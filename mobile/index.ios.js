@@ -1,7 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 import React, {
   AppRegistry,
@@ -10,6 +6,23 @@ import React, {
   Text,
   View
 } from 'react-native';
+
+
+let IM = require('./content/framework/system/im');
+
+IM.init();
+
+//let FasApp = require('./content/framework/system/navigator');
+//let FasApp = React.createClass({
+//  render() {
+//    return (
+//      <View>
+//        For test IM
+//      </View>
+//    );
+//  }
+//});
+
 
 class FasApp extends Component {
   render() {
@@ -48,5 +61,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
 
 AppRegistry.registerComponent('FasApp', () => FasApp);
