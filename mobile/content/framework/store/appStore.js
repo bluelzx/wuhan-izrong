@@ -43,11 +43,6 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getAPNSToken: () => _data.APNSToken,
   getToken: () => _data.token || '',
   getData: () => _data || {},
-
-  init: function(data) {
-    _info.initLoadingState = false;
-    _data = data;
-  },
 });
 
 
@@ -67,6 +62,9 @@ let _appInit = (data) => {
       _info.netWorkState = isConnected;
     }
   );
+
+  _info.initLoadingState = false;
+  AppStore.emitChange();
   // Persister.getAppData((data) => {
   //   _info.initLoadingState = false;
   //   _data = data;

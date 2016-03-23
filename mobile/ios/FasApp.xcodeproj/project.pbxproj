@@ -24,6 +24,21 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		58BC81E0B95C4AFAAE5CE46E /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 353DA0420F9F4652B3EBB0CF /* MaterialIcons.ttf */; };
+		58EE54281C9F8B61009348C3 /* RealmReact.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 589778971C9BAE7B00F57824 /* RealmReact.framework */; };
+		58EE546F1C9F9147009348C3 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 58EE54651C9F9147009348C3 /* ioapi.c */; };
+		58EE54701C9F9147009348C3 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 58EE54671C9F9147009348C3 /* mztools.c */; };
+		58EE54711C9F9147009348C3 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 58EE54691C9F9147009348C3 /* unzip.c */; };
+		58EE54721C9F9147009348C3 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 58EE546B1C9F9147009348C3 /* zip.c */; };
+		58EE54731C9F9147009348C3 /* ZipArchive.mm in Sources */ = {isa = PBXBuildFile; fileRef = 58EE546E1C9F9147009348C3 /* ZipArchive.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		58EE547A1C9F915A009348C3 /* ReactNativeAutoUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = 58EE54751C9F915A009348C3 /* ReactNativeAutoUpdater.m */; };
+		58EE547B1C9F915A009348C3 /* StatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 58EE54771C9F915A009348C3 /* StatusBarNotification.m */; };
+		58EE547C1C9F915A009348C3 /* UIImagePickerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 58EE54791C9F915A009348C3 /* UIImagePickerManager.m */; };
+		58EE54811C9F9165009348C3 /* FRCTTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 58EE547E1C9F9165009348C3 /* FRCTTabBar.m */; };
+		58EE54821C9F9165009348C3 /* FRCTTabBarManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 58EE54801C9F9165009348C3 /* FRCTTabBarManager.m */; };
+		58EE54911C9F91BB009348C3 /* metadata.json in Resources */ = {isa = PBXBuildFile; fileRef = 58EE54901C9F91BB009348C3 /* metadata.json */; };
+		58EE54A31C9F922D009348C3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EE54A21C9F922D009348C3 /* AVFoundation.framework */; };
+		58EE54A71C9F9266009348C3 /* libz.1.2.5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EE54A61C9F9266009348C3 /* libz.1.2.5.tbd */; };
+		58EE54CB1C9F9522009348C3 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EE54CA1C9F94DC009348C3 /* libRCTPushNotification.a */; };
 		5D09A96C30664DE9A73C1B4A /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 264504E2C0E2446A8F7FEDAE /* FontAwesome.ttf */; };
 		6633BA5AEEAD4935AEFC7238 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A71F4A15FDCD407D8AB3EEE0 /* libRNVectorIcons.a */; };
 		6A8C0C5DD0784738A63B1377 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F12B8E67CB034E3B8A687EBA /* EvilIcons.ttf */; };
@@ -140,6 +155,13 @@
 			remoteGlobalIDString = 02B29A161B7CF7C9008A7E6B;
 			remoteInfo = RealmReact;
 		};
+		58EE54C91C9F94DC009348C3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 58EE54C51C9F94DC009348C3 /* RCTPushNotification.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTPushNotification;
+		};
 		78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */;
@@ -182,6 +204,31 @@
 		353DA0420F9F4652B3EBB0CF /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		3E64B8D00BD044AA8CFD1F85 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		48DFD900D64840A29DBF0B01 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		58EE54641C9F9147009348C3 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		58EE54651C9F9147009348C3 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		58EE54661C9F9147009348C3 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		58EE54671C9F9147009348C3 /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		58EE54681C9F9147009348C3 /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		58EE54691C9F9147009348C3 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		58EE546A1C9F9147009348C3 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		58EE546B1C9F9147009348C3 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		58EE546C1C9F9147009348C3 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		58EE546D1C9F9147009348C3 /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
+		58EE546E1C9F9147009348C3 /* ZipArchive.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ZipArchive.mm; sourceTree = "<group>"; };
+		58EE54741C9F915A009348C3 /* ReactNativeAutoUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReactNativeAutoUpdater.h; path = FasApp/ReactNativeAutoUpdater.h; sourceTree = "<group>"; };
+		58EE54751C9F915A009348C3 /* ReactNativeAutoUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReactNativeAutoUpdater.m; path = FasApp/ReactNativeAutoUpdater.m; sourceTree = "<group>"; };
+		58EE54761C9F915A009348C3 /* StatusBarNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StatusBarNotification.h; path = FasApp/StatusBarNotification.h; sourceTree = "<group>"; };
+		58EE54771C9F915A009348C3 /* StatusBarNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StatusBarNotification.m; path = FasApp/StatusBarNotification.m; sourceTree = "<group>"; };
+		58EE54781C9F915A009348C3 /* UIImagePickerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImagePickerManager.h; path = FasApp/UIImagePickerManager.h; sourceTree = "<group>"; };
+		58EE54791C9F915A009348C3 /* UIImagePickerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImagePickerManager.m; path = FasApp/UIImagePickerManager.m; sourceTree = "<group>"; };
+		58EE547D1C9F9165009348C3 /* FRCTTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRCTTabBar.h; path = FasApp/FRCTTabBar.h; sourceTree = "<group>"; };
+		58EE547E1C9F9165009348C3 /* FRCTTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRCTTabBar.m; path = FasApp/FRCTTabBar.m; sourceTree = "<group>"; };
+		58EE547F1C9F9165009348C3 /* FRCTTabBarManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FRCTTabBarManager.h; path = FasApp/FRCTTabBarManager.h; sourceTree = "<group>"; };
+		58EE54801C9F9165009348C3 /* FRCTTabBarManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FRCTTabBarManager.m; path = FasApp/FRCTTabBarManager.m; sourceTree = "<group>"; };
+		58EE54901C9F91BB009348C3 /* metadata.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = metadata.json; sourceTree = "<group>"; };
+		58EE54A21C9F922D009348C3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		58EE54A61C9F9266009348C3 /* libz.1.2.5.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.2.5.tbd; path = usr/lib/libz.1.2.5.tbd; sourceTree = SDKROOT; };
+		58EE54C51C9F94DC009348C3 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		84129AD58BDB436796D16831 /* RealmJS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RealmJS.xcodeproj; path = ../node_modules/realm/RealmJS.xcodeproj; sourceTree = "<group>"; };
@@ -204,6 +251,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58EE54CB1C9F9522009348C3 /* libRCTPushNotification.a in Frameworks */,
+				58EE54A71C9F9266009348C3 /* libz.1.2.5.tbd in Frameworks */,
+				58EE54A31C9F922D009348C3 /* AVFoundation.framework in Frameworks */,
+				58EE54281C9F8B61009348C3 /* RealmReact.framework in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
@@ -298,13 +349,25 @@
 		13B07FAE1A68108700A75B9A /* FasApp */ = {
 			isa = PBXGroup;
 			children = (
+				58EE54621C9F9147009348C3 /* ZipArchive */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				58EE547D1C9F9165009348C3 /* FRCTTabBar.h */,
+				58EE547E1C9F9165009348C3 /* FRCTTabBar.m */,
+				58EE547F1C9F9165009348C3 /* FRCTTabBarManager.h */,
+				58EE54801C9F9165009348C3 /* FRCTTabBarManager.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				58EE54901C9F91BB009348C3 /* metadata.json */,
+				58EE54741C9F915A009348C3 /* ReactNativeAutoUpdater.h */,
+				58EE54751C9F915A009348C3 /* ReactNativeAutoUpdater.m */,
+				58EE54761C9F915A009348C3 /* StatusBarNotification.h */,
+				58EE54771C9F915A009348C3 /* StatusBarNotification.m */,
+				58EE54781C9F915A009348C3 /* UIImagePickerManager.h */,
+				58EE54791C9F915A009348C3 /* UIImagePickerManager.m */,
 			);
 			name = FasApp;
 			sourceTree = "<group>";
@@ -320,6 +383,8 @@
 		506462F460BB483AAFC63990 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				58EE54A61C9F9266009348C3 /* libz.1.2.5.tbd */,
+				58EE54A21C9F922D009348C3 /* AVFoundation.framework */,
 				A5CA5E76136448B3958979D3 /* Entypo.ttf */,
 				F12B8E67CB034E3B8A687EBA /* EvilIcons.ttf */,
 				264504E2C0E2446A8F7FEDAE /* FontAwesome.ttf */,
@@ -352,6 +417,41 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		58EE54621C9F9147009348C3 /* ZipArchive */ = {
+			isa = PBXGroup;
+			children = (
+				58EE54631C9F9147009348C3 /* minizip */,
+				58EE546D1C9F9147009348C3 /* ZipArchive.h */,
+				58EE546E1C9F9147009348C3 /* ZipArchive.mm */,
+			);
+			name = ZipArchive;
+			path = FasApp/ZipArchive;
+			sourceTree = "<group>";
+		};
+		58EE54631C9F9147009348C3 /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				58EE54641C9F9147009348C3 /* crypt.h */,
+				58EE54651C9F9147009348C3 /* ioapi.c */,
+				58EE54661C9F9147009348C3 /* ioapi.h */,
+				58EE54671C9F9147009348C3 /* mztools.c */,
+				58EE54681C9F9147009348C3 /* mztools.h */,
+				58EE54691C9F9147009348C3 /* unzip.c */,
+				58EE546A1C9F9147009348C3 /* unzip.h */,
+				58EE546B1C9F9147009348C3 /* zip.c */,
+				58EE546C1C9F9147009348C3 /* zip.h */,
+			);
+			path = minizip;
+			sourceTree = "<group>";
+		};
+		58EE54C61C9F94DC009348C3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				58EE54CA1C9F94DC009348C3 /* libRCTPushNotification.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		78C398B11ACF4ADC00677621 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -363,6 +463,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				58EE54C51C9F94DC009348C3 /* RCTPushNotification.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
 				00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */,
@@ -461,6 +562,14 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = T2WQCZJZ59;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "FasApp" */;
@@ -494,6 +603,10 @@
 				{
 					ProductGroup = 00C302D41ABCB9D200DB3ED1 /* Products */;
 					ProjectRef = 00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */;
+				},
+				{
+					ProductGroup = 58EE54C61C9F94DC009348C3 /* Products */;
+					ProjectRef = 58EE54C51C9F94DC009348C3 /* RCTPushNotification.xcodeproj */;
 				},
 				{
 					ProductGroup = 139105B71AF99BAD00B5F7CC /* Products */;
@@ -631,6 +744,13 @@
 			remoteRef = 589778961C9BAE7B00F57824 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		58EE54CA1C9F94DC009348C3 /* libRCTPushNotification.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTPushNotification.a;
+			remoteRef = 58EE54C91C9F94DC009348C3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		78C398B91ACF4ADC00677621 /* libRCTLinking.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -664,6 +784,7 @@
 				1180A737575C407C86416736 /* Entypo.ttf in Resources */,
 				6A8C0C5DD0784738A63B1377 /* EvilIcons.ttf in Resources */,
 				5D09A96C30664DE9A73C1B4A /* FontAwesome.ttf in Resources */,
+				58EE54911C9F91BB009348C3 /* metadata.json in Resources */,
 				B5FBD3F61DDF4940A9CED62A /* Foundation.ttf in Resources */,
 				B9BA899DE23D4B888DB9274F /* Ionicons.ttf in Resources */,
 				58BC81E0B95C4AFAAE5CE46E /* MaterialIcons.ttf in Resources */,
@@ -704,8 +825,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58EE546F1C9F9147009348C3 /* ioapi.c in Sources */,
+				58EE547C1C9F915A009348C3 /* UIImagePickerManager.m in Sources */,
+				58EE54711C9F9147009348C3 /* unzip.c in Sources */,
+				58EE54731C9F9147009348C3 /* ZipArchive.mm in Sources */,
+				58EE54821C9F9165009348C3 /* FRCTTabBarManager.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				58EE547B1C9F915A009348C3 /* StatusBarNotification.m in Sources */,
+				58EE54721C9F9147009348C3 /* zip.c in Sources */,
+				58EE54701C9F9147009348C3 /* mztools.c in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				58EE54811C9F9165009348C3 /* FRCTTabBar.m in Sources */,
+				58EE547A1C9F915A009348C3 /* ReactNativeAutoUpdater.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -783,6 +914,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -790,11 +923,15 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/realm/**",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS",
 				);
 				INFOPLIST_FILE = FasApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.izirong.fas;
 				PRODUCT_NAME = FasApp;
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -802,17 +939,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/realm/**",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS",
 				);
 				INFOPLIST_FILE = FasApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.izirong.fas;
 				PRODUCT_NAME = FasApp;
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -857,7 +1000,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/realm/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -899,7 +1042,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/realm/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

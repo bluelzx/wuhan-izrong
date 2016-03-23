@@ -103,43 +103,44 @@ var TabView = React.createClass({
         <TabBarIOS selectedTab={this.state.selectedTab} tintColor={'#44bcb2'} barTintColor={'#f6f6f6'}>
           <TabBarIOS.Item
             title="首页"
-            //icon={require('../../image/tab/home.png')}
-            //selectedIcon={require('../../image/tab/home_selected.png')}
-            systemIcon="contacts"
+            icon={require('../../image/tab/home.png')}
+            selectedIcon={require('../../image/tab/home_selected.png')}
+            //systemIcon="contacts"
             selected={this.state.selectedTab === 'home'}
             onPress={() => {this.setState({selectedTab: 'home'});}}>
             <Home navigator={this.props.navigator}/>
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
-            title="票据"
+            title="市场"
             //icon={require('../../image/tab/bill.png')}
             //selectedIcon={require('../../image/tab/bill_selected.png')}
             systemIcon="contacts"
             selected={this.state.selectedTab === 'bills'}
             onPress={() => {this.setState({selectedTab: 'bills'})}}>
-            <BillList navigator={this.props.navigator}/>
+
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
-            title="票据重构"
-            //icon={require('../../image/tab/bill.png')}
-            //selectedIcon={require('../../image/tab/bill_selected.png')}
-            systemIcon="contacts"
-            selected={this.state.selectedTab === 'bill'}
-            onPress={() => {this.setState({selectedTab: 'bill'})}}>
-            <Bill navigator={this.props.navigator}/>
+            title=""
+            icon={require('../../image/tab/home.png')}
+            selectedIcon={require('../../image/tab/home_selected.png')}
+            //systemIcon="contacts"
+            selected={this.state.selectedTab === 'home'}
+            onPress={() => {this.setState({selectedTab: 'home'});}}
+          >
+            <View></View>
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
             badge={this.state.billSum==0?null:this.state.billSum}
-            title="消息"
+            title="聊天"
             //icon={require('../../image/tab/message.png')}
             //selectedIcon={require('../../image/tab/message_selected.png')}
             systemIcon="contacts"
             selected={this.state.selectedTab === 'messages'}
             onPress={() => {this.setState({selectedTab: 'messages'})}}>
-            <Message navigator={this.props.navigator}></Message>
+
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
@@ -149,7 +150,7 @@ var TabView = React.createClass({
             systemIcon="contacts"
             selected={this.state.selectedTab === 'personCenter'}
             onPress={() => {this.setState({selectedTab: 'personCenter'})}}>
-            <PersonCenter navigator={this.props.navigator}></PersonCenter>
+
           </TabBarIOS.Item>
 
         </TabBarIOS>
@@ -168,7 +169,7 @@ var TabView = React.createClass({
 
           <View navigator={this.props.navigator}
                 tabLabel="ion|ios-pricetags"
-                    tabDesc="票据"
+                    tabDesc="市场"
                     //icon={require('../../image/tab/bill.png')}
                     //selectedIcon={require('../../image/tab/bill_selected.png')}>
           >
@@ -176,7 +177,7 @@ var TabView = React.createClass({
 
           <View navigator={this.props.navigator}
                 tabLabel="ion|ios-pricetags"
-                tabDesc="票据重构"
+                tabDesc=""
                 //icon={require('../../image/tab/bill.png')}
                 //selectedIcon={require('../../image/tab/bill_selected.png')}>
           >
@@ -185,7 +186,7 @@ var TabView = React.createClass({
 
           <View navigator={this.props.navigator}
                 tabLabel="ion|ios-pricetags"
-                tabDesc="消息"
+                tabDesc="聊天"
                    //badge={this.state.billSum==0?null:this.state.billSum}
                    //icon={require('../../image/tab/message.png')}
                    //selectedIcon={require('../../image/tab/message_selected.png')}
@@ -194,7 +195,7 @@ var TabView = React.createClass({
 
           <View navigator={this.props.navigator}
                 tabLabel="ion|ios-pricetags"
-                        tabDesc="我的"
+                        tabDesc="个人"
                         //icon={require('../../image/tab/member.png')}
                         //selectedIcon={require('../../image/tab/member_selected.png')}>
             >

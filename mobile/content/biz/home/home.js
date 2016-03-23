@@ -23,7 +23,7 @@ var Home = React.createClass({
     });
   },
   componentWillMount(){
-    this.toArray();
+    //this.toArray();
   },
   componentDidMount() {
     //setInterval(this.set, 20)

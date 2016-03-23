@@ -12,9 +12,11 @@ if (window.navigator && Object.keys(window.navigator).length == 0) {
 let React = require('react-native');
 let IO = require('socket.io-client/socket.io');
 let { ImHost } = require('../../../config');
+let _socket = IO(ImHost, {
+  transports: ['websocket'] // you need to explicitly tell it to use websockets
+});
 
 let IM = {
-  _socket: null,
   _param: {
     userId: 'test-user',
     orderType: null,
@@ -32,11 +34,7 @@ let IM = {
   _messages: [],
   _orderInfo: {},
   init: function () {
-    this._socket = IO(ImHost, {
-      transports: ['websocket'] // you need to explicitly tell it to use websockets
-    });
-
-    this._socket.on('msg.dataset', function (data) {
+    _socket.on('msg.dataset', (data) => {
       //console.log('msg.dataset ===>');
       //console.log(data);
 
@@ -68,7 +66,7 @@ let IM = {
       }
     });
 
-    this._socket.on('msg.deltaDataSet', function (data) {
+    _socket.on('msg.deltaDataSet', (data) => {
       //console.log('msg.deltaDataSet ===>');
       //console.log(data);
 
@@ -77,7 +75,7 @@ let IM = {
       var dataset = data.content;
       for (var i=0; i < dataset.length; i++ ) {
         var item = dataset[i];
-        var bExisted = this._dataset.some(function (element, index, array) {
+        var bExisted = this._dataset.some((element, index, array) => {
           if (element.oid = item.oid) {
             Array.prototype.push.apply(element.messages, item.messages);
             element.hasNew = true;
@@ -95,7 +93,7 @@ let IM = {
     });
 
 
-    this._socket.on('msg.received', function (message) {
+    _socket.on('msg.received', (message) => {
       this._param.lastUpdateTime = message.createAt;
 
       if (message.o == this._param.orderId
@@ -109,7 +107,7 @@ let IM = {
         //}
 
         // 确认消息已读
-        this._socket.emit('msg.read', message.mid);
+        _socket.emit('msg.read', message.mid);
 
       } else {
         // 是否新的会话
@@ -120,23 +118,23 @@ let IM = {
 
     });
 
-    this._socket.on('notice', function (notice) {
+    _socket.on('notice', (notice) => {
       console.log(notice.t + ' : ' + notice.c);
     });
 
-    this._socket.on('disconnect',function () { // Event:  disconnect
-      //console.log('Socket:' + this._socket.name + ' connetion is lost ~');
+    _socket.on('disconnect', () => { // Event:  disconnect
+      //console.log('Socket:' + _socket.name + ' connetion is lost ~');
       //console.log('Please wait ~');
       this._param.isConnected = false;
       this._param.indicator = '服务器连接失败，请稍后再试～';
       this._param.showHint = true;
     });
 
-    this._socket.on('reconnect', function () {
+    _socket.on('reconnect', () => {
       this._param.isConnected = true;
       this._param.indicator = '';
       this._param.showHint = false;
-      this._socket.emit('user.reconnect', {
+      _socket.emit('user.reconnect', {
         userId: this._param.userId,
         orderId: this._param.orderId,
         orderType: this._param.orderType,
@@ -144,15 +142,15 @@ let IM = {
       });
     });
 
-    this._socket.on('new.msg', function () {
+    _socket.on('new.msg', () => {
       this._param.msgNew = true;
     });
 
-    //this._socket.print();
-    this._socket.emit('user.login', { userId: this._param.userId }, function (data) {
+    //_socket.print();
+    _socket.emit('user.login', { userId: this._param.userId }, (data) => {
       console.log(data.flag + ' : ' + data.msg);
     });
-    //this._socket.emit('user.login');
+    //_socket.emit('user.login');
   }
 
 };

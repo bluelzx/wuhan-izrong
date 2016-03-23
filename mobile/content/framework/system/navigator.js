@@ -79,7 +79,7 @@ var Main = React.createClass({
       }
     }
   },
-  renderScene: function (route, navigator) {
+  _renderScene: function (route, navigator) {
     this._navigator = navigator;
     var Comp = route.comp;
     if (Comp == 'tabView') {
