@@ -13,8 +13,9 @@ var {
 var AppAction = require('../action/appAction');
 AppAction.appInit();
 var TabView = require('./tabView');
+var Login = require('../../biz/login/login');
 var AppStore = require('../store/appStore');
-var Alert = require('../../comp/utils/alert');
+var { Alert } = require('mx-artifacts');
 
 var Main = React.createClass({
   _navigator: null,
@@ -119,8 +120,8 @@ var Main = React.createClass({
           gestures: route.gestures
         })}
         initialRoute={{
-          //comp: Login
-          comp: initComp
+          comp: Login
+          //comp: initComp
         }}
       />
     );

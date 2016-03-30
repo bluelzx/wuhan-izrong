@@ -15,7 +15,7 @@ let IM = require('../system/im');
 let _appInit = function() {
   IM.init();
   AppDispatcher.dispatch({
-    type: ActionTypes.APP_INIT,
+    type: ActionTypes.APP_INIT
   });
 };
 let _notificationRegister = function(token) {

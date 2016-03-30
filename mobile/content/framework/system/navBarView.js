@@ -15,7 +15,7 @@ var RequestState = require('../../constants/requestState');
 
 let ProgressHUD = require('react-native-progress-hud');
 var dismissKeyboard = require('react-native-dismiss-keyboard');
-var Alert = require('../../comp/utils/alert');
+var { Alert } = require('mx-artifacts');
 var NavBarView = React.createClass({
   _curRoute: null,
   mixins: [ProgressHUD.Mixin],

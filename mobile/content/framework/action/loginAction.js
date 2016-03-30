@@ -6,7 +6,7 @@ let {
 let { Host } = require('../../../config');
 
 let AppDispatcher = require('../dispatcher/appDispatcher');
-let { ActionTypes } = require('../../constants/command');
+let { ActionTypes } = require('../../constants/actionTypes');
 let _ = require('lodash');
 let AppLinks = require('../../constants/appLinks');
 

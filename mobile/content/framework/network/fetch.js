@@ -1,5 +1,6 @@
 var Qs = require('qs');
-var Alert = require('../../comp/utils/alert');
+//var Alert = require('../../comp/utils/alert');
+var { Alert } = require('mx-artifacts');
 // var FileUpload = require('NativeModules').FileUpload;
 // var RNFS = require('react-native-fs');
 var AppStore = require('../store/appStore');

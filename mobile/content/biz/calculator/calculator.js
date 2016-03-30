@@ -12,14 +12,13 @@ var {
   NativeModules,
   DeviceEventEmitter
   } = React;
-var Adjust=require('../../comp/utils/adjust')
 var BottomButton = require('../../comp/utilsUi/bottomButton')
 var numeral = require('../../comp/utils/numberHelper')
 var _ = require('lodash');
 var VIcon = require('../../comp/icon/vIcon')
 var TextEdit = require('./../user/textEdit');
 var NavBarView = require('../../framework/system/navBarView')
-var Alert = require('../../comp/utils/alert');
+var { Alert, Device } = require('mx-artifacts');
 var RightTopButton = require('../../comp/utilsUi/rightTopButton')
 var DatePicker = require('NativeModules').DatePickerDialogModule;
 var Calculator = React.createClass({
@@ -137,7 +136,7 @@ var Calculator = React.createClass({
   returnItem(key, desc, holder, unit, max){
     return (
       <View style={styles.layout}>
-        <Text style={[styles.text,{width:Adjust.width(109)}]}>{desc}</Text>
+        <Text style={[styles.text,{width: Device.width * 109 / 375}]}>{desc}</Text>
         <View style={{flex:1}}>
           <TextInput style={{height:32,fontSize:15,color:'#7f7f7f'}}
                      underlineColorAndroid="transparent"
@@ -167,7 +166,7 @@ var Calculator = React.createClass({
     return (
       <TouchableHighlight onPress={()=>this.showDate(word,key,value==holder?'':value,type,'','')}>
         <View style={[styles.layout,{paddingRight:10}]}>
-          <Text style={[styles.text,{width:Adjust.width(109)}]}>{desc}</Text>
+          <Text style={[styles.text,{width: Device.width * 109 / 375}]}>{desc}</Text>
           <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
             <Text style={{fontSize:15,color:color}}>{value}</Text>
             <VIcon/>
@@ -179,7 +178,7 @@ var Calculator = React.createClass({
   returnResult(desc, value, unit){
     return (
       <View style={[styles.result,styles.borderBottom]}>
-        <Text style={[{width:Adjust.width(109)},styles.text]}>{desc}</Text>
+        <Text style={[{width: Device.width * 109 / 375},styles.text]}>{desc}</Text>
         <Text style={styles.after}>{value.length == 0 ? '' : numeral.number4(value)}</Text>
         <Text style={styles.text}>{unit}</Text>
       </View>

@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const Realm = require('realm');
+//const Realm = require('realm');
 const SCHEMA_KEY = '@realm:schema';
 
 let PersisterSchema = {
@@ -21,7 +21,7 @@ let PersisterSchema = {
   }
 };
 // Get the default Realm with support for our objects
-let _realm = new Realm({schema: [PersisterSchema]});
+//let _realm = new Realm({schema: [PersisterSchema]});
 let _persister = null;
 
 let PersisterFacade = {
@@ -38,7 +38,7 @@ let PersisterFacade = {
 };
 
 let _clearToken = function () {
-  realm.delete(_persister);
+  //realm.delete(_persister);
 };
 
 let _setItem = function (key, value, cb) {
@@ -46,7 +46,7 @@ let _setItem = function (key, value, cb) {
   //realm.create(SCHEMA_KEY, _.assign(data, { key: value }), true);
 
   _persister[key] = value;
-  realm.create(SCHEMA_KEY, _persister, true);
+  //realm.create(SCHEMA_KEY, _persister, true);
   //if (cb)cb();
 };
 
@@ -59,22 +59,22 @@ let _getAppData = function (cb) {
 
 let _saveAppData = function (data) {
   // Create Realm objects and write to local storage
-  _realm.write(() => {
-    _persister = _realm.create(SCHEMA_KEY, {
-      token: JSON.stringify(data.token),
-      APNSToken: '',
-      revBillBean: JSON.stringify(data.revBillBean),
-      sentBillBean: JSON.stringify(data.sentBillBean),
-      filterBeans: JSON.stringify(data.filterBeans),
-      userInfoBean: JSON.stringify(data.userInfoBean),
-      orgBeans: JSON.stringify(data.orgBeans),
-      mainMsgBean: JSON.stringify(data.mainMsgBean),
-      marketMsgBeans: JSON.stringify(data.marketMsgBeans),
-      systemMsgBeans: JSON.stringify(data.systemMsgBeans),
-      sentBillMsgBeans: JSON.stringify(data.sentBillMsgBeans),
-      demoFlag: JSON.stringify(data.demoFlag)
-    });
-  });
+  //_realm.write(() => {
+  //  _persister = _realm.create(SCHEMA_KEY, {
+  //    token: JSON.stringify(data.token),
+  //    APNSToken: '',
+  //    revBillBean: JSON.stringify(data.revBillBean),
+  //    sentBillBean: JSON.stringify(data.sentBillBean),
+  //    filterBeans: JSON.stringify(data.filterBeans),
+  //    userInfoBean: JSON.stringify(data.userInfoBean),
+  //    orgBeans: JSON.stringify(data.orgBeans),
+  //    mainMsgBean: JSON.stringify(data.mainMsgBean),
+  //    marketMsgBeans: JSON.stringify(data.marketMsgBeans),
+  //    systemMsgBeans: JSON.stringify(data.systemMsgBeans),
+  //    sentBillMsgBeans: JSON.stringify(data.sentBillMsgBeans),
+  //    demoFlag: JSON.stringify(data.demoFlag)
+  //  });
+  //});
 };
 
 module.exports = PersisterFacade;
