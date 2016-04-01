@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "description": "App for FAS project.",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "react-native-viewpager": "^0.2.1",
+    "realm": "^0.11.1"
+  },
   "devDependencies": {
     "babel-eslint": "^5.0.0",
     "chai": "^3.5.0",
