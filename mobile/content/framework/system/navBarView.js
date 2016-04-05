@@ -8,7 +8,7 @@ var {
   StyleSheet,
   Platform
 } = React;
-var { Icon } = require('react-native-vector-icons/Ionicons');
+var Icon  = require('react-native-vector-icons/Ionicons');
 var AppStore = require('../store/appStore');
 var RequestState = require('../../constants/requestState');
 // var VIcon = require('../../comp/icon/vIcon')

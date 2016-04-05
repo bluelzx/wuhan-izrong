@@ -39,7 +39,8 @@ var Verify = React.createClass({
     },
     loadErr(id){
         this.setState({load: 'failure'});
-        Alert("网络不好,请检查网络之后重试");
+       // Alert("网络不好,请检查网络之后重试");
+      console.log("网络不好,请检查网络之后重试");
     },
     returnPicCode(){
         if (this.state.load != 'failure') {

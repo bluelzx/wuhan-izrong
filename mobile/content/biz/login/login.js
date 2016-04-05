@@ -88,30 +88,19 @@ var Login = React.createClass({
   },
 
   render: function () {
-    //LoginAction.registerAPNS()
     return (
+      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
+                  contentBackgroundColor='#18304D' title='登陆' showBack={false} showBar={true}>
         <View style={[{flexDirection: 'column', flex: 1}, styles.paddingLR]}>
 
-          <Input placeholder='用户名/手机号' maxlength={20} field='userName'
+          <Input placeholder='手机号' maxlength={20} field='userName'
                  onChangeText={this._onChangeText} icon='user'/>
-
-          <Input placeholder='密码' maxlength={16} field='password' inputType='password'
-                 onChangeText={this._onChangeText} icon='password' />
 
           <VerifyCode ref='verifyCode' onChanged={this._onChangeText}/>
 
-          <View style={{marginTop: 24}}>
-            <Button onPress={this.login} disabled={this.state.checked}>登录</Button>
-          </View>
-          <View style={styles.menu}>
-            <TouchableOpacity onPress={(()=>{this.toOther(Register_checkPhone)})}>
-              <Text style={styles.colorPath}>新用户注册</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={(()=>{this.toOther(Forget_checkPhone)})}>
-              <Text style={styles.colorPath}>忘记密码?</Text>
-            </TouchableOpacity>
-          </View>
+
         </View>
+      </NavBarView>
     )
   }
 });
