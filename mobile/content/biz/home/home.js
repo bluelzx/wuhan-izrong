@@ -31,11 +31,8 @@ var Home = React.createClass({
 
   render() {
     return (
-      <NavBarView navigator={this.props.navigator} title="首页" showBack={false} showBar={true}>
+      <NavBarView navigator={this.props.navigator} title='首页' fontColor='#ffffff' backgroundColor='#1151B1' contentBackgroundColor='#18304D' showBack={false} showBar={true}>
 
-        <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
-
-        </ScrollView>
       </NavBarView>
     );
   }

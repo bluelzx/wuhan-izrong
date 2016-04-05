@@ -140,9 +140,9 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
    ^(RCTTabBarItem *tab, NSUInteger index, __unused BOOL *stop) {
     UIViewController *controller = _tabController.viewControllers[index];
     controller.tabBarItem = tab.barItem;
-    if (tab.selected) {
-      _tabController.selectedViewController = controller;
-    }
+//    if (tab.selected) {
+//      _tabController.selectedViewController = controller;
+//    }
   }];
 }
 

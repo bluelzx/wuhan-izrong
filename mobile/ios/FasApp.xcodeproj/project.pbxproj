@@ -24,7 +24,6 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		58BC81E0B95C4AFAAE5CE46E /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 353DA0420F9F4652B3EBB0CF /* MaterialIcons.ttf */; };
-		58EE54281C9F8B61009348C3 /* RealmReact.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 589778971C9BAE7B00F57824 /* RealmReact.framework */; };
 		58EE546F1C9F9147009348C3 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 58EE54651C9F9147009348C3 /* ioapi.c */; };
 		58EE54701C9F9147009348C3 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 58EE54671C9F9147009348C3 /* mztools.c */; };
 		58EE54711C9F9147009348C3 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 58EE54691C9F9147009348C3 /* unzip.c */; };
@@ -120,41 +119,6 @@
 			remoteGlobalIDString = 5DBEB1501B18CEA900B34395;
 			remoteInfo = RNVectorIcons;
 		};
-		5897788E1C9BAE7B00F57824 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84129AD58BDB436796D16831 /* RealmJS.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F63FF2F01C16405C00B3B8E0;
-			remoteInfo = GCDWebServers;
-		};
-		589778901C9BAE7B00F57824 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84129AD58BDB436796D16831 /* RealmJS.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F63FF2B11C1241E500B3B8E0;
-			remoteInfo = "RealmJS static";
-		};
-		589778921C9BAE7B00F57824 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84129AD58BDB436796D16831 /* RealmJS.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 02B58CB11AE99CEC009B348C;
-			remoteInfo = RealmJS;
-		};
-		589778941C9BAE7B00F57824 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84129AD58BDB436796D16831 /* RealmJS.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 02B58CBC1AE99CEC009B348C;
-			remoteInfo = RealmJSTests;
-		};
-		589778961C9BAE7B00F57824 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84129AD58BDB436796D16831 /* RealmJS.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 02B29A161B7CF7C9008A7E6B;
-			remoteInfo = RealmReact;
-		};
 		58EE54C91C9F94DC009348C3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 58EE54C51C9F94DC009348C3 /* RCTPushNotification.xcodeproj */;
@@ -231,7 +195,6 @@
 		58EE54C51C9F94DC009348C3 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		84129AD58BDB436796D16831 /* RealmJS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RealmJS.xcodeproj; path = ../node_modules/realm/RealmJS.xcodeproj; sourceTree = "<group>"; };
 		9D03F2B062F4433E9D65BCFB /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		A5CA5E76136448B3958979D3 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		A71F4A15FDCD407D8AB3EEE0 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
@@ -254,7 +217,6 @@
 				58EE54CB1C9F9522009348C3 /* libRCTPushNotification.a in Frameworks */,
 				58EE54A71C9F9266009348C3 /* libz.1.2.5.tbd in Frameworks */,
 				58EE54A31C9F922D009348C3 /* AVFoundation.framework in Frameworks */,
-				58EE54281C9F8B61009348C3 /* RealmReact.framework in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
@@ -405,18 +367,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5897787D1C9BAE7B00F57824 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5897788F1C9BAE7B00F57824 /* libGCDWebServers.a */,
-				589778911C9BAE7B00F57824 /* libRealmJS.a */,
-				589778931C9BAE7B00F57824 /* RealmJS.framework */,
-				589778951C9BAE7B00F57824 /* RealmJSTests.xctest */,
-				589778971C9BAE7B00F57824 /* RealmReact.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		58EE54621C9F9147009348C3 /* ZipArchive */ = {
 			isa = PBXGroup;
 			children = (
@@ -475,7 +425,6 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				3E64B8D00BD044AA8CFD1F85 /* RNVectorIcons.xcodeproj */,
-				84129AD58BDB436796D16831 /* RealmJS.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -629,10 +578,6 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = 5897787D1C9BAE7B00F57824 /* Products */;
-					ProjectRef = 84129AD58BDB436796D16831 /* RealmJS.xcodeproj */;
-				},
-				{
 					ProductGroup = 5851A8B11C9BAE0D00DB4D2F /* Products */;
 					ProjectRef = 3E64B8D00BD044AA8CFD1F85 /* RNVectorIcons.xcodeproj */;
 				},
@@ -707,41 +652,6 @@
 			fileType = archive.ar;
 			path = libRNVectorIcons.a;
 			remoteRef = 5851A8BE1C9BAE0D00DB4D2F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5897788F1C9BAE7B00F57824 /* libGCDWebServers.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libGCDWebServers.a;
-			remoteRef = 5897788E1C9BAE7B00F57824 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		589778911C9BAE7B00F57824 /* libRealmJS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRealmJS.a;
-			remoteRef = 589778901C9BAE7B00F57824 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		589778931C9BAE7B00F57824 /* RealmJS.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RealmJS.framework;
-			remoteRef = 589778921C9BAE7B00F57824 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		589778951C9BAE7B00F57824 /* RealmJSTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = RealmJSTests.xctest;
-			remoteRef = 589778941C9BAE7B00F57824 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		589778971C9BAE7B00F57824 /* RealmReact.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = RealmReact.framework;
-			remoteRef = 589778961C9BAE7B00F57824 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		58EE54CA1C9F94DC009348C3 /* libRCTPushNotification.a */ = {
