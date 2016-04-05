@@ -9,7 +9,7 @@ var {
   Dimensions
   } = React;
 var DictIcon = require('../../constants/dictIcon');
-var { Device } = require('mx-artifacts');
+//var { Device } = require('mx-artifacts');
 var Input = React.createClass({
 
   propTypes: {
@@ -45,7 +45,7 @@ var Input = React.createClass({
         fontSize: 18,
         color: '#7f7f7f',
         marginLeft: 9,
-        width: Device.width * (375 - 80) / 375
+        width: Dimensions.get('window').width * (375 - 80) / 375
       },
       placeholder: '',
       placeholderTextColor: '#7f7f7f',
