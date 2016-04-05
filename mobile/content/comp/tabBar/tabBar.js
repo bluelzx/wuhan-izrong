@@ -30,12 +30,7 @@ var styles = StyleSheet.create({
   tabs: {
     height: 50,
     flexDirection: 'row',
-    borderWidth: 1,
-    borderBottomWidth: 0,
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderTopColor: '#7f7f7f',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#1156C0'
   },
   badgeNoNumber: {
     flexDirection: 'row',
@@ -49,7 +44,7 @@ var styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     borderColor: '#ffffff',
-    backgroundColor: '#ff0000',
+    backgroundColor: '#ffffff',
   },
   badgeWithNumber: {
     flexDirection: 'row',
@@ -108,7 +103,7 @@ var AndroidTabBar = React.createClass({
       return (
         <View style={[styles.tabWrap]}>
           <Image source={tab.selectedIcon} style={{width: 30, height: 30}} />
-          <Text style={{color:'#44bcb2',fontSize:10}}>{tab.label}</Text>
+          <Text style={{color:'#ffffff',fontSize:10}}>{tab.label}</Text>
           {this.initBadge(tab)}
         </View>
       )

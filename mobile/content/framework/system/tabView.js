@@ -152,7 +152,7 @@ var TabView = React.createClass({
     } else {
       return (
         <ScrollableTabView initialPage={0} locked={true}
-
+                           renderTabBar={() => <AndroidTabBar />}
         >
           <Home navigator={this.props.navigator}
                 tabDesc="首页"
