@@ -5,8 +5,8 @@ let {
 } = require('../network/fetch');
 let { Host } = require('../../../config');
 
-let AppDispatcher = require('../dispatcher/appDispatcher');
-let ActionTypes = require('../../constants/actionTypes');
+let AppStore = require('../store/appStore');
+
 let _ = require('lodash');
 let AppLinks = require('../../constants/appLinks');
 
@@ -26,16 +26,14 @@ let LoginActions = {
   sendSMSCodeToOldMobile: (p, c, f) => PFetch(AppLinks.sendSMSCodeToOldMobile, p, c, f),
   resetMobileNo: (p, c, f) => _resetMobileNo(AppLinks.resetMobileNo, p, c, f),
   resetPasswordForChangePwd: (p, c, f) => BFetch(AppLinks.resetPasswordForChangePwd, p, c, f),
-  forceLogOut: () => AppDispatcher.dispatch({ type: ActionTypes.FORCE_LOGOUT }),
-  clear: () => AppDispatcher.dispatch({ type: ActionTypes.LOGOUT })
+  forceLogOut: () => AppStore.forceLogout(),
+  clear: () => AppStore.logout()
 };
 
 let _logout = function(url, c) {
   BFetch(url, {},
     function() {
-      AppDispatcher.dispatch({
-        type: ActionTypes.LOGOUT
-      });
+      AppStore.logout();
     }, null, {
       isLogout: true
     }
@@ -45,10 +43,7 @@ let _logout = function(url, c) {
 let _login = function(url, p) {
   return new Promise((resolve, reject) => {
     BFetch(url, p).then((response) => {
-      AppDispatcher.dispatch({
-        type: ActionTypes.LOGIN,
-        data: response
-      });
+      AppStore.login(response)
       resolve(response);
     }).catch((errorData) => {
       reject(errorData);
@@ -58,11 +53,8 @@ let _login = function(url, p) {
 
 let _register = function(url, p, c, f) {
   BFetch(url, p,
-    function(msg) {
-      AppDispatcher.dispatch({
-        type: ActionTypes.LOGIN,
-        data: msg
-      });
+    function(data) {
+      AppStore.login(data);
       c();
     },
     f
@@ -73,14 +65,15 @@ let _resetMobileNo = function(u, p, c, f) {
   let value = p[key];
   BFetch(u, p,
     function(msg) {
-      AppDispatcher.dispatch({
-        type: ActionTypes.UPDATE_USERINFO,
-        data: {
-          mobileNo: value
-        }
-      });
+      //AppDispatcher.dispatch({
+      //  type: ActionTypes.UPDATE_USERINFO,
+      //  data: {
+      //    mobileNo: value
+      //  }
+      //});
       c(msg);
     }
   );
 };
+
 module.exports = LoginActions;

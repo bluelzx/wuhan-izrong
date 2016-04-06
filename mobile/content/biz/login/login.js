@@ -32,8 +32,8 @@ var Login = React.createClass({
     return {
       loaded: false,
       checked: true,
-      userName: 'dpcui',
-      password: 'aaaaa1',
+      userName: '',
+      password: '',
       verify: '',
       active: false,
       deviceModel: deviceModel,

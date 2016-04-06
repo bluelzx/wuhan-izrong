@@ -1,8 +1,6 @@
 var Qs = require('qs');
 var { Alert } = require('mx-artifacts');
 var AppStore = require('../store/appStore');
-var AppDispatcher = require('../dispatcher/appDispatcher');
-var ActionTypes = require('../../constants/actionTypes');
 var { Host } = require('../../../config');
 
 var BFetch = function (url, param, callback, failure, options) {
@@ -73,13 +71,10 @@ var process = function (_promise, option) {
               if (json.msgCode == 'SYS_TOKEN_INVALID') {
                 var action;
                 if (option.isLogout) {
-                  action = ActionTypes.LOGOUT;
+                  AppStore.logout();
                 } else {
-                  action = ActionTypes.FORCE_LOGOUT;
+                  AppStore.forceLogout();
                 }
-                AppDispatcher.dispatch({
-                  type: action
-                });
               } else {
                 reject(json);
               }
