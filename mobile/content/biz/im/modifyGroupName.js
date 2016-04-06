@@ -2,18 +2,18 @@
  * Created by baoyinghai on 16/4/6.
  */
 let React = require('react-native');
-const {TouchableHighlight, Text, View, TextInput, Platform} = React;
+const {TouchableOpacity, Text, View, TextInput, Platform} = React;
 let NavBarView = require('../../framework/system/navBarView');
 let { Device } = require('mx-artifacts');
 let ModifyGroupName = React.createClass({
 
   renderRight: function(){
     return (
-      <TouchableHighlight onPress={()=>{
+      <TouchableOpacity onPress={()=>{
       this.props.navigator.pop();
       }}>
         <Text style={{color:'#ffffff'}}>完成</Text>
-      </TouchableHighlight>
+      </TouchableOpacity>
 
     );
   },

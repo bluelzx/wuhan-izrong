@@ -4,8 +4,9 @@
 let React = require('react-native');
 const {View, TouchableHighlight, Text} = React;
 let NavBarView = require('../../framework/system/navBarView');
-let { ExtenList } = require('mx-artifacts');
+let { ExtenList, Device } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
+let CheckBox = require('./checkBox');
 
 const MockData = [
   {groupName: '天津银行', groupData: [ {imgId:'../../pic/man.jpg', desc: 'A吴'}, {imgId:'../../pic/man.jpg', desc: 'A张'}]},
@@ -46,14 +47,13 @@ let DeleteMember = React.createClass({
   //渲染组成员
   itemRender: function(data) {
     return (
-      <TouchableHighlight key={data.desc}
-                          onPress={() => this.props.navigator.push({comp:Chat, param:{title:data.desc}})}
-                          style={{borderTopWidth:0.5,  borderTopColor: '#132232'}}>
-        <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
+      <CheckBox key={data.desc}
+                style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
+        <View style={{flexDirection:'row'}}>
           {this.renderImg(data)}
           <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.desc}</Text>
         </View>
-      </TouchableHighlight>
+      </CheckBox>
 
     );
   },
