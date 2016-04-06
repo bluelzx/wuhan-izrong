@@ -23,13 +23,13 @@ let _data = {};
 
 let AppStore = _.assign({}, EventEmitter.prototype, {
 
-  addChangeListener: function(callback, event = _info.CHANGE_EVENT) {
+  addChangeListener: function (callback, event = _info.CHANGE_EVENT) {
     this.on(event, callback);
   },
-  removeChangeListener: function(callback, event = _info.CHANGE_EVENT) {
+  removeChangeListener: function (callback, event = _info.CHANGE_EVENT) {
     this.removeListener(event, callback);
   },
-  emitChange: function(event = _info.CHANGE_EVENT) {
+  emitChange: function (event = _info.CHANGE_EVENT) {
     this.emit(event);
   },
 
@@ -42,14 +42,14 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   isProgressVisible: () => _info.isProgressVisible,
   getAPNSToken: () => _data.APNSToken,
   getToken: () => _data.token || '',
-  getData: () => _data || {},
+  getData: () => _data || {}
 });
 
 
 // Private Functions
 
 let _handleConnectivityChange = (isConnected) => {
-    _info.netWorkState = isConnected;
+  _info.netWorkState = isConnected;
 };
 //
 let _appInit = (data) => {
@@ -78,15 +78,15 @@ let _login = (data) => {
   _data = data;
   AppStore.emitChange();
 
-  Persister.getAppData((d) => {
-    data.demoFlag = d.demoFlag;
-    if (!d.demoFlag) {
-      data.demoFlag = {
-        flag: false
-      };
-    }
-    Persister.saveAppData(data);
-  });
+  //Persister.getAppData((d) => {
+  //  data.demoFlag = d.demoFlag;
+  //  if (!d.demoFlag) {
+  //    data.demoFlag = {
+  //      flag: false
+  //    };
+  //  }
+  //  Persister.saveAppData(data);
+  //});
 };
 let _logout = () => {
   _data.token = null;
@@ -95,10 +95,10 @@ let _logout = () => {
   AppStore.emitChange();
 };
 let _force_logout = function () {
-    _data.token = null;
-    Persister.clearToken();
-    _info.isLogout = true;
-    _info.isForce_Logout = true;
+  _data.token = null;
+  Persister.clearToken();
+  _info.isLogout = true;
+  _info.isForce_Logout = true;
 };
 
 AppStore.dispatchToken = AppDispatcher.register(function (action) {

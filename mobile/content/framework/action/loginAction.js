@@ -6,13 +6,13 @@ let {
 let { Host } = require('../../../config');
 
 let AppDispatcher = require('../dispatcher/appDispatcher');
-let { ActionTypes } = require('../../constants/actionTypes');
+let ActionTypes = require('../../constants/actionTypes');
 let _ = require('lodash');
 let AppLinks = require('../../constants/appLinks');
 
 let LoginActions = {
   getProtocol: () => AppLinks.protocal,
-  login: (p, c, f) => _login(AppLinks.login, p, c, f),
+  login: (p, c, f) => _login(AppLinks.login, p),
   logOut: () => _logout(AppLinks.logout),
   register: (p, c, f) => _register(AppLinks.register, p, c, f),
   validatePassword: (p, c, f) => BFetch(AppLinks.validatePassword, p, c, f),
@@ -42,18 +42,20 @@ let _logout = function(url, c) {
   );
 };
 
-let _login = function(url, p, c, f) {
-  BFetch(url, p,
-    function(msg) {
+let _login = function(url, p) {
+  return new Promise((resolve, reject) => {
+    BFetch(url, p).then((response) => {
       AppDispatcher.dispatch({
         type: ActionTypes.LOGIN,
-        data: msg
+        data: response
       });
-      c();
-    },
-    f
-  );
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
 };
+
 let _register = function(url, p, c, f) {
   BFetch(url, p,
     function(msg) {

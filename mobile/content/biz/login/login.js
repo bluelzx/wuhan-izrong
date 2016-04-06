@@ -6,7 +6,8 @@ var {
   TouchableOpacity,
   Text,
   View,
-  Platform
+  Platform,
+  ScrollView
   } = React;
 var AppStore = require('../../framework/store/appStore');
 //var UserStore = require('../../framework/store/userStore');
@@ -19,6 +20,8 @@ var VerifyCode = require('../../comp/utils/verifyCode');
 var Input = require('../../comp/utils/input');
 var { Alert, Button } = require('mx-artifacts');
 
+var TabView = require('../../framework/system/tabView');
+
 var Login = React.createClass({
   getStateFromStores() {
     //var user = UserStore.getUserInfoBean();
@@ -29,8 +32,8 @@ var Login = React.createClass({
     return {
       loaded: false,
       checked: true,
-      userName: '',
-      password: '',
+      userName: 'dpcui',
+      password: 'aaaaa1',
       verify: '',
       active: false,
       deviceModel: deviceModel,
@@ -51,25 +54,29 @@ var Login = React.createClass({
     this.setState(this.getStateFromStores());
   },
   login: function () {
-    if (this.state.userName && this.state.password && this.state.verify) {
-      dismissKeyboard()
-      LoginAction.login(
-        {
+    return new Promise((resolve, reject) => {
+      if (this.state.userName && this.state.password && this.state.verify) {
+        dismissKeyboard();
+        LoginAction.login({
           userName: this.state.userName,
           password: this.state.password,
           deviceToken: this.state.APNSToken,
           deviceModel: this.state.deviceModel,
           captcha: this.state.verify
-        },
-        function () {
-          this.props.navigator.pop();
-        }.bind(this),
-        function (msg) {
-          Alert(msg.msgContent);
-          this.refs['verifyCode'].changeVerify()
-        }.bind(this)
-      )
-    }
+        }).then((response) => {
+          //this.props.navigator.pop();
+          this.props.navigator.replace({
+            comp: TabView
+          });
+
+          resolve();
+        }).catch((errorData) => {
+          //Alert(msg.msgContent);
+          this.refs['verifyCode'].changeVerify();
+          reject(errorData);
+        });
+      }
+    });
   },
   toOther: function (name) {
     const { navigator } = this.props;
@@ -88,32 +95,62 @@ var Login = React.createClass({
   },
 
   render: function () {
-    //LoginAction.registerAPNS()
     return (
-        <View style={[{flexDirection: 'column', flex: 1}, styles.paddingLR]}>
+      <NavBarView navigator={this.props.navigator} title="登录" showBack={false}>
+          <View style={{flexDirection: 'column', flex: 1, paddingLeft: 12, paddingRight: 12}}>
+            <Input placeholder='用户名/手机号' maxlength={20} field='userName'
+                   onChangeText={this._onChangeText} icon='user' value={this.state.userName} />
 
-          <Input placeholder='用户名/手机号' maxlength={20} field='userName'
-                 onChangeText={this._onChangeText} icon='user'/>
+            <Input placeholder='密码' maxlength={16} field='password' inputType='password'
+                   onChangeText={this._onChangeText} icon='password' value={this.state.password} />
 
-          <Input placeholder='密码' maxlength={16} field='password' inputType='password'
-                 onChangeText={this._onChangeText} icon='password' />
+            <VerifyCode ref='verifyCode' onChanged={this._onChangeText} />
 
-          <VerifyCode ref='verifyCode' onChanged={this._onChangeText}/>
+            <View style={{marginTop: 24}}>
+              <Button onPress={() => this.props.exec(() => this.login(), true)} disabled={this.state.checked}>登录</Button>
+            </View>
 
-          <View style={{marginTop: 24}}>
-            <Button onPress={this.login} disabled={this.state.checked}>登录</Button>
+            <View style={styles.menu}>
+              <TouchableOpacity onPress={(()=>{this.toOther(Register_checkPhone)})}>
+                <Text style={styles.colorPath}>新用户注册</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={(()=>{this.toOther(Forget_checkPhone)})}>
+                <Text style={styles.colorPath}>忘记密码?</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.menu}>
-            <TouchableOpacity onPress={(()=>{this.toOther(Register_checkPhone)})}>
-              <Text style={styles.colorPath}>新用户注册</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={(()=>{this.toOther(Forget_checkPhone)})}>
-              <Text style={styles.colorPath}>忘记密码?</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-    )
-  }
+      </NavBarView>
+    );
+  },
+
+  //render: function () {
+  //  //LoginAction.registerAPNS()
+  //  return (
+  //    <NavBarView title="登录" navigator={this.props.navigator} showBack={true}>
+  //      <View style={[{flexDirection: 'column', flex: 1, marginTop: 20}, styles.paddingLR]}>
+  //        <Input placeholder='用户名/手机号' maxlength={20} field='userName'
+  //               onChangeText={this._onChangeText} icon='user' />
+  //
+  //        <Input placeholder='密码' maxlength={16} field='password' inputType='password'
+  //               onChangeText={this._onChangeText} icon='password' />
+  //
+  //        <VerifyCode ref='verifyCode' onChanged={this._onChangeText}/>
+  //
+  //        <View style={{marginTop: 24}}>
+  //          <Button onPress={this.login} disabled={this.state.checked}>登录</Button>
+  //        </View>
+  //        <View style={styles.menu}>
+  //          <TouchableOpacity onPress={(()=>{this.toOther(Register_checkPhone)})}>
+  //            <Text style={styles.colorPath}>新用户注册</Text>
+  //          </TouchableOpacity>
+  //          <TouchableOpacity onPress={(()=>{this.toOther(Forget_checkPhone)})}>
+  //            <Text style={styles.colorPath}>忘记密码?</Text>
+  //          </TouchableOpacity>
+  //        </View>
+  //      </View>
+  //    </NavBarView>
+  //  );
+  //}
 });
 var styles = StyleSheet.create({
   radio: {
@@ -137,10 +174,7 @@ var styles = StyleSheet.create({
   },
   rightButton: {
     marginTop: 30, height: 40, right: 20,
-  },
-  paddingLR: {
-    paddingLeft: 12, paddingRight: 12,
-  },
+  }
 });
 
 module.exports = Login;

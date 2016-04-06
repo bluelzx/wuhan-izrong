@@ -1,6 +1,8 @@
+//let { Host } = require('../../config');
+
 let AppLinks = {
   protocal: '',
-  login: '',
+  login: '/pub/login',
   logout: '',
   register: '',
   validatePassword: '',

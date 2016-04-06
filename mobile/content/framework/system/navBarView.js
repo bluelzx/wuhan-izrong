@@ -1,25 +1,16 @@
 'use strict';
 
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   View,
   TouchableOpacity,
-  Text,
-  StyleSheet,
-  Platform
+  Text
 } = React;
-var { Icon } = require('react-native-vector-icons/Ionicons');
-var AppStore = require('../store/appStore');
-var RequestState = require('../../constants/requestState');
-// var VIcon = require('../../comp/icon/vIcon')
+let { Icon } = require('react-native-vector-icons/Ionicons');
+let dismissKeyboard = require('react-native-dismiss-keyboard');
+let { Device } = require('mx-artifacts');
 
-let ProgressHUD = require('react-native-progress-hud');
-var dismissKeyboard = require('react-native-dismiss-keyboard');
-var { Alert } = require('mx-artifacts');
-var NavBarView = React.createClass({
-  _curRoute: null,
-  mixins: [ProgressHUD.Mixin],
-
+let NavBarView = React.createClass({
   PropTypes: {
     showBar: React.PropTypes.bool,
     showBack: React.PropTypes.bool,
@@ -39,39 +30,8 @@ var NavBarView = React.createClass({
       fontColor: '#333333',
       contentBackgroundColor: '#f0f0f0',
       actionButton: null,
-      // customLoading: false,
       navBarBottomWidth: 1
     };
-  },
-  componentDidMount: function () {
-    AppStore.addChangeListener(this._onChange, 'rpc');
-    this._curRoute = this.props.navigator.getCurrentRoutes().slice().pop();
-  },
-  componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange, 'rpc');
-    this._curRoute = this.props.navigator.getCurrentRoutes().slice().pop();
-  },
-  _onChange: function () {
-    var route = this.props.navigator.getCurrentRoutes().slice().pop();
-    var cur = this.props.navigator.cur;
-    if (cur === this._curRoute.comp || route.comp === 'login') {
-      // if (!this.props.customLoading) {
-        switch (AppStore.requestLoadingState()) {
-          case RequestState.START:
-            this.showProgressHUD();
-            break;
-          case RequestState.END:
-            this.dismissProgressHUD();
-            Promise.resolve().then(() => {
-              AppStore.requestHandle()();
-            }).catch((e) => {
-              Alert('系统异常');
-            });
-            break;
-          default:
-        }
-      // }
-    }
   },
   _renderLeft: function () {
     if (this.props.showBack) {
@@ -102,8 +62,8 @@ var NavBarView = React.createClass({
             justifyContent: 'space-between',
             alignItems: 'center',
             // paddingHorizontal: 6
-            height: (Platform.OS === 'ios') ? 64 : 44,
-            paddingTop: (Platform.OS === 'ios') ? 20 : 0
+            height: Device.navBarHeight,
+            paddingTop: Device.statusBarHeight
           }}
         >
           <View style={{width: 44}}>
@@ -133,13 +93,6 @@ var NavBarView = React.createClass({
             {this.props.children}
         </View>
 
-        <View style={{ height: Platform.OS === 'ios' ? 49 : 0 }}/>
-
-        <ProgressHUD
-          isVisible={this.state.is_hud_visible}
-          isDismissible={false}
-          overlayColor="rgba(0, 0, 0, 0)"
-        />
       </View>
     );
   }
