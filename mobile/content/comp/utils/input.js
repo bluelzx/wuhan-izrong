@@ -4,10 +4,10 @@ var React = require('react-native');
 var {
   TextInput,
   View,
-  Image
+  Image,
+  Dimensions
   } = React;
 var DictIcon = require('../../constants/dictIcon');
-//var { Device } = require('mx-artifacts');
 var Input = React.createClass({
 
   propTypes: {

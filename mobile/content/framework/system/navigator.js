@@ -138,7 +138,7 @@ var Main = React.createClass({
     }
 
     var initComp = TabView;
-    if (!this.state.token) {
+    if (!!this.state.token) {
       initComp = Login;
     }
     return (

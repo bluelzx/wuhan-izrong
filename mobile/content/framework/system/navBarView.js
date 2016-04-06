@@ -6,7 +6,7 @@ let {
   TouchableOpacity,
   Text
 } = React;
-let { Icon } = require('react-native-vector-icons/Ionicons');
+let Icon = require('react-native-vector-icons/Ionicons');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let { Device } = require('mx-artifacts');
 
@@ -37,7 +37,7 @@ let NavBarView = React.createClass({
     if (this.props.showBack) {
       return (
         <TouchableOpacity
-          // style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 10 }}
+          style={{ paddingLeft: 10 }}
           onPress={() => this.props.navigator.pop()}
         >
           <Icon name="ios-arrow-left" size={30} color={this.props.fontColor} />
