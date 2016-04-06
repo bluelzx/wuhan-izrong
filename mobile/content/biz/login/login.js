@@ -54,10 +54,11 @@ var Login = React.createClass({
     this.setState(this.getStateFromStores());
   },
   login: function () {
-    return new Promise((resolve, reject) => {
-      if (this.state.userName && this.state.password && this.state.verify) {
-        dismissKeyboard();
-        LoginAction.login({
+    if (this.state.userName && this.state.password && this.state.verify) {
+      dismissKeyboard();
+
+      this.props.exec(() => {
+        return LoginAction.login({
           userName: this.state.userName,
           password: this.state.password,
           deviceToken: this.state.APNSToken,
@@ -68,15 +69,13 @@ var Login = React.createClass({
           this.props.navigator.replace({
             comp: TabView
           });
-
-          resolve();
         }).catch((errorData) => {
           //Alert(msg.msgContent);
           this.refs['verifyCode'].changeVerify();
-          reject(errorData);
+          throw errorData;
         });
-      }
-    });
+      });
+    }
   },
   toOther: function (name) {
     const { navigator } = this.props;
@@ -107,7 +106,7 @@ var Login = React.createClass({
             <VerifyCode ref='verifyCode' onChanged={this._onChangeText} />
 
             <View style={{marginTop: 24}}>
-              <Button onPress={() => this.props.exec(() => this.login(), true)} disabled={this.state.checked}>登录</Button>
+              <Button onPress={this.login} disabled={this.state.checked}>登录</Button>
             </View>
 
             <View style={styles.menu}>
