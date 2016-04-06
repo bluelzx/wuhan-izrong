@@ -2,6 +2,10 @@ package com.fasapp;
 
 import com.facebook.react.ReactActivity;
 import io.realm.react.RealmReactPackage;
+
+import com.fasapp.BuildConfig;
+import com.fasapp.pakage.ZXReactPackage;
+import com.fasapp.view.viewpager.ZXViewPagerManager;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -38,7 +42,8 @@ public class MainActivity extends ReactActivity {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
             new RealmReactPackage(),
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new ZXReactPackage()
         );
     }
 }

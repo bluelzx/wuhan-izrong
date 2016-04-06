@@ -9,7 +9,11 @@ var {
   View,
   TabBarIOS
   } = React;
-var Home = require('../../biz/home/home')
+var Home = require('../../biz/home/home');
+var Market = require ('../../biz/market/market');
+var Publish = require('../../biz/publish/publish');
+var IM = require('../../biz/im/im');
+var Personal = require('../../biz/personal/personal');
 //var Message = require("../../biz/message/messageList")
 //var PersonCenter = require("../../biz/personalCenter/personalCenter")
 var AppAction = require('../action/appAction');
@@ -19,8 +23,8 @@ var AppStore = require('../store/appStore');
 //var Alert = require('../../comp/utils/alert');
 //var Login = require('../../biz/login/login')
 
-var ScrollableTabView = require('../../comp/tabBar/scrollableTabView')
-var AndroidTabBar = require('../../comp/tabBar/tabBar')
+var ScrollableTabView = require('../../comp/tabBar/scrollableTabView');
+var AndroidTabBar = require('../../comp/tabBar/tabBar');
 
 var TabView = React.createClass({
   getStateFromStores() {
@@ -48,34 +52,34 @@ var TabView = React.createClass({
     //}
   },
 
-  componentDidMount() {
-    AppStore.addChangeListener(this._onChange);
-    if (Platform.OS === 'ios') {
-      if (!AppStore.getAPNSToken()) {
-        PushNotificationIOS.requestPermissions();
-      }
-
-      PushNotificationIOS.removeEventListener('register', AppAction.notificationRegister);
-      PushNotificationIOS.removeEventListener('notification', AppAction.onNotification);
-      AppStateIOS.removeEventListener('change', this._handleAppStateChange);
-
-
-      PushNotificationIOS.addEventListener('register', AppAction.notificationRegister);
-      PushNotificationIOS.addEventListener('notification', AppAction.onNotification);
-
-      AppStateIOS.addEventListener('change', this._handleAppStateChange);
-    }
-  },
-
-  componentWillUnmount: function () {
-    if (Platform.OS === 'ios') {
-      AppStore.removeChangeListener(this._onChange);
-      PushNotificationIOS.removeEventListener('register', AppAction.notificationRegister);
-      PushNotificationIOS.removeEventListener('notification', AppAction.onNotification);
-      AppStateIOS.removeEventListener('change', this._handleAppStateChange);
-      PushNotificationIOS.setApplicationIconBadgeNumber(0);
-    }
-  },
+  //componentDidMount() {
+  //  AppStore.addChangeListener(this._onChange);
+  //  if (Platform.OS === 'ios') {
+  //    if (!AppStore.getAPNSToken()) {
+  //      PushNotificationIOS.requestPermissions();
+  //    }
+  //
+  //    PushNotificationIOS.removeEventListener('register', AppAction.notificationRegister);
+  //    PushNotificationIOS.removeEventListener('notification', AppAction.onNotification);
+  //    AppStateIOS.removeEventListener('change', this._handleAppStateChange);
+  //
+  //
+  //    PushNotificationIOS.addEventListener('register', AppAction.notificationRegister);
+  //    PushNotificationIOS.addEventListener('notification', AppAction.onNotification);
+  //
+  //    AppStateIOS.addEventListener('change', this._handleAppStateChange);
+  //  }
+  //},
+  //
+  //componentWillUnmount: function () {
+  //  if (Platform.OS === 'ios') {
+  //    AppStore.removeChangeListener(this._onChange);
+  //    PushNotificationIOS.removeEventListener('register', AppAction.notificationRegister);
+  //    PushNotificationIOS.removeEventListener('notification', AppAction.onNotification);
+  //    AppStateIOS.removeEventListener('change', this._handleAppStateChange);
+  //    PushNotificationIOS.setApplicationIconBadgeNumber(0);
+  //  }
+  //},
 
   _handleAppStateChange: function (currentAppState) {
     switch (currentAppState) {
@@ -100,57 +104,47 @@ var TabView = React.createClass({
     var navigator = this.props.navigator;
     if (Platform.OS === 'ios') {
       return (
-        <TabBarIOS selectedTab={this.state.selectedTab} tintColor={'#44bcb2'} barTintColor={'#f6f6f6'}>
+        <TabBarIOS selectedTab={this.state.selectedTab}
+                   translucent={true}
+                   tintColor={'#ffffff'} barTintColor={'#1156C0'}>
           <TabBarIOS.Item
             title="首页"
             icon={require('../../image/tab/home.png')}
-            selectedIcon={require('../../image/tab/home_selected.png')}
-            //systemIcon="contacts"
             selected={this.state.selectedTab === 'home'}
             onPress={() => {this.setState({selectedTab: 'home'});}}>
-            <Home navigator={this.props.navigator}/>
+            <Home navigator={this.props.navigator} />
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
             title="市场"
-            //icon={require('../../image/tab/bill.png')}
-            //selectedIcon={require('../../image/tab/bill_selected.png')}
-            systemIcon="contacts"
-            selected={this.state.selectedTab === 'bills'}
-            onPress={() => {this.setState({selectedTab: 'bills'})}}>
-
+            icon={require('../../image/tab/market.png')}
+            selected={this.state.selectedTab === 'market'}
+            onPress={() => {this.setState({selectedTab: 'market'})}}>
+            <Market navigator={this.props.navigator} />
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
-            title=""
-            icon={require('../../image/tab/home.png')}
-            selectedIcon={require('../../image/tab/home_selected.png')}
-            //systemIcon="contacts"
-            selected={this.state.selectedTab === 'home'}
-            onPress={() => {this.setState({selectedTab: 'home'});}}
-          >
-            <View></View>
+            title="发布"
+            icon={require('../../image/tab/publish.png')}
+            selected={this.state.selectedTab === 'publish'}
+            onPress={() => {this.setState({selectedTab: 'publish'});}}>
+            <Publish  navigator={this.props.navigator}/>
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
-            badge={this.state.billSum==0?null:this.state.billSum}
-            title="聊天"
-            //icon={require('../../image/tab/message.png')}
-            //selectedIcon={require('../../image/tab/message_selected.png')}
-            systemIcon="contacts"
-            selected={this.state.selectedTab === 'messages'}
-            onPress={() => {this.setState({selectedTab: 'messages'})}}>
-
+            title="IM"
+            icon={require('../../image/tab/IM.png')}
+            selected={this.state.selectedTab === 'IM'}
+            onPress={() => {this.setState({selectedTab: 'IM'})}}>
+            <IM navigator={this.props.navigator} />
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
             title="个人"
-            //icon={require('../../image/tab/member.png')}
-            //selectedIcon={require('../../image/tab/member_selected.png')}
-            systemIcon="contacts"
-            selected={this.state.selectedTab === 'personCenter'}
-            onPress={() => {this.setState({selectedTab: 'personCenter'})}}>
-
+            icon={require('../../image/tab/personalcenter.png')}
+            selected={this.state.selectedTab === 'personalCenter'}
+            onPress={() => {this.setState({selectedTab: 'personalCenter'})}}>
+            <Personal navigator={this.props.navigator} />
           </TabBarIOS.Item>
 
         </TabBarIOS>
@@ -158,50 +152,41 @@ var TabView = React.createClass({
     } else {
       return (
         <ScrollableTabView initialPage={0} locked={true}
-                           renderTabBar={() => <AndroidTabBar />}>
-          <View navigator={this.props.navigator}
-                tabLabel="ion|ios-pricetags"
+                           renderTabBar={() => <AndroidTabBar />}
+        >
+          <Home navigator={this.props.navigator}
                 tabDesc="首页"
-                //icon={require('../../image/tab/home.png')}
-                //selectedIcon={require('../../image/tab/home_selected.png')}>
-          >
-          </View>
+                icon={require('../../image/tab/home.png')}
+                selectedIcon={require('../../image/tab/home-selected.png')}>
+          </Home>
 
-          <View navigator={this.props.navigator}
-                tabLabel="ion|ios-pricetags"
-                    tabDesc="市场"
-                    //icon={require('../../image/tab/bill.png')}
-                    //selectedIcon={require('../../image/tab/bill_selected.png')}>
-          >
-          </View>
+          <Market navigator={this.props.navigator}
+                  tabDesc="市场"
+                  icon={require('../../image/tab/market.png')}
+                  selectedIcon={require('../../image/tab/market-selected.png')}>
+          </Market>
 
-          <View navigator={this.props.navigator}
-                tabLabel="ion|ios-pricetags"
-                tabDesc=""
-                //icon={require('../../image/tab/bill.png')}
-                //selectedIcon={require('../../image/tab/bill_selected.png')}>
-          >
-          </View>
+          <Publish navigator={this.props.navigator}
+                   tabDesc="发布"
+                   icon={require('../../image/tab/publish.png')}
+                   selectedIcon={require('../../image/tab/publish-selected.png')}>
+          </Publish>
 
 
-          <View navigator={this.props.navigator}
-                tabLabel="ion|ios-pricetags"
-                tabDesc="聊天"
-                   //badge={this.state.billSum==0?null:this.state.billSum}
-                   //icon={require('../../image/tab/message.png')}
-                   //selectedIcon={require('../../image/tab/message_selected.png')}
-          >
-          </View>
+          <IM navigator={this.props.navigator}
+              tabDesc="IM"
+              icon={require('../../image/tab/IM.png')}
+              selectedIcon={require('../../image/tab/IM-selected.png')}>
+          </IM>
 
-          <View navigator={this.props.navigator}
-                tabLabel="ion|ios-pricetags"
-                        tabDesc="个人"
-                        //icon={require('../../image/tab/member.png')}
-                        //selectedIcon={require('../../image/tab/member_selected.png')}>
-            >
-          </View>
+          <Personal navigator={this.props.navigator}
+                    tabDesc="个人"
+                    icon={require('../../image/tab/personalcenter.png')}
+                    selectedIcon={require('../../image/tab/personalcenter-selected.png')}>
+          </Personal>
+
         </ScrollableTabView>
-      )
+      );
     }
   },
 });

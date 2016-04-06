@@ -58,7 +58,7 @@ let NavBarView = React.createClass({
             flexDirection: 'row',
             backgroundColor: this.props.backgroundColor,
             borderBottomWidth: this.props.navBarBottomWidth,
-            borderColor: '#c8c7cc',
+            borderColor: '#A47441',
             justifyContent: 'space-between',
             alignItems: 'center',
             // paddingHorizontal: 6
