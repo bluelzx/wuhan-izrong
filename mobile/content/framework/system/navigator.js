@@ -85,7 +85,7 @@ var Main = React.createClass({
       }
     }
   },
-  _exec: function (func, showLoading) {
+  _exec: function (func, showLoading = true) {
     let self = this;
     if (showLoading) {
       this.showProgressHUD();
@@ -98,6 +98,10 @@ var Main = React.createClass({
           //Alert(response);
         })
         .catch((errorData) => {
+          if (showLoading) {
+            self.dismissProgressHUD();
+          }
+
           console.log(errorData);
           Alert(errorData.msgContent || errorData.message);
         });
@@ -108,7 +112,6 @@ var Main = React.createClass({
     }).catch((e) => {
       console.log(e);
     });
-
   },
   _renderScene: function (route, navigator) {
     this._navigator = navigator;

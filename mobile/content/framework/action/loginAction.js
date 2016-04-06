@@ -43,8 +43,7 @@ let _logout = function(url, c) {
 let _login = function(url, p) {
   return new Promise((resolve, reject) => {
     BFetch(url, p).then((response) => {
-      AppStore.login(response)
-      resolve(response);
+      resolve(AppStore.login(response));
     }).catch((errorData) => {
       reject(errorData);
     });

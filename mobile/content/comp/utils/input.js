@@ -4,8 +4,7 @@ var React = require('react-native');
 var {
   TextInput,
   View,
-  Image,
-  Dimensions
+  Image
   } = React;
 var DictIcon = require('../../constants/dictIcon');
 var Input = React.createClass({
