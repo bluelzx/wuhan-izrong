@@ -12,6 +12,7 @@ let {
   TouchableHighlight
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
+let Icon = require('react-native-vector-icons/Ionicons');
 let DateHelper = require('../../comp/utils/dateHelper');
 let { Device } = require('mx-artifacts');
 let Swipeout= require('react-native-swipeout');
@@ -39,7 +40,7 @@ let WhitePage = React.createClass({
             comp: Contacts
       });
       }}>
-        <Text style={{color:'#ffffff'}}>通讯录</Text>
+        <Icon name="ios-list-outline" size={25} color='#ffffff' />
       </TouchableOpacity>
     );
   },
