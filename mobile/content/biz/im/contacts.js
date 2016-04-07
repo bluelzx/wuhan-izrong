@@ -16,6 +16,7 @@ let CreateGroup = require('./createGroup');
 let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let Chat = require('./chat');
+let Icon = require('react-native-vector-icons/Ionicons');
 
 
 const MockData = [
@@ -72,7 +73,7 @@ let Contacts = React.createClass({
             comp: CreateGroup
       });
       }}>
-        <Text style={{color:'#ffffff', fontSize:30}}>+</Text>
+        <Icon name="plus" size={25} color='#ffffff' />
       </TouchableOpacity>
     );
   },
