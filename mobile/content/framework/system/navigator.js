@@ -120,8 +120,8 @@ var Main = React.createClass({
           gestures: route.gestures
         })}
         initialRoute={{
-          //comp: Login
-          comp: initComp
+          comp: Login
+          //comp: initComp
         }}
       />
     );

@@ -27,7 +27,7 @@ let GroupSchema = {
   }
 };
 
-let SendMessageSchema = {
+/*let SendMessageSchema = {
   name: "sendMessage",
   primaryKey: 'toUid',
   properties: {
@@ -52,12 +52,13 @@ let RevMessageSchema = {
     msgType: {type: 'string', optional: true},
     revTime: {type: 'date', optional: true},
   }
-};
+};*/
 let MessageSchema = {
   name: "message",
-  primaryKey: 'msgId',
+  primaryKey: 'sessionId',
   properties: {
-    msgId: 'id',
+    sessionId:{type:'int',optional: true},
+    msgId: {type: 'int', optional: true},
     fromUid: {type: 'int', optional: true},
     toUid: {type: 'int', optional: true},
     type: {type: 'string', optional: true},
@@ -71,7 +72,5 @@ let MessageSchema = {
 module.exports = {
   UserSchema: UserSchema,
   GroupSchema: GroupSchema,
-  SendMessageSchema: SendMessageSchema,
-  RevMessageSchema: RevMessageSchema,
   MessageSchema: MessageSchema
 };

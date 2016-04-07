@@ -133,8 +133,6 @@ var NavBarView = React.createClass({
             {this.props.children}
         </View>
 
-        <View style={{ height: Platform.OS === 'ios' ? 49 : 0 }}/>
-
         <ProgressHUD
           isVisible={this.state.is_hud_visible}
           isDismissible={false}

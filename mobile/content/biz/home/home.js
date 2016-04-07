@@ -35,30 +35,19 @@ var Home = React.createClass({
     };
   },
 
-  returnItem: function (border, url, text) {
-    if (border) {
-      return (
-        <View style={styles.borderTableItem}>
-          <Image></Image>
-          <Text></Text>
-        </View>
-      );
-    } else {
-      return (
-        <View style={{flex:1,flexDirection:"column"}}>
-          <Image></Image>
-          <Text></Text>
-        </View>
-      );
-    }
-  },
-
   componentWillMount(){
     //this.toArray();
   },
 
   componentDidMount() {
     //setInterval(this.set, 20)
+  },
+
+  toPage: function (name) {
+    const { navigator } = this.props;
+    if (navigator) {
+      navigator.push({comp: name})
+    }
   },
 
   _renderPage: function (data:Object) {
@@ -69,8 +58,30 @@ var Home = React.createClass({
     );
   },
 
-  _onChangePage: function (page) {
-
+  returnItem: function (border, url, text, toPage) {
+    if (border) {
+      return (
+        <TouchableHighlight style={styles.borderTableItem} activeOpacity={0.8}
+                            underlayColor='#18304b' onPress={()=>console.log(toPage)}>
+          <View style={{flexDirection:'column',alignItems:'center'}}>
+            <Image style={styles.menuImage} resizeMode='cover'
+                   source={url}></Image>
+            <Text style={styles.menuText}>{text}</Text>
+          </View>
+        </TouchableHighlight>
+      );
+    } else {
+      return (
+        <TouchableHighlight style={{flex:1,flexDirection:"column"}} activeOpacity={0.8}
+                            underlayColor='#18304b' onPress={()=>console.log(toPage)}>
+          <View style={{flexDirection:'column',alignItems:'center'}}>
+            <Image style={styles.menuImage} resizeMode='cover'
+                   source={url}></Image>
+            <Text style={styles.menuText}>{text}</Text>
+          </View>
+        </TouchableHighlight>
+      );
+    }
   },
 
   render() {
@@ -82,20 +93,19 @@ var Home = React.createClass({
             style={[this.props.style,styles.viewPager]}
             dataSource={this.state.dataSource}
             renderPage={this._renderPage}
-            onChangePage={this._onChangePage}
             isLoop={true}
             autoPlay={true}/>
           <View style={{height: width/3*2,flexDirection:"column",backgroundColor: "#162a40",justifyContent: "center"}}>
             <View style={{flex:1,flexDirection:"row",borderBottomColor:"#000000",borderBottomWidth:1}}>
-              {this.returnItem(false)}
-              {this.returnItem(true)}
-              {this.returnItem(false)}
+              {this.returnItem(false, require('../../image/home/assetTransaction.png'), '资产交易','assetTransaction')}
+              {this.returnItem(true, require('../../image/home/billTransaction.png'), '票据交易','billTransaction')}
+              {this.returnItem(false, require('../../image/home/capitalBusiness.png'), '资金业务','capitalBusiness')}
             </View>
 
             <View style={{flex:1,flexDirection:"row"}}>
-              {this.returnItem(false)}
-              {this.returnItem(true)}
-              {this.returnItem(false)}
+              {this.returnItem(false, require('../../image/home/companyBank.png'), '公司投行','companyBank')}
+              {this.returnItem(true, require('../../image/home/interbankAgent.png'), '同业代理','interbankAgent')}
+              {this.returnItem(false, require('../../image/home/myBusiness.png'), '我的业务','myBusiness')}
             </View>
           </View>
         </ScrollView>
@@ -123,6 +133,16 @@ var styles = StyleSheet.create({
     borderLeftColor: "#000000",
     borderLeftWidth: 1,
     borderRightWidth: 1
+  },
+  menuImage: {
+    height: 70,
+    width: 70,
+    marginTop: 20
+  },
+  menuText: {
+    color: '#ffffff',
+    marginTop: 20,
+    fontSize: 16
   }
 });
 

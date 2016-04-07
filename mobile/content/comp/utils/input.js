@@ -28,10 +28,10 @@ var Input = React.createClass({
     return {
       containerStyle: {
         height: 47,
-        borderColor: '#000000',
+        borderColor: '#0a1926',
         borderWidth: 0.5,
         marginTop: 12,
-        backgroundColor: '#000000',
+        backgroundColor: '#0a1926',
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 6

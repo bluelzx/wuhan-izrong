@@ -16,8 +16,8 @@ var {
   }=React;
 var NavBarView = require('../../framework/system/navBarView');
 var Validation = require('../../comp/utils/validation')
-
-var WhitePage = React.createClass({
+var Login = require('../../biz/login/login');
+var Personal = React.createClass({
   getInitialState: function () {
     return {
       userName: "用户名",
@@ -39,6 +39,7 @@ var WhitePage = React.createClass({
       navigator.push({comp: name})
     }
   },
+
   returnImg: function () {
 
   },
@@ -52,7 +53,7 @@ var WhitePage = React.createClass({
           <View style={{backgroundColor:"#18304b",height:10}}/>
           <View style={{backgroundColor:'#162a40'}}>
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
-                                onPress={()=>this.toPage()}>
+                                onPress={()=>this.toPage(Login)}>
               <View style={styles.layout}>
                 <View style={{flexDirection:'row'}}>
                   <Image style={styles.head} resizeMode="cover" source={this.returnImg()}/>
@@ -65,7 +66,6 @@ var WhitePage = React.createClass({
             </TouchableHighlight>
           </View>
           <View style={{backgroundColor:"#18304b",height:10}}/>
-
         </ScrollView>
       </NavBarView>
     );
@@ -91,4 +91,4 @@ var styles = StyleSheet.create({
 });
 
 
-module.exports = WhitePage;
+module.exports = Personal;

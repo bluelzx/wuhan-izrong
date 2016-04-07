@@ -6,7 +6,9 @@ var {
   TouchableOpacity,
   Text,
   View,
-  Platform
+  Image,
+  Platform,
+  Dimensions
   } = React;
 var AppStore = require('../../framework/store/appStore');
 //var UserStore = require('../../framework/store/userStore');
@@ -18,6 +20,9 @@ var dismissKeyboard = require('react-native-dismiss-keyboard');
 var VerifyCode = require('../../comp/utils/verifyCode');
 var Input = require('../../comp/utils/input');
 var { Alert, Button } = require('mx-artifacts');
+var Register_valiMobile = require('./register_valiMobile');
+var Login_ValiSMS = require('./login_valiSMS');
+var {height, width} = Dimensions.get('window');
 
 var Login = React.createClass({
   getStateFromStores() {
@@ -34,7 +39,8 @@ var Login = React.createClass({
       verify: '',
       active: false,
       deviceModel: deviceModel,
-      APNSToken: AppStore.getAPNSToken()
+      APNSToken: AppStore.getAPNSToken(),
+
     };
   },
   getInitialState: function () {
@@ -71,7 +77,8 @@ var Login = React.createClass({
       )
     }
   },
-  toOther: function (name) {
+
+  toPage: function (name) {
     const { navigator } = this.props;
     if (navigator) {
       navigator.push({comp: name})
@@ -86,19 +93,49 @@ var Login = React.createClass({
       this.setState({checked: false});
     }
   },
+  renderLogo: function () {
+    return (
+      <View style={{alignItems:'center',flexDirection:'column'}}>
+        <Image style={{marginTop:30,height:80,width:160}}
+               resizeMode='cover'
+               source={require("../../image/login/logo.png")}/>
+        <Text style={{color:'#ffffff',marginTop:20,fontSize:18}}>环渤海银银合作平台</Text>
+      </View>
+    )
+  },
 
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='登陆' showBack={false} showBar={true}>
+                  contentBackgroundColor='#18304D' title='登录' showBack={false} showBar={true}>
         <View style={[{flexDirection: 'column', flex: 1}, styles.paddingLR]}>
-
-          <Input placeholder='手机号' maxlength={20} field='userName'
+          {this.renderLogo()}
+          <Input containerStyle={{height: 47, borderColor: '#0a1926',borderWidth: 0.5,marginTop: 20,
+          backgroundColor: '#0a1926',flexDirection: 'row',alignItems: 'center',borderRadius: 6}}
+                 type="default" placeholder='手机号' maxlength={20} field='userName'
                  onChangeText={this._onChangeText} icon='user'/>
 
-          <VerifyCode ref='verifyCode' onChanged={this._onChangeText}/>
+          <Button
+            containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
+            style={{fontSize: 20, color: '#ffffff'}}
+            styleDisabled={{color: 'red'}}
+            onPress={()=>this.toPage(Login_ValiSMS)}>
+            登录
+          </Button>
 
-
+          <Button
+            containerStyle={{marginTop:20,backgroundColor:'#ffffff'}}
+            style={{fontSize: 20, color: '#1151B1'}}
+            styleDisabled={{color: 'red'}}
+            onPress={()=>this.toPage(Register_valiMobile)}>
+            新用户注册
+          </Button>
+        </View>
+        <View style={{flex:1,flexDirection:'column',justifyContent:'flex-end'}}>
+          <View style={{flexDirection:'row',justifyContent:'center',marginBottom:30}}>
+            <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服:</Text>
+            <Text style={{fontSize: 16, color: '#ffffff',textDecorationLine:'underline'}}>021-35885888</Text>
+          </View>
         </View>
       </NavBarView>
     )
