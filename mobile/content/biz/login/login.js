@@ -23,6 +23,8 @@ var { Alert, Button } = require('mx-artifacts');
 var Register_valiMobile = require('./register_valiMobile');
 var Login_ValiSMS = require('./login_valiSMS');
 var {height, width} = Dimensions.get('window');
+var TabView = require('../../framework/system/tabView');
+
 
 var Login = React.createClass({
   getStateFromStores() {
@@ -74,7 +76,8 @@ var Login = React.createClass({
         }).catch((errorData) => {
           //Alert(msg.msgContent);
           this.refs['verifyCode'].changeVerify();
-          throw errorData;
+          //throw errorData;
+          return Promise.reject(errorData);
         });
       });
     }
