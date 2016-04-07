@@ -3,27 +3,26 @@
  */
 'use strict';
 
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   StyleSheet,
   TouchableHighlight,
   Text,
   View,
-  Platform
+  Image
   } = React;
-var AppStore = require('../../framework/store/appStore');
-//var UserStore = require('../../framework/store/userStore');
-var LoginAction = require('../../framework/action/loginAction');
-//var Register_checkPhone = require('./register_checkPhone');
-//var Forget_checkPhone = require('./forget_checkPhone');
-var NavBarView = require('../../framework/system/navBarView');
-var dismissKeyboard = require('react-native-dismiss-keyboard');
-var Input = require('../../comp/utils/input');
-var { Alert, Button } = require('mx-artifacts');
-var Register_selectOrg = require('./register_selectOrg');
-var Register_uploadNameCard = require('./register_uploadNameCard')
+let AppStore = require('../../framework/store/appStore');
+//let UserStore = require('../../framework/store/userStore');
+let LoginAction = require('../../framework/action/loginAction');
+let NavBarView = require('../../framework/system/navBarView');
+let dismissKeyboard = require('react-native-dismiss-keyboard');
+let Input = require('../../comp/utils/input');
+let { Alert, Button } = require('mx-artifacts');
+let Register_selectOrg = require('./selectOrg');
+let Register_uploadNameCard = require('./uploadNameCard');
+let Icon = require('react-native-vector-icons/Ionicons');
 
-var Register_accountInfo = React.createClass({
+let Register_accountInfo = React.createClass({
   getStateFromStores() {
     return {};
   },
@@ -72,8 +71,12 @@ var Register_accountInfo = React.createClass({
                  onChangeText={this._onChangeText} icon='user'/>
           <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
                               onPress={()=>this.toPage(Register_selectOrg)}>
-            <View style={styles.container}>
-
+            <View style={styles.selectOrg}>
+              <Image
+                style={{height:20,width:20}}
+                source={require('../../image/login/select_org.png')}/>
+              <Text style={{color:'#ffffff',fontSize:18}}>选择机构</Text>
+                <Icon name="ios-arrow-right" size={28} color={'#ffffff'}/>
             </View>
           </TouchableHighlight>
           <Button
@@ -89,16 +92,20 @@ var Register_accountInfo = React.createClass({
     )
   }
 });
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   paddingLR: {
     paddingLeft: 12,
     paddingRight: 12
   },
-  container: {
+  selectOrg: {
+    flex:1,
     height: 47,
     backgroundColor: '#1151B1',
     marginTop: 20,
-    borderRadius: 6
+    borderRadius: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent:'space-around'
   }
 });
 

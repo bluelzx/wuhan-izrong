@@ -1,31 +1,34 @@
 /**
- * Created by vison on 16/4/5.
+ * Created by vison on 16/4/6.
  */
 'use strict';
 
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   StyleSheet,
   TouchableOpacity,
   Text,
   View,
   Platform
   } = React;
-var AppStore = require('../../framework/store/appStore');
-//var UserStore = require('../../framework/store/userStore');
-var LoginAction = require('../../framework/action/loginAction');
-//var Register_checkPhone = require('./register_checkPhone');
-//var Forget_checkPhone = require('./forget_checkPhone');
-var NavBarView = require('../../framework/system/navBarView');
-var dismissKeyboard = require('react-native-dismiss-keyboard');
-var Input = require('../../comp/utils/input');
-var { Alert, Button } = require('mx-artifacts');
-var SMSTimer = require('../../comp/utils/smsTimer')
+let AppStore = require('../../framework/store/appStore');
+//let UserStore = require('../../framework/store/userStore');
+let LoginAction = require('../../framework/action/loginAction');
+//let Register_checkPhone = require('./register_checkPhone');
+//let Forget_checkPhone = require('./forget_checkPhone');
+let NavBarView = require('../../framework/system/navBarView');
+let dismissKeyboard = require('react-native-dismiss-keyboard');
+let Input = require('../../comp/utils/input');
+let { Alert, Button } = require('mx-artifacts');
+let SMSTimer = require('../../comp/utils/smsTimer')
+let CheakBox = require('../../comp/utils/checkbox')
+let Register_AccountInfo = require('./accountInfo');
 
-var ValiSMS = React.createClass({
+let Register_valiMobile = React.createClass({
   getStateFromStores() {
     return {
-      valiMobile:'13275805130'
+      valiMobile:'13275805130',
+      checkbox: true,
     };
   },
   getInitialState: function () {
@@ -40,27 +43,6 @@ var ValiSMS = React.createClass({
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
-  },
-  login: function () {
-    if (this.state.userName && this.state.password && this.state.verify) {
-      dismissKeyboard()
-      LoginAction.login(
-        {
-          userName: this.state.userName,
-          password: this.state.password,
-          deviceToken: this.state.APNSToken,
-          deviceModel: this.state.deviceModel,
-          captcha: this.state.verify
-        },
-        function () {
-          this.props.navigator.pop();
-        }.bind(this),
-        function (msg) {
-          Alert(msg.msgContent);
-          this.refs['verifyCode'].changeVerify()
-        }.bind(this)
-      )
-    }
   },
 
   toPage: function (name) {
@@ -79,19 +61,37 @@ var ValiSMS = React.createClass({
     }
   },
 
+  selectChange(select){
+    this.setState({checkbox: select})
+  },
+
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='短信验证' showBack={true} showBar={true}>
-        <View style={[{flexDirection: 'column', flex: 1}, styles.paddingLR]}>
-          <Text style={{fontSize:16,color:'#ffffff',marginTop:20}}>已发送短信验证码至132****5130</Text>
+        <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
+          <Input type="default" placeholder='手机号' maxlength={20} field='userName'
+                 onChangeText={this._onChangeText} icon='user'/>
           <SMSTimer  ref="smsTimer" onChanged={this._onChange} func={'sendSMSCodeToNewMobile'}/>
+          <CheakBox content="已阅读并同意用户协议"
+                    onChange={this.selectChange}
+                    checkedUrl={require('../../image/utils/checkbox_checked.png')}
+                    unCheckedUrl={require('../../image/utils/checkbox_normal.png')}
+                    checked={this.state.checkbox}/>
+          <Button
+            containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
+            style={{fontSize: 20, color: '#ffffff'}}
+            styleDisabled={{color: 'red'}}
+            onPress={()=>this.toPage(Register_AccountInfo)}>
+            下一步
+          </Button>
         </View>
+
       </NavBarView>
     )
   }
 });
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   radio: {
     width: 40, height: 40
   },
@@ -119,4 +119,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = ValiSMS;
+module.exports = Register_valiMobile;

@@ -4,20 +4,19 @@
 
 'use strict';
 
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   View,
   StyleSheet,
   Text,
   ScrollView,
-  Dimensions,
   Image,
   TouchableHighlight,
   }=React;
-var NavBarView = require('../../framework/system/navBarView');
-var Validation = require('../../comp/utils/validation')
-var Login = require('../../biz/login/login');
-var Personal = React.createClass({
+let NavBarView = require('../../framework/system/navBarView');
+let Validation = require('../../comp/utils/validation')
+let Login = require('../../biz/login/login');
+let Personal = React.createClass({
   getInitialState: function () {
     return {
       userName: "用户名",
@@ -72,7 +71,7 @@ var Personal = React.createClass({
   }
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   layout: {
     flexDirection: 'row',
     justifyContent: 'space-between',
