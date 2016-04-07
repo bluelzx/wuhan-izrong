@@ -39,8 +39,7 @@ var Login = React.createClass({
       verify: '',
       active: false,
       deviceModel: deviceModel,
-      APNSToken: AppStore.getAPNSToken(),
-
+      APNSToken: AppStore.getAPNSToken()
     };
   },
   getInitialState: function () {
@@ -58,27 +57,29 @@ var Login = React.createClass({
   },
   login: function () {
     if (this.state.userName && this.state.password && this.state.verify) {
-      dismissKeyboard()
-      LoginAction.login(
-        {
+      dismissKeyboard();
+
+      this.props.exec(() => {
+        return LoginAction.login({
           userName: this.state.userName,
           password: this.state.password,
           deviceToken: this.state.APNSToken,
           deviceModel: this.state.deviceModel,
           captcha: this.state.verify
-        },
-        function () {
-          this.props.navigator.pop();
-        }.bind(this),
-        function (msg) {
-          Alert(msg.msgContent);
-          this.refs['verifyCode'].changeVerify()
-        }.bind(this)
-      )
+        }).then((response) => {
+          //this.props.navigator.pop();
+          this.props.navigator.replace({
+            comp: TabView
+          });
+        }).catch((errorData) => {
+          //Alert(msg.msgContent);
+          this.refs['verifyCode'].changeVerify();
+          throw errorData;
+        });
+      });
     }
   },
-
-  toPage: function (name) {
+  toOther: function (name) {
     const { navigator } = this.props;
     if (navigator) {
       navigator.push({comp: name})

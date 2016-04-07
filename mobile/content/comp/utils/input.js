@@ -2,14 +2,12 @@
 
 var React = require('react-native');
 var {
-  StyleSheet,
   TextInput,
   View,
   Image,
   Dimensions
   } = React;
 var DictIcon = require('../../constants/dictIcon');
-//var { Device } = require('mx-artifacts');
 var Input = React.createClass({
 
   propTypes: {
@@ -48,8 +46,8 @@ var Input = React.createClass({
         width: Dimensions.get('window').width * (375 - 80) / 375
       },
       placeholder: '',
-      placeholderTextColor: '#7f7f7f',
-      value: ''
+      placeholderTextColor: '#7f7f7f'
+      //value: ''
     };
   },
 
@@ -66,7 +64,7 @@ var Input = React.createClass({
           secureTextEntry={this.props.inputType === 'password'}
           autoCorrect={false}
           autoCapitalize="none"
-          //value={this.props.value}
+          value={this.props.value}
           placeholder={this.props.placeholder}
           placeholderTextColor={this.props.placeholderTextColor}
           clearButtonMode="while-editing"
