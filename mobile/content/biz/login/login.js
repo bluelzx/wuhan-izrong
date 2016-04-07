@@ -6,8 +6,9 @@ var {
   TouchableOpacity,
   Text,
   View,
+  Image,
   Platform,
-  ScrollView
+  Dimensions
   } = React;
 var AppStore = require('../../framework/store/appStore');
 //var UserStore = require('../../framework/store/userStore');
@@ -19,8 +20,9 @@ var dismissKeyboard = require('react-native-dismiss-keyboard');
 var VerifyCode = require('../../comp/utils/verifyCode');
 var Input = require('../../comp/utils/input');
 var { Alert, Button } = require('mx-artifacts');
-
-var TabView = require('../../framework/system/tabView');
+var Register_valiMobile = require('./register_valiMobile');
+var Login_ValiSMS = require('./login_valiSMS');
+var {height, width} = Dimensions.get('window');
 
 var Login = React.createClass({
   getStateFromStores() {
@@ -92,64 +94,53 @@ var Login = React.createClass({
       this.setState({checked: false});
     }
   },
+  renderLogo: function () {
+    return (
+      <View style={{alignItems:'center',flexDirection:'column'}}>
+        <Image style={{marginTop:30,height:80,width:160}}
+               resizeMode='cover'
+               source={require("../../image/login/logo.png")}/>
+        <Text style={{color:'#ffffff',marginTop:20,fontSize:18}}>环渤海银银合作平台</Text>
+      </View>
+    )
+  },
 
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} title="登录" showBack={false}>
-          <View style={{flexDirection: 'column', flex: 1, paddingLeft: 12, paddingRight: 12}}>
-            <Input placeholder='用户名/手机号' maxlength={20} field='userName'
-                   onChangeText={this._onChangeText} icon='user' value={this.state.userName} />
+      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
+                  contentBackgroundColor='#18304D' title='登录' showBack={false} showBar={true}>
+        <View style={[{flexDirection: 'column', flex: 1}, styles.paddingLR]}>
+          {this.renderLogo()}
+          <Input containerStyle={{height: 47, borderColor: '#0a1926',borderWidth: 0.5,marginTop: 20,
+          backgroundColor: '#0a1926',flexDirection: 'row',alignItems: 'center',borderRadius: 6}}
+                 type="default" placeholder='手机号' maxlength={20} field='userName'
+                 onChangeText={this._onChangeText} icon='user'/>
 
-            <Input placeholder='密码' maxlength={16} field='password' inputType='password'
-                   onChangeText={this._onChangeText} icon='password' value={this.state.password} />
+          <Button
+            containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
+            style={{fontSize: 20, color: '#ffffff'}}
+            styleDisabled={{color: 'red'}}
+            onPress={()=>this.toPage(Login_ValiSMS)}>
+            登录
+          </Button>
 
-            <VerifyCode ref='verifyCode' onChanged={this._onChangeText} />
-
-            <View style={{marginTop: 24}}>
-              <Button onPress={this.login} disabled={this.state.checked}>登录</Button>
-            </View>
-
-            <View style={styles.menu}>
-              <TouchableOpacity onPress={(()=>{this.toOther(Register_checkPhone)})}>
-                <Text style={styles.colorPath}>新用户注册</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={(()=>{this.toOther(Forget_checkPhone)})}>
-                <Text style={styles.colorPath}>忘记密码?</Text>
-              </TouchableOpacity>
-            </View>
+          <Button
+            containerStyle={{marginTop:20,backgroundColor:'#ffffff'}}
+            style={{fontSize: 20, color: '#1151B1'}}
+            styleDisabled={{color: 'red'}}
+            onPress={()=>this.toPage(Register_valiMobile)}>
+            新用户注册
+          </Button>
+        </View>
+        <View style={{flex:1,flexDirection:'column',justifyContent:'flex-end'}}>
+          <View style={{flexDirection:'row',justifyContent:'center',marginBottom:30}}>
+            <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服:</Text>
+            <Text style={{fontSize: 16, color: '#ffffff',textDecorationLine:'underline'}}>021-35885888</Text>
           </View>
+        </View>
       </NavBarView>
-    );
-  },
-
-  //render: function () {
-  //  //LoginAction.registerAPNS()
-  //  return (
-  //    <NavBarView title="登录" navigator={this.props.navigator} showBack={true}>
-  //      <View style={[{flexDirection: 'column', flex: 1, marginTop: 20}, styles.paddingLR]}>
-  //        <Input placeholder='用户名/手机号' maxlength={20} field='userName'
-  //               onChangeText={this._onChangeText} icon='user' />
-  //
-  //        <Input placeholder='密码' maxlength={16} field='password' inputType='password'
-  //               onChangeText={this._onChangeText} icon='password' />
-  //
-  //        <VerifyCode ref='verifyCode' onChanged={this._onChangeText}/>
-  //
-  //        <View style={{marginTop: 24}}>
-  //          <Button onPress={this.login} disabled={this.state.checked}>登录</Button>
-  //        </View>
-  //        <View style={styles.menu}>
-  //          <TouchableOpacity onPress={(()=>{this.toOther(Register_checkPhone)})}>
-  //            <Text style={styles.colorPath}>新用户注册</Text>
-  //          </TouchableOpacity>
-  //          <TouchableOpacity onPress={(()=>{this.toOther(Forget_checkPhone)})}>
-  //            <Text style={styles.colorPath}>忘记密码?</Text>
-  //          </TouchableOpacity>
-  //        </View>
-  //      </View>
-  //    </NavBarView>
-  //  );
-  //}
+    )
+  }
 });
 var styles = StyleSheet.create({
   radio: {
@@ -173,7 +164,10 @@ var styles = StyleSheet.create({
   },
   rightButton: {
     marginTop: 30, height: 40, right: 20,
-  }
+  },
+  paddingLR: {
+    paddingLeft: 12, paddingRight: 12,
+  },
 });
 
 module.exports = Login;
