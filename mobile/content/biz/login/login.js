@@ -95,7 +95,7 @@ let Login = React.createClass({
   renderLogo: function () {
     return (
       <View style={{alignItems:'center',flexDirection:'column'}}>
-        <Image style={{marginTop:30,height:80,width:160}}
+        <Image style={styles.logo}
                resizeMode='cover'
                source={require("../../image/login/logo.png")}/>
         <Text style={{color:'#ffffff',marginTop:20,fontSize:18}}>环渤海银银合作平台</Text>
@@ -166,6 +166,11 @@ let styles = StyleSheet.create({
   paddingLR: {
     paddingLeft: 12, paddingRight: 12,
   },
+  logo:{
+    marginTop:30,
+    height:80,
+    width:160
+  }
 });
 
 module.exports = Login;
