@@ -21,7 +21,7 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Input = require('../../comp/utils/input');
 let { Alert, Button } = require('mx-artifacts');
 let SMSTimer = require('../../comp/utils/smsTimer')
-let CheakBox = require('../../comp/utils/checkbox')
+let CheakBox = require('../../comp/utils/checkboxUtil')
 let Register_AccountInfo = require('./accountInfo');
 
 let Register_valiMobile = React.createClass({
