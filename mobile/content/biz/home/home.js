@@ -63,9 +63,8 @@ var Home = React.createClass({
       return (
         <TouchableHighlight style={styles.borderTableItem} activeOpacity={0.8}
                             underlayColor='#18304b' onPress={()=>console.log(toPage)}>
-          <View style={{flexDirection:'column',alignItems:'center'}}>
-            <Image style={styles.menuImage} resizeMode='cover'
-                   source={url}></Image>
+          <View style={styles.menuItem}>
+            <Image style={styles.menuImage} resizeMode='cover' source={url}/>
             <Text style={styles.menuText}>{text}</Text>
           </View>
         </TouchableHighlight>
@@ -74,9 +73,8 @@ var Home = React.createClass({
       return (
         <TouchableHighlight style={{flex:1,flexDirection:"column"}} activeOpacity={0.8}
                             underlayColor='#18304b' onPress={()=>console.log(toPage)}>
-          <View style={{flexDirection:'column',alignItems:'center'}}>
-            <Image style={styles.menuImage} resizeMode='cover'
-                   source={url}></Image>
+          <View style={styles.menuItem}>
+            <Image style={styles.menuImage} resizeMode='cover' source={url}/>
             <Text style={styles.menuText}>{text}</Text>
           </View>
         </TouchableHighlight>
@@ -136,14 +134,20 @@ var styles = StyleSheet.create({
   },
   menuImage: {
     height: 70,
-    width: 70,
-    marginTop: 20
+    width: 70
   },
   menuText: {
     color: '#ffffff',
     marginTop: 20,
     fontSize: 16
+  },
+  menuItem: {
+    flexDirection:'column',
+    alignItems:'center',
+    flex:1,
+    justifyContent:'center'
   }
+
 });
 
 

@@ -3,10 +3,10 @@
  */
 'use strict';
 
-var React = require('react-native');
-var PropTypes = React.PropTypes;
+let React = require('react-native');
+let PropTypes = React.PropTypes;
 
-var {
+let {
   StyleSheet,
   Image,
   Text,
@@ -14,7 +14,7 @@ var {
   TouchableHighlight
   } = React;
 
-var CheckBox = React.createClass({
+let CheckBox = React.createClass({
   //propTypes: {
   //  content: React.PropTypes.String,
   //  checked: React.PropTypes.boolean,
@@ -36,7 +36,7 @@ var CheckBox = React.createClass({
   },
 
   render() {
-    var source = this.props.checkedUrl;
+    let source = this.props.checkedUrl;
     if (this.props.checked) {
       source = this.props.unCheckedUrl;
     }
@@ -53,7 +53,7 @@ var CheckBox = React.createClass({
   }
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container1: {
     flexDirection: 'row',
     marginBottom: 5,
