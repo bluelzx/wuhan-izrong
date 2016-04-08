@@ -14,10 +14,10 @@ var NavBarView = require('../../framework/system/navBarView');
 var AboutUs = React.createClass({
   getInitialState(){
     return {
-      phone: '021-35885888-2627',
-      email: 'contacts@izirong.com',
-      web: 'www.izirong.com',
-      content: '       票易贴是安硕织信旗下的金融新产品，以“服务”为本，创新“互联网+票据”，坚定打造真正服务于中小微企业用户的票据贴现互联网平台，为企业票据融资提供渠道，切实帮助中小微企业解决资金短缺问题，助力企业发展。'
+      phone: '022-28405347',
+      email: 'bbcp.bankoftianjin.com',
+      versionNo: '0.0.0.1',
+      content: '     平台秉着"平等、互利、开放、合作、务实、创新"的原则,推动成员行在流动性互助、金融功能互助、投资业务互助、信贷业务互助和信息政策互助方面加强合作'
     }
   },
 
