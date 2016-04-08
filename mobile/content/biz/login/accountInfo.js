@@ -72,11 +72,16 @@ let Register_accountInfo = React.createClass({
           <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
                               onPress={()=>this.toPage(Register_selectOrg)}>
             <View style={styles.selectOrg}>
-              <Image
-                style={{height:20,width:20}}
-                source={require('../../image/login/select_org.png')}/>
-              <Text style={{color:'#ffffff',fontSize:18}}>选择机构</Text>
-                <Icon name="ios-arrow-right" size={28} color={'#ffffff'}/>
+              <View  style={{marginLeft:20,flexDirection:'row'}}>
+                <Image
+                  style={{height:20,width:20}}
+                  source={require('../../image/login/select_org.png')}/>
+                <Text style={{color:'#ffffff',fontSize:18,marginLeft:20}}>选择机构</Text>
+              </View>
+
+                <Icon
+                  style={{marginRight:20}}
+                  name="ios-arrow-right" size={28} color={'#ffffff'}/>
             </View>
           </TouchableHighlight>
           <Button
@@ -105,7 +110,7 @@ let styles = StyleSheet.create({
     borderRadius: 6,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:'space-around'
+    justifyContent:'space-between'
   }
 });
 
