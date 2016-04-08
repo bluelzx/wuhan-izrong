@@ -1,14 +1,14 @@
 'use strict';
 
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   TextInput,
   View,
   Image,
   Dimensions
   } = React;
-var DictIcon = require('../../constants/dictIcon');
-var Input = React.createClass({
+let DictIcon = require('../../constants/dictIcon');
+let Input = React.createClass({
 
   propTypes: {
     containerStyle: View.propTypes.style,

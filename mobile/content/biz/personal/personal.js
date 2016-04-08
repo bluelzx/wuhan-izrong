@@ -4,20 +4,23 @@
 
 'use strict';
 
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   View,
   StyleSheet,
   Text,
   ScrollView,
-  Dimensions,
   Image,
   TouchableHighlight,
   }=React;
-var NavBarView = require('../../framework/system/navBarView');
-var Validation = require('../../comp/utils/validation')
-var Login = require('../../biz/login/login');
-var Personal = React.createClass({
+let NavBarView = require('../../framework/system/navBarView');
+let Validation = require('../../comp/utils/validation');
+let Login = require('../../biz/login/login');
+let Item = require('../../comp/utils/item');
+let UserInfo = require('../../biz/personal/userInfo');
+let AboutUs = require('./aboutUs');
+
+let Personal = React.createClass({
   getInitialState: function () {
     return {
       userName: "用户名",
@@ -53,10 +56,10 @@ var Personal = React.createClass({
           <View style={{backgroundColor:"#18304b",height:10}}/>
           <View style={{backgroundColor:'#162a40'}}>
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
-                                onPress={()=>this.toPage(Login)}>
+                                onPress={()=>this.toPage(UserInfo)}>
               <View style={styles.layout}>
                 <View style={{flexDirection:'row'}}>
-                  <Image style={styles.head} resizeMode="cover" source={this.returnImg()}/>
+                  <Image style={styles.head} resizeMode="cover" source={require('../../image/user/head.png')}/>
                   <View style={{marginLeft:20,marginTop:10}}>
                     <Text style={{fontSize: 18,color: '#ffffff'}}>{this.state.userName}</Text>
                     <Text style={{fontSize: 18,color: '#ffffff',marginTop:10}}>{this.state.orgName}</Text>
@@ -66,13 +69,18 @@ var Personal = React.createClass({
             </TouchableHighlight>
           </View>
           <View style={{backgroundColor:"#18304b",height:10}}/>
+          <Item desc="用户指导" img = {false} value={this.state.realName}
+                func={() => this.toPage(AboutUs)}/>
+          <Item desc="关于我们" img = {false} value={this.state.realName}
+                func={() => this.toPage(AboutUs)}/>
+
         </ScrollView>
       </NavBarView>
     );
   }
 });
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   layout: {
     flexDirection: 'row',
     justifyContent: 'space-between',

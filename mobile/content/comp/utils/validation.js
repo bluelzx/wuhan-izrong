@@ -1,13 +1,13 @@
 'use strict'
-var React = require('react-native');
-var _ = require('lodash');
+let React = require('react-native');
+let _ = require('lodash');
 module.exports = {
     isPhone: function (data) {
         if (data.length == 0) {
             console.log('请输入手机号');
             return false;
         }
-        var reg = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/
+        let reg = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/
         if (!reg.test(data)) {
             console.log("您输入的手机号码格式不对");
             return false;
@@ -16,7 +16,7 @@ module.exports = {
         }
     },
     isComp: function (data, desc) {
-        var reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
+        let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
         if (!reg.test(data)) {
             console.log("请输入由数字和字母组成的" + desc);
             return false;
@@ -38,7 +38,7 @@ module.exports = {
     },
     isTelephone: function (data) {
         if (!_.isEmpty(data)) {
-            var re = /^0\d{2,3}-?\d{7,8}$/;
+            let re = /^0\d{2,3}-?\d{7,8}$/;
             if (!re.test(data)) {
                 console.log("您输入的座机号有误，请重新输入")
                 return false;
@@ -52,7 +52,7 @@ module.exports = {
     },
     isQQ: function (data) {
         if (!_.isEmpty(data)) {
-            var reg = /[1-9][0-9]{4,}/;
+            let reg = /[1-9][0-9]{4,}/;
             if (!reg.test(data)) {
                 console.log("您输入的QQ号有误，请重新输入")
                 return false;
@@ -65,7 +65,7 @@ module.exports = {
     },
     isEmail: function (data) {
         if (!_.isEmpty(data)) {
-            var reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+            let reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
             if (!reg.test(data)) {
                 console.log("您输入的邮箱有误，请重新输入")
                 return false;
