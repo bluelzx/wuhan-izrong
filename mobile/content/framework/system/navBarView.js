@@ -63,7 +63,7 @@ let NavBarView = React.createClass({
             alignItems: 'center',
             // paddingHorizontal: 6
             height: Device.navBarHeight,
-            paddingTop: Device.statusBarHeight
+            paddingTop: Device.statusBarHeight,
           }}
         >
           <View style={{width: 44}}>

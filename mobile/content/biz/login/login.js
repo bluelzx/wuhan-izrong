@@ -79,7 +79,7 @@ var Login = React.createClass({
       });
     }
   },
-  toOther: function (name) {
+  toPage: function (name) {
     const { navigator } = this.props;
     if (navigator) {
       navigator.push({comp: name})
