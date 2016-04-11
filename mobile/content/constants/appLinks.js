@@ -1,4 +1,4 @@
-//let { Host } = require('../../config');
+let { Host } = require('../../config');
 
 let AppLinks = {
   protocal: '',
@@ -15,7 +15,8 @@ let AppLinks = {
   resetPasswordForForgetPwd: '',
   sendSMSCodeToOldMobile: '',
   resetMobileNo: '',
-  resetPasswordForChangePwd: ''
+  resetPasswordForChangePwd: '',
+  sendSmsCodeToLoginMobile:Host + '/pub/sendSmsCodeToLoginMobile'
 };
 
 module.exports = AppLinks;

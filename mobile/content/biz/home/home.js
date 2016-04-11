@@ -102,7 +102,6 @@ var Home = React.createClass({
               {this.returnItem(true, require('../../image/home/billTransaction.png'), '票据交易','billTransaction')}
               {this.returnItem(false, require('../../image/home/capitalBusiness.png'), '资金业务','capitalBusiness')}
             </View>
-
             <View style={{flex:1,flexDirection:"row"}}>
               {this.returnItem(false, require('../../image/home/companyBank.png'), '公司投行','companyBank')}
               {this.returnItem(true, require('../../image/home/interbankAgent.png'), '同业代理','interbankAgent')}

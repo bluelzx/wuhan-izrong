@@ -31,7 +31,7 @@ let Item = React.createClass({
 
   render(){
     return (
-      <TouchableHighlight activeOpacity={0.8} underlayColor='#cccccc' onPress={this.props.func}>
+      <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={this.props.func}>
         <View>
           <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
             <View style={{flex:1,flexDirection:'row'}}>

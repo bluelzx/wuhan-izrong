@@ -2,14 +2,12 @@ let {
   BFetch,
   PFetch,
   UFetch
-} = require('../network/fetch');
+  } = require('../network/fetch');
 let { Host } = require('../../../config');
-
 let AppStore = require('../store/appStore');
-
 let _ = require('lodash');
 let AppLinks = require('../../constants/appLinks');
-
+var pub = "/pub";
 let LoginActions = {
   getProtocol: () => AppLinks.protocal,
   login: (p, c, f) => _login(AppLinks.login, p),
@@ -28,12 +26,23 @@ let LoginActions = {
   resetPasswordForChangePwd: (p, c, f) => BFetch(AppLinks.resetPasswordForChangePwd, p, c, f),
   forceLogOut: () => AppStore.forceLogout(),
   clear: () => AppStore.logout(),
-  uploadNameCard: (p, c, f)=> _uploadNameCard(p, c, f)
+  uploadNameCard: (p, c, f)=> _uploadNameCard(p, c, f),
+  sendSmsCodeToLoginMobile: (p, f)=> _sendSmsCodeToLoginMobile(AppLinks.sendSmsCodeToLoginMobile,p,c, f)
 };
 
-let _logout = function(url, c) {
+let _sendSmsCodeToLoginMobile = function (url,p,c,f) {
+  return new Promise((resolve, reject) => {
+    PFetch(url, p).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _logout = function (url, c) {
   BFetch(url, {},
-    function() {
+    function () {
       AppStore.logout();
     }, null, {
       isLogout: true
@@ -41,7 +50,9 @@ let _logout = function(url, c) {
   );
 };
 
-let _login = function(url, p) {
+
+
+let _login = function (url, p) {
   return new Promise((resolve, reject) => {
     BFetch(url, p).then((response) => {
       resolve(AppStore.login(response));
@@ -51,7 +62,7 @@ let _login = function(url, p) {
   });
 };
 
-let _uploadNameCard = function(){
+let _uploadNameCard = function () {
   return function (callback) {
     UFetch(pub + '/File/uploadFile',
       {
@@ -60,7 +71,7 @@ let _uploadNameCard = function(){
         name: fileFieldName
       },
       function (data) {
-        callback(null, {[fileFieldName]:data});
+        callback(null, {[fileFieldName]: data});
       },
       function (err) {
         callback(err, fileFieldName);
@@ -68,20 +79,20 @@ let _uploadNameCard = function(){
   }
 };
 
-let _register = function(url, p, c, f) {
+let _register = function (url, p, c, f) {
   BFetch(url, p,
-    function(data) {
+    function (data) {
       AppStore.login(data);
       c();
     },
     f
   );
 };
-let _resetMobileNo = function(u, p, c, f) {
+let _resetMobileNo = function (u, p, c, f) {
   let key = _.keys(p)[0];
   let value = p[key];
   BFetch(u, p,
-    function(msg) {
+    function (msg) {
       //AppDispatcher.dispatch({
       //  type: ActionTypes.UPDATE_USERINFO,
       //  data: {

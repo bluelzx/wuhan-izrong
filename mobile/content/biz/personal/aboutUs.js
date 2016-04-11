@@ -34,7 +34,7 @@ var AboutUs = React.createClass({
             {this.state.content}
           </Text>
         </View>
-        <View style={[{backgroundColor:'white'}]}>
+        <View>
           <Item desc="客服热线:" img={false} icon={false} top={true} value={this.state.phone}/>
           <Item desc="网站邮箱:" img={false} icon={false} value={this.state.email}/>
           <Item desc="版本号:" img={false} icon={false} value={this.state.web}/>
