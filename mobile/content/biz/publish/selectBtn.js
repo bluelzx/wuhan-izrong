@@ -28,7 +28,7 @@ var SelectBtn = React.createClass({
             <View style={{flexDirection: 'row'}}>
                 {this.props.dataList.map((item, i) => {
                     return (
-                        <TouchableHighlight onPress={(this.props.defaultData == i )? null : () => this.props.change(i)}
+                        <TouchableHighlight key={i} onPress={(this.props.defaultData == i )? null : () => this.props.change(i)}
                                             underlayColor='rgba(21,55,87,0)'>
                             <View
                                 style={{alignItems:'center',justifyContent:'center',marginLeft:10,width:70,height: 40,borderRadius:5, backgroundColor:(this.props.defaultData == i )? '#817fc9' : '#102a42'}}>

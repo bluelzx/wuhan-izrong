@@ -20,6 +20,8 @@ var {
 
 var screenWidth = Dimensions.get('window').width;
 var screenHeight = Dimensions.get('window').height;
+
+
 var Adjust = require('../../comp/utils/adjust');
 var BusinessDetail = require('./businessDetail');
 
@@ -54,7 +56,7 @@ var MarketList = React.createClass({
 
   render() {
     return (
-      <View style={{flex: 1,width:screenWidth,height:screenHeight, backgroundColor: '#162a40'}}>
+      <View style={{width:screenWidth,backgroundColor: '#162a40'}}>
         <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5}}>
           <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:'#8d8d8d',}}>
             {'方向'}
@@ -72,6 +74,7 @@ var MarketList = React.createClass({
         <ListView
           dataSource={this.state.dataSource}
           renderRow={this._renderRow}
+          automaticallyAdjustContentInsets={false}
         />
       </View>
     );
@@ -81,12 +84,9 @@ var MarketList = React.createClass({
       <TouchableHighlight onPress={() => this.toPage(BusinessDetail)} underlayColor='#000'>
         <View
           style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center'}}>
-          <View
-            style={{width:25,height:25,marginLeft:15,borderRadius:5,}}>
-            <Image style={{width:25,height:25}}
-                   source={rowData.type == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
-            />
-          </View>
+          <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
+                 source={rowData.type == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
+          />
           <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:'white',}}>
             {rowData.timeLimit + '天'}
           </Text>
@@ -95,7 +95,7 @@ var MarketList = React.createClass({
             {rowData.amount / 10000 + '万'}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:135}}
+            style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
             numberOfLines={1}>
             {rowData.promulgator}
           </Text>
