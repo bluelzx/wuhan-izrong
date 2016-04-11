@@ -23,7 +23,6 @@ var screenHeight = Dimensions.get('window').height;
 var NavBarView = require('../../framework/system/navBarView');
 
 
-
 var BusinessDetail = React.createClass({
   render: function () {
     return (
@@ -43,11 +42,11 @@ var BusinessDetail = React.createClass({
             {this.renderAdjunct()}
             <View style={{backgroundColor:'#153757',borderRadius:2,margin:10}}>
               {this.renderPromulgator()}
-              {this.returnInfoItem(require('../../image/market/tel.png'),'1234567890')}
-              {this.returnInfoItem(require('../../image/market/mobile.png'),'1234567890')}
-              {this.returnInfoItem(require('../../image/market/QQ.png'),'1234567890')}
-              {this.returnInfoItem(require('../../image/market/weChat.png'),'1234567890')}
-              {this.returnInfoItem(require('../../image/market/org.png'),'1234567890')}
+              {this.returnInfoItem(require('../../image/market/tel.png'), '1234567890')}
+              {this.returnInfoItem(require('../../image/market/mobile.png'), '1234567890')}
+              {this.returnInfoItem(require('../../image/market/QQ.png'), '1234567890')}
+              {this.returnInfoItem(require('../../image/market/weChat.png'), '1234567890')}
+              {this.returnInfoItem(require('../../image/market/org.png'), '1234567890')}
             </View>
           </View>
         </ScrollView>
@@ -67,36 +66,26 @@ var BusinessDetail = React.createClass({
       <View>
         <Text style={{marginLeft:10,fontSize:16, color:'white',}}>{'附件'}</Text>
         <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-          <View
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}>
-            <Image style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,}}
-                   source={require('../../image/market/next.png')}
-            />
-          </View>
-          <View
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}>
-            <Image style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,}}
-                   source={require('../../image/market/next.png')}
-            />
-          </View>
-          <View
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}>
-            <Image style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,}}
-                   source={require('../../image/market/next.png')}
-            />
-          </View>
-          <View
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}>
-            <Image style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,}}
-                   source={require('../../image/market/next.png')}
-            />
-          </View>
-          <View
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}>
-            <Image style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,}}
-                   source={require('../../image/market/next.png')}
-            />
-          </View>
+          <Image
+            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
+            source={require('../../image/market/next.png')}
+          />
+          <Image
+            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
+            source={require('../../image/market/next.png')}
+          />
+          <Image
+            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
+            source={require('../../image/market/next.png')}
+          />
+          <Image
+            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
+            source={require('../../image/market/next.png')}
+          />
+          <Image
+            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
+            source={require('../../image/market/next.png')}
+          />
         </View>
       </View>
     )
@@ -104,12 +93,10 @@ var BusinessDetail = React.createClass({
   renderPromulgator: function () {
     return (
       <View style={{flexDirection:'row',alignItems:'center'}}>
-        <View
-          style={{width:40,height:40,margin:10,backgroundColor:'#0a1926',borderRadius:5,alignItems:'center',}}>
-          <Image style={{width:40,height:40}}
-                 source={require('../../image/market/next.png')}
-          />
-        </View>
+        <Image style={{width:40,height:40,margin:10,backgroundColor:'#0a1926',borderRadius:5,alignItems:'center',}}
+               source={require('../../image/market/next.png')}
+        />
+
         <Text style={{fontSize:16,color:'white',}}>姚某某</Text>
         <TouchableHighlight onPress={this.gotoIM()}
                             underlayColor='white'>
@@ -118,7 +105,7 @@ var BusinessDetail = React.createClass({
       </View>
     )
   },
-  returnInfoItem: function (url,value) {
+  returnInfoItem: function (url, value) {
     return (
       <View style={{flexDirection:'row',alignItems:'center',paddingVertical:5,marginLeft:10}}>
         <Image style={{width:16,height:16}}

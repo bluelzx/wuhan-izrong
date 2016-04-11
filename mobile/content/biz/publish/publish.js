@@ -26,6 +26,7 @@ var NavBarView = require('../../framework/system/navBarView');
 var SelectBtn = require('./selectBtn');
 var Remarks = require('./remarks');
 
+
 var SelectBusiness1 = require('./selectBusiness1');
 
 var dataList1 = ['出', '收'];
@@ -46,17 +47,19 @@ var WhitePage = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='发布' showBack={false} showBar={true}>
-        <View style={{height:screenHeight-64,backgroundColor:'#153757'}}>
-          <ScrollView>
-            {this.renderSelectOrg()}
-            {this.renderBusinessType()}
-            {this.renderTimeLimit()}
-            {this.renderAmount()}
-            {this.renderRate()}
-            {this.renderAddImg()}
-            {this.renderRemarks()}
-          </ScrollView>
-          {this.renderReleaseBtn()}
+        <View style={{height:screenHeight-113,backgroundColor:'#153757'}}>
+          <View style={{flex:1}}>
+            <ScrollView>
+              {this.renderSelectOrg()}
+              {this.renderBusinessType()}
+              {this.renderTimeLimit()}
+              {this.renderAmount()}
+              {this.renderRate()}
+              {this.renderAddImg()}
+              {this.renderRemarks()}
+            </ScrollView>
+            {this.renderReleaseBtn()}
+          </View>
         </View>
       </NavBarView>
     );
@@ -80,7 +83,7 @@ var WhitePage = React.createClass({
     return (
       <TouchableOpacity onPress={()=>this.toPage(SelectBusiness1)} activeOpacity={0.8} underlayColor="#f0f0f0">
         <View
-          style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
+          style={{width: screenWidth-20,marginLeft:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
           <Text style={{fontSize:16,marginLeft:10,color:'white'}}>{'选择发布机构'}</Text>
           <Image style={{margin:10,width:16,height:16}}
                  source={require('../../image/market/next.png')}
@@ -91,7 +94,7 @@ var WhitePage = React.createClass({
   },
   renderBusinessType: function () {
     return (
-      <View style={{flexDirection:'column'}}>
+      <View style={{flexDirection:'column',marginTop:10}}>
         <View style={{flexDirection:'row'}}>
           <Text style={{marginLeft:10, color:'white',}}>{'方向'}</Text>
           <Text style={{color:'red',}}>{'*'}</Text>
@@ -160,9 +163,22 @@ var WhitePage = React.createClass({
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:'white',}}>{'添加图片'}</Text>
         <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-          <View
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}>
-          </View>
+          <Image
+            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
+            source={require('../../image/market/next.png')}/>
+          <Image
+            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
+            source={require('../../image/market/next.png')}/>
+          <Image
+            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
+            source={require('../../image/market/next.png')}/>
+          <Image
+            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
+            source={require('../../image/market/next.png')}/>
+          <Image
+            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
+            source={require('../../image/market/next.png')}/>
+
         </View>
       </View>
     )
@@ -188,16 +204,14 @@ var WhitePage = React.createClass({
   },
   renderReleaseBtn: function () {
     return (
-      <View style={{marginTop:10}}>
-        <TouchableHighlight onPress={() => this._pressRow()} underlayColor='rgba(129,127,201,0)'>
-          <View
-            style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
-            <Text style={{fontWeight: 'bold', color:'white',}}>
-              {'发布'}
-            </Text>
-          </View>
-        </TouchableHighlight>
-      </View>
+      <TouchableHighlight onPress={() => this._pressRow()} underlayColor='rgba(129,127,201,0)'>
+        <View
+          style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
+          <Text style={{fontWeight: 'bold', color:'white',}}>
+            {'发布'}
+          </Text>
+        </View>
+      </TouchableHighlight>
     )
   },
   _pressRow: function () {
