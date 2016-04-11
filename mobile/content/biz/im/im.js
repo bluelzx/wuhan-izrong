@@ -9,7 +9,8 @@ let {
   View,
   Text,
   TouchableOpacity,
-  TouchableHighlight
+  TouchableHighlight,
+  Platform
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
 let Icon = require('react-native-vector-icons/Ionicons');
@@ -24,7 +25,7 @@ let MockData = [
   {id:1,badge:0,title:'环渤海银银合作平台',recTime:new Date(),content:'尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'},
   {id:2,badge:1,title:'张缪缪',recTime:new Date(),content:'尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'},
   {id:3,badge:2,title:'吴某某',recTime:new Date(),content:'尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'},
-  {id:4,badge:3,title:'某群',recTime:new Date(),content:'尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'}
+  {id:4,badge:99,title:'某群',recTime:new Date(),content:'尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'}
 ]
 
 let WhitePage = React.createClass({
@@ -48,8 +49,8 @@ let WhitePage = React.createClass({
   unReadIcon: function(item){
     if (item.badge > 0) {
       return (
-        <View style={[{marginLeft:28,width:20,height:20,borderRadius:10,backgroundColor:'red',
-                flexDirection:'row',justifyContent:'center',alignItems:'center'},item.badge>=99&&{height:20,width:25,marginLeft:23}]}>
+        <View style={[{marginLeft:22,width:18,height:18,borderRadius:9,backgroundColor:'red',
+                flexDirection:'row',justifyContent:'center',alignItems:'center'},item.badge>=99&&{height:20,width:(Platform.OS === 'ios')?24:22,marginLeft:18}]}>
           <Text style={{color:'white',fontSize:11}}>{item.badge >= 99 ? "99+" : item.badge}</Text>
         </View>
       )
@@ -58,7 +59,7 @@ let WhitePage = React.createClass({
 
   renderImg: function(item, index) {
     return (
-      <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20}}>
+      <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20, marginRight:15}}>
         {this.unReadIcon(item)}
       </View>
     );
@@ -87,7 +88,7 @@ let WhitePage = React.createClass({
             style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
             {this.renderImg(item, index)}
             <View
-              style={{ height:40, marginLeft:15, width:width-70}}>
+              style={{ height:40, width:width-70}}>
               <View
                 style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
                 <Text style={{color:'#ffffff'}}>{item.title}</Text>

@@ -25,9 +25,10 @@ let ModifyGroupName = React.createClass({
                   actionButton={this.renderRight}>
         <View style={{backgroundColor:'#18304D', paddingTop:10}}>
           <TextInput
+            clearButtonMode="always"
             placeholder="创建群名称"
             placeholderTextColor="white"
-            style={{color: '#ffffff',height:(Platform.OS === 'ios')?50:100, width: Device.width,backgroundColor:'#15263A', paddingHorizontal:20}}></TextInput>
+            style={{color: '#ffffff',height:50, width: Device.width,backgroundColor:'#15263A', paddingHorizontal:20}}></TextInput>
         </View>
       </NavBarView>
     );
