@@ -21,13 +21,14 @@ let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Input = require('../../comp/utils/input');
 let { Alert, Button } = require('mx-artifacts');
-
+let PhotoPicker = require('NativeModules').PhotoPickerModule;
+let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 
 let Register_uploadNameCard = React.createClass({
   getStateFromStores() {
     return {
-      hasImage:false,
-      url:''
+      url:'',
+      imageSource:''
     };
   },
   getInitialState: function () {
@@ -51,14 +52,29 @@ let Register_uploadNameCard = React.createClass({
     }
   },
   selectPhoto: function () {
-
+    if(Platform.OS == 'android'){
+     // PhotoPicker.showImagePic(true,'nameCard',(response)=>console.log('Response = ', response));
+      UserPhotoPicModule.showImagePic(true,'nameCard',
+        (response)=>{
+          console.log('Response = ', response);
+          this.setState({
+            imageSource: response.uri
+          });
+          LoginAction.uploadNameCard(
+            {['photoStoreId']: this.state.imageSource},
+            ()=>Alert("上传成功"),
+            ()=> Alert("上传失败")
+          )
+        });
+    }
   },
+
   returnImage: function () {
-    if (!this.state.hasImage){
+    if (this.state.imageSource == ''){
       return (
         <TouchableHighlight style={styles.nameCard} activeOpacity={0.8} underlayColor='#18304b'
                             onPress={()=>this.selectPhoto()}>
-          <View style={{flexDirection:'column',flex:1,alignItems:'center',justifyContent:'space-around'}}>
+          <View style={styles.imageArea}>
             <Image
               resizeMode='cover'
               source={require("../../image/login/nameCard.png")}/>
@@ -70,15 +86,13 @@ let Register_uploadNameCard = React.createClass({
       return (
         <TouchableHighlight style={styles.nameCard} activeOpacity={0.8} underlayColor='#18304b'
                             onPress={()=>this.selectPhoto()}>
-
           <Image style={{flexDirection:'column',flex:1,alignItems:'center',justifyContent:'space-around'}}
                  resizeMode='cover'
-                 source = {{uri:this.state.url}}
+                 source = {{uri:this.state.imageSource}}
           />
         </TouchableHighlight>
       );
     }
-
   },
 
   render: function () {
@@ -111,6 +125,12 @@ let styles = StyleSheet.create({
     height: 200,
     marginTop: 20,
     borderRadius: 6
+  },
+  imageArea:{
+    flexDirection:'column',
+    flex:1,
+    alignItems:'center',
+    justifyContent:'space-around'
   }
 });
 

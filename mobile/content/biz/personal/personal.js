@@ -25,7 +25,6 @@ let Personal = React.createClass({
     return {
       userName: "用户名",
       orgName: "所属机构"
-
     }
   },
   componentDidMount() {

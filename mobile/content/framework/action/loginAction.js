@@ -27,7 +27,8 @@ let LoginActions = {
   resetMobileNo: (p, c, f) => _resetMobileNo(AppLinks.resetMobileNo, p, c, f),
   resetPasswordForChangePwd: (p, c, f) => BFetch(AppLinks.resetPasswordForChangePwd, p, c, f),
   forceLogOut: () => AppStore.forceLogout(),
-  clear: () => AppStore.logout()
+  clear: () => AppStore.logout(),
+  uploadNameCard: (p, c, f)=> _uploadNameCard(p, c, f)
 };
 
 let _logout = function(url, c) {
@@ -48,6 +49,23 @@ let _login = function(url, p) {
       reject(errorData);
     });
   });
+};
+
+let _uploadNameCard = function(){
+  return function (callback) {
+    UFetch(pub + '/File/uploadFile',
+      {
+        uri: params[fileFieldName],
+        type: 'image/jpeg',
+        name: fileFieldName
+      },
+      function (data) {
+        callback(null, {[fileFieldName]:data});
+      },
+      function (err) {
+        callback(err, fileFieldName);
+      });
+  }
 };
 
 let _register = function(url, p, c, f) {
