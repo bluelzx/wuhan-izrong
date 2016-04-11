@@ -1,28 +1,27 @@
 'use strict';
 
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   LinkingIOS,
   Platform,
   ActionSheetIOS,
-  Dimensions,
   View,
   Text
   } = React;
 
-var GiftedMessenger = require('react-native-gifted-messenger');
-var Communications = require('react-native-communications');
+let GiftedMessenger = require('../../comp/messenger/giftedMessenger');
+let { Communications, Device } = require('mx-artifacts');
 
 
-var GiftedMessengerExample = React.createClass({
+let Messenger = React.createClass({
 
   getMessages() {
     return [
       {text: 'Are you building a chat app?', name: 'React-Native', image: {uri: 'https://facebook.github.io/react/img/logo_og.png'}, position: 'left', date: new Date(2015, 10, 16, 19, 0)},
       {
-        text: "Yes, and I use Gifted Messenger!",
+        text: "Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger!",
         name: 'Developer',
-        image: null,
+        image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
         position: 'right',
         date: new Date(2015, 10, 17, 19, 0)
         // If needed, you can add others data (eg: userId, messageId)
@@ -47,11 +46,11 @@ var GiftedMessengerExample = React.createClass({
     // Eg: Retrieve old messages from your server
 
     // newest messages have to be at the begining of the array
-    var earlierMessages = [
+    let earlierMessages = [
       {
         text: 'This is a touchable phone number 0606060606 parsed by taskrabbit/react-native-parsed-text',
         name: 'Developer',
-        image: null,
+        image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
         position: 'right',
         date: new Date(2014, 0, 1, 20, 0),
       }, {
@@ -108,18 +107,23 @@ var GiftedMessengerExample = React.createClass({
           },
         }}
 
+        displayNames={false}
+        displayNamesInsideBubble={false}
+
         autoFocus={false}
         messages={this.getMessages()}
         handleSend={this.handleSend}
         onErrorButtonPress={this.onErrorButtonPress}
-        maxHeight={Dimensions.get('window').height - navBarHeight - statusBarHeight}
+        maxHeight={Device.height - Device.navBarHeight}
         loadEarlierMessagesButton={true}
         onLoadEarlierMessages={this.onLoadEarlierMessages}
 
         senderName='Developer'
-        senderImage={null}
+        senderImage={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
         onImagePress={this.onImagePress}
-        displayNames={true}
+        //displayNames={true}
+        forceRenderImage={true}
+        renderStatus={false}
 
         parseText={true} // enable handlePhonePress and handleUrlPress
         handlePhonePress={this.handlePhonePress}
@@ -140,12 +144,12 @@ var GiftedMessengerExample = React.createClass({
 
   handlePhonePress(phone) {
     if (Platform.OS !== 'android') {
-      var BUTTONS = [
+      let BUTTONS = [
         'Text message',
         'Call',
         'Cancel',
       ];
-      var CANCEL_INDEX = 2;
+      let CANCEL_INDEX = 2;
 
       ActionSheetIOS.showActionSheetWithOptions({
           options: BUTTONS,
@@ -169,11 +173,4 @@ var GiftedMessengerExample = React.createClass({
   },
 });
 
-var navBarHeight = (Platform.OS === 'android' ? 56 : 64);
-// warning: height of android statusbar depends of the resolution of the device
-// http://stackoverflow.com/questions/3407256/height-of-status-bar-in-android
-// @todo check Navigator.NavigationBar.Styles.General.NavBarHeight
-var statusBarHeight = (Platform.OS === 'android' ? 25 : 0);
-
-
-module.exports = GiftedMessengerExample;
+module.exports = Messenger;
