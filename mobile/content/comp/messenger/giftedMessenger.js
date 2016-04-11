@@ -1,10 +1,6 @@
 'use strict';
 
-// npm: react-native-gifted-messenger
-
 var React = require('react-native');
-import Message from './message';
-var GiftedSpinner = require('./giftedSpinner');
 var {
   Text,
   View,
@@ -12,32 +8,44 @@ var {
   TextInput,
   Dimensions,
   Animated,
+  LayoutAnimation,
   Image,
   TouchableHighlight,
   Platform,
-  PixelRatio
+  PixelRatio,
+  TouchableOpacity,
+  RefreshControl
   } = React;
 
+var dismissKeyboard = require('react-native-dismiss-keyboard');
 var moment = require('moment');
+var Icon = require('react-native-vector-icons/Ionicons');
 
-var Button = require('react-native-button');
+let { Spinner, Button } = require('mx-artifacts');
+
+var AutoExpandingTextInput = require('./autoExpandingTextInput');
+//var Message = require('./Message');
+import Message from './message';
+
+let DictIcon = require('../../constants/dictIcon');
 
 var GiftedMessenger = React.createClass({
 
   firstDisplay: true,
   listHeight: 0,
   footerY: 0,
+  inputHeight: 0,
 
   getDefaultProps() {
     return {
       displayNames: true,
       displayNamesInsideBubble: false,
-      placeholder: 'Type a message...',
+      placeholder: '',
       styles: {},
       autoFocus: true,
       onErrorButtonPress: (message, rowID) => {},
       loadEarlierMessagesButton: false,
-      loadEarlierMessagesButtonText: 'Load earlier messages',
+      loadEarlierMessagesButtonText: '加载历史消息',
       onLoadEarlierMessages: (oldestMessage, callback) => {},
       parseText: false,
       handleUrlPress: (url) => {},
@@ -49,16 +57,20 @@ var GiftedMessenger = React.createClass({
       maxHeight: Dimensions.get('window').height,
       senderName: 'Sender',
       senderImage: null,
-      sendButtonText: 'Send',
+      sendButtonText: '发送',
       onImagePress: null,
       onMessageLongPress: null,
       hideTextInput: false,
-      keyboardDismissMode: 'interactive',
+      keyboardDismissMode: 'on-drag',
       keyboardShouldPersistTaps: true,
       submitOnReturn: false,
       forceRenderImage: false,
+      renderStatus: false,
       onChangeText: (text) => {},
       autoScroll: false,
+      defaultTextInputHeight: 60,
+      maxTextInputHeight: 100,
+      panelHeight: 120,
     };
   },
 
@@ -92,22 +104,27 @@ var GiftedMessenger = React.createClass({
     keyboardDismissMode: React.PropTypes.string,
     keyboardShouldPersistTaps: React.PropTypes.bool,
     forceRenderImage: React.PropTypes.bool,
+    renderStatus: React.PropTypes.bool,
     onChangeText: React.PropTypes.func,
     autoScroll: React.PropTypes.bool,
+    defaultTextInputHeight: React.PropTypes.number,
+    maxTextInputHeight: React.PropTypes.number,
+    panelHeight: React.PropTypes.number,
   },
 
   getInitialState: function() {
     this._data = [];
     this._rowIds = [];
 
-    var textInputHeight = 44;
     if (this.props.hideTextInput === false) {
-      if (this.props.styles.hasOwnProperty('textInputContainer')) {
-        textInputHeight = this.props.styles.textInputContainer.height || textInputHeight;
-      }
+      //if (this.props.styles.hasOwnProperty('textInputContainer')) {
+      //  textInputHeight = this.props.styles.textInputContainer.height || textInputHeight;
+      //}
     }
 
-    this.listViewMaxHeight = this.props.maxHeight - textInputHeight;
+    this.inputHeight = this.props.defaultTextInputHeight;
+    this.listViewMaxHeight = this.props.maxHeight - this.inputHeight;
+    //this.listViewMaxHeight = this.props.maxHeight - this.props.textInputHeight - this.props.panelHeight;
 
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
       if (typeof r1.status !== 'undefined') {
@@ -118,11 +135,14 @@ var GiftedMessenger = React.createClass({
     return {
       dataSource: ds.cloneWithRows([]),
       text: '',
+      textInputHeight: new Animated.Value(this.inputHeight),
       disabled: true,
       height: new Animated.Value(this.listViewMaxHeight),
       isLoadingEarlierMessages: false,
       allLoaded: false,
       appearAnim: new Animated.Value(0),
+      showPanel: false,
+      isRefreshing: false
     };
   },
 
@@ -202,6 +222,7 @@ var GiftedMessenger = React.createClass({
           diffMessage={diffMessage}
           position={rowData.position}
           forceRenderImage={this.props.forceRenderImage}
+          renderStatus={this.props.renderStatus}
           onImagePress={this.props.onImagePress}
           onMessageLongPress={this.props.onMessageLongPress}
           renderCustomText={this.props.renderCustomText}
@@ -230,6 +251,8 @@ var GiftedMessenger = React.createClass({
   },
 
   componentDidMount() {
+    //LayoutAnimation.spring();
+
     this.scrollResponder = this.refs.listView.getScrollResponder();
 
     if (this.props.messages.length > 0) {
@@ -252,23 +275,25 @@ var GiftedMessenger = React.createClass({
     this._rowIds = [];
     this.appendMessages(nextProps.messages);
 
-    var textInputHeight = 44;
-    if (nextProps.styles.hasOwnProperty('textInputContainer')) {
-      textInputHeight = nextProps.styles.textInputContainer.height || textInputHeight;
-    }
+    //var textInputHeight = 44;
+    //if (nextProps.styles.hasOwnProperty('textInputContainer')) {
+    //  textInputHeight = nextProps.styles.textInputContainer.height || textInputHeight;
+    //}
 
     if (nextProps.maxHeight !== this.props.maxHeight) {
       this.listViewMaxHeight = nextProps.maxHeight;
     }
 
     if (nextProps.hideTextInput && !this.props.hideTextInput) {
-      this.listViewMaxHeight += textInputHeight;
+      //this.listViewMaxHeight += this.props.defaultTextInputHeight;
+      this.listViewMaxHeight += this.inputHeight;
 
       this.setState({
         height: new Animated.Value(this.listViewMaxHeight),
       });
     } else if (!nextProps.hideTextInput && this.props.hideTextInput) {
-      this.listViewMaxHeight -= textInputHeight;
+      //this.listViewMaxHeight -= this.props.defaultTextInputHeight;
+      this.listViewMaxHeight -= this.inputHeight;
 
       this.setState({
         height: new Animated.Value(this.listViewMaxHeight),
@@ -284,6 +309,7 @@ var GiftedMessenger = React.createClass({
   },
 
   onKeyboardWillShow(e) {
+    this._hidePanel();
     Animated.timing(this.state.height, {
       toValue: this.listViewMaxHeight - (e.endCoordinates ? e.endCoordinates.height : e.end.height),
       duration: 200,
@@ -307,17 +333,8 @@ var GiftedMessenger = React.createClass({
       var scrollDistance = this.listHeight - this.footerY;
       this.scrollResponder.scrollTo({
         y: -scrollDistance,
-      });
-    }
-  },
-
-  scrollWithoutAnimationToBottom() {
-    if (this.listHeight && this.footerY && this.footerY > this.listHeight) {
-      var scrollDistance = this.listHeight - this.footerY;
-      this.scrollResponder.scrollTo({
-        y: -scrollDistance,
         x: 0,
-        animated: false,
+        animated: true
       });
     }
   },
@@ -328,7 +345,7 @@ var GiftedMessenger = React.createClass({
       name: this.props.senderName,
       image: this.props.senderImage,
       position: 'right',
-      date: new Date(),
+      date: new Date()
     };
     if (this.props.onCustomSend) {
       this.props.onCustomSend(message);
@@ -337,6 +354,8 @@ var GiftedMessenger = React.createClass({
       this.props.handleSend(message, rowID);
       this.onChangeText('');
     }
+
+    this._resetTextInput();
   },
 
   postLoadEarlierMessages(messages = [], allLoaded = false) {
@@ -364,13 +383,21 @@ var GiftedMessenger = React.createClass({
         if (this.state.isLoadingEarlierMessages === true) {
           return (
             <View style={this.styles.loadEarlierMessages}>
-              <GiftedSpinner />
+              <Spinner />
             </View>
           );
         } else {
           return (
             <View style={this.styles.loadEarlierMessages}>
               <Button
+                containerStyle={{
+                  borderRadius: 0,
+                  backgroundColor: 'transparent',
+                  paddingHorizontal: 12,
+                  height: 47,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
                 style={this.styles.loadEarlierMessagesButton}
                 onPress={() => {this.preLoadEarlierMessages()}}
               >
@@ -382,6 +409,24 @@ var GiftedMessenger = React.createClass({
       }
     }
     return null;
+  },
+
+
+  _postLoadEarlierMessages(messages = [], allLoaded = false) {
+    this.prependMessages(messages);
+    this.setState({
+      isRefreshing: false
+    });
+    if (allLoaded === true) {
+      this.setState({
+        allLoaded: true,
+      });
+    }
+  },
+
+  _onRefresh() {
+    this.setState({isRefreshing: true});
+    this.props.onLoadEarlierMessages(this._data[this._rowIds[this._rowIds.length - 1]], this._postLoadEarlierMessages);
   },
 
   prependMessages(messages = []) {
@@ -458,33 +503,55 @@ var GiftedMessenger = React.createClass({
     }
   },
 
+  _onAccessibilityTap() {
+    //console.log('onAccessibilityTap');
+    this._hidePanel();
+  },
+
   renderAnimatedView() {
     return (
       <Animated.View
         style={{
           height: this.state.height,
         }}
-
       >
         <ListView
           ref='listView'
           dataSource={this.state.dataSource}
           renderRow={this.renderRow}
+
+          //accessible={true}
+          //onAccessibilityTap={this._onAccessibilityTap}
+          onResponderMove={this._onAccessibilityTap}
+
+          //refreshControl={
+          //  <RefreshControl
+          //    refreshing={this.state.isRefreshing}
+          //    onRefresh={this._onRefresh}
+          //    tintColor="#ff0000"
+          //    title="Loading..."
+          //    colors={['#ff0000', '#00ff00', '#0000ff']}
+          //    progressBackgroundColor="#ffff00"
+          //  />
+          //}
+
           renderHeader={this.renderLoadEarlierMessages}
           onLayout={(event) => {
             var layout = event.nativeEvent.layout;
             this.listHeight = layout.height;
-            if (this.firstDisplay === true) {
-              requestAnimationFrame(() => {
-                this.firstDisplay = false;
-                this.scrollWithoutAnimationToBottom();
-              });
-            }
+            this.scrollToBottom();
+            //if (this.firstDisplay === true) {
+            //  requestAnimationFrame(() => {
+            //    this.firstDisplay = false;
+            //    this.scrollToBottom();
+            //  });
+            //}
 
           }}
           renderFooter={() => {
             return (
-              <View onLayout={(event) => {
+              <View
+                onLayout={(event) => {
                   var layout = event.nativeEvent.layout;
                   this.footerY = layout.y;
 
@@ -496,11 +563,7 @@ var GiftedMessenger = React.createClass({
             );
           }}
 
-
-
-
           style={this.styles.listView}
-
 
           // not working android RN 0.14.2
           onKeyboardWillShow={this.onKeyboardWillShow}
@@ -508,20 +571,210 @@ var GiftedMessenger = React.createClass({
           onKeyboardWillHide={this.onKeyboardWillHide}
           onKeyboardDidHide={this.onKeyboardDidHide}
 
-
           keyboardShouldPersistTaps={this.props.keyboardShouldPersistTaps} // @issue keyboardShouldPersistTaps={false} + textInput focused = 2 taps are needed to trigger the ParsedText links
           keyboardDismissMode={this.props.keyboardDismissMode}
 
-
           initialListSize={10}
           pageSize={this.props.messages.length}
-
 
           {...this.props}
         />
 
       </Animated.View>
     );
+  },
+
+  _animateTextInput(variation) {
+    this.inputHeight += variation;
+    Animated.timing(this.state.textInputHeight, {
+      toValue: this.inputHeight,
+      duration: 150,
+    }).start();
+
+    this.listHeight -= variation;
+    Animated.timing(this.state.height, {
+      toValue: this.listHeight,
+      duration: 150,
+    }).start();
+  },
+
+  _resetTextInput() {
+    if (this.inputHeight !== this.props.defaultTextInputHeight) {
+      this._animateTextInput(this.props.defaultTextInputHeight - this.inputHeight);
+    }
+  },
+
+  _onChangeHeight(before, after) {
+    console.log('before: ' + before + ' after: ' + after);
+    this._animateTextInput(after - before);
+  },
+
+  _renderIcon() {
+    if (this.state.disabled) {
+      return (
+        <TouchableOpacity onPress={this._handleMore}>
+          <Icon
+            style={{
+              //borderWidth: 2,
+              flex: 1,
+              paddingHorizontal: 10,
+              paddingVertical: 5,
+            }}
+            name="ios-plus-outline"
+            size={40}
+            color="#0f60b1"
+          />
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <Button
+        containerStyle={{
+          borderRadius: 6,
+          backgroundColor: '#0f60b1',
+          paddingHorizontal: 0,
+          marginHorizontal: 10,
+          marginBottom: 8,
+          width: 60,
+          height: this.props.defaultTextInputHeight - 20,
+        }}
+        style={this.styles.sendButton}
+        styleDisabled={this.styles.sendButtonDisabled}
+        onPress={this.onSend}
+        disabled={this.state.disabled}
+      >
+        {this.props.sendButtonText}
+      </Button>
+    );
+  },
+
+  renderTextInput() {
+    if (this.props.hideTextInput === false) {
+      return (
+        <Animated.View style={{height: this.state.textInputHeight}}>
+          <View style={this.styles.textInputContainer}>
+            <AutoExpandingTextInput
+              minHeight={this.props.defaultTextInputHeight - 20}
+              maxHeight={this.props.maxTextInputHeight}
+              onChangeHeight={this._onChangeHeight}
+
+              style={this.styles.textInput}
+              placeholder={this.props.placeholder}
+              ref='autoExpandingTextInput'
+              onChangeText={this.onChangeText}
+              value={this.state.text}
+              autoFocus={this.props.autoFocus}
+              returnKeyType={this.props.submitOnReturn ? 'send' : 'default'}
+              onSubmitEditing={this.props.submitOnReturn ? this.onSend : null}
+              enablesReturnKeyAutomatically={true}
+              multiline={true}
+              blurOnSubmit={false}
+            />
+            {this._renderIcon()}
+          </View>
+        </Animated.View>
+      );
+    }
+  },
+
+  _showPanel() {
+    if (!this.state.showPanel) {
+      dismissKeyboard();
+      this.listViewMaxHeight -= this.props.panelHeight;
+
+      Animated.timing(this.state.height, {
+        toValue: this.listViewMaxHeight,
+        duration: 150,
+      }).start();
+
+      this.setState({
+        showPanel: true
+      });
+
+      this.scrollToBottom();
+    }
+  },
+
+  _hidePanel() {
+    if (this.state.showPanel) {
+      this.listViewMaxHeight += this.props.panelHeight;
+
+      Animated.timing(this.state.height, {
+        toValue: this.listViewMaxHeight,
+        duration: 150,
+      }).start();
+
+      this.setState({
+        showPanel: false
+      });
+
+      this.scrollToBottom();
+    }
+  },
+
+  _handleMore() {
+    //LayoutAnimation.spring();
+    if (this.state.showPanel) {
+      this._hidePanel();
+    } else {
+      this._showPanel();
+    }
+  },
+
+  renderPanel() {
+    //LayoutAnimation.spring();
+    if (this.state.showPanel) {
+      return (
+        <Animated.View style={this.styles.panelContainer}>
+
+          <TouchableOpacity
+            style={this.styles.panelItem}
+            onPress= {() => {}}
+          >
+            <Image
+              style={this.styles.panelIcon}
+              source={DictIcon.imImg}
+            />
+            <Text style={this.styles.panelText}>照片</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={this.styles.panelItem}
+            onPress= {() => {}}
+          >
+            <Image
+              style={this.styles.panelIcon}
+              source={DictIcon.imPhoto}
+            />
+            <Text style={this.styles.panelText}>拍摄</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={this.styles.panelItem}
+            onPress= {() => {}}
+          >
+            <Image
+              style={this.styles.panelIcon}
+              source={DictIcon.imQuote}
+            />
+            <Text style={this.styles.panelText}>业务</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={this.styles.panelItem}
+            onPress= {() => {}}
+          >
+            <Image
+              style={this.styles.panelIcon}
+              source={DictIcon.imCard}
+            />
+            <Text style={this.styles.panelText}>名片</Text>
+          </TouchableOpacity>
+
+        </Animated.View>
+      );
+    }
   },
 
   render() {
@@ -532,71 +785,42 @@ var GiftedMessenger = React.createClass({
       >
         {this.renderAnimatedView()}
         {this.renderTextInput()}
+        {this.renderPanel()}
       </View>
-    )
-  },
-
-  renderTextInput() {
-    if (this.props.hideTextInput === false) {
-      return (
-        <View style={this.styles.textInputContainer}>
-          <TextInput
-            style={this.styles.textInput}
-            placeholder={this.props.placeholder}
-            ref='textInput'
-            onChangeText={this.onChangeText}
-            value={this.state.text}
-            autoFocus={this.props.autoFocus}
-            returnKeyType={this.props.submitOnReturn ? 'send' : 'default'}
-            onSubmitEditing={this.props.submitOnReturn ? this.onSend : null}
-            enablesReturnKeyAutomatically={true}
-
-            blurOnSubmit={false}
-          />
-          <Button
-            style={this.styles.sendButton}
-            styleDisabled={this.styles.sendButtonDisabled}
-            onPress={this.onSend}
-            disabled={this.state.disabled}
-          >
-            {this.props.sendButtonText}
-          </Button>
-        </View>
-      );
-    }
-    return null;
+    );
   },
 
   componentWillMount() {
     this.styles = {
       container: {
         flex: 1,
-        backgroundColor: '#FFF',
       },
       listView: {
         flex: 1,
       },
       textInputContainer: {
-        height: 44,
-        borderTopWidth: 1 / PixelRatio.get(),
-        borderColor: '#b2b2b2',
+        flex: 1,
+        borderTopWidth: 3 / PixelRatio.get(),
+        borderBottomWidth: 3 / PixelRatio.get(),
+        borderColor: '#0f263d',
         flexDirection: 'row',
-        paddingLeft: 10,
-        paddingRight: 10,
+        alignItems: 'flex-end',
+        backgroundColor: '#153757',
       },
       textInput: {
-        alignSelf: 'center',
-        height: 30,
-        width: 100,
-        backgroundColor: '#FFF',
+        //alignSelf: 'flex-end',
         flex: 1,
         padding: 0,
         margin: 0,
         fontSize: 15,
+        marginLeft: 10,
+        marginVertical: 10,
+        borderRadius: 6,
+        backgroundColor: '#0a1926',
+        color: 'white'
       },
       sendButton: {
-        marginTop: 11,
-        marginLeft: 10,
+        fontSize: 15
       },
       date: {
         color: '#aaaaaa',
@@ -623,6 +847,33 @@ var GiftedMessenger = React.createClass({
       loadEarlierMessagesButton: {
         fontSize: 14,
       },
+      panelContainer: {
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        flexDirection: 'row',
+        backgroundColor: '#153757',
+        paddingTop: 5,
+        flex: 1
+      },
+      panelItem: {
+        flex: 1,
+        margin: 5,
+        borderRadius: 3,
+        flexDirection: 'column',
+        //alignSelf: 'stretch',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        height: 100
+        //marginHorizontal: 70
+      },
+      panelIcon: {
+        width: 69,
+        height: 69
+      },
+      panelText: {
+        fontSize: 14,
+        color: '#0f60b1'
+      }
     };
 
     Object.assign(this.styles, this.props.styles);

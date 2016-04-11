@@ -19,6 +19,8 @@ let { Alert, Device } = require('mx-artifacts');
 let ProgressHUD = require('react-native-progress-hud');
 let co = require('co');
 
+let Chat = require('../../biz/im/chat');
+
 var Main = React.createClass({
   _navigator: null,
   mixins: [ProgressHUD.Mixin],
@@ -139,6 +141,7 @@ var Main = React.createClass({
     }
 
     var initComp = TabView;
+    //var initComp = Chat;
     if (!!this.state.token) {
       initComp = Login;
     }

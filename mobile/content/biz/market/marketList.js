@@ -36,16 +36,13 @@ var arr = [
   {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
   {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
   {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
+  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
   {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
+  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
   {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
+  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
   {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'}]
+  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},]
 
 var MarketList = React.createClass({
   getInitialState: function () {
@@ -56,7 +53,7 @@ var MarketList = React.createClass({
 
   render() {
     return (
-      <View style={{width:screenWidth,backgroundColor: '#162a40'}}>
+      <View style={{flex:1,width:screenWidth,backgroundColor: '#162a40'}}>
         <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5}}>
           <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:'#8d8d8d',}}>
             {'方向'}
