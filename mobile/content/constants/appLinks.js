@@ -2,9 +2,6 @@ let { Host } = require('../../config');
 
 let AppLinks = {
   protocal: '',
-  login: '/pub/login',
-  logout: '',
-  register: '',
   validatePassword: '',
   validateMobileForResetMobile: '',
   sendSMSCodeToNewMobile: '',
@@ -16,7 +13,14 @@ let AppLinks = {
   sendSMSCodeToOldMobile: '',
   resetMobileNo: '',
   resetPasswordForChangePwd: '',
-  sendSmsCodeToLoginMobile:Host + '/pub/sendSmsCodeToLoginMobile'
+  sendSmsCodeToLoginMobile: '/pub/sendSmsCodeToLoginMobile',
+  sendSmsCodeToRegisterMobile: '/pub/sendSmsCodeToRegisterMobile',
+  validateSmsCode: '/pub/validateSmsCode',
+  login: '/pub/login',
+  logout: '/api/Account/logout',
+  register: '/pub/register',
+  uploadFile:'/File/upload',
+  updateUserInfo: '/api/Account/updateUserInfo'
 };
 
 module.exports = AppLinks;

@@ -50,6 +50,7 @@ let Login = React.createClass({
   _onChange: function () {
     this.setState(this.getStateFromStores());
   },
+
   sendSmsCodeToLoginMobile: function () {
     if (this.state.mobileNo) {
       dismissKeyboard();
@@ -76,6 +77,7 @@ let Login = React.createClass({
       });
     }
   },
+
   toOther: function (name) {
     this.props.navigator.push({
       comp: name

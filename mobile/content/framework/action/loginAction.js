@@ -10,7 +10,6 @@ let AppLinks = require('../../constants/appLinks');
 var pub = "/pub";
 let LoginActions = {
   getProtocol: () => AppLinks.protocal,
-  login: (p, c, f) => _login(AppLinks.login, p),
   logOut: () => _logout(AppLinks.logout),
   register: (p, c, f) => _register(AppLinks.register, p, c, f),
   validatePassword: (p, c, f) => BFetch(AppLinks.validatePassword, p, c, f),
@@ -26,11 +25,14 @@ let LoginActions = {
   resetPasswordForChangePwd: (p, c, f) => BFetch(AppLinks.resetPasswordForChangePwd, p, c, f),
   forceLogOut: () => AppStore.forceLogout(),
   clear: () => AppStore.logout(),
-  uploadNameCard: (p, c, f)=> _uploadNameCard(p, c, f),
-  sendSmsCodeToLoginMobile: (p, f)=> _sendSmsCodeToLoginMobile(AppLinks.sendSmsCodeToLoginMobile,p,c, f)
+  login: (p, c, f) => _login(AppLinks.login, p),
+  sendSmsCodeToLoginMobile: (p, f)=> _sendSmsCodeToLoginMobile(AppLinks.sendSmsCodeToLoginMobile,p),
+  sendSmsCodeToRegisterMobile: (p, f)=> _sendSmsCodeToRegisterMobile(AppLinks.sendSmsCodeToRegisterMobile,p),
+  validateSmsCode: (p,f) => _validateSmsCode(AppLinks.validateSmsCode),
+  uploadNameCard: (p) => _uploadNameCard(AppLinks.uploadFile,p)
 };
 
-let _sendSmsCodeToLoginMobile = function (url,p,c,f) {
+let _sendSmsCodeToLoginMobile = function (url,p) {
   return new Promise((resolve, reject) => {
     PFetch(url, p).then((response) => {
       resolve(response);
@@ -40,17 +42,15 @@ let _sendSmsCodeToLoginMobile = function (url,p,c,f) {
   });
 };
 
-let _logout = function (url, c) {
-  BFetch(url, {},
-    function () {
-      AppStore.logout();
-    }, null, {
-      isLogout: true
-    }
-  );
+let _sendSmsCodeToRegisterMobile = function (url,p) {
+  return new Promise((resolve, reject) => {
+    PFetch(url, p).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
 };
-
-
 
 let _login = function (url, p) {
   return new Promise((resolve, reject) => {
@@ -62,9 +62,29 @@ let _login = function (url, p) {
   });
 };
 
-let _uploadNameCard = function () {
+let _register = function (url, p) {
+  return new Promise((resolve, reject) => {
+    BFetch(url, p).then((response) => {
+      resolve(AppStore.login(response));
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _logout = function (url) {
+  BFetch(url, {},
+    function () {
+      AppStore.logout();
+    }, null, {
+      isLogout: true
+    }
+  );
+};
+
+let _uploadNameCard = function (fileFieldName) {
   return function (callback) {
-    UFetch(pub + '/File/uploadFile',
+    UFetch(url,
       {
         uri: params[fileFieldName],
         type: 'image/jpeg',
@@ -77,31 +97,6 @@ let _uploadNameCard = function () {
         callback(err, fileFieldName);
       });
   }
-};
-
-let _register = function (url, p, c, f) {
-  BFetch(url, p,
-    function (data) {
-      AppStore.login(data);
-      c();
-    },
-    f
-  );
-};
-let _resetMobileNo = function (u, p, c, f) {
-  let key = _.keys(p)[0];
-  let value = p[key];
-  BFetch(u, p,
-    function (msg) {
-      //AppDispatcher.dispatch({
-      //  type: ActionTypes.UPDATE_USERINFO,
-      //  data: {
-      //    mobileNo: value
-      //  }
-      //});
-      c(msg);
-    }
-  );
 };
 
 module.exports = LoginActions;

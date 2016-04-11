@@ -41,7 +41,7 @@ var UFetch = function (url, param, callback, failure, options) {
   return rawFetch(Host + url, {
     method: 'POST',
     headers: headers,
-    body: formdata,
+    body: formdata
   }, { custLoading: true });
 };
 
