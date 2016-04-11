@@ -44,7 +44,7 @@ var SelectBusiness1 = React.createClass({
     return (
       <TouchableHighlight
         onPress={()=>this.pressRow()} underlayColor='#2b4f79'>
-        <View style={{width:screenWidth,height:50,flexDirection:'row',alignItems: "center",justifyContent: "space-between",backgroundColor:'#244266',borderBottomColor:"black",borderBottomWidth:0.5}}>
+        <View style={{width:screenWidth,height:50,flexDirection:'row',alignItems: "center",justifyContent: "space-between",backgroundColor:'#244266',borderBottomColor:"#0a1926",borderBottomWidth:0.7}}>
           <Text style={{marginLeft:10,fontSize:16,color:'white'}}>{rowData}</Text>
           <Image style={{margin:10,width:16,height:16}}
                  source={require('../../image/market/next.png')}
