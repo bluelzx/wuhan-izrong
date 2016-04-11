@@ -10,7 +10,8 @@ let {
   Text,
   TouchableOpacity,
   TouchableHighlight,
-  Platform
+  Platform,
+  DeviceEventEmitter
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
 let Icon = require('react-native-vector-icons/Ionicons');
@@ -71,6 +72,12 @@ let WhitePage = React.createClass({
       param:{title:item.title}
     });
   },
+
+  componentWillMount:function() {
+    DeviceEventEmitter.addListener('keyboardWillShow', function(e: Event) {
+      console.log('hello RC, I am Android Native');
+    });
+  },
   renderItem: function(item, index) {
     let {width} = Device;
     let swipeoutBtns = [
@@ -78,6 +85,7 @@ let WhitePage = React.createClass({
         text: '删除',
         backgroundColor: 'red',
         onPress: function(){
+
         }
       }
     ]
