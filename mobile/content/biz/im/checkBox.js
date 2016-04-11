@@ -3,6 +3,7 @@
  */
 let React = require('react-native');
 const {TouchableHighlight, Image, View} = React;
+let Icon = require('react-native-vector-icons/Ionicons');
 let CheckBox = React.createClass({
   getInitialState: function() {
     return {
@@ -11,13 +12,20 @@ let CheckBox = React.createClass({
   },
 
   changeAgree: function(){
+    var key = this.props.item;
     var agree = this.state.agree;
-    this.setState({agree: !agree})
+    this.setState({agree: !agree});
+    if(this.props.choice&&this.props.unChoice){
+      !agree?this.props.choice(key):this.props.unChoice(key);
+    }
+
   },
 
   isRead: function(){
     if (this.state.agree) {
-      return (require('../../image/utils/radioChecked.png'))
+      return (
+        <Icon name="person-stalker" size={25} color='#ffffff' />
+      );
     } else {
       return (require('../../image/utils/radioUncheck.png'))
     }
@@ -28,7 +36,12 @@ let CheckBox = React.createClass({
     return (
       <TouchableHighlight style={style} onPress={this.changeAgree}>
         <View style={{flexDirection:'row', alignItems:'center'}}>
-          <Image style={{width:12,height:12}} source={this.isRead()}/>
+          <Icon name={this.state.agree?'ios-checkmark':'ios-circle-outline'} size={24} color='#44ABFD' />
+
+          {/*
+          *<Image style={{width:12,height:12}} source={this.isRead()}/>
+           */}
+
           <View style={{padding:5}}></View>
           {this.props.children}
         </View>

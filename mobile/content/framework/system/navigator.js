@@ -15,25 +15,23 @@ AppAction.appInit();
 var TabView = require('./tabView');
 var Login = require('../../biz/login/login');
 var AppStore = require('../store/appStore');
-
 let { Alert, Device } = require('mx-artifacts');
 let ProgressHUD = require('react-native-progress-hud');
 let co = require('co');
 
 var Main = React.createClass({
-  mixins: [ProgressHUD.Mixin],
-
   _navigator: null,
-  _getStateFromStores: function () {
+  mixins: [ProgressHUD.Mixin],
+  _getStateFromStores: function() {
     return {
       initLoading: AppStore.getInitLoadingState(),
       token: AppStore.getToken()
     };
   },
-  getInitialState: function () {
+  getInitialState: function() {
     return this._getStateFromStores();
   },
-  componentDidMount: function () {
+  componentDidMount: function() {
     AppStore.addChangeListener(this._onChange);
     if (Platform.OS === 'android') {
       BackAndroid.addEventListener('hardwareBackPress', this._onAndroidBackPressed);

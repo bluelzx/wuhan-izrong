@@ -8,28 +8,25 @@ var {
   View,
   Image,
   Platform,
-  Dimensions
   } = React;
-var AppStore = require('../../framework/store/appStore');
-//var UserStore = require('../../framework/store/userStore');
-var LoginAction = require('../../framework/action/loginAction');
-//var Register_checkPhone = require('./register_checkPhone');
-//var Forget_checkPhone = require('./forget_checkPhone');
-var NavBarView = require('../../framework/system/navBarView');
-var dismissKeyboard = require('react-native-dismiss-keyboard');
-var VerifyCode = require('../../comp/utils/verifyCode');
-var Input = require('../../comp/utils/input');
-var { Alert, Button } = require('mx-artifacts');
-var Register_valiMobile = require('./register_valiMobile');
-var Login_ValiSMS = require('./login_valiSMS');
-var {height, width} = Dimensions.get('window');
-var TabView = require('../../framework/system/tabView');
+let AppStore = require('../../framework/store/appStore');
+//let UserStore = require('../../framework/store/userStore');
+let LoginAction = require('../../framework/action/loginAction');
+//let Register_checkPhone = require('./register_checkPhone');
+//let Forget_checkPhone = require('./forget_checkPhone');
+let NavBarView = require('../../framework/system/navBarView');
+let dismissKeyboard = require('react-native-dismiss-keyboard');
+let VerifyCode = require('../../comp/utils/verifyCode');
+let Input = require('../../comp/utils/input');
+let { Alert, Button, Device} = require('mx-artifacts');
+let Register_valiMobile = require('./registerValiMobile');
+let Login_ValiSMS = require('./loginValiSMS');
+let TabView = require('../../framework/system/tabView');
 
-
-var Login = React.createClass({
+let Login = React.createClass({
   getStateFromStores() {
-    //var user = UserStore.getUserInfoBean();
-    var deviceModel = 'IOS';
+    //let user = UserStore.getUserInfoBean();
+    let deviceModel = 'IOS';
     if (Platform.OS != 'ios') {
       deviceModel = 'ANDROID';
     }
@@ -83,10 +80,9 @@ var Login = React.createClass({
     }
   },
   toOther: function (name) {
-    const { navigator } = this.props;
-    if (navigator) {
-      navigator.push({comp: name})
-    }
+    this.props.navigator.push({
+      comp:name
+    });
   },
 
   _onChangeText(key, value){
@@ -100,7 +96,7 @@ var Login = React.createClass({
   renderLogo: function () {
     return (
       <View style={{alignItems:'center',flexDirection:'column'}}>
-        <Image style={{marginTop:30,height:80,width:160}}
+        <Image style={styles.logo}
                resizeMode='cover'
                source={require("../../image/login/logo.png")}/>
         <Text style={{color:'#ffffff',marginTop:20,fontSize:18}}>环渤海银银合作平台</Text>
@@ -111,7 +107,7 @@ var Login = React.createClass({
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='登录' showBack={false} showBar={true}>
+                  contentBackgroundColor='#18304D' title='登录' showBack={true} showBar={true}>
         <View style={[{flexDirection: 'column', flex: 1}, styles.paddingLR]}>
           {this.renderLogo()}
           <Input containerStyle={{height: 47, borderColor: '#0a1926',borderWidth: 0.5,marginTop: 20,
@@ -123,7 +119,7 @@ var Login = React.createClass({
             containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
             style={{fontSize: 20, color: '#ffffff'}}
             styleDisabled={{color: 'red'}}
-            onPress={()=>this.toPage(Login_ValiSMS)}>
+            onPress={()=>this.toOther(Login_ValiSMS)}>
             登录
           </Button>
 
@@ -131,7 +127,7 @@ var Login = React.createClass({
             containerStyle={{marginTop:20,backgroundColor:'#ffffff'}}
             style={{fontSize: 20, color: '#1151B1'}}
             styleDisabled={{color: 'red'}}
-            onPress={()=>this.toPage(Register_valiMobile)}>
+            onPress={()=>this.toOther(Register_valiMobile)}>
             新用户注册
           </Button>
         </View>
@@ -145,7 +141,7 @@ var Login = React.createClass({
     )
   }
 });
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   radio: {
     width: 40, height: 40
   },
@@ -171,6 +167,11 @@ var styles = StyleSheet.create({
   paddingLR: {
     paddingLeft: 12, paddingRight: 12,
   },
+  logo:{
+    marginTop:30,
+    height:80,
+    width:160
+  }
 });
 
 module.exports = Login;

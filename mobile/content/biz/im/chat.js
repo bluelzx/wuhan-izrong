@@ -5,6 +5,7 @@
 let React = require('react-native');
 const {Text, TouchableHighlight, TouchableOpacity} = React;
 let NavBarView = require('../../framework/system/navBarView');
+let Icon = require('react-native-vector-icons/Ionicons');
 let EditGroup = require('./editGroup');
 
 let Chat = React.createClass({
@@ -16,7 +17,7 @@ let Chat = React.createClass({
             comp: EditGroup
       });
       }}>
-      <Text style={{color:'#ffffff'}}>编辑群</Text>
+      <Icon name="person-stalker" size={25} color='#ffffff' />
     </TouchableOpacity>
 
     );

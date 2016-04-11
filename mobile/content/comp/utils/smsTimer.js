@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
     StyleSheet,
     TouchableOpacity,
     View,
@@ -10,10 +10,10 @@ var {
     Dimensions,
     Image
     } = React;
-//var LoginAction = require("../../framework/action/loginAction");
-//var BillAction = require('../../framework/action/billAction');
-var TimerMixin = require('react-timer-mixin');
-var SMSTimer = React.createClass({
+//let LoginAction = require("../../framework/action/loginAction");
+//let BillAction = require('../../framework/action/billAction');
+let TimerMixin = require('react-timer-mixin');
+let SMSTimer = React.createClass({
     mixins: [TimerMixin],
     getInitialState: function () {
         return {
@@ -85,10 +85,10 @@ var SMSTimer = React.createClass({
     },
 
     updateText: function () {
-        var nowTime = new Date().getTime();
-        var timeGo = Math.floor((nowTime - this.state.startTime) / 1000);
+        let nowTime = new Date().getTime();
+        let timeGo = Math.floor((nowTime - this.state.startTime) / 1000);
 
-        var t = --this.state.deadline;
+        let t = --this.state.deadline;
         if (t + timeGo == 60) {
 
         } else if (t + timeGo > 60) {
@@ -115,7 +115,7 @@ var SMSTimer = React.createClass({
         this.props.onChanged(type, this.state.verify)
     },
     render() {
-        var {height, width} = Dimensions.get('window');
+        let {height, width} = Dimensions.get('window');
         return (
             <View style={{flexDirection: 'row',flex:1,marginTop:20}}>
                 <View style={[styles.view,styles.radius]}>
@@ -137,7 +137,7 @@ var SMSTimer = React.createClass({
         )
     }
 })
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
     view: {
         height: 47, borderColor: '#0a1926', borderWidth: 0.5, backgroundColor: '#0a1926',
         flexDirection: 'row', alignItems: 'center', flex: 1
