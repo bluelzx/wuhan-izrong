@@ -21,6 +21,7 @@ let co = require('co');
 
 var Main = React.createClass({
   _navigator: null,
+  mixins: [ProgressHUD.Mixin],
   _getStateFromStores: function() {
     return {
       initLoading: AppStore.getInitLoadingState(),
