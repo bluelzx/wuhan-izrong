@@ -15,7 +15,10 @@ let CheckBox = React.createClass({
     var key = this.props.item;
     var agree = this.state.agree;
     this.setState({agree: !agree});
-    !agree?this.props.choice(key):this.props.unChoice(key);;
+    if(this.props.choice&&this.props.unChoice){
+      !agree?this.props.choice(key):this.props.unChoice(key);
+    }
+
   },
 
   isRead: function(){
