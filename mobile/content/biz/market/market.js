@@ -24,6 +24,7 @@ var NavBarView = require('../../framework/system/navBarView');
 var RadioControl = require('./radioControl');
 var MarketList = require('./marketList');
 var SelectOrg = require('./selectOrg');
+let Icon = require('react-native-vector-icons/Ionicons');
 
 var data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var WhitePage = React.createClass({
@@ -43,9 +44,6 @@ var WhitePage = React.createClass({
       pickTypeRow2: 0,
       pickTimeRow: 0,
       pickRowColor: '#244266',
-      typeImgName: require('../../image/market/filter_Down.png'),
-      timeImgName: require("../../image/market/filter_Down.png"),
-      otherImgName: require("../../image/market/filter_Down.png")
     }
   },
   render: function () {
@@ -55,7 +53,7 @@ var WhitePage = React.createClass({
                   contentBackgroundColor='#18304D' title='市场' showBack={false} showBar={true}>
         <View
           style={{width: screenWidth,alignItems: "center",justifyContent: "flex-start",flexDirection: "row"}}>
-          {this.renderFilter(this.pressFilterType, this.pressFilterTime, this.pressFilterOther, this.state.typeImgName, this.state.timeImgName, this.state.otherImgName)}
+          {this.renderFilter(this.pressFilterType, this.pressFilterTime, this.pressFilterOther)}
         </View>
         <MarketList navigator={this.props.navigator}/>
         {this.renderOptionType()}
@@ -69,9 +67,6 @@ var WhitePage = React.createClass({
       clickFilterTime: 0,
       clickFilterOther: 0,
       clickFilterType: (this.state.clickFilterType == 0) ? 1 : 0,
-      timeImgName: require("../../image/market/filter_Down.png"),
-      otherImgName: require("../../image/market/filter_Down.png"),
-      typeImgName: (this.state.clickFilterType == 0) ? require("../../image/market/filter_Up.png") : require("../../image/market/filter_Down.png")
     })
   },
   pressFilterTime(){
@@ -79,9 +74,6 @@ var WhitePage = React.createClass({
       clickFilterType: 0,
       clickFilterOther: 0,
       clickFilterTime: (this.state.clickFilterTime == 0) ? 1 : 0,
-      typeImgName: require("../../image/market/filter_Down.png"),
-      otherImgName: require("../../image/market/filter_Down.png"),
-      timeImgName: (this.state.clickFilterTime == 0) ? require("../../image/market/filter_Up.png") : require("../../image/market/filter_Down.png")
     })
   },
   pressFilterOther(){
@@ -89,9 +81,6 @@ var WhitePage = React.createClass({
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: (this.state.clickFilterOther == 0) ? 1 : 0,
-      typeImgName: require("../../image/market/filter_Down.png"),
-      timeImgName: require("../../image/market/filter_Down.png"),
-      otherImgName: (this.state.clickFilterOther == 0) ? require("../../image/market/filter_Up.png") : require("../../image/market/filter_Down.png")
     })
   },
   pressTypeRow1(rowId){
@@ -119,7 +108,6 @@ var WhitePage = React.createClass({
       clickFilterType: 0,
       pickTypeRow2: rowId,
       levelTwoText: this.state.dataSource2[rowId],
-      typeImgName: (this.state.clickFilterType == 0) ? require("../../image/market/filter_Up.png") : require("../../image/market/filter_Down.png")
     })
   },
   pressTimeRow(rowId){
@@ -127,9 +115,8 @@ var WhitePage = React.createClass({
       clickFilterTime: 0,
       pickTimeRow: rowId,
       optionTwoText: this.state.dataSource3[rowId],
-      timeImgName: (this.state.clickFilterTime == 0) ? require("../../image/market/filter_Up.png") : require("../../image/market/filter_Down.png")
     })
-  },renderFilter(pressFilterType, pressFilterTime, pressFilterOther, typeImgName, timeImgName, otherImgName){
+  },renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
     return (
       <View style={{flex:1,flexDirection:'row'}}>
         <TouchableOpacity onPress={pressFilterType} activeOpacity={1}
@@ -139,7 +126,8 @@ var WhitePage = React.createClass({
             <Text
               style={{width:screenWidth/2 - 40,color:(this.state.clickFilterType == 1)?'#419cd6':'white'}}
               numberOfLines={1}>{this.state.levelOneText + ' - ' + this.state.levelTwoText}</Text>
-            <Image style={{width:10,height:10,marginLeft:10}} source={typeImgName}/>
+            <Icon name={(this.state.clickFilterType == 1)?"arrow-up-b":"arrow-down-b"} size={20} color={(this.state.clickFilterType == 1)?'#419cd6':'white'} />
+
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={pressFilterTime} activeOpacity={1}
@@ -149,7 +137,7 @@ var WhitePage = React.createClass({
             <Text
               style={{width:screenWidth/3 - 30,color:(this.state.clickFilterTime == 1)?'#419cd6':'white'}}
               numberOfLines={1}>{this.state.optionTwoText}</Text>
-            <Image style={{width:10,height:10,marginLeft:10}} source={timeImgName}/>
+            <Icon name={(this.state.clickFilterTime == 1)?"arrow-up-b":"arrow-down-b"} size={20} color={(this.state.clickFilterTime == 1)?'#419cd6':'white'} />
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={pressFilterOther} activeOpacity={1}
@@ -159,7 +147,7 @@ var WhitePage = React.createClass({
             <Text
               style={{width:screenWidth/6 - 30,color:(this.state.clickFilterOther == 1)?'#419cd6':'white'}}
               numberOfLines={1}>{'筛选'}</Text>
-            <Image style={{width:10,height:10,marginLeft:10}} source={otherImgName}/>
+            <Icon name={(this.state.clickFilterOther == 1)?"arrow-up-b":"arrow-down-b"} size={20} color={(this.state.clickFilterOther == 1)?'#419cd6':'white'} />
           </View>
         </TouchableOpacity>
 
