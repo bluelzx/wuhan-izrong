@@ -23,14 +23,15 @@ var styles = StyleSheet.create({
   tab: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 10
+    justifyContent: 'center'
   },
 
   tabs: {
-    height: 50,
+    height: 80,
     flexDirection: 'row',
-    backgroundColor: '#1156C0'
+    backgroundColor: '#1156C0',
+    alignItems:'flex-start',
+    paddingTop:10
   },
   badgeNoNumber: {
     flexDirection: 'row',
@@ -171,12 +172,9 @@ var AndroidTabBar = React.createClass({
     });
 
     return (
-      <View>
         <View style={styles.tabs}>
           {this.props.tabs.map((tab, i) => this.renderTabOption(tab, i))}
         </View>
-
-      </View>
     );
   },
 });
