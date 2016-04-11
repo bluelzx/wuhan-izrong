@@ -31,12 +31,8 @@ let Login = React.createClass({
       deviceModel = 'ANDROID';
     }
     return {
-      loaded: false,
-      checked: true,
-      userName: '',
-      password: '',
-      verify: '',
-      active: false,
+      mobileNo: '',
+      checked:'',
       deviceModel: deviceModel,
       APNSToken: AppStore.getAPNSToken()
     };
@@ -54,39 +50,43 @@ let Login = React.createClass({
   _onChange: function () {
     this.setState(this.getStateFromStores());
   },
-  login: function () {
-    if (this.state.userName && this.state.password && this.state.verify) {
-      dismissKeyboard();
 
+  sendSmsCodeToLoginMobile: function () {
+    if (this.state.mobileNo) {
+      dismissKeyboard();
       this.props.exec(() => {
-        return LoginAction.login({
-          userName: this.state.userName,
-          password: this.state.password,
-          deviceToken: this.state.APNSToken,
-          deviceModel: this.state.deviceModel,
-          captcha: this.state.verify
+        return LoginAction.sendSmsCodeToLoginMobile({
+          mobileNo:this.state.mobileNo
         }).then((response) => {
-          //this.props.navigator.pop();
-          this.props.navigator.replace({
-            comp: TabView
-          });
+          const { navigator } = this.props;
+          if (navigator) {
+            if (!this.state.checked) {
+              navigator.push(
+                {
+                  comp: Login_ValiSMS,
+                  param: {
+                    mobileNo: this.state.mobileNo
+                  }
+                });
+            }
+          }
         }).catch((errorData) => {
           //Alert(msg.msgContent);
-          this.refs['verifyCode'].changeVerify();
           throw errorData;
         });
       });
     }
   },
+
   toOther: function (name) {
     this.props.navigator.push({
-      comp:name
+      comp: name
     });
   },
 
   _onChangeText(key, value){
     this.setState({[key]: value});
-    if (this.state.userName.length == 0 || this.state.password.length == 0 || this.state.verify.length == 0) {
+    if (this.state.mobileNo.length == 0) {
       this.setState({checked: true});
     } else {
       this.setState({checked: false});
@@ -109,16 +109,15 @@ let Login = React.createClass({
                   contentBackgroundColor='#18304D' title='登录' showBack={true} showBar={true}>
         <View style={[{flexDirection: 'column', flex: 1}, styles.paddingLR]}>
           {this.renderLogo()}
-          <Input containerStyle={{height: 47, borderColor: '#0a1926',borderWidth: 0.5,marginTop: 20,
-          backgroundColor: '#0a1926',flexDirection: 'row',alignItems: 'center',borderRadius: 6}}
-                 type="default" placeholder='手机号' maxlength={20} field='userName'
+          <Input containerStyle={styles.inputStyle}
+                 type="default" placeholder='手机号' maxlength={20} field='mobileNo'
                  onChangeText={this._onChangeText} icon='user'/>
 
           <Button
             containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
             style={{fontSize: 20, color: '#ffffff'}}
             styleDisabled={{color: 'red'}}
-            onPress={()=>this.toOther(Login_ValiSMS)}>
+            onPress={()=>this.sendSmsCodeToLoginMobile()}>
             登录
           </Button>
 
@@ -142,34 +141,58 @@ let Login = React.createClass({
 });
 let styles = StyleSheet.create({
   radio: {
-    width: 40, height: 40
+    width: 40,
+    height: 40
   },
   menu: {
-    paddingTop: 24, paddingBottom: 50,
-    alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between'
+    paddingTop: 24,
+    paddingBottom: 50,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   rememberMe: {
-    height: 60, width: 21, flexDirection: 'row', alignItems: 'center'
+    height: 60,
+    width: 21,
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   contact: {
-    alignItems: 'center', height: 45,
+    alignItems: 'center',
+    height: 45
   },
   colorPath: {
-    fontSize: 15, color: '#333333'
+    fontSize: 15,
+    color: '#333333'
   },
   leftButton: {
-    marginTop: 30, left: 20, height: 40,
+    marginTop: 30,
+    left: 20,
+    height: 40
   },
   rightButton: {
-    marginTop: 30, height: 40, right: 20,
+    marginTop: 30,
+    height: 40,
+    right: 20
   },
   paddingLR: {
-    paddingLeft: 12, paddingRight: 12,
+    paddingLeft: 12,
+    paddingRight: 12
   },
-  logo:{
-    marginTop:30,
-    height:80,
-    width:160
+  logo: {
+    marginTop: 30,
+    height: 80,
+    width: 160
+  },
+  inputStyle: {
+    height: 47,
+    borderColor: '#0a1926',
+    borderWidth: 0.5,
+    marginTop: 20,
+    backgroundColor: '#0a1926',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 6
   }
 });
 

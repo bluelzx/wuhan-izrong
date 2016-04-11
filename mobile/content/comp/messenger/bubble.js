@@ -2,7 +2,7 @@ import React, {Text, View, Animated, Image, StyleSheet} from 'react-native';
 
 let styles = StyleSheet.create({
   bubble: {
-    borderRadius: 15,
+    borderRadius: 5,
     paddingLeft: 14,
     paddingRight: 14,
     paddingBottom: 10,
@@ -15,21 +15,7 @@ let styles = StyleSheet.create({
   },
   textRight: {
     color: '#fff',
-  },
-  bubbleLeft: {
-    marginRight: 70,
-    backgroundColor: '#e6e6eb',
-    alignSelf: "flex-start",
-  },
-  bubbleRight: {
-    marginLeft: 70,
-    backgroundColor: '#007aff',
-    alignSelf: "flex-end"
-  },
-  bubbleError: {
-    backgroundColor: '#e01717'
-  },
-
+  }
 });
 
 export default class Bubble extends React.Component {
@@ -54,28 +40,54 @@ export default class Bubble extends React.Component {
     );
   }
 
+  _getLength(str) {
+    return str.replace(/[^\x00-\xff]/g,"01").length;
+  }
+
   render(){
     var flexStyle = {};
-    if ( this.props.text.length > 40 ) {
+    //if ( this.props.text.length > 40 ) {
+    if ( this._getLength(this.props.text) > 40 ) {
       flexStyle.flex = 1;
     }
 
+    let customStyle = {};
+    if (this.props.position === 'left') {
+      customStyle = {
+        marginRight: 30,
+        backgroundColor: this.props.leftBackgroundColor,
+        alignSelf: 'flex-start'
+      };
+    } else {
+      customStyle = {
+        marginLeft: 30,
+        backgroundColor: this.props.status === 'ErrorButton' ? this.props.errorBackgroundColor : this.props.rightBackgroundColor,
+        alignSelf: 'flex-end'
+      };
+    }
+
     return (
-      <View style={[styles.bubble,
-        (this.props.position === 'left' ? styles.bubbleLeft : styles.bubbleRight),
-        (this.props.status === 'ErrorButton' ? styles.bubbleError : null),
-        flexStyle]}>
+      <View style={[styles.bubble, customStyle, flexStyle]}>
         {this.props.name}
         {this.renderText(this.props.text, this.props.position)}
       </View>
-    )
+    );
   }
 }
 
 Bubble.propTypes = {
-  position: React.PropTypes.oneOf(['left','right']),
+  position: React.PropTypes.oneOf(['left', 'right']),
   status: React.PropTypes.string,
   text: React.PropTypes.string,
   renderCustomText: React.PropTypes.func,
-  name: React.PropTypes.element
-}
+  name: React.PropTypes.element,
+  leftBackgroundColor: React.PropTypes.string,
+  rightBackgroundColor: React.PropTypes.string,
+  errorBackgroundColor: React.PropTypes.string
+};
+
+Bubble.defaultProps = {
+  leftBackgroundColor: '#e6e6eb',
+  rightBackgroundColor: '#007aff',
+  errorBackgroundColor: '#e01717'
+};

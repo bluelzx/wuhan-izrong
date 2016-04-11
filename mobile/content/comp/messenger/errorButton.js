@@ -1,5 +1,5 @@
 import React, {View, Text, TouchableHighlight, StyleSheet} from 'react-native';
-import GiftedSpinner from './giftedSpinner';
+import { Spinner } from 'mx-artifacts';
 
 let styles = StyleSheet.create({
   errorButtonContainer: {
@@ -47,7 +47,7 @@ export default class ErrorButton extends React.Component {
           backgroundColor: 'transparent',
           borderRadius: 0,
         }]}>
-          <GiftedSpinner />
+          <Spinner />
         </View>
       );
     }

@@ -21,13 +21,14 @@ let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Input = require('../../comp/utils/input');
 let { Alert, Button } = require('mx-artifacts');
-
+let PhotoPicker = require('NativeModules').PhotoPickerModule;
+let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 
 let Register_uploadNameCard = React.createClass({
   getStateFromStores() {
     return {
-      hasImage:false,
-      url:''
+      url: '',
+      imageSource: ''
     };
   },
   getInitialState: function () {
@@ -50,15 +51,73 @@ let Register_uploadNameCard = React.createClass({
       navigator.push({comp: name})
     }
   },
-  selectPhoto: function () {
+  selectIOS(desc, name){
+    var options = {
+      title: desc, // specify null or empty string to remove the title
+      cancelButtonTitle: '取消',
+      takePhotoButtonTitle: '拍照', // specify null or empty string to remove this button
+      chooseFromLibraryButtonTitle: '图库', // specify null or empty string to remove this button
+      cameraType: 'back', // 'front' or 'back'
+      mediaType: 'photo', // 'photo' or 'video'
+      videoQuality: 'high', // 'low', 'medium', or 'high'
+      maxWidth: 100, // photos only
+      maxHeight: 100, // photos only
+      aspectX: 1, // aspectX:aspectY, the cropping image's ratio of width to height
+      aspectY: 1, // aspectX:aspectY, the cropping image's ratio of width to height
+      quality: 1, // photos only
+      allowsEditing: true, // Built in iOS functionality to resize/reposition the image
+      noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
+      storageOptions: { // if this key is provided, the image will get saved in the documents directory (rather than a temporary directory)
+        skipBackup: true, // image will NOT be backed up to icloud
+        path: 'images' // will save image at /Documents/images rather than the root
+      }
+    };
 
+    UIImagePickerManager.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('UIImagePickerManager Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        var source = response.uri.replace('file://', '');
+        this.setState({
+          [name]: source
+        });
+        UserAction.updateUserHead(
+          {[name]: source}
+        )
+      }
+    });
   },
+  selectAndroid: function () {
+    // PhotoPicker.showImagePic(true,'nameCard',(response)=>console.log('Response = ', response));
+    UserPhotoPicModule.showImagePic(true, 'nameCard',
+      (response)=> {
+        console.log('Response = ', response);
+        this.setState({
+          imageSource: response.uri
+        });
+        LoginAction.uploadNameCard(
+          {['photoStoreId']: this.state.imageSource},
+          ()=>Alert("上传成功"),
+          ()=> Alert("上传失败")
+        )
+      });
+  },
+
   returnImage: function () {
-    if (!this.state.hasImage){
+    if (this.state.imageSource == '') {
       return (
         <TouchableHighlight style={styles.nameCard} activeOpacity={0.8} underlayColor='#18304b'
                             onPress={()=>this.selectPhoto()}>
-          <View style={{flexDirection:'column',flex:1,alignItems:'center',justifyContent:'space-around'}}>
+          <View style={styles.imageArea}>
             <Image
               resizeMode='cover'
               source={require("../../image/login/nameCard.png")}/>
@@ -66,19 +125,17 @@ let Register_uploadNameCard = React.createClass({
           </View>
         </TouchableHighlight>
       );
-    }else{
+    } else {
       return (
         <TouchableHighlight style={styles.nameCard} activeOpacity={0.8} underlayColor='#18304b'
                             onPress={()=>this.selectPhoto()}>
-
           <Image style={{flexDirection:'column',flex:1,alignItems:'center',justifyContent:'space-around'}}
                  resizeMode='cover'
-                 source = {{uri:this.state.url}}
+                 source={{uri:this.state.imageSource}}
           />
         </TouchableHighlight>
       );
     }
-
   },
 
   render: function () {
@@ -111,6 +168,12 @@ let styles = StyleSheet.create({
     height: 200,
     marginTop: 20,
     borderRadius: 6
+  },
+  imageArea: {
+    flexDirection: 'column',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-around'
   }
 });
 
