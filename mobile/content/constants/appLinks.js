@@ -20,7 +20,9 @@ let AppLinks = {
   logout: '/api/Account/logout',
   register: '/pub/register',
   uploadFile:'/File/upload',
-  updateUserInfo: '/api/Account/updateUserInfo'
+  updateUserInfo: '/api/Account/updateUserInfo',
+  bizOrderMarketSearchDefaultSearch: '/api/BizOrderMarketSearch/defaultSearch',
+  bizOrderMarketSearchsearch: '/api/BizOrderMarketSearch/search',
 };
 
 module.exports = AppLinks;
