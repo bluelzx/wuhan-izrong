@@ -43,7 +43,7 @@ var SelectBusiness2 = React.createClass({
     return (
       <TouchableHighlight
         onPress={()=>this.pressRow(rowID)} underlayColor='#2b4f79'>
-        <View style={{width:screenWidth,height:50,flexDirection:'row',alignItems: "center",justifyContent: "space-between",backgroundColor:'#244266',borderBottomColor:"black",borderBottomWidth:0.5}}>
+        <View style={{width:screenWidth,height:50,flexDirection:'row',alignItems: "center",justifyContent: "space-between",backgroundColor:'#244266',borderBottomColor:"#0a1926",borderBottomWidth:0.7}}>
           <Text style={{marginLeft:10,fontSize:16,color:'white'}}>{rowData}</Text>
         </View>
       </TouchableHighlight>

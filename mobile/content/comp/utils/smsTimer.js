@@ -10,9 +10,11 @@ let {
     Dimensions,
     Image
     } = React;
-//let LoginAction = require("../../framework/action/loginAction");
+let dismissKeyboard = require('react-native-dismiss-keyboard');
+let LoginAction = require("../../framework/action/loginAction");
 //let BillAction = require('../../framework/action/billAction');
 let TimerMixin = require('react-timer-mixin');
+
 let SMSTimer = React.createClass({
     mixins: [TimerMixin],
     getInitialState: function () {
@@ -20,7 +22,7 @@ let SMSTimer = React.createClass({
             verify: '',
             time: "点击获取",
             active: '',
-            click: false,
+            click: false
         };
     },
     getDefaultProps(){
@@ -51,6 +53,20 @@ let SMSTimer = React.createClass({
 
     },
 
+  sendSmsCodeToRegisterMobile: function () {
+      dismissKeyboard();
+      this.props.exec(() => {
+        return LoginAction.sendSmsCodeToRegisterMobile({
+          mobileNo: this.props.parameter
+        }).then((response) => {
+          console.log(response)
+        }).catch((errorData) => {
+          //Alert(msg.msgContent);
+          throw errorData;
+        })
+      });
+  },
+
     afterLoginChangeVerify:function(){
         if (this.state.time == "重新获取" || this.props.isNeed) {
            BillAction.sendSMSCodeForDiscount(
@@ -76,11 +92,14 @@ let SMSTimer = React.createClass({
 
     },
 
+
     selectVerifyFunction:function(){
         if(this.props.func === 'afterLoginSendSMSCodeToOldMobile'){
             this.afterLoginChangeVerify();
-        }else {
-            this.changeVerify();
+        }else if (this.props.func === 'sendSmsCodeToRegisterMobile'){
+            this.sendSmsCodeToRegisterMobile();
+        }else{
+          this.changeVerify();
         }
     },
 
@@ -105,14 +124,14 @@ let SMSTimer = React.createClass({
         if (t == 0) {
             this.setState({
                 time: "重新获取",
-                click: true,
+                click: true
             });
             this.clearInterval(this.state.tim);
         }
     },
     textOnchange: function (text, type) {
-        this.setState({[type]: text})
-        this.props.onChanged(type, this.state.verify)
+        this.setState({[type]: text});
+        this.props.onChanged(type, this.state.verify);
     },
     render() {
         let {height, width} = Dimensions.get('window');
@@ -136,7 +155,8 @@ let SMSTimer = React.createClass({
             </View>
         )
     }
-})
+});
+
 let styles = StyleSheet.create({
     view: {
         height: 47, borderColor: '#0a1926', borderWidth: 0.5, backgroundColor: '#0a1926',
@@ -163,5 +183,5 @@ let styles = StyleSheet.create({
         backgroundColor: '#8bb0d9'
     }
 
-})
+});
 module.exports = SMSTimer;

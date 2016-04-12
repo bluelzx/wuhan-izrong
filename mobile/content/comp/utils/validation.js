@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 let React = require('react-native');
 let _ = require('lodash');
 module.exports = {
