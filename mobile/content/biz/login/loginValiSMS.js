@@ -25,8 +25,16 @@ let TabView = require('../../framework/system/tabView');
 
 let ValiSMS = React.createClass({
   getStateFromStores() {
+    var user = UserStore.getUserInfoBean();
+    var deviceModel = 'IOS';
+    if (Platform.OS != 'ios') {
+      deviceModel = 'ANDROID'
+    }
     return {
-      valiMobile:'13275805130'
+      mobileNo:'',
+      smsCode:'',
+      deviceModel: deviceModel,
+      APNSToken: AppStore.getAPNSToken()
     };
   },
   getInitialState: function () {
@@ -43,24 +51,28 @@ let ValiSMS = React.createClass({
     this.setState(this.getStateFromStores());
   },
   login: function () {
-    if (this.state.userName && this.state.password && this.state.verify) {
-      dismissKeyboard()
-      LoginAction.login(
-        {
-          userName: this.state.userName,
-          password: this.state.password,
+    if (this.state.mobileNo && this.state.smsCode) {
+      dismissKeyboard();
+      this.props.exec(() => {
+        return LoginAction.login({
+          mobileNo: this.state.mobileNo,
+          smsCode: this.state.smsCode,
           deviceToken: this.state.APNSToken,
-          deviceModel: this.state.deviceModel,
-          captcha: this.state.verify
-        },
-        function () {
-          this.props.navigator.pop();
-        }.bind(this),
-        function (msg) {
-          Alert(msg.msgContent);
-          this.refs['verifyCode'].changeVerify()
-        }.bind(this)
-      )
+          deviceModel: this.state.deviceModel
+        }).then((response) => {
+          const { navigator } = this.props;
+          if (navigator) {
+            if (!this.state.checked) {
+              navigator.push(
+                {
+                  comp: TabView
+                });
+            }
+          }
+        }).catch((errorData) => {
+          throw errorData;
+        });
+      });
     }
   },
 
@@ -90,7 +102,7 @@ let ValiSMS = React.createClass({
             containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
             style={{fontSize: 20, color: '#ffffff'}}
             styleDisabled={{color: 'red'}}
-            onPress={()=>Alert('登陆完成')}>
+            onPress={()=>this.login()}>
             确定
           </Button>
         </View>

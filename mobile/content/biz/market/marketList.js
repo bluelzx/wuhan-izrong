@@ -53,7 +53,7 @@ var MarketList = React.createClass({
 
   render() {
     return (
-      <View style={{flex:1,width:screenWidth,backgroundColor: '#162a40'}}>
+      <View style={{width:screenWidth,height:screenHeight-149,backgroundColor: '#162a40'}}>
         <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5}}>
           <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:'#8d8d8d',}}>
             {'方向'}
@@ -80,7 +80,7 @@ var MarketList = React.createClass({
     return (
       <TouchableHighlight onPress={() => this.toPage(BusinessDetail)} underlayColor='#000'>
         <View
-          style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center'}}>
+          style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926',}}>
           <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
                  source={rowData.type == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />

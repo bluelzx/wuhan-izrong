@@ -164,9 +164,11 @@ var WhitePage = React.createClass({
     else {
       return (
         <View style={{position:"absolute",left:0,top:36}}>
-          <View
-            style={{flex: 1, backgroundColor: 'black',opacity:0.2,height:screenHeight,width:screenWidth}}>
-          </View>
+          <TouchableOpacity onPress={()=>this.pressFilterType()} activeOpacity={0.8} underlayColor="#f0f0f0">
+            <View
+              style={{flex: 1, backgroundColor: 'black',opacity:0.2,height:screenHeight,width:screenWidth}}>
+            </View>
+          </TouchableOpacity>
           <ListView style={{height:180,position:"absolute",left:0,top:0,opacity:this.state.clickFilterType}}
                     dataSource={data.cloneWithRows(this.state.dataSource)}
                     renderRow={this.renderTypeRow1}
@@ -190,9 +192,11 @@ var WhitePage = React.createClass({
     } else {
       return (
         <View style={{position:"absolute",left:0,top:36}}>
-          <View
-            style={{flex: 1, backgroundColor: 'black',opacity:0.2,position:"absolute",left:0,top:108,height:screenHeight - 108,width:screenWidth}}>
-          </View>
+          <TouchableOpacity onPress={()=>this.pressFilterTime()} activeOpacity={0.8} underlayColor="#f0f0f0">
+            <View
+              style={{flex: 1, backgroundColor: 'black',opacity:0.2,position:"absolute",left:0,top:108,height:screenHeight - 108,width:screenWidth}}>
+            </View>
+          </TouchableOpacity>
           <ListView
             style={{height:108,position:"absolute",left:0,top:0,opacity:this.state.clickFilterTime}}
             dataSource={data.cloneWithRows(this.state.dataSource3)}
@@ -223,7 +227,14 @@ var WhitePage = React.createClass({
             </View>
           </TouchableOpacity>
           <RadioControl/>
-
+          <TouchableHighlight onPress={() => this.confirmBtn()} underlayColor='rgba(129,127,201,0)'>
+            <View
+              style={{margin:10,borderRadius:5,flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
+              <Text style={{fontWeight: 'bold', color:'white',}}>
+                {'确定'}
+              </Text>
+            </View>
+          </TouchableHighlight>
         </View>
       )
     }
@@ -264,6 +275,8 @@ var WhitePage = React.createClass({
         </View>
       </TouchableOpacity>
     )
+  },
+  confirmBtn: function () {
   },
   toPage: function (name) {
     const { navigator } = this.props;
