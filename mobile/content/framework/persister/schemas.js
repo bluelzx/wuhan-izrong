@@ -3,8 +3,18 @@
  */
 
 
+
+let DeviceSchema = {
+  name: 'device',
+  primaryKey: 'deviceOS',
+  properties: {
+    deviceOS: {type: 'string'},
+    APNSToken: {type: 'string', optional: true}
+  }
+};
+
 let UserSchema = {
-  name: "friend",
+  name: "user",
   primaryKey: 'userId',
   properties: {
     userId: 'int',
@@ -22,8 +32,8 @@ let GroupSchema = {
     groupName: {type: 'string', optional: true},
     groupMasterUname: {type: 'string', optional: true},
     memberNum: {type: 'int', optional: true},
-    members: {type: 'list', objectType: 'int'},
-    isMute: {type: 'boolean', objectType: 'int'}
+    members: {type: 'int',  optional: true},
+    isMute: {type: 'bool', optional: true}
   }
 };
 
@@ -99,6 +109,7 @@ let OrgBeanSchema = {
 };
 
 module.exports = {
+  DeviceSchema:DeviceSchema,
   UserSchema: UserSchema,
   GroupSchema: GroupSchema,
   MessageSchema: MessageSchema,

@@ -23,18 +23,18 @@ class SectionHeader extends Component {
   render() {
     // inline styles used for brevity, use a stylesheet when possible
     var textStyle = {
-      textAlign:'left',
-      marginLeft:20,
-      color:'#fff',
-      fontWeight:'700',
-      fontSize:16
+      textAlign: 'left',
+      marginLeft: 20,
+      color: '#fff',
+      fontWeight: '700',
+      fontSize: 16
     };
 
     var viewStyle = {
       backgroundColor: '#244266',
-      marginTop:-1,
-      height:30,
-      justifyContent:"center"
+      marginTop: -1,
+      height: 30,
+      justifyContent: "center"
     };
     return (
       <View style={viewStyle}>
@@ -65,10 +65,7 @@ class Cell extends Component {
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
     //let user = UserStore.getUserInfoBean();
-    let deviceModel = 'IOS';
-    if (Platform.OS != 'ios') {
-      deviceModel = 'ANDROID';
-    }
+    this.getOrgList();
     return {
       loaded: false,
       checked: true,
@@ -76,7 +73,6 @@ let Register_selectOrg = React.createClass({
       password: '',
       verify: '',
       active: false,
-      deviceModel: deviceModel,
       data: {
         A: ['some', 'entries', 'are here'],
         B: ['some', 'entries', 'are here'],
@@ -106,6 +102,19 @@ let Register_selectOrg = React.createClass({
       }
     };
   },
+
+  getOrgList: function () {
+    this.props.exec(() => {
+      return LoginAction.getOrgList({})
+        .then((response) => {
+             console.log("))))))"+response);
+          this.setState({data:response});
+        }).catch((errorData) => {
+          throw errorData;
+        });
+    });
+  },
+
   getInitialState: function () {
     return this.getStateFromStores();
   },
@@ -119,19 +128,19 @@ let Register_selectOrg = React.createClass({
   _onChange: function () {
 
   },
-  renderSectionHeader: function(){
+  renderSectionHeader: function () {
     return (
       <View style={styles.viewStyle}>
         <Text style={styles.textStyle}>{this.state.title}</Text>
       </View>
     );
   },
-  renderSectionItem: function(){
+  renderSectionItem: function () {
     return (
       <Text style={{color:'#f00'}}>{this.props.title}</Text>
     );
   },
-  renderCell: function() {
+  renderCell: function () {
     return (
       <View style={{height:30}}>
         <Text>{this.props.item}</Text>

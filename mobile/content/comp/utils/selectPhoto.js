@@ -9,17 +9,17 @@ let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 
 let SelectPhoto = React.createClass({
 
-  selectPhoto: function (desc, name) {
+  selectPhoto: function (desc,name,callback) {
     let uri = '';
     if (Platform.OS == 'android') {
-      uri = this.selectAndroid(desc,name);
+      uri = this.selectAndroid();
     } else {
       uri = this.selectIOS('用户名片', 'nameCardFileUrl');
     }
-    return uri;
+    callback(uri);
   },
 
-  selectIOS(desc, name){
+  selectIOS(desc){
     var options = {
       title: desc, // specify null or empty string to remove the title
       cancelButtonTitle: '取消',
@@ -67,6 +67,10 @@ let SelectPhoto = React.createClass({
         return response.uri;
         console.log('Response = ', response.uri);
       });
+  },
+
+  render: function(){
+
   }
 });
 
