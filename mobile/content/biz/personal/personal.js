@@ -19,6 +19,7 @@ let Login = require('../../biz/login/login');
 let Item = require('../../comp/utils/item');
 let UserInfo = require('../../biz/personal/userInfo');
 let AboutUs = require('./aboutUs');
+let SelectOrg  = require('../../biz/login/selectOrg');
 
 let Personal = React.createClass({
   getInitialState: function () {
@@ -55,7 +56,7 @@ let Personal = React.createClass({
           <View style={{backgroundColor:"#18304b",height:10}}/>
           <View style={{backgroundColor:'#162a40'}}>
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
-                                onPress={()=>this.toPage(Login)}>
+                                onPress={()=>this.toPage(SelectOrg)}>
               <View style={styles.layout}>
                 <View style={{flexDirection:'row'}}>
                   <Image style={styles.head} resizeMode="cover" source={require('../../image/user/head.png')}/>

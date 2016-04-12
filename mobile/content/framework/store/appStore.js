@@ -40,7 +40,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   logout: () => _logout(),
   forceLogout: () => _force_logout(),
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
-  pushNotification: (data) => _push_notification(data)
+  pushNotification: (data) => _push_notification(data),
 
 });
 
@@ -85,6 +85,10 @@ let _login = (data) => {
   //  Persister.saveAppData(data);
   //});
 };
+let _saveLoginData = () => {
+  Persister.loginTest();
+};
+
 let _logout = () => {
   _data.token = null;
   Persister.clearToken();

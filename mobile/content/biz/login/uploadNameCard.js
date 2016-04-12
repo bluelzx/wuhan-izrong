@@ -22,13 +22,18 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Input = require('../../comp/utils/input');
 let { Alert, Button } = require('mx-artifacts');
 let PhotoPicker = require('NativeModules').PhotoPickerModule;
+var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
+let TabView = require('../../framework/system/tabView');
+let SelectPhoto = require('../../comp/utils/selectPhoto');
 
 let Register_uploadNameCard = React.createClass({
   getStateFromStores() {
     return {
       url: '',
-      imageSource: ''
+      uploaded: true,
+      nameCardFileUrl:''
+
     };
   },
   getInitialState: function () {
@@ -51,7 +56,36 @@ let Register_uploadNameCard = React.createClass({
       navigator.push({comp: name})
     }
   },
-  selectIOS(desc, name){
+
+  register: function () {
+    if (this.state.uploaded) {
+      dismissKeyboard();
+      this.props.exec(() => {
+        return LoginAction.register({
+          mobileNo: this.props.mobileNo,
+          realName: this.props.realName,
+          userName: this.props.userName,
+          orgId: this.props.orgId,
+          nameCardFileUrl: this.props.url
+        }).then((response) => {
+          const { navigator } = this.props;
+          if (navigator) {
+            if (!this.state.checked) {
+              navigator.push(
+                {
+                  comp: TabView
+                });
+            }
+          }
+        }).catch((errorData) => {
+          //Alert(msg.msgContent);
+          throw errorData;
+        });
+      });
+    }
+  },
+
+  selectIOS(desc,name){
     var options = {
       title: desc, // specify null or empty string to remove the title
       cancelButtonTitle: '取消',
@@ -90,32 +124,48 @@ let Register_uploadNameCard = React.createClass({
         this.setState({
           [name]: source
         });
-        UserAction.updateUserHead(
-          {[name]: source}
-        )
+        this.uploadNameCard(name);
       }
     });
   },
-  selectAndroid: function () {
+  selectAndroid: function (desc,name) {
     // PhotoPicker.showImagePic(true,'nameCard',(response)=>console.log('Response = ', response));
-    UserPhotoPicModule.showImagePic(true, 'nameCard',
+    UserPhotoPicModule.showImagePic(true, name,
       (response)=> {
         console.log('Response = ', response);
         this.setState({
-          imageSource: response.uri
+          nameCardFileUrl: response.uri
         });
-        LoginAction.uploadNameCard(
-          {['photoStoreId']: this.state.imageSource},
-          ()=>Alert("上传成功"),
-          ()=> Alert("上传失败")
-        )
+        this.uploadNameCard(name);
+      });
+  },
+
+  selectPhoto: function(){
+    if (Platform.OS == 'android') {
+      this.selectAndroid('用户名片','nameCardFileUrl');
+    } else {
+      this.selectIOS('用户名片','nameCardFileUrl');
+    }
+   // SelectPhoto.selectPhoto('用户名片','nameCardFileUrl',(uri)=>{console.log(uri)});
+  },
+
+  uploadNameCard: function(fileFieldName){
+      this.props.exec(() => {
+        return LoginAction.uploadNameCard(fileFieldName,{
+        [fileFieldName]: this.state.nameCardFileUrl
+        }).then((response) => {
+          console.log(response);
+        }).catch((errorData) => {
+          //Alert(msg.msgContent);
+          throw errorData;
+        });
       });
   },
 
   returnImage: function () {
-    if (this.state.imageSource == '') {
+    if (this.state.nameCardFileUrl == '') {
       return (
-        <TouchableHighlight style={styles.nameCard} activeOpacity={0.8} underlayColor='#18304b'
+        <TouchableHighlight style={[styles.nameCard,{backgroundColor: '#0a1926'}]} activeOpacity={0.8} underlayColor='#18304b'
                             onPress={()=>this.selectPhoto()}>
           <View style={styles.imageArea}>
             <Image
@@ -131,7 +181,7 @@ let Register_uploadNameCard = React.createClass({
                             onPress={()=>this.selectPhoto()}>
           <Image style={{flexDirection:'column',flex:1,alignItems:'center',justifyContent:'space-around'}}
                  resizeMode='cover'
-                 source={{uri:this.state.imageSource}}
+                 source={{uri:this.state.nameCardFileUrl}}
           />
         </TouchableHighlight>
       );
@@ -148,7 +198,7 @@ let Register_uploadNameCard = React.createClass({
             containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
             style={{fontSize: 20, color: '#ffffff'}}
             styleDisabled={{color: 'red'}}
-            onPress={()=>Alert("注册完成")}>
+            onPress={()=>this.register()}>
             完成
           </Button>
         </View>
@@ -162,7 +212,6 @@ let styles = StyleSheet.create({
     paddingRight: 12
   },
   nameCard: {
-    backgroundColor: '#0a1926',
     borderWidth: 1,
     borderColor: '#1151B1',
     height: 200,

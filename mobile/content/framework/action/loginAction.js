@@ -28,8 +28,9 @@ let LoginActions = {
   login: (p, c, f) => _login(AppLinks.login, p),
   sendSmsCodeToLoginMobile: (p, f)=> _sendSmsCodeToLoginMobile(AppLinks.sendSmsCodeToLoginMobile,p),
   sendSmsCodeToRegisterMobile: (p, f)=> _sendSmsCodeToRegisterMobile(AppLinks.sendSmsCodeToRegisterMobile,p),
-  validateSmsCode: (p,f) => _validateSmsCode(AppLinks.validateSmsCode),
-  uploadNameCard: (p) => _uploadNameCard(AppLinks.uploadFile,p)
+  validateSmsCode: (p,f) => _validateSmsCode(AppLinks.validateSmsCode,p),
+  uploadNameCard: (fileFieldName,p) => _uploadNameCard(AppLinks.uploadFile,fileFieldName,p),
+  getOrgList: () => _getOrgList(AppLinks.getOrgList)
 };
 
 let _sendSmsCodeToLoginMobile = function (url,p) {
@@ -52,6 +53,17 @@ let _sendSmsCodeToRegisterMobile = function (url,p) {
   });
 };
 
+let _validateSmsCode = function (url,p) {
+  return new Promise((resolve, reject) => {
+    PFetch(url, p).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+
 let _login = function (url, p) {
   return new Promise((resolve, reject) => {
     BFetch(url, p).then((response) => {
@@ -73,30 +85,37 @@ let _register = function (url, p) {
 };
 
 let _logout = function (url) {
-  BFetch(url, {},
-    function () {
-      AppStore.logout();
-    }, null, {
-      isLogout: true
-    }
-  );
+  return new Promise((resolve, reject) => {
+    BFetch(url).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
 };
 
-let _uploadNameCard = function (fileFieldName) {
-  return function (callback) {
-    UFetch(url,
-      {
-        uri: params[fileFieldName],
-        type: 'image/jpeg',
-        name: fileFieldName
-      },
-      function (data) {
-        callback(null, {[fileFieldName]: data});
-      },
-      function (err) {
-        callback(err, fileFieldName);
-      });
-  }
+let _uploadNameCard = function (url,fileFieldName,p) {
+  return new Promise((resolve, reject) => {
+    UFetch(url, {
+      uri: p[fileFieldName],
+      type: 'image/jpeg',
+      name: fileFieldName
+    }).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _getOrgList = function (url) {
+  return new Promise((resolve, reject) => {
+    BFetch(url).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
 };
 
 module.exports = LoginActions;
