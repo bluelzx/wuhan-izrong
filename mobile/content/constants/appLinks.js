@@ -22,7 +22,7 @@ let AppLinks = {
   register: pub + '/register',
   uploadFile: '/File/upload',
   updateUserInfo: api + '/Account/updateUserInfo',
-  getOrgList: pub + '/getOrgList/'
+  getOrgList: pub + '/getOrgList/',
   bizOrderMarketSearchDefaultSearch: '/api/BizOrderMarketSearch/defaultSearch',
   bizOrderMarketSearchsearch: '/api/BizOrderMarketSearch/search',
 };

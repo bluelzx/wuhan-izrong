@@ -25,7 +25,6 @@ let PhotoPicker = require('NativeModules').PhotoPickerModule;
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 let TabView = require('../../framework/system/tabView');
-let SelectPhoto = require('../../comp/utils/selectPhoto');
 
 let Register_uploadNameCard = React.createClass({
   getStateFromStores() {
