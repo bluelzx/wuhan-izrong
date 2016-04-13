@@ -66,7 +66,7 @@ let AutoExpandingTextInput = React.createClass({
   }
 });
 
-const styles = StyleSheet.create({
+let styles = StyleSheet.create({
   default: {
     paddingHorizontal: 10,
     paddingVertical: 5,

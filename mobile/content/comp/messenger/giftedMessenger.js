@@ -61,8 +61,9 @@ var GiftedMessenger = React.createClass({
       onImagePress: null,
       onMessageLongPress: null,
       hideTextInput: false,
-      keyboardDismissMode: 'on-drag',
-      keyboardShouldPersistTaps: true,
+      //keyboardDismissMode: 'on-drag',
+      keyboardDismissMode: 'interactive',
+      keyboardShouldPersistTaps: false,
       submitOnReturn: false,
       forceRenderImage: false,
       renderStatus: false,
@@ -612,14 +613,15 @@ var GiftedMessenger = React.createClass({
   _renderIcon() {
     if (this.state.disabled) {
       return (
-        <TouchableOpacity onPress={this._handleMore}>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
+          onPress={this._handleMore}
+        >
           <Icon
-            style={{
-              //borderWidth: 2,
-              flex: 1,
-              paddingHorizontal: 10,
-              paddingVertical: 5,
-            }}
             name="ios-plus-outline"
             size={40}
             color="#0f60b1"
@@ -629,23 +631,33 @@ var GiftedMessenger = React.createClass({
     }
 
     return (
-      <Button
-        containerStyle={{
-          borderRadius: 6,
-          backgroundColor: '#0f60b1',
-          paddingHorizontal: 0,
-          marginHorizontal: 10,
-          marginBottom: 8,
-          width: 60,
-          height: this.props.defaultTextInputHeight - 20,
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
-        style={this.styles.sendButton}
-        styleDisabled={this.styles.sendButtonDisabled}
-        onPress={this.onSend}
-        disabled={this.state.disabled}
       >
-        {this.props.sendButtonText}
-      </Button>
+        <Button
+          containerStyle={{
+            justifyContent: 'center',
+            borderRadius: 6,
+            backgroundColor: '#0f60b1',
+            paddingHorizontal: 10,
+            height: this.props.defaultTextInputHeight - 20,
+          }}
+          style={{
+            fontSize: 15,
+            letterSpacing: 1
+          }}
+          styleDisabled={this.styles.sendButtonDisabled}
+          onPress={this.onSend}
+          disabled={this.state.disabled}
+        >
+          {this.props.sendButtonText}
+        </Button>
+      </View>
+
     );
   },
 
@@ -653,13 +665,35 @@ var GiftedMessenger = React.createClass({
     if (this.props.hideTextInput === false) {
       return (
         <Animated.View style={{height: this.state.textInputHeight}}>
-          <View style={this.styles.textInputContainer}>
+          <View
+            style={{
+              flex: 1,
+              borderTopWidth: 3 / PixelRatio.get(),
+              borderBottomWidth: 3 / PixelRatio.get(),
+              borderColor: '#0f263d',
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              paddingTop: 8,
+              backgroundColor: '#153757',
+            }}
+          >
             <AutoExpandingTextInput
               minHeight={this.props.defaultTextInputHeight - 20}
               maxHeight={this.props.maxTextInputHeight}
               onChangeHeight={this._onChangeHeight}
 
-              style={this.styles.textInput}
+              style={{
+                //alignSelf: 'flex-end',
+                flex: 4,
+                padding: 0,
+                fontSize: 15,
+                marginLeft: 10,
+                marginRight: 0,
+                //marginVertical: 10,
+                borderRadius: 6,
+                backgroundColor: '#0a1926',
+                color: 'white',
+              }}
               placeholder={this.props.placeholder}
               ref='autoExpandingTextInput'
               onChangeText={this.onChangeText}
@@ -793,34 +827,10 @@ var GiftedMessenger = React.createClass({
   componentWillMount() {
     this.styles = {
       container: {
-        flex: 1,
+        flex: 1
       },
       listView: {
         flex: 1,
-      },
-      textInputContainer: {
-        flex: 1,
-        borderTopWidth: 3 / PixelRatio.get(),
-        borderBottomWidth: 3 / PixelRatio.get(),
-        borderColor: '#0f263d',
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        backgroundColor: '#153757',
-      },
-      textInput: {
-        //alignSelf: 'flex-end',
-        flex: 1,
-        padding: 0,
-        margin: 0,
-        fontSize: 15,
-        marginLeft: 10,
-        marginVertical: 10,
-        borderRadius: 6,
-        backgroundColor: '#0a1926',
-        color: 'white'
-      },
-      sendButton: {
-        fontSize: 15
       },
       date: {
         color: '#aaaaaa',

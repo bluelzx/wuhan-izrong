@@ -1,6 +1,7 @@
 'use strict';
 var React = require('react-native');
 var {
+  StatusBar,
   Navigator,
   StyleSheet,
   Text,
@@ -146,7 +147,13 @@ var Main = React.createClass({
       initComp = Login;
     }
     return (
-      <View style={{ width: Device.width, height: Device.height  }}>
+      <View style={{ width: Device.width, height: Device.height }}>
+        <StatusBar
+          backgroundColor="#1151B1"
+          barStyle="light-content"
+          hidden={false}
+        />
+
         <Navigator
           ref="navigator"
           renderScene={this._renderScene}

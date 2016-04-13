@@ -27,11 +27,10 @@ var styles = StyleSheet.create({
   },
 
   tabs: {
-    height: 80,
+    height: 48,
     flexDirection: 'row',
     backgroundColor: '#1156C0',
-    alignItems:'flex-start',
-    paddingTop:10
+    alignItems: 'center'
   },
   badgeNoNumber: {
     flexDirection: 'row',
