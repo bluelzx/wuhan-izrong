@@ -14,7 +14,8 @@ var {
   Platform,
   PixelRatio,
   TouchableOpacity,
-  RefreshControl
+  RefreshControl,
+  DeviceEventEmitter
   } = React;
 
 var dismissKeyboard = require('react-native-dismiss-keyboard');
@@ -271,6 +272,23 @@ var GiftedMessenger = React.createClass({
       }
     }
 
+    if (Platform.OS === 'android') {
+      this._listeners = [
+        DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardDidShow),
+        DeviceEventEmitter.addListener('keyboardDidHide', this.onKeyboardDidHide)
+      ];
+    } else {
+      this._listeners = [
+        DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardWillShow),
+        DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardWillHide)
+      ];
+    }
+  },
+
+  componentWillUnmount() {
+    this._listeners.forEach((/** EmitterSubscription */listener) => {
+      listener.remove();
+    });
   },
 
   componentWillReceiveProps(nextProps) {
@@ -320,13 +338,14 @@ var GiftedMessenger = React.createClass({
   },
 
   onKeyboardDidShow(e) {
-    if(React.Platform.OS == 'android') {
+    if(Platform.OS === 'android') {
       //this.onKeyboardWillShow(e);
     }
     this.scrollToBottom();
   },
+
   onKeyboardDidHide(e) {
-    if(React.Platform.OS == 'android') {
+    if(Platform.OS === 'android') {
       this.onKeyboardWillHide(e);
     }
   },
@@ -568,12 +587,6 @@ var GiftedMessenger = React.createClass({
 
           style={this.styles.listView}
 
-          // not working android RN 0.14.2
-          onKeyboardWillShow={this.onKeyboardWillShow}
-          onKeyboardDidShow={this.onKeyboardDidShow}
-          onKeyboardWillHide={this.onKeyboardWillHide}
-          onKeyboardDidHide={this.onKeyboardDidHide}
-
           keyboardShouldPersistTaps={this.props.keyboardShouldPersistTaps} // @issue keyboardShouldPersistTaps={false} + textInput focused = 2 taps are needed to trigger the ParsedText links
           keyboardDismissMode={this.props.keyboardDismissMode}
 
@@ -623,10 +636,12 @@ var GiftedMessenger = React.createClass({
           }}
           onPress={this._handleMore}
         >
-          <Icon
-            name="ios-plus-outline"
-            size={40}
-            color="#0f60b1"
+          <Image
+            style={{
+              width: 36,
+              height: 36
+            }}
+            source={DictIcon.imMore}
           />
         </TouchableOpacity>
       );
@@ -816,6 +831,7 @@ var GiftedMessenger = React.createClass({
   },
 
   render() {
+    LayoutAnimation.spring();
     return (
       <View
         style={this.styles.container}

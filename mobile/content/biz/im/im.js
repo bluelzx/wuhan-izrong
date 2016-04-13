@@ -11,7 +11,8 @@ let {
   TouchableOpacity,
   TouchableHighlight,
   Platform,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  Image
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
 let Icon = require('react-native-vector-icons/Ionicons');
@@ -21,18 +22,35 @@ let Swipeout= require('react-native-swipeout');
 let Contacts = require('./contacts');
 let Chat = require('./chat');
 let SearchBar = require('./searchBar');
-
-let MockData = [
-  {id:1,badge:0,title:'环渤海银银合作平台',recTime:new Date(),content:'尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'},
-  {id:2,badge:1,title:'张缪缪',recTime:new Date(),content:'尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'},
-  {id:3,badge:2,title:'吴某某',recTime:new Date(),content:'尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'},
-  {id:4,badge:99,title:'某群',recTime:new Date(),content:'尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'}
-]
+let DictIcon = require('../../constants/dictIcon');
+let Spread = require('./spread');
+let HeadPic = require('./headerPic');
+let AppStore = require('../../framework/store/appStore');
+let CONSTANT = require('./itemType');
+let ContactStore = require('../../framework/store/contactStore');
 
 let WhitePage = React.createClass({
 
-  textChange: function() {
+  componentDidMount() {
+    AppStore.addChangeListener(this._onChange);
+  },
 
+  componentWillUnmount: function () {
+    AppStore.removeChangeListener(this._onChange);
+  },
+  _onChange: function () {
+    this.setState(this.getStateFromStores());
+  },
+
+  getStateFromStores: function() {
+    return {data:ContactStore.getIMNotificationMessage()};
+  },
+
+  getInitialState: function(){
+    return this.getStateFromStores();
+  },
+
+  textChange: function() {
   },
 
   renderContact: function() {
@@ -42,7 +60,7 @@ let WhitePage = React.createClass({
             comp: Contacts
       });
       }}>
-        <Icon name="ios-list-outline" size={25} color='#ffffff' />
+        <Image style={{width:20,height:20}} source={DictIcon.imContact}/>
       </TouchableOpacity>
     );
   },
@@ -66,10 +84,21 @@ let WhitePage = React.createClass({
     );
   },
 
-  toOther: function(item) {
+  toOther: function(item, type) {
+    let option = null;
+    if (type == CONSTANT.GROUP) {
+      option = Object.assign({},
+        {
+          id: item.groupId,
+          ownerId: item.ownerId
+        });
+    } else {
+      option = Object.assign({}, {id: item.userId});
+    }
+
     this.props.navigator.push({
-      comp:Chat,
-      param:{title:item.title}
+      comp: Chat,
+      param: Object.assign({title: item.title, type: type}, option)
     });
   },
 
@@ -78,6 +107,29 @@ let WhitePage = React.createClass({
       console.log('hello RC, I am Android Native');
     });
   },
+
+  renderSpread: function(item) {
+    let {width} = Device;
+    return (
+      <TouchableHighlight onPress={()=> this.props.navigator.push({comp: Spread})}>
+        <View
+          style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
+          <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imSpread} />
+          <View
+            style={{ height:40, width:width-70}}>
+            <View
+              style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
+              <Text style={{color:'#ffffff'}}>{item.title}</Text>
+              <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.recTime)}</Text>
+            </View>
+            <Text numberOfLines={1}
+                  style={{marginTop:5,color:'#687886'}}>{item.content}</Text>
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  },
+
   renderItem: function(item, index) {
     let {width} = Device;
     let swipeoutBtns = [
@@ -88,13 +140,17 @@ let WhitePage = React.createClass({
 
         }
       }
-    ]
+    ];
+    let id = item.groupId;
+    if(item.type == CONSTANT.USER){
+      id = item.userId;
+    }
     return (
-      <Swipeout key={index} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
-        <TouchableHighlight onPress={()=>this.toOther(item)}>
+      <Swipeout key={id} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
+        <TouchableHighlight onPress={()=>this.toOther(item, item.type)}>
           <View
             style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
-            {this.renderImg(item, index)}
+            <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={item.type==CONSTANT.GROUP?DictIcon.imMyGroup:require('../../image/user/head.png')} />
             <View
               style={{ height:40, width:width-70}}>
               <View
@@ -113,7 +169,7 @@ let WhitePage = React.createClass({
 
   renderMessage: function() {
     let msg = new Array();
-    MockData.map((item, index)=>{
+    this.state.data.notice.map((item, index)=>{
       msg.push(this.renderItem(item, index));
     });
     return msg;
@@ -127,6 +183,7 @@ let WhitePage = React.createClass({
                   actionButton={this.renderContact}>
        <SearchBar textChange={this.textChange}/>
         <View>
+          {this.renderSpread(this.state.data.spreadNotice)}
           {this.renderMessage()}
         </View>
       </NavBarView>
