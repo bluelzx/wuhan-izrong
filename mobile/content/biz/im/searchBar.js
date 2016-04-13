@@ -30,6 +30,7 @@ let SearchBar = React.createClass({
           onBlur={() => this.setState({editAble:false})}
           onChangeText={(text) => this.textChange(text)}
           returnKeyType={'search'}
+          multiline={true}
           style={{color: '#ffffff',height:(Platform.OS === 'ios')?30:60,backgroundColor:'#15263A',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}></TextInput>
       );
     } else {

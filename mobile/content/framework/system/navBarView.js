@@ -26,9 +26,9 @@ let NavBarView = React.createClass({
       showBar: true,
       showBack: true,
       title: '',
-      backgroundColor: '#f7f7f7',
-      fontColor: '#333333',
-      contentBackgroundColor: '#f0f0f0',
+      backgroundColor: '#1151B1',
+      fontColor: '#ffffff',
+      contentBackgroundColor: '#15263A',
       actionButton: null,
       navBarBottomWidth: 1
     };
@@ -63,7 +63,7 @@ let NavBarView = React.createClass({
             alignItems: 'center',
             // paddingHorizontal: 6
             height: Device.navBarHeight,
-            paddingTop: Device.statusBarHeight,
+            paddingTop: Device.innerStatusBarSize,
           }}
         >
           <View style={{width: 44}}>

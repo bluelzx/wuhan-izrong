@@ -65,7 +65,7 @@ class Cell extends Component {
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
     //let user = UserStore.getUserInfoBean();
-    this.getOrgList();
+    //this.getOrgList();
     return {
       loaded: false,
       checked: true,
@@ -108,7 +108,6 @@ let Register_selectOrg = React.createClass({
       return LoginAction.getOrgList({})
         .then((response) => {
              console.log("))))))"+response);
-          this.setState({data:response});
         }).catch((errorData) => {
           throw errorData;
         });

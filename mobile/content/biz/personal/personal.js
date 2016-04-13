@@ -56,7 +56,7 @@ let Personal = React.createClass({
           <View style={{backgroundColor:"#18304b",height:10}}/>
           <View style={{backgroundColor:'#162a40'}}>
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
-                                onPress={()=>this.toPage(SelectOrg)}>
+                                onPress={()=>this.toPage(Login)}>
               <View style={styles.layout}>
                 <View style={{flexDirection:'row'}}>
                   <Image style={styles.head} resizeMode="cover" source={require('../../image/user/head.png')}/>

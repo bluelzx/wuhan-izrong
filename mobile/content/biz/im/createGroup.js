@@ -9,28 +9,11 @@ let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let CheckBox = require('./checkBox');
-
-const MockData = [
-  {groupName: '我的群组A', groupData: [
-    {imgId:'../../pic/man.jpg', desc: 'A吴'},
-    {imgId:'../../pic/man.jpg', desc: 'A张'}]},
-  {groupName: '我的群组B', groupData: [
-    {imgId:'../../pic/man.jpg', desc: 'B吴'},
-    {imgId:'../../pic/man.jpg', desc: 'B张'},
-    {imgId:'../../pic/man.jpg', desc: 'B李'}]},
-  {groupName: '我的群组A', groupData: [
-    {imgId:'../../pic/man.jpg', desc: 'C吴'},
-    {imgId:'../../pic/man.jpg', desc: 'C张'}]},
-  {groupName: '我的群组A', groupData: [
-    {imgId:'../../pic/man.jpg', desc: 'D吴'},
-    {imgId:'../../pic/man.jpg', desc: 'D张'}]},
-  {groupName: '我的群组A', groupData: [
-    {imgId:'../../pic/man.jpg', desc: 'E吴'},
-    {imgId:'../../pic/man.jpg', desc: 'E张'}]},
-
-
-];
-
+let ContactStore = require('../../framework/store/contactStore');
+let ContactAction = require('../../framework/action/contactAction');
+let Chat = require('./chat');
+let CONSTANT = require('./itemType');
+let ChooseList = require('./chooseList');
 
 let CreateGroup = React.createClass({
 
@@ -52,21 +35,21 @@ let CreateGroup = React.createClass({
       <Text
         style={
           {color: '#ffffff'}}>
-        {data.groupName}
+        {data.orgName}
       </Text>
     );
   },
 
   checkBoxChoice: function(item) {
     let memberList = this.state.memberList;
-    memberList[item.desc] = item;
-    this.setState(memberList);
+    memberList[item.userId] = item;
+    this.setState({memberList:memberList});
   },
 
   unCheckBoxChoice: function(item) {
     let memberList = this.state.memberList;
-    memberList[item.desc] = null;
-    this.setState(memberList);
+    memberList[item.userId] = null;
+    this.setState({memberList:memberList});
   },
 
   //渲染组成员
@@ -74,61 +57,74 @@ let CreateGroup = React.createClass({
     return (
       <CheckBox
                 item={data}
-                key={data.desc}
+                key={data.userId}
                 choice={this.checkBoxChoice}
                 unChoice={this.unCheckBoxChoice}
                 style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
         <View style={{flexDirection:'row'}}>
           {this.renderImg(data)}
-          <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.desc}</Text>
+          <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.userName}</Text>
         </View>
       </CheckBox>
     );
   },
   //*********************
 
+  createGroup: function(members) {
+    console.log(members);
+    if(!members || members.length == 0)
+      return;
+    else if(members.length == 1){
+      let userId = members[0];
+      //获取用户名
+      let userInfo = ContactStore.getUserInfoByUserId()
+      this.props.navigator.replacePreviousAndPop(
+        {
+          comp: Chat,
+          param: {title: userInfo.userName, type: CONSTANT.USER, id: userId}
+        }
+      );
+    }else{
+      //setp1: 发送建群的请求   返回groupId
+      let groupId = ContactAction.createGroup();
+      //setp2: 跳转到群聊页面
+      this.props.navigator.replacePreviousAndPop(
+        {
+          comp: Chat,
+          param: {title: this.state.groupName, type: CONSTANT.GROUP, id: 0}
+        }
+      );
+    }
+  },
 
   renderLabel: function() {
-    return (
-      <Text style={{ marginLeft:-20,color:'#6B849C'}}>{'创建(' + 29+ ')'}</Text>
-    );
-  },
-
-  renderMemberView: function(data) {
-    return data.map((item, index)=>{
-      return (
-        <View  key={item.desc} style={{alignItems:'center',padding:5}}>
-          <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 30,width: 30,borderRadius: 15}}>
-          </View>
-        </View>
-      );
-    });
-  },
-
-  renderSelectMem: function(){
-    let memberView = new Array();
     let memberList = this.state.memberList;
-    for(let des in memberList){
-      if(!!memberList[des]){
-        memberView.push(memberList[des]);
+    let count = 0;
+    let members = [];
+    for(let userId in memberList){
+      if(!!memberList[userId]){
+        count ++ ;
+        members.push(userId);
       }
     }
-    if(!!memberList.length)
-    this.setState({searchBarWidth:Device.width - 15 - memberList.length * 40});
     return (
-      <View style={{backgroundColor:'#1B385E',padding:5, borderBottomWidth:5, borderBottomColor:'#15263A'}}>
-        <View style={{flexDirection:'row', backgroundColor:'#15263A'}}>
-          {this.renderMemberView(memberView)}
-        </View>
-      </View>
+      <TouchableOpacity onPress={() => this.createGroup(members)}>
+        <Text style={{ marginLeft:-20,color:count==0?'#6B849C':'white'}}>{'创建(' + count + ')'}</Text>
+      </TouchableOpacity>
     );
   },
 
   getInitialState: function() {
     return {
       searchBarWidth:Device.width - 15,
-      memberList:{}
+      memberList:{},
+      userData: ContactStore.getUsers(),
+      groupName:'我新建的群'
     };
+  },
+
+  setGroupName: function(text) {
+    this.setState({groupName: text});
   },
 
   render: function() {
@@ -141,12 +137,11 @@ let CreateGroup = React.createClass({
           <TextInput
             placeholder="创建群名称"
             placeholderTextColor="white"
+            onChangeText={(text) => this.setGroupName(text)}
             style={{color: '#ffffff',height:50, width: Device.width,backgroundColor:'#15263A', paddingHorizontal:20}}></TextInput>
         </View>
 
-
-        {this.renderSelectMem()}
-
+        <ChooseList  memberList={this.state.memberList}/>
 
         <SearchBar textChange={this.textChange}/>
 
@@ -156,8 +151,8 @@ let CreateGroup = React.createClass({
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={MockData}
-                   groupDataName={'groupData'}
+                   dataSource={this.state.userData}
+                   groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />
 

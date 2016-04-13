@@ -14,7 +14,8 @@ var {
   Platform,
   PixelRatio,
   TouchableOpacity,
-  RefreshControl
+  RefreshControl,
+  DeviceEventEmitter
   } = React;
 
 var dismissKeyboard = require('react-native-dismiss-keyboard');
@@ -28,6 +29,8 @@ var AutoExpandingTextInput = require('./autoExpandingTextInput');
 import Message from './message';
 
 let DictIcon = require('../../constants/dictIcon');
+
+let ImagePicker = require('../utils/imagePicker');
 
 var GiftedMessenger = React.createClass({
 
@@ -61,8 +64,9 @@ var GiftedMessenger = React.createClass({
       onImagePress: null,
       onMessageLongPress: null,
       hideTextInput: false,
-      keyboardDismissMode: 'on-drag',
-      keyboardShouldPersistTaps: true,
+      //keyboardDismissMode: 'on-drag',
+      keyboardDismissMode: 'interactive',
+      keyboardShouldPersistTaps: false,
       submitOnReturn: false,
       forceRenderImage: false,
       renderStatus: false,
@@ -268,6 +272,23 @@ var GiftedMessenger = React.createClass({
       }
     }
 
+    if (Platform.OS === 'android') {
+      this._listeners = [
+        DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardDidShow),
+        DeviceEventEmitter.addListener('keyboardDidHide', this.onKeyboardDidHide)
+      ];
+    } else {
+      this._listeners = [
+        DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardWillShow),
+        DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardWillHide)
+      ];
+    }
+  },
+
+  componentWillUnmount() {
+    this._listeners.forEach((/** EmitterSubscription */listener) => {
+      listener.remove();
+    });
   },
 
   componentWillReceiveProps(nextProps) {
@@ -317,13 +338,14 @@ var GiftedMessenger = React.createClass({
   },
 
   onKeyboardDidShow(e) {
-    if(React.Platform.OS == 'android') {
-      this.onKeyboardWillShow(e);
+    if(Platform.OS === 'android') {
+      //this.onKeyboardWillShow(e);
     }
     this.scrollToBottom();
   },
+
   onKeyboardDidHide(e) {
-    if(React.Platform.OS == 'android') {
+    if(Platform.OS === 'android') {
       this.onKeyboardWillHide(e);
     }
   },
@@ -565,12 +587,6 @@ var GiftedMessenger = React.createClass({
 
           style={this.styles.listView}
 
-          // not working android RN 0.14.2
-          onKeyboardWillShow={this.onKeyboardWillShow}
-          onKeyboardDidShow={this.onKeyboardDidShow}
-          onKeyboardWillHide={this.onKeyboardWillHide}
-          onKeyboardDidHide={this.onKeyboardDidHide}
-
           keyboardShouldPersistTaps={this.props.keyboardShouldPersistTaps} // @issue keyboardShouldPersistTaps={false} + textInput focused = 2 taps are needed to trigger the ParsedText links
           keyboardDismissMode={this.props.keyboardDismissMode}
 
@@ -612,40 +628,53 @@ var GiftedMessenger = React.createClass({
   _renderIcon() {
     if (this.state.disabled) {
       return (
-        <TouchableOpacity onPress={this._handleMore}>
-          <Icon
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
+          onPress={this._handleMore}
+        >
+          <Image
             style={{
-              //borderWidth: 2,
-              flex: 1,
-              paddingHorizontal: 10,
-              paddingVertical: 5,
+              width: 36,
+              height: 36
             }}
-            name="ios-plus-outline"
-            size={40}
-            color="#0f60b1"
+            source={DictIcon.imMore}
           />
         </TouchableOpacity>
       );
     }
 
     return (
-      <Button
-        containerStyle={{
-          borderRadius: 6,
-          backgroundColor: '#0f60b1',
-          paddingHorizontal: 0,
-          marginHorizontal: 10,
-          marginBottom: 8,
-          width: 60,
-          height: this.props.defaultTextInputHeight - 20,
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
-        style={this.styles.sendButton}
-        styleDisabled={this.styles.sendButtonDisabled}
-        onPress={this.onSend}
-        disabled={this.state.disabled}
       >
-        {this.props.sendButtonText}
-      </Button>
+        <Button
+          containerStyle={{
+            justifyContent: 'center',
+            borderRadius: 6,
+            backgroundColor: '#0f60b1',
+            paddingHorizontal: 10,
+            height: this.props.defaultTextInputHeight - 20,
+          }}
+          style={{
+            fontSize: 15,
+            letterSpacing: 1
+          }}
+          styleDisabled={this.styles.sendButtonDisabled}
+          onPress={this.onSend}
+          disabled={this.state.disabled}
+        >
+          {this.props.sendButtonText}
+        </Button>
+      </View>
+
     );
   },
 
@@ -653,13 +682,35 @@ var GiftedMessenger = React.createClass({
     if (this.props.hideTextInput === false) {
       return (
         <Animated.View style={{height: this.state.textInputHeight}}>
-          <View style={this.styles.textInputContainer}>
+          <View
+            style={{
+              flex: 1,
+              borderTopWidth: 3 / PixelRatio.get(),
+              borderBottomWidth: 3 / PixelRatio.get(),
+              borderColor: '#0f263d',
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              paddingTop: 8,
+              backgroundColor: '#153757',
+            }}
+          >
             <AutoExpandingTextInput
               minHeight={this.props.defaultTextInputHeight - 20}
               maxHeight={this.props.maxTextInputHeight}
               onChangeHeight={this._onChangeHeight}
 
-              style={this.styles.textInput}
+              style={{
+                //alignSelf: 'flex-end',
+                flex: 4,
+                padding: 0,
+                fontSize: 15,
+                marginLeft: 10,
+                marginRight: 0,
+                //marginVertical: 10,
+                borderRadius: 6,
+                backgroundColor: '#0a1926',
+                color: 'white',
+              }}
               placeholder={this.props.placeholder}
               ref='autoExpandingTextInput'
               onChangeText={this.onChangeText}
@@ -728,16 +779,18 @@ var GiftedMessenger = React.createClass({
       return (
         <Animated.View style={this.styles.panelContainer}>
 
-          <TouchableOpacity
+          <ImagePicker
+            type="all"
+            onSelected={(response) => { console.log(response)}}
+            title="选择图片"
             style={this.styles.panelItem}
-            onPress= {() => {}}
           >
             <Image
               style={this.styles.panelIcon}
               source={DictIcon.imImg}
             />
             <Text style={this.styles.panelText}>照片</Text>
-          </TouchableOpacity>
+          </ImagePicker>
 
           <TouchableOpacity
             style={this.styles.panelItem}
@@ -778,6 +831,7 @@ var GiftedMessenger = React.createClass({
   },
 
   render() {
+    LayoutAnimation.spring();
     return (
       <View
         style={this.styles.container}
@@ -793,34 +847,10 @@ var GiftedMessenger = React.createClass({
   componentWillMount() {
     this.styles = {
       container: {
-        flex: 1,
+        flex: 1
       },
       listView: {
         flex: 1,
-      },
-      textInputContainer: {
-        flex: 1,
-        borderTopWidth: 3 / PixelRatio.get(),
-        borderBottomWidth: 3 / PixelRatio.get(),
-        borderColor: '#0f263d',
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        backgroundColor: '#153757',
-      },
-      textInput: {
-        //alignSelf: 'flex-end',
-        flex: 1,
-        padding: 0,
-        margin: 0,
-        fontSize: 15,
-        marginLeft: 10,
-        marginVertical: 10,
-        borderRadius: 6,
-        backgroundColor: '#0a1926',
-        color: 'white'
-      },
-      sendButton: {
-        fontSize: 15
       },
       date: {
         color: '#aaaaaa',

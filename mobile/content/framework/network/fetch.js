@@ -67,7 +67,7 @@ var rawFetch = function (url, param, callback, failure, option) {
 
   if (!option) option = {};
   var _promise = Promise.race([fetch(url, param), new Promise(function (resolve, reject) {
-    setTimeout(() => reject(new Error('链接超时')), 5000);
+    setTimeout(() => reject(new Error('链接超时')), 20000);
   })]);
   //process(fetch(url, param) ,callback,failure,option);
   return process(_promise, option);

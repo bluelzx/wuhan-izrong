@@ -20,7 +20,7 @@ let AppLinks = {
   login: pub + '/login',
   logout: api + '/Account/logout',
   register: pub + '/register',
-  uploadFile: '/File/upload',
+  uploadFile: pub + '/File/upload',
   updateUserInfo: api + '/Account/updateUserInfo',
   getOrgList: pub + '/getOrgList/',
   bizOrderMarketSearchDefaultSearch: api + '/BizOrderMarketSearch/defaultSearch',

@@ -16,7 +16,6 @@ let _info = {
 let _data = {};
 
 let AppStore = _.assign({}, EventEmitter.prototype, {
-
   addChangeListener: function (callback, event = _info.CHANGE_EVENT) {
     this.on(event, callback);
   },
@@ -26,29 +25,28 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   emitChange: function (event = _info.CHANGE_EVENT) {
     this.emit(event);
   },
-
   getNetWorkState: () => _info.netWorkState,
   getInitLoadingState: () => _info.initLoadingState,
   isLogout: () => _info.isLogout,
   isForceLogout: () => _info.isForceLogout,
-  getAPNSToken: () => _data.APNSToken,
+  getAPNSToken: () => _get_apns_token(),
   getToken: () => _data.token || '',
   getData: () => _data || {},
-
   appInit: () => _appInit(),
+  register: (data)=> _register(data),
   login: (data) => _login(data),
   logout: () => _logout(),
   forceLogout: () => _force_logout(),
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
-  pushNotification: (data) => _push_notification(data),
-
+  getApnsToken: () => _get_apns_token(),
+  pushNotification: (data) => _push_notification(data)
 });
-
 
 // Private Functions
 let _handleConnectivityChange = (isConnected) => {
   _info.netWorkState = isConnected;
 };
+
 let _appInit = () => {
   NetInfo.isConnected.addEventListener(
     'change',
@@ -59,34 +57,19 @@ let _appInit = () => {
       _info.netWorkState = isConnected;
     }
   );
-
   _info.initLoadingState = false;
   AppStore.emitChange();
-  // Persister.getAppData((data) => {
-  //   _info.initLoadingState = false;
-  //   _data = data;
-  //   _initOrgBean();
-  //   _info.isLogout = false;
-  //   AppStore.emitChange();
-  // });
 };
+
+let _register = (data) => {
+  Persister.saveAppData(data);
+  AppStore.emitChange();
+};
+
 let _login = (data) => {
-  _info.isLogout = false;
-  _data = data;
+  Persister.saveAppData(data);
   AppStore.emitChange();
 
-  //Persister.getAppData((d) => {
-  //  data.demoFlag = d.demoFlag;
-  //  if (!d.demoFlag) {
-  //    data.demoFlag = {
-  //      flag: false
-  //    };
-  //  }
-  //  Persister.saveAppData(data);
-  //});
-};
-let _saveLoginData = () => {
-  Persister.loginTest();
 };
 
 let _logout = () => {
@@ -95,6 +78,7 @@ let _logout = () => {
   _info.isLogout = true;
   AppStore.emitChange();
 };
+
 let _force_logout = () => {
   _data.token = null;
   Persister.clearToken();
@@ -102,11 +86,18 @@ let _force_logout = () => {
   _info.isForceLogout = true;
   AppStore.emitChange();
 };
+
 let _save_apns_token = (apnsToken) => {
   _data.APNSToken = apnsToken;
   Persister.saveAPNSToken(apnsToken);
   console.log('APNSToken' + apnsToken);
 };
+
+let _get_apns_token = () => {
+  return Persister.getAPNSToken((apnsToken)=> {return apnsToken;});
+  console.log('APNSToken' + Persister.getAPNSToken());
+};
+
 let _push_notification = (data) => {
   // _freshMessageData(action.data);
 };
