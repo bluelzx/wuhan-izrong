@@ -29,6 +29,8 @@ import Message from './message';
 
 let DictIcon = require('../../constants/dictIcon');
 
+let ImagePicker = require('../utils/imagePicker');
+
 var GiftedMessenger = React.createClass({
 
   firstDisplay: true,
@@ -319,7 +321,7 @@ var GiftedMessenger = React.createClass({
 
   onKeyboardDidShow(e) {
     if(React.Platform.OS == 'android') {
-      this.onKeyboardWillShow(e);
+      //this.onKeyboardWillShow(e);
     }
     this.scrollToBottom();
   },
@@ -762,16 +764,18 @@ var GiftedMessenger = React.createClass({
       return (
         <Animated.View style={this.styles.panelContainer}>
 
-          <TouchableOpacity
+          <ImagePicker
+            type="all"
+            onSelected={(response) => { console.log(response)}}
+            title="选择图片"
             style={this.styles.panelItem}
-            onPress= {() => {}}
           >
             <Image
               style={this.styles.panelIcon}
               source={DictIcon.imImg}
             />
             <Text style={this.styles.panelText}>照片</Text>
-          </TouchableOpacity>
+          </ImagePicker>
 
           <TouchableOpacity
             style={this.styles.panelItem}

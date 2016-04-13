@@ -1,6 +1,6 @@
 let { Host } = require('../../config');
-let pub = 'app/pub';
-let api = 'app/api';
+let pub = '/app/pub';
+let api = '/app/api';
 let AppLinks = {
   protocal: '',
   validatePassword: '',
