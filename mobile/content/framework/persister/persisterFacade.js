@@ -3,10 +3,10 @@ const Realm = require('realm');
 const SCHEMA_KEY = '@realm:schema';
 const {
   DeviceSchema,
-  UserSchema,
   GroupSchema,
   MessageSchema,
   UserInfoSchema,
+  LoginUserInfoSchema,
   OrgBeanSchema,
   } = require('./schemas');
 
@@ -32,10 +32,12 @@ let PersisterSchema = {
 
 // Get the default Realm with support for our objects
 console.log(Realm.defaultPath);
-let _realm = new Realm({
-  schema: [DeviceSchema, UserSchema, GroupSchema, MessageSchema, UserInfoSchema, OrgBeanSchema],
-  schemaVersion: 11}
-);
+let realm = new Realm({
+  schema: [DeviceSchema, GroupSchema, MessageSchema, UserInfoSchema, LoginUserInfoSchema, OrgBeanSchema],
+  schemaVersion: 1
+});
+// Create Realm objects and write to local storage
+
 
 let _persister = null;
 
@@ -98,7 +100,7 @@ let _loginTest = function () {
     _realm.create('device', {
       deviceOS: 'IOS',
       APNSToken: 'qqqq'
-    },true);
+    }, true);
   });
 };
 
