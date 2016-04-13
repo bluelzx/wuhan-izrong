@@ -127,19 +127,19 @@ let BizOrderCategorySchema = {
   name: "bizOrderCategory",
   primaryKey: 'displaySeq',
   properties: {
-    displaySeq:{type: 'string', optional: true},
-    bizCategory:{type: 'string', optional: true},
-    bizCategoryDesc:{type: 'string', optional: true},
-    bizOrderItemBeans:{type: 'list', objectType: 'bizOrderItem'}
+    displaySeq: {type: 'string', optional: true},
+    bizCategory: {type: 'string', optional: true},
+    bizCategoryDesc: {type: 'string', optional: true},
+    bizOrderItemBeans: {type: 'list', objectType: 'bizOrderItem'}
   }
 };
 let bizOrderItem = {
   name: "bizOrderItem",
   primaryKey: 'displaySeq',
   properties: {
-    displaySeq:{type: 'string', optional: true},
-    bizItem:{type: 'string', optional: true},
-    bizItemDesc:{type: 'string', optional: true},
+    displaySeq: {type: 'string', optional: true},
+    bizItem: {type: 'string', optional: true},
+    bizItemDesc: {type: 'string', optional: true},
   }
 };
 
@@ -151,11 +151,13 @@ module.exports = {
   UserInfoSchema: UserInfoSchema,
   LoginUserInfoSchema: LoginUserInfoSchema,
   OrgBeanSchema: OrgBeanSchema,
+  BizOrderCategorySchema: BizOrderCategorySchema,
   DEVICESCHEMA: 'device',
   GROUPSCHEMA: 'group',
   MESSAGESCHEMA: 'message',
   USERINFOSCHEMA: 'userInfo',
   LOGINUSERINFOSCHEMA: 'loginUserInfo',
-  ORGBEANSCHEMA: 'orgBean'
+  ORGBEANSCHEMA: 'orgBean',
+  BizOrderCategorySchema:'BizOrderCategory'
 
 };
