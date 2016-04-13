@@ -27,7 +27,7 @@ let Register_accountInfo = React.createClass({
     return {
       realName: '',
       userName: '',
-      orgId: '1111'
+      orgId: '1'
     };
   },
 
