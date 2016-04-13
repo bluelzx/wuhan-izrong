@@ -1,6 +1,15 @@
 const _ = require('lodash');
-//const Realm = require('realm');
+const Realm = require('realm');
 const SCHEMA_KEY = '@realm:schema';
+const {
+  DeviceSchema,
+  GroupSchema,
+  MessageSchema,
+  UserInfoSchema,
+  LoginUserInfoSchema,
+  OrgBeanSchema,
+  } = require('./schemas');
+
 
 let PersisterSchema = {
   name: SCHEMA_KEY,
@@ -20,8 +29,16 @@ let PersisterSchema = {
     demoFlag: {type: 'bool'}
   }
 };
+
 // Get the default Realm with support for our objects
-//let _realm = new Realm({schema: [PersisterSchema]});
+console.log(Realm.defaultPath);
+let realm = new Realm({
+  schema: [DeviceSchema, GroupSchema, MessageSchema, UserInfoSchema, LoginUserInfoSchema, OrgBeanSchema],
+  schemaVersion: 1
+});
+// Create Realm objects and write to local storage
+
+
 let _persister = null;
 
 let PersisterFacade = {
@@ -34,7 +51,8 @@ let PersisterFacade = {
   saveOrg: (org, cb) => _setItem('orgBeans', org, cb),
   saveMsgDetail: (mainMsgBean, cb) => _setItem('mainMsgBean', mainMsgBean, cb),
   saveMainMsgBean: (mainMsgBean, cb) => _setItem('mainMsgBean', mainMsgBean, cb),
-  saveDemoFlag: (flag, cb) => _setItem('demoFlag', flag, cb)
+  saveDemoFlag: (flag, cb) => _setItem('demoFlag', flag, cb),
+  loginTest: ()=> _loginTest()
 };
 
 let _clearToken = function () {
@@ -77,5 +95,13 @@ let _saveAppData = function (data) {
   //});
 };
 
+let _loginTest = function () {
+  _realm.write(() => {
+    _realm.create('device', {
+      deviceOS: 'IOS',
+      APNSToken: 'qqqq'
+    }, true);
+  });
+};
 
 module.exports = PersisterFacade;

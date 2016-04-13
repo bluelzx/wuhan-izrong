@@ -25,11 +25,13 @@ var RadioControl = require('./radioControl');
 var MarketList = require('./marketList');
 var SelectOrg = require('./selectOrg');
 let Icon = require('react-native-vector-icons/Ionicons');
+let MarketAction = require('../../framework/action/marketAction');
 
 var data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var WhitePage = React.createClass({
 
   getInitialState(){
+    MarketAction.defaultSearch()
     return {
       dataSource: ['资金业务', '资产交易', '票据交易', '同业代理', '公司与投行'],
       dataSource2: ['同业存款', '同业拆借', '债券回购', '存单', '其他'],

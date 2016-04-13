@@ -58,7 +58,7 @@ var FilterSelectBtn = React.createClass({
                                 underlayColor='rgba(0,0,0,0)'>
                 <View>
                     <View
-                        style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:(this.props.section == 3)?(screenWidth-50)/4:screenWidth/3, height: 40, backgroundColor: this.state.isAll ? '#102a42' : (this.state.rowDefault == rowID ? '#817fc9':'#102a42'), alignItems: 'center', borderRadius: 5, }}>
+                        style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:(this.props.section == 3)?(screenWidth-50)/4:(screenWidth-120)/2, height: 40, backgroundColor: this.state.isAll ? '#102a42' : (this.state.rowDefault == rowID ? '#817fc9':'#102a42'), alignItems: 'center', borderRadius: 5, }}>
                         <Text style={{flex: 1, marginTop: 5, fontWeight: 'bold', color:'white'}}>
                             {rowData}
                         </Text>

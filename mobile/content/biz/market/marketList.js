@@ -26,7 +26,7 @@ var Adjust = require('../../comp/utils/adjust');
 var BusinessDetail = require('./businessDetail');
 
 var data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-var arr = [
+var marketData = [
   {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
   {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
   {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
@@ -42,12 +42,13 @@ var arr = [
   {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
   {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
   {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},]
+  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'}];
+
 
 var MarketList = React.createClass({
   getInitialState: function () {
     return {
-      dataSource: data.cloneWithRows(arr),
+      dataSource: data.cloneWithRows(marketData),
     };
   },
 

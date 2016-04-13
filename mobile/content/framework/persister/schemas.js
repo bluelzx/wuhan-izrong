@@ -3,14 +3,13 @@
  */
 
 
-let UserSchema = {
-  name: "friend",
-  primaryKey: 'userId',
+
+let DeviceSchema = {
+  name: 'device',
+  primaryKey: 'deviceOS',
   properties: {
-    userId: 'int',
-    userName: {type: 'string', optional: true},
-    photoFileId: {type: 'string', optional: true},
-    orgName: {type: 'string', optional: true},
+    deviceOS: {type: 'string'},
+    APNSToken: {type: 'string', optional: true}
   }
 };
 
@@ -22,8 +21,8 @@ let GroupSchema = {
     groupName: {type: 'string', optional: true},
     groupMasterUname: {type: 'string', optional: true},
     memberNum: {type: 'int', optional: true},
-    members: {type: 'list', objectType: 'int'},
-    isMute: {type: 'boolean', objectType: 'int'}
+    members: {type: 'list', objectType: 'userInfo'},
+    isMute: {type: 'bool', optional: true}
   }
 };
 
@@ -42,6 +41,7 @@ let MessageSchema = {
     revTime: {type: 'date', optional: true}
   }
 };
+
 
 let UserInfoSchema = {
   name: "userInfo",
@@ -67,8 +67,36 @@ let UserInfoSchema = {
     publicAddress: {type: 'string', optional: true},
     publicWeChat: {type: 'string', optional: true},
     publicQQ: {type: 'string', optional: true},
+    orgId: {type: 'int', optional: true}
+  }
+};
+
+let LoginUserInfoSchema = {
+  name: "loginUserInfo",
+  primaryKey: 'userId',
+  properties: {
+    userId: {type: 'int', optional: true},
+    address: {type: 'string', optional: true},
+    realName: {type: 'string', optional: true},
+    weChatNo: {type: 'string', optional: true},
+    email: {type: 'string', optional: true},
+    nameCardFileUrl: {type: 'string', optional: true},
+    qqNo: {type: 'string', optional: true},
+    department: {type: 'string', optional: true},
+    mobileNumber: {type: 'string', optional: true},
+    jobTitle: {type: 'string', optional: true},
+    phoneNumber: {type: 'string', optional: true},
+    photoFileUrl: {type: 'string', optional: true},
+    publicTitle: {type: 'string', optional: true},
+    publicMobile: {type: 'string', optional: true},
+    publicDepart: {type: 'string', optional: true},
+    publicPhone: {type: 'string', optional: true},
+    publicEmail: {type: 'string', optional: true},
+    publicAddress: {type: 'string', optional: true},
+    publicWeChat: {type: 'string', optional: true},
+    publicQQ: {type: 'string', optional: true},
     orgId: {type: 'int', optional: true},
-    appToken:{type:'string',optional:true}
+    token: {type: 'string', optional: true}
   }
 };
 let OrgBeanSchema = {
@@ -100,10 +128,11 @@ let OrgBeanSchema = {
 
 
 module.exports = {
-  UserSchema: UserSchema,
+  DeviceSchema: DeviceSchema,
   GroupSchema: GroupSchema,
   MessageSchema: MessageSchema,
   UserInfoSchema: UserInfoSchema,
+  LoginUserInfoSchema:LoginUserInfoSchema,
   OrgBeanSchema: OrgBeanSchema
 
 };

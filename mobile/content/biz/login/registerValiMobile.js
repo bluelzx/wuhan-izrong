@@ -22,8 +22,9 @@ let Register_valiMobile = React.createClass({
   getStateFromStores() {
     return {
       mobileNo:'',
+      verify: '',
       checkbox: true,
-      smsCode:''
+      checked:true
     };
   },
   getInitialState: function () {
@@ -48,12 +49,13 @@ let Register_valiMobile = React.createClass({
   },
 
   validateSmsCode: function(){
-    if (this.state.mobileNo && this.ref.smsTimer.state.verify) {
+    console.log(this.state.mobileNo);
+    if (this.state.mobileNo && this.state.verify) {
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.validateSmsCode({
           mobileNo:this.state.mobileNo,
-          smsCode:this.ref.smsTimer.state.verify
+          inputSmsCode:this.state.verify
         }).then((response) => {
           const { navigator } = this.props;
           if (navigator) {
@@ -71,13 +73,25 @@ let Register_valiMobile = React.createClass({
           throw errorData;
         });
       });
+      //const { navigator } = this.props;
+      //if (navigator) {
+      //  if (!this.state.checked) {
+      //    navigator.push(
+      //      {
+      //        comp: Register_AccountInfo,
+      //        param: {
+      //          mobileNo: this.state.mobileNo
+      //        }
+      //      });
+      //  }
+      //}
     }
   },
 
 
   _onChangeText(key, value){
     this.setState({[key]: value});
-    if (this.state.mobileNo.length == 0 ) {
+    if (this.state.mobileNo.length == 0 || this.state.verify.length == 0) {
       this.setState({checked: true});
     } else {
       this.setState({checked: false});
@@ -95,7 +109,7 @@ let Register_valiMobile = React.createClass({
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <Input type="default" placeholder='手机号' maxlength={20} field='mobileNo'
                  onChangeText={this._onChangeText} icon='user'/>
-          <SMSTimer  ref="smsTimer" onChanged={this._onChange}
+          <SMSTimer  ref="smsTimer" onChanged={this._onChangeText}
                      func={'sendSmsCodeToRegisterMobile'}
                      parameter = {this.state.mobileNo} exec={this.props.exec}/>
           <CheakBox content="已阅读并同意用户协议"
@@ -107,7 +121,7 @@ let Register_valiMobile = React.createClass({
             containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
             style={{fontSize: 20, color: '#ffffff'}}
             styleDisabled={{color: 'red'}}
-            onPress={()=>this.toPage(Register_AccountInfo)}>
+            onPress={()=>this.validateSmsCode()}>
             下一步
           </Button>
         </View>

@@ -59,10 +59,12 @@ let SMSTimer = React.createClass({
         return LoginAction.sendSmsCodeToRegisterMobile({
           mobileNo: this.props.parameter
         }).then((response) => {
-          console.log(response)
+          console.log(response);
+          this.changeVerify();
         }).catch((errorData) => {
           //Alert(msg.msgContent);
           throw errorData;
+          this.changeVerify();
         })
       });
   },

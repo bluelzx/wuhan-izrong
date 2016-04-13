@@ -6,6 +6,7 @@ module.exports = {
   idCard: require('../image/user/personId.png'),
 
   // IM
+  imMore: require('../image/im/more.png'),
   imCard: require('../image/im/card.png'),
   imImg: require('../image/im/img.png'),
   imPhoto: require('../image/im/photo.png'),

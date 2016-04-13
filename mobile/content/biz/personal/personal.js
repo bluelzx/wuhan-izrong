@@ -19,6 +19,7 @@ let Login = require('../../biz/login/login');
 let Item = require('../../comp/utils/item');
 let UserInfo = require('../../biz/personal/userInfo');
 let AboutUs = require('./aboutUs');
+let SelectOrg  = require('../../biz/login/selectOrg');
 
 let Personal = React.createClass({
   getInitialState: function () {

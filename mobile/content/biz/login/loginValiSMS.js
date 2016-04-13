@@ -84,7 +84,7 @@ let ValiSMS = React.createClass({
 
   _onChangeText(key, value){
     this.setState({[key]: value});
-    if (this.state.userName.length == 0 || this.state.password.length == 0 || this.state.verify.length == 0) {
+    if (this.state.mobileNo.length == 0 || this.state.smsCode.length == 0) {
       this.setState({checked: true});
     } else {
       this.setState({checked: false});
