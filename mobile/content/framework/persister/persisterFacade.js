@@ -8,36 +8,43 @@ const {
   UserInfoSchema,
   LoginUserInfoSchema,
   OrgBeanSchema,
+  BizOrderCategorySchema,
+  BizOrderItemSchema,
+  MarketInfoSchema,
   DEVICESCHEMA,
   GROUPSCHEMA,
   MESSAGESCHEMA,
   USERINFOSCHEMA,
   LOGINUSERINFOSCHEMA,
-  ORGBEANSCHEMA
+  ORGBEANSCHEMA,
+  BIZORDERCATEGORY,
+  BIZORDERITEM,
+  MARKETINFO
   } = require('./schemas');
 
 let PersisterFacade = {
   getAppData: (cb) => _getAppData(cb),
   saveAppData: (data) => _saveAppData(data),
   clearToken: () => _clearToken(),
-  saveAPNSToken: (apnsToken, cb) => _saveAPNSToken('device', apnsToken, cb),
-  getAPNSToken: (cb) => _getAPNSToken()('device', cb),
+  saveAPNSToken: (apnsToken, cb) => _saveAPNSToken(apnsToken, cb),
+  getAPNSToken: (cb) => _getAPNSToken()(cb),
   setItem: (k, v, c) => _setItem(k, v, c),
   saveUser: (user, cb) => _setItem('userInfoBean', user, cb),
   saveOrg: (org, cb) => _setItem('orgBeans', org, cb),
   saveMsgDetail: (mainMsgBean, cb) => _setItem('mainMsgBean', mainMsgBean, cb),
   saveMainMsgBean: (mainMsgBean, cb) => _setItem('mainMsgBean', mainMsgBean, cb),
-  saveDemoFlag: (flag, cb) => _setItem('demoFlag', flag, cb),
-  savaRegisterData:(data) =>_savaRegisterData(data)
+  saveDemoFlag: (flag, cb) => _setItem('demoFlag', flag, cb)
 };
 
 console.log(Realm.defaultPath);
 let _realm = new Realm({
-  schema: [DeviceSchema, GroupSchema, MessageSchema, UserInfoSchema, LoginUserInfoSchema, OrgBeanSchema],
-  schemaVersion: 5
+  schema: [DeviceSchema, GroupSchema, MessageSchema, UserInfoSchema,
+           LoginUserInfoSchema, OrgBeanSchema,BizOrderCategorySchema,
+           BizOrderItemSchema,MarketInfoSchema],
+  schemaVersion: 7
 });
 // Create Realm objects and write to local storage
-let _savaRegisterData = function(data){
+let _saveAppData = function(data){
   let appUserInfo = data.appUserInfoBean;
   let orgBean = appUserInfo.orgBean;
   _realm.write(() => {
@@ -62,13 +69,13 @@ let _savaRegisterData = function(data){
       publicAddress:  appUserInfo.publicAddress,
       publicWeChat:  appUserInfo.publicWeChat,
       publicQQ:  appUserInfo.publicQQ,
-      orgId: orgBean.id,
+      orgBeanId: appUserInfo.orgBeanId,
       token: data.appToken
     });
   });
   _realm.write(() => {
     _persister = _realm.create(ORGBEANSCHEMA, {
-      id: orgBean.id,
+      id: orgBean.orgBeanId,
       orgCategory: orgBean.orgCategory,
       orgCode: orgBean.orgCode,
       orgValue: orgBean.orgValue,
@@ -89,8 +96,10 @@ let _savaRegisterData = function(data){
   });
 };
 
-let _getAPNSToken = function (tableName, data, callback) {
-
+let _getAPNSToken = function (cb) {
+  if (cb){
+    cb('sdfhkjashdfkjhewkrwedfkjhask');
+  }
 };
 
 let _saveAPNSToken = function (tableName, callback) {

@@ -95,7 +95,7 @@ let LoginUserInfoSchema = {
     publicAddress: {type: 'bool', optional: true},
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
-    orgId: {type: 'int', optional: true},
+    orgBeanId: {type: 'int', optional: true},
     token: {type: 'string', optional: true}
   }
 };
@@ -133,13 +133,38 @@ let BizOrderCategorySchema = {
     bizOrderItemBeans: {type: 'list', objectType: 'bizOrderItem'}
   }
 };
-let bizOrderItem = {
+
+let BizOrderItemSchema = {
   name: "bizOrderItem",
   primaryKey: 'displaySeq',
   properties: {
     displaySeq: {type: 'string', optional: true},
     bizItem: {type: 'string', optional: true},
     bizItemDesc: {type: 'string', optional: true},
+  }
+};
+
+let MarketInfoSchema = {
+  name: "marketInfo",
+  primaryKey: 'id',
+  properties: {
+    id: {type: 'int', optional: true},
+    bizCategory: {type: 'string', optional: true},
+    bizCategoryDesc: {type: 'string', optional: true},
+    bizItem: {type: 'string', optional: true},
+    bizItemDesc: {type: 'string', optional: true},
+    bizOrientation: {type: 'string', optional: true},
+    bizOrientationDesc: {type: 'string', optional: true},
+    term: {type: 'int', optional: true},
+    amount: {type: 'int', optional: true},
+    rate: {type: 'double', optional: true},
+    status:  {type: 'string', optional: true},
+    statusDesc:  {type: 'string', optional: true},
+    lastModifyDate:  {type: 'date', optional: true},
+    userId: {type: 'int', optional: true},
+    userName: {type: 'string', optional: true},
+    orgId: {type: 'int', optional: true},
+    orgName: {type: 'string', optional: true}
   }
 };
 
@@ -152,12 +177,16 @@ module.exports = {
   LoginUserInfoSchema: LoginUserInfoSchema,
   OrgBeanSchema: OrgBeanSchema,
   BizOrderCategorySchema: BizOrderCategorySchema,
+  BizOrderItemSchema:BizOrderItemSchema,
+  MarketInfoSchema:MarketInfoSchema,
   DEVICESCHEMA: 'device',
   GROUPSCHEMA: 'group',
   MESSAGESCHEMA: 'message',
   USERINFOSCHEMA: 'userInfo',
   LOGINUSERINFOSCHEMA: 'loginUserInfo',
   ORGBEANSCHEMA: 'orgBean',
-  BizOrderCategorySchema:'BizOrderCategory'
+  BIZORDERCATEGORY:'bizOrderCategory',
+  BIZORDERITEM:'bizOrderItem',
+  MARKETINFO:'marketInfo'
 
 };
