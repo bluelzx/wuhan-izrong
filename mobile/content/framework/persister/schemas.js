@@ -5,7 +5,7 @@
 
 
 let DeviceSchema = {
-  name: 'device',
+  name: "device",
   primaryKey: 'deviceOS',
   properties: {
     deviceOS: {type: 'string'},
@@ -19,10 +19,10 @@ let GroupSchema = {
   properties: {
     groupId: 'int',
     groupName: {type: 'string', optional: true},
-    groupMasterUname: {type: 'string', optional: true},
+    groupMasterUid: {type: 'string', optional: true},
     memberNum: {type: 'int', optional: true},
     members: {type: 'list', objectType: 'userInfo'},
-    isMute: {type: 'bool', optional: true}
+    mute: {type: 'bool', optional: true}
   }
 };
 
@@ -59,14 +59,14 @@ let UserInfoSchema = {
     jobTitle: {type: 'string', optional: true},
     phoneNumber: {type: 'string', optional: true},
     photoFileUrl: {type: 'string', optional: true},
-    publicTitle: {type: 'string', optional: true},
-    publicMobile: {type: 'string', optional: true},
-    publicDepart: {type: 'string', optional: true},
-    publicPhone: {type: 'string', optional: true},
-    publicEmail: {type: 'string', optional: true},
-    publicAddress: {type: 'string', optional: true},
-    publicWeChat: {type: 'string', optional: true},
-    publicQQ: {type: 'string', optional: true},
+    publicTitle: {type: 'bool', optional: true},
+    publicMobile: {type: 'bool', optional: true},
+    publicDepart: {type: 'bool', optional: true},
+    publicPhone: {type: 'bool', optional: true},
+    publicEmail: {type: 'bool', optional: true},
+    publicAddress: {type: 'bool', optional: true},
+    publicWeChat: {type: 'bool', optional: true},
+    publicQQ: {type: 'bool', optional: true},
     orgId: {type: 'int', optional: true}
   }
 };
@@ -87,14 +87,14 @@ let LoginUserInfoSchema = {
     jobTitle: {type: 'string', optional: true},
     phoneNumber: {type: 'string', optional: true},
     photoFileUrl: {type: 'string', optional: true},
-    publicTitle: {type: 'string', optional: true},
-    publicMobile: {type: 'string', optional: true},
-    publicDepart: {type: 'string', optional: true},
-    publicPhone: {type: 'string', optional: true},
-    publicEmail: {type: 'string', optional: true},
-    publicAddress: {type: 'string', optional: true},
-    publicWeChat: {type: 'string', optional: true},
-    publicQQ: {type: 'string', optional: true},
+    publicTitle: {type: 'bool', optional: true},
+    publicMobile: {type: 'bool', optional: true},
+    publicDepart: {type: 'bool', optional: true},
+    publicPhone: {type: 'bool', optional: true},
+    publicEmail: {type: 'bool', optional: true},
+    publicAddress: {type: 'bool', optional: true},
+    publicWeChat: {type: 'bool', optional: true},
+    publicQQ: {type: 'bool', optional: true},
     orgId: {type: 'int', optional: true},
     token: {type: 'string', optional: true}
   }
@@ -106,8 +106,6 @@ let OrgBeanSchema = {
     id: {type: 'int', optional: true},
     corporationType: {type: 'string', optional: true},
     lastUpdateDate: {type: 'date', optional: true},
-    corporationType: {type: 'string', optional: true},
-    lastUpdateDate: {type: 'string', optional: true},
     orgCategory: {type: 'string', optional: true},
     orgCode: {type: 'string', optional: true},
     orgValue: {type: 'string', optional: true},
@@ -122,7 +120,26 @@ let OrgBeanSchema = {
     isDeleted: {type: 'bool', optional: true},
     isApply: {type: 'bool', optional: true},
     remark: {type: 'string', optional: true}
+  }
+};
 
+let BizOrderCategorySchema = {
+  name: "bizOrderCategory",
+  primaryKey: 'displaySeq',
+  properties: {
+    displaySeq:{type: 'string', optional: true},
+    bizCategory:{type: 'string', optional: true},
+    bizCategoryDesc:{type: 'string', optional: true},
+    bizOrderItemBeans:{type: 'list', objectType: 'bizOrderItem'}
+  }
+};
+let bizOrderItem = {
+  name: "bizOrderItem",
+  primaryKey: 'displaySeq',
+  properties: {
+    displaySeq:{type: 'string', optional: true},
+    bizItem:{type: 'string', optional: true},
+    bizItemDesc:{type: 'string', optional: true},
   }
 };
 
@@ -131,7 +148,13 @@ module.exports = {
   GroupSchema: GroupSchema,
   MessageSchema: MessageSchema,
   UserInfoSchema: UserInfoSchema,
-  LoginUserInfoSchema:LoginUserInfoSchema,
-  OrgBeanSchema: OrgBeanSchema
+  LoginUserInfoSchema: LoginUserInfoSchema,
+  OrgBeanSchema: OrgBeanSchema,
+  DEVICESCHEMA: 'device',
+  GROUPSCHEMA: 'group',
+  MESSAGESCHEMA: 'message',
+  USERINFOSCHEMA: 'userInfo',
+  LOGINUSERINFOSCHEMA: 'loginUserInfo',
+  ORGBEANSCHEMA: 'orgBean'
 
 };

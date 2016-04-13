@@ -8,31 +8,93 @@ const {
   UserInfoSchema,
   LoginUserInfoSchema,
   OrgBeanSchema,
+  DEVICESCHEMA,
+  GROUPSCHEMA,
+  MESSAGESCHEMA,
+  USERINFOSCHEMA,
+  LOGINUSERINFOSCHEMA,
+  ORGBEANSCHEMA
   } = require('./schemas');
-
-// Get the default Realm with support for our objects
-console.log(Realm.defaultPath);
-let _realm = new Realm({
-  schema: [DeviceSchema, GroupSchema, MessageSchema, UserInfoSchema, LoginUserInfoSchema, OrgBeanSchema],
-  schemaVersion: 1
-});
-// Create Realm objects and write to local storage
-
-
-let _persister = null;
 
 let PersisterFacade = {
   getAppData: (cb) => _getAppData(cb),
   saveAppData: (data) => _saveAppData(data),
   clearToken: () => _clearToken(),
-  saveAPNSToken: (apnsToken, cb) => _setItem('APNSToken', apnsToken, cb),
+  saveAPNSToken: (apnsToken, cb) => _saveAPNSToken('device', apnsToken, cb),
+  getAPNSToken: (cb) => _getAPNSToken()('device', cb),
   setItem: (k, v, c) => _setItem(k, v, c),
   saveUser: (user, cb) => _setItem('userInfoBean', user, cb),
   saveOrg: (org, cb) => _setItem('orgBeans', org, cb),
   saveMsgDetail: (mainMsgBean, cb) => _setItem('mainMsgBean', mainMsgBean, cb),
   saveMainMsgBean: (mainMsgBean, cb) => _setItem('mainMsgBean', mainMsgBean, cb),
   saveDemoFlag: (flag, cb) => _setItem('demoFlag', flag, cb),
-  loginTest: ()=> _loginTest()
+  savaRegisterData:(data) =>_savaRegisterData(data)
+};
+
+console.log(Realm.defaultPath);
+let _realm = new Realm({
+  schema: [DeviceSchema, GroupSchema, MessageSchema, UserInfoSchema, LoginUserInfoSchema, OrgBeanSchema],
+  schemaVersion: 5
+});
+// Create Realm objects and write to local storage
+let _savaRegisterData = function(data){
+  let appUserInfo = data.appUserInfoBean;
+  let orgBean = appUserInfo.orgBean;
+  _realm.write(() => {
+    _persister = _realm.create(LOGINUSERINFOSCHEMA, {
+      userId:appUserInfo.userId,
+      address: appUserInfo.address,
+      realName: appUserInfo.realName,
+      weChatNo: appUserInfo.weChatNo,
+      email: {type: 'string', optional: true},
+      nameCardFileUrl:  appUserInfo.nameCardFileUrl,
+      qqNo:  appUserInfo.qqNo,
+      department:  appUserInfo.department,
+      mobileNumber: appUserInfo.mobileNumber,
+      jobTitle:  appUserInfo.jobTitle,
+      phoneNumber:  appUserInfo.phoneNumber,
+      photoFileUrl:  appUserInfo.photoFileUrl,
+      publicTitle:  appUserInfo.publicTitle,
+      publicMobile:  appUserInfo.publicMobile,
+      publicDepart:  appUserInfo.publicDepart,
+      publicPhone:  appUserInfo.publicPhone,
+      publicEmail:  appUserInfo.publicEmail,
+      publicAddress:  appUserInfo.publicAddress,
+      publicWeChat:  appUserInfo.publicWeChat,
+      publicQQ:  appUserInfo.publicQQ,
+      orgId: orgBean.id,
+      token: data.appToken
+    });
+  });
+  _realm.write(() => {
+    _persister = _realm.create(ORGBEANSCHEMA, {
+      id: orgBean.id,
+      orgCategory: orgBean.orgCategory,
+      orgCode: orgBean.orgCode,
+      orgValue: orgBean.orgValue,
+      corporationType:orgBean.corporationType,
+      orgValueAlias:orgBean.orgValueAlias,
+      isDisabled: orgBean.isDisabled,
+      creator: orgBean.creator,
+      creatorDate: orgBean.creatorDate,
+      lastUpdateBy:orgBean.lastUpdateBy,
+      lastUpdateDate:orgBean.lastUpdateDate,
+      isNeedAudit:orgBean.isNeedAudit,
+      totalQuota: orgBean.totalQuota,
+      occupiedQuota:orgBean.occupiedQuota,
+      isDeleted: orgBean.isDeleted,
+      isApply: orgBean.isApply,
+      remark: orgBean.remark
+    });
+  });
+};
+
+let _getAPNSToken = function (tableName, data, callback) {
+
+};
+
+let _saveAPNSToken = function (tableName, callback) {
+
 };
 
 let _clearToken = function () {
@@ -53,35 +115,6 @@ let _getAppData = function (cb) {
   //let data = _realm.objects(SCHEMA_KEY)[0];
   //if (cb)cb(data);
   if (cb)cb(_persister);
-};
-
-let _saveAppData = function (data) {
-  //Create Realm objects and write to local storage
-  _realm.write(() => {
-    _persister = _realm.create(SCHEMA_KEY, {
-      token: JSON.stringify(data.token),
-      APNSToken: '',
-      revBillBean: JSON.stringify(data.revBillBean),
-      sentBillBean: JSON.stringify(data.sentBillBean),
-      filterBeans: JSON.stringify(data.filterBeans),
-      userInfoBean: JSON.stringify(data.userInfoBean),
-      orgBeans: JSON.stringify(data.orgBeans),
-      mainMsgBean: JSON.stringify(data.mainMsgBean),
-      marketMsgBeans: JSON.stringify(data.marketMsgBeans),
-      systemMsgBeans: JSON.stringify(data.systemMsgBeans),
-      sentBillMsgBeans: JSON.stringify(data.sentBillMsgBeans),
-      demoFlag: JSON.stringify(data.demoFlag)
-    });
-  });
-};
-
-let _loginTest = function () {
-  _realm.write(() => {
-    _realm.create('device', {
-      deviceOS: 'IOS',
-      APNSToken: 'qqqq'
-    }, true);
-  });
 };
 
 module.exports = PersisterFacade;

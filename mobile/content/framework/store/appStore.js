@@ -36,14 +36,19 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getData: () => _data || {},
 
   appInit: () => _appInit(),
+  register:(data)=> _register(data),
   login: (data) => _login(data),
   logout: () => _logout(),
   forceLogout: () => _force_logout(),
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
-  pushNotification: (data) => _push_notification(data),
+  getApnsToken: () => _get_apns_token(),
+  pushNotification: (data) => _push_notification(data)
 
 });
 
+let _register = (data) =>{
+  Persister.savaRegisterData(data);
+};
 
 // Private Functions
 let _handleConnectivityChange = (isConnected) => {
@@ -95,6 +100,7 @@ let _logout = () => {
   _info.isLogout = true;
   AppStore.emitChange();
 };
+
 let _force_logout = () => {
   _data.token = null;
   Persister.clearToken();
@@ -102,11 +108,18 @@ let _force_logout = () => {
   _info.isForceLogout = true;
   AppStore.emitChange();
 };
+
 let _save_apns_token = (apnsToken) => {
   _data.APNSToken = apnsToken;
   Persister.saveAPNSToken(apnsToken);
   console.log('APNSToken' + apnsToken);
 };
+
+let _get_apns_token = () => {
+  return Persister.getAPNSToken();
+  console.log('APNSToken' +  Persister.getAPNSToken());
+};
+
 let _push_notification = (data) => {
   // _freshMessageData(action.data);
 };
