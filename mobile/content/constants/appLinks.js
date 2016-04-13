@@ -22,9 +22,10 @@ let AppLinks = {
   register: pub + '/register',
   uploadFile: '/File/upload',
   updateUserInfo: api + '/Account/updateUserInfo',
-  getOrgList: pub + '/getOrgList/'
-  bizOrderMarketSearchDefaultSearch: '/api/BizOrderMarketSearch/defaultSearch',
-  bizOrderMarketSearchsearch: '/api/BizOrderMarketSearch/search',
+  getOrgList: pub + '/getOrgList/',
+  bizOrderMarketSearchDefaultSearch: api + '/BizOrderMarketSearch/defaultSearch',
+  bizOrderMarketSearchsearch: api + '/BizOrderMarketSearch/search',
+  getBizOrderInMarket: api + 'BizOrderManage/getBizOrderInMarket',
 };
 
 module.exports = AppLinks;

@@ -21,37 +21,31 @@ var {
 var screenWidth = Dimensions.get('window').width;
 var screenHeight = Dimensions.get('window').height;
 
-
 var Adjust = require('../../comp/utils/adjust');
 var BusinessDetail = require('./businessDetail');
 
+var MarketStore = require('../../framework/store/marketStore');
+
 var data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var marketData = [
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '收', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'},
-  {type: '出', timeLimit: '365', amount: '10000000', promulgator: '上海安硕信息股份有限公司'}];
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'}];
 
 
 var MarketList = React.createClass({
   getInitialState: function () {
     return {
-      dataSource: data.cloneWithRows(marketData),
+      dataSource: data.cloneWithRows(MarketStore.getMarketData()),
     };
   },
-
+  componentWillMount: function () {
+  },
   render() {
     return (
       <View style={{width:screenWidth,height:screenHeight-149,backgroundColor: '#162a40'}}>
@@ -79,14 +73,14 @@ var MarketList = React.createClass({
   },
   _renderRow: function (rowData, sectionID, rowID) {
     return (
-      <TouchableHighlight onPress={() => this.toPage(BusinessDetail)} underlayColor='#000'>
+      <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
         <View
           style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926',}}>
           <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
-                 source={rowData.type == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
+                 source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
           <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:'white',}}>
-            {rowData.timeLimit + '天'}
+            {rowData.term + '天'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
@@ -95,7 +89,7 @@ var MarketList = React.createClass({
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
             numberOfLines={1}>
-            {rowData.promulgator}
+            {rowData.orgName}
           </Text>
         </View>
       </TouchableHighlight>
@@ -103,12 +97,23 @@ var MarketList = React.createClass({
   },
   _pressRow: function (rowID) {
   },
-  toPage: function (name) {
+  toDetail: function (name, rowData) {
     const { navigator } = this.props;
     if (navigator) {
-      navigator.push({comp: name})
+      navigator.push({
+        comp: name,
+        param: {
+          marketInfo: rowData
+        }
+      })
     }
   },
+
+  _changeData: function () {
+    this.setState({
+      dataSource: data.cloneWithRows(marketData),
+    })
+  }
 })
 
 var styles = StyleSheet.create({
