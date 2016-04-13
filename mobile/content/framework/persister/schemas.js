@@ -98,6 +98,7 @@ let OrgBeanSchema = {
   }
 };
 
+
 module.exports = {
   UserSchema: UserSchema,
   GroupSchema: GroupSchema,

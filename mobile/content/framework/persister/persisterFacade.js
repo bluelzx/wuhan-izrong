@@ -77,4 +77,5 @@ let _saveAppData = function (data) {
   //});
 };
 
+
 module.exports = PersisterFacade;
