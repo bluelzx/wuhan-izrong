@@ -1,6 +1,6 @@
 let { Host } = require('../../config');
-let pub = '/app/pub';
-let api = '/app/api';
+let pub = 'app/pub';
+let api = 'app/api';
 let AppLinks = {
   protocal: '',
   validatePassword: '',
@@ -22,9 +22,9 @@ let AppLinks = {
   register: pub + '/register',
   uploadFile: '/File/upload',
   updateUserInfo: api + '/Account/updateUserInfo',
-  getOrgList: pub + '/getOrgList/'
-  bizOrderMarketSearchDefaultSearch: '/api/BizOrderMarketSearch/defaultSearch',
-  bizOrderMarketSearchsearch: '/api/BizOrderMarketSearch/search',
+  getOrgList: pub + '/getOrgList/',
+  bizOrderMarketSearchDefaultSearch: api+'/BizOrderMarketSearch/defaultSearch',
+  bizOrderMarketSearchsearch: api+'/BizOrderMarketSearch/search'
 };
 
 module.exports = AppLinks;

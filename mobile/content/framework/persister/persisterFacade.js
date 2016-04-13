@@ -10,29 +10,9 @@ const {
   OrgBeanSchema,
   } = require('./schemas');
 
-
-let PersisterSchema = {
-  name: SCHEMA_KEY,
-  primaryKey: 'token',
-  properties: {
-    token: {type: 'string'},
-    APNSToken: {type: 'string'},
-    revBillBean: {type: 'string'},
-    sentBillBean: {type: 'string'},
-    filterBeans: {type: 'string'},
-    userInfoBean: {type: 'string'},
-    orgBeans: {type: 'string'},
-    mainMsgBean: {type: 'string'},
-    marketMsgBeans: {type: 'string'},
-    systemMsgBeans: {type: 'string'},
-    sentBillMsgBeans: {type: 'string'},
-    demoFlag: {type: 'bool'}
-  }
-};
-
 // Get the default Realm with support for our objects
 console.log(Realm.defaultPath);
-let realm = new Realm({
+let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, UserInfoSchema, LoginUserInfoSchema, OrgBeanSchema],
   schemaVersion: 1
 });
@@ -76,23 +56,23 @@ let _getAppData = function (cb) {
 };
 
 let _saveAppData = function (data) {
-  // Create Realm objects and write to local storage
-  //_realm.write(() => {
-  //  _persister = _realm.create(SCHEMA_KEY, {
-  //    token: JSON.stringify(data.token),
-  //    APNSToken: '',
-  //    revBillBean: JSON.stringify(data.revBillBean),
-  //    sentBillBean: JSON.stringify(data.sentBillBean),
-  //    filterBeans: JSON.stringify(data.filterBeans),
-  //    userInfoBean: JSON.stringify(data.userInfoBean),
-  //    orgBeans: JSON.stringify(data.orgBeans),
-  //    mainMsgBean: JSON.stringify(data.mainMsgBean),
-  //    marketMsgBeans: JSON.stringify(data.marketMsgBeans),
-  //    systemMsgBeans: JSON.stringify(data.systemMsgBeans),
-  //    sentBillMsgBeans: JSON.stringify(data.sentBillMsgBeans),
-  //    demoFlag: JSON.stringify(data.demoFlag)
-  //  });
-  //});
+  //Create Realm objects and write to local storage
+  _realm.write(() => {
+    _persister = _realm.create(SCHEMA_KEY, {
+      token: JSON.stringify(data.token),
+      APNSToken: '',
+      revBillBean: JSON.stringify(data.revBillBean),
+      sentBillBean: JSON.stringify(data.sentBillBean),
+      filterBeans: JSON.stringify(data.filterBeans),
+      userInfoBean: JSON.stringify(data.userInfoBean),
+      orgBeans: JSON.stringify(data.orgBeans),
+      mainMsgBean: JSON.stringify(data.mainMsgBean),
+      marketMsgBeans: JSON.stringify(data.marketMsgBeans),
+      systemMsgBeans: JSON.stringify(data.systemMsgBeans),
+      sentBillMsgBeans: JSON.stringify(data.sentBillMsgBeans),
+      demoFlag: JSON.stringify(data.demoFlag)
+    });
+  });
 };
 
 let _loginTest = function () {
