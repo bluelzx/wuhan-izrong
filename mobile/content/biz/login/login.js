@@ -9,6 +9,7 @@ let {
   Image,
   Platform,
   } = React;
+let lodash = require('lodash');
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
@@ -35,6 +36,7 @@ let Login = React.createClass({
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange);
   },
+
   _onChange: function () {
     this.setState(this.getStateFromStores());
   },

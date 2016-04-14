@@ -49,7 +49,7 @@ let ValiSMS = React.createClass({
       this.props.exec(() => {
         return LoginAction.login({
           mobileNo: this.props.param.mobileNo,
-          smsCode: this.state.verify,
+          inputSmsCode: this.state.verify,
           deviceToken: this.state.APNSToken,
           deviceModel: this.state.deviceModel
         }).then((response) => {

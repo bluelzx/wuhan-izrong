@@ -38,7 +38,8 @@ let MessageSchema = {
     contentType: {type: 'string', optional: true},
     content: {type: 'string', optional: true},
     msgType: {type: 'string', optional: true},
-    revTime: {type: 'date', optional: true}
+    revTime: {type: 'date', optional: true},
+    isReaded:{type:'bool',option:true}
   }
 };
 
@@ -67,7 +68,8 @@ let UserInfoSchema = {
     publicAddress: {type: 'bool', optional: true},
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
-    orgId: {type: 'int', optional: true}
+    orgId: {type: 'int', optional: true},
+    isMute: {type: 'bool', optional: true}
   }
 };
 

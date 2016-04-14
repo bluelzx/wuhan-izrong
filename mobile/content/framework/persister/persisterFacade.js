@@ -33,7 +33,8 @@ let PersisterFacade = {
   saveOrg: (org, cb) => _setItem('orgBeans', org, cb),
   saveMsgDetail: (mainMsgBean, cb) => _setItem('mainMsgBean', mainMsgBean, cb),
   saveMainMsgBean: (mainMsgBean, cb) => _setItem('mainMsgBean', mainMsgBean, cb),
-  saveDemoFlag: (flag, cb) => _setItem('demoFlag', flag, cb)
+  saveDemoFlag: (flag, cb) => _setItem('demoFlag', flag, cb),
+  saveLoginUserInfo:(loginUserInfo) =>_saveLoginUserInfo(loginUserInfo)
 };
 
 console.log(Realm.defaultPath);
@@ -45,53 +46,64 @@ let _realm = new Realm({
 });
 // Create Realm objects and write to local storage
 let _saveAppData = function(data){
-  let appUserInfo = data.appUserInfoBean;
-  let orgBean = appUserInfo.orgBean;
+  let loginUserInfo = data.appUserInfoBean;
+  let orgBeanSet = data.orgBeanSet;
+  let appUser = data.appUserInfoBeanMap;
+  let appUserGroupBeanList = data.appUserGroupBeanList;
+  let bizOrderCategoryBeanList = data.bizOrderCategoryBeanList;
+  _saveLoginUserInfo(loginUserInfo);
+  _saveOrgBean(orgBeanSet);
+};
+
+let _saveLoginUserInfo = function(loginUserInfo){
   _realm.write(() => {
     _persister = _realm.create(LOGINUSERINFOSCHEMA, {
-      userId:appUserInfo.userId,
-      address: appUserInfo.address,
-      realName: appUserInfo.realName,
-      weChatNo: appUserInfo.weChatNo,
-      email: {type: 'string', optional: true},
-      nameCardFileUrl:  appUserInfo.nameCardFileUrl,
-      qqNo:  appUserInfo.qqNo,
-      department:  appUserInfo.department,
-      mobileNumber: appUserInfo.mobileNumber,
-      jobTitle:  appUserInfo.jobTitle,
-      phoneNumber:  appUserInfo.phoneNumber,
-      photoFileUrl:  appUserInfo.photoFileUrl,
-      publicTitle:  appUserInfo.publicTitle,
-      publicMobile:  appUserInfo.publicMobile,
-      publicDepart:  appUserInfo.publicDepart,
-      publicPhone:  appUserInfo.publicPhone,
-      publicEmail:  appUserInfo.publicEmail,
-      publicAddress:  appUserInfo.publicAddress,
-      publicWeChat:  appUserInfo.publicWeChat,
-      publicQQ:  appUserInfo.publicQQ,
-      orgBeanId: appUserInfo.orgBeanId,
+      userId:loginUserInfo.userId,
+      address: loginUserInfo.address,
+      realName: loginUserInfo.realName,
+      weChatNo: loginUserInfo.weChatNo,
+      email: loginUserInfo.email,
+      nameCardFileUrl:  loginUserInfo.nameCardFileUrl,
+      qqNo:  loginUserInfo.qqNo,
+      department:  loginUserInfo.department,
+      mobileNumber: loginUserInfo.mobileNumber,
+      jobTitle:  loginUserInfo.jobTitle,
+      phoneNumber:  loginUserInfo.phoneNumber,
+      photoFileUrl:  loginUserInfo.photoFileUrl,
+      publicTitle:  loginUserInfo.publicTitle,
+      publicMobile:  loginUserInfo.publicMobile,
+      publicDepart:  loginUserInfo.publicDepart,
+      publicPhone:  loginUserInfo.publicPhone,
+      publicEmail:  loginUserInfo.publicEmail,
+      publicAddress:  loginUserInfo.publicAddress,
+      publicWeChat:  loginUserInfo.publicWeChat,
+      publicQQ:  loginUserInfo.publicQQ,
+      orgBeanId: loginUserInfo.orgBeanId,
       token: data.appToken
     });
   });
+};
+
+let _saveOrgBean = function(orgBeanSet){
   _realm.write(() => {
     _persister = _realm.create(ORGBEANSCHEMA, {
-      id: orgBean.orgBeanId,
-      orgCategory: orgBean.orgCategory,
-      orgCode: orgBean.orgCode,
-      orgValue: orgBean.orgValue,
-      corporationType:orgBean.corporationType,
-      orgValueAlias:orgBean.orgValueAlias,
-      isDisabled: orgBean.isDisabled,
-      creator: orgBean.creator,
-      creatorDate: orgBean.creatorDate,
-      lastUpdateBy:orgBean.lastUpdateBy,
-      lastUpdateDate:orgBean.lastUpdateDate,
-      isNeedAudit:orgBean.isNeedAudit,
-      totalQuota: orgBean.totalQuota,
-      occupiedQuota:orgBean.occupiedQuota,
-      isDeleted: orgBean.isDeleted,
-      isApply: orgBean.isApply,
-      remark: orgBean.remark
+      id: orgBeanSet.orgBeanId,
+      orgCategory: orgBeanSet.orgCategory,
+      orgCode: orgBeanSet.orgCode,
+      orgValue: orgBeanSet.orgValue,
+      corporationType:orgBeanSet.corporationType,
+      orgValueAlias:orgBeanSet.orgValueAlias,
+      isDisabled: orgBeanSet.isDisabled,
+      creator: orgBeanSet.creator,
+      creatorDate: orgBeanSet.creatorDate,
+      lastUpdateBy:orgBeanSet.lastUpdateBy,
+      lastUpdateDate:orgBeanSet.lastUpdateDate,
+      isNeedAudit:orgBeanSet.isNeedAudit,
+      totalQuota: orgBeanSet.totalQuota,
+      occupiedQuota:orgBeanSet.occupiedQuota,
+      isDeleted: orgBeanSet.isDeleted,
+      isApply: orgBeanSet.isApply,
+      remark: orgBeanSet.remark
     });
   });
 };
