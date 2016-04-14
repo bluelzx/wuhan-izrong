@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const Realm = require('realm');
 const SCHEMA_KEY = '@realm:schema';
+let React = require('react-native');
 const {
   DeviceSchema,
   GroupSchema,
@@ -87,7 +88,7 @@ let _saveImUsers = function (imUserBeanList) {
   }).value();
 };
 
-let _saveOrgBean = function (imUserBeanList) {
+let _saveOrgBean = function (orgBeanSet) {
   _realm.write(() => {
     _realm.create(ORGBEAN, {
       id: orgBeanSet.orgBeanId,
@@ -112,7 +113,15 @@ let _saveOrgBean = function (imUserBeanList) {
 };
 
 let _getAPNSToken = function () {
+  _realm.write(() => {
+    _realm.create(DEVICE, {
+      id: 1,
+      deviceOS: 'IOS',
+      APNSToken:'asdfghjklzxcvbnm'
+    }, true);
+  });
   let device = _realm.objects(DEVICE);
+
   return device[0].APNSToken ;
 };
 
@@ -128,7 +137,6 @@ let _saveAPNSToken = function (apnsToken) {
 
 let _getToken = function(){
   let loginUsers = _realm.objects(LOGINUSERINFO);
-
 };
 
 let _clearToken = function () {
