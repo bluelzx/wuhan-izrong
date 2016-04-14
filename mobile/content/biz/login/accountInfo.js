@@ -52,12 +52,7 @@ let Register_accountInfo = React.createClass({
       navigator.push(
         {
           comp: name,
-          param: {
-            mobileNo: this.props.param.mobileNo,
-            realName: param.realName,
-            userName: param.userName,
-            orgId: param.orgId
-          }
+          param: param
         }
       )
     }
@@ -86,7 +81,7 @@ let Register_accountInfo = React.createClass({
           <Input type="default" placeholder='用户名(邮箱)' maxlength={20} field='userName'
                  onChangeText={this._onChangeText} icon='user'/>
           <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
-                              onPress={()=>this.toPage(Register_selectOrg)}>
+                              onPress={()=>this.toPage(Register_selectOrg,'')}>
             <View style={styles.selectOrg}>
               <View style={{marginLeft:20,flexDirection:'row'}}>
                 <Image
@@ -105,7 +100,9 @@ let Register_accountInfo = React.createClass({
             style={{fontSize: 20, color: '#ffffff'}}
             styleDisabled={{color: 'red'}}
             onPress={()=>this.toPage(Register_uploadNameCard,
-                 {  realName:this.state.realName,
+                 {
+                    mobileNo: this.props.param.mobileNo,
+                    realName:this.state.realName,
                     userName:this.state.userName,
                     orgId:this.state.orgId
                  })}>
