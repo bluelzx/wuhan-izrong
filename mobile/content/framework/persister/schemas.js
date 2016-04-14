@@ -99,6 +99,7 @@ let LoginUserInfoSchema = {
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
     orgBeanId: {type: 'int', optional: true},
+    lastLoginTime:{type: 'date', optional: true},
     token: {type: 'string', optional: true}
   }
 };

@@ -28,13 +28,7 @@ let PersisterFacade = {
   clearToken: () => _clearToken(),
   saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
   getAPNSToken: () => _getAPNSToken(),
-  setItem: (k, v, c) => _setItem(k, v, c),
-  saveUser: (user, cb) => _setItem('userInfoBean', user, cb),
-  saveOrg: (org, cb) => _setItem('orgBeans', org, cb),
-  saveMsgDetail: (mainMsgBean, cb) => _setItem('mainMsgBean', mainMsgBean, cb),
-  saveMainMsgBean: (mainMsgBean, cb) => _setItem('mainMsgBean', mainMsgBean, cb),
-  saveDemoFlag: (flag, cb) => _setItem('demoFlag', flag, cb),
-  saveLoginUserInfo: (loginUserInfo) =>_saveLoginUserInfo(loginUserInfo)
+  getToken: ()=> _getToken()
 };
 
 console.log(Realm.defaultPath);
@@ -42,7 +36,7 @@ let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema,
     LoginUserInfoSchema, OrgBeanSchema, BizOrderCategorySchema,
     BizOrderItemSchema, MarketInfoSchema],
-  schemaVersion: 10
+  schemaVersion: 1
 });
 // Create Realm objects and write to local storage
 let _saveAppData = function (data) {
@@ -52,7 +46,7 @@ let _saveAppData = function (data) {
   let bizOrderCategoryBeanList = data.bizOrderCategoryBeanList;
   let imUserBeanList = data.imUserBeanList;
   _saveLoginUserInfo(data);
- // _saveOrgBean(orgBeanSet);
+  _saveOrgBean(orgBeanSet);
 };
 
 let _saveLoginUserInfo = function (data) {
@@ -73,6 +67,7 @@ let _saveLoginUserInfo = function (data) {
       photoFileUrl: loginUserInfo.photoFileUrl,
       orgBeanId: loginUserInfo.orgBeanId,
       token: data.appToken,
+      lastLoginTime:new Date(),
       publicTitle: _.isEmpty(loginUserInfo.publicTitle)? true : loginUserInfo.publicTitle,
       publicMobile: _.isEmpty(loginUserInfo.publicMobile)? true : loginUserInfo.publicMobile,
       publicDepart: _.isEmpty(loginUserInfo.publicDepart)? true : loginUserInfo.publicDepart,
@@ -85,7 +80,14 @@ let _saveLoginUserInfo = function (data) {
   });
 };
 
-let _saveOrgBean = function (orgBeanSet) {
+let _saveImUsers = function (imUserBeanList) {
+  console.log(imUserBeanList);
+  _([1, 2]).forEach(function(n) {
+    console.log(n);
+  }).value();
+};
+
+let _saveOrgBean = function (imUserBeanList) {
   _realm.write(() => {
     _realm.create(ORGBEAN, {
       id: orgBeanSet.orgBeanId,
@@ -124,17 +126,13 @@ let _saveAPNSToken = function (apnsToken) {
  });
 };
 
-let _clearToken = function () {
-  //realm.delete(_persister);
+let _getToken = function(){
+  let loginUsers = _realm.objects(LOGINUSERINFO);
+
 };
 
-let _setItem = function (key, value, cb) {
-  //let data = _realm.objects(SCHEMA_KEY)[0];
-  //realm.create(SCHEMA_KEY, _.assign(data, { key: value }), true);
+let _clearToken = function () {
 
-  _persister[key] = value;
-  //realm.create(SCHEMA_KEY, _persister, true);
-  //if (cb)cb();
 };
 
 
