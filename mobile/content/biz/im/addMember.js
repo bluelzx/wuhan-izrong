@@ -2,36 +2,65 @@
  * Created by baoyinghai on 16/4/6.
  */
 let React = require('react-native');
-const {View, TouchableHighlight, Text} = React;
+const {View, TouchableOpacity, Text} = React;
 let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList, Device } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let CheckBox = require('./checkBox');
-
-
-const MockData = [
-  {groupName: '天津银行', groupData: [ {imgId:'../../pic/man.jpg', desc: 'A吴'}, {imgId:'../../pic/man.jpg', desc: 'A张'}]},
-  {groupName: '工商银行', groupData: [ {imgId:'../../pic/man.jpg', desc: 'B吴'}, {imgId:'../../pic/man.jpg', desc: 'B张'}, {imgId:'../../pic/man.jpg', desc: 'B李'}]}
-];
+let ContactStore = require('../../framework/store/contactStore');
+let DictIcon = require('../../constants/dictIcon');
+let HeadPic = require('./headerPic');
+let ChooseList = require('./chooseList');
 
 let AddMember = React.createClass({
 
-  textChange: function() {
+  getInitialState:function() {
+    let groupId = this.props.param.groupId;
+    return {
+      data:ContactStore.getUsersExpress(groupId),
+      memberList:{}
+    }
+  },
 
+  textChange: function() {
+  },
+
+  addUser: function(members, groupId) {
+    //step1: 添加成员
+    //step2: 回退
+    this.props.navigator.pop();
   },
 
   renderState: function () {
+    let memberList = this.state.memberList;
+    let count = 0;
+    let members = [];
+    for(let userId in memberList){
+      if(!!memberList[userId]){
+        count ++ ;
+        members.push(userId);
+      }
+    }
     return (
-      <Text style={{color:'#ffffff',marginLeft:-20}}>{'完成(1)'}</Text>
+      <TouchableOpacity onPress={() => this.addUser(members,this.props.param.groupId)}>
+        <Text style={{ marginLeft:-20,color:count==0?'#6B849C':'white'}}>{'完成(' + count + ')'}</Text>
+      </TouchableOpacity>
     );
   },
 
-  renderImg: function(data) {
-    return (
-      <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20}}>
-      </View>
-    );
+
+  checkBoxChoice: function(item) {
+    let memberList = this.state.memberList;
+    memberList[item.userId] = item;
+    this.setState({memberList:memberList});
   },
+
+  unCheckBoxChoice: function(item) {
+    let memberList = this.state.memberList;
+    memberList[item.userId] = null;
+    this.setState({memberList:memberList});
+  },
+
 
   //******************** 扩展列表
   //渲染组标题
@@ -40,7 +69,7 @@ let AddMember = React.createClass({
       <Text
         style={
           {color: '#ffffff'}}>
-        {data.groupName}
+        {data.orgName}
       </Text>
     );
   },
@@ -48,11 +77,14 @@ let AddMember = React.createClass({
   //渲染组成员
   itemRender: function(data) {
     return (
-    <CheckBox key={data.desc}
+    <CheckBox key={data.userId}
+              item={data}
+              choice={this.checkBoxChoice}
+              unChoice={this.unCheckBoxChoice}
               style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
       <View style={{flexDirection:'row'}}>
-        {this.renderImg(data)}
-        <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.desc}</Text>
+        <HeadPic showBadge={false} style={{height: 40,width: 40, marginTop:5}} source={DictIcon.imSpread} />
+        <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.userName}</Text>
       </View>
     </CheckBox>
     );
@@ -64,6 +96,8 @@ let AddMember = React.createClass({
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1' contentBackgroundColor='#15263A' title='添加群成员'
                   showBar={true}
                   actionButton={this.renderState}>
+        <ChooseList  memberList={this.state.memberList}/>
+
         <SearchBar textChange={this.textChange}/>
         <ExtenList itemHeight={56}
                    groundColor={'#15263A'}
@@ -71,8 +105,8 @@ let AddMember = React.createClass({
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={MockData}
-                   groupDataName={'groupData'}
+                   dataSource={this.state.data}
+                   groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />
       </NavBarView>

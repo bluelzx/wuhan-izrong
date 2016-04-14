@@ -27,12 +27,18 @@ let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 let TabView = require('../../framework/system/tabView');
 
 let Register_uploadNameCard = React.createClass({
-  getStateFromStores() {
-    return {
-      url: '',
-      uploaded: true,
-      nameCardFileUrl:''
 
+  getStateFromStores() {
+    let deviceModel = 'IOS';
+    if (Platform.OS != 'ios') {
+      deviceModel = 'ANDROID';
+    }
+    return {
+      uri: '',
+      uploaded: true,
+      nameCardFileUrl: '',
+      deviceModel: deviceModel,
+      APNSToken: "asdfasdgdfhfghjdgfgbaser34etewfgsdfasd"
     };
   },
   getInitialState: function () {
@@ -49,32 +55,22 @@ let Register_uploadNameCard = React.createClass({
     this.setState(this.getStateFromStores());
   },
 
-  toPage: function (name) {
-    const { navigator } = this.props;
-    if (navigator) {
-      navigator.push({comp: name})
-    }
-  },
-
   register: function () {
     if (this.state.uploaded) {
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.register({
-          mobileNo: this.props.mobileNo,
-          realName: this.props.realName,
-          userName: this.props.userName,
-          orgId: this.props.orgId,
-          nameCardFileUrl: this.props.url
+          mobileNo: this.props.param.mobileNo,
+          realName: this.props.param.realName,
+          userName: this.props.param.userName,
+          orgId: this.props.param.orgId,
+          nameCardFileUrl: this.state.nameCardFileUrl,
+          deviceToken: this.state.APNSToken,
+          deviceModel: this.state.deviceModel
         }).then((response) => {
           const { navigator } = this.props;
           if (navigator) {
-            if (!this.state.checked) {
-              navigator.push(
-                {
-                  comp: TabView
-                });
-            }
+            navigator.popToTop();
           }
         }).catch((errorData) => {
           //Alert(msg.msgContent);
@@ -84,7 +80,7 @@ let Register_uploadNameCard = React.createClass({
     }
   },
 
-  selectIOS(desc,name){
+  selectIOS(desc, name){
     var options = {
       title: desc, // specify null or empty string to remove the title
       cancelButtonTitle: '取消',
@@ -121,50 +117,52 @@ let Register_uploadNameCard = React.createClass({
       else {
         var source = response.uri.replace('file://', '');
         this.setState({
-          [name]: source
+          uri: source
         });
         this.uploadNameCard(name);
       }
     });
   },
-  selectAndroid: function (desc,name) {
+  selectAndroid: function (desc, name) {
     // PhotoPicker.showImagePic(true,'nameCard',(response)=>console.log('Response = ', response));
     UserPhotoPicModule.showImagePic(true, name,
       (response)=> {
         console.log('Response = ', response);
         this.setState({
-          nameCardFileUrl: response.uri
+          uri: response.uri
         });
         this.uploadNameCard(name);
       });
   },
 
-  selectPhoto: function(){
+  selectPhoto: function () {
     if (Platform.OS == 'android') {
-      this.selectAndroid('用户名片','nameCardFileUrl');
+      this.selectAndroid('用户名片', 'nameCardFileUrl');
     } else {
-      this.selectIOS('用户名片','nameCardFileUrl');
+      this.selectIOS('用户名片', 'nameCardFileUrl');
     }
-   // SelectPhoto.selectPhoto('用户名片','nameCardFileUrl',(uri)=>{console.log(uri)});
+    // SelectPhoto.selectPhoto('用户名片','nameCardFileUrl',(uri)=>{console.log(uri)});
   },
 
-  uploadNameCard: function(fileFieldName){
-      this.props.exec(() => {
-        return LoginAction.uploadNameCard(fileFieldName,{
-        [fileFieldName]: this.state.nameCardFileUrl
-        }).then((response) => {
-          console.log(response);
-        }).catch((errorData) => {
-          //Alert(msg.msgContent);
-          throw errorData;
-        });
+  uploadNameCard: function (fileFieldName) {
+    this.props.exec(() => {
+      return LoginAction.uploadNameCard(fileFieldName, {
+        [fileFieldName]: this.state.uri
+      }).then((response) => {
+        console.log(response);
+        this.state.nameCardFileUrl = response.fileId;
+      }).catch((errorData) => {
+        //Alert(msg.msgContent);
+        throw errorData;
       });
+    });
   },
 
   returnImage: function () {
     if (this.state.nameCardFileUrl == '') {
       return (
-        <TouchableHighlight style={[styles.nameCard,{backgroundColor: '#0a1926'}]} activeOpacity={0.8} underlayColor='#18304b'
+        <TouchableHighlight style={[styles.nameCard,{backgroundColor: '#0a1926'}]} activeOpacity={0.8}
+                            underlayColor='#18304b'
                             onPress={()=>this.selectPhoto()}>
           <View style={styles.imageArea}>
             <Image
@@ -179,8 +177,8 @@ let Register_uploadNameCard = React.createClass({
         <TouchableHighlight style={styles.nameCard} activeOpacity={0.8} underlayColor='#18304b'
                             onPress={()=>this.selectPhoto()}>
           <Image style={{flexDirection:'column',flex:1,alignItems:'center',justifyContent:'space-around'}}
-                 resizeMode='cover'
-                 source={{uri:this.state.nameCardFileUrl}}
+                 resizeMode='contain'
+                 source={{uri:this.state.uri}}
           />
         </TouchableHighlight>
       );

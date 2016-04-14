@@ -31,7 +31,6 @@ var data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var WhitePage = React.createClass({
 
   getInitialState(){
-    MarketAction.defaultSearch()
     return {
       dataSource: ['资金业务', '资产交易', '票据交易', '同业代理', '公司与投行'],
       dataSource2: ['同业存款', '同业拆借', '债券回购', '存单', '其他'],
@@ -48,6 +47,11 @@ var WhitePage = React.createClass({
       pickRowColor: '#244266',
     }
   },
+
+  componentWillMount: function () {
+    {this.bizOrderMarketSearchDefaultSearch()}
+  },
+
   render: function () {
     let {title}  = this.props;
     return (
@@ -57,7 +61,7 @@ var WhitePage = React.createClass({
           style={{width: screenWidth,alignItems: "center",justifyContent: "flex-start",flexDirection: "row"}}>
           {this.renderFilter(this.pressFilterType, this.pressFilterTime, this.pressFilterOther)}
         </View>
-        <MarketList navigator={this.props.navigator}/>
+        <MarketList ref="MARKETLIST" navigator={this.props.navigator}/>
         {this.renderOptionType()}
         {this.renderOptionTime()}
         {this.renderOptionOther()}
@@ -111,6 +115,7 @@ var WhitePage = React.createClass({
       pickTypeRow2: rowId,
       levelTwoText: this.state.dataSource2[rowId],
     })
+    {this.refs['MARKETLIST']._changeData()}
   },
   pressTimeRow(rowId){
     this.setState({
@@ -118,7 +123,7 @@ var WhitePage = React.createClass({
       pickTimeRow: rowId,
       optionTwoText: this.state.dataSource3[rowId],
     })
-  },renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
+  }, renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
     return (
       <View style={{flex:1,flexDirection:'row'}}>
         <TouchableOpacity onPress={pressFilterType} activeOpacity={1}
@@ -128,7 +133,8 @@ var WhitePage = React.createClass({
             <Text
               style={{width:screenWidth/2 - 40,color:(this.state.clickFilterType == 1)?'#419cd6':'white'}}
               numberOfLines={1}>{this.state.levelOneText + ' - ' + this.state.levelTwoText}</Text>
-            <Icon name={(this.state.clickFilterType == 1)?"arrow-up-b":"arrow-down-b"} size={20} color={(this.state.clickFilterType == 1)?'#419cd6':'white'} />
+            <Icon name={(this.state.clickFilterType == 1)?"arrow-up-b":"arrow-down-b"} size={20}
+                  color={(this.state.clickFilterType == 1)?'#419cd6':'white'}/>
 
           </View>
         </TouchableOpacity>
@@ -139,7 +145,8 @@ var WhitePage = React.createClass({
             <Text
               style={{width:screenWidth/3 - 30,color:(this.state.clickFilterTime == 1)?'#419cd6':'white'}}
               numberOfLines={1}>{this.state.optionTwoText}</Text>
-            <Icon name={(this.state.clickFilterTime == 1)?"arrow-up-b":"arrow-down-b"} size={20} color={(this.state.clickFilterTime == 1)?'#419cd6':'white'} />
+            <Icon name={(this.state.clickFilterTime == 1)?"arrow-up-b":"arrow-down-b"} size={20}
+                  color={(this.state.clickFilterTime == 1)?'#419cd6':'white'}/>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={pressFilterOther} activeOpacity={1}
@@ -149,7 +156,8 @@ var WhitePage = React.createClass({
             <Text
               style={{width:screenWidth/6 - 30,color:(this.state.clickFilterOther == 1)?'#419cd6':'white'}}
               numberOfLines={1}>{'筛选'}</Text>
-            <Icon name={(this.state.clickFilterOther == 1)?"arrow-up-b":"arrow-down-b"} size={20} color={(this.state.clickFilterOther == 1)?'#419cd6':'white'} />
+            <Icon name={(this.state.clickFilterOther == 1)?"arrow-up-b":"arrow-down-b"} size={20}
+                  color={(this.state.clickFilterOther == 1)?'#419cd6':'white'}/>
           </View>
         </TouchableOpacity>
 
@@ -286,6 +294,41 @@ var WhitePage = React.createClass({
       navigator.push({comp: name})
     }
   },
+  bizOrderMarketSearchDefaultSearch: function () {
+    this.props.exec(
+      ()=> {
+        return MarketAction.bizOrderMarketSearchDefaultSearch(
+        ).then((response)=> {
+          var arr = new Array();
+          arr = (JSON.stringify(response.pageResult.contentList));
+          console.log(arr);
+        }).catch(
+          (errorData) => {
+            throw errorData;
+          }
+        );
+      }
+    );
+  },
+
+  bizOrderMarketSearchsearch: function () {
+    this.props.exec(
+      ()=> {
+        return MarketAction.bizOrderMarketSearchsearch(
+        ).then((response)=> {
+          var arr = new Array();
+          arr = (JSON.stringify(response.pageResult.contentList));
+          console.log(JSON.stringify(response));
+        }).catch(
+          (errorData) => {
+            throw errorData;
+          }
+        );
+      }
+    );
+  },
+
+
 });
 
 module.exports = WhitePage;

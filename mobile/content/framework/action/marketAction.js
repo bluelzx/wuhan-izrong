@@ -4,7 +4,8 @@
 let {
   BFetch,
   PFetch,
-  UFetch
+  UFetch,
+  BFetch1,
   } = require('../network/fetch');
 let { Host } = require('../../../config');
 let AppStore = require('../store/appStore');
@@ -14,13 +15,35 @@ var pub = "/pub";
 
 var MarketActions ={
 
-  defaultSearch: (p, c, f) => _defaultSearch('http://192.168.64.197:9081/app/api/BizOrderMarketSearch/defaultSearch', p, c, f),
+  bizOrderMarketSearchDefaultSearch: (p, c, f) => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch, p, c, f),
+  bizOrderMarketSearchsearch: (p, c, f) => _bizOrderMarketSearchsearch(AppLinks.bizOrderMarketSearchsearch, p, c, f),
+  getBizOrderInMarket: (p, c, f) => _getBizOrderInMarket(AppLinks.getBizOrderInMarket, p, c, f),
 
 };
 
-let _defaultSearch = function (url) {
+let _bizOrderMarketSearchDefaultSearch = function (url) {
   return new Promise((resolve, reject) => {
-    BFetch(url).then((response) => {
+    BFetch1(url).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _bizOrderMarketSearchsearch = function (url,p) {
+  return new Promise((resolve, reject) => {
+    BFetch1(url,p).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _getBizOrderInMarket = function (url,p) {
+  return new Promise((resolve, reject) => {
+    PFetch(url,p).then((response) => {
       resolve(response);
     }).catch((errorData) => {
       reject(errorData);

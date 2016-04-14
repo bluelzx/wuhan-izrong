@@ -20,11 +20,12 @@ let AppLinks = {
   login: pub + '/login',
   logout: api + '/Account/logout',
   register: pub + '/register',
-  uploadFile: '/File/upload',
+  uploadFile: pub + '/File/upload',
   updateUserInfo: api + '/Account/updateUserInfo',
   getOrgList: pub + '/getOrgList/',
-  bizOrderMarketSearchDefaultSearch: '/api/BizOrderMarketSearch/defaultSearch',
-  bizOrderMarketSearchsearch: '/api/BizOrderMarketSearch/search',
+  bizOrderMarketSearchDefaultSearch: api + '/BizOrderMarketSearch/defaultSearch',
+  bizOrderMarketSearchsearch: api + '/BizOrderMarketSearch/search',
+  getBizOrderInMarket: api + 'BizOrderManage/getBizOrderInMarket',
 };
 
 module.exports = AppLinks;

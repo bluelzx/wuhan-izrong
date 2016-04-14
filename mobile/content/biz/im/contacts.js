@@ -8,8 +8,7 @@ let {
   Text,
   TouchableHighlight,
   TouchableOpacity,
-  TextInput,
-  Platform
+  Image
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
 let CreateGroup = require('./createGroup');
@@ -17,14 +16,34 @@ let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let Chat = require('./chat');
 let Icon = require('react-native-vector-icons/Ionicons');
+let ContactStore = require('../../framework/store/contactStore');
+let AppStore = require('../../framework/store/appStore');
+let CONSTANT = require('./itemType');
+let DictIcon = require('../../constants/dictIcon');
+let Spread = require('./spread');
 
 
-const MockData = [
-  {groupName: '我的群组A', groupData: [ {imgId:'../../pic/man.jpg', desc: 'A吴'}, {imgId:'../../pic/man.jpg', desc: 'A张'}]},
-  {groupName: '我的群组B', groupData: [ {imgId:'../../pic/man.jpg', desc: 'B吴'}, {imgId:'../../pic/man.jpg', desc: 'B张'}, {imgId:'../../pic/man.jpg', desc: 'B李'}]}
-];
 
 let Contacts = React.createClass({
+
+  componentDidMount() {
+    AppStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function () {
+    AppStore.removeChangeListener(this._onChange);
+  },
+  _onChange: function () {
+    this.setState(this.getStateFromStores());
+  },
+
+  getStateFromStores: function() {
+    return {dataSource:ContactStore.getContact()};
+  },
+
+  getInitialState: function(){
+    return this.getStateFromStores();
+  },
 
   renderImg: function(data) {
     return (
@@ -40,24 +59,38 @@ let Contacts = React.createClass({
       <Text
         style={
           {color: '#ffffff'}}>
-        {data.groupName}
+        {data.orgName}
       </Text>
     );
   },
 
   //渲染组成员
   itemRender: function(data) {
-    return (
-      <TouchableHighlight key={data.desc}
-                          onPress={() => this.props.navigator.push({comp:Chat, param:{title:data.desc}})}
-                          style={{borderTopWidth:0.5,  borderTopColor: '#132232'}}>
-        <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
-          {this.renderImg(data)}
-          <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.desc}</Text>
-        </View>
-      </TouchableHighlight>
+    if(data.type==CONSTANT.GROUP){
+      return (
+        <TouchableHighlight key={data.groupId}
+                            onPress={() => this.props.navigator.push({comp:Chat, param:{title:data.groupName}})}
+                            style={{borderTopWidth:0.5,  borderTopColor: '#132232'}}>
+          <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
+            <Image style={{height: 40,width: 40,borderRadius: 20}} source={DictIcon.imMyGroup} />
+            <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.groupName}</Text>
+          </View>
+        </TouchableHighlight>
 
-    );
+      );
+    }else {
+      return (
+        <TouchableHighlight key={data.userId}
+                            onPress={() => this.props.navigator.push({comp:Chat, param:{title:data.userName}})}
+                            style={{borderTopWidth:0.5,  borderTopColor: '#132232'}}>
+          <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
+            {this.renderImg(data)}
+            <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.userName}</Text>
+          </View>
+        </TouchableHighlight>
+
+      );
+    }
   },
   //*********************
 
@@ -73,7 +106,7 @@ let Contacts = React.createClass({
             comp: CreateGroup
       });
       }}>
-        <Icon name="plus" size={25} color='#ffffff' />
+        <Image  style={{width:20,height:20}} source={DictIcon.imCreateGroupBtn}/>
       </TouchableOpacity>
     );
   },
@@ -81,10 +114,10 @@ let Contacts = React.createClass({
   renderGlobal: function() {
     return (
       <TouchableHighlight
-        onPress={() => this.props.navigator.push({comp:Chat, param:{title:'环渤海银银合作平台'}})}
+        onPress={() => this.props.navigator.push({comp:Spread})}
             style={{borderTopWidth:0.5, borderTopColor: '#132232'}}>
         <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
-          {this.renderImg(" ")}
+          <Image style={{height: 40,width: 40,borderRadius: 20}} source={DictIcon.imSpread} />
           <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{'环渤海银银合作平台'}</Text>
         </View>
       </TouchableHighlight>
@@ -106,8 +139,8 @@ let Contacts = React.createClass({
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={MockData}
-                   groupDataName={'groupData'}
+                   dataSource={this.state.dataSource}
+                   groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />
       </NavBarView>

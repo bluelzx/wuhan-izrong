@@ -9,32 +9,21 @@ let {
   Image,
   Platform,
   } = React;
+let lodash = require('lodash');
 let AppStore = require('../../framework/store/appStore');
-//let UserStore = require('../../framework/store/userStore');
 let LoginAction = require('../../framework/action/loginAction');
-//let Register_checkPhone = require('./register_checkPhone');
-//let Forget_checkPhone = require('./forget_checkPhone');
 let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let VerifyCode = require('../../comp/utils/verifyCode');
 let Input = require('../../comp/utils/input');
-let { Alert, Button, Device} = require('mx-artifacts');
+let {Button} = require('mx-artifacts');
 let Register_valiMobile = require('./registerValiMobile');
 let Login_ValiSMS = require('./loginValiSMS');
-let TabView = require('../../framework/system/tabView');
 
 let Login = React.createClass({
   getStateFromStores() {
-    //let user = UserStore.getUserInfoBean();
-    let deviceModel = 'IOS';
-    if (Platform.OS != 'ios') {
-      deviceModel = 'ANDROID';
-    }
     return {
       mobileNo: '',
-      checked:'',
-      deviceModel: deviceModel,
-      APNSToken: AppStore.getAPNSToken()
+      checked:''
     };
   },
   getInitialState: function () {
@@ -47,6 +36,7 @@ let Login = React.createClass({
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange);
   },
+
   _onChange: function () {
     this.setState(this.getStateFromStores());
   },

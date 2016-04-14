@@ -11,10 +11,24 @@ var BFetch = function (url, param, callback, failure, options) {
   };
 
   return rawFetch(Host + url, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(param)
-    }, options);
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(param)
+  }, options);
+};
+
+var BFetch1 = function (url, param, callback, failure, options) {
+  var headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'Authorization': 'Basic  ' + '11111111'
+  };
+
+  return rawFetch(Host + url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(param)
+  }, options);
 };
 
 var PFetch = function (url, param, callback, failure, options) {
@@ -42,17 +56,18 @@ var UFetch = function (url, param, callback, failure, options) {
     method: 'POST',
     headers: headers,
     body: formdata
-  }, { custLoading: true });
+  }, {custLoading: true});
 };
 
 
 var rawFetch = function (url, param, callback, failure, option) {
   console.log('以下打印一次传出去的param:');
   console.log(param);
+  console.log('请求地址:'+url);
 
   if (!option) option = {};
   var _promise = Promise.race([fetch(url, param), new Promise(function (resolve, reject) {
-    setTimeout(() => reject(new Error('链接超时')), 5000);
+    setTimeout(() => reject(new Error('链接超时')), 20000);
   })]);
   //process(fetch(url, param) ,callback,failure,option);
   return process(_promise, option);
@@ -105,5 +120,6 @@ var process = function (_promise, option) {
 module.exports = {
   BFetch: BFetch,
   PFetch: PFetch,
-  UFetch: UFetch
+  UFetch: UFetch,
+  BFetch1: BFetch1,
 };

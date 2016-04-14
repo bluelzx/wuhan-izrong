@@ -5,67 +5,134 @@ const {
   DeviceSchema,
   GroupSchema,
   MessageSchema,
-  UserInfoSchema,
+  ImUserInfoSchema,
   LoginUserInfoSchema,
   OrgBeanSchema,
+  BizOrderCategorySchema,
+  BizOrderItemSchema,
+  MarketInfoSchema,
+  DEVICE,
+  GROUP,
+  MESSAGE,
+  IMUSERINFO,
+  LOGINUSERINFO,
+  ORGBEAN,
+  BIZORDERCATEGORY,
+  BIZORDERITEM,
+  MARKETINFO
   } = require('./schemas');
-
-
-let PersisterSchema = {
-  name: SCHEMA_KEY,
-  primaryKey: 'token',
-  properties: {
-    token: {type: 'string'},
-    APNSToken: {type: 'string'},
-    revBillBean: {type: 'string'},
-    sentBillBean: {type: 'string'},
-    filterBeans: {type: 'string'},
-    userInfoBean: {type: 'string'},
-    orgBeans: {type: 'string'},
-    mainMsgBean: {type: 'string'},
-    marketMsgBeans: {type: 'string'},
-    systemMsgBeans: {type: 'string'},
-    sentBillMsgBeans: {type: 'string'},
-    demoFlag: {type: 'bool'}
-  }
-};
-
-// Get the default Realm with support for our objects
-console.log(Realm.defaultPath);
-let realm = new Realm({
-  schema: [DeviceSchema, GroupSchema, MessageSchema, UserInfoSchema, LoginUserInfoSchema, OrgBeanSchema],
-  schemaVersion: 1
-});
-// Create Realm objects and write to local storage
-
-
-let _persister = null;
-
+let {Platform} = React;
 let PersisterFacade = {
   getAppData: (cb) => _getAppData(cb),
   saveAppData: (data) => _saveAppData(data),
   clearToken: () => _clearToken(),
-  saveAPNSToken: (apnsToken, cb) => _setItem('APNSToken', apnsToken, cb),
-  setItem: (k, v, c) => _setItem(k, v, c),
-  saveUser: (user, cb) => _setItem('userInfoBean', user, cb),
-  saveOrg: (org, cb) => _setItem('orgBeans', org, cb),
-  saveMsgDetail: (mainMsgBean, cb) => _setItem('mainMsgBean', mainMsgBean, cb),
-  saveMainMsgBean: (mainMsgBean, cb) => _setItem('mainMsgBean', mainMsgBean, cb),
-  saveDemoFlag: (flag, cb) => _setItem('demoFlag', flag, cb),
-  loginTest: ()=> _loginTest()
+  saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
+  getAPNSToken: () => _getAPNSToken(),
+  getToken: ()=> _getToken()
+};
+
+console.log(Realm.defaultPath);
+let _realm = new Realm({
+  schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema,
+    LoginUserInfoSchema, OrgBeanSchema, BizOrderCategorySchema,
+    BizOrderItemSchema, MarketInfoSchema],
+  schemaVersion: 1
+});
+// Create Realm objects and write to local storage
+let _saveAppData = function (data) {
+  let orgBeanSet = data.orgBeanSet;
+  let appUser = data.appUserInfoBean;
+  let appUserGroupBeanList = data.appUserGroupBeanList;
+  let bizOrderCategoryBeanList = data.bizOrderCategoryBeanList;
+  let imUserBeanList = data.imUserBeanList;
+  _saveLoginUserInfo(data);
+  _saveOrgBean(orgBeanSet);
+};
+
+let _saveLoginUserInfo = function (data) {
+  let loginUserInfo = data.appUserInfoBean;
+  _realm.write(() => {
+    _realm.create(LOGINUSERINFO, {
+      userId: loginUserInfo.userId,
+      address: loginUserInfo.address,
+      realName: loginUserInfo.realName,
+      weChatNo: loginUserInfo.weChatNo,
+      email: loginUserInfo.email,
+      nameCardFileUrl: loginUserInfo.nameCardFileUrl,
+      qqNo: loginUserInfo.qqNo,
+      department: loginUserInfo.department,
+      mobileNumber: loginUserInfo.mobileNumber,
+      jobTitle: loginUserInfo.jobTitle,
+      phoneNumber: loginUserInfo.phoneNumber,
+      photoFileUrl: loginUserInfo.photoFileUrl,
+      orgBeanId: loginUserInfo.orgBeanId,
+      token: data.appToken,
+      lastLoginTime:new Date(),
+      publicTitle: _.isEmpty(loginUserInfo.publicTitle)? true : loginUserInfo.publicTitle,
+      publicMobile: _.isEmpty(loginUserInfo.publicMobile)? true : loginUserInfo.publicMobile,
+      publicDepart: _.isEmpty(loginUserInfo.publicDepart)? true : loginUserInfo.publicDepart,
+      publicPhone: _.isEmpty(loginUserInfo.publicPhone)? true : loginUserInfo.publicPhone,
+      publicEmail: _.isEmpty(!loginUserInfo.publicEmail)? true : loginUserInfo.publicEmail,
+      publicAddress: _.isEmpty(loginUserInfo.publicAddress)? true : loginUserInfo.publicAddress,
+      publicWeChat: _.isEmpty(loginUserInfo.publicWeChat)? true : loginUserInfo.publicWeChat,
+      publicQQ: _.isEmpty(loginUserInfo.publicQQ)? true : loginUserInfo.publicQQ
+    },true);
+  });
+};
+
+let _saveImUsers = function (imUserBeanList) {
+  console.log(imUserBeanList);
+  _([1, 2]).forEach(function(n) {
+    console.log(n);
+  }).value();
+};
+
+let _saveOrgBean = function (imUserBeanList) {
+  _realm.write(() => {
+    _realm.create(ORGBEAN, {
+      id: orgBeanSet.orgBeanId,
+      orgCategory: orgBeanSet.orgCategory,
+      orgCode: orgBeanSet.orgCode,
+      orgValue: orgBeanSet.orgValue,
+      corporationType: orgBeanSet.corporationType,
+      orgValueAlias: orgBeanSet.orgValueAlias,
+      isDisabled: orgBeanSet.isDisabled,
+      creator: orgBeanSet.creator,
+      creatorDate: orgBeanSet.creatorDate,
+      lastUpdateBy: orgBeanSet.lastUpdateBy,
+      lastUpdateDate: orgBeanSet.lastUpdateDate,
+      isNeedAudit: orgBeanSet.isNeedAudit,
+      totalQuota: orgBeanSet.totalQuota,
+      occupiedQuota: orgBeanSet.occupiedQuota,
+      isDeleted: orgBeanSet.isDeleted,
+      isApply: orgBeanSet.isApply,
+      remark: orgBeanSet.remark
+    }, true);
+  });
+};
+
+let _getAPNSToken = function () {
+  let device = _realm.objects(DEVICE);
+  return device[0].APNSToken ;
+};
+
+let _saveAPNSToken = function (apnsToken) {
+ _realm.write(()=>{
+   _realm.create(DEVICE, {
+     id: 1,
+     deviceOS:Platform.OS,
+     APNSToken:apnsToken
+   }, true);
+ });
+};
+
+let _getToken = function(){
+  let loginUsers = _realm.objects(LOGINUSERINFO);
+
 };
 
 let _clearToken = function () {
-  //realm.delete(_persister);
-};
 
-let _setItem = function (key, value, cb) {
-  //let data = _realm.objects(SCHEMA_KEY)[0];
-  //realm.create(SCHEMA_KEY, _.assign(data, { key: value }), true);
-
-  _persister[key] = value;
-  //realm.create(SCHEMA_KEY, _persister, true);
-  //if (cb)cb();
 };
 
 
@@ -73,35 +140,6 @@ let _getAppData = function (cb) {
   //let data = _realm.objects(SCHEMA_KEY)[0];
   //if (cb)cb(data);
   if (cb)cb(_persister);
-};
-
-let _saveAppData = function (data) {
-  // Create Realm objects and write to local storage
-  //_realm.write(() => {
-  //  _persister = _realm.create(SCHEMA_KEY, {
-  //    token: JSON.stringify(data.token),
-  //    APNSToken: '',
-  //    revBillBean: JSON.stringify(data.revBillBean),
-  //    sentBillBean: JSON.stringify(data.sentBillBean),
-  //    filterBeans: JSON.stringify(data.filterBeans),
-  //    userInfoBean: JSON.stringify(data.userInfoBean),
-  //    orgBeans: JSON.stringify(data.orgBeans),
-  //    mainMsgBean: JSON.stringify(data.mainMsgBean),
-  //    marketMsgBeans: JSON.stringify(data.marketMsgBeans),
-  //    systemMsgBeans: JSON.stringify(data.systemMsgBeans),
-  //    sentBillMsgBeans: JSON.stringify(data.sentBillMsgBeans),
-  //    demoFlag: JSON.stringify(data.demoFlag)
-  //  });
-  //});
-};
-
-let _loginTest = function () {
-  _realm.write(() => {
-    _realm.create('device', {
-      deviceOS: 'IOS',
-      APNSToken: 'qqqq'
-    }, true);
-  });
 };
 
 module.exports = PersisterFacade;

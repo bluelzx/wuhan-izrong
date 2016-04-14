@@ -120,7 +120,7 @@ var TabView = React.createClass({
             icon={require('../../image/tab/market.png')}
             selected={this.state.selectedTab === 'market'}
             onPress={() => {this.setState({selectedTab: 'market'})}}>
-            <Market navigator={this.props.navigator} />
+            <Market navigator={this.props.navigator} exec={this.props.exec}/>
           </TabBarIOS.Item>
 
           <TabBarIOS.Item

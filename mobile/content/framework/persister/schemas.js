@@ -5,10 +5,11 @@
 
 
 let DeviceSchema = {
-  name: 'device',
-  primaryKey: 'deviceOS',
+  name: "device",
+  primaryKey: 'id',
   properties: {
-    deviceOS: {type: 'string'},
+    id:{type: 'int', optional: true},
+    deviceOS: {type: 'string',optional: true},
     APNSToken: {type: 'string', optional: true}
   }
 };
@@ -17,12 +18,12 @@ let GroupSchema = {
   name: "group",
   primaryKey: 'groupId',
   properties: {
-    groupId: 'int',
+    groupId: {type: 'int', optional: true},
     groupName: {type: 'string', optional: true},
-    groupMasterUname: {type: 'string', optional: true},
+    groupMasterUid: {type: 'string', optional: true},
     memberNum: {type: 'int', optional: true},
     members: {type: 'list', objectType: 'userInfo'},
-    isMute: {type: 'bool', optional: true}
+    mute: {type: 'bool', optional: true}
   }
 };
 
@@ -38,12 +39,13 @@ let MessageSchema = {
     contentType: {type: 'string', optional: true},
     content: {type: 'string', optional: true},
     msgType: {type: 'string', optional: true},
-    revTime: {type: 'date', optional: true}
+    revTime: {type: 'date', optional: true},
+    isRead: {type: 'bool', option: true}
   }
 };
 
 
-let UserInfoSchema = {
+let ImUserInfoSchema = {
   name: "userInfo",
   primaryKey: 'userId',
   properties: {
@@ -59,15 +61,16 @@ let UserInfoSchema = {
     jobTitle: {type: 'string', optional: true},
     phoneNumber: {type: 'string', optional: true},
     photoFileUrl: {type: 'string', optional: true},
-    publicTitle: {type: 'string', optional: true},
-    publicMobile: {type: 'string', optional: true},
-    publicDepart: {type: 'string', optional: true},
-    publicPhone: {type: 'string', optional: true},
-    publicEmail: {type: 'string', optional: true},
-    publicAddress: {type: 'string', optional: true},
-    publicWeChat: {type: 'string', optional: true},
-    publicQQ: {type: 'string', optional: true},
-    orgId: {type: 'int', optional: true}
+    publicTitle: {type: 'bool', optional: true},
+    publicMobile: {type: 'bool', optional: true},
+    publicDepart: {type: 'bool', optional: true},
+    publicPhone: {type: 'bool', optional: true},
+    publicEmail: {type: 'bool', optional: true},
+    publicAddress: {type: 'bool', optional: true},
+    publicWeChat: {type: 'bool', optional: true},
+    publicQQ: {type: 'bool', optional: true},
+    orgBeanId: {type: 'int', optional: true},
+    mute: {type: 'bool', optional: true}
   }
 };
 
@@ -87,15 +90,16 @@ let LoginUserInfoSchema = {
     jobTitle: {type: 'string', optional: true},
     phoneNumber: {type: 'string', optional: true},
     photoFileUrl: {type: 'string', optional: true},
-    publicTitle: {type: 'string', optional: true},
-    publicMobile: {type: 'string', optional: true},
-    publicDepart: {type: 'string', optional: true},
-    publicPhone: {type: 'string', optional: true},
-    publicEmail: {type: 'string', optional: true},
-    publicAddress: {type: 'string', optional: true},
-    publicWeChat: {type: 'string', optional: true},
-    publicQQ: {type: 'string', optional: true},
-    orgId: {type: 'int', optional: true},
+    publicTitle: {type: 'bool', optional: true},
+    publicMobile: {type: 'bool', optional: true},
+    publicDepart: {type: 'bool', optional: true},
+    publicPhone: {type: 'bool', optional: true},
+    publicEmail: {type: 'bool', optional: true},
+    publicAddress: {type: 'bool', optional: true},
+    publicWeChat: {type: 'bool', optional: true},
+    publicQQ: {type: 'bool', optional: true},
+    orgBeanId: {type: 'int', optional: true},
+    lastLoginTime:{type: 'date', optional: true},
     token: {type: 'string', optional: true}
   }
 };
@@ -106,8 +110,6 @@ let OrgBeanSchema = {
     id: {type: 'int', optional: true},
     corporationType: {type: 'string', optional: true},
     lastUpdateDate: {type: 'date', optional: true},
-    corporationType: {type: 'string', optional: true},
-    lastUpdateDate: {type: 'string', optional: true},
     orgCategory: {type: 'string', optional: true},
     orgCode: {type: 'string', optional: true},
     orgValue: {type: 'string', optional: true},
@@ -122,16 +124,72 @@ let OrgBeanSchema = {
     isDeleted: {type: 'bool', optional: true},
     isApply: {type: 'bool', optional: true},
     remark: {type: 'string', optional: true}
-
   }
 };
+
+let BizOrderCategorySchema = {
+  name: "bizOrderCategory",
+  primaryKey: 'displaySeq',
+  properties: {
+    displaySeq: {type: 'string', optional: true},
+    bizCategory: {type: 'string', optional: true},
+    bizCategoryDesc: {type: 'string', optional: true},
+    bizOrderItemBeans: {type: 'list', objectType: 'bizOrderItem'}
+  }
+};
+
+let BizOrderItemSchema = {
+  name: "bizOrderItem",
+  primaryKey: 'displaySeq',
+  properties: {
+    displaySeq: {type: 'string', optional: true},
+    bizItem: {type: 'string', optional: true},
+    bizItemDesc: {type: 'string', optional: true},
+  }
+};
+
+let MarketInfoSchema = {
+  name: "marketInfo",
+  primaryKey: 'id',
+  properties: {
+    id: {type: 'int', optional: true},
+    bizCategory: {type: 'string', optional: true},
+    bizCategoryDesc: {type: 'string', optional: true},
+    bizItem: {type: 'string', optional: true},
+    bizItemDesc: {type: 'string', optional: true},
+    bizOrientation: {type: 'string', optional: true},
+    bizOrientationDesc: {type: 'string', optional: true},
+    term: {type: 'int', optional: true},
+    amount: {type: 'int', optional: true},
+    rate: {type: 'double', optional: true},
+    status: {type: 'string', optional: true},
+    statusDesc: {type: 'string', optional: true},
+    lastModifyDate: {type: 'date', optional: true},
+    userId: {type: 'int', optional: true},
+    userName: {type: 'string', optional: true},
+    orgId: {type: 'int', optional: true},
+    orgName: {type: 'string', optional: true}
+  }
+};
+
 
 module.exports = {
   DeviceSchema: DeviceSchema,
   GroupSchema: GroupSchema,
   MessageSchema: MessageSchema,
-  UserInfoSchema: UserInfoSchema,
-  LoginUserInfoSchema:LoginUserInfoSchema,
-  OrgBeanSchema: OrgBeanSchema
-
+  ImUserInfoSchema: ImUserInfoSchema,
+  LoginUserInfoSchema: LoginUserInfoSchema,
+  OrgBeanSchema: OrgBeanSchema,
+  BizOrderCategorySchema: BizOrderCategorySchema,
+  BizOrderItemSchema: BizOrderItemSchema,
+  MarketInfoSchema: MarketInfoSchema,
+  DEVICE: 'device',
+  GROUP: 'group',
+  MESSAGE: 'message',
+  IMUSERINFO: 'imUserInfo',
+  LOGINUSERINFO: 'loginUserInfo',
+  ORGBEAN: 'orgBean',
+  BIZORDERCATEGORY: 'bizOrderCategory',
+  BIZORDERITEM: 'bizOrderItem',
+  MARKETINFO: 'marketInfo'
 };

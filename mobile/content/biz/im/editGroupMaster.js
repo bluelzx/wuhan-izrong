@@ -10,9 +10,9 @@ let GroupMembers = require('./groupMembers');
 let ModifyGroupName = require('./modifyGroupName');
 let AddMember = require('./addMember');
 let DeleteMember = require('./deleteMember');
+let CircularButton = require('./circularButton');
 let ContactStore = require('../../framework/store/contactStore');
 let DictIcon = require('../../constants/dictIcon');
-
 let MembersBar = require('./membersBar');
 
 let EditGroup = React.createClass({
@@ -22,6 +22,18 @@ let EditGroup = React.createClass({
       falseSwitchIsOn:false,
       groupInfo:ContactStore.getGroupDetailById(this.props.param.id)
     };
+  },
+
+  renderCircularButton: function () {
+
+    let btns = new Array();
+    btns.push(<CircularButton key="cir1" onPress={()=>this.props.navigator.push({comp:AddMember})}>
+      <Text style={{fontSize:20, color:'#F3AD2C',fontWeight:'bold'}}>+</Text>
+    </CircularButton>);
+    btns.push(<CircularButton key="cir2" onPress={()=>this.props.navigator.push({comp:DeleteMember})}>
+      <Text style={{fontSize:20, color:'#F3AD2C',fontWeight:'bold'}}>-</Text>
+    </CircularButton>);
+    return btns;
   },
 
   renderMember: function() {
@@ -56,16 +68,17 @@ let EditGroup = React.createClass({
               </View>
             </TouchableOpacity>
 
-            <View
+            <TouchableOpacity onPress={() => this.props.navigator.push({comp:ModifyGroupName})}
               style={{borderTopColor:'#132132',borderTopWidth:0.5,height:50,marginTop: 10,backgroundColor: '#15263A'}}>
               <View
                 style={{height:50,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center'}}>
                 <Text style={{color:'#ffffff'}}>群名称</Text>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
                   <Text style={{color:'#6B849C',marginRight:5}}>群名称</Text>
+                  <Icon name="ios-arrow-right" size={20} color='#ffffff'/>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
 
             <View
               style={{borderTopColor:'#132132',borderTopWidth:0.5,height:50,backgroundColor: '#15263A',flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
@@ -87,7 +100,7 @@ let EditGroup = React.createClass({
             <Button containerStyle={{padding:10, height:45,borderRadius:0, overflow:'hidden', backgroundColor: '#E8004D'}}
                     style={{fontSize: 18, color: '#ffffff'}}
             >
-              删除并退出该群
+              解散该群
             </Button>
 
           </View>
