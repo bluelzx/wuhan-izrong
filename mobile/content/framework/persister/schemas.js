@@ -6,9 +6,10 @@
 
 let DeviceSchema = {
   name: "device",
-  primaryKey: 'deviceOS',
+  primaryKey: 'id',
   properties: {
-    deviceOS: {type: 'string'},
+    id:{type: 'int', optional: true},
+    deviceOS: {type: 'string',optional: true},
     APNSToken: {type: 'string', optional: true}
   }
 };
@@ -17,7 +18,7 @@ let GroupSchema = {
   name: "group",
   primaryKey: 'groupId',
   properties: {
-    groupId: 'int',
+    groupId: {type: 'int', optional: true},
     groupName: {type: 'string', optional: true},
     groupMasterUid: {type: 'string', optional: true},
     memberNum: {type: 'int', optional: true},
@@ -39,12 +40,12 @@ let MessageSchema = {
     content: {type: 'string', optional: true},
     msgType: {type: 'string', optional: true},
     revTime: {type: 'date', optional: true},
-    isReaded:{type:'bool',option:true}
+    isRead: {type: 'bool', option: true}
   }
 };
 
 
-let UserInfoSchema = {
+let ImUserInfoSchema = {
   name: "userInfo",
   primaryKey: 'userId',
   properties: {
@@ -68,8 +69,8 @@ let UserInfoSchema = {
     publicAddress: {type: 'bool', optional: true},
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
-    orgId: {type: 'int', optional: true},
-    isMute: {type: 'bool', optional: true}
+    orgBeanId: {type: 'int', optional: true},
+    mute: {type: 'bool', optional: true}
   }
 };
 
@@ -160,9 +161,9 @@ let MarketInfoSchema = {
     term: {type: 'int', optional: true},
     amount: {type: 'int', optional: true},
     rate: {type: 'double', optional: true},
-    status:  {type: 'string', optional: true},
-    statusDesc:  {type: 'string', optional: true},
-    lastModifyDate:  {type: 'date', optional: true},
+    status: {type: 'string', optional: true},
+    statusDesc: {type: 'string', optional: true},
+    lastModifyDate: {type: 'date', optional: true},
     userId: {type: 'int', optional: true},
     userName: {type: 'string', optional: true},
     orgId: {type: 'int', optional: true},
@@ -175,20 +176,19 @@ module.exports = {
   DeviceSchema: DeviceSchema,
   GroupSchema: GroupSchema,
   MessageSchema: MessageSchema,
-  UserInfoSchema: UserInfoSchema,
+  ImUserInfoSchema: ImUserInfoSchema,
   LoginUserInfoSchema: LoginUserInfoSchema,
   OrgBeanSchema: OrgBeanSchema,
   BizOrderCategorySchema: BizOrderCategorySchema,
-  BizOrderItemSchema:BizOrderItemSchema,
-  MarketInfoSchema:MarketInfoSchema,
-  DEVICESCHEMA: 'device',
-  GROUPSCHEMA: 'group',
-  MESSAGESCHEMA: 'message',
-  USERINFOSCHEMA: 'userInfo',
-  LOGINUSERINFOSCHEMA: 'loginUserInfo',
-  ORGBEANSCHEMA: 'orgBean',
-  BIZORDERCATEGORY:'bizOrderCategory',
-  BIZORDERITEM:'bizOrderItem',
-  MARKETINFO:'marketInfo'
-
+  BizOrderItemSchema: BizOrderItemSchema,
+  MarketInfoSchema: MarketInfoSchema,
+  DEVICE: 'device',
+  GROUP: 'group',
+  MESSAGE: 'message',
+  IMUSERINFO: 'imUserInfo',
+  LOGINUSERINFO: 'loginUserInfo',
+  ORGBEAN: 'orgBean',
+  BIZORDERCATEGORY: 'bizOrderCategory',
+  BIZORDERITEM: 'bizOrderItem',
+  MARKETINFO: 'marketInfo'
 };

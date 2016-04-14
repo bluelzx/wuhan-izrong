@@ -29,7 +29,9 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getInitLoadingState: () => _info.initLoadingState,
   isLogout: () => _info.isLogout,
   isForceLogout: () => _info.isForceLogout,
+  saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
+  getAppToken:() => _getAppToken(),
   getToken: () => _data.token || '',
   getData: () => _data || {},
   appInit: () => _appInit(),
@@ -37,8 +39,6 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   login: (data) => _login(data),
   logout: () => _logout(),
   forceLogout: () => _force_logout(),
-  saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
-  getApnsToken: () => _get_apns_token(),
   pushNotification: (data) => _push_notification(data)
 });
 
@@ -94,8 +94,12 @@ let _save_apns_token = (apnsToken) => {
 };
 
 let _get_apns_token = () => {
-  return Persister.getAPNSToken((apnsToken)=> {return apnsToken;});
+  return Persister.getAPNSToken();
   console.log('APNSToken' + Persister.getAPNSToken());
+};
+
+let _getAppToken = () => {
+
 };
 
 let _push_notification = (data) => {
