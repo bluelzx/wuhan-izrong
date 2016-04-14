@@ -29,7 +29,19 @@ let Item = React.createClass({
     }
   },
 
+  renderArrow: function(showArrow){
+    if(showArrow){
+      return (
+        <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+      );
+    }else{
+      return null;
+    }
+
+  },
+
   render(){
+    let {showArrow=true} = this.props;
     return (
       <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={this.props.func}>
         <View>
@@ -39,8 +51,8 @@ let Item = React.createClass({
               <Text style={styles.title} numberOfLines={1}>{this.props.desc}</Text>
             </View>
             <View style={{flexDirection:'row',alignItems:'center'}}>
-              <Text style={[{fontSize: 15,color: '#162a40'}]}>{this.props.value}</Text>
-              <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+              <Text style={[{fontSize: 15,color: '#ffffff'},!this.props.showArrow && {marginRight:20}]}>{this.props.value}</Text>
+              {this.renderArrow(showArrow)}
             </View>
           </View>
           <View style={styles.bottomStyle}/>

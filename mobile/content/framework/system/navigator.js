@@ -143,9 +143,9 @@ var Main = React.createClass({
 
     var initComp = TabView;
     //var initComp = Chat;
-    if (!!this.state.token) {
-      initComp = Login;
-    }
+    //if (!!this.state.token) {
+    //  initComp = Login;
+    //}
     return (
       <View style={{ width: Device.width, height: Device.height }}>
         <StatusBar

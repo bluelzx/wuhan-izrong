@@ -34,7 +34,7 @@ let PersisterFacade = {
 console.log(Realm.defaultPath);
 let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, UserInfoSchema, LoginUserInfoSchema, OrgBeanSchema],
-  schemaVersion: 5
+  schemaVersion: 8
 });
 // Create Realm objects and write to local storage
 let _savaRegisterData = function(data){

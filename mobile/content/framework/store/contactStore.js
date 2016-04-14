@@ -1,6 +1,10 @@
 /**
  * Created by baoyinghai on 16/4/12.
  */
+
+let msgType = require('../../constants/wsMsgType');
+let contentType = require('../../constants/msgContentType');
+
 let _getContact = function(){
   //我的群
   //联系人按群组分类
@@ -110,51 +114,68 @@ let _getUsers = function() {
 }
 
 let _getIMNotificationMessage = function() {
-  let SpreadData = {
-    badge: 1,
-    title: '环渤海银银合作平台',
-    recTime: new Date(),
-    content: '尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'
+  let platformInfo = {
+    infoId:'i001',
+    title:'new11',
+    content:'new1',
+    badge:1,
+    createDate:new Date(),
+    msgType:msgType.PLATFORM_INFO
   };
+  //按照msgType 分两组, p2p 和 group, p2p 按照fromUid再分组,取组内最新的一条瓶装数据,并统计未读数量  ,最终结果再按照时间排序
   let MockData = [
     {
-      type: 'user',
-      userId: 2,
-      badge: 1,
-      title: '张缪缪',
-      recTime: new Date(),
-      content: '尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'
+      fromUid: 'u001',
+      badge:2,  //统计未读条数
+      realName:'user', //用户名
+      content: 'text message',
+      contentType: contentType.TEXT,
+      msgId: 'uuid',
+      sendDate: new Date(),
+      msgType: msgType.REC_P2P_MSG
     },
     {
-      type: 'user',
-      userId: 3,
-      badge: 2,
-      title: '吴某某',
-      recTime: new Date(),
-      content: '尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'
-    },
-    {
-      type: 'group',
-      groupId: 4,
-      ownerId: 0,
-      badge: 99,
-      title: '某群',
-      recTime: new Date(),
-      content: '尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'
+      fromUid: 'u001',
+      gid: 'g001',
+      badge:3,//统计未读条数
+      groupName:'group1', // 群组名字
+      groupOwnerId:3,   //群主
+      content: 'text',
+      contentType: contentType.TEXT,
+      msgId: 'uuid',
+      sendDate: new Date(),
+      msgType: msgType.REC_GROUP_MSG
     }
   ];
   return {
-    spreadNotice:SpreadData,  // 平台通知
-    notice:MockData           // 用户和群组的通知
+    platformInfo:platformInfo,  // 平台通知
+    msg:MockData           // 用户和群组的通知
   };
 }
 
 let _getUserInfoByUserId = function() {
   return {
-    "userId": 2,
-    type:'user',
-    "photoFileId": "test003",
-    "userName": "B吴"
+    address:'苏州',
+    realName:'user',
+    email:'user@amarsoft.com',
+    nameCardFileUrl:'http://',
+    department:'资管',
+    publicDepart:false,
+    jobTitle:'研发',
+    publicTitle:true,
+    mobileNumber:'156937232',
+    publicMobile:true,
+    phoneNumber:'0512-42424',
+    publicPhone:false,
+    publicEmail:false,
+    publicAddress:false,
+    publicWeChat:false,
+    photoFileUrl:'http://',
+    qqNo:'932424',
+    publicQQ:false,
+    weChatNo:'4252624',
+    userId:2,
+    orgName:'xxxx银行'
   };
 }
 

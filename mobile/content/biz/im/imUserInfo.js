@@ -17,21 +17,17 @@ let NavBarView = require('../../framework/system/navBarView');
 let Validation = require('../../comp/utils/validation');
 let Item = require('../../comp/utils/item');
 let Icon = require('react-native-vector-icons/Ionicons');
+let ContactStore = require('../../framework/store/contactStore');
 
 let ImUserInfo = React.createClass({
+
+
+  getStateFromStores: function() {
+    return ContactStore.getUserInfoByUserId();
+  },
+
   getInitialState: function () {
-    return {
-      switchOpen:true,
-      userName: "用户名",
-      mobile: '****',
-      telephoneNo: '****',
-      qqNo: '****',
-      wechatNo: '****',
-      email: '****',
-      organization: '****',
-      depart: '****',
-      jobTitle: '****'
-    }
+    return this.getStateFromStores();
   },
   componentDidMount() {
 
@@ -47,6 +43,7 @@ let ImUserInfo = React.createClass({
 
   render: function () {
     let {title}  = this.props;
+    let privateDesc = "未公开";
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='详细资料' showBack={true} showBar={true}>
@@ -56,27 +53,17 @@ let ImUserInfo = React.createClass({
                               onPress={()=>this.selectPhoto()}>
             <View style={styles.layout}>
               <Image style={styles.head} resizeMode="cover" source={require('../../image/user/head.png')}/>
-              <Text style={{color:'#ffffff',fontSize:18}}>张某某</Text>
-              <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+              <Text style={{color:'#ffffff',fontSize:18, marginRight:20}}>张某某</Text>
             </View>
           </TouchableHighlight>
-
-          <Item desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.mobile}/>
-
-          <Item desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.telephoneNo}/>
-
-          <Item desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.qqNo}/>
-
-          <Item desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.wechatNo}/>
-
-          <Item desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.email}/>
-
-          <Item style={{marginTop:20}} desc="机构:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.organization}/>
-
-          <Item desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.depart}/>
-
-          <Item desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.jobTitle}/>
-
+          <Item showArrow={false} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.publicMobile?this.state.mobileNumber:privateDesc}/>
+          <Item showArrow={false} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.publicPhone?this.state.phoneNumber:privateDesc}/>
+          <Item showArrow={false} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.publicQQ?this.state.qqNo:privateDesc}/>
+          <Item showArrow={false} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.publicWeChat?this.state.wechatNo:privateDesc}/>
+          <Item showArrow={false} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.publicEmail?this.state.email:privateDesc}/>
+          <Item showArrow={false} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.publicEmail?this.state.organization:privateDesc}/>
+          <Item showArrow={false} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.orgName}/>
+          <Item showArrow={false} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.publicTitle?this.state.jobTitle:privateDesc}/>
           <View style={{backgroundColor:'#162a40',height:50,marginTop:20}}>
             <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
               <Text style={{color: '#ffffff',fontSize:18,marginLeft:20}}>屏蔽此人</Text>
