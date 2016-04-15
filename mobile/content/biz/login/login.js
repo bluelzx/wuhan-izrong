@@ -15,10 +15,9 @@ let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Input = require('../../comp/utils/input');
-let {Button} = require('mx-artifacts');
+let {Alert,Button} = require('mx-artifacts');
 let Register_valiMobile = require('./registerValiMobile');
 let Login_ValiSMS = require('./loginValiSMS');
-let TabView = require('../../framework/system/tabView');
 
 let Login = React.createClass({
   getStateFromStores() {
@@ -62,8 +61,7 @@ let Login = React.createClass({
             }
           }
         }).catch((errorData) => {
-          //Alert(msg.msgContent);
-          throw errorData;
+          Alert(errorData.toString());
         });
       });
     }
@@ -116,7 +114,7 @@ let Login = React.createClass({
             containerStyle={{marginTop:20,backgroundColor:'#ffffff'}}
             style={{fontSize: 20, color: '#1151B1'}}
             styleDisabled={{color: 'red'}}
-            onPress={()=>this.toOther(TabView)}>
+            onPress={()=>this.toOther(Register_valiMobile)}>
             新用户注册
           </Button>
         </View>

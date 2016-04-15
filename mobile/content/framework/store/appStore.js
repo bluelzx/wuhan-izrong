@@ -38,7 +38,9 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   login: (data) => _login(data),
   logout: () => _logout(),
   forceLogout: () => _force_logout(),
-  getUserId:() => _getUserId()
+  getUserId:() => _getUserId(),
+  getLoginUserInfo:() => _getLoginUserInfo(),
+  getOrgByOrgId:(orgId) => _getOrgByOrgId(orgId)
 });
 
 // Private Functions
@@ -104,4 +106,11 @@ let _getUserId = ()=> {
   return Persister.getUserId();
 };
 
+let _getLoginUserInfo =() => {
+  return  Persister.getLoginUserInfo();
+};
+
+let _getOrgByOrgId =(orgId)=>{
+  return Persister.getOrgByOrgId(orgId);
+};
 module.exports = AppStore;

@@ -133,7 +133,7 @@ var Main = React.createClass({
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#FFFFFF',
+            backgroundColor: '#FFFFFF'
           }}
         >
           <Text>数据加载中,请稍后...</Text>
