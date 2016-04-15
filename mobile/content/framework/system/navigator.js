@@ -141,10 +141,11 @@ var Main = React.createClass({
       );
     }
 
-    var initComp = TabView;
+    var initComp = Login;
     //var initComp = Chat;
-    if (!!this.state.token) {
-      initComp = Login;
+    if (this.state.token) {
+      initComp = TabView;
+      AppAction.imInit();
     }
     return (
       <View style={{ width: Device.width, height: Device.height }}>

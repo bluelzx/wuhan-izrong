@@ -13,7 +13,7 @@ let IM = require('../system/im');
 
 // Private Functions
 let _appInit = function() {
-  IM.init();
+  //IM.init();
   AppStore.appInit();
 };
 let _notificationRegister = function(token) {
@@ -32,6 +32,7 @@ let _onNotification = function(notification) {
 
 let AppActions = {
   appInit: () => _appInit(),
+  imInit: () => new IM().init(),
   notificationRegister: (token) => _notificationRegister(token),
   onNotification: (notification) => _onNotification(notification),
   freshNotification: (notification) => _onNotification(notification),
