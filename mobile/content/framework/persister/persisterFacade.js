@@ -47,6 +47,7 @@ let _saveAppData = function (data) {
   let bizOrderCategoryBeanList = data.bizOrderCategoryBeanList;
   let imUserBeanList = data.imUserBeanList;
   _saveLoginUserInfo(data);
+  _saveImUsers();
   _saveOrgBean(orgBeanSet);
 };
 
