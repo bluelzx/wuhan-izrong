@@ -34,12 +34,12 @@ let Item = React.createClass({
       <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={this.props.func}>
         <View>
           <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
-            <View style={{flex:1,flexDirection:'row'}}>
+            <View style={{flexDirection:'row',backgroundColor:'#162a40',flex:1}}>
               {this.returnImg()}
-              <Text style={styles.title} numberOfLines={1}>{this.props.desc}</Text>
+              <Text style={styles.title}>{this.props.desc}</Text>
             </View>
-            <View style={{flexDirection:'row',alignItems:'center'}}>
-              <Text style={[{fontSize: 15,color: '#162a40'}]}>{this.props.value}</Text>
+            <View style={{flexDirection:'row',alignItems:'center',flex:1,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
+              <Text style={[{fontSize: 15,color: '#ffffff',width:140}]}  numberOfLines={1}>{this.props.value}</Text>
               <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
             </View>
           </View>
@@ -48,10 +48,10 @@ let Item = React.createClass({
       </TouchableHighlight>
     )
   }
-})
+});
 let styles = StyleSheet.create({
   borderTop: {
-    borderTopWidth: 1,
+    borderTopWidth: 1
   },
   listLayout: {
     flexDirection: 'row',
@@ -78,6 +78,5 @@ let styles = StyleSheet.create({
     backgroundColor: '#0a1926',
     marginLeft:20
   }
-
-})
+});
 module.exports = Item;

@@ -30,16 +30,16 @@ let PersisterFacade = {
   getAPNSToken: () => _getAPNSToken(),
   getToken: ()=> _getToken(),
   clearToken: () => _clearToken(),
-  getUserId:()=> _getUserId(),
-
+  getLoginUserInfo: ()=> _getLoginUserInfo(),
+  getOrgByOrgId:(orgId)=> _getOrgByOrgId(orgId),
   //interface for ContactStore
-  getContact:()=>_getContact(),
+  getContact: ()=>_getContact(),
   _getIMNotificationMessage: ()=>_getIMNotificationMessage(),
-  getUsers:()=>_getUsers(),
-  getUserInfoByUserId:(userId)=>_getUserInfoByUserId(userId),
-  getGroupDetailById:(groupId)=>_getGroupDetailById(groupId),
-
-  getUsersExpress:()=> _getUsersExpress()
+  getUsers: ()=>_getUsers(),
+  getUserInfoByUserId: (userId)=>_getUserInfoByUserId(userId),
+  getGroupDetailById: (groupId)=>_getGroupDetailById(groupId),
+  getUsersExpress: ()=> _getUsersExpress(),
+  saveOrgBeanSet: () => _saveOrgBeanSet()
 };
 
 console.log(Realm.defaultPath);
@@ -58,7 +58,8 @@ let _saveAppData = function (data) {
   let imUserBeanList = data.imUserBeanList;
   _saveLoginUserInfo(data);
   _saveImUsers();
-  _saveOrgBean(orgBeanSet);
+  _saveOrgBeanSet();
+  //_saveOrgBean(orgBeanSet);
 };
 
 let _saveLoginUserInfo = function (data) {
@@ -79,46 +80,125 @@ let _saveLoginUserInfo = function (data) {
       photoFileUrl: loginUserInfo.photoFileUrl,
       orgBeanId: loginUserInfo.orgBeanId,
       token: data.appToken,
-      lastLoginTime:new Date(),
-      publicTitle: _.isEmpty(loginUserInfo.publicTitle)? true : loginUserInfo.publicTitle,
-      publicMobile: _.isEmpty(loginUserInfo.publicMobile)? true : loginUserInfo.publicMobile,
-      publicDepart: _.isEmpty(loginUserInfo.publicDepart)? true : loginUserInfo.publicDepart,
-      publicPhone: _.isEmpty(loginUserInfo.publicPhone)? true : loginUserInfo.publicPhone,
-      publicEmail: _.isEmpty(!loginUserInfo.publicEmail)? true : loginUserInfo.publicEmail,
-      publicAddress: _.isEmpty(loginUserInfo.publicAddress)? true : loginUserInfo.publicAddress,
-      publicWeChat: _.isEmpty(loginUserInfo.publicWeChat)? true : loginUserInfo.publicWeChat,
-      publicQQ: _.isEmpty(loginUserInfo.publicQQ)? true : loginUserInfo.publicQQ
-    },true);
+      lastLoginTime: new Date(),
+      publicTitle: _.isEmpty(loginUserInfo.publicTitle) ? true : loginUserInfo.publicTitle,
+      publicMobile: _.isEmpty(loginUserInfo.publicMobile) ? true : loginUserInfo.publicMobile,
+      publicDepart: _.isEmpty(loginUserInfo.publicDepart) ? true : loginUserInfo.publicDepart,
+      publicPhone: _.isEmpty(loginUserInfo.publicPhone) ? true : loginUserInfo.publicPhone,
+      publicEmail: _.isEmpty(!loginUserInfo.publicEmail) ? true : loginUserInfo.publicEmail,
+      publicAddress: _.isEmpty(loginUserInfo.publicAddress) ? true : loginUserInfo.publicAddress,
+      publicWeChat: _.isEmpty(loginUserInfo.publicWeChat) ? true : loginUserInfo.publicWeChat,
+      publicQQ: _.isEmpty(loginUserInfo.publicQQ) ? true : loginUserInfo.publicQQ
+    }, true);
   });
 };
 
-let _saveImUsers = function (imUserBeanList) {
-  console.log(imUserBeanList);
-  _([1, 2]).forEach(function(n) {
-    console.log(n);
-  }).value();
+let _saveImUsers = function () {
+
 };
 
-let _saveOrgBean = function (orgBeanSet) {
+let _saveOrgBeanSet = function(){
+  let mockOrgBeanSet = [
+    {
+      corporationType: "INDEPENDENT",
+      creator: null,
+      creatorDate: null,
+      id: 1,
+      isApply: null,
+      isDeleted: null,
+      isDisabled: false,
+      isNeedAudit: null,
+      lastUpdateBy: null,
+      lastUpdateDate: null,
+      occupiedQuota: 2,
+      orgCategory: "BANK",
+      orgCode: "21556211-2",
+      orgValue: "天津银行无锡分行天津银行无锡分行无锡分行",
+      orgValueAlias: null,
+      remark: null,
+      totalQuota: 5
+    }, {
+      corporationType: "INDEPENDENT",
+      creator: null,
+      creatorDate: null,
+      id: 2,
+      isApply: null,
+      isDeleted: null,
+      isDisabled: false,
+      isNeedAudit: null,
+      lastUpdateBy: null,
+      lastUpdateDate: null,
+      occupiedQuota: 2,
+      orgCategory: "BANK",
+      orgCode: "21556211-2",
+      orgValue: "天津银行无锡分行天津银行无锡分行无锡分行",
+      orgValueAlias: null,
+      remark: null,
+      totalQuota: 5
+    }, {
+      corporationType: "INDEPENDENT",
+      creator: null,
+      creatorDate: null,
+      id: 3,
+      isApply: null,
+      isDeleted: null,
+      isDisabled: false,
+      isNeedAudit: null,
+      lastUpdateBy: null,
+      lastUpdateDate: null,
+      occupiedQuota: 2,
+      orgCategory: "BANK",
+      orgCode: "21556211-2",
+      orgValue: "天津银行无锡分行天津银行无锡分行无锡分行",
+      orgValueAlias: null,
+      remark: null,
+      totalQuota: 5
+    }, {
+      corporationType: "INDEPENDENT",
+      creator: null,
+      creatorDate: null,
+      id: 4,
+      isApply: null,
+      isDeleted: null,
+      isDisabled: false,
+      isNeedAudit: null,
+      lastUpdateBy: null,
+      lastUpdateDate: null,
+      occupiedQuota: 2,
+      orgCategory: "BANK",
+      orgCode: "21556211-2",
+      orgValue: "天津银行无锡分行天津银行无锡分行无锡分行",
+      orgValueAlias: null,
+      remark: null,
+      totalQuota: 5
+    }
+  ];
+  mockOrgBeanSet.forEach(function(n){
+    console.log(n);
+    _saveOrgBeanItem(n);
+  });
+};
+
+let _saveOrgBeanItem = function (orgBean) {
   _realm.write(() => {
     _realm.create(ORGBEAN, {
-      id: orgBeanSet.orgBeanId,
-      orgCategory: orgBeanSet.orgCategory,
-      orgCode: orgBeanSet.orgCode,
-      orgValue: orgBeanSet.orgValue,
-      corporationType: orgBeanSet.corporationType,
-      orgValueAlias: orgBeanSet.orgValueAlias,
-      isDisabled: orgBeanSet.isDisabled,
-      creator: orgBeanSet.creator,
-      creatorDate: orgBeanSet.creatorDate,
-      lastUpdateBy: orgBeanSet.lastUpdateBy,
-      lastUpdateDate: orgBeanSet.lastUpdateDate,
-      isNeedAudit: orgBeanSet.isNeedAudit,
-      totalQuota: orgBeanSet.totalQuota,
-      occupiedQuota: orgBeanSet.occupiedQuota,
-      isDeleted: orgBeanSet.isDeleted,
-      isApply: orgBeanSet.isApply,
-      remark: orgBeanSet.remark
+      id: Number(orgBean.id),
+      orgCategory: orgBean.orgCategory,
+      orgCode: orgBean.orgCode,
+      orgValue: orgBean.orgValue,
+      corporationType: orgBean.corporationType,
+      orgValueAlias: orgBean.orgValueAlias,
+      isDisabled: orgBean.isDisabled,
+      creator: orgBean.creator,
+      creatorDate: orgBean.creatorDate,
+      lastUpdateBy: orgBean.lastUpdateBy,
+      lastUpdateDate: orgBean.lastUpdateDate,
+      isNeedAudit: orgBean.isNeedAudit,
+      totalQuota: Number(orgBean.id),
+      occupiedQuota: Number(orgBean.id),
+      isDeleted: orgBean.isDeleted,
+      isApply: orgBean.isApply,
+      remark: orgBean.remark
     }, true);
   });
 };
@@ -128,64 +208,83 @@ let _getAPNSToken = function () {
     _realm.create(DEVICE, {
       id: 1,
       deviceOS: 'IOS',
-      APNSToken:'asdfghjklzxcvbnm'
+      APNSToken: 'asdfghjklzxcvbnm'
     }, true);
   });
   let device = _realm.objects(DEVICE);
 
-  return device[0].APNSToken ;
+  return device[0].APNSToken;
 };
 
 let _saveAPNSToken = function (apnsToken) {
- _realm.write(()=>{
-   _realm.create(DEVICE, {
-     id: 1,
-     deviceOS:Platform.OS,
-     APNSToken:apnsToken
-   }, true);
- });
+  _realm.write(()=> {
+    _realm.create(DEVICE, {
+      id: 1,
+      deviceOS: Platform.OS,
+      APNSToken: apnsToken
+    }, true);
+  });
 };
 
-let _getToken = function(){
+let _getToken = function () {
   let loginUsers = _realm.objects(LOGINUSERINFO);
-  return loginUsers[0].token;
+  if (loginUsers.length != 0) {
+    if (loginUsers[0].token) {
+      return loginUsers[0].token;
+    }
+  }
+  return '';
 };
 
 let _clearToken = function () {
   _realm.write(() => {
     _realm.create(LOGINUSERINFO, {
-      token:''
-    },true);
+      token: ''
+    }, true);
   });
 };
 
-let _getUserId = function(){
+let _getLoginUserInfo = function () {
   let loginUsers = _realm.objects(LOGINUSERINFO);
-  return loginUsers[0].userId;
+  if (loginUsers.length != 0) {
+    let sortedUser = loginUsers.sorted('lastLoginTime', [true]);
+    return sortedUser[0];
+  }else{
+    return '';
+  }
 };
 
-let _getContact = function(){
+let _getOrgByOrgId = function(orgId){
+  let orgBeans = _realm.objects(ORGBEAN);
+  if (orgBeans.isEmpty){
+    return null;
+  }else {
+    return  orgBeans.filtered('id='+orgId)[0];
+  }
+};
+
+let _getContact = function () {
 
 };
 
-let _getUsers = function(){
+let _getUsers = function () {
 
 };
 
-let _getUserInfoByUserId = function(userId){
+let _getUserInfoByUserId = function (userId) {
   let imUsers = _realm.objects(IMUSERINFO);
-  return imUsers.filtered('"userId" = '+userId);
+  return imUsers.filtered('"userId" = ' + userId);
 };
 
-let _getGroupDetailById = function(groupId){
-
-};
-
-let  _getIMNotificationMessage = function(){
+let _getGroupDetailById = function (groupId) {
 
 };
 
-let _getUsersExpress = function(){
+let _getIMNotificationMessage = function () {
+
+};
+
+let _getUsersExpress = function () {
 
 };
 

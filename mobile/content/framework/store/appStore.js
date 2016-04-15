@@ -14,6 +14,7 @@ let _info = {
   isForceLogout: false
 };
 
+let _data = {};
 
 let AppStore = _.assign({}, EventEmitter.prototype, {
   addChangeListener: function (callback, event = _info.CHANGE_EVENT) {
@@ -31,13 +32,15 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   isForceLogout: () => _info.isForceLogout,
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
-  getToken: () => _getToken || '',
+  getToken: () => _data.token || '',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),
   logout: () => _logout(),
   forceLogout: () => _force_logout(),
-  getUserId:() => _getUserId()
+  getUserId:() => _getUserId(),
+  getLoginUserInfo:() => _getLoginUserInfo(),
+  getOrgByOrgId:(orgId) => _getOrgByOrgId(orgId)
 });
 
 // Private Functions
@@ -56,6 +59,9 @@ let _appInit = () => {
     }
   );
   _info.initLoadingState = false;
+  _.assign(_data, {
+    token: _getToken()
+  });
   AppStore.emitChange();
 };
 
@@ -100,4 +106,11 @@ let _getUserId = ()=> {
   return Persister.getUserId();
 };
 
+let _getLoginUserInfo =() => {
+  return  Persister.getLoginUserInfo();
+};
+
+let _getOrgByOrgId =(orgId)=>{
+  return Persister.getOrgByOrgId(orgId);
+};
 module.exports = AppStore;

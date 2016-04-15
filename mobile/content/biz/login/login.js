@@ -15,7 +15,7 @@ let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Input = require('../../comp/utils/input');
-let {Button} = require('mx-artifacts');
+let {Alert,Button} = require('mx-artifacts');
 let Register_valiMobile = require('./registerValiMobile');
 let Login_ValiSMS = require('./loginValiSMS');
 
@@ -61,8 +61,7 @@ let Login = React.createClass({
             }
           }
         }).catch((errorData) => {
-          //Alert(msg.msgContent);
-          throw errorData;
+          Alert(errorData.toString());
         });
       });
     }
