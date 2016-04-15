@@ -119,7 +119,7 @@ let Login = React.createClass({
             新用户注册
           </Button>
         </View>
-        <View style={{flexDirection:'column',justifyContent:'flex-end'}}>
+        <View style={{flexDirection:'column',marginTop:30}}>
           <View style={{flexDirection:'row',justifyContent:'center',marginBottom:30}}>
             <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服:</Text>
             <Text style={{fontSize: 16, color: '#ffffff',textDecorationLine:'underline'}}>021-35885888</Text>

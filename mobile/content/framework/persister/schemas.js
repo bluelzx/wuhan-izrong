@@ -22,7 +22,7 @@ let GroupSchema = {
     groupName: {type: 'string', optional: true},
     groupMasterUid: {type: 'string', optional: true},
     memberNum: {type: 'int', optional: true},
-    members: {type: 'list', objectType: 'userInfo'},
+    members: {type: 'list', objectType: 'imUserInfo'},
     mute: {type: 'bool', optional: true}
   }
 };

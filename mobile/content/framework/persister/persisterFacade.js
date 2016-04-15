@@ -47,7 +47,7 @@ let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema,
     LoginUserInfoSchema, OrgBeanSchema, BizOrderCategorySchema,
     BizOrderItemSchema, MarketInfoSchema],
-  schemaVersion: 1
+  schemaVersion: 3
 });
 // Create Realm objects and write to local storage
 let _saveAppData = function (data) {
