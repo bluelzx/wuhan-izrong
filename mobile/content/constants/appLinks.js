@@ -23,9 +23,14 @@ let AppLinks = {
   uploadFile: pub + '/File/upload',
   updateUserInfo: api + '/Account/updateUserInfo',
   getOrgList: pub + '/getOrgList/',
+
   bizOrderMarketSearchDefaultSearch: api + '/BizOrderMarketSearch/defaultSearch',
   bizOrderMarketSearchsearch: api + '/BizOrderMarketSearch/search',
   getBizOrderInMarket: api + 'BizOrderManage/getBizOrderInMarket',
+  addBizOrder: api + 'BizOrderManage/addBizOrder',
+  downselfBizOrder: api + 'BizOrderManage/downselfBizOrder',
+  updateBizOrder: api + 'BizOrderManage/updateBizOrder',
+  getBizOrderCategoryAndItem : api + 'BizOrderManage/getBizOrderCategoryAndItem',
 };
 
 module.exports = AppLinks;

@@ -25,7 +25,9 @@ var RadioControl = require('./radioControl');
 var MarketList = require('./marketList');
 var SelectOrg = require('./selectOrg');
 let Icon = require('react-native-vector-icons/Ionicons');
+
 let MarketAction = require('../../framework/action/marketAction');
+var MarketStore = require('../../framework/store/marketStore');
 
 var data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var WhitePage = React.createClass({
@@ -45,11 +47,14 @@ var WhitePage = React.createClass({
       pickTypeRow2: 0,
       pickTimeRow: 0,
       pickRowColor: '#244266',
+
     }
   },
 
   componentWillMount: function () {
-    {this.bizOrderMarketSearchDefaultSearch()}
+    //{this.bizOrderMarketSearchDefaultSearch()};
+    //{this.bizOrderMarketSearchsearch()}
+    MarketStore.getCategory(MarketStore.getMarketData().filterItems);
   },
 
   render: function () {
@@ -115,7 +120,9 @@ var WhitePage = React.createClass({
       pickTypeRow2: rowId,
       levelTwoText: this.state.dataSource2[rowId],
     })
-    {this.refs['MARKETLIST']._changeData()}
+    {
+      this.refs['MARKETLIST']._changeData()
+    }
   },
   pressTimeRow(rowId){
     this.setState({
@@ -179,17 +186,14 @@ var WhitePage = React.createClass({
               style={{flex: 1, backgroundColor: 'black',opacity:0.2,height:screenHeight,width:screenWidth}}>
             </View>
           </TouchableOpacity>
-          <ListView style={{height:180,position:"absolute",left:0,top:0,opacity:this.state.clickFilterType}}
-                    dataSource={data.cloneWithRows(this.state.dataSource)}
-                    renderRow={this.renderTypeRow1}
-                    scrollEnabled={false}
-          />
+          <ListView
+            style={{backgroundColor:'#162a40',height:180,position:"absolute",left:0,top:0,opacity:this.state.clickFilterType}}
+            dataSource={data.cloneWithRows(this.state.dataSource)}
+            renderRow={this.renderTypeRow1}/>
           <ListView
             style={{backgroundColor:'#244266',height:180,position:"absolute",left:screenWidth/3,top:0,opacity:this.state.clickFilterType}}
             dataSource={data.cloneWithRows(this.state.dataSource2)}
-            renderRow={this.renderTypeRow2}
-            scrollEnabled={false}
-          />
+            renderRow={this.renderTypeRow2}/>
         </View>
       )
     }
@@ -208,10 +212,9 @@ var WhitePage = React.createClass({
             </View>
           </TouchableOpacity>
           <ListView
-            style={{height:108,position:"absolute",left:0,top:0,opacity:this.state.clickFilterTime}}
+            style={{backgroundColor:'#244266',height:108,position:"absolute",left:0,top:0,opacity:this.state.clickFilterTime}}
             dataSource={data.cloneWithRows(this.state.dataSource3)}
             renderRow={this.renderTimeRow}
-            scrollEnabled={false}
           />
         </View>
       )
@@ -294,13 +297,17 @@ var WhitePage = React.createClass({
       navigator.push({comp: name})
     }
   },
+
+  changeFilterConditions: function () {
+
+  },
   bizOrderMarketSearchDefaultSearch: function () {
     this.props.exec(
       ()=> {
         return MarketAction.bizOrderMarketSearchDefaultSearch(
         ).then((response)=> {
           var arr = new Array();
-          arr = (JSON.stringify(response.pageResult.contentList));
+          arr = (JSON.stringify(response));
           console.log(arr);
         }).catch(
           (errorData) => {
@@ -314,10 +321,29 @@ var WhitePage = React.createClass({
   bizOrderMarketSearchsearch: function () {
     this.props.exec(
       ()=> {
-        return MarketAction.bizOrderMarketSearchsearch(
+        return MarketAction.bizOrderMarketSearchsearch({
+            orderField: 'lastModifyDate',
+            orderType: 'desc',
+            //filterList: [243, 251],
+            pageIndex: 1,
+
+            custFilterList: {
+              bizCategory: {
+                values: ['MCA'],
+                opt: 'Eq',
+                filedName: 'bizCategory',
+                valueType: 'String'
+              },
+              bizItem: {
+                values: ['MCA_ABS'],
+                opt: 'Eq',
+                filedName: 'bizItem',
+                valueType: 'String'
+              }
+            }
+
+          }
         ).then((response)=> {
-          var arr = new Array();
-          arr = (JSON.stringify(response.pageResult.contentList));
           console.log(JSON.stringify(response));
         }).catch(
           (errorData) => {
