@@ -117,9 +117,9 @@ var Main = React.createClass({
   _renderScene: function (route, navigator) {
     this._navigator = navigator;
     var Comp = route.comp;
-    //if (Comp == 'tabView') {
-    //  Comp = TabView;
-    //}
+    if (Comp == 'tabView') {
+      Comp = TabView;
+    }
     navigator.cur = Comp;
     return (
       <Comp param={route.param} navigator={navigator} callback={route.callBack} exec={this._exec}/>
@@ -143,7 +143,7 @@ var Main = React.createClass({
 
     var initComp = TabView;
     //var initComp = Chat;
-    if (!!this.state.token) {
+    if (this.state.token == '') {
       initComp = Login;
     }
     return (

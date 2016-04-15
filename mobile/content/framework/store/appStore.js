@@ -14,6 +14,7 @@ let _info = {
   isForceLogout: false
 };
 
+let _data = {};
 
 let AppStore = _.assign({}, EventEmitter.prototype, {
   addChangeListener: function (callback, event = _info.CHANGE_EVENT) {
@@ -31,7 +32,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   isForceLogout: () => _info.isForceLogout,
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
-  getToken: () => _getToken || '',
+  getToken: () => _data.token || '',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),
@@ -56,6 +57,9 @@ let _appInit = () => {
     }
   );
   _info.initLoadingState = false;
+  _.assign(_data, {
+    token: _getToken()
+  });
   AppStore.emitChange();
 };
 

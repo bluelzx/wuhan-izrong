@@ -57,8 +57,8 @@ let _saveAppData = function (data) {
   let bizOrderCategoryBeanList = data.bizOrderCategoryBeanList;
   let imUserBeanList = data.imUserBeanList;
   _saveLoginUserInfo(data);
-  _saveImUsers();
-  _saveOrgBean(orgBeanSet);
+  //_saveImUsers();
+  //_saveOrgBean(orgBeanSet);
 };
 
 let _saveLoginUserInfo = function (data) {
@@ -148,7 +148,16 @@ let _saveAPNSToken = function (apnsToken) {
 
 let _getToken = function(){
   let loginUsers = _realm.objects(LOGINUSERINFO);
-  return loginUsers[0].token;
+  if (loginUsers.length != 0){
+    if (_.isElement(loginUsers[0].token)){
+      return loginUsers[0].token;
+    }else{
+      return '';
+    }
+  }else{
+    return '';
+  }
+
 };
 
 let _clearToken = function () {

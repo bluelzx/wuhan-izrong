@@ -18,6 +18,7 @@ let Input = require('../../comp/utils/input');
 let {Button} = require('mx-artifacts');
 let Register_valiMobile = require('./registerValiMobile');
 let Login_ValiSMS = require('./loginValiSMS');
+let TabView = require('../../framework/system/tabView');
 
 let Login = React.createClass({
   getStateFromStores() {
@@ -115,7 +116,7 @@ let Login = React.createClass({
             containerStyle={{marginTop:20,backgroundColor:'#ffffff'}}
             style={{fontSize: 20, color: '#1151B1'}}
             styleDisabled={{color: 'red'}}
-            onPress={()=>this.toOther(Register_valiMobile)}>
+            onPress={()=>this.toOther(TabView)}>
             新用户注册
           </Button>
         </View>
