@@ -56,7 +56,10 @@ let ValiSMS = React.createClass({
         }).then((response) => {
           const { navigator } = this.props;
           if (navigator) {
-              navigator.popToTop();
+             // navigator.popToTop();
+            this.props.navigator.push({
+              comp: 'tabView'
+            });
           }
         }).catch((errorData) => {
           throw errorData;

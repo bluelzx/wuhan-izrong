@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const Realm = require('realm');
 const SCHEMA_KEY = '@realm:schema';
+let React = require('react-native');
 const {
   DeviceSchema,
   GroupSchema,
@@ -23,12 +24,22 @@ const {
   } = require('./schemas');
 let {Platform} = React;
 let PersisterFacade = {
-  getAppData: (cb) => _getAppData(cb),
+  //interface for AppStore
   saveAppData: (data) => _saveAppData(data),
-  clearToken: () => _clearToken(),
   saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
   getAPNSToken: () => _getAPNSToken(),
-  getToken: ()=> _getToken()
+  getToken: ()=> _getToken(),
+  clearToken: () => _clearToken(),
+  getUserId:()=> _getUserId(),
+
+  //interface for ContactStore
+  getContact:()=>_getContact(),
+  _getIMNotificationMessage: ()=>_getIMNotificationMessage(),
+  getUsers:()=>_getUsers(),
+  getUserInfoByUserId:(userId)=>_getUserInfoByUserId(userId),
+  getGroupDetailById:(groupId)=>_getGroupDetailById(groupId),
+
+  getUsersExpress:()=> _getUsersExpress()
 };
 
 console.log(Realm.defaultPath);
@@ -36,7 +47,7 @@ let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema,
     LoginUserInfoSchema, OrgBeanSchema, BizOrderCategorySchema,
     BizOrderItemSchema, MarketInfoSchema],
-  schemaVersion: 1
+  schemaVersion: 3
 });
 // Create Realm objects and write to local storage
 let _saveAppData = function (data) {
@@ -46,7 +57,8 @@ let _saveAppData = function (data) {
   let bizOrderCategoryBeanList = data.bizOrderCategoryBeanList;
   let imUserBeanList = data.imUserBeanList;
   _saveLoginUserInfo(data);
-  _saveOrgBean(orgBeanSet);
+  //_saveImUsers();
+  //_saveOrgBean(orgBeanSet);
 };
 
 let _saveLoginUserInfo = function (data) {
@@ -87,7 +99,7 @@ let _saveImUsers = function (imUserBeanList) {
   }).value();
 };
 
-let _saveOrgBean = function (imUserBeanList) {
+let _saveOrgBean = function (orgBeanSet) {
   _realm.write(() => {
     _realm.create(ORGBEAN, {
       id: orgBeanSet.orgBeanId,
@@ -112,7 +124,15 @@ let _saveOrgBean = function (imUserBeanList) {
 };
 
 let _getAPNSToken = function () {
+  _realm.write(() => {
+    _realm.create(DEVICE, {
+      id: 1,
+      deviceOS: 'IOS',
+      APNSToken:'asdfghjklzxcvbnm'
+    }, true);
+  });
   let device = _realm.objects(DEVICE);
+
   return device[0].APNSToken ;
 };
 
@@ -128,18 +148,54 @@ let _saveAPNSToken = function (apnsToken) {
 
 let _getToken = function(){
   let loginUsers = _realm.objects(LOGINUSERINFO);
+  if (loginUsers.length != 0){
+    if (_.isElement(loginUsers[0].token)){
+      return loginUsers[0].token;
+    }else{
+      return '';
+    }
+  }else{
+    return '';
+  }
 
 };
 
 let _clearToken = function () {
+  _realm.write(() => {
+    _realm.create(LOGINUSERINFO, {
+      token:''
+    },true);
+  });
+};
+
+let _getUserId = function(){
+  let loginUsers = _realm.objects(LOGINUSERINFO);
+  return loginUsers[0].userId;
+};
+
+let _getContact = function(){
 
 };
 
+let _getUsers = function(){
 
-let _getAppData = function (cb) {
-  //let data = _realm.objects(SCHEMA_KEY)[0];
-  //if (cb)cb(data);
-  if (cb)cb(_persister);
+};
+
+let _getUserInfoByUserId = function(userId){
+  let imUsers = _realm.objects(IMUSERINFO);
+  return imUsers.filtered('"userId" = '+userId);
+};
+
+let _getGroupDetailById = function(groupId){
+
+};
+
+let  _getIMNotificationMessage = function(){
+
+};
+
+let _getUsersExpress = function(){
+
 };
 
 module.exports = PersisterFacade;

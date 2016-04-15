@@ -13,6 +13,7 @@ let _info = {
   isLogout: false,
   isForceLogout: false
 };
+
 let _data = {};
 
 let AppStore = _.assign({}, EventEmitter.prototype, {
@@ -31,14 +32,13 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   isForceLogout: () => _info.isForceLogout,
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
-  getToken: () => _getToken || '',
-  getData: () => _data || {},
+  getToken: () => _data.token || '',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),
   logout: () => _logout(),
   forceLogout: () => _force_logout(),
-  pushNotification: (data) => _push_notification(data)
+  getUserId:() => _getUserId()
 });
 
 // Private Functions
@@ -57,6 +57,9 @@ let _appInit = () => {
     }
   );
   _info.initLoadingState = false;
+  _.assign(_data, {
+    token: _getToken()
+  });
   AppStore.emitChange();
 };
 
@@ -68,18 +71,15 @@ let _register = (data) => {
 let _login = (data) => {
   Persister.saveAppData(data);
   AppStore.emitChange();
-
 };
 
 let _logout = () => {
-  _data.token = null;
   Persister.clearToken();
   _info.isLogout = true;
   AppStore.emitChange();
 };
 
 let _force_logout = () => {
-  _data.token = null;
   Persister.clearToken();
   _info.isLogout = true;
   _info.isForceLogout = true;
@@ -89,6 +89,7 @@ let _force_logout = () => {
 let _save_apns_token = (apnsToken) => {
   Persister.saveAPNSToken(apnsToken);
   console.log('APNSToken' + apnsToken);
+  AppStore.emitChange();
 };
 
 let _get_apns_token = () => {
@@ -99,8 +100,8 @@ let _getToken = () => {
   return Persister.getToken();
 };
 
-let _push_notification = (data) => {
-  // _freshMessageData(action.data);
+let _getUserId = ()=> {
+  return Persister.getUserId();
 };
 
 module.exports = AppStore;

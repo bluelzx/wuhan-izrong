@@ -23,9 +23,7 @@ let _getContact = function(){
       ]
     }
   ].concat(_getUsers());
-
-
-}
+};
 
 let _getUsers = function() {
 
@@ -107,7 +105,7 @@ let _getUsers = function() {
       ]
     }
   ];
-}
+};
 
 let _getIMNotificationMessage = function() {
   let SpreadData = {
@@ -147,7 +145,7 @@ let _getIMNotificationMessage = function() {
     spreadNotice:SpreadData,  // 平台通知
     notice:MockData           // 用户和群组的通知
   };
-}
+};
 
 let _getUserInfoByUserId = function() {
   return {
@@ -156,7 +154,7 @@ let _getUserInfoByUserId = function() {
     "photoFileId": "test003",
     "userName": "B吴"
   };
-}
+};
 
 let _getGroupDetailById = function() {
   return {
@@ -191,7 +189,7 @@ let _getGroupDetailById = function() {
       }
     ]
   };
-}
+};
 
 let _getUsersExpress = function(groupId) {
   return [
@@ -236,7 +234,7 @@ let _getUsersExpress = function(groupId) {
       ]
     }
     ];
-}
+};
 
 let ContactStore = {
   getContact:_getContact ,                 //获得联系人和群组信息
@@ -244,7 +242,7 @@ let ContactStore = {
   getUsers:_getUsers,                             //获得所有用户
   getUserInfoByUserId:_getUserInfoByUserId,       // 根据userId获得用户信息
   getGroupDetailById:_getGroupDetailById,          //更具groupId获得群组信息
-  getUsersExpress:_getUsersExpress,               //获得除了已存在groupId群组中的用户
+  getUsersExpress:_getUsersExpress             //获得除了已存在groupId群组中的用户
 };
 
 module.exports = ContactStore;
