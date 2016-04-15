@@ -97,7 +97,7 @@ let Login = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='登录' showBack={true} showBar={true}>
-        <View style={[{flexDirection: 'column', flex: 1}, styles.paddingLR]}>
+        <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.renderLogo()}
           <Input containerStyle={styles.inputStyle}
                  type="default" placeholder='手机号' maxlength={20} field='mobileNo'
@@ -119,7 +119,7 @@ let Login = React.createClass({
             新用户注册
           </Button>
         </View>
-        <View style={{flex:1,flexDirection:'column',justifyContent:'flex-end'}}>
+        <View style={{flexDirection:'column',justifyContent:'flex-end'}}>
           <View style={{flexDirection:'row',justifyContent:'center',marginBottom:30}}>
             <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服:</Text>
             <Text style={{fontSize: 16, color: '#ffffff',textDecorationLine:'underline'}}>021-35885888</Text>

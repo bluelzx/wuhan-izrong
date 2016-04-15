@@ -3,7 +3,6 @@
  */
 var assign = require('object-assign');
 var EventEmitter = require('events').EventEmitter;
-var AppStore = require('./appStore')
 
 var MarketStore = ({
   getMarketData: function () {
@@ -103,10 +102,10 @@ var MarketStore = ({
           "userName": "lfzhu@amarsoft.com",
           "orgId": 1,
           "orgName": "天津银行苏州小分行虎丘支行"
-        },
+        }
       ]
     )
-  },
+  }
 
 });
 

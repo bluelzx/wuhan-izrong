@@ -45,7 +45,7 @@ let MessageSchema = {
 };
 
 let ImUserInfoSchema = {
-  name: "userInfo",
+  name: "imUserInfo",
   primaryKey: 'userId',
   properties: {
     userId: {type: 'int', optional: true},
