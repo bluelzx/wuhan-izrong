@@ -1,8 +1,8 @@
 /**
  * Created by cui on 16/4/8.
  */
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   ListView,
   TouchableHighlight,
   Text,
@@ -12,17 +12,17 @@ var {
   Dimensions,
   } = React;
 
-var screenWidth = Dimensions.get('window').width;
-var screenHeight = Dimensions.get('window').height;
+let screenWidth = Dimensions.get('window').width;
+let screenHeight = Dimensions.get('window').height;
 
-var NavBarView = require('../../framework/system/navBarView');
-var SelectBusiness2 = require('./selectBusiness2');
+let NavBarView = require('../../framework/system/navBarView');
+let SelectBusiness2 = require('./selectBusiness2');
 
-var data = new ListView.DataSource({
+let data = new ListView.DataSource({
   rowHasChanged: (r1, r2) => r1 !== r2,
 });
 
-var SelectBusiness1 = React.createClass({
+let SelectBusiness1 = React.createClass({
   getInitialState(){
     return {
       dataSource: ['资金业务', '资产交易', '票据交易', '同业代理', '公司与投行'],
@@ -58,6 +58,6 @@ var SelectBusiness1 = React.createClass({
   },
 });
 
-var styles = StyleSheet.create({});
+let styles = StyleSheet.create({});
 
 module.exports = SelectBusiness1;

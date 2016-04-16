@@ -4,7 +4,7 @@
 
 'use strict';
 
-var React = require('react-native');
+let React = require('react-native');
 var {
   ListView,
   TouchableHighlight,
@@ -246,7 +246,7 @@ var WhitePage = React.createClass({
             ''
           ]
         }).then((response)=> {
-          var arr = new Array();
+          let arr = new Array();
           arr = (JSON.stringify(response));
           console.log(arr);
         }).catch(
