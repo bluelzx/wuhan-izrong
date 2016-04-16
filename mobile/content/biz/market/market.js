@@ -33,8 +33,10 @@ var data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var WhitePage = React.createClass({
 
   getInitialState(){
+    var categoryAndItem = MarketStore.bizDefaultSearch().filterItems;
     return {
-      dataSource: ['资金业务', '资产交易', '票据交易', '同业代理', '公司与投行'],
+      categoryAndItem: categoryAndItem,
+      dataSource: categoryAndItem[0].options,
       dataSource2: ['同业存款', '同业拆借', '债券回购', '存单', '其他'],
       dataSource3: ['最新发布', '金额最高', '利率最低'],
       clickFilterType: 0,
@@ -54,7 +56,9 @@ var WhitePage = React.createClass({
   componentWillMount: function () {
     //{this.bizOrderMarketSearchDefaultSearch()};
     //{this.bizOrderMarketSearchsearch()}
-    MarketStore.getCategory(MarketStore.getMarketData().filterItems);
+    var obj = MarketStore.bizDefaultSearch().filterItems;
+    let categroyAndItem = MarketStore.getCategoryAndItem(obj);
+    console.log(categroyAndItem)
   },
 
   render: function () {
@@ -110,7 +114,7 @@ var WhitePage = React.createClass({
     this.setState({
       pickTypeRow1: rowId,
       pickTypeRow2: 0,
-      levelOneText: this.state.dataSource[rowId],
+      levelOneText: this.state.dataSource[rowId].displayName,
       levelTwoText: this.state.dataSource2[0],
     })
   },
@@ -260,7 +264,7 @@ var WhitePage = React.createClass({
         onPress={()=>this.pressTypeRow1(rowID)} activeOpacity={1}
         underlayColor="#f0f0f0">
         <View style={{width:screenWidth/3}}>
-          <Text style={{marginLeft:10,color:'white'}}>{rowData}</Text>
+          <Text style={{marginLeft:10,color:'white'}}>{rowData.displayName}</Text>
         </View>
       </TouchableOpacity>
     )

@@ -5,8 +5,8 @@ var assign = require('object-assign');
 var EventEmitter = require('events').EventEmitter;
 
 var MarketStore = ({
-  bizDefaultSearch: function (){
-    return(
+  bizDefaultSearch: function () {
+    return (
     {
       "pageResult": {
         "pageIndex": 1,
@@ -454,7 +454,7 @@ var MarketStore = ({
     )
   },
   getMarketData: function () {
-    return(
+    return (
       [
         {
           "id": 1,
@@ -552,6 +552,35 @@ var MarketStore = ({
           "orgName": "天津银行苏州小分行虎丘支行"
         }
       ]
+    )
+  },
+
+  getCategoryAndItem: function (filterItems) {
+    var bizCategory = filterItems[0];
+    var bizItem = filterItems[1];
+    console.log(bizCategory);
+    console.log(bizItem);
+    var totalArr = new Array()
+    for (var category of bizCategory.options) {
+      console.log(category);
+      var itemArr = new Array()
+      for (var item of bizItem.options) {
+        if (item.displayCode.substring(0, 3) == category.displayCode) {
+          itemArr.push(item);
+        }
+      }
+      var categoryobj = {
+        itemArr: itemArr,
+        id: category.id,
+        displayName: category.displayName,
+        displayCode: category.displayCode,
+        displaySeq: category.displaySeq,
+        isSelected: category.isSelected
+      }
+      totalArr.push(categoryobj);
+    }
+    return (
+      totalArr
     )
   },
 
