@@ -1,116 +1,23 @@
 /**
  * Created by baoyinghai on 16/4/12.
  */
-
 let msgType = require('../../constants/wsMsgType');
 let contentType = require('../../constants/msgContentType');
+let PersisterFacade = require('../persister/persisterFacade');
 
 let _getContact = function(){
-  //我的群
+  //我的群  第一个元素必须为群组
   //联系人按群组分类
+  let groups = PersisterFacade.getAllGroups();
   return [
     {
-      "orgName": "我的群组",
-      "orgMembers": [
-        {
-          "groupId": 1,
-          "type":'group',
-          "groupName": "某群",
-          "groupPhotoFileId":"test005"
-        },
-        {
-          "groupId": 2,
-          "type":'group',
-          "groupName": "某群2",
-          "groupPhotoFileId":"test005"
-        }
-      ]
+      orgMembers: groups
     }
   ].concat(_getUsers());
-
-
 }
 
 let _getUsers = function() {
-
-  return [
-    {
-      "orgName": "bank1",
-      "orgMembers": [
-        {
-          "userId": 1,
-           type:'user',
-          "photoFileId": "test001",
-          "userName": "A吴"
-        },
-        {
-          "userId": 3,
-          type:'user',
-          "photoFileId": "test002",
-          "userName": "A张"
-        },
-        {
-          "userId": 4,
-          type:'user',
-          "photoFileId": "test004",
-          "userName": "B张"
-        },
-        {
-          "userId": 5,
-          type:'user',
-          "photoFileId": "test005",
-          "userName": "B李"
-        }
-      ]
-    },
-    {
-      "orgName": "bank2",
-      "orgMembers": [
-        {
-          "userId": 2,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },{
-          "userId": 6,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },{
-          "userId": 7,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },{
-          "userId": 8,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },{
-          "userId": 9,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },
-        {
-          "userId": 10,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },{
-          "userId": 11,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },{
-          "userId": 12,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        }
-      ]
-    }
-  ];
+  return PersisterFacade.getUsersGroupByOrg();
 }
 
 let _getIMNotificationMessage = function() {
@@ -139,7 +46,7 @@ let _getIMNotificationMessage = function() {
       gid: 'g001',
       badge:3,//统计未读条数
       groupName:'group1', // 群组名字
-      groupOwnerId:3,   //群主
+      groupMasterUid:3,   //群主
       content: 'text',
       contentType: contentType.TEXT,
       msgId: 'uuid',
@@ -153,62 +60,52 @@ let _getIMNotificationMessage = function() {
   };
 }
 
-let _getUserInfoByUserId = function() {
-  return {
-    address:'苏州',
-    realName:'user',
-    email:'user@amarsoft.com',
-    nameCardFileUrl:'http://',
-    department:'资管',
-    publicDepart:false,
-    jobTitle:'研发',
-    publicTitle:true,
-    mobileNumber:'156937232',
-    publicMobile:true,
-    phoneNumber:'0512-42424',
-    publicPhone:false,
-    publicEmail:false,
-    publicAddress:false,
-    publicWeChat:false,
-    photoFileUrl:'http://',
-    qqNo:'932424',
-    publicQQ:false,
-    weChatNo:'4252624',
-    userId:2,
-    orgName:'xxxx银行'
-  };
+let _getUserInfoByUserId = function(id) {
+  return PersisterFacade.getUserInfoByUserId(id);
 }
 
 let _getGroupDetailById = function() {
   return {
     'groupId': 1,
     'groupName': 'bank1',
-    'ownerId': 1,
-    isMute:false,
+    'groupMasterUid': 1,
+     isMute:true,
     'members': [
       {
-        "userId": 1,
-        type:'user',
-        "photoFileId": "test001",
-        "userName": "A吴"
+        "userId": 2,
+        "photoFileId": "test003",
+        "realName": "B吴"
+      },{
+        "userId": 6,
+        "photoFileId": "test003",
+        "realName": "B吴"
+      },{
+        "userId": 7,
+        "photoFileId": "test003",
+        "realName": "B吴"
+      }
+      ,{
+        "userId": 8,
+        "photoFileId": "test003",
+        "realName": "B吴"
+      }
+      ,{
+        "userId": 9,
+        "photoFileId": "test003",
+        "realName": "B吴"
       },
       {
-        "userId": 3,
-        type:'user',
-        "photoFileId": "test002",
-        "userName": "A张"
-      },
-      {
-        "userId": 4,
-        type:'user',
-        "photoFileId": "test004",
-        "userName": "B张"
-      },
-      {
-        "userId": 5,
-        type:'user',
-        "photoFileId": "test005",
-        "userName": "B李"
+        "userId": 10,
+        "photoFileId": "test003",
+        "realName": "B吴"
+      },{
+        "userId": 11,
+        "photoFileId": "test003",
+        "realName": "B吴"
+      },{
+        "userId": 12,
+        "photoFileId": "test003",
+        "realName": "B吴"
       }
     ]
   };
@@ -221,27 +118,23 @@ let _getUsersExpress = function(groupId) {
       "orgMembers": [
         {
           "userId": 1,
-          type:'user',
           "photoFileId": "test001",
-          "userName": "A吴"
+          "realName": "A吴"
         },
         {
           "userId": 3,
-          type:'user',
           "photoFileId": "test002",
-          "userName": "A张"
+          "realName": "A张"
         },
         {
           "userId": 4,
-          type:'user',
           "photoFileId": "test004",
-          "userName": "B张"
+          "realName": "B张"
         },
         {
           "userId": 5,
-          type:'user',
           "photoFileId": "test005",
-          "userName": "B李"
+          "realName": "B李"
         }
       ]
     },
@@ -250,13 +143,116 @@ let _getUsersExpress = function(groupId) {
       "orgMembers": [
         {
           "userId": 2,
-          type:'user',
           "photoFileId": "test003",
-          "userName": "B吴"
+          "realName": "B吴"
+        },{
+          "userId": 6,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 7,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 8,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 9,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },
+        {
+          "userId": 10,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 11,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 12,
+          "photoFileId": "test003",
+          "realName": "B吴"
         }
       ]
     }
-    ];
+  ];
+}
+
+let _getUserInfo = function() {
+  return {
+    userId:3
+  };
+}
+
+let _getUsersByGroupId = function (groupId) {
+  return [
+    {
+      "orgName": "bank1",
+      "orgMembers": [
+        {
+          "userId": 1,
+          "photoFileId": "test001",
+          "realName": "A吴"
+        },
+        {
+          "userId": 3,
+          "photoFileId": "test002",
+          "realName": "A张"
+        },
+        {
+          "userId": 4,
+          "photoFileId": "test004",
+          "realName": "B张"
+        },
+        {
+          "userId": 5,
+          "photoFileId": "test005",
+          "realName": "B李"
+        }
+      ]
+    },
+    {
+      "orgName": "bank2",
+      "orgMembers": [
+        {
+          "userId": 2,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 6,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 7,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 8,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 9,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },
+        {
+          "userId": 10,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 11,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 12,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        }
+      ]
+    }
+  ];
 }
 
 let ContactStore = {
@@ -266,6 +262,8 @@ let ContactStore = {
   getUserInfoByUserId:_getUserInfoByUserId,       // 根据userId获得用户信息
   getGroupDetailById:_getGroupDetailById,          //更具groupId获得群组信息
   getUsersExpress:_getUsersExpress,               //获得除了已存在groupId群组中的用户
+  getUserInfo:_getUserInfo,                       // 获得当前用户信息
+  getUsersByGroupId:_getUsersByGroupId            //获得群组成员
 };
 
 module.exports = ContactStore;

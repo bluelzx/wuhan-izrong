@@ -102,12 +102,12 @@ let WhitePage = React.createClass({
     if(msgType.REC_GROUP_MSG == item.msgType){ // 区分聊天窗口类型
       param.chatType = ItemType.GROUP
       param.title = item.groupName;
-      param.gid = item.gid;
-      param.groupOwnerId = item.groupOwnerId;
+      param.groupId = item.gid;
+      param.groupMasterUid = item.groupMasterUid;
     }else{
       param.chatType = ItemType.USER;
       param.title = item.realName;
-      param.id = item.fromUid;
+      param.userId = item.fromUid;
     }
     this.props.navigator.push({
       comp: Chat,

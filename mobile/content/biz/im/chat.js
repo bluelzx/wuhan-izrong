@@ -12,6 +12,8 @@ let ImUserInfo = require('./imUserInfo');
 const Messenger = require('./messenger');
 let msgType = require('../../constants/wsMsgType');
 let ItemType = require('./itemType');
+let ContactStore = require('../../framework/store/contactStore');
+
 
 let Chat = React.createClass({
 
@@ -25,10 +27,10 @@ let Chat = React.createClass({
 
   getInitialState: function() {
     return {
-      chatInfo:{
-        type:this.props.param.type
+      chatInfo: {
+        type: this.props.param.type
       },
-      myId:0
+      userInfo: ContactStore.getUserInfo()
     }
   },
 
@@ -38,7 +40,7 @@ let Chat = React.createClass({
     let item = this.props.param;
     if(item.chatType==ItemType.USER){
       comp = ImUserInfo;
-    }else if(item.groupOwnerId == this.state.myId){
+    }else if(item.groupMasterUid == this.state.userInfo.userId){
       comp = EditGroupMaster;
     }else{
       // 普通成员
@@ -61,12 +63,8 @@ let Chat = React.createClass({
 
   render: function () {
     let item = this.props.param;
-    let title = "";
-    if(item.chatType == ItemType.GROUP){
-      title = item.groupName;
-    }else{
-      title = item.realName;
-    }
+    let title = item.title;
+
     return (
       <NavBarView
         navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'

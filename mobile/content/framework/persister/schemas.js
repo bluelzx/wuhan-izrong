@@ -20,7 +20,7 @@ let GroupSchema = {
   properties: {
     groupId: {type: 'int', optional: true},
     groupName: {type: 'string', optional: true},
-    groupMasterUid: {type: 'string', optional: true},
+    groupMasterUid: {type: 'string', optional: true}, //为什么是string
     memberNum: {type: 'int', optional: true},
     members: {type: 'list', objectType: 'userInfo'},
     mute: {type: 'bool', optional: true}
@@ -43,6 +43,21 @@ let MessageSchema = {
     isRead: {type: 'bool', option: true}
   }
 };
+
+
+let MessageListSchema = {
+  name: "messageList",
+  primaryKey: 'sessionId',
+  properties: {
+    sessionId: {type: 'int', optional: true},
+    type: {type: 'string', optional: true},
+    badge:{type: 'int', optional: true},
+    title: {type: 'string', optional: true},
+    content:{type: 'string', optional: true},
+    lastTime: {type: 'date', optional: true}
+  }
+};
+
 
 
 let ImUserInfoSchema = {
@@ -186,7 +201,7 @@ module.exports = {
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
-  IMUSERINFO: 'imUserInfo',
+  IMUSERINFO: 'userInfo',
   LOGINUSERINFO: 'loginUserInfo',
   ORGBEAN: 'orgBean',
   BIZORDERCATEGORY: 'bizOrderCategory',

@@ -197,12 +197,36 @@ let org2 = {
   remark: ' '
 }
 
+
+let group1 = {
+  groupId: 1,
+  groupName: 'group A',
+  groupMasterUid: '001',
+  memberNum: 10,
+  members: [user1,user2,user3],
+  mute: false
+}
+
+let group2 = {
+  groupId: 2,
+  groupName: 'group B',
+  groupMasterUid: '001',
+  memberNum: 10,
+  members: [user4,user5],
+  mute: false
+}
+
+
 module.exports = {
   users: [
     user1, user2, user3, user4, user5, user6
   ],
   orgs: [
     org1, org2
+  ],
+  groups:[
+    group1,
+    group2
   ]
 }
 

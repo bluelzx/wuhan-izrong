@@ -1,5 +1,7 @@
 const _ = require('lodash');
 const Realm = require('realm');
+let React = require('react-native');
+let MockData = require('./createMockData');
 const SCHEMA_KEY = '@realm:schema';
 const {
   DeviceSchema,
@@ -22,22 +24,17 @@ const {
   MARKETINFO
   } = require('./schemas');
 let {Platform} = React;
-let PersisterFacade = {
-  getAppData: (cb) => _getAppData(cb),
-  saveAppData: (data) => _saveAppData(data),
-  clearToken: () => _clearToken(),
-  saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
-  getAPNSToken: () => _getAPNSToken(),
-  getToken: ()=> _getToken()
-};
+
 
 console.log(Realm.defaultPath);
 let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema,
     LoginUserInfoSchema, OrgBeanSchema, BizOrderCategorySchema,
     BizOrderItemSchema, MarketInfoSchema],
-  schemaVersion: 1
+  schemaVersion: 9
 });
+
+
 // Create Realm objects and write to local storage
 let _saveAppData = function (data) {
   let orgBeanSet = data.orgBeanSet;
@@ -135,11 +132,64 @@ let _clearToken = function () {
 
 };
 
-
+//TODO: nullException
 let _getAppData = function (cb) {
   //let data = _realm.objects(SCHEMA_KEY)[0];
   //if (cb)cb(data);
   if (cb)cb(_persister);
+};
+
+
+_realm.write(() => {
+  for (let item of MockData.users) {
+    _realm.create(IMUSERINFO, item, true);
+  }
+
+  for (let org of MockData.orgs) {
+    _realm.create(ORGBEAN, org, true);
+  }
+
+  for(let group of MockData.groups){
+    _realm.create(GROUP, group, true);
+  }
+});
+
+let _getAllGroups = function() {
+  return _realm.objects(GROUP);
+}
+
+let _getUsersGroupByOrg = function() {
+  let orgs = _realm.objects(ORGBEAN);
+  let users = _realm.objects(IMUSERINFO);
+  let orgArray = [];
+  for(let org of orgs){
+    let id = org.id;
+    let orgMembers = users.filtered('orgBeanId = ' + id);
+    org.orgMembers = orgMembers
+    orgArray.push(org);
+  }
+  return orgArray;
+}
+
+let _getUserInfoByUserId = function(id) {
+  let users =  _realm.objects(IMUSERINFO).filtered('userId = ' + id)[0];
+  let orgs = _realm.objects(ORGBEAN);
+  let org = orgs.filtered('id = ' + users.orgBeanId);
+  users.orgValue = org[0].orgValue;
+  return users;
+}
+
+let PersisterFacade = {
+  getAppData: (cb) => _getAppData(cb),
+  saveAppData: (data) => _saveAppData(data),
+  clearToken: () => _clearToken(),
+  saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
+  getAPNSToken: () => _getAPNSToken(),
+  getToken: ()=> _getToken(),
+  getAllGroups: () => _getAllGroups(),
+  getUsersGroupByOrg:() => _getUsersGroupByOrg(),
+  getUserInfoByUserId:(id) => _getUserInfoByUserId(id)
+
 };
 
 module.exports = PersisterFacade;

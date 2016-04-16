@@ -18,12 +18,13 @@ let Validation = require('../../comp/utils/validation');
 let Item = require('../../comp/utils/item');
 let Icon = require('react-native-vector-icons/Ionicons');
 let ContactStore = require('../../framework/store/contactStore');
+let ContactAction = require('../../framework/action/contactAction');
 
 let ImUserInfo = React.createClass({
 
 
   getStateFromStores: function() {
-    return ContactStore.getUserInfoByUserId();
+    return ContactStore.getUserInfoByUserId(this.props.param.userId);
   },
 
   getInitialState: function () {
@@ -38,7 +39,9 @@ let ImUserInfo = React.createClass({
   },
 
   switchControl(open){
-    this.setState({switchOpen: open})
+    this.setState({switchOpen: open});
+    //TODO: 在这里调用后台借口可能会卡机
+    ContactAction.muteUser(this.props.param.userId, value);
   },
 
   render: function () {
@@ -59,10 +62,10 @@ let ImUserInfo = React.createClass({
           <Item showArrow={false} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.publicMobile?this.state.mobileNumber:privateDesc}/>
           <Item showArrow={false} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.publicPhone?this.state.phoneNumber:privateDesc}/>
           <Item showArrow={false} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.publicQQ?this.state.qqNo:privateDesc}/>
-          <Item showArrow={false} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.publicWeChat?this.state.wechatNo:privateDesc}/>
+          <Item showArrow={false} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.publicWeChat?this.state.weChatNo:privateDesc}/>
           <Item showArrow={false} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.publicEmail?this.state.email:privateDesc}/>
-          <Item showArrow={false} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.publicEmail?this.state.organization:privateDesc}/>
-          <Item showArrow={false} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.orgName}/>
+          <Item showArrow={false} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.orgValue}/>
+          <Item showArrow={false} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.publicDepart?this.state.department:privateDesc}/>
           <Item showArrow={false} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.publicTitle?this.state.jobTitle:privateDesc}/>
           <View style={{backgroundColor:'#162a40',height:50,marginTop:20}}>
             <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
