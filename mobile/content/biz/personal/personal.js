@@ -51,10 +51,6 @@ let Personal = React.createClass({
     }
   },
 
-  logout: function(){
-    LoginAction.logout();
-  },
-
   render: function () {
     let {title}  = this.props;
     return (
@@ -81,13 +77,6 @@ let Personal = React.createClass({
                 func={() => this.toPage(AboutUs)}/>
           <Item desc="关于我们" img = {false} value={this.state.realName}
                 func={() => this.toPage(AboutUs)}/>
-          <Button
-            containerStyle={{marginTop:20,marginHorizontal:20,backgroundColor:'#ffffff'}}
-            style={{fontSize: 20, color: '#1151B1'}}
-            styleDisabled={{color: 'red'}}
-            onPress={()=>this.logout()}>
-            退出登陆
-          </Button>
         </ScrollView>
       </NavBarView>
     );

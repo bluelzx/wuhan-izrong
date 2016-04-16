@@ -11,14 +11,16 @@ let {
   ScrollView,
   Image,
   TouchableHighlight,
+  TouchableOpacity
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
 let Validation = require('../../comp/utils/validation');
 let Item = require('../../comp/utils/item');
 let Icon = require('react-native-vector-icons/Ionicons');
 let TextEdit = require('./textEdit');
+let { Alert } = require('mx-artifacts');
 let UserInfoAction = require('../../framework/action/userInfoAction');
-
+let LoginAction = require('../../framework/action/loginAction');
 
 let UserInfo = React.createClass({
 
@@ -37,14 +39,14 @@ let UserInfo = React.createClass({
       publicQQ: userInfo.publicQQ,
       weChatNo: userInfo.weChatNo,
       publicWeChat: userInfo.publicWeChat,
-      email:userInfo.email,
+      email: userInfo.email,
       publicEmail: userInfo.publicEmail,
       orgBeanName: orgBean.orgValue,
       department: userInfo.department,
       publicDepart: userInfo.publicDepart,
       jobTitle: userInfo.jobTitle,
-      publicTitle:userInfo.publicTitle,
-      address:userInfo.address,
+      publicTitle: userInfo.publicTitle,
+      address: userInfo.address,
       publicAddress: userInfo.publicAddress,
       nameCardFileUrl: userInfo.nameCardFileUrl
     }
@@ -84,11 +86,22 @@ let UserInfo = React.createClass({
     }
   },
 
+  logout:function(){
+    this.props.exec(() => {
+      return  LoginAction.logout()
+        .then((response) => {
+      }).catch((errorData) => {
+        Alert(errorData.toString());
+      });
+    });
+  },
+
   render: function () {
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='个人信息' showBack={true} showBar={true}>
+                  contentBackgroundColor='#18304D' title='个人信息' showBack={true} showBar={true}
+                  actionButton={this.renderLogout}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false} backgroundColor='#18304b'>
 
           <TouchableHighlight style={{backgroundColor:'#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
@@ -115,10 +128,11 @@ let UserInfo = React.createClass({
           <Item desc="电子邮箱" imgPath={require('../../image/user/email.png')} value={this.state.email}
                 func={() => this.toEdit("邮箱", 'email', this.state.email,this.state.publicEmail, '', 60, Validation.isEmail)}/>
 
-          <Item style={{marginTop:20}} desc="机构" imgPath={require('../../image/user/jobTitle.png')} value={this.state.orgBeanName}
+          <Item style={{marginTop:20}} desc="机构" imgPath={require('../../image/user/comp.png')}
+                value={this.state.orgBeanName}
                 func={() => this.toEdit("机构", 'organization', this.state.orgBeanName,true, 'name', 20, '')}/>
 
-          <Item desc="部门" imgPath={require('../../image/user/jobTitle.png')} value={this.state.department}
+          <Item desc="部门" imgPath={require('../../image/user/comp.png')} value={this.state.department}
                 func={() => this.toEdit("部门", 'depart', this.state.department,this.state.publicDepart, 'name', 20, '')}/>
 
           <Item desc="职位" imgPath={require('../../image/user/jobTitle.png')} value={this.state.jobTitle}
@@ -127,6 +141,15 @@ let UserInfo = React.createClass({
         </ScrollView>
       </NavBarView>
     );
+  },
+  renderLogout: function () {
+    return (
+      <TouchableOpacity style={{width:150,marginLeft:-20}}
+                        onPress={()=>this.logout()}>
+        <Text style={{color:'#ffffff'}}>退出登陆</Text>
+      </TouchableOpacity>
+    );
+
   }
 });
 
@@ -155,7 +178,7 @@ let styles = StyleSheet.create({
     borderColor: '#cccccc',
     borderWidth: 1,
     marginLeft: 20
-  },
+  }
 });
 
 

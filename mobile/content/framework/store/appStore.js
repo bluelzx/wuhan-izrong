@@ -125,6 +125,7 @@ let _getOrgByOrgId =(orgId)=>{
 
 let _getFilters = ()=>{
   console.log(Persister.getFilters());
-  Persister.getFilters();
+  return Persister.getFilters();
 };
+
 module.exports = AppStore;
