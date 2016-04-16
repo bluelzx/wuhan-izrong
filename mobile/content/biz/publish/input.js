@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
     StyleSheet,
     TextInput,
     View,
@@ -9,10 +9,10 @@ var {
     Dimensions
     } = React;
 
-var screenWidth = Dimensions.get('window').width;
-var screenHeight = Dimensions.get('window').height;
+let screenWidth = Dimensions.get('window').width;
+let screenHeight = Dimensions.get('window').height;
 
-var Input = React.createClass({
+let Input = React.createClass({
     getDefaultProps(){
 
     },
@@ -20,7 +20,7 @@ var Input = React.createClass({
         this.props.onChanged(type, text)
     },
     render(){
-        var {height, width} = Dimensions.get('window');
+        let {height, width} = Dimensions.get('window');
         if (this.props.type == 'default') {
             return (
                 <View style={[styles.view]}>
@@ -34,7 +34,7 @@ var Input = React.createClass({
         }
     }
 })
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
     view: {
         height: 47,
         borderColor: '#cccccc',

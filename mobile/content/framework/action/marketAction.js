@@ -11,9 +11,9 @@ let { Host } = require('../../../config');
 let AppStore = require('../store/appStore');
 let _ = require('lodash');
 let AppLinks = require('../../constants/appLinks');
-var pub = "/pub";
+let pub = "/pub";
 
-var MarketActions ={
+let MarketActions ={
 
   bizOrderMarketSearchDefaultSearch: (url) => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch),
   bizOrderMarketSearchsearch: (url,p) => _bizOrderMarketSearchsearch(AppLinks.bizOrderMarketSearchsearch, p),

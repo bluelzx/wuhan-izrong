@@ -1,10 +1,10 @@
 /**
  * Created by cui on 16/4/13.
  */
-var assign = require('object-assign');
-var EventEmitter = require('events').EventEmitter;
+let assign = require('object-assign');
+let EventEmitter = require('events').EventEmitter;
 
-var MarketStore = ({
+let MarketStore = ({
   bizDefaultSearch: function () {
     return (
     {
@@ -556,33 +556,33 @@ var MarketStore = ({
   },
 
   getCategoryAndItem: function (filterItems) {
-    var bizCategory = filterItems[0];
-    var bizItem = filterItems[1];
+    let bizCategory = filterItems[0];
+    let bizItem = filterItems[1];
     console.log(bizCategory);
     console.log(bizItem);
-    var totalArr = new Array()
-    for (var category of bizCategory.options) {
+    let totalArr = new Array();
+    for (let category of bizCategory.options) {
       console.log(category);
-      var itemArr = new Array()
-      for (var item of bizItem.options) {
+      let itemArr = new Array();
+      for (let item of bizItem.options) {
         if (item.displayCode.substring(0, 3) == category.displayCode) {
           itemArr.push(item);
         }
       }
-      var categoryobj = {
+      let categoryobj = {
         itemArr: itemArr,
         id: category.id,
         displayName: category.displayName,
         displayCode: category.displayCode,
         displaySeq: category.displaySeq,
         isSelected: category.isSelected
-      }
+      };
       totalArr.push(categoryobj);
     }
     return (
       totalArr
     )
-  },
+  }
 
 });
 

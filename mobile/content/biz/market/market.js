@@ -4,8 +4,8 @@
 
 'use strict';
 
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   ListView,
   TouchableHighlight,
   Text,
@@ -17,27 +17,30 @@ var {
   TouchableOpacity,
   }=React;
 
-var screenWidth = Dimensions.get('window').width;
-var screenHeight = Dimensions.get('window').height;
+let screenWidth = Dimensions.get('window').width;
+let screenHeight = Dimensions.get('window').height;
 
-var NavBarView = require('../../framework/system/navBarView');
-var RadioControl = require('./radioControl');
-var MarketList = require('./marketList');
-var SelectOrg = require('./selectOrg');
+let NavBarView = require('../../framework/system/navBarView');
+let RadioControl = require('./radioControl');
+let MarketList = require('./marketList');
+let SelectOrg = require('./selectOrg');
 let Icon = require('react-native-vector-icons/Ionicons');
 
 let MarketAction = require('../../framework/action/marketAction');
-var MarketStore = require('../../framework/store/marketStore');
+let MarketStore = require('../../framework/store/marketStore');
+let AppStore = require('../../framework/store/appStore');
 
-var data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-var WhitePage = React.createClass({
+let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+let WhitePage = React.createClass({
 
   getInitialState(){
-    var categoryAndItem = MarketStore.bizDefaultSearch().filterItems;
+    let categoryAndItem = AppStore.getFilters().filterItems;
+    let item = MarketStore.getCategoryAndItem(categoryAndItem);
     return {
-      categoryAndItem: categoryAndItem,
+      item:item,
+      categoryAndItem:categoryAndItem,
       dataSource: categoryAndItem[0].options,
-      dataSource2: ['同业存款', '同业拆借', '债券回购', '存单', '其他'],
+      dataSource2: item[0].itemArr,
       dataSource3: ['最新发布', '金额最高', '利率最低'],
       clickFilterType: 0,
       clickFilterTime: 0,
@@ -48,7 +51,7 @@ var WhitePage = React.createClass({
       pickTypeRow1: 0,
       pickTypeRow2: 0,
       pickTimeRow: 0,
-      pickRowColor: '#244266',
+      pickRowColor: '#244266'
 
     }
   },
@@ -56,10 +59,6 @@ var WhitePage = React.createClass({
   componentWillMount: function () {
     //{this.bizOrderMarketSearchDefaultSearch()};
     //{this.bizOrderMarketSearchsearch()}
-    //MarketStore.getCategory(MarketStore.getMarketData().filterItems);
-    var obj = MarketStore.bizDefaultSearch().filterItems;
-    let categroyAndItem = MarketStore.getCategoryAndItem(obj);
-    console.log(categroyAndItem)
   },
 
   render: function () {
@@ -100,31 +99,34 @@ var WhitePage = React.createClass({
     })
   },
   pressTypeRow1(rowId){
-    if (rowId == 0) {
-      this.setState({dataSource2: ['同业存款', '同业拆借', '债券回购', '存单', '其他']})
-    } else if (rowId == 1) {
-      this.setState({dataSource2: ["同业理财", "福费廷", "资产支持证券", '其他']})
-    } else if (rowId == 2) {
-      this.setState({dataSource2: ["纸票交易", "电票交易", "纸票回购", "电票回购", '其他']})
-    } else if (rowId == 3) {
-      this.setState({dataSource2: ["代理开证/保函", "福费廷", '其他']})
-    } else if (rowId == 4) {
-      this.setState({dataSource2: ["债券承销", "北金所私募券", "资产证券化", "并购", "结构化融资", '其他']})
-    } else {
-    }
+    let categoryAndItem = this.state.categoryAndItem;
+    let item = this.state.item;
+    //if (rowId == 0) {
+    //  this.setState({dataSource2: ['同业存款', '同业拆借', '债券回购', '存单', '其他']})
+    //} else if (rowId == 1) {
+    //  this.setState({dataSource2: ["同业理财", "福费廷", "资产支持证券", '其他']})
+    //} else if (rowId == 2) {
+    //  this.setState({dataSource2: ["纸票交易", "电票交易", "纸票回购", "电票回购", '其他']})
+    //} else if (rowId == 3) {
+    //  this.setState({dataSource2: ["代理开证/保函", "福费廷", '其他']})
+    //} else if (rowId == 4) {
+    //  this.setState({dataSource2: ["债券承销", "北金所私募券", "资产证券化", "并购", "结构化融资", '其他']})
+    //} else {
+    //}
     this.setState({
       pickTypeRow1: rowId,
       pickTypeRow2: 0,
       levelOneText: this.state.dataSource[rowId].displayName,
-      levelTwoText: this.state.dataSource2[0],
+      dataSource2: item[rowId].itemArr,
+      levelTwoText: this.state.dataSource2[0].displayName
     })
   },
   pressTypeRow2(rowId){
     this.setState({
       clickFilterType: 0,
       pickTypeRow2: rowId,
-      levelTwoText: this.state.dataSource2[rowId],
-    })
+      levelTwoText: this.state.dataSource2[rowId].displayName
+    });
     {
       this.refs['MARKETLIST']._changeData()
     }
@@ -133,7 +135,7 @@ var WhitePage = React.createClass({
     this.setState({
       clickFilterTime: 0,
       pickTimeRow: rowId,
-      optionTwoText: this.state.dataSource3[rowId],
+      optionTwoText: this.state.dataSource3[rowId]
     })
   }, renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
     return (
@@ -277,7 +279,7 @@ var WhitePage = React.createClass({
         onPress={()=>this.pressTypeRow2(rowID)} activeOpacity={1}
         underlayColor="#f0f0f0">
         <View style={{width:screenWidth/3*2}}>
-          <Text style={{marginLeft:10,color:'white'}}>{rowData}</Text>
+          <Text style={{marginLeft:10,color:'white'}}>{rowData.displayName}</Text>
         </View>
       </TouchableOpacity>
     )
@@ -311,7 +313,7 @@ var WhitePage = React.createClass({
       ()=> {
         return MarketAction.bizOrderMarketSearchDefaultSearch(
         ).then((response)=> {
-          var arr = new Array();
+          let arr = new Array();
           arr = (JSON.stringify(response));
           console.log(arr);
         }).catch(

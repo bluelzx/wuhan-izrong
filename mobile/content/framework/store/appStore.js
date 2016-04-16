@@ -41,7 +41,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getUserId:() => _getUserId(),
   getLoginUserInfo:() => _getLoginUserInfo(),
   getOrgByOrgId:(orgId) => _getOrgByOrgId(orgId),
-  getFilters:()=>_getFilters()
+  getFilters: ()=> _getFilters()
 });
 
 // Private Functions
@@ -61,9 +61,10 @@ let _appInit = () => {
   );
   _info.initLoadingState = false;
   _.assign(_data, {
-    token: _getToken()
+    token: _getToken(),
+    filters: Persister.getFilters()
   });
-  Persister.saveFilters();
+
   AppStore.emitChange();
 };
 
@@ -124,7 +125,7 @@ let _getOrgByOrgId =(orgId)=>{
 };
 
 let _getFilters = ()=>{
-  console.log(Persister.getFilters());
-  Persister.getFilters();
+  return _data.filters;
 };
+
 module.exports = AppStore;
