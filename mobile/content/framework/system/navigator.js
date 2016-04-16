@@ -117,9 +117,9 @@ var Main = React.createClass({
   _renderScene: function (route, navigator) {
     this._navigator = navigator;
     var Comp = route.comp;
-    //if (Comp == 'tabView') {
-    //  Comp = TabView;
-    //}
+    if (Comp == 'tabView') {
+      Comp = TabView;
+    }
     navigator.cur = Comp;
     return (
       <Comp param={route.param} navigator={navigator} callback={route.callBack} exec={this._exec}/>
@@ -133,7 +133,7 @@ var Main = React.createClass({
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: '#FFFFFF',
+            backgroundColor: '#FFFFFF'
           }}
         >
           <Text>数据加载中,请稍后...</Text>
@@ -143,9 +143,9 @@ var Main = React.createClass({
 
     var initComp = TabView;
     //var initComp = Chat;
-    //if (!!this.state.token) {
-    //  initComp = Login;
-    //}
+    if (this.state.token == '') {
+      initComp = Login;
+    }
     return (
       <View style={{ width: Device.width, height: Device.height }}>
         <StatusBar

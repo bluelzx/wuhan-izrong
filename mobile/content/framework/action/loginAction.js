@@ -31,6 +31,7 @@ let LoginActions = {
   validateSmsCode: (p,f) => _validateSmsCode(AppLinks.validateSmsCode,p),
   uploadNameCard: (fileFieldName,p) => _uploadNameCard(AppLinks.uploadFile,fileFieldName,p),
   getOrgList: () => _getOrgList(AppLinks.getOrgList)
+
 };
 
 let _sendSmsCodeToLoginMobile = function (url,p) {

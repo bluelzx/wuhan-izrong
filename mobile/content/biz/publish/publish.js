@@ -25,9 +25,9 @@ var screenHeight = Dimensions.get('window').height;
 var NavBarView = require('../../framework/system/navBarView');
 var SelectBtn = require('./selectBtn');
 var Remarks = require('./remarks');
-
-
 var SelectBusiness1 = require('./selectBusiness1');
+
+let MarketAction = require('../../framework/action/marketAction');
 
 var dataList1 = ['出', '收'];
 var dataList2 = ['日', '月', '年'];
@@ -39,6 +39,12 @@ var WhitePage = React.createClass({
       defaultData1: 0,
       defaultData2: 0,
       defaultData3: 0,
+    }
+  },
+
+  componentWillMount: function () {
+    {
+      //this.addBizOrder();
     }
   },
 
@@ -222,6 +228,34 @@ var WhitePage = React.createClass({
     if (navigator) {
       navigator.push({comp: name})
     }
+  },
+
+  addBizOrder: function () {
+    this.props.exec(
+      ()=> {
+        return MarketAction.addBizOrder({
+          id:'',
+          term:33,
+          rate:0.03,
+          remark:'这里就只是一个备注',
+          bizOrientation:'天津银行',
+          bizCategory:'MCA',
+          bizItem:'MCA_ABS',
+          amount:10000000,
+          fileIds:[
+            ''
+          ]
+        }).then((response)=> {
+          var arr = new Array();
+          arr = (JSON.stringify(response));
+          console.log(arr);
+        }).catch(
+          (errorData) => {
+            throw errorData;
+          }
+        );
+      }
+    );
   },
 });
 

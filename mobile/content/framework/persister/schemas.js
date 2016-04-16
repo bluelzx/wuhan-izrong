@@ -22,7 +22,7 @@ let GroupSchema = {
     groupName: {type: 'string', optional: true},
     groupMasterUid: {type: 'string', optional: true}, //为什么是string
     memberNum: {type: 'int', optional: true},
-    members: {type: 'list', objectType: 'userInfo'},
+    members: {type: 'list', objectType: 'imUserInfo'},
     mute: {type: 'bool', optional: true}
   }
 };
@@ -61,7 +61,7 @@ let MessageListSchema = {
 
 
 let ImUserInfoSchema = {
-  name: "userInfo",
+  name: "imUserInfo",
   primaryKey: 'userId',
   properties: {
     userId: {type: 'int', optional: true},
@@ -85,7 +85,7 @@ let ImUserInfoSchema = {
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
     orgBeanId: {type: 'int', optional: true},
-    mute: {type: 'bool', optional: true}
+    mute: {type: 'bool', optional: true}  //是否屏蔽该用户
   }
 };
 
@@ -114,20 +114,21 @@ let LoginUserInfoSchema = {
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
     orgBeanId: {type: 'int', optional: true},
-    lastLoginTime:{type: 'date', optional: true},
+    lastLoginTime:{type: 'date', optional: true},  //本地增加,用于多用户登陆排序
     token: {type: 'string', optional: true}
   }
 };
+
 let OrgBeanSchema = {
   name: "orgBean",
   primaryKey: 'id',
   properties: {
     id: {type: 'int', optional: true},
-    corporationType: {type: 'string', optional: true},
+    corporationType: {type: 'string', optional: true},//公司类型, 'INDEPENDENT'
     lastUpdateDate: {type: 'date', optional: true},
-    orgCategory: {type: 'string', optional: true},
+    orgCategory: {type: 'string', optional: true},  //企业类型 'BANK'
     orgCode: {type: 'string', optional: true},
-    orgValue: {type: 'string', optional: true},
+    orgValue: {type: 'string', optional: true},  //企业名称
     orgValueAlias: {type: 'string', optional: true},
     isDisabled: {type: 'bool', optional: true},
     creator: {type: 'string', optional: true},
@@ -201,7 +202,7 @@ module.exports = {
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
-  IMUSERINFO: 'userInfo',
+  IMUSERINFO: 'imUserInfo',
   LOGINUSERINFO: 'loginUserInfo',
   ORGBEAN: 'orgBean',
   BIZORDERCATEGORY: 'bizOrderCategory',

@@ -65,7 +65,7 @@ class Cell extends Component {
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
     //let user = UserStore.getUserInfoBean();
-    //this.getOrgList();
+    let orgList = this.getOrgList();
     return {
       loaded: false,
       checked: true,
@@ -74,31 +74,7 @@ let Register_selectOrg = React.createClass({
       verify: '',
       active: false,
       data: {
-        A: ['some', 'entries', 'are here'],
-        B: ['some', 'entries', 'are here'],
-        C: ['some', 'entries', 'are here'],
-        D: ['some', 'entries', 'are here'],
-        E: ['some', 'entries', 'are here'],
-        F: ['some', 'entries', 'are here'],
-        G: ['some', 'entries', 'are here'],
-        H: ['some', 'entries', 'are here'],
-        I: ['some', 'entries', 'are here'],
-        J: ['some', 'entries', 'are here'],
-        K: ['some', 'entries', 'are here'],
-        L: ['some', 'entries', 'are here'],
-        M: ['some', 'entries', 'are here'],
-        N: ['some', 'entries', 'are here'],
-        O: ['some', 'entries', 'are here'],
-        P: ['some', 'entries', 'are here'],
-        Q: ['some', 'entries', 'are here'],
-        R: ['some', 'entries', 'are here'],
-        S: ['some', 'entries', 'are here'],
-        T: ['some', 'entries', 'are here'],
-        U: ['some', 'entries', 'are here'],
-        V: ['some', 'entries', 'are here'],
-        X: ['some', 'entries', 'are here'],
-        Y: ['some', 'entries', 'are here'],
-        Z: ['some', 'entries', 'are here']
+        A: ['some', 'entries', 'are here']
       }
     };
   },
@@ -107,7 +83,7 @@ let Register_selectOrg = React.createClass({
     this.props.exec(() => {
       return LoginAction.getOrgList({})
         .then((response) => {
-             console.log("))))))"+response);
+             console.log(response);
         }).catch((errorData) => {
           throw errorData;
         });
