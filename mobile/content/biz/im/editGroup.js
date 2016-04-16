@@ -11,6 +11,7 @@ let ModifyGroupName = require('./modifyGroupName');
 let AddMember = require('./addMember');
 let DeleteMember = require('./deleteMember');
 let ContactStore = require('../../framework/store/contactStore');
+let ContactAction = require('../../framework/action/contactAction');
 let DictIcon = require('../../constants/dictIcon');
 
 let MembersBar = require('./membersBar');
@@ -18,24 +19,34 @@ let MembersBar = require('./membersBar');
 let EditGroup = React.createClass({
 
   getInitialState:function () {
+    let groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
     return {
-      falseSwitchIsOn:false,
-      groupInfo:ContactStore.getGroupDetailById(this.props.param.id)
+      falseSwitchIsOn:groupInfo.isMute,
+      groupInfo:groupInfo
     };
   },
 
   renderMember: function() {
     let initData = {
       members: this.state.groupInfo.members,
-      showDelete: true,
+      showDelete: false,
       imgSource: DictIcon.imSpread,
-      addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.id}}),
-      deleteMember: ()=>this.props.navigator.push({comp: DeleteMember, param:{groupId:this.props.param.id}})
+      addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId}})
     };
 
     return (
       <MembersBar {...initData}/>
     );
+  },
+
+  setMute: function(value){
+    this.setState({falseSwitchIsOn: value});
+    ContactAction.muteGroup(this.props.param.groupId, value)
+
+  },
+
+  deleteGroup:function(){
+    ContactAction.deleteGroup(this.props.param.groupId);
   },
 
   render: function() {
@@ -77,14 +88,14 @@ let EditGroup = React.createClass({
               style={{borderTopColor:'#132132',borderTopWidth:0.5,height:50,backgroundColor: '#15263A',flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
               <Text style={{color:'#ffffff'}}>屏蔽群消息提醒</Text>
               <Switch
-                onValueChange={(value) => this.setState({falseSwitchIsOn: value})}
+                onValueChange={(value) => this.setMute(value)}
                 style={{height:30}}
                 value={this.state.falseSwitchIsOn}/>
             </View>
 
           </View>
           <View >
-            <Button containerStyle={{padding:10, height:45,borderRadius:0, overflow:'hidden', backgroundColor: '#E8004D'}}
+            <Button onPress={this.deleteGroup} containerStyle={{padding:10, height:45,borderRadius:0, overflow:'hidden', backgroundColor: '#E8004D'}}
                     style={{fontSize: 18, color: '#ffffff'}}
             >
               删除并退出该群

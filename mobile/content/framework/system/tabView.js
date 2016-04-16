@@ -128,7 +128,7 @@ var TabView = React.createClass({
             icon={require('../../image/tab/publish.png')}
             selected={this.state.selectedTab === 'publish'}
             onPress={() => {this.setState({selectedTab: 'publish'});}}>
-            <Publish  navigator={this.props.navigator}/>
+            <Publish  navigator={this.props.navigator} exec={this.props.exec}/>
           </TabBarIOS.Item>
 
           <TabBarIOS.Item

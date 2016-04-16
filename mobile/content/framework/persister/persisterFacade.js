@@ -1,7 +1,8 @@
 const _ = require('lodash');
 const Realm = require('realm');
-const SCHEMA_KEY = '@realm:schema';
 let React = require('react-native');
+let MockData = require('./createMockData');
+const SCHEMA_KEY = '@realm:schema';
 const {
   DeviceSchema,
   GroupSchema,
@@ -27,24 +28,6 @@ const {
   ORDERITEMSCHEMA
   } = require('./schemas');
 let {Platform} = React;
-let PersisterFacade = {
-  //interface for AppStore
-  saveAppData: (data) => _saveAppData(data),
-  saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
-  getAPNSToken: () => _getAPNSToken(),
-  getToken: ()=> _getToken(),
-  clearToken: () => _clearToken(),
-  getLoginUserInfo: ()=> _getLoginUserInfo(),
-  getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
-  //interface for ContactStore
-  getContact: ()=>_getContact(),
-  _getIMNotificationMessage: ()=>_getIMNotificationMessage(),
-  getUsers: ()=>_getUsers(),
-  getUserInfoByUserId: (userId)=>_getUserInfoByUserId(userId),
-  getGroupDetailById: (groupId)=>_getGroupDetailById(groupId),
-  getUsersExpress: ()=> _getUsersExpress(),
-  saveOrgBeanSet: () => _saveOrgBeanSet()
-};
 
 console.log(Realm.defaultPath);
 let _realm = new Realm({
@@ -52,7 +35,6 @@ let _realm = new Realm({
     BizOrderCategorySchema, BizOrderItemSchema, FilterItemSchema, FilterItemsSchema, OrderItemSchema],
   schemaVersion: 1
 });
-
 
 let _saveAppData = function (data) {
   let orgBeanSet = data.orgBeanSet;
@@ -275,7 +257,7 @@ let _getUsers = function () {
 
 };
 
-let _getUserInfoByUserId = function (userId) {
+let _getLoginUserInfoByUserId = function (userId) {
   let imUsers = _realm.objects(IMUSERINFO);
   return imUsers.filtered('"userId" = ' + userId);
 };
@@ -289,6 +271,70 @@ let _getIMNotificationMessage = function () {
 };
 
 let _getUsersExpress = function () {
+
+};
+
+
+_realm.write(() => {
+  for (let item of MockData.users) {
+    _realm.create(IMUSERINFO, item, true);
+  }
+
+  for (let org of MockData.orgs) {
+    _realm.create(ORGBEAN, org, true);
+  }
+
+  for(let group of MockData.groups){
+    _realm.create(GROUP, group, true);
+  }
+});
+
+let _getAllGroups = function() {
+  return _realm.objects(GROUP);
+}
+
+let _getUsersGroupByOrg = function() {
+  let orgs = _realm.objects(ORGBEAN);
+  let users = _realm.objects(IMUSERINFO);
+  let orgArray = [];
+  for(let org of orgs){
+    let id = org.id;
+    let orgMembers = users.filtered('orgBeanId = ' + id);
+    org.orgMembers = orgMembers
+    orgArray.push(org);
+  }
+  return orgArray;
+}
+
+let _getUserInfoByUserId = function(id) {
+  let users =  _realm.objects(IMUSERINFO).filtered('userId = ' + id)[0];
+  let orgs = _realm.objects(ORGBEAN);
+  let org = orgs.filtered('id = ' + users.orgBeanId);
+  users.orgValue = org[0].orgValue;
+  return users;
+}
+
+let PersisterFacade = {
+  getAllGroups: () => _getAllGroups(),
+  getUsersGroupByOrg:() => _getUsersGroupByOrg(),
+  getUserInfoByUserId:(id) => _getUserInfoByUserId(id),
+
+  //interface for AppStore
+  saveAppData: (data) => _saveAppData(data),
+  saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
+  getAPNSToken: () => _getAPNSToken(),
+  getToken: ()=> _getToken(),
+  clearToken: () => _clearToken(),
+  getLoginUserInfo: ()=> _getLoginUserInfo(),
+  getOrgByOrgId:(orgId)=> _getOrgByOrgId(orgId),
+  //interface for ContactStore
+  getContact: ()=>_getContact(),
+  _getIMNotificationMessage: ()=>_getIMNotificationMessage(),
+  getUsers: ()=>_getUsers(),
+  getLoginUserInfoByUserId: (userId)=>_getLoginUserInfoByUserId(userId),
+  getGroupDetailById: (groupId)=>_getGroupDetailById(groupId),
+  getUsersExpress: ()=> _getUsersExpress(),
+  saveOrgBeanSet: () => _saveOrgBeanSet()
 
 };
 

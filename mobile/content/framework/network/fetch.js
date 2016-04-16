@@ -21,7 +21,7 @@ var BFetch1 = function (url, param, callback, failure, options) {
   var headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    'Authorization': 'Basic  ' + '11111111'
+    'Authorization': ''
   };
 
   return rawFetch(Host + url, {

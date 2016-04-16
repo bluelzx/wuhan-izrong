@@ -27,7 +27,6 @@ let GroupSchema = {
   }
 };
 
-
 let MessageSchema = {
   name: "message",
   primaryKey: 'sessionId',
@@ -42,6 +41,19 @@ let MessageSchema = {
     msgType: {type: 'string', optional: true},
     revTime: {type: 'date', optional: true},
     isRead: {type: 'bool', option: true}
+  }
+};
+
+let MessageListSchema = {
+  name: "messageList",
+  primaryKey: 'sessionId',
+  properties: {
+    sessionId: {type: 'int', optional: true},
+    type: {type: 'string', optional: true},
+    badge:{type: 'int', optional: true},
+    title: {type: 'string', optional: true},
+    content:{type: 'string', optional: true},
+    lastTime: {type: 'date', optional: true}
   }
 };
 

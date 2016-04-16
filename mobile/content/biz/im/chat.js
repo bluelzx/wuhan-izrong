@@ -10,6 +10,10 @@ let EditGroupMaster = require('./editGroupMaster');
 let DictIcon = require('../../constants/dictIcon');
 let ImUserInfo = require('./imUserInfo');
 const Messenger = require('./messenger');
+let msgType = require('../../constants/wsMsgType');
+let ItemType = require('./itemType');
+let ContactStore = require('../../framework/store/contactStore');
+
 
 let Chat = React.createClass({
 
@@ -23,49 +27,44 @@ let Chat = React.createClass({
 
   getInitialState: function() {
     return {
-      chatInfo:{
-        type:this.props.param.type
+      chatInfo: {
+        type: this.props.param.type
       },
-      myId:0
+      userInfo: ContactStore.getUserInfo()
     }
   },
 
   tagDetail: function(){
-    let id = this.props.param.id;//groupId or userId  ,!!!deferent from ownerId
-    if(this.props.param.type=="user"){
-      this.props.navigator.push({
-        comp: ImUserInfo,
-        param:{
-          id:id
-        }
-      });
+    //let id = this.props.param.id;//groupId or userId  ,!!!deferent from ownerId
+    let comp = EditGroup;
+    let item = this.props.param;
+    if(item.chatType==ItemType.USER){
+      comp = ImUserInfo;
+    }else if(item.groupMasterUid == this.state.userInfo.userId){
+      comp = EditGroupMaster;
     }else{
-      let comp = EditGroup;
-      if(this.props.param.ownerId == this.state.myId){
-        comp = EditGroupMaster;
-      }
-      this.props.navigator.push({
-        comp: comp,
-        param:{
-          id:id
-        }
-
-      });
+      // 普通成员
     }
+    this.props.navigator.push({
+      comp: comp,
+      param:item
+    });
   },
 
   renderEdit: function () {
     return (
       <TouchableOpacity
         onPress={this.tagDetail}>
-       <Image style={{width:25,height:25}} source={this.props.param.type=="user"?DictIcon.imUserMore:DictIcon.imGroupMore}/>
+       <Image style={{width:25,height:25}} source={this.props.param.chatType==ItemType.GROUP?DictIcon.imGroupMore:DictIcon.imUserMore}/>
       </TouchableOpacity>
 
     );
   },
 
   render: function () {
-    let {title} = this.props.param;
+    let item = this.props.param;
+    let title = item.title;
+
     return (
       <NavBarView
         navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'

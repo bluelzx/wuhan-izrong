@@ -14,6 +14,7 @@ let ContactAction = require('../../framework/action/contactAction');
 let Chat = require('./chat');
 let CONSTANT = require('./itemType');
 let ChooseList = require('./chooseList');
+let ItemType = require('./itemType');
 
 let CreateGroup = React.createClass({
 
@@ -63,7 +64,7 @@ let CreateGroup = React.createClass({
                 style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
         <View style={{flexDirection:'row'}}>
           {this.renderImg(data)}
-          <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.userName}</Text>
+          <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
         </View>
       </CheckBox>
     );
@@ -81,17 +82,17 @@ let CreateGroup = React.createClass({
       this.props.navigator.replacePreviousAndPop(
         {
           comp: Chat,
-          param: {title: userInfo.userName, type: CONSTANT.USER, id: userId}
+          param: {title: userInfo.userName, chatType: ItemType.USER, userId: userId}
         }
       );
     }else{
       //setp1: 发送建群的请求   返回groupId
-      let groupId = ContactAction.createGroup();
+      let groupId = ContactAction.createGroup(members, this.state.groupName, this.state.userInfo.userId);
       //setp2: 跳转到群聊页面
       this.props.navigator.replacePreviousAndPop(
         {
           comp: Chat,
-          param: {title: this.state.groupName, type: CONSTANT.GROUP, id: 0}
+          param: {title: this.state.groupName, chatType: ItemType.GROUP, groupMasterUid: 0}
         }
       );
     }
@@ -119,7 +120,8 @@ let CreateGroup = React.createClass({
       searchBarWidth:Device.width - 15,
       memberList:{},
       userData: ContactStore.getUsers(),
-      groupName:'我新建的群'
+      groupName:'我新建的群',
+      userInfo:ContactStore.getUserInfo() // 用户信息
     };
   },
 
