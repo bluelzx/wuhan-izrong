@@ -33,8 +33,8 @@ let MessageSchema = {
   properties: {
     sessionId: {type: 'int', optional: true},
     msgId: {type: 'int', optional: true},
-    fromUid: {type: 'int', optional: true},
-    toUid: {type: 'int', optional: true},
+    fromId: {type: 'int', optional: true},
+    toId: {type: 'int', optional: true},
     type: {type: 'string', optional: true},
     contentType: {type: 'string', optional: true},
     content: {type: 'string', optional: true},
@@ -226,7 +226,7 @@ module.exports = {
   ORGBEAN: 'orgBean',
   BIZORDERCATEGORY: 'bizOrderCategory',
   BIZORDERITEM: 'bizOrderItem',
-  FILTERITEMSSCHEMA:'filterItemsSchema',
-  FILTERITEMSCHEMA:'filterItemSchema',
-  ORDERITEMSCHEMA:'orderItemSchema'
+  FILTERITEMS:'filterItems',
+  FILTERITEM:'filterItem',
+  ORDERITEM:'orderItem'
 };

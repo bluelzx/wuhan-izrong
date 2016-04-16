@@ -17,7 +17,7 @@ var MarketActions ={
 
   bizOrderMarketSearchDefaultSearch: (p, c, f) => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch, p, c, f),
   bizOrderMarketSearchsearch: (p, c, f) => _bizOrderMarketSearchsearch(AppLinks.bizOrderMarketSearchsearch, p, c, f),
-  getBizOrderInMarket: (p, c, f) => _getBizOrderInMarket(AppLinks.getBizOrderInMarket, p, c, f)
+  getBizOrderInMarket: (p, c, f) => _getBizOrderInMarket(AppLinks.getBizOrderInMarket, p, c, f),
   getBizOrderInMarket: (p, c, f) =>_pfetchWithUrlAndP(AppLinks.getBizOrderInMarket, p, c, f),
 
   addBizOrder: (p, c, f) => _bfetchWithUrlAndP(AppLinks.addBizOrder, p, c, f),

@@ -2,6 +2,7 @@ const _ = require('lodash');
 const Realm = require('realm');
 let React = require('react-native');
 let MockData = require('./createMockData');
+let FilterData = require('./filterData');
 const SCHEMA_KEY = '@realm:schema';
 const {
   DeviceSchema,
@@ -23,9 +24,9 @@ const {
   ORGBEAN,
   BIZORDERCATEGORY,
   BIZORDERITEM,
-  FILTERITEMSSCHEMA,
-  FILTERITEMSCHEMA,
-  ORDERITEMSCHEMA
+  FILTERITEMS,
+  FILTERITEM,
+  ORDERITEM
   } = require('./schemas');
 let {Platform} = React;
 
@@ -274,6 +275,47 @@ let _getUsersExpress = function () {
 
 };
 
+let _saveFilters = function () {
+  let data = FilterData.filterData;
+  let filterItems = data.filterItems;
+  let orderItems = data.orderItems;
+  orderItems.forEach(function (orderItem) {
+    _realm.write(() => {
+      _realm.create(ORDERITEM, {
+        id: orderItem.id,
+        fieldName: orderItem.fieldName,
+        fieldDisplayName: orderItem.fieldDisplayName,
+        fieldDisplayCode: orderItem.fieldDisplayCode,
+        displaySequence: orderItem.displaySequence,
+        filterId: orderItem.filterId,
+        selected: orderItem.selected,
+        asc: orderItem.asc
+      }, true);
+    });
+  });
+  filterItems.forEach(function (filterItem, index) {
+    _realm.write(() => {
+      _realm.create(FILTERITEMS, {
+        id: index + 1,
+        descrCode: filterItem.descrCode,
+        descrName: filterItem.descrName,
+        displaySeq: filterItem.displaySeq,
+        options: filterItem.options
+      }, true);
+    });
+  });
+};
+
+let _getFilters = function () {
+  let filterItems = _realm.objects(FILTERITEMS);
+  let orderItems = _realm.objects(ORDERITEM);
+  console.log(filterItems);
+  return {
+    filterItems:filterItems,
+    orderItems:orderItems
+  }
+};
+
 
 _realm.write(() => {
   for (let item of MockData.users) {
@@ -284,40 +326,40 @@ _realm.write(() => {
     _realm.create(ORGBEAN, org, true);
   }
 
-  for(let group of MockData.groups){
+  for (let group of MockData.groups) {
     _realm.create(GROUP, group, true);
   }
 });
 
-let _getAllGroups = function() {
+let _getAllGroups = function () {
   return _realm.objects(GROUP);
-}
+};
 
-let _getUsersGroupByOrg = function() {
+let _getUsersGroupByOrg = function () {
   let orgs = _realm.objects(ORGBEAN);
   let users = _realm.objects(IMUSERINFO);
   let orgArray = [];
-  for(let org of orgs){
+  for (let org of orgs) {
     let id = org.id;
     let orgMembers = users.filtered('orgBeanId = ' + id);
-    org.orgMembers = orgMembers
+    org.orgMembers = orgMembers;
     orgArray.push(org);
   }
   return orgArray;
-}
+};
 
-let _getUserInfoByUserId = function(id) {
-  let users =  _realm.objects(IMUSERINFO).filtered('userId = ' + id)[0];
+let _getUserInfoByUserId = function (id) {
+  let users = _realm.objects(IMUSERINFO).filtered('userId = ' + id)[0];
   let orgs = _realm.objects(ORGBEAN);
   let org = orgs.filtered('id = ' + users.orgBeanId);
   users.orgValue = org[0].orgValue;
   return users;
-}
+};
 
 let PersisterFacade = {
   getAllGroups: () => _getAllGroups(),
-  getUsersGroupByOrg:() => _getUsersGroupByOrg(),
-  getUserInfoByUserId:(id) => _getUserInfoByUserId(id),
+  getUsersGroupByOrg: () => _getUsersGroupByOrg(),
+  getUserInfoByUserId: (id) => _getUserInfoByUserId(id),
 
   //interface for AppStore
   saveAppData: (data) => _saveAppData(data),
@@ -326,7 +368,7 @@ let PersisterFacade = {
   getToken: ()=> _getToken(),
   clearToken: () => _clearToken(),
   getLoginUserInfo: ()=> _getLoginUserInfo(),
-  getOrgByOrgId:(orgId)=> _getOrgByOrgId(orgId),
+  getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
   //interface for ContactStore
   getContact: ()=>_getContact(),
   _getIMNotificationMessage: ()=>_getIMNotificationMessage(),
@@ -334,8 +376,9 @@ let PersisterFacade = {
   getLoginUserInfoByUserId: (userId)=>_getLoginUserInfoByUserId(userId),
   getGroupDetailById: (groupId)=>_getGroupDetailById(groupId),
   getUsersExpress: ()=> _getUsersExpress(),
-  saveOrgBeanSet: () => _saveOrgBeanSet()
-
+  saveOrgBeanSet: () => _saveOrgBeanSet(),
+  saveFilters: ()=> _saveFilters(),
+  getFilters: ()=> _getFilters()
 };
 
 module.exports = PersisterFacade;
