@@ -21,8 +21,7 @@ let AppStore = require('../../framework/store/appStore');
 let CONSTANT = require('./itemType');
 let DictIcon = require('../../constants/dictIcon');
 let Spread = require('./spread');
-
-
+let ItemType = require('./itemType');
 
 let Contacts = React.createClass({
 
@@ -54,22 +53,46 @@ let Contacts = React.createClass({
 
   //******************** 扩展列表
   //渲染组标题
-  titleRender: function(data) {
+  titleRender: function(data, index) {
+    let title = "";
+    if (index == 0)
+      title = '我的群组';
+    else
+      title = data.orgValue;
     return (
       <Text
         style={
           {color: '#ffffff'}}>
-        {data.orgName}
+        {title}
       </Text>
     );
   },
 
+  toGroup: function(item){
+    let param = {};
+    param.chatType = ItemType.GROUP;
+    param.title = item.groupName;
+    param.groupId = item.groupId;
+    param.groupMasterUid = item.groupMasterUid;
+    this.props.navigator.push({comp:Chat, param:param});
+
+  },
+
+  toUser: function(item){
+    let param = {};
+
+    param.chatType = ItemType.USER;
+    param.title = item.realName;
+    param.userId = item.userId;
+    this.props.navigator.push({comp:Chat, param:param});
+  },
+
   //渲染组成员
-  itemRender: function(data) {
-    if(data.type==CONSTANT.GROUP){
+  itemRender: function(data, index) {
+    if(index == 0){
       return (
         <TouchableHighlight key={data.groupId}
-                            onPress={() => this.props.navigator.push({comp:Chat, param:{title:data.groupName}})}
+                            onPress={() => this.toGroup(data)}
                             style={{borderTopWidth:0.5,  borderTopColor: '#132232'}}>
           <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
             <Image style={{height: 40,width: 40,borderRadius: 20}} source={DictIcon.imMyGroup} />
@@ -81,11 +104,11 @@ let Contacts = React.createClass({
     }else {
       return (
         <TouchableHighlight key={data.userId}
-                            onPress={() => this.props.navigator.push({comp:Chat, param:{title:data.userName}})}
+                            onPress={() => this.toUser(data)}
                             style={{borderTopWidth:0.5,  borderTopColor: '#132232'}}>
           <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
             {this.renderImg(data)}
-            <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.userName}</Text>
+            <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
           </View>
         </TouchableHighlight>
 

@@ -10,27 +10,16 @@ let AppLinks = require('../../constants/appLinks');
 var pub = "/pub";
 let LoginActions = {
   getProtocol: () => AppLinks.protocal,
-  logOut: () => _logout(AppLinks.logout),
-  register: (p, c, f) => _register(AppLinks.register, p, c, f),
-  validatePassword: (p, c, f) => BFetch(AppLinks.validatePassword, p, c, f),
-  validateMobileForResetMobile: (p, c, f) => BFetch(AppLinks.validateMobileForForgetPwd, p, c, f),
-  sendSMSCodeToNewMobile: (p, c, f) => PFetch(AppLinks.sendSMSCodeToNewMobile, p, c, f),
-  sendSMSCodeToNewMobileApi: (p, c, f) => BFetch(AppLinks.sendSMSCodeToNewMobileApi, p, c, f),
-  validateSMSCode: (p, c, f) => PFetch(AppLinks.validateSMSCode, p, c, f),
-  validateMobileForReg: (p, c, f) => BFetch(AppLinks.validateMobileForReg, p, c, f),
-  validateMobileForForgetPwd: (p, c, f) => BFetch(AppLinks.validateMobileForForgetPwd, p, c, f),
-  resetPasswordForForgetPwd: (p, c, f) => BFetch(AppLinks.resetPasswordForForgetPwd, p, c, f),
-  sendSMSCodeToOldMobile: (p, c, f) => PFetch(AppLinks.sendSMSCodeToOldMobile, p, c, f),
-  resetMobileNo: (p, c, f) => _resetMobileNo(AppLinks.resetMobileNo, p, c, f),
-  resetPasswordForChangePwd: (p, c, f) => BFetch(AppLinks.resetPasswordForChangePwd, p, c, f),
   forceLogOut: () => AppStore.forceLogout(),
-  clear: () => AppStore.logout(),
-  login: (p, c, f) => _login(AppLinks.login, p),
-  sendSmsCodeToLoginMobile: (p, f)=> _sendSmsCodeToLoginMobile(AppLinks.sendSmsCodeToLoginMobile,p),
-  sendSmsCodeToRegisterMobile: (p, f)=> _sendSmsCodeToRegisterMobile(AppLinks.sendSmsCodeToRegisterMobile,p),
-  validateSmsCode: (p,f) => _validateSmsCode(AppLinks.validateSmsCode,p),
+  logout: () => _logout(AppLinks.logout),
+  login: (p) => _login(AppLinks.login, p),
+  register: (p, c, f) => _register(AppLinks.register, p, c, f),
+  sendSmsCodeToLoginMobile: (p)=> _sendSmsCodeToLoginMobile(AppLinks.sendSmsCodeToLoginMobile,p),
+  sendSmsCodeToRegisterMobile: (p)=> _sendSmsCodeToRegisterMobile(AppLinks.sendSmsCodeToRegisterMobile,p),
+  validateSmsCode: (p) => _validateSmsCode(AppLinks.validateSmsCode,p),
   uploadNameCard: (fileFieldName,p) => _uploadNameCard(AppLinks.uploadFile,fileFieldName,p),
-  getOrgList: () => _getOrgList(AppLinks.getOrgList)
+  getOrgList: () => _getOrgList(AppLinks.getOrgList),
+  bizOrderMarketSearchDefaultSearch: (url) => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch)
 
 };
 
@@ -88,7 +77,7 @@ let _register = function (url, p) {
 let _logout = function (url) {
   return new Promise((resolve, reject) => {
     BFetch(url).then((response) => {
-      resolve(response);
+      resolve(AppStore.logout(response));
     }).catch((errorData) => {
       reject(errorData);
     });
@@ -118,5 +107,16 @@ let _getOrgList = function (url) {
     });
   });
 };
+
+let _bizOrderMarketSearchDefaultSearch = function (url) {
+  return new Promise((resolve, reject) => {
+    BFetch(url).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
 
 module.exports = LoginActions;

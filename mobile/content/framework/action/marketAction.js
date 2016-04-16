@@ -28,7 +28,7 @@ var MarketActions ={
 
 let _bizOrderMarketSearchDefaultSearch = function (url) {
   return new Promise((resolve, reject) => {
-    BFetch1(url).then((response) => {
+    BFetch(url).then((response) => {
       resolve(response);
     }).catch((errorData) => {
       reject(errorData);
@@ -38,7 +38,7 @@ let _bizOrderMarketSearchDefaultSearch = function (url) {
 
 let _bizOrderMarketSearchsearch = function (url,p) {
   return new Promise((resolve, reject) => {
-    BFetch1(url,p).then((response) => {
+    BFetch(url,p).then((response) => {
       resolve(response);
     }).catch((errorData) => {
       reject(errorData);

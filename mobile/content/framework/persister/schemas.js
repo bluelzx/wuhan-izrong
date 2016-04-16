@@ -20,7 +20,7 @@ let GroupSchema = {
   properties: {
     groupId: {type: 'int', optional: true},
     groupName: {type: 'string', optional: true},
-    groupMasterUid: {type: 'string', optional: true},
+    groupMasterUid: {type: 'int', optional: true},
     memberNum: {type: 'int', optional: true},
     members: {type: 'list', objectType: 'imUserInfo'},
     mute: {type: 'bool', optional: true}
@@ -33,8 +33,8 @@ let MessageSchema = {
   properties: {
     sessionId: {type: 'int', optional: true},
     msgId: {type: 'int', optional: true},
-    fromUid: {type: 'int', optional: true},
-    toUid: {type: 'int', optional: true},
+    fromId: {type: 'int', optional: true},
+    toId: {type: 'int', optional: true},
     type: {type: 'string', optional: true},
     contentType: {type: 'string', optional: true},
     content: {type: 'string', optional: true},
@@ -44,6 +44,20 @@ let MessageSchema = {
   }
 };
 
+let MessageListSchema = {
+  name: "messageList",
+  primaryKey: 'sessionId',
+  properties: {
+    sessionId: {type: 'int', optional: true},
+    type: {type: 'string', optional: true},
+    badge:{type: 'int', optional: true},
+    title: {type: 'string', optional: true},
+    content:{type: 'string', optional: true},
+    lastTime: {type: 'date', optional: true}
+  }
+};
+
+//im用户信息
 let ImUserInfoSchema = {
   name: "imUserInfo",
   primaryKey: 'userId',
@@ -73,6 +87,7 @@ let ImUserInfoSchema = {
   }
 };
 
+//登陆用户信息
 let LoginUserInfoSchema = {
   name: "loginUserInfo",
   primaryKey: 'userId',
@@ -144,31 +159,49 @@ let BizOrderItemSchema = {
   properties: {
     displaySeq: {type: 'string', optional: true},
     bizItem: {type: 'string', optional: true},
-    bizItemDesc: {type: 'string', optional: true},
+    bizItemDesc: {type: 'string', optional: true}
   }
 };
 
-let MarketInfoSchema = {
-  name: "marketInfo",
+//两侧筛选器一级菜单
+let FilterItemsSchema = {
+  name: "filterItems",
   primaryKey: 'id',
   properties: {
     id: {type: 'int', optional: true},
-    bizCategory: {type: 'string', optional: true},
-    bizCategoryDesc: {type: 'string', optional: true},
-    bizItem: {type: 'string', optional: true},
-    bizItemDesc: {type: 'string', optional: true},
-    bizOrientation: {type: 'string', optional: true},
-    bizOrientationDesc: {type: 'string', optional: true},
-    term: {type: 'int', optional: true},
-    amount: {type: 'int', optional: true},
-    rate: {type: 'double', optional: true},
-    status: {type: 'string', optional: true},
-    statusDesc: {type: 'string', optional: true},
-    lastModifyDate: {type: 'date', optional: true},
-    userId: {type: 'int', optional: true},
-    userName: {type: 'string', optional: true},
-    orgId: {type: 'int', optional: true},
-    orgName: {type: 'string', optional: true}
+    descrCode: {type: 'string', optional: true},
+    descrName: {type: 'string', optional: true},
+    displaySeq: {type: 'int', optional: true},
+    options: {type: 'list', objectType: 'filterItem'}
+  }
+};
+
+//两侧筛选器二级菜单
+let FilterItemSchema = {
+  name: "filterItem",
+  primaryKey: 'id',
+  properties: {
+    id: {type: 'int', optional: true},
+    displayName: {type: 'string', optional: true},
+    displayCode: {type: 'string', optional: true},
+    displaySeq: {type: 'int', optional: true},
+    isSelected: {type: 'bool', optional: true}
+  }
+};
+
+//筛选器中间部分,只有一级菜单
+let OrderItemSchema = {
+  name: "orderItem",
+  primaryKey: 'id',
+  properties: {
+    id: {type: 'int', optional: true},
+    fieldName: {type: 'string', optional: true},
+    fieldDisplayName: {type: 'string', optional: true},
+    fieldDisplayCode: {type: 'string', optional: true},
+    displaySequence: {type: 'int', optional: true},
+    filterId: {type: 'int', optional: true},
+    selected: {type: 'bool', optional: true},
+    asc: {type: 'bool', optional: true}
   }
 };
 
@@ -182,7 +215,9 @@ module.exports = {
   OrgBeanSchema: OrgBeanSchema,
   BizOrderCategorySchema: BizOrderCategorySchema,
   BizOrderItemSchema: BizOrderItemSchema,
-  MarketInfoSchema: MarketInfoSchema,
+  FilterItemSchema:FilterItemSchema,
+  FilterItemsSchema:FilterItemsSchema,
+  OrderItemSchema:OrderItemSchema,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
@@ -191,5 +226,7 @@ module.exports = {
   ORGBEAN: 'orgBean',
   BIZORDERCATEGORY: 'bizOrderCategory',
   BIZORDERITEM: 'bizOrderItem',
-  MARKETINFO: 'marketInfo'
+  FILTERITEMS:'filterItems',
+  FILTERITEM:'filterItem',
+  ORDERITEM:'orderItem'
 };

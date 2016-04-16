@@ -56,6 +56,7 @@ var WhitePage = React.createClass({
   componentWillMount: function () {
     //{this.bizOrderMarketSearchDefaultSearch()};
     //{this.bizOrderMarketSearchsearch()}
+    //MarketStore.getCategory(MarketStore.getMarketData().filterItems);
     var obj = MarketStore.bizDefaultSearch().filterItems;
     let categroyAndItem = MarketStore.getCategoryAndItem(obj);
     console.log(categroyAndItem)

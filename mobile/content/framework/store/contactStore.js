@@ -1,195 +1,115 @@
 /**
  * Created by baoyinghai on 16/4/12.
  */
+let msgType = require('../../constants/wsMsgType');
+let contentType = require('../../constants/msgContentType');
+let PersisterFacade = require('../persister/persisterFacade');
+
 let _getContact = function(){
-  //我的群
+  //我的群  第一个元素必须为群组
   //联系人按群组分类
+  let groups = PersisterFacade.getAllGroups();
   return [
     {
-      "orgName": "我的群组",
-      "orgMembers": [
-        {
-          "groupId": 1,
-          "type":'group',
-          "groupName": "某群",
-          "groupPhotoFileId":"test005"
-        },
-        {
-          "groupId": 2,
-          "type":'group',
-          "groupName": "某群2",
-          "groupPhotoFileId":"test005"
-        }
-      ]
+      orgMembers: groups
     }
   ].concat(_getUsers());
-};
+}
 
 let _getUsers = function() {
-
-  return [
-    {
-      "orgName": "bank1",
-      "orgMembers": [
-        {
-          "userId": 1,
-           type:'user',
-          "photoFileId": "test001",
-          "userName": "A吴"
-        },
-        {
-          "userId": 3,
-          type:'user',
-          "photoFileId": "test002",
-          "userName": "A张"
-        },
-        {
-          "userId": 4,
-          type:'user',
-          "photoFileId": "test004",
-          "userName": "B张"
-        },
-        {
-          "userId": 5,
-          type:'user',
-          "photoFileId": "test005",
-          "userName": "B李"
-        }
-      ]
-    },
-    {
-      "orgName": "bank2",
-      "orgMembers": [
-        {
-          "userId": 2,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },{
-          "userId": 6,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },{
-          "userId": 7,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },{
-          "userId": 8,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },{
-          "userId": 9,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },
-        {
-          "userId": 10,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },{
-          "userId": 11,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        },{
-          "userId": 12,
-          type:'user',
-          "photoFileId": "test003",
-          "userName": "B吴"
-        }
-      ]
-    }
-  ];
-};
+  return PersisterFacade.getUsersGroupByOrg();
+}
 
 let _getIMNotificationMessage = function() {
-  let SpreadData = {
-    badge: 1,
-    title: '环渤海银银合作平台',
-    recTime: new Date(),
-    content: '尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'
+  let platformInfo = {
+    infoId:'i001',
+    title:'new11',
+    content:'new1',
+    badge:1,
+    createDate:new Date(),
+    msgType:msgType.PLATFORM_INFO
   };
+  //按照msgType 分两组, p2p 和 group, p2p 按照fromUid再分组,取组内最新的一条瓶装数据,并统计未读数量  ,最终结果再按照时间排序
   let MockData = [
     {
-      type: 'user',
-      userId: 2,
-      badge: 1,
-      title: '张缪缪',
-      recTime: new Date(),
-      content: '尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'
+      fromUid: 'u001',
+      badge:2,  //统计未读条数
+      realName:'user', //用户名
+      content: 'text message',
+      contentType: contentType.TEXT,
+      msgId: 'uuid',
+      sendDate: new Date(),
+      msgType: msgType.REC_P2P_MSG
     },
     {
-      type: 'user',
-      userId: 3,
-      badge: 2,
-      title: '吴某某',
-      recTime: new Date(),
-      content: '尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'
-    },
-    {
-      type: 'group',
-      groupId: 4,
-      ownerId: 0,
-      badge: 99,
-      title: '某群',
-      recTime: new Date(),
-      content: '尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!尊敬的用户您好!'
+      fromUid: 'u001',
+      gid: 'g001',
+      badge:3,//统计未读条数
+      groupName:'group1', // 群组名字
+      groupMasterUid:3,   //群主
+      content: 'text',
+      contentType: contentType.TEXT,
+      msgId: 'uuid',
+      sendDate: new Date(),
+      msgType: msgType.REC_GROUP_MSG
     }
   ];
   return {
-    spreadNotice:SpreadData,  // 平台通知
-    notice:MockData           // 用户和群组的通知
+    platformInfo:platformInfo,  // 平台通知
+    msg:MockData           // 用户和群组的通知
   };
-};
+}
 
-let _getUserInfoByUserId = function() {
-  return {
-    "userId": 2,
-    type:'user',
-    "photoFileId": "test003",
-    "userName": "B吴"
-  };
-};
+let _getUserInfoByUserId = function(id) {
+  return PersisterFacade.getUserInfoByUserId(id);
+}
 
 let _getGroupDetailById = function() {
   return {
     'groupId': 1,
     'groupName': 'bank1',
-    'ownerId': 1,
-    isMute:false,
+    'groupMasterUid': 1,
+     isMute:true,
     'members': [
       {
-        "userId": 1,
-        type:'user',
-        "photoFileId": "test001",
-        "userName": "A吴"
+        "userId": 2,
+        "photoFileId": "test003",
+        "realName": "B吴"
+      },{
+        "userId": 6,
+        "photoFileId": "test003",
+        "realName": "B吴"
+      },{
+        "userId": 7,
+        "photoFileId": "test003",
+        "realName": "B吴"
+      }
+      ,{
+        "userId": 8,
+        "photoFileId": "test003",
+        "realName": "B吴"
+      }
+      ,{
+        "userId": 9,
+        "photoFileId": "test003",
+        "realName": "B吴"
       },
       {
-        "userId": 3,
-        type:'user',
-        "photoFileId": "test002",
-        "userName": "A张"
-      },
-      {
-        "userId": 4,
-        type:'user',
-        "photoFileId": "test004",
-        "userName": "B张"
-      },
-      {
-        "userId": 5,
-        type:'user',
-        "photoFileId": "test005",
-        "userName": "B李"
+        "userId": 10,
+        "photoFileId": "test003",
+        "realName": "B吴"
+      },{
+        "userId": 11,
+        "photoFileId": "test003",
+        "realName": "B吴"
+      },{
+        "userId": 12,
+        "photoFileId": "test003",
+        "realName": "B吴"
       }
     ]
   };
-};
+}
 
 let _getUsersExpress = function(groupId) {
   return [
@@ -198,27 +118,23 @@ let _getUsersExpress = function(groupId) {
       "orgMembers": [
         {
           "userId": 1,
-          type:'user',
           "photoFileId": "test001",
-          "userName": "A吴"
+          "realName": "A吴"
         },
         {
           "userId": 3,
-          type:'user',
           "photoFileId": "test002",
-          "userName": "A张"
+          "realName": "A张"
         },
         {
           "userId": 4,
-          type:'user',
           "photoFileId": "test004",
-          "userName": "B张"
+          "realName": "B张"
         },
         {
           "userId": 5,
-          type:'user',
           "photoFileId": "test005",
-          "userName": "B李"
+          "realName": "B李"
         }
       ]
     },
@@ -227,14 +143,117 @@ let _getUsersExpress = function(groupId) {
       "orgMembers": [
         {
           "userId": 2,
-          type:'user',
           "photoFileId": "test003",
-          "userName": "B吴"
+          "realName": "B吴"
+        },{
+          "userId": 6,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 7,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 8,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 9,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },
+        {
+          "userId": 10,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 11,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 12,
+          "photoFileId": "test003",
+          "realName": "B吴"
         }
       ]
     }
-    ];
-};
+  ];
+}
+
+let _getUserInfo = function() {
+  return {
+    userId:3
+  };
+}
+
+let _getUsersByGroupId = function (groupId) {
+  return [
+    {
+      "orgName": "bank1",
+      "orgMembers": [
+        {
+          "userId": 1,
+          "photoFileId": "test001",
+          "realName": "A吴"
+        },
+        {
+          "userId": 3,
+          "photoFileId": "test002",
+          "realName": "A张"
+        },
+        {
+          "userId": 4,
+          "photoFileId": "test004",
+          "realName": "B张"
+        },
+        {
+          "userId": 5,
+          "photoFileId": "test005",
+          "realName": "B李"
+        }
+      ]
+    },
+    {
+      "orgName": "bank2",
+      "orgMembers": [
+        {
+          "userId": 2,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 6,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 7,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 8,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 9,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },
+        {
+          "userId": 10,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 11,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        },{
+          "userId": 12,
+          "photoFileId": "test003",
+          "realName": "B吴"
+        }
+      ]
+    }
+  ];
+}
 
 let ContactStore = {
   getContact:_getContact ,                 //获得联系人和群组信息
@@ -242,7 +261,9 @@ let ContactStore = {
   getUsers:_getUsers,                             //获得所有用户
   getUserInfoByUserId:_getUserInfoByUserId,       // 根据userId获得用户信息
   getGroupDetailById:_getGroupDetailById,          //更具groupId获得群组信息
-  getUsersExpress:_getUsersExpress             //获得除了已存在groupId群组中的用户
+  getUsersExpress:_getUsersExpress,               //获得除了已存在groupId群组中的用户
+  getUserInfo:_getUserInfo,                       // 获得当前用户信息
+  getUsersByGroupId:_getUsersByGroupId            //获得群组成员
 };
 
 module.exports = ContactStore;

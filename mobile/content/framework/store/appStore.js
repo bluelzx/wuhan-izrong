@@ -40,7 +40,8 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   forceLogout: () => _force_logout(),
   getUserId:() => _getUserId(),
   getLoginUserInfo:() => _getLoginUserInfo(),
-  getOrgByOrgId:(orgId) => _getOrgByOrgId(orgId)
+  getOrgByOrgId:(orgId) => _getOrgByOrgId(orgId),
+  getFilters:()=>_getFilters()
 });
 
 // Private Functions
@@ -62,16 +63,24 @@ let _appInit = () => {
   _.assign(_data, {
     token: _getToken()
   });
+  Persister.saveFilters();
   AppStore.emitChange();
 };
 
 let _register = (data) => {
   Persister.saveAppData(data);
+  _.assign(_data, {
+    token: _getToken()
+  });
   AppStore.emitChange();
 };
 
 let _login = (data) => {
   Persister.saveAppData(data);
+  _.assign(_data, {
+    token: _getToken()
+  });
+
   AppStore.emitChange();
 };
 
@@ -112,5 +121,10 @@ let _getLoginUserInfo =() => {
 
 let _getOrgByOrgId =(orgId)=>{
   return Persister.getOrgByOrgId(orgId);
+};
+
+let _getFilters = ()=>{
+  console.log(Persister.getFilters());
+  Persister.getFilters();
 };
 module.exports = AppStore;
