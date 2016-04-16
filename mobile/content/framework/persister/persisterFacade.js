@@ -24,21 +24,13 @@ const {
   MARKETINFO
   } = require('./schemas');
 let {Platform} = React;
-let PersisterFacade = {
-  getAppData: (cb) => _getAppData(cb),
-  saveAppData: (data) => _saveAppData(data),
-  clearToken: () => _clearToken(),
-  saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
-  getAPNSToken: () => _getAPNSToken(),
-  getToken: ()=> _getToken()
-};
 
 console.log(Realm.defaultPath);
 let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema,
     LoginUserInfoSchema, OrgBeanSchema, BizOrderCategorySchema,
     BizOrderItemSchema, MarketInfoSchema],
-  schemaVersion: 3
+  schemaVersion: 10
 });
 // Create Realm objects and write to local storage
 let _saveAppData = function (data) {
@@ -262,7 +254,7 @@ let _getUsers = function () {
 
 };
 
-let _getUserInfoByUserId = function (userId) {
+let _getLoginUserInfoByUserId = function (userId) {
   let imUsers = _realm.objects(IMUSERINFO);
   return imUsers.filtered('"userId" = ' + userId);
 };
@@ -322,7 +314,7 @@ let _getUserInfoByUserId = function(id) {
 let PersisterFacade = {
   getAllGroups: () => _getAllGroups(),
   getUsersGroupByOrg:() => _getUsersGroupByOrg(),
-  getUserInfoByUserId:(id) => _getUserInfoByUserId(id)
+  getUserInfoByUserId:(id) => _getUserInfoByUserId(id),
 
   //interface for AppStore
   saveAppData: (data) => _saveAppData(data),
@@ -336,7 +328,7 @@ let PersisterFacade = {
   getContact: ()=>_getContact(),
   _getIMNotificationMessage: ()=>_getIMNotificationMessage(),
   getUsers: ()=>_getUsers(),
-  getUserInfoByUserId: (userId)=>_getUserInfoByUserId(userId),
+  getLoginUserInfoByUserId: (userId)=>_getLoginUserInfoByUserId(userId),
   getGroupDetailById: (groupId)=>_getGroupDetailById(groupId),
   getUsersExpress: ()=> _getUsersExpress(),
   saveOrgBeanSet: () => _saveOrgBeanSet()
