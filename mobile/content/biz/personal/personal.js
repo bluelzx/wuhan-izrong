@@ -14,14 +14,14 @@ let {
   TouchableHighlight,
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
-let Validation = require('../../comp/utils/validation');
 let Login = require('../../biz/login/login');
 let Item = require('../../comp/utils/item');
 let UserInfo = require('../../biz/personal/userInfo');
 let AboutUs = require('./aboutUs');
-let SelectOrg  = require('../../biz/login/selectOrg');
+let {Button} = require('mx-artifacts');
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let AppStore = require('../../framework/store/appStore');
+let LoginAction = require('../../framework/action/loginAction');
 
 let Personal = React.createClass({
   getInitialState: function () {
@@ -51,8 +51,8 @@ let Personal = React.createClass({
     }
   },
 
-  returnImg: function () {
-
+  logout: function(){
+    LoginAction.logout();
   },
 
   render: function () {
@@ -81,7 +81,13 @@ let Personal = React.createClass({
                 func={() => this.toPage(AboutUs)}/>
           <Item desc="关于我们" img = {false} value={this.state.realName}
                 func={() => this.toPage(AboutUs)}/>
-
+          <Button
+            containerStyle={{marginTop:20,marginHorizontal:20,backgroundColor:'#ffffff'}}
+            style={{fontSize: 20, color: '#1151B1'}}
+            styleDisabled={{color: 'red'}}
+            onPress={()=>this.logout()}>
+            退出登陆
+          </Button>
         </ScrollView>
       </NavBarView>
     );

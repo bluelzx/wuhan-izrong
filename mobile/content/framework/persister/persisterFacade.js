@@ -11,7 +11,9 @@ const {
   OrgBeanSchema,
   BizOrderCategorySchema,
   BizOrderItemSchema,
-  MarketInfoSchema,
+  FilterItemSchema,
+  FilterItemsSchema,
+  OrderItemSchema,
   DEVICE,
   GROUP,
   MESSAGE,
@@ -20,7 +22,9 @@ const {
   ORGBEAN,
   BIZORDERCATEGORY,
   BIZORDERITEM,
-  MARKETINFO
+  FILTERITEMSSCHEMA,
+  FILTERITEMSCHEMA,
+  ORDERITEMSCHEMA
   } = require('./schemas');
 let {Platform} = React;
 let PersisterFacade = {
@@ -31,7 +35,7 @@ let PersisterFacade = {
   getToken: ()=> _getToken(),
   clearToken: () => _clearToken(),
   getLoginUserInfo: ()=> _getLoginUserInfo(),
-  getOrgByOrgId:(orgId)=> _getOrgByOrgId(orgId),
+  getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
   //interface for ContactStore
   getContact: ()=>_getContact(),
   _getIMNotificationMessage: ()=>_getIMNotificationMessage(),
@@ -44,12 +48,12 @@ let PersisterFacade = {
 
 console.log(Realm.defaultPath);
 let _realm = new Realm({
-  schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema,
-    LoginUserInfoSchema, OrgBeanSchema, BizOrderCategorySchema,
-    BizOrderItemSchema, MarketInfoSchema],
-  schemaVersion: 3
+  schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema, LoginUserInfoSchema, OrgBeanSchema,
+    BizOrderCategorySchema, BizOrderItemSchema, FilterItemSchema, FilterItemsSchema, OrderItemSchema],
+  schemaVersion: 1
 });
-// Create Realm objects and write to local storage
+
+
 let _saveAppData = function (data) {
   let orgBeanSet = data.orgBeanSet;
   let appUser = data.appUserInfoBean;
@@ -97,7 +101,7 @@ let _saveImUsers = function () {
 
 };
 
-let _saveOrgBeanSet = function(){
+let _saveOrgBeanSet = function () {
   let mockOrgBeanSet = [
     {
       corporationType: "INDEPENDENT",
@@ -173,7 +177,7 @@ let _saveOrgBeanSet = function(){
       totalQuota: 5
     }
   ];
-  mockOrgBeanSet.forEach(function(n){
+  mockOrgBeanSet.forEach(function (n) {
     console.log(n);
     _saveOrgBeanItem(n);
   });
@@ -249,17 +253,17 @@ let _getLoginUserInfo = function () {
   if (loginUsers.length != 0) {
     let sortedUser = loginUsers.sorted('lastLoginTime', [true]);
     return sortedUser[0];
-  }else{
+  } else {
     return '';
   }
 };
 
-let _getOrgByOrgId = function(orgId){
+let _getOrgByOrgId = function (orgId) {
   let orgBeans = _realm.objects(ORGBEAN);
-  if (orgBeans.isEmpty){
+  if (orgBeans.isEmpty) {
     return null;
-  }else {
-    return  orgBeans.filtered('id='+orgId)[0];
+  } else {
+    return orgBeans.filtered('id=' + orgId)[0];
   }
 };
 

@@ -67,11 +67,18 @@ let _appInit = () => {
 
 let _register = (data) => {
   Persister.saveAppData(data);
+  _.assign(_data, {
+    token: _getToken()
+  });
   AppStore.emitChange();
 };
 
 let _login = (data) => {
   Persister.saveAppData(data);
+  _.assign(_data, {
+    token: _getToken()
+  });
+
   AppStore.emitChange();
 };
 

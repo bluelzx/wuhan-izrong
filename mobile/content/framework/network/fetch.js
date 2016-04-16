@@ -121,5 +121,5 @@ module.exports = {
   BFetch: BFetch,
   PFetch: PFetch,
   UFetch: UFetch,
-  BFetch1: BFetch1,
+  BFetch1: BFetch1
 };
