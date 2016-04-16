@@ -55,13 +55,6 @@ let Register_uploadNameCard = React.createClass({
     this.setState(this.getStateFromStores());
   },
 
-  toPage: function (name) {
-    const { navigator } = this.props;
-    if (navigator) {
-      navigator.push({comp: name})
-    }
-  },
-
   register: function () {
     if (this.state.uploaded) {
       dismissKeyboard();
@@ -78,11 +71,6 @@ let Register_uploadNameCard = React.createClass({
           const { navigator } = this.props;
           if (navigator) {
             navigator.popToTop();
-            //navigator._popN(3);
-            //navigator.push(
-            //  {
-            //    comp: TabView
-            //  });
           }
         }).catch((errorData) => {
           //Alert(msg.msgContent);

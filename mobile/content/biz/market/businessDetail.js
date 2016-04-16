@@ -22,8 +22,19 @@ var screenHeight = Dimensions.get('window').height;
 
 var NavBarView = require('../../framework/system/navBarView');
 
+var MarketStore = require('../../framework/store/marketStore');
 
 var BusinessDetail = React.createClass({
+  getInitialState(){
+    return {
+      detailData: ''
+    }
+  },
+  componentWillMount: function () {
+    //{
+    //  this.getBizOrderInMarket(this.props.param.marketInfo.id)
+    //}
+  },
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
@@ -118,6 +129,26 @@ var BusinessDetail = React.createClass({
   gotoIM: function () {
 
   },
+
+  getBizOrderInMarket: function (id) {
+    this.props.exec(
+      ()=> {
+        return MarketAction.getBizOrderInMarket(
+        ).then((response)=> {
+          var detail = (JSON.stringify(response));
+          console.log(arr);
+          this.setState({
+            detailData: detail,
+          })
+        }).catch(
+          (errorData) => {
+            throw errorData;
+          }
+        );
+      }
+    );
+  },
+
 });
 
 var styles = StyleSheet.create({});
