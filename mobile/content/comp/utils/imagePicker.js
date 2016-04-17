@@ -20,7 +20,7 @@ let ImagePicker = React.createClass({
     allowsEditing: React.PropTypes.bool,
     onError: React.PropTypes.func,
     fileId: React.PropTypes.string,
-    title: React.PropTypes.string,
+    title: React.PropTypes.string
   },
 
   getDefaultProps() {

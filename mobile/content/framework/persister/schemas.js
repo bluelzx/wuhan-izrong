@@ -218,6 +218,7 @@ module.exports = {
   FilterItemSchema:FilterItemSchema,
   FilterItemsSchema:FilterItemsSchema,
   OrderItemSchema:OrderItemSchema,
+  MessageListSchema:MessageListSchema,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
@@ -228,5 +229,6 @@ module.exports = {
   BIZORDERITEM: 'bizOrderItem',
   FILTERITEMS:'filterItems',
   FILTERITEM:'filterItem',
-  ORDERITEM:'orderItem'
+  ORDERITEM:'orderItem',
+  MESSAGELIST:'messageList'
 };

@@ -90,8 +90,9 @@ let UserInfo = React.createClass({
     this.props.exec(() => {
       return  LoginAction.logout()
         .then((response) => {
+          console.log(response);
       }).catch((errorData) => {
-        Alert(errorData.toString());
+        Alert(errorData.msgContent);
       });
     });
   },

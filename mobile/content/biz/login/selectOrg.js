@@ -10,7 +10,8 @@ let {
   View,
   Image,
   Platform,
-  Component
+  Component,
+  TouchableHighlight
   } = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
@@ -52,20 +53,27 @@ class SectionItem extends Component {
   }
 }
 
-class Cell extends Component {
+let Cell = React.createClass({
   render() {
     return (
-      <View style={{height:40,marginLeft:20,justifyContent:"center",borderBottomWidth:1,borderBottomColor:'#122335'}}>
-        <Text style={{color:"#FFFFFF",textAlign:"left"}}>{this.props.item}</Text>
-      </View>
+      <TouchableHighlight style={{backgroundColor:'#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
+                          onPress={()=>this.selectOrgItem(this.props.item)}>
+        <View style={{height:40,marginLeft:20,justifyContent:"center",borderBottomWidth:1,borderBottomColor:'#122335'}}>
+          <Text style={{color:"#FFFFFF",textAlign:"left"}}>{this.props.item.orgValue}</Text>
+        </View>
+      </TouchableHighlight>
     );
+  },
+
+  selectOrgItem: function (orgItem) {
+    console.log(orgItem);
   }
-}
+});
 
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
-    //let user = UserStore.getUserInfoBean();
-    let orgList = this.getOrgList();
+    this.getOrgList();
+    let orgBuildList = AppStore.getOrgList();
     return {
       loaded: false,
       checked: true,
@@ -73,17 +81,18 @@ let Register_selectOrg = React.createClass({
       password: '',
       verify: '',
       active: false,
-      data: {
-        A: ['some', 'entries', 'are here']
-      }
+      data: orgBuildList
     };
   },
 
-  getOrgList: function () {
+  //网络请求获取
+  getOrgList: function (orgList) {
     this.props.exec(() => {
       return LoginAction.getOrgList({})
         .then((response) => {
-             console.log(response);
+          console.log(response);
+          AppStore.saveOrgList(response);
+          return response;
         }).catch((errorData) => {
           throw errorData;
         });
