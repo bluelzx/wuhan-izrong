@@ -9,7 +9,7 @@ let {
   PFetch,
   UFetch
 } = require('../network/fetch');
-let IM = require('../system/im');
+let ImSocket = require('../network/imSocket');
 
 // Private Functions
 let _appInit = function() {
@@ -32,7 +32,7 @@ let _onNotification = function(notification) {
 
 let AppActions = {
   appInit: () => _appInit(),
-  imInit: () => new IM().init(),
+  imInit: () => ImSocket.init(),
   notificationRegister: (token) => _notificationRegister(token),
   onNotification: (notification) => _onNotification(notification),
   freshNotification: (notification) => _onNotification(notification),

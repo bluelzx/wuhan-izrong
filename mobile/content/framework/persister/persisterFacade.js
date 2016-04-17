@@ -30,16 +30,16 @@ let PersisterFacade = {
   getAPNSToken: () => _getAPNSToken(),
   getToken: ()=> _getToken(),
   clearToken: () => _clearToken(),
-  getUserId:()=> _getUserId(),
+  getUserId: ()=> _getUserId(),
 
   //interface for ContactStore
-  getContact:()=>_getContact(),
+  getContact: ()=>_getContact(),
   _getIMNotificationMessage: ()=>_getIMNotificationMessage(),
-  getUsers:()=>_getUsers(),
-  getUserInfoByUserId:(userId)=>_getUserInfoByUserId(userId),
-  getGroupDetailById:(groupId)=>_getGroupDetailById(groupId),
+  getUsers: ()=>_getUsers(),
+  getUserInfoByUserId: (userId)=>_getUserInfoByUserId(userId),
+  getGroupDetailById: (groupId)=>_getGroupDetailById(groupId),
 
-  getUsersExpress:()=> _getUsersExpress()
+  getUsersExpress: ()=> _getUsersExpress()
 };
 
 console.log(Realm.defaultPath);
@@ -79,22 +79,22 @@ let _saveLoginUserInfo = function (data) {
       photoFileUrl: loginUserInfo.photoFileUrl,
       orgBeanId: loginUserInfo.orgBeanId,
       token: data.appToken,
-      lastLoginTime:new Date(),
-      publicTitle: _.isEmpty(loginUserInfo.publicTitle)? true : loginUserInfo.publicTitle,
-      publicMobile: _.isEmpty(loginUserInfo.publicMobile)? true : loginUserInfo.publicMobile,
-      publicDepart: _.isEmpty(loginUserInfo.publicDepart)? true : loginUserInfo.publicDepart,
-      publicPhone: _.isEmpty(loginUserInfo.publicPhone)? true : loginUserInfo.publicPhone,
-      publicEmail: _.isEmpty(!loginUserInfo.publicEmail)? true : loginUserInfo.publicEmail,
-      publicAddress: _.isEmpty(loginUserInfo.publicAddress)? true : loginUserInfo.publicAddress,
-      publicWeChat: _.isEmpty(loginUserInfo.publicWeChat)? true : loginUserInfo.publicWeChat,
-      publicQQ: _.isEmpty(loginUserInfo.publicQQ)? true : loginUserInfo.publicQQ
-    },true);
+      lastLoginTime: new Date(),
+      publicTitle: _.isEmpty(loginUserInfo.publicTitle) ? true : loginUserInfo.publicTitle,
+      publicMobile: _.isEmpty(loginUserInfo.publicMobile) ? true : loginUserInfo.publicMobile,
+      publicDepart: _.isEmpty(loginUserInfo.publicDepart) ? true : loginUserInfo.publicDepart,
+      publicPhone: _.isEmpty(loginUserInfo.publicPhone) ? true : loginUserInfo.publicPhone,
+      publicEmail: _.isEmpty(!loginUserInfo.publicEmail) ? true : loginUserInfo.publicEmail,
+      publicAddress: _.isEmpty(loginUserInfo.publicAddress) ? true : loginUserInfo.publicAddress,
+      publicWeChat: _.isEmpty(loginUserInfo.publicWeChat) ? true : loginUserInfo.publicWeChat,
+      publicQQ: _.isEmpty(loginUserInfo.publicQQ) ? true : loginUserInfo.publicQQ
+    }, true);
   });
 };
 
 let _saveImUsers = function (imUserBeanList) {
   console.log(imUserBeanList);
-  _([1, 2]).forEach(function(n) {
+  _([1, 2]).forEach(function (n) {
     console.log(n);
   }).value();
 };
@@ -128,73 +128,69 @@ let _getAPNSToken = function () {
     _realm.create(DEVICE, {
       id: 1,
       deviceOS: 'IOS',
-      APNSToken:'asdfghjklzxcvbnm'
+      APNSToken: 'asdfghjklzxcvbnm'
     }, true);
   });
   let device = _realm.objects(DEVICE);
 
-  return device[0].APNSToken ;
+  return device[0].APNSToken;
 };
 
 let _saveAPNSToken = function (apnsToken) {
- _realm.write(()=>{
-   _realm.create(DEVICE, {
-     id: 1,
-     deviceOS:Platform.OS,
-     APNSToken:apnsToken
-   }, true);
- });
+  _realm.write(()=> {
+    _realm.create(DEVICE, {
+      id: 1,
+      deviceOS: Platform.OS,
+      APNSToken: apnsToken
+    }, true);
+  });
 };
 
-let _getToken = function(){
+let _getToken = function () {
   let loginUsers = _realm.objects(LOGINUSERINFO);
-  if (loginUsers.length != 0){
-    if (_.isElement(loginUsers[0].token)){
+  if (loginUsers.length != 0) {
+    if (loginUsers[0].token) {
       return loginUsers[0].token;
-    }else{
-      return '';
     }
-  }else{
-    return '';
   }
-
+  return '';
 };
 
 let _clearToken = function () {
   _realm.write(() => {
     _realm.create(LOGINUSERINFO, {
-      token:''
-    },true);
+      token: ''
+    }, true);
   });
 };
 
-let _getUserId = function(){
+let _getUserId = function () {
   let loginUsers = _realm.objects(LOGINUSERINFO);
   return loginUsers[0].userId;
 };
 
-let _getContact = function(){
+let _getContact = function () {
 
 };
 
-let _getUsers = function(){
+let _getUsers = function () {
 
 };
 
-let _getUserInfoByUserId = function(userId){
+let _getUserInfoByUserId = function (userId) {
   let imUsers = _realm.objects(IMUSERINFO);
-  return imUsers.filtered('"userId" = '+userId);
+  return imUsers.filtered('"userId" = ' + userId);
 };
 
-let _getGroupDetailById = function(groupId){
-
-};
-
-let  _getIMNotificationMessage = function(){
+let _getGroupDetailById = function (groupId) {
 
 };
 
-let _getUsersExpress = function(){
+let _getIMNotificationMessage = function () {
+
+};
+
+let _getUsersExpress = function () {
 
 };
 

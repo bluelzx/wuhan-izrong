@@ -9,7 +9,7 @@ let EditGroup = require('./editGroup');
 let EditGroupMaster = require('./editGroupMaster');
 let DictIcon = require('../../constants/dictIcon');
 let ImUserInfo = require('./imUserInfo');
-const Messenger = require('./messenger');
+const Messenger = require('./../../comp/messenger/messenger');
 
 let Chat = React.createClass({
 

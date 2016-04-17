@@ -1,12 +1,12 @@
 let { Host, ImHost } = require('../../config');
-let imWebSocket = 'ws://' + ImHost + '/';
+let imSocket = 'ws://' + ImHost + '/';
 let imHttp = 'http://' + ImHost + '/';
 
 let pub = '/app/pub';
 let api = '/app/api';
 
 let AppLinks = {
-  ImWebSocket: imWebSocket,
+  ImSocket: imSocket,
   ImHttp: imHttp,
   protocal: '',
   validatePassword: '',
