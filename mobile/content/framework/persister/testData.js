@@ -411,6 +411,83 @@ let filterData = {
   ]
 };
 
+let mockOrgBeanSet = [
+  {
+    corporationType: "INDEPENDENT",
+    creator: null,
+    creatorDate: null,
+    id: 1,
+    isApply: null,
+    isDeleted: null,
+    isDisabled: false,
+    isNeedAudit: null,
+    lastUpdateBy: null,
+    lastUpdateDate: null,
+    occupiedQuota: 2,
+    orgCategory: "BANK",
+    orgCode: "21556211-2",
+    orgValue: "天津银行无锡分行天津银行无锡分行无锡分行",
+    orgValueAlias: null,
+    remark: null,
+    totalQuota: 5
+  }, {
+    corporationType: "INDEPENDENT",
+    creator: null,
+    creatorDate: null,
+    id: 2,
+    isApply: null,
+    isDeleted: null,
+    isDisabled: false,
+    isNeedAudit: null,
+    lastUpdateBy: null,
+    lastUpdateDate: null,
+    occupiedQuota: 2,
+    orgCategory: "BANK",
+    orgCode: "21556211-2",
+    orgValue: "天津银行无锡分行天津银行无锡分行无锡分行",
+    orgValueAlias: null,
+    remark: null,
+    totalQuota: 5
+  }, {
+    corporationType: "INDEPENDENT",
+    creator: null,
+    creatorDate: null,
+    id: 3,
+    isApply: null,
+    isDeleted: null,
+    isDisabled: false,
+    isNeedAudit: null,
+    lastUpdateBy: null,
+    lastUpdateDate: null,
+    occupiedQuota: 2,
+    orgCategory: "BANK",
+    orgCode: "21556211-2",
+    orgValue: "天津银行无锡分行天津银行无锡分行无锡分行",
+    orgValueAlias: null,
+    remark: null,
+    totalQuota: 5
+  }, {
+    corporationType: "INDEPENDENT",
+    creator: null,
+    creatorDate: null,
+    id: 4,
+    isApply: null,
+    isDeleted: null,
+    isDisabled: false,
+    isNeedAudit: null,
+    lastUpdateBy: null,
+    lastUpdateDate: null,
+    occupiedQuota: 2,
+    orgCategory: "BANK",
+    orgCode: "21556211-2",
+    orgValue: "天津银行无锡分行天津银行无锡分行无锡分行",
+    orgValueAlias: null,
+    remark: null,
+    totalQuota: 5
+  }
+];
+
 module.exports = {
-  filterData: filterData
+  filterData: filterData,
+  mockOrgBeanSet:mockOrgBeanSet
 };

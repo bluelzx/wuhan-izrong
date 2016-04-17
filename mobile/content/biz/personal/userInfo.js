@@ -124,7 +124,7 @@ let UserInfo = React.createClass({
                 func={() => this.toEdit("QQ", 'qqNo', this.state.qqNo,this.state.publicQQ, 'number', 20, Validation.isQQ)}/>
 
           <Item desc="微信" imgPath={require('../../image/user/wechatNo.png')} value={this.state.weChatNo}
-                func={() => this.toEdit("微信", 'wechatNo', this.state.weChatNo,this.state.publicWeChat,this.state.publicWeChat, '', 40, '')}/>
+                func={() => this.toEdit("微信", 'wechatNo', this.state.weChatNo,this.state.publicWeChat, '', 40, '')}/>
 
           <Item desc="电子邮箱" imgPath={require('../../image/user/email.png')} value={this.state.email}
                 func={() => this.toEdit("邮箱", 'email', this.state.email,this.state.publicEmail, '', 60, Validation.isEmail)}/>

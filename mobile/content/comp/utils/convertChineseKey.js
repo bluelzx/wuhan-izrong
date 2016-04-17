@@ -3,7 +3,8 @@
  */
 
 let ConvertChineseKey = {
-  makePy: (str) => _makePy(str)
+  makePy: (str) => _makePy(str),
+  buildOrgList: (orgList)=> _buildOrgList(orgList)
 };
 
 // 汉字拼音首字母列表 本列表包含了20902个汉字,用于配合 ToChineseSpell
@@ -40,6 +41,131 @@ function checkCh(ch){
     //return (oMultiDiff[uni]?oMultiDiff[uni]:(strChineseFirstPY.charAt(uni-19968)));
     return strChineseFirstPY.charAt(uni-19968);
   }
+}
+
+function _buildOrgList(orgList){
+  let A = new Array();
+  let B = new Array();
+  let C = new Array();
+  let D = new Array();
+  let E = new Array();
+  let F = new Array();
+  let G = new Array();
+  let H = new Array();
+  let I = new Array();
+  let J = new Array();
+  let K = new Array();
+  let L = new Array();
+  let M = new Array();
+  let N = new Array();
+  let O = new Array();
+  let P = new Array();
+  let Q = new Array();
+  let R = new Array();
+  let S = new Array();
+  let T = new Array();
+  let U = new Array();
+  let V = new Array();
+  let W = new Array();
+  let X = new Array();
+  let Y = new Array();
+  let Z = new Array();
+  let $ = new Array();
+
+  orgList.forEach(function (orgItem) {
+    console.log(orgItem);
+    switch (ConvertChineseKey.makePy(orgItem.orgValue)) {
+      case 'A':
+        A.push(orgItem);
+        break;
+      case 'B':
+        B.push(orgItem);
+        break;
+      case 'C':
+        C.push(orgItem);
+        break;
+      case 'D':
+        D.push(orgItem);
+        break;
+      case 'E':
+        E.push(orgItem);
+        break;
+      case 'F':
+        F.push(orgItem);
+        break;
+      case 'G':
+        G.push(orgItem);
+        break;
+      case 'H':
+        H.push(orgItem);
+        break;
+      case 'I':
+        I.push(orgItem);
+        break;
+      case 'J':
+        J.push(orgItem);
+        break;
+      case 'K':
+        K.push(orgItem);
+        break;
+      case 'L':
+        L.push(orgItem);
+        break;
+      case 'M':
+        M.push(orgItem);
+        break;
+      case 'N':
+        N.push(orgItem);
+        break;
+      case 'O':
+        O.push(orgItem);
+        break;
+      case 'P':
+        P.push(orgItem);
+        break;
+      case 'Q':
+        A.push(orgItem);
+        break;
+      case 'R':
+        R.push(orgItem);
+        break;
+      case 'S':
+        S.push(orgItem);
+        break;
+      case 'T':
+        T.push(orgItem);
+        break;
+      case 'U':
+        U.push(orgItem);
+        break;
+      case 'V':
+        V.push(orgItem);
+        break;
+      case 'W':
+        W.push(orgItem);
+        break;
+      case 'X':
+        X.push(orgItem);
+        break;
+      case 'Y':
+        Y.push(orgItem);
+        break;
+      case 'Z':
+        Z.push(orgItem);
+        break;
+      case '$':
+        $.push(orgItem);
+    }
+  });
+
+  let buildList = {
+    'A':A, 'B':B, 'C':C, 'D':D, 'E':E, 'F':F, 'G':G,
+    'H':H, 'I':I, 'J':J, 'K':K, 'L':L, 'M':M, 'N':N,
+    'O':O, 'P':P, 'Q':Q, 'R':R, 'S':S, 'T':T, 'U':U,
+    'V':V, 'W':W, 'X':X, 'Y':Y, 'Z':Z, '$':$
+  };
+  console.log(buildList);
+  return buildList;
 }
 
 module.exports = ConvertChineseKey;
