@@ -8,17 +8,12 @@ let {
   StyleSheet,
   Text,
   View,
-  Image,
-  Platform,
-  Component,
   TouchableHighlight
   } = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
-let dismissKeyboard = require('react-native-dismiss-keyboard');
-let { Alert, Button ,Device} = require('mx-artifacts');
-var AlphabetListView = require('react-native-alphabetlistview');
+let AlphabetListView = require('react-native-alphabetlistview');
 
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
@@ -56,9 +51,10 @@ let Register_selectOrg = React.createClass({
   _onChange: function () {
 
   },
-  selectItem: function(a,b){
-
+  onCellSelect: function (item) {
+    console.log(item)
   },
+
 
   render: function () {
     return (
@@ -73,8 +69,8 @@ let Register_selectOrg = React.createClass({
             sectionHeader={SectionHeader}
             sectionHeaderHeight={22.5}
             updateScrollState={true}
-            onCellSelect={(a,b)=>{
-               console.log(a.toString+b.toString());
+            onCellSelect={()=>{
+               console.log('onCellSelect')
             }}/>
         </View>
       </NavBarView>
@@ -113,8 +109,8 @@ let Cell = React.createClass({
     );
   },
 
-  selectOrgItem: function (orgItem, callback) {
-    console.log(orgItem);
+  selectOrgItem: function (item) {
+     console.log(item);
   }
 });
 

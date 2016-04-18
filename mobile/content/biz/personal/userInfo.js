@@ -64,7 +64,7 @@ let UserInfo = React.createClass({
 
   },
 
-  toEdit: function (title, name, value, isPublic, type, maxLength, valid) {
+  toEdit: function (title, name, value, publicName, publicValue, type, maxLength, valid) {
     if (value == '未设置') {
       value = ''
     }
@@ -76,7 +76,8 @@ let UserInfo = React.createClass({
           title: title,
           name: name,
           value: value,
-          public: isPublic,
+          publicName: publicName,
+          publicValue: publicValue,
           type: type,
           maxLength: maxLength,
           valid: valid
@@ -95,12 +96,29 @@ let UserInfo = React.createClass({
             navigator.push({
               comp: Login
             });
-
           }
         }).catch((errorData) => {
           Alert(errorData);
         });
     });
+  },
+
+  renderRow: function (desc, imagePath, name, value, pubName, pubValue, type, maxLength, valid) {
+
+    let showValue = '';
+    if (value == null || value == '未填写') {
+      showValue = '未填写';
+    } else {
+      if (pubValue) {
+        showValue = value + '(公开)';
+      } else {
+        showValue = value + '(不公开)';
+      }
+    }
+    return (
+      <Item desc={desc} imgPath={imagePath} value={showValue}
+            func={() => this.toEdit(desc, name, value, pubName ,pubValue, type, maxLength, valid)}/>
+    )
   },
 
   render: function () {
@@ -120,30 +138,34 @@ let UserInfo = React.createClass({
             </View>
           </TouchableHighlight>
 
-          <Item desc="手机号" imgPath={require('../../image/user/mobileNo.png')} value={this.state.mobileNumber}
-                func={() => this.toEdit("手机号", 'mobile', this.state.mobileNumber,this.state.publicMobile, 'name', 20, Validation.isPhone)}/>
+          {this.renderRow("手机号",require('../../image/user/mobileNo.png'),'mobile', this.state.mobileNumber,'publicMobile',this.state.publicMobile, 'name', 20, Validation.isPhone)}
+
+          <Item desc="手机号" imgPath={require('../../image/user/mobileNo.png')} page='userInfo'
+                value={this.state.mobileNumber}
+                func={() => this.toEdit("手机号", 'mobile', this.state.mobileNumber,'publicMobile',this.state.publicMobile, 'name', 20, Validation.isPhone)}/>
 
           <Item desc="座机号" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.phoneNumber}
-                func={() => this.toEdit("座机号", 'telephoneNo', this.state.phoneNumber,this.state.publicPhone, 'telephone', 13, Validation.isTelephone)}/>
+                page='userInfo'
+                func={() => this.toEdit("座机号", 'telephoneNo', this.state.phoneNumber,'publicPhone',this.state.publicPhone, 'telephone', 13, Validation.isTelephone)}/>
 
-          <Item desc="QQ" imgPath={require('../../image/user/qqNo.png')} value={this.state.qqNo}
-                func={() => this.toEdit("QQ", 'qqNo', this.state.qqNo,this.state.publicQQ, 'number', 20, Validation.isQQ)}/>
+          <Item desc="QQ" imgPath={require('../../image/user/qqNo.png')} value={this.state.qqNo} page='userInfo'
+                func={() => this.toEdit("QQ", 'qqNo', this.state.qqNo,'publicQQ',this.state.publicQQ, 'number', 20, Validation.isQQ)}/>
 
-          <Item desc="微信" imgPath={require('../../image/user/wechatNo.png')} value={this.state.weChatNo}
-                func={() => this.toEdit("微信", 'wechatNo', this.state.weChatNo,this.state.publicWeChat, '', 40, '')}/>
+          <Item desc="微信" imgPath={require('../../image/user/wechatNo.png')} value={this.state.weChatNo} page='userInfo'
+                func={() => this.toEdit("微信", 'wechatNo', this.state.weChatNo,'publicWeChat',this.state.publicWeChat, '', 40, '')}/>
 
-          <Item desc="电子邮箱" imgPath={require('../../image/user/email.png')} value={this.state.email}
-                func={() => this.toEdit("邮箱", 'email', this.state.email,this.state.publicEmail, '', 60, Validation.isEmail)}/>
+          <Item desc="电子邮箱" imgPath={require('../../image/user/email.png')} value={this.state.email} page='userInfo'
+                func={() => this.toEdit("邮箱", 'email', this.state.email,'publicEmail',this.state.publicEmail, '', 60, Validation.isEmail)}/>
 
           <Item style={{marginTop:20}} desc="机构" imgPath={require('../../image/user/comp.png')}
-                value={this.state.orgBeanName}
-                func={() => this.toEdit("机构", 'organization', this.state.orgBeanName,true, 'name', 20, '')}/>
+                value={this.state.orgBeanName} page='userInfo'
+                func={() => this.toEdit("机构", 'organization', this.state.orgBeanName,'',true, 'name', 20, '')}/>
 
-          <Item desc="部门" imgPath={require('../../image/user/comp.png')} value={this.state.department}
-                func={() => this.toEdit("部门", 'depart', this.state.department,this.state.publicDepart, 'name', 20, '')}/>
+          <Item desc="部门" imgPath={require('../../image/user/comp.png')} value={this.state.department} page='userInfo'
+                func={() => this.toEdit("部门", 'depart', this.state.department,'publicDepart',this.state.publicDepart, 'name', 20, '')}/>
 
-          <Item desc="职位" imgPath={require('../../image/user/jobTitle.png')} value={this.state.jobTitle}
-                func={() => this.toEdit("职位", 'jobTitle', this.state.jobTitle,this.state.publicTitle ,'name', 20, '')}/>
+          <Item desc="职位" imgPath={require('../../image/user/jobTitle.png')} value={this.state.jobTitle} page='userInfo'
+                func={() => this.toEdit("职位", 'jobTitle', this.state.jobTitle,'publicTitle',this.state.publicTitle ,'name', 20, '')}/>
 
         </ScrollView>
       </NavBarView>

@@ -52,6 +52,7 @@ let PersisterFacade = {
   getToken: ()=> _getToken(),
   clearToken: (userId) => _clearToken(userId),
   getLoginUserInfo: ()=> _getLoginUserInfo(),
+  getUserId: ()=> _getUserId(),
   getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
   //interface for ContactStore
   getContact: ()=>_getContact(),
@@ -198,6 +199,14 @@ let _getLoginUserInfo = function () {
     let sortedUser = loginUsers.sorted('lastLoginTime', [true]);
     return sortedUser[0];
   } else {
+    return '';
+  }
+};
+
+let _getUserId = function () {
+  if (_getLoginUserInfo){
+    return _getLoginUserInfo.userId;
+  }else{
     return '';
   }
 };

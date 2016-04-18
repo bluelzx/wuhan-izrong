@@ -45,7 +45,8 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
-  getOrgList: ()=> _getOrgList()
+  getOrgList: ()=> _getOrgList(),
+  updateUserInfo:()=> _updateUserInfo()
 });
 
 // Private Functions
@@ -141,4 +142,7 @@ let _getOrgList = ()=> {
   return orgBuildList;
 };
 
+let _updateUserInfo = ()=>{
+
+};
 module.exports = AppStore;

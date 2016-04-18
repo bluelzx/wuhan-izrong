@@ -7,14 +7,16 @@ let {
   TextInput,
   Text,
   Picker,
-  Switch
+  Switch,
+  TouchableOpacity
   } = React;
 let _ = require('lodash');
-let NavBarView = require('../../framework/system/navBarView')
-let dateFormat = require('dateformat')
+let NavBarView = require('../../framework/system/navBarView');
+let dateFormat = require('dateformat');
 let date = dateFormat(new Date(), 'yyyy-mm-dd');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let { Alert, Button ,Device} = require('mx-artifacts');
+let UserInfoAction = require('../../framework/action/userInfoAction');
 
 let TextEdit = React.createClass({
   getInitialState: function () {
@@ -30,7 +32,8 @@ let TextEdit = React.createClass({
     let year = this.props.param.type == "date" ? (this.props.param.value == '' ? Number(date.split("-")[0]) : Number(this.props.param.value.split("-")[0])) : '';
     let month = this.props.param.type == "date" ? (this.props.param.value == '' ? Number(date.split("-")[1]) : Number(this.props.param.value.split("-")[1])) : '';
     return {
-      switchOpen: true,
+      publicValue: this.props.param.publicValue,
+      publicName: this.props.param.publicName,
       oldValue: (value == null || value == '') ? '' : this.props.param.value.toString(),
       year: year,
       month: month,
@@ -53,7 +56,7 @@ let TextEdit = React.createClass({
       year = this.state.year;
       month = this.state.month;
     }
-    let a = 0
+    let a = 0;
     if (_.indexOf([1, 3, 5, 7, 8, 10, 12], month) > -1) {
       a = 31
     } else if (_.indexOf([4, 6, 9, 11], month) > -1) {
@@ -120,16 +123,49 @@ let TextEdit = React.createClass({
       )
 
   },
+  updateUserInfo: function(){
+    if (this.state.newValue != this.state.oldValue && this.state.publicValue!= this.props.param)
+    this.props.exec(() => {
+      return  UserInfoAction.updateUserInfo(
+        {
+          value:this.props.param.name,
+          column:this.state.newValue
+        },{
+          value:this.props.param.publicName,
+          column:this.state.publicValue
+        }
+      ).then((response) => {
+        const { navigator } = this.props;
+        if (navigator) {
+          // navigator.popToTop();
+          this.props.navigator.pop();
+        }
+      }).catch((errorData) => {
+        Alert(errorData.toString());
+      });
+    });
+  },
+
+  renderUpdate: function () {
+    return (
+      <TouchableOpacity style={{width:150}}
+                        onPress={()=>this.updateUserInfo()}>
+        <Text style={{color:'#ffffff'}}>完成</Text>
+      </TouchableOpacity>
+    );
+
+  },
 
   switchControl(open){
-    this.setState({switchOpen: open})
+    this.setState({publicValue: open})
   },
 
   render: function () {
     if (this.props.param.type == "date") {
       return (
         <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}>
+                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
+                    actionButton={this.renderUpdate}>
 
           <View style={{flexDirection:'row'}}>
             <View style={{flex:1}}>
@@ -180,7 +216,8 @@ let TextEdit = React.createClass({
     } else if (this.props.param.type == "telephone") {
       return (
         <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}>
+                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
+                    actionButton={this.renderUpdate}>
           <View
             style={{backgroundColor:'#162a40',height:50,marginTop:20,borderBottomWidth:0.5,borderBottomColor:'#0a1926'}}>
             <View style={[styles.view,{flexDirection:'row'}]}>
@@ -203,7 +240,7 @@ let TextEdit = React.createClass({
               <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                 <Text style={{color: '#ffffff',fontSize:18,marginLeft:20}}>公开此信息</Text>
                 <Switch style={{margin:20}}
-                        value={this.state.switchOpen}
+                        value={this.state.publicValue}
                         onValueChange={this.switchControl}/>
               </View>
             </View>
@@ -213,7 +250,8 @@ let TextEdit = React.createClass({
     } else {
       return (
         <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}>
+                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
+                    actionButton={this.renderUpdate}>
           <View
             style={{backgroundColor:'#162a40',height:50,marginTop:20,borderBottomWidth:0.5,borderBottomColor:'#0a1926'}}>
             <View style={styles.view}>
@@ -229,7 +267,7 @@ let TextEdit = React.createClass({
               <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                 <Text style={{color: '#ffffff',fontSize:18,marginLeft:20}}>公开此信息</Text>
                 <Switch style={{margin:20}}
-                        value={this.state.switchOpen}
+                        value={this.state.publicValue}
                         onValueChange={this.switchControl}/>
               </View>
             </View>
@@ -238,15 +276,15 @@ let TextEdit = React.createClass({
       )
     }
   }
-})
+});
 let styles = StyleSheet.create({
   view: {
     marginTop: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 20
   },
   text: {
     height: 40,
     color: '#ffffff'
   }
-})
+});
 module.exports = TextEdit;
