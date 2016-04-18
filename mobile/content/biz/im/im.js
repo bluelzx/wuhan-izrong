@@ -28,9 +28,12 @@ let HeadPic = require('./headerPic');
 let AppStore = require('../../framework/store/appStore');
 
 let ContactStore = require('../../framework/store/contactStore');
-let { MSG_TYPE, MSG_CONTENT_TYPE } = require('../../constants/dictIm');
+let { MSG_TYPE, MSG_CONTENT_TYPE, ITEM_TYPE } = require('../../constants/dictIm');
 
-let ItemType = require('./itemType');
+let _getSessionKey = (t, id) => {
+  // return (f > t ? f + ':' + t : t + ':' + f) + ':' + new Date().getTime() + ':' + _device_id;
+  return t + ':' + id;
+};
 
 let WhitePage = React.createClass({
 
@@ -100,14 +103,16 @@ let WhitePage = React.createClass({
     //}
     let param = {};
     if(MSG_TYPE.REC_GROUP_MSG == item.msgType){ // 区分聊天窗口类型
-      param.chatType = ItemType.GROUP
+      param.chatType = ITEM_TYPE.GROUP;
       param.title = item.groupName;
       param.groupId = item.gid;
       param.groupMasterUid = item.groupMasterUid;
+      param.sessionId = _getSessionKey(param.chatType, param.groupId);
     }else{
-      param.chatType = ItemType.USER;
+      param.chatType = ITEM_TYPE.USER;
       param.title = item.realName;
       param.userId = item.fromUid;
+      param.sessionId = _getSessionKey(param.chatType, param.userId);
     }
     this.props.navigator.push({
       comp: Chat,

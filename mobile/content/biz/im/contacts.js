@@ -18,10 +18,9 @@ let Chat = require('./chat');
 let Icon = require('react-native-vector-icons/Ionicons');
 let ContactStore = require('../../framework/store/contactStore');
 let AppStore = require('../../framework/store/appStore');
-let CONSTANT = require('./itemType');
 let DictIcon = require('../../constants/dictIcon');
+let { ITEM_TYPE } = require('../../constants/dictIm');
 let Spread = require('./spread');
-let ItemType = require('./itemType');
 
 let Contacts = React.createClass({
 
@@ -70,7 +69,7 @@ let Contacts = React.createClass({
 
   toGroup: function(item){
     let param = {};
-    param.chatType = ItemType.GROUP;
+    param.chatType = ITEM_TYPE.GROUP;
     param.title = item.groupName;
     param.groupId = item.groupId;
     param.groupMasterUid = item.groupMasterUid;
@@ -81,7 +80,7 @@ let Contacts = React.createClass({
   toUser: function(item){
     let param = {};
 
-    param.chatType = ItemType.USER;
+    param.chatType = ITEM_TYPE.USER;
     param.title = item.realName;
     param.userId = item.userId;
     this.props.navigator.push({comp:Chat, param:param});

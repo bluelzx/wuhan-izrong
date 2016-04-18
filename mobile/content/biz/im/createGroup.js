@@ -12,9 +12,8 @@ let CheckBox = require('./checkBox');
 let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let Chat = require('./chat');
-let CONSTANT = require('./itemType');
 let ChooseList = require('./chooseList');
-let ItemType = require('./itemType');
+let { ITEM_TYPE } = require('../../constants/dictIm');
 
 let CreateGroup = React.createClass({
 
@@ -82,7 +81,7 @@ let CreateGroup = React.createClass({
       this.props.navigator.replacePreviousAndPop(
         {
           comp: Chat,
-          param: {title: userInfo.userName, chatType: ItemType.USER, userId: userId}
+          param: {title: userInfo.userName, chatType: ITEM_TYPE.USER, userId: userId}
         }
       );
     }else{
@@ -92,7 +91,7 @@ let CreateGroup = React.createClass({
       this.props.navigator.replacePreviousAndPop(
         {
           comp: Chat,
-          param: {title: this.state.groupName, chatType: ItemType.GROUP, groupMasterUid: 0}
+          param: {title: this.state.groupName, chatType: ITEM_TYPE.GROUP, groupMasterUid: 0}
         }
       );
     }
