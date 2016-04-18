@@ -33,7 +33,8 @@ let MessageSchema = {
   properties: {
     sessionId: {type: 'int', optional: true},
     msgId: {type: 'int', optional: true},
-    fromId: {type: 'int', optional: true},
+    fromUid: {type: 'int', optional: true},
+    groupId: {type: 'int', optional: true},
     toId: {type: 'int', optional: true},
     type: {type: 'string', optional: true},
     contentType: {type: 'string', optional: true},
@@ -53,7 +54,8 @@ let MessageListSchema = {
     badge:{type: 'int', optional: true},
     title: {type: 'string', optional: true},
     content:{type: 'string', optional: true},
-    lastTime: {type: 'date', optional: true}
+    lastTime: {type: 'date', optional: true},
+    contentType: {type: 'string', optional: true}
   }
 };
 

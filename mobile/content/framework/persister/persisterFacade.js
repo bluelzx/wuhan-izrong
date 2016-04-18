@@ -37,7 +37,7 @@ console.log(Realm.defaultPath);
 let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema, LoginUserInfoSchema, OrgBeanSchema,
     BizOrderCategorySchema, BizOrderItemSchema, FilterItemSchema, FilterItemsSchema, OrderItemSchema, MessageListSchema],
-  schemaVersion: 2
+  schemaVersion: 13
 });
 
 let _saveAppData = function (data) {
@@ -198,9 +198,6 @@ let _getIMNotificationMessage = function () {
 
 };
 
-let _getUsersExpress = function () {
-
-};
 
 let _saveFilters = function () {
   let data = TestData.filterData;
@@ -258,6 +255,8 @@ let _getOrgList = function () {
 };
 
 
+
+//造假数据
 _realm.write(() => {
   for (let item of MockData.users) {
     _realm.create(IMUSERINFO, item, true);
@@ -270,11 +269,30 @@ _realm.write(() => {
   for (let group of MockData.groups) {
     _realm.create(GROUP, group, true);
   }
+
+  for (let message of MockData.message){
+    _realm.create(MESSAGE, message, true);
+  }
+
+  for(let session of MockData.sessionList){
+    _realm.create(MESSAGELIST, session, true);
+  }
 });
+
+
 
 let _getAllGroups = function () {
   return _realm.objects(GROUP);
 };
+
+let _getGroupInfoByGroupId = function (groupId) {
+  return _realm.objects(GROUP).filtered('groupId = ' + groupId)[0];
+};
+
+let _getGroupMembersByGroupId = function(groupId) {
+  return _getGroupInfoByGroupId(groupId).members;
+};
+
 
 let _getUsersGroupByOrg = function () {
   let orgs = _realm.objects(ORGBEAN);
@@ -297,10 +315,76 @@ let _getUserInfoByUserId = function (id) {
   return users;
 };
 
+let _isInGroup = function(orgMembers, id){
+  let array = [];
+  for (let mem of orgMembers) {
+    if (mem.orgBeanId == id) {
+      array.push(mem);
+    }
+  }
+  return array;
+};
+
+let _isNotInGroup = function(orgMembers, existMembers){
+  let array = [];
+  for(let mem of orgMembers){
+    let f = false;
+    for(let ex of existMembers){
+      if(mem.userId == ex.userId){
+        f = true;
+      }
+    }
+    !f ? array.push(mem) : '';
+  }
+  return array;
+};
+
+let _getUsersExpress = function(groupId) {
+  let orgs = _realm.objects(ORGBEAN);//获得所有机构
+  let users = _realm.objects(IMUSERINFO);//获得所有用户
+  let existMembers = _getGroupMembersByGroupId(groupId);//获得群组用户
+  let orgArray = [];
+  for (let org of orgs) {
+    let id = org.id;
+    let orgMembers = users.filtered('orgBeanId = ' + id);//机构下的成员
+    org.orgMembers = _isNotInGroup(orgMembers, existMembers);
+    orgArray.push(org);
+  }
+  return orgArray;
+};
+
+let _getUsersGroupByOrgByGroupId = function(groupId) {
+  let orgs = _realm.objects(ORGBEAN);//获得所有机构
+  let existMembers = _getGroupMembersByGroupId(groupId);//获得群组用户
+  let orgArray = [];
+  for (let org of orgs) {
+    let id = org.id;
+    org.orgMembers = _isInGroup(existMembers, id);
+    orgArray.push(org);
+  }
+  return orgArray;
+};
+
+let _getLastMessageBySessionId = function(id) {
+  let msgs = _realm.objects(MESSAGE).filtered('sessionId = ' + id);
+  let msg = msgs.sorted('revTime')[0];
+  return msg;
+};
+
+let _getAllSession = function() {
+  return _realm.objects(MESSAGELIST);
+};
+
 let PersisterFacade = {
+  getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
   getAllGroups: () => _getAllGroups(),
   getUsersGroupByOrg: () => _getUsersGroupByOrg(),
+  getUsersGroupByOrgByGroupId:(id) => _getUsersGroupByOrgByGroupId(id),
   getUserInfoByUserId: (id) => _getUserInfoByUserId(id),
+  getGroupMembersByGroupId: (id) => _getGroupMembersByGroupId(id),
+  getGroupInfoByGroupId:(id) => _getGroupInfoByGroupId(id),
+  getUsersExpress:(groupId) => _getUsersExpress(groupId),
+  getAllSession:() => _getAllSession(),
 
   //interface for AppStore
   saveAppData: (data) => _saveAppData(data),
@@ -316,7 +400,6 @@ let PersisterFacade = {
   getUsers: ()=>_getUsers(),
   getLoginUserInfoByUserId: (userId)=>_getLoginUserInfoByUserId(userId),
   getGroupDetailById: (groupId)=>_getGroupDetailById(groupId),
-  getUsersExpress: ()=> _getUsersExpress(),
   saveOrgBeanSet: () => _saveOrgBeanSet(),
   saveFilters: ()=> _saveFilters(),
   getFilters: ()=> _getFilters(),
