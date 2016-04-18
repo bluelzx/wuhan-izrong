@@ -203,11 +203,9 @@ let _getLoginUserInfo = function () {
 };
 
 let _getUserId = function () {
-  let loginUsers = _realm.objects(LOGINUSERINFO);
-  if (loginUsers.length != 0) {
-    let sortedUser = loginUsers.sorted('lastLoginTime', [true]);
-    return sortedUser[0].userId;
-  } else {
+  if (_getLoginUserInfo){
+    return _getLoginUserInfo.userId;
+  }else{
     return '';
   }
 };

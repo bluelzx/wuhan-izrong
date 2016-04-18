@@ -32,7 +32,8 @@ let TextEdit = React.createClass({
     let year = this.props.param.type == "date" ? (this.props.param.value == '' ? Number(date.split("-")[0]) : Number(this.props.param.value.split("-")[0])) : '';
     let month = this.props.param.type == "date" ? (this.props.param.value == '' ? Number(date.split("-")[1]) : Number(this.props.param.value.split("-")[1])) : '';
     return {
-      switchOpen: true,
+      publicValue: this.props.param.publicValue,
+      publicName: this.props.param.publicName,
       oldValue: (value == null || value == '') ? '' : this.props.param.value.toString(),
       year: year,
       month: month,
@@ -123,12 +124,15 @@ let TextEdit = React.createClass({
 
   },
   updateUserInfo: function(){
-    if (this.state.newValue != this.state.oldValue && this.state.switchOpen!= this.props.param)
+    if (this.state.newValue != this.state.oldValue && this.state.publicValue!= this.props.param)
     this.props.exec(() => {
       return  UserInfoAction.updateUserInfo(
         {
           value:this.props.param.name,
           column:this.state.newValue
+        },{
+          value:this.props.param.publicName,
+          column:this.state.publicValue
         }
       ).then((response) => {
         const { navigator } = this.props;
@@ -153,7 +157,7 @@ let TextEdit = React.createClass({
   },
 
   switchControl(open){
-    this.setState({switchOpen: open})
+    this.setState({publicValue: open})
   },
 
   render: function () {
@@ -236,7 +240,7 @@ let TextEdit = React.createClass({
               <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                 <Text style={{color: '#ffffff',fontSize:18,marginLeft:20}}>公开此信息</Text>
                 <Switch style={{margin:20}}
-                        value={this.state.switchOpen}
+                        value={this.state.publicValue}
                         onValueChange={this.switchControl}/>
               </View>
             </View>
@@ -263,7 +267,7 @@ let TextEdit = React.createClass({
               <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                 <Text style={{color: '#ffffff',fontSize:18,marginLeft:20}}>公开此信息</Text>
                 <Switch style={{margin:20}}
-                        value={this.state.switchOpen}
+                        value={this.state.publicValue}
                         onValueChange={this.switchControl}/>
               </View>
             </View>

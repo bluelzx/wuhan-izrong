@@ -104,13 +104,21 @@ let UserInfo = React.createClass({
   },
 
   renderRow: function (desc, imagePath, name, value, pubName, pubValue, type, maxLength, valid) {
-    let isPublic = '(公开)';
-    if (pubValue == true) {
-      isPublic = '(不公开)'
+
+    let showValue = '';
+    if (value == null || value == '未填写') {
+      showValue = '未填写';
+    } else {
+      if (pubValue) {
+        showValue = value + '(公开)';
+      } else {
+        showValue = value + '(不公开)';
+      }
     }
     return (
-      <Item desc={desc} imgPath={imagePath} value={value+isPublic}
-            func={() => this.toEdit(desc, name, value, pubName ,pubValue, type, maxLength, valid)}/>)
+      <Item desc={desc} imgPath={imagePath} value={showValue}
+            func={() => this.toEdit(desc, name, value, pubName ,pubValue, type, maxLength, valid)}/>
+    )
   },
 
   render: function () {
@@ -129,30 +137,34 @@ let UserInfo = React.createClass({
               <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
             </View>
           </TouchableHighlight>
-          {this.renderRow("手机号", require('../../image/user/mobileNo.png'), 'mobile', this.state.mobileNumber,
-            'publicMobile', this.state.publicMobile, 'name', 20, Validation.isPhone)}
 
+          {this.renderRow("手机号",require('../../image/user/mobileNo.png'),'mobile', this.state.mobileNumber,'publicMobile',this.state.publicMobile, 'name', 20, Validation.isPhone)}
+
+          <Item desc="手机号" imgPath={require('../../image/user/mobileNo.png')} page='userInfo'
+                value={this.state.mobileNumber}
+                func={() => this.toEdit("手机号", 'mobile', this.state.mobileNumber,'publicMobile',this.state.publicMobile, 'name', 20, Validation.isPhone)}/>
 
           <Item desc="座机号" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.phoneNumber}
+                page='userInfo'
                 func={() => this.toEdit("座机号", 'telephoneNo', this.state.phoneNumber,'publicPhone',this.state.publicPhone, 'telephone', 13, Validation.isTelephone)}/>
 
-          <Item desc="QQ" imgPath={require('../../image/user/qqNo.png')} value={this.state.qqNo}
+          <Item desc="QQ" imgPath={require('../../image/user/qqNo.png')} value={this.state.qqNo} page='userInfo'
                 func={() => this.toEdit("QQ", 'qqNo', this.state.qqNo,'publicQQ',this.state.publicQQ, 'number', 20, Validation.isQQ)}/>
 
-          <Item desc="微信" imgPath={require('../../image/user/wechatNo.png')} value={this.state.weChatNo}
+          <Item desc="微信" imgPath={require('../../image/user/wechatNo.png')} value={this.state.weChatNo} page='userInfo'
                 func={() => this.toEdit("微信", 'wechatNo', this.state.weChatNo,'publicWeChat',this.state.publicWeChat, '', 40, '')}/>
 
-          <Item desc="电子邮箱" imgPath={require('../../image/user/email.png')} value={this.state.email}
+          <Item desc="电子邮箱" imgPath={require('../../image/user/email.png')} value={this.state.email} page='userInfo'
                 func={() => this.toEdit("邮箱", 'email', this.state.email,'publicEmail',this.state.publicEmail, '', 60, Validation.isEmail)}/>
 
           <Item style={{marginTop:20}} desc="机构" imgPath={require('../../image/user/comp.png')}
-                value={this.state.orgBeanName}
+                value={this.state.orgBeanName} page='userInfo'
                 func={() => this.toEdit("机构", 'organization', this.state.orgBeanName,'',true, 'name', 20, '')}/>
 
-          <Item desc="部门" imgPath={require('../../image/user/comp.png')} value={this.state.department}
+          <Item desc="部门" imgPath={require('../../image/user/comp.png')} value={this.state.department} page='userInfo'
                 func={() => this.toEdit("部门", 'depart', this.state.department,'publicDepart',this.state.publicDepart, 'name', 20, '')}/>
 
-          <Item desc="职位" imgPath={require('../../image/user/jobTitle.png')} value={this.state.jobTitle}
+          <Item desc="职位" imgPath={require('../../image/user/jobTitle.png')} value={this.state.jobTitle} page='userInfo'
                 func={() => this.toEdit("职位", 'jobTitle', this.state.jobTitle,'publicTitle',this.state.publicTitle ,'name', 20, '')}/>
 
         </ScrollView>
