@@ -15,7 +15,7 @@ let pub = "/pub";
 
 let MarketActions ={
 
-  bizOrderMarketSearchDefaultSearch: (url) => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch),
+  bizOrderMarketSearchDefaultSearch: (url) => _bfetchWithUrl(AppLinks.bizOrderMarketSearchDefaultSearch),
   bizOrderMarketSearchsearch: (url,p) => _bizOrderMarketSearchsearch(AppLinks.bizOrderMarketSearchsearch, p),
   getBizOrderInMarket: (url,p) =>_pfetchWithUrlAndP(AppLinks.getBizOrderInMarket, p),
 
@@ -28,7 +28,7 @@ let MarketActions ={
 
 let _bizOrderMarketSearchDefaultSearch = function (url) {
   return new Promise((resolve, reject) => {
-    BFetch(url).then((response) => {
+    BFetch1(url).then((response) => {
       resolve(response);
     }).catch((errorData) => {
       reject(errorData);
@@ -38,7 +38,7 @@ let _bizOrderMarketSearchDefaultSearch = function (url) {
 
 let _bizOrderMarketSearchsearch = function (url,p) {
   return new Promise((resolve, reject) => {
-    BFetch(url,p).then((response) => {
+    BFetch1(url,p).then((response) => {
       resolve(response);
     }).catch((errorData) => {
       reject(errorData);
