@@ -56,9 +56,10 @@ let Register_selectOrg = React.createClass({
   _onChange: function () {
 
   },
-  selectItem: function(a,b){
-
+  onCellSelect: function(item){
+    console.log(item)
   },
+
 
   render: function () {
     return (
@@ -72,10 +73,7 @@ let Register_selectOrg = React.createClass({
             sectionListItem={SectionItem}
             sectionHeader={SectionHeader}
             sectionHeaderHeight={22.5}
-            updateScrollState={true}
-            onCellSelect={(a,b)=>{
-               console.log(a.toString+b.toString());
-            }}/>
+            updateScrollState={true}/>
         </View>
       </NavBarView>
     )
@@ -102,10 +100,18 @@ let SectionItem = React.createClass({
 
 let Cell = React.createClass({
 
+  getInitialState(){
+    return(
+    {
+      item:''
+    }
+    )
+  },
+
   render() {
     return (
       <TouchableHighlight style={{backgroundColor:'#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
-                          onPress={()=>this.selectOrgItem(this.props.item)}>
+                          onPress={()=>this.setState({item:this.props.item})}>
         <View style={{height:40,marginLeft:20,justifyContent:"center",borderBottomWidth:1,borderBottomColor:'#122335'}}>
           <Text style={{color:"#FFFFFF",textAlign:"left"}}>{this.props.item.orgValue}</Text>
         </View>
@@ -113,8 +119,8 @@ let Cell = React.createClass({
     );
   },
 
-  selectOrgItem: function (orgItem, callback) {
-    console.log(orgItem);
+  selectOrgItem: function () {
+    Register_selectOrg.onCellSelect(this.state.item);
   }
 });
 
