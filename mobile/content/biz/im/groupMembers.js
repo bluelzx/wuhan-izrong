@@ -7,14 +7,16 @@ const {View, TextInput, Platform, Text} = React;
 let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
-
-const MockData = [
-  {groupName: 'A', groupData: [ {imgId:'../../pic/man.jpg', desc: 'A吴'}, {imgId:'../../pic/man.jpg', desc: 'A张'}]},
-  {groupName: 'B', groupData: [ {imgId:'../../pic/man.jpg', desc: 'B吴'}, {imgId:'../../pic/man.jpg', desc: 'B张'},
-    {imgId:'../../pic/man.jpg', desc: 'B李'}]}
-];
+let ContactStore = require('../../framework/store/contactStore');
 
 let GroupMembers = React.createClass({
+
+  getInitialState: function() {
+    let groupId = this.props.param.groupId;
+    return {
+      data:ContactStore.getUsersGroupByOrgByGroupId(groupId)
+    };
+  },
 
   textChange: function(){
 
@@ -34,7 +36,7 @@ let GroupMembers = React.createClass({
       <Text
         style={
           {color: '#ffffff'}}>
-        {data.groupName}
+        {data.orgValue}
       </Text>
     );
   },
@@ -43,10 +45,10 @@ let GroupMembers = React.createClass({
   //渲染组成员
   itemRender: function(data) {
     return (
-      <View key={data.desc}
+      <View key={data.userId}
             style={{borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
         {this.renderImg(data)}
-        <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.desc}</Text>
+        <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
       </View>
 
     );
@@ -67,8 +69,8 @@ let GroupMembers = React.createClass({
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={MockData}
-                   groupDataName={'groupData'}
+                   dataSource={this.state.data}
+                   groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />
       </NavBarView>

@@ -54,7 +54,8 @@ let MessageListSchema = {
     badge:{type: 'int', optional: true},
     title: {type: 'string', optional: true},
     content:{type: 'string', optional: true},
-    lastTime: {type: 'date', optional: true}
+    lastTime: {type: 'date', optional: true},
+    contentType: {type: 'string', optional: true}
   }
 };
 

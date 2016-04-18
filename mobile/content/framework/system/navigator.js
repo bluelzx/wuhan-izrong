@@ -19,6 +19,7 @@ var AppStore = require('../store/appStore');
 let { Alert, Device } = require('mx-artifacts');
 let ProgressHUD = require('react-native-progress-hud');
 let co = require('co');
+let NotificationManager = require('./notificationManager');
 
 let Chat = require('../../biz/im/chat');
 
@@ -43,12 +44,15 @@ var Main = React.createClass({
       //   console.log(e.test);
       // });
     }
+    NotificationManager.openNotification();
+
   },
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange);
     if (Platform.OS === 'android') {
       BackAndroid.removeEventListener('hardwareBackPress', this._onAndroidBackPressed);
     }
+    NotificationManager.closeNotification();
   },
   _onAndroidBackPressed: function () {
     if (this._navigator) {
@@ -141,10 +145,11 @@ var Main = React.createClass({
       );
     }
 
-    var initComp = TabView;
+    var initComp = Login;
     //var initComp = Chat;
-    if (this.state.token == '') {
-      initComp = Login ;
+    if (!this.state.token) {
+      initComp = TabView;
+      AppAction.imInit();
     }
     return (
       <View style={{ width: Device.width, height: Device.height }}>

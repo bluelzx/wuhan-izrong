@@ -51,7 +51,7 @@ let Item = React.createClass({
             </View>
             <View style={{flexDirection:'row',alignItems:'center',flex:1,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
               <Text style={[{fontSize: 15,color: '#ffffff',width:140}]}  numberOfLines={1}>{this.props.value ? this.props.value:"未填写"}</Text>
-              <Icon style={[{marginRight:20},!this.props.showArrow && {marginRight:20}]} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+              {this.renderArrow(this.props.showArrow)}
             </View>
           </View>
           <View style={styles.bottomStyle}/>

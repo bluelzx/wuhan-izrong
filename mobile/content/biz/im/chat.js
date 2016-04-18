@@ -9,13 +9,38 @@ let EditGroup = require('./editGroup');
 let EditGroupMaster = require('./editGroupMaster');
 let DictIcon = require('../../constants/dictIcon');
 let ImUserInfo = require('./imUserInfo');
-const Messenger = require('./messenger');
-let msgType = require('../../constants/wsMsgType');
+const Messenger = require('./../../comp/messenger/messenger');
+let { MSG_TYPE, MSG_CONTENT_TYPE } = require('../../constants/dictIm');
+let AppStore = require('../../framework/store/appStore');
 let ItemType = require('./itemType');
 let ContactStore = require('../../framework/store/contactStore');
 
-
 let Chat = React.createClass({
+
+  componentDidMount() {
+    AppStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function () {
+    AppStore.removeChangeListener(this._onChange);
+  },
+  _onChange: function () {
+    this.setState(this.getStateFromStores());
+  },
+
+  getStateFromStores: function() {
+    //TODO:群组聊天时被踢
+    return {
+      chatInfo: {
+        type: this.props.param.type
+      },
+      userInfo: ContactStore.getUserInfo()
+    }
+  },
+
+  getInitialState: function(){
+    return this.getStateFromStores();
+  },
 
   getDefaultProps: function () {
     return {

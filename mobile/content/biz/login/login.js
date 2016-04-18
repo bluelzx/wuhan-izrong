@@ -61,7 +61,7 @@ let Login = React.createClass({
             }
           }
         }).catch((errorData) => {
-          Alert(errorData.toString());
+          Alert(errorData.msgContent);
         });
       });
     }

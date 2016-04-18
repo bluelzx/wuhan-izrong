@@ -71,7 +71,7 @@ let EditGroup = React.createClass({
         <View style={{flexDirection:'column'}}>
           <View style={{flexDirection:'column'}}>
             {this.renderMember()}
-            <TouchableOpacity onPress={() => this.props.navigator.push({comp:GroupMembers})}
+            <TouchableOpacity onPress={() => this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}})}
               style={{backgroundColor: '#15263A', paddingVertical:10,borderTopColor:'#132132',borderTopWidth:0.5}}>
               <View
                 style={{flexDirection:'row', justifyContent:'space-between', marginTop:5,alignItems:'center',paddingHorizontal:10}}>

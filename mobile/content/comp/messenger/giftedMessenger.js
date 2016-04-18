@@ -780,7 +780,7 @@ var GiftedMessenger = React.createClass({
         <Animated.View style={this.styles.panelContainer}>
 
           <ImagePicker
-            type="all"
+            type="library"
             onSelected={(response) => { console.log(response)}}
             title="选择图片"
             style={this.styles.panelItem}
@@ -792,16 +792,18 @@ var GiftedMessenger = React.createClass({
             <Text style={this.styles.panelText}>照片</Text>
           </ImagePicker>
 
-          <TouchableOpacity
+          <ImagePicker
+            type="camera"
+            onSelected={(response) => { console.log(response)}}
+            title="选择图片"
             style={this.styles.panelItem}
-            onPress= {() => {}}
           >
             <Image
               style={this.styles.panelIcon}
               source={DictIcon.imPhoto}
             />
             <Text style={this.styles.panelText}>拍摄</Text>
-          </TouchableOpacity>
+          </ImagePicker>
 
           <TouchableOpacity
             style={this.styles.panelItem}
