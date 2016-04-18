@@ -147,7 +147,7 @@ var Main = React.createClass({
 
     var initComp = Login;
     //var initComp = Chat;
-    if (this.state.token) {
+    if (!this.state.token) {
       initComp = TabView;
       AppAction.imInit();
     }
