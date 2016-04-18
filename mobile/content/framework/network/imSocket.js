@@ -1,13 +1,17 @@
-let io = require('./manager');
+let Manager = require('./manager');
+
+let { ImWebSocket } = require('../../constants/appLinks');
+let AppStore = require('../store/appStore');
 
 let _socket = null;
 
 let ImSocket = {
 
   init: function () {
-    _socket = io('ws://localhost:3000/t001');
-    _socket.on('connect', function(){});
-    _socket.on('event', function(data){});
+    // this.uri = ImWebSocket + AppStore.getToken();
+    this.uri = 'ws://localhost:3000/t001';
+    console.log('###### Connect to %s', this.uri);
+    _socket = Manager(this.uri);
 
     _socket.on('open', function () {
       console.log('###### open');
@@ -17,17 +21,12 @@ let ImSocket = {
       console.log('###### message %s', JSON.stringify(data));
     });
 
-    _socket.on('close', function () {
-      console.log('###### close');
+    _socket.on('close', function (reason) {
+      console.log('###### close %s', JSON.stringify(reason));
     });
 
-    _socket.on('disconnect', function () { // Event:  disconnect
-      console.log('Socket:' + _socket.name + ' connetion is lost ~');
-      console.log('Please wait ~');
-    });
-
-    _socket.on('reconnect', function () {
-      console.log('Socket:' + _socket.name + ' reconnect.');
+    _socket.on('reconnect', function (attempt) {
+      console.log('###### reconnect after %d attempt', attempt);
     });
 
   },

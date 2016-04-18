@@ -197,7 +197,7 @@ Manager.prototype.maybeReconnectOnOpen = function () {
 
 Manager.prototype.open =
 Manager.prototype.connect = function (fn) {
-  console.log('**websocket** readyState %s', this.readyState);
+  // console.log('**websocket** readyState %s', this.readyState);
   if (~this.readyState.indexOf('open')) return this;
 
   console.log('**websocket** opening %s', this.uri);
@@ -215,7 +215,7 @@ Manager.prototype.connect = function (fn) {
 
   // emit `connect_error`
   socket.onerror = (e) => {
-    console.log('**websocket** connect_error');
+    console.log('**websocket** connect_error [%s]', JSON.stringify(e));
     self.cleanup();
     self.readyState = 'closed';
     self.emitAll('connect_error', e);
@@ -320,7 +320,7 @@ Manager.prototype.destroy = function (socket) {
  */
 
 Manager.prototype.cleanup = function () {
-  console.log('**websocket** cleanup');
+  // console.log('**websocket** cleanup');
 
   var subsLength = this.subs.length;
   for (var i = 0; i < subsLength; i++) {
@@ -399,7 +399,7 @@ Manager.prototype.reconnect = function () {
     var timer = setTimeout(function () {
       if (self.skipReconnect) return;
 
-      console.log('**websocket** attempting reconnect');
+      // console.log('**websocket** attempting reconnect');
       self.emitAll('reconnect_attempt', self.backoff.attempts);
       self.emitAll('reconnecting', self.backoff.attempts);
 
@@ -408,7 +408,7 @@ Manager.prototype.reconnect = function () {
 
       self.open(function (err) {
         if (err) {
-          console.log('**websocket** reconnect attempt error');
+          // console.log('**websocket** reconnect attempt error');
           self.reconnecting = false;
           self.reconnect();
           self.emitAll('reconnect_error', err.data);
