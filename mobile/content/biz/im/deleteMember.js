@@ -4,12 +4,13 @@
 let React = require('react-native');
 const {View, TouchableOpacity, Text} = React;
 let NavBarView = require('../../framework/system/navBarView');
-let { ExtenList, Device } = require('mx-artifacts');
+let { ExtenList, Device, Alert } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let CheckBox = require('./checkBox');
 let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let DictIcon = require('../../constants/dictIcon');
+let dismissKeyboard = require('react-native-dismiss-keyboard');
 let HeadPic = require('./headerPic');
 
 let DeleteMember = React.createClass({
@@ -23,10 +24,14 @@ let DeleteMember = React.createClass({
   },
 
   delUser: function( groupId, members) {
-    //step1: 删除成员
-    ContactAction.deleteGroupMembers(this.props.param.groupId, members);
-    //step2: 回退
-    this.props.navigator.pop();
+    dismissKeyboard();
+    this.props.exec(() => {
+      return ContactAction.deleteGroupMembers(this.props.param.groupId, members).then(()=>{
+        this.props.navigator.pop();
+      }).catch((errorData) => {
+        Alert(errorData.errCode);
+      });;
+    });
   },
 
   textChange: function() {
@@ -36,15 +41,13 @@ let DeleteMember = React.createClass({
   renderState: function () {
     let memberList = this.state.memberList;
     let count = 0;
-    let members = [];
     for(let userId in memberList){
       if(!!memberList[userId]){
         count ++ ;
-        members.push(userId);
       }
     }
     return (
-      <TouchableOpacity onPress={() => this.delUser(this.props.param.groupId, members)}>
+      <TouchableOpacity onPress={() => this.delUser(this.props.param.groupId, memberList)}>
         <Text style={{ marginLeft:-20,color:count==0?'#6B849C':'white'}}>{'删除(' + count + ')'}</Text>
       </TouchableOpacity>
     );

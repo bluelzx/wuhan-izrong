@@ -99,8 +99,7 @@ var Main = React.createClass({
     co(function* () {
       yield func()
         .then((response) => {
-          //console.log(response);
-          //Alert(response);
+          console.log(response);
         })
         .catch((errorData) => {
           if (showLoading) {
@@ -147,7 +146,7 @@ var Main = React.createClass({
 
     var initComp = Login;
     //var initComp = Chat;
-    if (!this.state.token) {
+    if (this.state.token) {
       initComp = TabView;
       AppAction.imInit();
     }

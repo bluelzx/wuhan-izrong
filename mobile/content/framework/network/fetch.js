@@ -102,9 +102,7 @@ var process = function (_promise, option) {
         })
         .catch((errorData) => {
           console.log(errorData);
-          reject({
-            msgContent: '系统异常'
-          });
+          reject(errorData);
         });
     } else {
       reject({

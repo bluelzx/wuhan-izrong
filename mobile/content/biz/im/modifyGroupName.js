@@ -11,13 +11,18 @@ let ModifyGroupName = React.createClass({
 
   getInitialState: function(){
     return {
-      groupName:''
+      groupName:this.props.param.groupName
     };
   },
 
   modifyGroupName: function(){
-    ContactAction.modifyGroupName(this.props.param, this.state.groupName);
-    this.props.navigator.pop();
+
+    this.props.exec(()=>{
+      return ContactAction.modifyGroupName(this.props.param.groupId, this.state.groupName).then((response)=>{
+        this.props.navigator.pop();
+      });
+    });
+
   },
 
   renderRight: function(){
@@ -45,6 +50,7 @@ let ModifyGroupName = React.createClass({
             clearButtonMode="always"
             placeholder="创建群名称"
             placeholderTextColor="white"
+            value={this.state.groupName}
             onChangeText={(text) => this.changeTextValue(text)}
             style={{color: '#ffffff',height:50, width: Device.width,backgroundColor:'#15263A', paddingHorizontal:20}}></TextInput>
         </View>
