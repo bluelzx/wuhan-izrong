@@ -37,6 +37,7 @@ let AppLinks = {
   downselfBizOrder: Host + api + 'BizOrderManage/downselfBizOrder',
   updateBizOrder: Host + api + 'BizOrderManage/updateBizOrder',
   getBizOrderCategoryAndItem: Host + api + 'BizOrderManage/getBizOrderCategoryAndItem',
+  updateUserInfo: Host + api +'/Account/updateUserInfo'
 };
 
 module.exports = AppLinks;

@@ -7,14 +7,16 @@ let {
   TextInput,
   Text,
   Picker,
-  Switch
+  Switch,
+  TouchableOpacity
   } = React;
 let _ = require('lodash');
-let NavBarView = require('../../framework/system/navBarView')
-let dateFormat = require('dateformat')
+let NavBarView = require('../../framework/system/navBarView');
+let dateFormat = require('dateformat');
 let date = dateFormat(new Date(), 'yyyy-mm-dd');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let { Alert, Button ,Device} = require('mx-artifacts');
+let UserInfoAction = require('../../framework/action/userInfoAction');
 
 let TextEdit = React.createClass({
   getInitialState: function () {
@@ -53,7 +55,7 @@ let TextEdit = React.createClass({
       year = this.state.year;
       month = this.state.month;
     }
-    let a = 0
+    let a = 0;
     if (_.indexOf([1, 3, 5, 7, 8, 10, 12], month) > -1) {
       a = 31
     } else if (_.indexOf([4, 6, 9, 11], month) > -1) {
@@ -120,6 +122,35 @@ let TextEdit = React.createClass({
       )
 
   },
+  updateUserInfo: function(){
+    if (this.state.newValue != this.state.oldValue && this.state.switchOpen!= this.props.param)
+    this.props.exec(() => {
+      return  UserInfoAction.updateUserInfo(
+        {
+          value:this.props.param.name,
+          column:this.state.newValue
+        }
+      ).then((response) => {
+        const { navigator } = this.props;
+        if (navigator) {
+          // navigator.popToTop();
+          this.props.navigator.pop();
+        }
+      }).catch((errorData) => {
+        Alert(errorData.toString());
+      });
+    });
+  },
+
+  renderUpdate: function () {
+    return (
+      <TouchableOpacity style={{width:150}}
+                        onPress={()=>this.updateUserInfo()}>
+        <Text style={{color:'#ffffff'}}>完成</Text>
+      </TouchableOpacity>
+    );
+
+  },
 
   switchControl(open){
     this.setState({switchOpen: open})
@@ -129,7 +160,8 @@ let TextEdit = React.createClass({
     if (this.props.param.type == "date") {
       return (
         <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}>
+                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
+                    actionButton={this.renderUpdate}>
 
           <View style={{flexDirection:'row'}}>
             <View style={{flex:1}}>
@@ -180,7 +212,8 @@ let TextEdit = React.createClass({
     } else if (this.props.param.type == "telephone") {
       return (
         <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}>
+                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
+                    actionButton={this.renderUpdate}>
           <View
             style={{backgroundColor:'#162a40',height:50,marginTop:20,borderBottomWidth:0.5,borderBottomColor:'#0a1926'}}>
             <View style={[styles.view,{flexDirection:'row'}]}>
@@ -213,7 +246,8 @@ let TextEdit = React.createClass({
     } else {
       return (
         <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}>
+                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
+                    actionButton={this.renderUpdate}>
           <View
             style={{backgroundColor:'#162a40',height:50,marginTop:20,borderBottomWidth:0.5,borderBottomColor:'#0a1926'}}>
             <View style={styles.view}>
@@ -238,15 +272,15 @@ let TextEdit = React.createClass({
       )
     }
   }
-})
+});
 let styles = StyleSheet.create({
   view: {
     marginTop: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 20
   },
   text: {
     height: 40,
     color: '#ffffff'
   }
-})
+});
 module.exports = TextEdit;

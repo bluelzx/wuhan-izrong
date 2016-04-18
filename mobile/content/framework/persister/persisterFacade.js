@@ -51,6 +51,7 @@ let PersisterFacade = {
   getToken: ()=> _getToken(),
   clearToken: (userId) => _clearToken(userId),
   getLoginUserInfo: ()=> _getLoginUserInfo(),
+  getUserId: ()=> _getUserId(),
   getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
   //interface for ContactStore
   getContact: ()=>_getContact(),
@@ -196,6 +197,16 @@ let _getLoginUserInfo = function () {
   if (loginUsers.length != 0) {
     let sortedUser = loginUsers.sorted('lastLoginTime', [true]);
     return sortedUser[0];
+  } else {
+    return '';
+  }
+};
+
+let _getUserId = function () {
+  let loginUsers = _realm.objects(LOGINUSERINFO);
+  if (loginUsers.length != 0) {
+    let sortedUser = loginUsers.sorted('lastLoginTime', [true]);
+    return sortedUser[0].userId;
   } else {
     return '';
   }

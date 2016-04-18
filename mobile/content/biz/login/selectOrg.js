@@ -8,17 +8,12 @@ let {
   StyleSheet,
   Text,
   View,
-  Image,
-  Platform,
-  Component,
   TouchableHighlight
   } = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
-let dismissKeyboard = require('react-native-dismiss-keyboard');
-let { Alert, Button ,Device} = require('mx-artifacts');
-var AlphabetListView = require('react-native-alphabetlistview');
+let AlphabetListView = require('react-native-alphabetlistview');
 
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
@@ -56,7 +51,7 @@ let Register_selectOrg = React.createClass({
   _onChange: function () {
 
   },
-  onCellSelect: function(item){
+  onCellSelect: function (item) {
     console.log(item)
   },
 
@@ -73,7 +68,10 @@ let Register_selectOrg = React.createClass({
             sectionListItem={SectionItem}
             sectionHeader={SectionHeader}
             sectionHeaderHeight={22.5}
-            updateScrollState={true}/>
+            updateScrollState={true}
+            onCellSelect={()=>{
+               console.log('onCellSelect')
+            }}/>
         </View>
       </NavBarView>
     )
@@ -100,18 +98,10 @@ let SectionItem = React.createClass({
 
 let Cell = React.createClass({
 
-  getInitialState(){
-    return(
-    {
-      item:''
-    }
-    )
-  },
-
   render() {
     return (
       <TouchableHighlight style={{backgroundColor:'#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
-                          onPress={()=>this.setState({item:this.props.item})}>
+                          onPress={()=>this.selectOrgItem(this.props.item)}>
         <View style={{height:40,marginLeft:20,justifyContent:"center",borderBottomWidth:1,borderBottomColor:'#122335'}}>
           <Text style={{color:"#FFFFFF",textAlign:"left"}}>{this.props.item.orgValue}</Text>
         </View>
@@ -119,8 +109,8 @@ let Cell = React.createClass({
     );
   },
 
-  selectOrgItem: function () {
-    Register_selectOrg.onCellSelect(this.state.item);
+  selectOrgItem: function (item) {
+     console.log(item);
   }
 });
 
