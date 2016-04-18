@@ -582,7 +582,17 @@ let MarketStore = ({
     return (
       totalArr
     )
-  }
+  },
+
+  getFilterOptions: function (filterItems,descrCode) {
+    for(let item of filterItems){
+        if(item.descrCode == descrCode){
+          return(
+            item
+          )
+        }
+    }
+  },
 
 });
 

@@ -7,6 +7,7 @@
 
 let _createGroup = function(members, groupName, groupMasterUid) {
   //return or callback
+
   return 0;
 };
 

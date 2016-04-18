@@ -44,14 +44,15 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),
-  logout: () => _logout(),
+  logout: (userId) => _logout(userId),
   forceLogout: () => _force_logout(),
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
-  getOrgList: ()=> _getOrgList()
+  getOrgList: ()=> _getOrgList(),
+  updateUserInfo:()=> _updateUserInfo()
 });
 
 // Private Functions
@@ -95,8 +96,8 @@ let _login = (data) => {
   AppStore.emitChange();
 };
 
-let _logout = () => {
-  Persister.clearToken();
+let _logout = (userId) => {
+  Persister.clearToken(userId);
   _info.isLogout = true;
   AppStore.emitChange();
 };
@@ -147,4 +148,7 @@ let _getOrgList = ()=> {
   return orgBuildList;
 };
 
+let _updateUserInfo = ()=>{
+
+};
 module.exports = AppStore;

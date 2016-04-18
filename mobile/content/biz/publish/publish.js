@@ -29,23 +29,31 @@ var SelectBusiness1 = require('./selectBusiness1');
 
 let MarketAction = require('../../framework/action/marketAction');
 
-var dataList1 = ['出', '收'];
-var dataList2 = ['日', '月', '年'];
-var dataList3 = ['万', '亿'];
+var bizOrientationUnit = ['出', '收'];
+var termUnit = ['日', '月', '年'];
+var amountUnit = ['万', '亿'];
 
 var WhitePage = React.createClass({
   getInitialState(){
     return {
-      defaultData1: 0,
-      defaultData2: 0,
-      defaultData3: 0,
+      bizOrientationDefault: 0,
+      termDefault: 0,
+      amountDefault: 0,
+      //networt
+      term:33,
+      rate:0.03,
+      remark:'这里就只是一个备注',
+      bizOrientation:'天津银行',
+      bizCategory:'MCA',
+      bizItem:'MCA_ABS',
+      amount:10000000,
+      fileIds:[
+        ''
+      ]
     }
   },
 
   componentWillMount: function () {
-    {
-      //this.addBizOrder();
-    }
   },
 
   render: function () {
@@ -72,17 +80,17 @@ var WhitePage = React.createClass({
   },
   _dataChange1 (index) {
     this.setState({
-      defaultData1: index
+      bizOrientationDefault: index
     })
   },
   _dataChange2 (index) {
     this.setState({
-      defaultData2: index
+      termDefault: index
     })
   },
   _dataChange3 (index) {
     this.setState({
-      defaultData3: index
+      amountDefault: index
     })
   },
   renderSelectOrg: function () {
@@ -90,7 +98,7 @@ var WhitePage = React.createClass({
       <TouchableOpacity onPress={()=>this.toPage(SelectBusiness1)} activeOpacity={0.8} underlayColor="#f0f0f0">
         <View
           style={{width: screenWidth-20,marginLeft:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
-          <Text style={{fontSize:16,marginLeft:10,color:'white'}}>{'选择发布机构'}</Text>
+          <Text style={{fontSize:16,marginLeft:10,color:'white'}}>{'选择业务类型'}</Text>
           <Image style={{margin:10,width:16,height:16}}
                  source={require('../../image/market/next.png')}
           />
@@ -106,7 +114,7 @@ var WhitePage = React.createClass({
           <Text style={{color:'red',}}>{'*'}</Text>
         </View>
         <View style={{marginTop:10,flexDirection:'row'}}>
-          <SelectBtn dataList={dataList1} defaultData={this.state.defaultData1} change={this._dataChange1}/>
+          <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault} change={this._dataChange1}/>
         </View>
       </View>
     )
@@ -121,9 +129,10 @@ var WhitePage = React.createClass({
               placeholder={'天数'}
               placeholderTextColor='#325779'
               returnKeyType="search"
+              maxLength={8}
               style={{width:100,height:40,marginLeft:10,color:'#ffd547'}}/>
           </View>
-          <SelectBtn dataList={dataList2} defaultData={this.state.defaultData2} change={this._dataChange2}/>
+          <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._dataChange2}/>
 
         </View>
       </View>
@@ -139,9 +148,10 @@ var WhitePage = React.createClass({
               placeholder={'1万-1000亿'}
               placeholderTextColor='#325779'
               returnKeyType="search"
+              maxLength={8}
               style={{width:100,height:40,marginLeft:10,color:'#ffd547',}}/>
           </View>
-          <SelectBtn dataList={dataList3} defaultData={this.state.defaultData3} change={this._dataChange3}/>
+          <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._dataChange3}/>
 
         </View>
       </View>
@@ -157,6 +167,7 @@ var WhitePage = React.createClass({
               placeholder={'0-100.00'}
               placeholderTextColor='#325779'
               returnKeyType="search"
+              maxLength={8}
               style={{width:100,height:40,marginLeft:10,color:'#ffd547'}}/>
           </View>
           <Text style={{marginLeft:10,fontWeight: 'bold', color:'white',}}>{'%'}</Text>
@@ -210,7 +221,7 @@ var WhitePage = React.createClass({
   },
   renderReleaseBtn: function () {
     return (
-      <TouchableHighlight onPress={() => this._pressRow()} underlayColor='rgba(129,127,201,0)'>
+      <TouchableHighlight onPress={() => this._pressPublish()} underlayColor='rgba(129,127,201,0)'>
         <View
           style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
           <Text style={{fontWeight: 'bold', color:'white',}}>
@@ -220,8 +231,10 @@ var WhitePage = React.createClass({
       </TouchableHighlight>
     )
   },
-  _pressRow: function () {
-
+  _pressPublish: function () {
+    {
+      this.addBizOrder();
+    }
   },
   toPage: function (name) {
     const { navigator } = this.props;

@@ -1,8 +1,7 @@
 /**
  * Created by baoyinghai on 16/4/15.
  */
-
-
+let { MSG_TYPE, MSG_CONTENT_TYPE } = require('../../constants/dictIm');
 let user1 = {
   "userId": 1,
   "address": "1号街",
@@ -217,6 +216,67 @@ let group2 = {
 }
 
 
+let session1 = {
+  sessionId: 1,
+  type: MSG_TYPE.PLATFORM_INFO,
+  badge: 1,
+  title: 'new11',
+  content: 'new1',
+  lastTime: new Date(),
+  contentType: MSG_CONTENT_TYPE.TEXT
+}
+
+
+let session2 = {
+  sessionId: 2,
+  type: MSG_TYPE.REC_P2P_MSG,
+  badge:2,
+  title: 'user',
+  content:'text message',
+  lastTime: new Date(),
+  contentType: MSG_CONTENT_TYPE.TEXT
+}
+
+
+
+let session3 = {
+  sessionId: 3,
+  type: MSG_TYPE.REC_GROUP_MSG,
+  badge:3,
+  title: 'group1',
+  content:'text',
+  lastTime: new Date(),
+  contentType: MSG_CONTENT_TYPE.TEXT
+}
+
+let message1 = {
+  sessionId: 2,
+  msgId: 1,
+  fromUId: 2,
+  groupId: 0,
+  toId: 3,
+  type: MSG_TYPE.REC_P2P_MSG,
+  contentType: MSG_CONTENT_TYPE.TEXT,
+  content: 'haha',
+  msgType: MSG_TYPE.REC_P2P_MSG,
+  revTime: new Date(),
+  isRead: false
+}
+
+let message2 = {
+  sessionId: 3,
+  msgId: 1,
+  fromUId: 2,
+  groupId: 1,
+  toId: 3,
+  type: MSG_TYPE.REC_GROUP_MSG,
+  contentType: MSG_CONTENT_TYPE.TEXT,
+  content: 'haha',
+  msgType: MSG_TYPE.REC_GROUP_MSG,
+  revTime: new Date(),
+  isRead: false
+}
+
 module.exports = {
   users: [
     user1, user2, user3, user4, user5, user6
@@ -227,7 +287,9 @@ module.exports = {
   groups:[
     group1,
     group2
-  ]
+  ],
+  sessionList:[session1, session2, session3],
+  message:[message1, message2]
 }
 
 

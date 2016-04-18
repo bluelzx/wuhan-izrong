@@ -10,7 +10,8 @@ let SearchBar = React.createClass({
 
   getInitialState: function() {
     return {
-      editAble:false
+      editAble:false,
+      text:''
     }
   },
 
@@ -20,17 +21,18 @@ let SearchBar = React.createClass({
 
   textChange: function(text){
     this.props.textChange(text);
+    this.setState({text:text});
   },
 
   renderBar: function() {
-    if(this.state.editAble) {
+    if(this.state.text!='' || this.state.editAble) {
       return (
         <TextInput
           autoFocus={this.state.editAble}
-          onBlur={() => this.setState({editAble:false})}
+          onBlur={() => this.setState({editAble:false}) }
+          onFocus={() => this.setState({editAble:true}) }
           onChangeText={(text) => this.textChange(text)}
           returnKeyType={'search'}
-          multiline={true}
           style={{color: '#ffffff',height:(Platform.OS === 'ios')?30:60,backgroundColor:'#15263A',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}></TextInput>
       );
     } else {
