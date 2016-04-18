@@ -30,14 +30,13 @@ let Item = React.createClass({
   },
 
   renderArrow: function(showArrow){
-    if(showArrow){
+    if(!showArrow){
       return (
         <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
       );
     }else{
       return null;
     }
-
   },
 
   render(){
@@ -51,8 +50,8 @@ let Item = React.createClass({
               <Text style={styles.title}>{this.props.desc}</Text>
             </View>
             <View style={{flexDirection:'row',alignItems:'center',flex:1,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
-              <Text style={[{fontSize: 15,color: '#ffffff',width:140}]}  numberOfLines={1}>{this.props.value}</Text>
-              <Icon style={[{marginRight:20},,!this.props.showArrow && {marginRight:20}]} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+              <Text style={[{fontSize: 15,color: '#ffffff',width:140}]}  numberOfLines={1}>{this.props.value ? this.props.value:"未填写"}</Text>
+              {this.renderArrow(this.props.showArrow)}
             </View>
           </View>
           <View style={styles.bottomStyle}/>

@@ -1,7 +1,6 @@
 var Qs = require('qs');
 var { Alert } = require('mx-artifacts');
 var AppStore = require('../store/appStore');
-var { Host } = require('../../../config');
 
 var BFetch = function (url, param, callback, failure, options) {
   var headers = {
@@ -10,7 +9,7 @@ var BFetch = function (url, param, callback, failure, options) {
     'Authorization': 'Basic  ' + AppStore.getToken()
   };
 
-  return rawFetch(Host + url, {
+  return rawFetch(url, {
     method: 'POST',
     headers: headers,
     body: JSON.stringify(param)
@@ -24,7 +23,7 @@ var BFetch1 = function (url, param, callback, failure, options) {
     'Authorization': ''
   };
 
-  return rawFetch(Host + url, {
+  return rawFetch(url, {
     method: 'POST',
     headers: headers,
     body: JSON.stringify(param)
@@ -37,7 +36,7 @@ var PFetch = function (url, param, callback, failure, options) {
     'Authorization': 'Basic  ' + AppStore.getToken()
   };
 
-  return rawFetch(Host + url + '?' + Qs.stringify(param), {
+  return rawFetch(url + '?' + Qs.stringify(param), {
     method: 'POST',
     headers: headers
   }, options);
@@ -52,7 +51,7 @@ var UFetch = function (url, param, callback, failure, options) {
 
   var formdata = new FormData();
   formdata.append('file', param);
-  return rawFetch(Host + url, {
+  return rawFetch(url, {
     method: 'POST',
     headers: headers,
     body: formdata
@@ -67,7 +66,7 @@ var rawFetch = function (url, param, callback, failure, option) {
 
   if (!option) option = {};
   var _promise = Promise.race([fetch(url, param), new Promise(function (resolve, reject) {
-    setTimeout(() => reject(new Error('链接超时')), 20000);
+    setTimeout(() => reject(new Error('链接超时')), 2000000);
   })]);
   //process(fetch(url, param) ,callback,failure,option);
   return process(_promise, option);

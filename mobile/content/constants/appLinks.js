@@ -1,7 +1,13 @@
-let { Host } = require('../../config');
+let { Host, ImHost } = require('../../config');
+let imSocket = 'ws://' + ImHost + '/';
+let imHttp = 'http://' + ImHost + '/';
+
 let pub = '/app/pub';
 let api = '/app/api';
+
 let AppLinks = {
+  ImSocket: imSocket,
+  ImHttp: imHttp,
   protocal: '',
   validatePassword: '',
   validateMobileForResetMobile: '',
@@ -14,15 +20,15 @@ let AppLinks = {
   sendSMSCodeToOldMobile: '',
   resetMobileNo: '',
   resetPasswordForChangePwd: '',
-  sendSmsCodeToLoginMobile: pub + '/sendSmsCodeToLoginMobile',
-  sendSmsCodeToRegisterMobile: pub + '/sendSmsCodeToRegisterMobile',
-  validateSmsCode: pub + '/validateSmsCode',
-  login: pub + '/login',
-  logout: api + '/Account/logout',
-  register: pub + '/register',
-  uploadFile: pub + '/File/upload',
-  updateUserInfo: api + '/Account/updateUserInfo',
-  getOrgList: pub + '/getOrgList/',
+  sendSmsCodeToLoginMobile: Host + pub + '/sendSmsCodeToLoginMobile',
+  sendSmsCodeToRegisterMobile: Host + pub + '/sendSmsCodeToRegisterMobile',
+  validateSmsCode: Host + pub + '/validateSmsCode',
+  login: Host + pub + '/login',
+  logout: Host + api + '/Account/logout',
+  register: Host + pub + '/register',
+  uploadFile: Host + pub + '/File/upload',
+  updateUserInfo: Host + api + '/Account/updateUserInfo',
+  getOrgList: Host + pub + '/getOrgList/',
 
   bizOrderMarketSearchDefaultSearch: api + '/BizOrderMarketSearch/defaultSearch',
   bizOrderMarketSearchsearch: api + '/BizOrderMarketSearch/search',
@@ -31,6 +37,7 @@ let AppLinks = {
   downselfBizOrder: api + '/BizOrderManage/downselfBizOrder',
   updateBizOrder: api + '/BizOrderManage/updateBizOrder',
   getBizOrderCategoryAndItem : api + '/BizOrderManage/getBizOrderCategoryAndItem',
+  updateUserInfo: Host + api +'/Account/updateUserInfo'
 };
 
 module.exports = AppLinks;

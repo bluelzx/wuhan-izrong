@@ -11,7 +11,7 @@ var pub = "/pub";
 let LoginActions = {
   getProtocol: () => AppLinks.protocal,
   forceLogOut: () => AppStore.forceLogout(),
-  logout: () => _logout(AppLinks.logout),
+  logout: (p) => _logout(AppLinks.logout,p),
   login: (p) => _login(AppLinks.login, p),
   register: (p, c, f) => _register(AppLinks.register, p, c, f),
   sendSmsCodeToLoginMobile: (p)=> _sendSmsCodeToLoginMobile(AppLinks.sendSmsCodeToLoginMobile,p),
@@ -74,10 +74,10 @@ let _register = function (url, p) {
   });
 };
 
-let _logout = function (url) {
+let _logout = function (url,p) {
   return new Promise((resolve, reject) => {
     BFetch(url).then((response) => {
-      resolve(AppStore.logout(response));
+      resolve(AppStore.logout(p));
     }).catch((errorData) => {
       reject(errorData);
     });

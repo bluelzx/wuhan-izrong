@@ -71,7 +71,7 @@ let AddMember = React.createClass({
       <Text
         style={
           {color: '#ffffff'}}>
-        {data.orgName}
+        {data.orgValue}
       </Text>
     );
   },

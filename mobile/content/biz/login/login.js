@@ -61,7 +61,7 @@ let Login = React.createClass({
             }
           }
         }).catch((errorData) => {
-          Alert(errorData.toString());
+          Alert(errorData.msgContent);
         });
       });
     }
@@ -95,7 +95,7 @@ let Login = React.createClass({
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='登录' showBack={true} showBar={true}>
+                  contentBackgroundColor='#18304D' title='登录' showBack={false} showBar={true}>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.renderLogo()}
           <Input containerStyle={styles.inputStyle}

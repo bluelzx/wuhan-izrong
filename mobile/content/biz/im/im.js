@@ -28,9 +28,8 @@ let HeadPic = require('./headerPic');
 let AppStore = require('../../framework/store/appStore');
 
 let ContactStore = require('../../framework/store/contactStore');
-let msgType = require('../../constants/wsMsgType');
-let contentType = require('../../constants/msgContentType');
 let ItemType = require('./itemType');
+let { MSG_TYPE, MSG_CONTENT_TYPE } = require('../../constants/dictIm');
 
 let WhitePage = React.createClass({
 
@@ -88,26 +87,20 @@ let WhitePage = React.createClass({
   },
 
   toOther: function(item) {
+    let userinfo = ContactStore.getUserInfo();
     let option = null;
-    //if (type == msgType.REC_GROUP_MSG) {
-    //  option = Object.assign({},
-    //    {
-    //      id: item.groupId,
-    //      ownerId: item.ownerId
-    //    });
-    //} else {
-    //  option = Object.assign({}, {id: item.userId});
-    //}
     let param = {};
-    if(msgType.REC_GROUP_MSG == item.msgType){ // 区分聊天窗口类型
+    if(MSG_TYPE.REC_GROUP_MSG == item.type){ // 区分聊天窗口类型
+      let g = ContactStore.getGroupInfoBySessionId(item.sessionId,userinfo.userId)
       param.chatType = ItemType.GROUP
-      param.title = item.groupName;
-      param.groupId = item.gid;
-      param.groupMasterUid = item.groupMasterUid;
+      param.title = item.title;
+      param.groupId = g.groupId; //query
+      param.groupMasterUid = g.groupMasterUid; //query
     }else{
+      let u = ContactStore.getUserInfoBySessionId(item.sessionId,userinfo.userId)
       param.chatType = ItemType.USER;
-      param.title = item.realName;
-      param.userId = item.fromUid;
+      param.title = item.title;
+      param.userId = u.userId;  //query
     }
     this.props.navigator.push({
       comp: Chat,
@@ -133,7 +126,7 @@ let WhitePage = React.createClass({
             <View
               style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
               <Text style={{color:'#ffffff'}}>{'环渤海银银合作平台'}</Text>
-              <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.createDate)}</Text>
+              <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
             </View>
             <Text numberOfLines={1}
                   style={{marginTop:5,color:'#687886'}}>{item.content}</Text>
@@ -156,7 +149,7 @@ let WhitePage = React.createClass({
       }
     ];
     return (
-      <Swipeout key={item.gid} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
+      <Swipeout key={item.sessionId} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
         <TouchableHighlight onPress={()=>this.toOther(item)}>
           <View
             style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
@@ -165,11 +158,11 @@ let WhitePage = React.createClass({
               style={{ height:40, width:width-70}}>
               <View
                 style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
-                <Text style={{color:'#ffffff'}}>{item.groupName}</Text>
-                <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.sendDate)}</Text>
+                <Text style={{color:'#ffffff'}}>{item.title}</Text>
+                <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
               <Text numberOfLines={1}
-                    style={{marginTop:5,color:'#687886'}}>{contentType.TEXT==item.contentType?item.content:'点击查看详情'}</Text>
+                    style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT==item.contentType?item.content:'点击查看详情'}</Text>
             </View>
           </View>
         </TouchableHighlight>
@@ -189,7 +182,7 @@ let WhitePage = React.createClass({
       }
     ];
     return (
-      <Swipeout key={item.fromUid} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
+      <Swipeout key={item.sessionId} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
         <TouchableHighlight onPress={()=>this.toOther(item)}>
           <View
             style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
@@ -198,11 +191,11 @@ let WhitePage = React.createClass({
               style={{ height:40, width:width-70}}>
               <View
                 style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
-                <Text style={{color:'#ffffff'}}>{item.realName}</Text>
-                <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.sendDate)}</Text>
+                <Text style={{color:'#ffffff'}}>{item.title}</Text>
+                <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
               <Text numberOfLines={1}
-                    style={{marginTop:5,color:'#687886'}}>{contentType.TEXT==item.contentType?item.content:'点击查看详情'}</Text>
+                    style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT==item.contentType?item.content:'点击查看详情'}</Text>
             </View>
           </View>
         </TouchableHighlight>
@@ -212,7 +205,7 @@ let WhitePage = React.createClass({
 
   renderItem: function(item, index) {
 
-    if(item.msgType == msgType.REC_P2P_MSG)
+    if(item.type == MSG_TYPE.REC_P2P_MSG)
     return this.renderUser(item, index);
     else {
       return this.renderGroup(item, index);

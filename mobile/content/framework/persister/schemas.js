@@ -33,7 +33,8 @@ let MessageSchema = {
   properties: {
     sessionId: {type: 'int', optional: true},
     msgId: {type: 'int', optional: true},
-    fromId: {type: 'int', optional: true},
+    fromUId: {type: 'int', optional: true},
+    groupId: {type: 'int', optional: true},
     toId: {type: 'int', optional: true},
     type: {type: 'string', optional: true},
     contentType: {type: 'string', optional: true},
@@ -53,7 +54,8 @@ let MessageListSchema = {
     badge:{type: 'int', optional: true},
     title: {type: 'string', optional: true},
     content:{type: 'string', optional: true},
-    lastTime: {type: 'date', optional: true}
+    lastTime: {type: 'date', optional: true},
+    contentType: {type: 'string', optional: true}
   }
 };
 
@@ -218,6 +220,7 @@ module.exports = {
   FilterItemSchema:FilterItemSchema,
   FilterItemsSchema:FilterItemsSchema,
   OrderItemSchema:OrderItemSchema,
+  MessageListSchema:MessageListSchema,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
@@ -228,5 +231,6 @@ module.exports = {
   BIZORDERITEM: 'bizOrderItem',
   FILTERITEMS:'filterItems',
   FILTERITEM:'filterItem',
-  ORDERITEM:'orderItem'
+  ORDERITEM:'orderItem',
+  MESSAGELIST:'messageList'
 };

@@ -9,11 +9,25 @@ let {
   Text
   } = React;
 
-let GiftedMessenger = require('../../comp/messenger/giftedMessenger');
+let GiftedMessenger = require('./giftedMessenger');
 let { Communications, Device } = require('mx-artifacts');
 
+let ImSocket = require('../../framework/network/imSocket');
+let { MSG_CONTENT_TYPE, COMMAND_TYPE } = require('../../constants/dictIm');
 
 let Messenger = React.createClass({
+
+  getDefaultProps() {
+    return {
+      sessionId: 'sessionId',
+      toUid: 'u002',
+    };
+  },
+
+  propTypes: {
+    sessionId: React.PropTypes.string,
+    toUid: React.PropTypes.string
+  },
 
   getMessages() {
     return [
@@ -32,11 +46,23 @@ let Messenger = React.createClass({
   handleSend(message = {}, rowID = null) {
     // Your logic here
     // Send message.text to your server
+    let msgToSend = {
+      toUid: this.props.toUid,
+      contentType: MSG_CONTENT_TYPE.TEXT,
+      content: message.text,
+      msgId: 'uuid',
+      command: COMMAND_TYPE.SEND_P2P_MSG
+    };
 
-    // this._GiftedMessenger.setMessageStatus('Sent', rowID);
-    // this._GiftedMessenger.setMessageStatus('Seen', rowID);
-    // this._GiftedMessenger.setMessageStatus('Custom label status', rowID);
-    this._GiftedMessenger.setMessageStatus('ErrorButton', rowID); // => In this case, you need also to set onErrorButtonPress
+    ImSocket.send(msgToSend)
+      .then(() => {
+        // this._GiftedMessenger.setMessageStatus('Seen', rowID);
+        // this._GiftedMessenger.setMessageStatus('Custom label status', rowID);
+        this._GiftedMessenger.setMessageStatus('Sent', rowID);
+      }).catch((error) => {
+        // => In this case, you need also to set onErrorButtonPress
+        this._GiftedMessenger.setMessageStatus('ErrorButton', rowID);
+      });
   },
 
   // @oldestMessage is the oldest message already added to the list
