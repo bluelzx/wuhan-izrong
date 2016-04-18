@@ -37,7 +37,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),
-  logout: () => _logout(),
+  logout: (userId) => _logout(userId),
   forceLogout: () => _force_logout(),
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
@@ -88,8 +88,8 @@ let _login = (data) => {
   AppStore.emitChange();
 };
 
-let _logout = () => {
-  Persister.clearToken();
+let _logout = (userId) => {
+  Persister.clearToken(userId);
   _info.isLogout = true;
   AppStore.emitChange();
 };

@@ -20,56 +20,6 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let { Alert, Button ,Device} = require('mx-artifacts');
 var AlphabetListView = require('react-native-alphabetlistview');
 
-class SectionHeader extends Component {
-  render() {
-    // inline styles used for brevity, use a stylesheet when possible
-    var textStyle = {
-      textAlign: 'left',
-      marginLeft: 20,
-      color: '#fff',
-      fontWeight: '700',
-      fontSize: 16
-    };
-
-    var viewStyle = {
-      backgroundColor: '#244266',
-      marginTop: -1,
-      height: 30,
-      justifyContent: "center"
-    };
-    return (
-      <View style={viewStyle}>
-        <Text style={textStyle}>{this.props.title}</Text>
-      </View>
-    );
-  }
-}
-
-class SectionItem extends Component {
-  render() {
-    return (
-      <Text style={{color:"#327efb"}}>{this.props.title}</Text>
-    );
-  }
-}
-
-let Cell = React.createClass({
-  render() {
-    return (
-      <TouchableHighlight style={{backgroundColor:'#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
-                          onPress={()=>this.selectOrgItem(this.props.item)}>
-        <View style={{height:40,marginLeft:20,justifyContent:"center",borderBottomWidth:1,borderBottomColor:'#122335'}}>
-          <Text style={{color:"#FFFFFF",textAlign:"left"}}>{this.props.item.orgValue}</Text>
-        </View>
-      </TouchableHighlight>
-    );
-  },
-
-  selectOrgItem: function (orgItem) {
-    console.log(orgItem);
-  }
-});
-
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
     this.getOrgList();
@@ -106,6 +56,9 @@ let Register_selectOrg = React.createClass({
   _onChange: function () {
 
   },
+  selectItem: function(a,b){
+
+  },
 
   render: function () {
     return (
@@ -118,26 +71,70 @@ let Register_selectOrg = React.createClass({
             cellHeight={30}
             sectionListItem={SectionItem}
             sectionHeader={SectionHeader}
-            sectionHeaderHeight={22.5}/>
+            sectionHeaderHeight={22.5}
+            updateScrollState={true}
+            onCellSelect={(a,b)=>{
+               console.log(a.toString+b.toString());
+            }}/>
         </View>
       </NavBarView>
     )
   }
 });
+
+let SectionHeader = React.createClass({
+  render() {
+    return (
+      <View style={styles.viewStyle}>
+        <Text style={styles.textStyle}>{this.props.title}</Text>
+      </View>
+    );
+  }
+});
+
+let SectionItem = React.createClass({
+  render() {
+    return (
+      <Text style={{color:"#327efb"}}>{this.props.title}</Text>
+    );
+  }
+});
+
+let Cell = React.createClass({
+
+  render() {
+    return (
+      <TouchableHighlight style={{backgroundColor:'#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
+                          onPress={()=>this.selectOrgItem(this.props.item)}>
+        <View style={{height:40,marginLeft:20,justifyContent:"center",borderBottomWidth:1,borderBottomColor:'#122335'}}>
+          <Text style={{color:"#FFFFFF",textAlign:"left"}}>{this.props.item.orgValue}</Text>
+        </View>
+      </TouchableHighlight>
+    );
+  },
+
+  selectOrgItem: function (orgItem, callback) {
+    console.log(orgItem);
+  }
+});
+
 let styles = StyleSheet.create({
   paddingLR: {
     paddingLeft: 12,
     paddingRight: 12
   },
   textStyle: {
-    textAlign: 'center',
+    textAlign: 'left',
+    marginLeft: 20,
     color: '#fff',
     fontWeight: '700',
     fontSize: 16
   },
-
   viewStyle: {
-    backgroundColor: '#ccc'
+    backgroundColor: '#244266',
+    marginTop: -1,
+    height: 30,
+    justifyContent: "center"
   }
 });
 
