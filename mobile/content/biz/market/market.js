@@ -22,6 +22,7 @@ let screenHeight = Dimensions.get('window').height;
 
 let NavBarView = require('../../framework/system/navBarView');
 let RadioControl = require('./radioControl');
+let FilterSelectBtn = require('./filterSelectBtn');
 let MarketList = require('./marketList');
 let SelectOrg = require('./selectOrg');
 let Icon = require('react-native-vector-icons/Ionicons');
@@ -34,14 +35,23 @@ let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let WhitePage = React.createClass({
 
   getInitialState(){
-    let categoryAndItem = AppStore.getFilters().filterItems;
-    let item = MarketStore.getCategoryAndItem(categoryAndItem);
+    let filterItems = AppStore.getFilters().filterItems;
+    let orderItems = AppStore.getFilters().orderItems;
+    let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
+    let item = MarketStore.getCategoryAndItem(filterItems);
+    let bizOrientation = MarketStore.getFilterOptions(filterItems, 'bizOrientation').options;
+    let term = MarketStore.getFilterOptions(filterItems, 'term').options;
+    let amount = MarketStore.getFilterOptions(filterItems, 'amount').options;
+
     return {
-      item:item,
-      categoryAndItem:categoryAndItem,
-      dataSource: categoryAndItem[0].options,
+      item: item,
+      filterItems: filterItems,
+      bizOrientation: bizOrientation,
+      term: term,
+      amount: amount,
+      dataSource: category.options,
       dataSource2: item[0].itemArr,
-      dataSource3: ['最新发布', '金额最高', '利率最低'],
+      dataSource3: orderItems,
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
@@ -51,14 +61,20 @@ let WhitePage = React.createClass({
       pickTypeRow1: 0,
       pickTypeRow2: 0,
       pickTimeRow: 0,
-      pickRowColor: '#244266'
-
+      pickRowColor: '#244266',
+      //network
+      orderField: 'lastModifyDate',
+      orderType: 'desc',
+      pageIndex: 1,
+      bizCategoryValues: 'MCA',
+      bizItemValues: 'MCA_ABS',
+      bizOrientationValues: 'ALL',
+      termValues: 'ALL',
+      amountValues: 'ALL'
     }
   },
 
   componentWillMount: function () {
-    //{this.bizOrderMarketSearchDefaultSearch()};
-    //{this.bizOrderMarketSearchsearch()}
   },
 
   render: function () {
@@ -70,7 +86,9 @@ let WhitePage = React.createClass({
           style={{width: screenWidth,alignItems: "center",justifyContent: "flex-start",flexDirection: "row"}}>
           {this.renderFilter(this.pressFilterType, this.pressFilterTime, this.pressFilterOther)}
         </View>
-        <MarketList ref="MARKETLIST" navigator={this.props.navigator}/>
+        <MarketList ref="MARKETLIST" navigator={this.props.navigator} exec={this.props.exec}
+                    orderField={this.state.orderField} orderType={this.state.orderType}
+                    pageIndex={this.state.pageIndex}/>
         {this.renderOptionType()}
         {this.renderOptionTime()}
         {this.renderOptionOther()}
@@ -99,44 +117,34 @@ let WhitePage = React.createClass({
     })
   },
   pressTypeRow1(rowId){
-    let categoryAndItem = this.state.categoryAndItem;
-    let item = this.state.item;
-    //if (rowId == 0) {
-    //  this.setState({dataSource2: ['同业存款', '同业拆借', '债券回购', '存单', '其他']})
-    //} else if (rowId == 1) {
-    //  this.setState({dataSource2: ["同业理财", "福费廷", "资产支持证券", '其他']})
-    //} else if (rowId == 2) {
-    //  this.setState({dataSource2: ["纸票交易", "电票交易", "纸票回购", "电票回购", '其他']})
-    //} else if (rowId == 3) {
-    //  this.setState({dataSource2: ["代理开证/保函", "福费廷", '其他']})
-    //} else if (rowId == 4) {
-    //  this.setState({dataSource2: ["债券承销", "北金所私募券", "资产证券化", "并购", "结构化融资", '其他']})
-    //} else {
-    //}
     this.setState({
       pickTypeRow1: rowId,
       pickTypeRow2: 0,
       levelOneText: this.state.dataSource[rowId].displayName,
-      dataSource2: item[rowId].itemArr,
-      levelTwoText: this.state.dataSource2[0].displayName
+      dataSource2: this.state.item[rowId].itemArr,
+      levelTwoText: this.state.item[rowId].itemArr[0].displayName,
+      bizCategoryValues: this.state.dataSource[rowId].displayCode
     })
   },
   pressTypeRow2(rowId){
     this.setState({
       clickFilterType: 0,
       pickTypeRow2: rowId,
-      levelTwoText: this.state.dataSource2[rowId].displayName
+      levelTwoText: this.state.dataSource2[rowId].displayName,
+      bizItemValues: this.state.dataSource2[rowId].displayCode
     });
-    {
-      this.refs['MARKETLIST']._changeData()
-    }
+    {this.refs['MARKETLIST']._changeData();}
+    {this.bizOrderMarketSearchsearch();}
   },
   pressTimeRow(rowId){
     this.setState({
       clickFilterTime: 0,
       pickTimeRow: rowId,
-      optionTwoText: this.state.dataSource3[rowId]
+      optionTwoText: this.state.dataSource3[rowId].fieldDisplayName,
+      orderField:this.state.dataSource3[rowId].fieldName,
+      orderType: this.state.dataSource3[rowId].asc?'asc':'desc',
     })
+    {this.bizOrderMarketSearchsearch();}
   }, renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
     return (
       <View style={{flex:1,flexDirection:'row'}}>
@@ -246,7 +254,12 @@ let WhitePage = React.createClass({
               />
             </View>
           </TouchableOpacity>
-          <RadioControl/>
+          <View>
+            <FilterSelectBtn typeTitle={'方向'} dataList={this.state.bizOrientation} section={3}
+                             callBack={this.callBack}/>
+            <FilterSelectBtn typeTitle={'期限'} dataList={this.state.term} section={3} callBack={this.callBack}/>
+            <FilterSelectBtn typeTitle={'金额'} dataList={this.state.amount} section={2} callBack={this.callBack}/>
+          </View>
           <TouchableHighlight onPress={() => this.confirmBtn()} underlayColor='rgba(129,127,201,0)'>
             <View
               style={{margin:10,borderRadius:5,flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
@@ -291,12 +304,31 @@ let WhitePage = React.createClass({
         onPress={()=>this.pressTimeRow(rowID)} activeOpacity={1}
         underlayColor="#f0f0f0">
         <View style={{width:screenWidth}}>
-          <Text style={{marginLeft:10,color:'white'}}>{rowData}</Text>
+          <Text style={{marginLeft:10,color:'white'}}>{rowData.fieldDisplayName}</Text>
         </View>
       </TouchableOpacity>
     )
   },
+  callBack: function (item, title) {
+    if(title == '方向'){
+      this.setState({
+        bizOrientationValues:item.displayCode
+      })
+    }else if(title == '期限'){
+      this.setState({
+        termValues:item.displayCode
+      })
+    }else if(title == '金额'){
+      this.setState({
+        amountValues:item.displayCode
+      })
+    }else{
+
+    }
+  },
   confirmBtn: function () {
+    {this.pressFilterOther();}
+    {this.bizOrderMarketSearchsearch();}
   },
   toPage: function (name) {
     const { navigator } = this.props;
@@ -305,9 +337,6 @@ let WhitePage = React.createClass({
     }
   },
 
-  changeFilterConditions: function () {
-
-  },
   bizOrderMarketSearchDefaultSearch: function () {
     this.props.exec(
       ()=> {
@@ -329,29 +358,44 @@ let WhitePage = React.createClass({
     this.props.exec(
       ()=> {
         return MarketAction.bizOrderMarketSearchsearch({
-            orderField: 'lastModifyDate',
-            orderType: 'desc',
-            //filterList: [243, 251],
-            pageIndex: 1,
-
-            custFilterList: {
+            orderField: this.state.orderField,
+            orderType: this.state.orderType,
+            pageIndex: this.state.pageIndex,
+            custFilterList:{
               bizCategory: {
-                values: ['MCA'],
+                values: [this.state.bizCategoryValues],
                 opt: 'Eq',
                 filedName: 'bizCategory',
                 valueType: 'String'
               },
               bizItem: {
-                values: ['MCA_ABS'],
+                values: [this.state.bizItemValues],
                 opt: 'Eq',
                 filedName: 'bizItem',
                 valueType: 'String'
+              },
+              bizOrientation: {
+                values: [this.state.bizOrientationValues],
+                opt: 'Eq',
+                filedName: 'bizOrientation',
+                valueType: 'String'
+              },
+              term: {
+                values: [this.state.termValues],
+                opt: 'Eq',
+                filedName: 'term',
+                valueType: 'String'
+              },
+              amount: {
+                values: [this.state.amountValues],
+                opt: 'Eq',
+                filedName: 'amount',
+                valueType: 'String'
               }
             }
-
           }
         ).then((response)=> {
-          console.log(JSON.stringify(response));
+
         }).catch(
           (errorData) => {
             throw errorData;
@@ -360,6 +404,7 @@ let WhitePage = React.createClass({
       }
     );
   },
+
 
 
 });
