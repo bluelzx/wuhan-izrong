@@ -1,8 +1,8 @@
 /**
  * Created by baoyinghai on 16/4/12.
  */
-let msgType = require('../../constants/wsMsgType');
-let contentType = require('../../constants/msgContentType');
+
+let { MSG_TYPE } = require('../../constants/dictIm');
 let PersisterFacade = require('../persister/persisterFacade');
 
 let _getContact = function(){
@@ -27,7 +27,7 @@ let _getIMNotificationMessage = function() {
   //按照msgType 分两组, p2p 和 group, p2p 按照fromUid再分组,取组内最新的一条瓶装数据,并统计未读数量  ,最终结果再按照时间排序
   let msgs = [];
   for(let session of sessions){
-    if(session.type == msgType.PLATFORM_INFO){ // TODO:两种判断
+    if(session.type == MSG_TYPE.PLATFORM_INFO){ // TODO:两种判断
       platformInfo = session;
     }else{
       msgs.push(session);

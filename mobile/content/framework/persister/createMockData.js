@@ -1,9 +1,7 @@
 /**
  * Created by baoyinghai on 16/4/15.
  */
-
-let msgType = require('../../constants/wsMsgType');
-let contentType = require('../../constants/msgContentType');
+let { MSG_TYPE, MSG_CONTENT_TYPE } = require('../../constants/dictIm');
 let user1 = {
   "userId": 1,
   "address": "1号街",
@@ -220,47 +218,47 @@ let group2 = {
 
 let session1 = {
   sessionId: 1,
-  type: msgType.PLATFORM_INFO,
+  type: MSG_TYPE.PLATFORM_INFO,
   badge: 1,
   title: 'new11',
   content: 'new1',
   lastTime: new Date(),
-  contentType: contentType.TEXT
+  MSG_CONTENT_TYPE: MSG_CONTENT_TYPE.TEXT
 }
 
 
 let session2 = {
   sessionId: 2,
-  type: msgType.REC_P2P_MSG,
+  type: MSG_TYPE.REC_P2P_MSG,
   badge:2,
   title: 'user',
   content:'text message',
   lastTime: new Date(),
-  contentType: contentType.TEXT
+  MSG_CONTENT_TYPE: MSG_CONTENT_TYPE.TEXT
 }
 
 
 
 let session3 = {
   sessionId: 3,
-  type: msgType.REC_GROUP_MSG,
+  type: MSG_TYPE.REC_GROUP_MSG,
   badge:3,
   title: 'group1',
   content:'text',
   lastTime: new Date(),
-  contentType: contentType.TEXT
+  MSG_CONTENT_TYPE: MSG_CONTENT_TYPE.TEXT
 }
 
 let message1 = {
   sessionId: 2,
   msgId: 1,
-  fromUid: 2,
+  fromUId: 2,
   groupId: 0,
   toId: 3,
-  type: msgType.REC_P2P_MSG,
-  contentType: contentType.TEXT,
+  type: MSG_TYPE.REC_P2P_MSG,
+  MSG_CONTENT_TYPE: MSG_CONTENT_TYPE.TEXT,
   content: 'haha',
-  msgType: msgType.REC_P2P_MSG,
+  MSG_TYPE: MSG_TYPE.REC_P2P_MSG,
   revTime: new Date(),
   isRead: false
 }
@@ -268,13 +266,13 @@ let message1 = {
 let message2 = {
   sessionId: 3,
   msgId: 1,
-  fromUid: 2,
+  fromUId: 2,
   groupId: 1,
   toId: 3,
-  type: msgType.REC_GROUP_MSG,
-  contentType: contentType.TEXT,
+  type: MSG_TYPE.REC_GROUP_MSG,
+  MSG_CONTENT_TYPE: MSG_CONTENT_TYPE.TEXT,
   content: 'haha',
-  msgType: msgType.REC_GROUP_MSG,
+  MSG_TYPE: MSG_TYPE.REC_GROUP_MSG,
   revTime: new Date(),
   isRead: false
 }

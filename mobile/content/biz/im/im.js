@@ -28,9 +28,8 @@ let HeadPic = require('./headerPic');
 let AppStore = require('../../framework/store/appStore');
 
 let ContactStore = require('../../framework/store/contactStore');
-let msgType = require('../../constants/wsMsgType');
-let contentType = require('../../constants/msgContentType');
 let ItemType = require('./itemType');
+let { MSG_TYPE, MSG_CONTENT_TYPE } = require('../../constants/dictIm');
 
 let WhitePage = React.createClass({
 
@@ -91,7 +90,7 @@ let WhitePage = React.createClass({
     let userinfo = ContactStore.getUserInfo();
     let option = null;
     let param = {};
-    if(msgType.REC_GROUP_MSG == item.type){ // 区分聊天窗口类型
+    if(MSG_TYPE.REC_GROUP_MSG == item.type){ // 区分聊天窗口类型
       let g = ContactStore.getGroupInfoBySessionId(item.sessionId,userinfo.userId)
       param.chatType = ItemType.GROUP
       param.title = item.title;
@@ -163,7 +162,7 @@ let WhitePage = React.createClass({
                 <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
               <Text numberOfLines={1}
-                    style={{marginTop:5,color:'#687886'}}>{contentType.TEXT==item.contentType?item.content:'点击查看详情'}</Text>
+                    style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT==item.contentType?item.content:'点击查看详情'}</Text>
             </View>
           </View>
         </TouchableHighlight>
@@ -196,7 +195,7 @@ let WhitePage = React.createClass({
                 <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
               <Text numberOfLines={1}
-                    style={{marginTop:5,color:'#687886'}}>{contentType.TEXT==item.contentType?item.content:'点击查看详情'}</Text>
+                    style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT==item.contentType?item.content:'点击查看详情'}</Text>
             </View>
           </View>
         </TouchableHighlight>
@@ -206,7 +205,7 @@ let WhitePage = React.createClass({
 
   renderItem: function(item, index) {
 
-    if(item.type == msgType.REC_P2P_MSG)
+    if(item.type == MSG_TYPE.REC_P2P_MSG)
     return this.renderUser(item, index);
     else {
       return this.renderGroup(item, index);
