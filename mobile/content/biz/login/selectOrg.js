@@ -75,12 +75,6 @@ let Register_selectOrg = React.createClass({
     this.getOrgList();
     let orgBuildList = AppStore.getOrgList();
     return {
-      loaded: false,
-      checked: true,
-      userName: '',
-      password: '',
-      verify: '',
-      active: false,
       data: orgBuildList
     };
   },
@@ -112,25 +106,6 @@ let Register_selectOrg = React.createClass({
   _onChange: function () {
 
   },
-  renderSectionHeader: function () {
-    return (
-      <View style={styles.viewStyle}>
-        <Text style={styles.textStyle}>{this.state.title}</Text>
-      </View>
-    );
-  },
-  renderSectionItem: function () {
-    return (
-      <Text style={{color:'#f00'}}>{this.props.title}</Text>
-    );
-  },
-  renderCell: function () {
-    return (
-      <View style={{height:30}}>
-        <Text>{this.props.item}</Text>
-      </View>
-    );
-  },
 
   render: function () {
     return (
@@ -143,8 +118,7 @@ let Register_selectOrg = React.createClass({
             cellHeight={30}
             sectionListItem={SectionItem}
             sectionHeader={SectionHeader}
-            sectionHeaderHeight={22.5}
-          />
+            sectionHeaderHeight={22.5}/>
         </View>
       </NavBarView>
     )
@@ -152,7 +126,8 @@ let Register_selectOrg = React.createClass({
 });
 let styles = StyleSheet.create({
   paddingLR: {
-    paddingLeft: 12, paddingRight: 12,
+    paddingLeft: 12,
+    paddingRight: 12
   },
   textStyle: {
     textAlign: 'center',

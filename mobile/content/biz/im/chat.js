@@ -9,8 +9,9 @@ let EditGroup = require('./editGroup');
 let EditGroupMaster = require('./editGroupMaster');
 let DictIcon = require('../../constants/dictIcon');
 let ImUserInfo = require('./imUserInfo');
-const Messenger = require('./messenger');
-let msgType = require('../../constants/wsMsgType');
+const Messenger = require('./../../comp/messenger/messenger');
+let { MSG_TYPE } = require('../../constants/dictIm');
+
 let ItemType = require('./itemType');
 let ContactStore = require('../../framework/store/contactStore');
 

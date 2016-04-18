@@ -68,8 +68,6 @@ let _appInit = () => {
     filters: Persister.getFilters()
   });
   Persister.saveFilters();
-  let key = ConvertChineseKey.makePy("");
-  console.log(key);
   AppStore.emitChange();
 };
 
