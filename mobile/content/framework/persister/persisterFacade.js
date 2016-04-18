@@ -49,7 +49,7 @@ let PersisterFacade = {
   saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
   getAPNSToken: () => _getAPNSToken(),
   getToken: ()=> _getToken(),
-  clearToken: () => _clearToken(),
+  clearToken: (userId) => _clearToken(userId),
   getLoginUserInfo: ()=> _getLoginUserInfo(),
   getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
   //interface for ContactStore
@@ -182,9 +182,10 @@ let _getToken = function () {
   return '';
 };
 
-let _clearToken = function () {
+let _clearToken = function (userId) {
   _realm.write(() => {
     _realm.create(LOGINUSERINFO, {
+      userId:userId,
       token: ''
     }, true);
   });

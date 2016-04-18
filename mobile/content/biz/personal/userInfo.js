@@ -21,9 +21,9 @@ let TextEdit = require('./textEdit');
 let { Alert } = require('mx-artifacts');
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let LoginAction = require('../../framework/action/loginAction');
+let Login = require('../../biz/login/login');
 
 let UserInfo = React.createClass({
-
   getInitialState: function () {
     let userInfo = UserInfoAction.getLoginUserInfo();
     let orgBean = UserInfoAction.getOrgById(userInfo.orgBeanId);
@@ -86,14 +86,20 @@ let UserInfo = React.createClass({
     }
   },
 
-  logout:function(){
+  logout: function () {
     this.props.exec(() => {
-      return  LoginAction.logout()
+      return LoginAction.logout(this.state.userId)
         .then((response) => {
-          console.log(response);
-      }).catch((errorData) => {
-        Alert(errorData.msgContent);
-      });
+          const { navigator } = this.props;
+          if (navigator) {
+            navigator.push({
+              comp: Login
+            });
+
+          }
+        }).catch((errorData) => {
+          Alert(errorData);
+        });
     });
   },
 
