@@ -14,13 +14,15 @@ let CircularButton = require('./circularButton');
 let ContactStore = require('../../framework/store/contactStore');
 let DictIcon = require('../../constants/dictIcon');
 let MembersBar = require('./membersBar');
+let ContactAction = require('../../framework/action/contactAction');
 
 let EditGroup = React.createClass({
 
   getInitialState:function () {
+    let groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
     return {
-      falseSwitchIsOn:false,
-      groupInfo:ContactStore.getGroupDetailById(this.props.param.id)
+      falseSwitchIsOn:groupInfo.isMute,
+      groupInfo:groupInfo
     };
   },
 
@@ -41,13 +43,23 @@ let EditGroup = React.createClass({
       members: this.state.groupInfo.members,
       showDelete: true,
       imgSource: DictIcon.imSpread,
-      addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.id}}),
-      deleteMember: ()=>this.props.navigator.push({comp: DeleteMember, param:{groupId:this.props.param.id}})
+      addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId}}),
+      deleteMember: ()=>this.props.navigator.push({comp: DeleteMember, param:{groupId:this.props.param.groupId}})
     };
 
     return (
       <MembersBar {...initData}/>
     );
+  },
+
+  setMute: function(value){
+    this.setState({falseSwitchIsOn: value});
+    ContactAction.muteGroup(this.props.param.groupId, value)
+
+  },
+
+  dismissGroup: function(){
+    ContactAction.dismissGroup(this.props.param.groupId);
   },
 
   render: function() {
@@ -68,7 +80,7 @@ let EditGroup = React.createClass({
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => this.props.navigator.push({comp:ModifyGroupName})}
+            <TouchableOpacity onPress={() => this.props.navigator.push({comp:ModifyGroupName,param:this.props.param.groupId})}
               style={{borderTopColor:'#132132',borderTopWidth:0.5,height:50,marginTop: 10,backgroundColor: '#15263A'}}>
               <View
                 style={{height:50,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center'}}>
@@ -90,14 +102,14 @@ let EditGroup = React.createClass({
               style={{borderTopColor:'#132132',borderTopWidth:0.5,height:50,backgroundColor: '#15263A',flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
               <Text style={{color:'#ffffff'}}>屏蔽群消息提醒</Text>
               <Switch
-                onValueChange={(value) => this.setState({falseSwitchIsOn: value})}
+                onValueChange={(value) => this.setMute(value)}
                 style={{height:30}}
                 value={this.state.falseSwitchIsOn}/>
             </View>
 
           </View>
           <View >
-            <Button containerStyle={{padding:10, height:45,borderRadius:0, overflow:'hidden', backgroundColor: '#E8004D'}}
+            <Button onPress={this.dismissGroup}  containerStyle={{padding:10, height:45,borderRadius:0, overflow:'hidden', backgroundColor: '#E8004D'}}
                     style={{fontSize: 18, color: '#ffffff'}}
             >
               解散该群

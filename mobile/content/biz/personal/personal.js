@@ -14,18 +14,22 @@ let {
   TouchableHighlight,
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
-let Validation = require('../../comp/utils/validation');
 let Login = require('../../biz/login/login');
 let Item = require('../../comp/utils/item');
 let UserInfo = require('../../biz/personal/userInfo');
 let AboutUs = require('./aboutUs');
-let SelectOrg  = require('../../biz/login/selectOrg');
+let {Button} = require('mx-artifacts');
+let UserInfoAction = require('../../framework/action/userInfoAction');
+let AppStore = require('../../framework/store/appStore');
+let LoginAction = require('../../framework/action/loginAction');
 
 let Personal = React.createClass({
   getInitialState: function () {
+    let userInfo = UserInfoAction.getLoginUserInfo();
+    let orgBean = UserInfoAction.getOrgById(userInfo.orgBeanId);
     return {
-      userName: "用户名",
-      orgName: "所属机构"
+      userName: userInfo.realName,
+      orgName: orgBean.orgValue
     }
   },
   componentDidMount() {
@@ -36,15 +40,15 @@ let Personal = React.createClass({
 
   },
 
-  toPage: function (name) {
+  toPage: function () {
     const { navigator } = this.props;
     if (navigator) {
-      navigator.push({comp: name})
+      if (AppStore.getToken()){
+        navigator.push({comp: UserInfo});
+      }else{
+        navigator.push({comp: Login});
+      }
     }
-  },
-
-  returnImg: function () {
-
   },
 
   render: function () {
@@ -56,13 +60,13 @@ let Personal = React.createClass({
           <View style={{backgroundColor:"#18304b",height:10}}/>
           <View style={{backgroundColor:'#162a40'}}>
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
-                                onPress={()=>this.toPage(Login)}>
+                                onPress={()=>this.toPage()}>
               <View style={styles.layout}>
                 <View style={{flexDirection:'row'}}>
                   <Image style={styles.head} resizeMode="cover" source={require('../../image/user/head.png')}/>
                   <View style={{marginLeft:20,marginTop:10}}>
                     <Text style={{fontSize: 18,color: '#ffffff'}}>{this.state.userName}</Text>
-                    <Text style={{fontSize: 18,color: '#ffffff',marginTop:10}}>{this.state.orgName}</Text>
+                    <Text style={{fontSize: 18,color: '#ffffff',marginTop:10,width:200}} numberOfLines={1}>{this.state.orgName}</Text>
                   </View>
                 </View>
               </View>
@@ -73,7 +77,6 @@ let Personal = React.createClass({
                 func={() => this.toPage(AboutUs)}/>
           <Item desc="关于我们" img = {false} value={this.state.realName}
                 func={() => this.toPage(AboutUs)}/>
-
         </ScrollView>
       </NavBarView>
     );

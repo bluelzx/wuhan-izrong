@@ -29,12 +29,12 @@ let MembersBar = React.createClass({
       m.push(
         <View key={members[i].userId} style={{alignItems:'center',padding:5}}>
           <HeadPic showBadge={false} style={{marginTop:5,height: 40,width: 40}} source={imgSource}/>
-          <Text style={{color:'#ffffff',marginTop:4}}>{members[i].userName}</Text>
+          <Text style={{color:'#ffffff',marginTop:4}}>{members[i].realName}</Text>
         </View>
       );
     }
     return (
-      <View style={{flexDirection:'row', backgroundColor:'#15263A'}}>
+      <View style={{flexDirection:'row', flexWrap:'wrap', backgroundColor:'#15263A'}}>
         {m}
         {this.renderCircularButton()}
       </View>

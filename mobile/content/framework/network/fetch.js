@@ -20,7 +20,7 @@ var BFetch1 = function (url, param, callback, failure, options) {
   var headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    'Authorization': 'Basic  ' + '11111111'
+    'Authorization': ''
   };
 
   return rawFetch(url, {
@@ -120,5 +120,5 @@ module.exports = {
   BFetch: BFetch,
   PFetch: PFetch,
   UFetch: UFetch,
-  BFetch1: BFetch1,
+  BFetch1: BFetch1
 };

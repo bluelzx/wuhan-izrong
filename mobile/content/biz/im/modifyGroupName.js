@@ -5,17 +5,34 @@ let React = require('react-native');
 const {TouchableOpacity, Text, View, TextInput, Platform} = React;
 let NavBarView = require('../../framework/system/navBarView');
 let { Device } = require('mx-artifacts');
+let ContactAction = require('../../framework/action/contactAction');
+
 let ModifyGroupName = React.createClass({
+
+  getInitialState: function(){
+    return {
+      groupName:''
+    };
+  },
+
+  modifyGroupName: function(){
+    ContactAction.modifyGroupName(this.props.param, this.state.groupName);
+    this.props.navigator.pop();
+  },
 
   renderRight: function(){
     return (
       <TouchableOpacity onPress={()=>{
-      this.props.navigator.pop();
+      this.modifyGroupName();
       }}>
         <Text style={{color:'#ffffff'}}>完成</Text>
       </TouchableOpacity>
 
     );
+  },
+
+  changeTextValue: function(text){
+    this.setState({groupName:text});
   },
 
   render: function() {
@@ -28,6 +45,7 @@ let ModifyGroupName = React.createClass({
             clearButtonMode="always"
             placeholder="创建群名称"
             placeholderTextColor="white"
+            onChangeText={(text) => this.changeTextValue(text)}
             style={{color: '#ffffff',height:50, width: Device.width,backgroundColor:'#15263A', paddingHorizontal:20}}></TextInput>
         </View>
       </NavBarView>

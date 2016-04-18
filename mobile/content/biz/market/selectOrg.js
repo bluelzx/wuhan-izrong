@@ -1,8 +1,8 @@
 /**
  * Created by cui on 16/4/1.
  */
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   ListView,
   TouchableHighlight,
   Text,
@@ -10,25 +10,25 @@ var {
   StyleSheet,
   } = React;
 
-var NavBarView = require('../../framework/system/navBarView');
+let NavBarView = require('../../framework/system/navBarView');
 
-var data = new ListView.DataSource({
+let data = new ListView.DataSource({
   rowHasChanged: (r1, r2) => r1 !== r2,
   sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
 });
 
-var section1 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
-var section2 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
-var section3 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
-var section4 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
-var section5 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
-var section6 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
-var section7 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
-var section8 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
+let section1 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
+let section2 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
+let section3 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
+let section4 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
+let section5 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
+let section6 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
+let section7 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
+let section8 = [{title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}, {title: '天津银行', detail: '分行'}];
 
-var arr = {T: section1, B: section2, C: section3, D: section4, E: section5, F: section6, G: section7, H: section8};
+let arr = {T: section1, B: section2, C: section3, D: section4, E: section5, F: section6, G: section7, H: section8};
 
-var SelectOrg = React.createClass({
+let SelectOrg = React.createClass({
   getInitialState: function () {
     return {
       dataSource: data.cloneWithRowsAndSections(arr),
@@ -72,6 +72,6 @@ var SelectOrg = React.createClass({
   }
 });
 
-var styles = StyleSheet.create({});
+let styles = StyleSheet.create({});
 
 module.exports = SelectOrg

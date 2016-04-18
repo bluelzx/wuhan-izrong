@@ -11,6 +11,7 @@ let ContactStore = require('../../framework/store/contactStore');
 let DictIcon = require('../../constants/dictIcon');
 let HeadPic = require('./headerPic');
 let ChooseList = require('./chooseList');
+let ContactAction = require('../../framework/action/contactAction');
 
 let AddMember = React.createClass({
 
@@ -25,8 +26,9 @@ let AddMember = React.createClass({
   textChange: function() {
   },
 
-  addUser: function(members, groupId) {
+  addUser: function( groupId, members) {
     //step1: 添加成员
+    ContactAction.addGroupMembers(this.props.param.groupId, members)
     //step2: 回退
     this.props.navigator.pop();
   },
@@ -42,7 +44,7 @@ let AddMember = React.createClass({
       }
     }
     return (
-      <TouchableOpacity onPress={() => this.addUser(members,this.props.param.groupId)}>
+      <TouchableOpacity onPress={() => this.addUser(this.props.param.groupId, members)}>
         <Text style={{ marginLeft:-20,color:count==0?'#6B849C':'white'}}>{'完成(' + count + ')'}</Text>
       </TouchableOpacity>
     );
@@ -84,7 +86,7 @@ let AddMember = React.createClass({
               style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
       <View style={{flexDirection:'row'}}>
         <HeadPic showBadge={false} style={{height: 40,width: 40, marginTop:5}} source={DictIcon.imSpread} />
-        <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.userName}</Text>
+        <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
       </View>
     </CheckBox>
     );

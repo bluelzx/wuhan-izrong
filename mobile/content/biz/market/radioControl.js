@@ -1,8 +1,8 @@
 /**
  * Created by cui on 16/3/31.
  */
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
     ListView,
     TouchableHighlight,
     Text,
@@ -15,18 +15,18 @@ var {
     InteractionManager
     } = React;
 
-var screenWidth = Dimensions.get('window').width;
-var screenHeight = Dimensions.get('window').height;
+let screenWidth = Dimensions.get('window').width;
+let screenHeight = Dimensions.get('window').height;
 
-var FilterSelectBtn = require('./filterSelectBtn');
+let FilterSelectBtn = require('./filterSelectBtn');
 
-var directionData = ['出', '收'];
-var limitData = ['隔夜', '1周', '2周', '3周', '1个月', '2个月', '3个月', '半年', '≥半年'];
-var amountData = ['3000万以下', '3000万-5000万', '5000万-1亿', '1亿以上'];
+let directionData = ['出', '收'];
+let limitData = ['隔夜', '1周', '2周', '3周', '1个月', '2个月', '3个月', '半年', '≥半年'];
+let amountData = ['3000万以下', '3000万-5000万', '5000万-1亿', '1亿以上'];
 
-var data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-var RadioControl = React.createClass({
+let RadioControl = React.createClass({
     getInitialState: function () {
         return {
         };
@@ -42,6 +42,6 @@ var RadioControl = React.createClass({
     },
 });
 
-var styles = StyleSheet.create({});
+let styles = StyleSheet.create({});
 
 module.exports = RadioControl;

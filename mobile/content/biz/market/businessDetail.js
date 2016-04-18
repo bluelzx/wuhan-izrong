@@ -1,8 +1,8 @@
 /**
  * Created by cui on 16/4/6.
  */
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   ListView,
   TouchableHighlight,
   Text,
@@ -17,14 +17,14 @@ var {
   InteractionManager
   } = React;
 
-var screenWidth = Dimensions.get('window').width;
-var screenHeight = Dimensions.get('window').height;
+let screenWidth = Dimensions.get('window').width;
+let screenHeight = Dimensions.get('window').height;
 
-var NavBarView = require('../../framework/system/navBarView');
+let NavBarView = require('../../framework/system/navBarView');
 
-var MarketStore = require('../../framework/store/marketStore');
+let MarketStore = require('../../framework/store/marketStore');
 
-var BusinessDetail = React.createClass({
+let BusinessDetail = React.createClass({
   getInitialState(){
     return {
       detailData: ''
@@ -135,7 +135,7 @@ var BusinessDetail = React.createClass({
       ()=> {
         return MarketAction.getBizOrderInMarket(
         ).then((response)=> {
-          var detail = (JSON.stringify(response));
+          let detail = (JSON.stringify(response));
           console.log(arr);
           this.setState({
             detailData: detail,
@@ -151,6 +151,6 @@ var BusinessDetail = React.createClass({
 
 });
 
-var styles = StyleSheet.create({});
+let styles = StyleSheet.create({});
 
 module.exports = BusinessDetail;

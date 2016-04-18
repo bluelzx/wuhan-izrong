@@ -1,8 +1,8 @@
 /**
  * Created by cui on 16/4/5.
  */
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
     ListView,
     TouchableHighlight,
     Text,
@@ -15,10 +15,10 @@ var {
     InteractionManager
     } = React;
 
-var screenWidth = Dimensions.get('window').width;
-var screenHeight = Dimensions.get('window').height;
+let screenWidth = Dimensions.get('window').width;
+let screenHeight = Dimensions.get('window').height;
 
-var SelectBtn = React.createClass({
+let SelectBtn = React.createClass({
     getInitialState(){
         return {}
     },
@@ -44,6 +44,6 @@ var SelectBtn = React.createClass({
     },
 });
 
-var styles = StyleSheet.create({});
+let styles = StyleSheet.create({});
 
 module.exports = SelectBtn;

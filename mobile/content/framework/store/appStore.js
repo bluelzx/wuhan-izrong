@@ -5,6 +5,7 @@ let EventEmitter = require('events').EventEmitter;
 //let { MsgTypes } = require('../../constants/notification');
 
 let Persister = require('../persister/persisterFacade');
+let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 
 let _info = {
   initLoadingState: true,
@@ -38,7 +39,12 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   login: (data) => _login(data),
   logout: () => _logout(),
   forceLogout: () => _force_logout(),
-  getUserId:() => _getUserId()
+  getUserId: () => _getUserId(),
+  getLoginUserInfo: () => _getLoginUserInfo(),
+  getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
+  getFilters: ()=> _getFilters(),
+  saveOrgList: (orgList)=> _saveOrgList(orgList),
+  getOrgList: ()=> _getOrgList()
 });
 
 // Private Functions
@@ -58,18 +64,27 @@ let _appInit = () => {
   );
   _info.initLoadingState = false;
   _.assign(_data, {
-    token: _getToken()
+    token: _getToken(),
+    filters: Persister.getFilters()
   });
+  Persister.saveFilters();
   AppStore.emitChange();
 };
 
 let _register = (data) => {
   Persister.saveAppData(data);
+  _.assign(_data, {
+    token: _getToken()
+  });
   AppStore.emitChange();
 };
 
 let _login = (data) => {
   Persister.saveAppData(data);
+  _.assign(_data, {
+    token: _getToken()
+  });
+
   AppStore.emitChange();
 };
 
@@ -102,6 +117,27 @@ let _getToken = () => {
 
 let _getUserId = ()=> {
   return Persister.getUserId();
+};
+
+let _getLoginUserInfo = () => {
+  return Persister.getLoginUserInfo();
+};
+
+let _getOrgByOrgId = (orgId)=> {
+  return Persister.getOrgByOrgId(orgId);
+};
+
+let _getFilters = ()=> {
+  return _data.filters;
+};
+
+let _saveOrgList = (orgList)=> {
+  Persister.saveOrgList(orgList);
+};
+
+let _getOrgList = ()=> {
+  let orgBuildList = Persister.getOrgList();
+  return orgBuildList;
 };
 
 module.exports = AppStore;

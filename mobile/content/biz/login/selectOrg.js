@@ -10,7 +10,8 @@ let {
   View,
   Image,
   Platform,
-  Component
+  Component,
+  TouchableHighlight
   } = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
@@ -52,38 +53,40 @@ class SectionItem extends Component {
   }
 }
 
-class Cell extends Component {
+let Cell = React.createClass({
   render() {
     return (
-      <View style={{height:40,marginLeft:20,justifyContent:"center",borderBottomWidth:1,borderBottomColor:'#122335'}}>
-        <Text style={{color:"#FFFFFF",textAlign:"left"}}>{this.props.item}</Text>
-      </View>
+      <TouchableHighlight style={{backgroundColor:'#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
+                          onPress={()=>this.selectOrgItem(this.props.item)}>
+        <View style={{height:40,marginLeft:20,justifyContent:"center",borderBottomWidth:1,borderBottomColor:'#122335'}}>
+          <Text style={{color:"#FFFFFF",textAlign:"left"}}>{this.props.item.orgValue}</Text>
+        </View>
+      </TouchableHighlight>
     );
+  },
+
+  selectOrgItem: function (orgItem) {
+    console.log(orgItem);
   }
-}
+});
 
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
-    //let user = UserStore.getUserInfoBean();
-    let orgList = this.getOrgList();
+    this.getOrgList();
+    let orgBuildList = AppStore.getOrgList();
     return {
-      loaded: false,
-      checked: true,
-      userName: '',
-      password: '',
-      verify: '',
-      active: false,
-      data: {
-        A: ['some', 'entries', 'are here']
-      }
+      data: orgBuildList
     };
   },
 
-  getOrgList: function () {
+  //网络请求获取
+  getOrgList: function (orgList) {
     this.props.exec(() => {
       return LoginAction.getOrgList({})
         .then((response) => {
-             console.log(response);
+          console.log(response);
+          AppStore.saveOrgList(response);
+          return response;
         }).catch((errorData) => {
           throw errorData;
         });
@@ -103,25 +106,6 @@ let Register_selectOrg = React.createClass({
   _onChange: function () {
 
   },
-  renderSectionHeader: function () {
-    return (
-      <View style={styles.viewStyle}>
-        <Text style={styles.textStyle}>{this.state.title}</Text>
-      </View>
-    );
-  },
-  renderSectionItem: function () {
-    return (
-      <Text style={{color:'#f00'}}>{this.props.title}</Text>
-    );
-  },
-  renderCell: function () {
-    return (
-      <View style={{height:30}}>
-        <Text>{this.props.item}</Text>
-      </View>
-    );
-  },
 
   render: function () {
     return (
@@ -134,8 +118,7 @@ let Register_selectOrg = React.createClass({
             cellHeight={30}
             sectionListItem={SectionItem}
             sectionHeader={SectionHeader}
-            sectionHeaderHeight={22.5}
-          />
+            sectionHeaderHeight={22.5}/>
         </View>
       </NavBarView>
     )
@@ -143,7 +126,8 @@ let Register_selectOrg = React.createClass({
 });
 let styles = StyleSheet.create({
   paddingLR: {
-    paddingLeft: 12, paddingRight: 12,
+    paddingLeft: 12,
+    paddingRight: 12
   },
   textStyle: {
     textAlign: 'center',

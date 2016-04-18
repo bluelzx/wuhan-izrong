@@ -89,8 +89,8 @@ let Register_uploadNameCard = React.createClass({
       cameraType: 'back', // 'front' or 'back'
       mediaType: 'photo', // 'photo' or 'video'
       videoQuality: 'high', // 'low', 'medium', or 'high'
-      maxWidth: 100, // photos only
-      maxHeight: 100, // photos only
+      maxWidth: 400, // photos only
+      maxHeight: 400, // photos only
       aspectX: 1, // aspectX:aspectY, the cropping image's ratio of width to height
       aspectY: 1, // aspectX:aspectY, the cropping image's ratio of width to height
       quality: 1, // photos only

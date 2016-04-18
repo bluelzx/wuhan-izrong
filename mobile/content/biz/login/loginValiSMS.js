@@ -14,7 +14,7 @@ let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let { Button } = require('mx-artifacts');
+let { Alert,Button } = require('mx-artifacts');
 let SMSTimer = require('../../comp/utils/smsTimer');
 let TabView = require('../../framework/system/tabView');
 
@@ -62,7 +62,7 @@ let ValiSMS = React.createClass({
             });
           }
         }).catch((errorData) => {
-          throw errorData;
+          Alert(errorData.toString());
         });
       });
     }

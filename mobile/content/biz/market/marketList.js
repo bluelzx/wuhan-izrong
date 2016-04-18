@@ -38,7 +38,7 @@ var marketData = [
   {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'}];
 
 
-var MarketList = React.createClass({
+let MarketList = React.createClass({
   getInitialState: function () {
     return {
       dataSource: data.cloneWithRows(MarketStore.getMarketData()),
