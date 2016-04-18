@@ -4,7 +4,7 @@ let React = require('react-native');
 let MockData = require('./createMockData');
 let TestData = require('./testData');
 let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
-const SCHEMA_KEY = '@realm:schema';
+
 const {
   DeviceSchema,
   GroupSchema,
@@ -33,11 +33,38 @@ const {
   } = require('./schemas');
 let {Platform} = React;
 
+let PersisterFacade = {
+  getAllGroups: () => _getAllGroups(),
+  getUsersGroupByOrg: () => _getUsersGroupByOrg(),
+  getUserInfoByUserId: (id) => _getUserInfoByUserId(id),
+
+  //interface for AppStore
+  saveAppData: (data) => _saveAppData(data),
+  saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
+  getAPNSToken: () => _getAPNSToken(),
+  getToken: ()=> _getToken(),
+  clearToken: () => _clearToken(),
+  getLoginUserInfo: ()=> _getLoginUserInfo(),
+  getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
+  //interface for ContactStore
+  getContact: ()=>_getContact(),
+  _getIMNotificationMessage: ()=>_getIMNotificationMessage(),
+  getUsers: ()=>_getUsers(),
+  getLoginUserInfoByUserId: (userId)=>_getLoginUserInfoByUserId(userId),
+  getGroupDetailById: (groupId)=>_getGroupDetailById(groupId),
+  getUsersExpress: ()=> _getUsersExpress(),
+  saveOrgBeanSet: () => _saveOrgBeanSet(),
+  saveFilters: ()=> _saveFilters(),
+  getFilters: ()=> _getFilters(),
+  saveOrgList: (orgList)=> _saveOrgList(orgList),
+  getOrgList: ()=>_getOrgList()
+};
+
 console.log(Realm.defaultPath);
 let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema, LoginUserInfoSchema, OrgBeanSchema,
     BizOrderCategorySchema, BizOrderItemSchema, FilterItemSchema, FilterItemsSchema, OrderItemSchema, MessageListSchema],
-  schemaVersion: 2
+  schemaVersion: 3
 });
 
 let _saveAppData = function (data) {
@@ -295,33 +322,6 @@ let _getUserInfoByUserId = function (id) {
   let org = orgs.filtered('id = ' + users.orgBeanId);
   users.orgValue = org[0].orgValue;
   return users;
-};
-
-let PersisterFacade = {
-  getAllGroups: () => _getAllGroups(),
-  getUsersGroupByOrg: () => _getUsersGroupByOrg(),
-  getUserInfoByUserId: (id) => _getUserInfoByUserId(id),
-
-  //interface for AppStore
-  saveAppData: (data) => _saveAppData(data),
-  saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
-  getAPNSToken: () => _getAPNSToken(),
-  getToken: ()=> _getToken(),
-  clearToken: () => _clearToken(),
-  getLoginUserInfo: ()=> _getLoginUserInfo(),
-  getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
-  //interface for ContactStore
-  getContact: ()=>_getContact(),
-  _getIMNotificationMessage: ()=>_getIMNotificationMessage(),
-  getUsers: ()=>_getUsers(),
-  getLoginUserInfoByUserId: (userId)=>_getLoginUserInfoByUserId(userId),
-  getGroupDetailById: (groupId)=>_getGroupDetailById(groupId),
-  getUsersExpress: ()=> _getUsersExpress(),
-  saveOrgBeanSet: () => _saveOrgBeanSet(),
-  saveFilters: ()=> _saveFilters(),
-  getFilters: ()=> _getFilters(),
-  saveOrgList: (orgList)=> _saveOrgList(orgList),
-  getOrgList: ()=>_getOrgList()
 };
 
 module.exports = PersisterFacade;

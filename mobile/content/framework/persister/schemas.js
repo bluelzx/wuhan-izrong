@@ -33,7 +33,8 @@ let MessageSchema = {
   properties: {
     sessionId: {type: 'int', optional: true},
     msgId: {type: 'int', optional: true},
-    fromId: {type: 'int', optional: true},
+    fromUId: {type: 'int', optional: true},
+    groupId: {type: 'int', optional: true},
     toId: {type: 'int', optional: true},
     type: {type: 'string', optional: true},
     contentType: {type: 'string', optional: true},
