@@ -348,23 +348,6 @@ let WhitePage = React.createClass({
     }
   },
 
-  bizOrderMarketSearchDefaultSearch: function () {
-    this.props.exec(
-      ()=> {
-        return MarketAction.bizOrderMarketSearchDefaultSearch(
-        ).then((response)=> {
-          let arr = new Array();
-          arr = (JSON.stringify(response));
-          console.log(arr);
-        }).catch(
-          (errorData) => {
-            throw errorData;
-          }
-        );
-      }
-    );
-  },
-
   bizOrderMarketSearchsearch: function () {
     this.props.exec(
       ()=> {
