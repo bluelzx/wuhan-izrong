@@ -58,28 +58,38 @@ let PersisterFacade = {
   saveFilters: ()=> _saveFilters(),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
-  getOrgList: ()=>_getOrgList()
+  getOrgList: ()=>_getOrgList(),
+  deleteDevice:()=> _deleteDevice()
 };
 
 console.log(Realm.defaultPath);
 let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema, LoginUserInfoSchema, OrgBeanSchema,
     FilterItemSchema, FilterItemsSchema, OrderItemSchema, MessageListSchema],
-  schemaVersion: 14
+  schemaVersion: 2
 });
 
+//test method
+let _deleteDevice = function(){
+  _realm.write(() => {
+    let devices = _realm.objects(DEVICE);
+    _realm.delete(devices); // Deletes all books
+  });
+};
+
 let _saveAppData = function (data) {
+  let loginUserInfo = data.appUserInfoOutBean;
+  let token = data.appToken;
   let orgBeanMap = data.orgBeanMap;
   let appUserGroupBeanList = data.appUserGroupBeanList;
   let imUserBeanList = data.imUserBeanList;
-  _saveLoginUserInfo(data);
+  _saveLoginUserInfo(loginUserInfo,token);
   _saveImUsers(imUserBeanList);
-  _saveOrgBeanMap(orgBeanMap);
-  _saveAppUserGroupBeanList(appUserGroupBeanList);
+  //_saveOrgBeanMap(orgBeanMap);
+  //_saveAppUserGroupBeanList(appUserGroupBeanList);
 };
 
-let _saveLoginUserInfo = function (data) {
-  let loginUserInfo = data.appUserInfoOutBean;
+let _saveLoginUserInfo = function (loginUserInfo,token) {
   _realm.write(() => {
     _realm.create(LOGINUSERINFO, {
       userId: loginUserInfo.userId,
@@ -95,7 +105,7 @@ let _saveLoginUserInfo = function (data) {
       phoneNumber: loginUserInfo.phoneNumber,
       photoFileUrl: loginUserInfo.photoFileUrl,
       orgBeanId: loginUserInfo.orgBeanId,
-      token: data.appToken,
+      token: token,
       lastLoginTime: new Date(),
       publicTitle: _.isEmpty(loginUserInfo.publicTitle) ? true : loginUserInfo.publicTitle,
       publicMobile: _.isEmpty(loginUserInfo.publicMobile) ? true : loginUserInfo.publicMobile,
@@ -110,7 +120,7 @@ let _saveLoginUserInfo = function (data) {
 };
 
 let _saveAppUserGroupBeanList = function (appUserGroupBeanList) {
-  imUserBeanList.forEach(function (n) {
+  appUserGroupBeanList.forEach(function (n) {
     console.log(n);
     _saveAppUserGroupBean(n);
   });
@@ -131,15 +141,16 @@ let _saveAppUserGroupBean =function(appUserGroupBean){
 };
 
 let _saveImUsers = function (imUserBeanList) {
-  imUserBeanList.forEach(function (n) {
-    console.log(n);
-    _saveImUser(n);
+  imUserBeanList.forEach(function (imUserBean) {
+    console.log(imUserBean);
+    _saveImUser(imUserBean);
   });
 };
 
-let _saveImUser = function(){
+let _saveImUser = function(imUserBean){
   _realm.write(() => {
     _realm.create(IMUSERINFO, {
+      userId: imUserBean.userId,
       address: imUserBean.address,
       realName: imUserBean.realName,
       nameCardFileUrl: imUserBean.nameCardFileUrl,
@@ -152,23 +163,23 @@ let _saveImUser = function(){
       mobileNumber: imUserBean.mobileNumber,
       publicMobile: imUserBean.publicMobile,
       phoneNumber: imUserBean.phoneNumber,
-      publicPhone: imUserBean,publicPhone,
-      publicEmail: imUserBean,publicEmail,
+      publicPhone: imUserBean.publicPhone,
+      publicEmail: imUserBean.publicEmail,
       publicAddress: imUserBean.publicAddress,
       publicWeChat: imUserBean.publicWeChat,
       photoFileUrl: imUserBean.photoFileUrl,
       publicQQ: imUserBean.publicQQ,
       weChatNo: imUserBean.weChatNo,
-      userId: imUserBean.userId,
-      mute: imUserBean.mute
+      mute: imUserBean.mute,
+      orgId: imUserBean.orgBeanId
     }, true);
   });
 };
 
 let _saveOrgBeanMap = function (orgBeanMap) {
-  TestData.mockOrgBeanSet.forEach(function (n) {
-    console.log(n);
-    _saveOrgBeanItem(n);
+  orgBeanMap.forEach(function (orgBean) {
+    console.log(orgBean);
+    _saveOrgBeanItem(orgBean);
   });
 };
 
@@ -200,12 +211,11 @@ let _getAPNSToken = function () {
   _realm.write(() => {
     _realm.create(DEVICE, {
       id: 1,
-      deviceOS: 'IOS',
+      deviceOS: Platform.OS,
       APNSToken: 'asdfghjklzxcvbnm'
     }, true);
   });
   let device = _realm.objects(DEVICE);
-
   return device[0].APNSToken;
 };
 
@@ -344,27 +354,23 @@ let _getOrgList = function () {
 
 
 //造假数据
-_realm.write(() => {
-  for (let item of MockData.users) {
-    _realm.create(IMUSERINFO, item, true);
-  }
-
-  for (let org of MockData.orgs) {
-    _realm.create(ORGBEAN, org, true);
-  }
-
-  for (let group of MockData.groups) {
-    _realm.create(GROUP, group, true);
-  }
-
-  for (let message of MockData.message) {
-    _realm.create(MESSAGE, message, true);
-  }
-
-  for (let session of MockData.sessionList) {
-    _realm.create(MESSAGELIST, session, true);
-  }
-});
+//_realm.write(() => {
+//  for (let item of MockData.users) {
+//    _realm.create(IMUSERINFO, item, true);
+//  }
+//
+//  for (let group of MockData.groups) {
+//    _realm.create(GROUP, group, true);
+//  }
+//
+//  for (let message of MockData.message) {
+//    _realm.create(MESSAGE, message, true);
+//  }
+//
+//  for (let session of MockData.sessionList) {
+//    _realm.create(MESSAGELIST, session, true);
+//  }
+//});
 
 
 let _getAllGroups = function () {

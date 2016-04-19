@@ -86,7 +86,7 @@ let ImagePicker = React.createClass({
 
   _selectAndroid: function () {
     // PhotoPicker.showImagePic(true,'nameCard',(response)=>console.log('Response = ', response));
-    UserPhotoPicModule.showImagePic(true, this.props.fileId,
+    UserPhotoPicModule.showImagePic(this.props.allowsEditing, this.props.fileId, this.props.type,
       (response) => {
         console.log('Response = ', response.uri);
         this.props.onSelected(response.uri);

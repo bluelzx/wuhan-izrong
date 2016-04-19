@@ -27,7 +27,7 @@ let AppLinks = {
   logout: Host + api + '/Account/logout',
   register: Host + pub + '/register',
   uploadFile: Host + pub + '/File/upload',
-  updateUserInfo: Host + api + '/Account/updateUserInfo',
+  updateUserInfo: Host + api + '/Account/updateUserInfoList',
   getOrgList: Host + pub + '/getOrgList/',
 
   bizOrderMarketSearchDefaultSearch: api + '/BizOrderMarketSearch/defaultSearch',
@@ -36,8 +36,7 @@ let AppLinks = {
   addBizOrder: api + '/BizOrderManage/addBizOrder',
   downselfBizOrder: api + '/BizOrderManage/downselfBizOrder',
   updateBizOrder: api + '/BizOrderManage/updateBizOrder',
-  getBizOrderCategoryAndItem : api + '/BizOrderManage/getBizOrderCategoryAndItem',
-  updateUserInfo: Host + api +'/Account/updateUserInfo'
+  getBizOrderCategoryAndItem : api + '/BizOrderManage/getBizOrderCategoryAndItem'
 };
 
 module.exports = AppLinks;
