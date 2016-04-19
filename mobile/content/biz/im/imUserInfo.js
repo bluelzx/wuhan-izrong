@@ -41,7 +41,10 @@ let ImUserInfo = React.createClass({
   switchControl(open){
     this.setState({switchOpen: open});
     //TODO: 在这里调用后台借口可能会卡机
-    ContactAction.muteUser(this.props.param.userId, value);
+    this.props.exec(() => {
+      return ContactAction.muteUser(this.props.param.userId, value);
+    });
+
   },
 
   render: function () {

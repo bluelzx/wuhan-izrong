@@ -12,6 +12,7 @@ let AddMember = require('./addMember');
 let DeleteMember = require('./deleteMember');
 let CircularButton = require('./circularButton');
 let ContactStore = require('../../framework/store/contactStore');
+let dismissKeyboard = require('react-native-dismiss-keyboard');
 let DictIcon = require('../../constants/dictIcon');
 let MembersBar = require('./membersBar');
 let ContactAction = require('../../framework/action/contactAction');
@@ -54,17 +55,22 @@ let EditGroup = React.createClass({
 
   setMute: function(value){
     this.setState({falseSwitchIsOn: value});
-    ContactAction.muteGroup(this.props.param.groupId, value)
-
+    this.props.exec(()=>{
+      return ContactAction.muteGroup(this.props.param.groupId, value);
+    });
   },
 
   dismissGroup: function(){
+    dismissKeyboard();
     this.props.exec(()=>{
       return  ContactAction.dismissGroup(this.props.param.groupId).then(
-        ()=>{
-          this.props.navigator.popToTop();
+        (response)=>{
+          //this.props.navigator.popToTop();
+          console.log(123);
         }
-      );
+      ).catch((error)=>{
+        console.log(123);
+      });
     });
 
   },

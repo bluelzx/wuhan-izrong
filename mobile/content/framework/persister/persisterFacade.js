@@ -46,6 +46,8 @@ let PersisterFacade = {
   kickOutMember:(groupId, members) => _kickOutMember(groupId, members),
   modifyGroupName:(groupId, groupName) => _modifyGroupName(groupId, groupName),
   dismissGroup:(groupId) => _dismissGroup(groupId),
+  setContactMute:(userId, value) => _setContactMute(userId, value),
+  setGroupMute:(groupId, value) => _setGroupMute(groupId, value),
 
   //interface for AppStore
   saveAppData: (data) => _saveAppData(data),
@@ -358,10 +360,14 @@ let _getUsersGroupByOrg = function () {
   let orgArray = [];
   for (let org of orgs) {
     let id = org.id;
+    let obj = {
+      ogrMembers:'',
+      orgValue:org.orgValue,
+    };
     let orgMembers = users.filtered('orgBeanId = ' + id);
     if(orgMembers.length > 0 ){
-      org.orgMembers = orgMembers;
-      orgArray.push(org);
+      obj.orgMembers = orgMembers;
+      orgArray.push(obj);
     }
   }
   return orgArray;
@@ -495,18 +501,35 @@ let _modifyGroupName = function(groupId, groupName){
 
 let _dismissGroup = function(groupId) {
   let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
-  //let newGroup = {
-  //  groupId:group[0].groupId,
-  //  groupName:'',
-  //  groupMasterUid:group[0].groupMasterUid,
-  //  memberNum:group[0].memberNum,
-  //  members:[],
-  //  mute:group[0].mute
-  //}
+  let newGroup = {
+    groupId:group[0].groupId,
+    groupName:'',
+    groupMasterUid:group[0].groupMasterUid,
+    memberNum:group[0].memberNum,
+    members:[],
+    mute:group[0].mute
+  }
   //console.log(newGroup);
   _realm.write(() => {
-    //_realm.create(GROUP, newGroup, true);
-    _realm.delete(group);
+    let g = _realm.create(GROUP, newGroup, true);
+    _realm.delete(g);
+  });
+
+}
+
+let _setContactMute = function(userId, value){
+  let user = _realm.objects(IMUSERINFO).filtered('userId = ' + userId);
+  user.mute = value;
+  _realm.write(()=>{
+    _realm.create(IMUSERINFO, user, true);
+  });
+}
+
+let _setGroupMute = function(groupId, value){
+  let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
+  group.mute = value;
+  _realm.write(()=>{
+    _realm.create(GROUP, group, true);
   });
 }
 

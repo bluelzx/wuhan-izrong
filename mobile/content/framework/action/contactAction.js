@@ -33,7 +33,7 @@ let _createGroup = function(members, groupName, groupMasterUid) {
     BFetch(AppLinks.createGroup, param).then((response)=>{
       console.log(response.gid);
       contactStore.createGroup(response.gid, groupName,groupMasterUid,memberList,false);
-      resolve(response.gid);
+      resolve(response);
     }, reject);
   });
 };
@@ -45,7 +45,16 @@ let _createGroup = function(members, groupName, groupMasterUid) {
  * @param value  true:屏蔽  false:不屏蔽
  * */
 let _muteUser = function(userId, value){
-  return ;
+  let param = {
+    uid:userId,
+    state:value
+  }
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.setContactMute,param).then((response) => {
+      contactStore.setContactMute(userId, value);
+      resolve(response);
+    },reject);
+  });
 }
 
 /**
@@ -54,7 +63,16 @@ let _muteUser = function(userId, value){
  * @param value  true:屏蔽  false:不屏蔽
  * */
 let _muteGroup = function(groupId, value){
-  return ;
+  let param = {
+    gid:groupId,
+    state:value
+  }
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.setGroupMute,param).then((response) => {
+      contactStore.setGroupMute(groupId, value);
+      resolve(response);
+    },reject);
+  });
 }
 /**
  * 退出群

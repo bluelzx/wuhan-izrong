@@ -202,7 +202,7 @@ let group1 = {
   groupName: 'group A',
   groupMasterUid: '001',
   memberNum: 10,
-  members: [user1,user2,user3],
+  members: JSON.stringify([1,2,3]),
   mute: false
 }
 
@@ -211,7 +211,7 @@ let group2 = {
   groupName: 'group B',
   groupMasterUid: '001',
   memberNum: 10,
-  members: [user4,user5],
+  members: JSON.stringify[4,5],
   mute: false
 }
 

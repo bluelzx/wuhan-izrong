@@ -41,12 +41,22 @@ let EditGroup = React.createClass({
 
   setMute: function(value){
     this.setState({falseSwitchIsOn: value});
-    ContactAction.muteGroup(this.props.param.groupId, value)
-
+    this.props.exec(()=>{
+      return ContactAction.muteGroup(this.props.param.groupId, value);
+    });
   },
 
   deleteGroup:function(){
-    ContactAction.deleteGroup(this.props.param.groupId);
+    this.props.exec(
+      ()=>{
+        return  ContactAction.deleteGroup(this.props.param.groupId).then(
+          ()=>{
+            this.props.navigator.pop();
+          }
+        );
+      }
+    );
+
   },
 
   render: function() {

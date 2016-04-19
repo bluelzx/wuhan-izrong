@@ -101,6 +101,12 @@ let _modifyGroupName = function(groupId, groupName) {
 let _dismissGroup = function(groupId) {
   PersisterFacade.dismissGroup(groupId);
 }
+let _setContactMute = function(userId, value) {
+  PersisterFacade.setContactMute(userId, value);
+}
+let _setGroupMute = function(groupId, value){
+  PersisterFacade.setGroupMute(groupId, value);
+}
 
 let ContactStore = {
   getGroupInfoBySessionId:_getGroupInfoBySessionId,  //根据会话Id获得群组信息
@@ -118,6 +124,8 @@ let ContactStore = {
   kickOutMember:_kickOutMember,    //踢人
   modifyGroupName:_modifyGroupName,
   dismissGroup:_dismissGroup,
+  setContactMute:_setContactMute, //屏蔽用户
+  setGroupMute:_setGroupMute,
 };
 
 module.exports = ContactStore;
