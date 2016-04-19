@@ -78,7 +78,7 @@ let WhitePage = React.createClass({
   },
 
   componentWillMount: function () {
-    //{this.bizOrderMarketSearchsearch();}
+    {this.bizOrderMarketSearchsearch();}
   },
 
   render: function () {
