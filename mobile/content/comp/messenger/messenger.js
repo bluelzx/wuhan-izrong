@@ -11,17 +11,13 @@ let {
 
 let _ = require('lodash');
 let GiftedMessenger = require('./giftedMessenger');
-let {Communications, Device} = require('mx-artifacts');
+let { Alert, Communications, Device } = require('mx-artifacts');
 
 let ImAction = require('../../framework/action/imAction');
 let ImStore = require('../../framework/store/imStore');
 let { MSG_CONTENT_TYPE, COMMAND_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 
-
-// let _getMessageKey = (f, t) => {
-//   // return (f > t ? f + ':' + t : t + ':' + f) + ':' + new Date().getTime() + ':' + _device_id;
-//   return f + ':' + t + ':' + new Date().getTime() + ':' + _device_id;
-// };
+let KeyGenerator = require('../../comp/utils/keyGenerator');
 
 let Messenger = React.createClass({
 
@@ -67,9 +63,10 @@ let Messenger = React.createClass({
   handleSend(message = {}, rowID = null, isReSend = false) {
     // Your logic here
     // Send message.content to your server
+    let msgId = KeyGenerator.getMessageKey(this.props.param.sessionId);
     let msgToSend = {
       sessionId: this.props.param.sessionId,
-      msgId: message.msgId,
+      msgId: msgId,
       fromUId: null,
       contentType: MSG_CONTENT_TYPE.TEXT,
       content: message.content,
@@ -99,6 +96,50 @@ let Messenger = React.createClass({
     // this._GiftedMessenger.setMessageStatus('Seen', rowID);
     // this._GiftedMessenger.setMessageStatus('Custom label status', rowID);
     // this._GiftedMessenger.setMessageStatus('ErrorButton', rowID);
+  },
+
+  handleSendImage(uri) {
+    // Your logic here
+    // Send message.content to your server
+
+    ImAction.uploadImage(uri)
+      .then((response) => {
+        let msgId = KeyGenerator.getMessageKey(this.props.param.sessionId);
+        let msgToSend = {
+          sessionId: this.props.param.sessionId,
+          msgId: msgId,
+          fromUId: null,
+          contentType: MSG_CONTENT_TYPE.IMAGE,
+          content: response.fileId,
+          revTime: new Date(),
+          isRead: true,
+          status: 'ErrorButton'
+        };
+        if (this.props.param.chatType === SESSION_TYPE.USER) {
+          _.assign(msgToSend, {
+            // toId: this.props.param.userId,
+            toId: 'u002',
+            type: SESSION_TYPE.USER,
+            msgType: COMMAND_TYPE.SEND_P2P_MSG
+          });
+        } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
+          _.assign(msgToSend, {
+            groupId: this.props.param.groupId,
+            type: SESSION_TYPE.GROUP,
+            msgType: COMMAND_TYPE.SEND_GROUP_MSG
+          });
+        }
+
+        ImAction.send(msgToSend);
+      }).catch((errorData) => {
+        console.log('Image upload error ' + JSON.stringify(errorData));
+        Alert('图片上传失败');
+      });
+  },
+
+  handleImageError(error) {
+    console.log('Image select error ' + JSON.stringify(error));
+    Alert('图片选择失败');
   },
 
   // @oldestMessage is the oldest message already added to the list
@@ -141,7 +182,8 @@ let Messenger = React.createClass({
   onErrorButtonPress(message = {}, rowID = null) {
     // Your logic here
     // Eg: Re-send the message to your server
-    this.handleSend(message, rowID, true);
+    // this.handleSend(message, rowID, true);
+    ImAction.send(message, true);
 
     // setTimeout(() => {
     //   // will set the message to a custom status 'Sent' (you can replace 'Sent' by what you want - it will be displayed under the row)
@@ -187,6 +229,8 @@ let Messenger = React.createClass({
         autoFocus={false}
         messages={this.state.messages}
         handleSend={this.handleSend}
+        handleSendImage={this.handleSendImage}
+        handleImageError={this.handleImageError}
         onErrorButtonPress={this.onErrorButtonPress}
         maxHeight={Device.height - Device.navBarHeight}
         loadEarlierMessagesButton={true}

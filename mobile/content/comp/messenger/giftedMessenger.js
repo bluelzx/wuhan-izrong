@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   Text,
   View,
   ListView,
@@ -18,24 +18,22 @@ var {
   DeviceEventEmitter
   } = React;
 
-var dismissKeyboard = require('react-native-dismiss-keyboard');
-var moment = require('moment');
-var Icon = require('react-native-vector-icons/Ionicons');
-var TimerMixin = require('react-timer-mixin');
+let dismissKeyboard = require('react-native-dismiss-keyboard');
+let moment = require('moment');
+let Icon = require('react-native-vector-icons/Ionicons');
+let TimerMixin = require('react-timer-mixin');
 
 let { Spinner, Button } = require('mx-artifacts');
 
-var AutoExpandingTextInput = require('./autoExpandingTextInput');
-//var Message = require('./Message');
+let AutoExpandingTextInput = require('./autoExpandingTextInput');
+//let Message = require('./Message');
 import Message from './message';
 
 let DictIcon = require('../../constants/dictIcon');
 
 let ImagePicker = require('../utils/imagePicker');
 
-let KeyGenerator = require('../../comp/utils/keyGenerator');
-
-var GiftedMessenger = React.createClass({
+let GiftedMessenger = React.createClass({
   mixins: [TimerMixin],
 
   firstDisplay: true,
@@ -61,6 +59,8 @@ var GiftedMessenger = React.createClass({
       initialMessages: [],
       messages: [],
       handleSend: (message, rowID) => {},
+      handleSendImage: (uri) => {},
+      handleImageError: (error) => {},
       maxHeight: Dimensions.get('window').height,
       senderName: 'Sender',
       senderImage: null,
@@ -100,6 +100,8 @@ var GiftedMessenger = React.createClass({
     initialMessages: React.PropTypes.array,
     messages: React.PropTypes.array,
     handleSend: React.PropTypes.func,
+    handleSendImage: React.PropTypes.func,
+    handleImageError: React.PropTypes.func,
     onCustomSend: React.PropTypes.func,
     renderCustomText: React.PropTypes.func,
     maxHeight: React.PropTypes.number,
@@ -134,7 +136,7 @@ var GiftedMessenger = React.createClass({
     this.listViewMaxHeight = this.props.maxHeight - this.inputHeight;
     //this.listViewMaxHeight = this.props.maxHeight - this.props.textInputHeight - this.props.panelHeight;
 
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
+    let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
       if (typeof r1.status !== 'undefined') {
         return true;
       }
@@ -182,7 +184,7 @@ var GiftedMessenger = React.createClass({
   },
 
   renderDate(rowData = {}, rowID = null) {
-    var diffMessage = null;
+    let diffMessage = null;
     if (rowData.isOld === true) {
       diffMessage = this.getPreviousMessage(rowID);
     } else {
@@ -211,7 +213,7 @@ var GiftedMessenger = React.createClass({
 
   renderRow(rowData = {}, sectionID = null, rowID = null) {
 
-    var diffMessage = null;
+    let diffMessage = null;
     if (rowData.isOld === true) {
       diffMessage = this.getPreviousMessage(rowID);
     } else {
@@ -307,7 +309,7 @@ var GiftedMessenger = React.createClass({
     this._rowIds = [];
     this.appendMessages(nextProps.messages);
 
-    //var textInputHeight = 44;
+    //let textInputHeight = 44;
     //if (nextProps.styles.hasOwnProperty('textInputContainer')) {
     //  textInputHeight = nextProps.styles.textInputContainer.height || textInputHeight;
     //}
@@ -363,7 +365,7 @@ var GiftedMessenger = React.createClass({
 
   scrollToBottom() {
     if (this.listHeight && this.footerY && this.footerY > this.listHeight) {
-      var scrollDistance = this.listHeight - this.footerY;
+      let scrollDistance = this.listHeight - this.footerY;
       this.scrollResponder.scrollTo({
         y: -scrollDistance,
         x: 0,
@@ -373,19 +375,17 @@ var GiftedMessenger = React.createClass({
   },
 
   onSend() {
-    var msgId = KeyGenerator.getMessageKey(this.props.sessionId);
-    var message = {
+    let message = {
       content: this.state.text.trim(),
       name: this.props.senderName,
       image: this.props.senderImage,
       position: 'right',
-      date: new Date(),
-      msgId: msgId
+      date: new Date()
     };
     if (this.props.onCustomSend) {
       this.props.onCustomSend(message);
     } else {
-      var rowID = this.appendMessage(message, true);
+      let rowID = this.appendMessage(message, true);
       this.props.handleSend(message, rowID);
       this.onChangeText('');
     }
@@ -465,7 +465,7 @@ var GiftedMessenger = React.createClass({
   },
 
   prependMessages(messages = []) {
-    var rowID = null;
+    let rowID = null;
     for (let i = 0; i < messages.length; i++) {
       this._data.push(messages[i]);
       this._rowIds.unshift(this._data.length - 1);
@@ -478,12 +478,12 @@ var GiftedMessenger = React.createClass({
   },
 
   prependMessage(message = {}) {
-    var rowID = this.prependMessages([message]);
+    let rowID = this.prependMessages([message]);
     return rowID;
   },
 
   appendMessages(messages = []) {
-    var rowID = null;
+    let rowID = null;
     for (let i = 0; i < messages.length; i++) {
       messages[i].isOld = true;
       this._data.push(messages[i]);
@@ -499,8 +499,8 @@ var GiftedMessenger = React.createClass({
   },
 
   appendMessage(message = {}, scrollToBottom = true) {
-    // var rowID = this.appendMessages([message]);
-    var rowID = this._data.length;
+    // let rowID = this.appendMessages([message]);
+    let rowID = this._data.length;
 
     if (scrollToBottom === true) {
       this.setTimeout(() => {
@@ -573,7 +573,7 @@ var GiftedMessenger = React.createClass({
 
           renderHeader={this.renderLoadEarlierMessages}
           onLayout={(event) => {
-            var layout = event.nativeEvent.layout;
+            let layout = event.nativeEvent.layout;
             this.listHeight = layout.height;
             this.scrollToBottom();
             //if (this.firstDisplay === true) {
@@ -588,7 +588,7 @@ var GiftedMessenger = React.createClass({
             return (
               <View
                 onLayout={(event) => {
-                  var layout = event.nativeEvent.layout;
+                  let layout = event.nativeEvent.layout;
                   this.footerY = layout.y;
 
                   if (this.props.autoScroll) {
@@ -795,7 +795,8 @@ var GiftedMessenger = React.createClass({
 
           <ImagePicker
             type="library"
-            onSelected={(response) => { console.log(response)}}
+            onSelected={(response) => this.props.handleSendImage(response)}
+            onError={(error) => this.props.handleImageError(error)}
             title="选择图片"
             style={this.styles.panelItem}
           >
@@ -847,7 +848,7 @@ var GiftedMessenger = React.createClass({
   },
 
   render() {
-    LayoutAnimation.spring();
+    // LayoutAnimation.spring();
     return (
       <View
         style={this.styles.container}

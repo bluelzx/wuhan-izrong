@@ -34,6 +34,15 @@ let testMessages = [
     date: new Date(2015, 10, 17, 19, 0)
     // If needed, you can add others data (eg: userId, messageId)
   },
+  {
+    msgId: 'user:3:1461049417501:0A6848BA-5E72-410B-A259-1DDA7E7F71C8',
+    contentType: 'image',
+    content: 'http://192.168.64.169:9081/fas/app/pub/File/downLoad/571614d8961ace061a5c2099',
+    name: 'Developer',
+    image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
+    position: 'right',
+    date: new Date(2015, 10, 18, 19, 0)
+  }
 ];
 
 let _data = {

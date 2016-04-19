@@ -13,6 +13,9 @@ let Resolver = {
   },
   _dealMessage: function (message) {
     switch (message.msgType) {
+      case MSG_TYPE.EXCEPTION:
+        console.log('[error] %s', message.errMsg);
+        break;
       case MSG_TYPE.REC_P2P_MSG:
         // ImAction.receive({
         ImStore.saveMsg({
