@@ -26,6 +26,7 @@ let Chat = React.createClass({
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
+
   },
 
   getStateFromStores: function() {

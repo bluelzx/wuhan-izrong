@@ -41,8 +41,12 @@ let AppLinks = {
   createGroup: NodeHost + 'createGroup',
   kickOutMember: NodeHost + 'kickOutMember',
   updateGroupName: NodeHost + 'updateGroupName',
-  acceptInvitation: NodeHost + 'acceptInvitation'
-
+  acceptInvitation: NodeHost + 'acceptInvitation',
+  dismissGroup: NodeHost + 'dismissGroup',
+  setContactMute: NodeHost + 'setContactMute',
+  setGroupMute: NodeHost + 'setGroupMute',
+  inviteMember: NodeHost + 'inviteMember',
+  leaveGroup: NodeHost + 'leaveGroup',
 };
 
 module.exports = AppLinks;

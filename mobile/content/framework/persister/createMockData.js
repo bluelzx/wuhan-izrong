@@ -23,7 +23,7 @@ let user1 = {
   "publicAddress": true,
   "publicWeChat": true,
   "publicQQ": true,
-  "orgBeanId": 1,
+  "orgId": 1,
   "mute": false
 };
 
@@ -48,7 +48,7 @@ let user2= {
   "publicAddress": true,
   "publicWeChat": true,
   "publicQQ": true,
-  "orgBeanId": 1,
+  "orgId": 1,
   "mute": false
 }
 
@@ -73,7 +73,7 @@ let user3 = {
   "publicAddress": true,
   "publicWeChat": true,
   "publicQQ": true,
-  "orgBeanId": 1,
+  "orgId": 1,
   "mute": false
 }
 
@@ -98,7 +98,7 @@ let user4 ={
   "publicAddress": true,
   "publicWeChat": true,
   "publicQQ": true,
-  "orgBeanId": 2,
+  "orgId": 2,
   "mute": false
 }
 
@@ -123,7 +123,7 @@ let user5 = {
   "publicAddress": true,
   "publicWeChat": true,
   "publicQQ": true,
-  "orgBeanId": 2,
+  "orgId": 2,
   "mute": false
 }
 
@@ -148,7 +148,7 @@ let user6 = {
   "publicAddress": true,
   "publicWeChat": true,
   "publicQQ": true,
-  "orgBeanId": 2,
+  "orgId": 2,
   "mute": false
 }
 
@@ -200,18 +200,18 @@ let org2 = {
 let group1 = {
   groupId: 1,
   groupName: 'group A',
-  groupMasterUid: '001',
+  groupMasterUid: 1,
   memberNum: 10,
-  members: [user1,user2,user3],
+  members: JSON.stringify([1,2,3]),
   mute: false
 }
 
 let group2 = {
   groupId: 2,
   groupName: 'group B',
-  groupMasterUid: '001',
+  groupMasterUid: 2,
   memberNum: 10,
-  members: [user4,user5],
+  members: JSON.stringify([4,5]),
   mute: false
 }
 

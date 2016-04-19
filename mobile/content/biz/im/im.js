@@ -11,7 +11,6 @@ let {
   TouchableOpacity,
   TouchableHighlight,
   Platform,
-  DeviceEventEmitter,
   Image
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
@@ -111,11 +110,6 @@ let WhitePage = React.createClass({
     });
   },
 
-  componentWillMount:function() {
-    //DeviceEventEmitter.addListener('keyboardWillShow', function(e: Event) {
-    //  console.log('hello RC, I am Android Native');
-    //});
-  },
 
   renderSpread: function(item) {
     let {width} = Device;

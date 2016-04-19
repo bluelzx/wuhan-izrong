@@ -62,7 +62,7 @@ let ValiSMS = React.createClass({
             });
           }
         }).catch((errorData) => {
-          Alert(errorData);
+          Alert(errorData.toString());
         });
       });
     }

@@ -92,16 +92,19 @@ let CreateGroup = React.createClass({
             .then((response)=>{
               if(!!response.errCode)
                 throw response;
+              else{
+                return response.gid
+              }
               //else{
               //  let groupId = response.gid;
               //   ContactAction.saveGroup(members, this.state.groupName, this.state.userInfo.userId);
               //}
-            }).then(()=>{
+            }).then((gid)=>{
               //setp2: 跳转到群聊页面
               this.props.navigator.replacePreviousAndPop(
                 {
                   comp: Chat,
-                  param: {title: this.state.groupName, chatType: SESSION_TYPE.GROUP, groupMasterUid: this.state.userInfo.userId}
+                  param: {groupId:gid,title: this.state.groupName, chatType: SESSION_TYPE.GROUP, groupMasterUid: this.state.userInfo.userId}
                 }
               );
             }).catch((errorData) => {
