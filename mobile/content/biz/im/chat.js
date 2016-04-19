@@ -10,7 +10,7 @@ let EditGroupMaster = require('./editGroupMaster');
 let DictIcon = require('../../constants/dictIcon');
 let ImUserInfo = require('./imUserInfo');
 const Messenger = require('./../../comp/messenger/messenger');
-let { MSG_TYPE, MSG_CONTENT_TYPE, ITEM_TYPE } = require('../../constants/dictIm');
+let { MSG_TYPE, MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 let AppStore = require('../../framework/store/appStore');
 let ContactStore = require('../../framework/store/contactStore');
 
@@ -63,7 +63,7 @@ let Chat = React.createClass({
     //let id = this.props.param.id;//groupId or userId  ,!!!deferent from ownerId
     let comp = EditGroup;
     let item = this.props.param;
-    if(item.chatType==ITEM_TYPE.USER){
+    if(item.chatType==SESSION_TYPE.USER){
       comp = ImUserInfo;
     }else if(item.groupMasterUid == this.state.userInfo.userId){
       comp = EditGroupMaster;
@@ -80,7 +80,7 @@ let Chat = React.createClass({
     return (
       <TouchableOpacity
         onPress={this.tagDetail}>
-       <Image style={{width:25,height:25}} source={this.props.param.chatType==ITEM_TYPE.GROUP?DictIcon.imGroupMore:DictIcon.imUserMore}/>
+       <Image style={{width:25,height:25}} source={this.props.param.chatType==SESSION_TYPE.GROUP?DictIcon.imGroupMore:DictIcon.imUserMore}/>
       </TouchableOpacity>
 
     );

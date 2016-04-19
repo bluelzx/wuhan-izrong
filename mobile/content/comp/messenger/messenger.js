@@ -14,16 +14,14 @@ let GiftedMessenger = require('./giftedMessenger');
 let {Communications, Device} = require('mx-artifacts');
 
 let ImAction = require('../../framework/action/imAction');
-let AppStore = require('../../framework/store/appStore');
 let ImStore = require('../../framework/store/imStore');
-let { MSG_CONTENT_TYPE, COMMAND_TYPE, ITEM_TYPE } = require('../../constants/dictIm');
+let { MSG_CONTENT_TYPE, COMMAND_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 
-const _device_id = AppStore.getDeviceId();
-const _user_id = AppStore.getUserId();
-let _getMessageKey = (f, t) => {
-  // return (f > t ? f + ':' + t : t + ':' + f) + ':' + new Date().getTime() + ':' + _device_id;
-  return f + ':' + t + ':' + new Date().getTime() + ':' + _device_id;
-};
+
+// let _getMessageKey = (f, t) => {
+//   // return (f > t ? f + ':' + t : t + ':' + f) + ':' + new Date().getTime() + ':' + _device_id;
+//   return f + ':' + t + ':' + new Date().getTime() + ':' + _device_id;
+// };
 
 let Messenger = React.createClass({
 
@@ -31,7 +29,7 @@ let Messenger = React.createClass({
     return {
       param: {
         sessionId: 'sessionId',
-        chatType: ITEM_TYPE.USER,
+        chatType: SESSION_TYPE.USER,
         userId: ''
       },
     }
@@ -58,23 +56,22 @@ let Messenger = React.createClass({
   handleSend(message = {}, rowID = null) {
     // Your logic here
     // Send message.text to your server
-    let _messageId = _getMessageKey(_user_id, this.props.toUid);
-
-    let msgToSend = { sessionId: this.this.props.param.sessionId };
-    if (this.props.param.chatType === ITEM_TYPE.USER) {
+    let msgToSend = { sessionId: this.props.param.sessionId };
+    if (this.props.param.chatType === SESSION_TYPE.USER) {
       msgToSend.data = {
-        toUid: this.props.param.userId,
+        // toUid: this.props.param.userId,
+        toUid: 'u002',
         contentType: MSG_CONTENT_TYPE.TEXT,
         content: message.text,
-        msgId: _messageId,
+        msgId: message.msgId,
         command: COMMAND_TYPE.SEND_P2P_MSG
       };
-    } else if (this.props.param.chatType === ITEM_TYPE.GROUP) {
+    } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
       msgToSend.data = {
         toUid: this.props.param.groupId,
         contentType: MSG_CONTENT_TYPE.TEXT,
         content: message.text,
-        msgId: _messageId,
+        msgId: message.msgId,
         command: COMMAND_TYPE.SEND_GROUP_MSG
       };
     }
@@ -192,6 +189,8 @@ let Messenger = React.createClass({
         handleEmailPress={this.handleEmailPress}
 
         inverted={true}
+
+        sessionId={this.props.param.sessionId}
       />
 
     );

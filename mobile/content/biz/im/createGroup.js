@@ -13,7 +13,7 @@ let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let Chat = require('./chat');
 let ChooseList = require('./chooseList');
-let { ITEM_TYPE } = require('../../constants/dictIm');
+let { SESSION_TYPE } = require('../../constants/dictIm');
 
 let CreateGroup = React.createClass({
 
@@ -81,7 +81,7 @@ let CreateGroup = React.createClass({
       this.props.navigator.replacePreviousAndPop(
         {
           comp: Chat,
-          param: {title: userInfo.userName, chatType: ITEM_TYPE.USER, userId: userId}
+          param: {title: userInfo.userName, chatType: SESSION_TYPE.USER, userId: userId}
         }
       );
     }else{
@@ -91,7 +91,7 @@ let CreateGroup = React.createClass({
       this.props.navigator.replacePreviousAndPop(
         {
           comp: Chat,
-          param: {title: this.state.groupName, chatType: ITEM_TYPE.GROUP, groupMasterUid: 0}
+          param: {title: this.state.groupName, chatType: SESSION_TYPE.GROUP, groupMasterUid: 0}
         }
       );
     }

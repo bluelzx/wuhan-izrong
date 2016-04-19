@@ -284,7 +284,7 @@ Manager.prototype.onopen = function () {
 
 Manager.prototype.onmessage = function (data) {
   //this.decoder.add(data);
-  console.log('**websocket** ondata %s', data);
+  // console.log('**websocket** ondata %s', JSON.stringify(data));
   this.emit('message', data);
 };
 

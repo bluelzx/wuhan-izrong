@@ -15,9 +15,14 @@ let _send = (data) => {
     });
 };
 
+let _receive = (data) => {
+  ;
+};
+
 let ImAction = {
   imInit: () => ImSocket.init(),
-  send: (data) => _send(data),
+  send: (data) => ImStore.saveMsg(data),
+  receive: (data) => _receive(data),
   notificationRegister: (token) => _notificationRegister(token),
   onNotification: (notification) => _onNotification(notification),
   freshNotification: (notification) => _onNotification(notification),
