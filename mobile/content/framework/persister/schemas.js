@@ -16,6 +16,7 @@ let GroupSchema = {
   primaryKey: 'groupId',
   properties: {
     groupId: {type: 'int', optional: true},
+    groupImageUrl:{type: 'string', optional: true},
     groupName: {type: 'string', optional: true},
     groupMasterUid: {type: 'int', optional: true},
     memberNum: {type: 'int', optional: true},
@@ -29,7 +30,7 @@ let MessageSchema = {
   primaryKey: 'sessionId',
   properties: {
     sessionId: {type: 'int', optional: true},
-    msgId: {type: 'int', optional: true},
+    msgId: {type: 'string', optional: true},
     fromUId: {type: 'int', optional: true},
     groupId: {type: 'int', optional: true},
     toId: {type: 'int', optional: true},
@@ -38,7 +39,8 @@ let MessageSchema = {
     content: {type: 'string', optional: true},
     msgType: {type: 'string', optional: true},
     revTime: {type: 'date', optional: true},
-    isRead: {type: 'bool', option: true}
+    isRead: {type: 'bool', option: true},
+    status:{type: 'string', optional: true}//状态: 是否发送成功
   }
 };
 

@@ -31,6 +31,8 @@ let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
 
+var marketData = {contentList:[]};
+
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let WhitePage = React.createClass({
 
@@ -66,15 +68,17 @@ let WhitePage = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryValues: 'MCA',
-      bizItemValues: 'MCA_ABS',
-      bizOrientationValues: 'ALL',
-      termValues: 'ALL',
-      amountValues: 'ALL'
+      bizCategoryID: 243,
+      bizItemID: 251,
+      bizOrientationID: '',
+      termID: '',
+      amountID: '',
+      marketData: marketData
     }
   },
 
   componentWillMount: function () {
+    //{this.bizOrderMarketSearchsearch();}
   },
 
   render: function () {
@@ -88,7 +92,7 @@ let WhitePage = React.createClass({
         </View>
         <MarketList ref="MARKETLIST" navigator={this.props.navigator} exec={this.props.exec}
                     orderField={this.state.orderField} orderType={this.state.orderType}
-                    pageIndex={this.state.pageIndex}/>
+                    pageIndex={this.state.pageIndex} marketData={this.state.marketData}/>
         {this.renderOptionType()}
         {this.renderOptionTime()}
         {this.renderOptionOther()}
@@ -123,7 +127,7 @@ let WhitePage = React.createClass({
       levelOneText: this.state.dataSource[rowId].displayName,
       dataSource2: this.state.item[rowId].itemArr,
       levelTwoText: this.state.item[rowId].itemArr[0].displayName,
-      bizCategoryValues: this.state.dataSource[rowId].displayCode
+      bizCategoryID: this.state.dataSource[rowId].id
     })
   },
   pressTypeRow2(rowId){
@@ -131,20 +135,23 @@ let WhitePage = React.createClass({
       clickFilterType: 0,
       pickTypeRow2: rowId,
       levelTwoText: this.state.dataSource2[rowId].displayName,
-      bizItemValues: this.state.dataSource2[rowId].displayCode
+      bizItemID: this.state.dataSource2[rowId].id
     });
-    {this.refs['MARKETLIST']._changeData();}
-    {this.bizOrderMarketSearchsearch();}
+    {
+      this.bizOrderMarketSearchsearch();
+    }
   },
   pressTimeRow(rowId){
     this.setState({
       clickFilterTime: 0,
       pickTimeRow: rowId,
       optionTwoText: this.state.dataSource3[rowId].fieldDisplayName,
-      orderField:this.state.dataSource3[rowId].fieldName,
-      orderType: this.state.dataSource3[rowId].asc?'asc':'desc',
+      orderField: this.state.dataSource3[rowId].fieldName,
+      orderType: this.state.dataSource3[rowId].asc ? 'asc' : 'desc',
     })
-    {this.bizOrderMarketSearchsearch();}
+    {
+      this.bizOrderMarketSearchsearch();
+    }
   }, renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
     return (
       <View style={{flex:1,flexDirection:'row'}}>
@@ -310,25 +317,29 @@ let WhitePage = React.createClass({
     )
   },
   callBack: function (item, title) {
-    if(title == '方向'){
+    if (title == '方向') {
       this.setState({
-        bizOrientationValues:item.displayCode
+        bizOrientationID: (item.id == 'ALL') ? '' : item.id
       })
-    }else if(title == '期限'){
+    } else if (title == '期限') {
       this.setState({
-        termValues:item.displayCode
+        termID: (item.id == 'ALL') ? '' : item.id
       })
-    }else if(title == '金额'){
+    } else if (title == '金额') {
       this.setState({
-        amountValues:item.displayCode
+        amountID: (item.id == 'ALL') ? '' : item.id
       })
-    }else{
+    } else {
 
     }
   },
   confirmBtn: function () {
-    {this.pressFilterOther();}
-    {this.bizOrderMarketSearchsearch();}
+    {
+      this.pressFilterOther();
+    }
+    {
+      this.bizOrderMarketSearchsearch();
+    }
   },
   toPage: function (name) {
     const { navigator } = this.props;
@@ -361,41 +372,19 @@ let WhitePage = React.createClass({
             orderField: this.state.orderField,
             orderType: this.state.orderType,
             pageIndex: this.state.pageIndex,
-            custFilterList:{
-              bizCategory: {
-                values: [this.state.bizCategoryValues],
-                opt: 'Eq',
-                filedName: 'bizCategory',
-                valueType: 'String'
-              },
-              bizItem: {
-                values: [this.state.bizItemValues],
-                opt: 'Eq',
-                filedName: 'bizItem',
-                valueType: 'String'
-              },
-              bizOrientation: {
-                values: [this.state.bizOrientationValues],
-                opt: 'Eq',
-                filedName: 'bizOrientation',
-                valueType: 'String'
-              },
-              term: {
-                values: [this.state.termValues],
-                opt: 'Eq',
-                filedName: 'term',
-                valueType: 'String'
-              },
-              amount: {
-                values: [this.state.amountValues],
-                opt: 'Eq',
-                filedName: 'amount',
-                valueType: 'String'
-              }
-            }
+            filterList: [
+              this.state.bizCategoryID,
+              this.state.bizItemID,
+              this.state.bizOrientationID,
+              this.state.termID,
+              this.state.amountID
+            ]
           }
         ).then((response)=> {
-
+          this.setState({
+            marketData: response
+          })
+          this.refs["MARKETLIST"]._changeData();
         }).catch(
           (errorData) => {
             throw errorData;
@@ -404,7 +393,6 @@ let WhitePage = React.createClass({
       }
     );
   },
-
 
 
 });

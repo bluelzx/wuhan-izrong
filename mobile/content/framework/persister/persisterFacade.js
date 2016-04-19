@@ -29,30 +29,39 @@ let PersisterFacade = {
   getLoginUserInfo: ()=> _getLoginUserInfo(),
   getUserId: ()=> _getUserId(),
   getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
+  updateUserInfo: (column, value)=>_updateUserInfo(column, value),
   //interface for ContactStore
   getLoginUserInfoByUserId: (userId)=>_getLoginUserInfoByUserId(userId),
   saveOrgBeanSet: () => _saveOrgBeanSet(),
   saveFilters: ()=> _saveFilters(),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
-  getOrgList: ()=>_getOrgList()
+  getOrgList: ()=>_getOrgList(),
+  deleteDevice: ()=> _deleteDevice()
 };
 
 
+//test method
+let _deleteDevice = function () {
+  _realm.write(() => {
+    let devices = _realm.objects(DEVICE);
+    _realm.delete(devices); // Deletes all books
+  });
+};
 
 let _saveAppData = function (data) {
-  let orgBeanSet = data.orgBeanSet;
-  let appUser = data.appUserInfoBean;
+  let loginUserInfo = data.appUserInfoOutBean;
+  let token = data.appToken;
+  let orgBeanList = data.orgBeanList;
   let appUserGroupBeanList = data.appUserGroupBeanList;
-  let bizOrderCategoryBeanList = data.bizOrderCategoryBeanList;
   let imUserBeanList = data.imUserBeanList;
-  _saveLoginUserInfo(data);
-  _saveImUsers();
-  _saveOrgBeanSet();
+  _saveLoginUserInfo(loginUserInfo, token);
+  _saveImUsers(imUserBeanList);
+  _saveOrgBeanList(orgBeanList);
+  _saveAppUserGroupBeanList(appUserGroupBeanList);
 };
 
-let _saveLoginUserInfo = function (data) {
-  let loginUserInfo = data.appUserInfoBean;
+let _saveLoginUserInfo = function (loginUserInfo, token) {
   _realm.write(() => {
     _realm.create(LOGINUSERINFO, {
       userId: loginUserInfo.userId,
@@ -67,29 +76,84 @@ let _saveLoginUserInfo = function (data) {
       jobTitle: loginUserInfo.jobTitle,
       phoneNumber: loginUserInfo.phoneNumber,
       photoFileUrl: loginUserInfo.photoFileUrl,
-      orgBeanId: loginUserInfo.orgBeanId,
-      token: data.appToken,
+      orgId: loginUserInfo.orgBeanId,
+      token: token,
       lastLoginTime: new Date(),
-      publicTitle: _.isEmpty(loginUserInfo.publicTitle) ? true : loginUserInfo.publicTitle,
-      publicMobile: _.isEmpty(loginUserInfo.publicMobile) ? true : loginUserInfo.publicMobile,
-      publicDepart: _.isEmpty(loginUserInfo.publicDepart) ? true : loginUserInfo.publicDepart,
-      publicPhone: _.isEmpty(loginUserInfo.publicPhone) ? true : loginUserInfo.publicPhone,
-      publicEmail: _.isEmpty(!loginUserInfo.publicEmail) ? true : loginUserInfo.publicEmail,
-      publicAddress: _.isEmpty(loginUserInfo.publicAddress) ? true : loginUserInfo.publicAddress,
-      publicWeChat: _.isEmpty(loginUserInfo.publicWeChat) ? true : loginUserInfo.publicWeChat,
-      publicQQ: _.isEmpty(loginUserInfo.publicQQ) ? true : loginUserInfo.publicQQ
+      publicTitle: !!(loginUserInfo.publicTitle == true || loginUserInfo.publicTitle == null),
+      publicMobile: !!(loginUserInfo.publicMobile == true || loginUserInfo.publicMobile == null),
+      publicDepart: !!(loginUserInfo.publicDepart == true || loginUserInfo.publicDepart == null),
+      publicPhone: !!(loginUserInfo.publicPhone == true || loginUserInfo.publicPhone == null),
+      publicEmail: !!(loginUserInfo.publicEmail == true || loginUserInfo.publicEmail == null),
+      publicAddress: !!(loginUserInfo.publicAddress == true || loginUserInfo.publicAddress == null),
+      publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat == null),
+      publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ == null)
     }, true);
   });
 };
 
-let _saveImUsers = function () {
+let _saveAppUserGroupBeanList = function (appUserGroupBeanList) {
+  appUserGroupBeanList.forEach(function (n) {
+    console.log(n);
+    _saveAppUserGroupBean(n);
+  });
 
 };
 
-let _saveOrgBeanSet = function () {
-  TestData.mockOrgBeanSet.forEach(function (n) {
-    console.log(n);
-    _saveOrgBeanItem(n);
+let _saveAppUserGroupBean = function (appUserGroupBean) {
+  _realm.write(() => {
+    _realm.create(GROUP, {
+      groupId: appUserGroupBean.groupId,
+      groupImageUrl: appUserGroupBean.groupImageUrl,
+      groupName: appUserGroupBean.groupName,
+      groupMasterUid: appUserGroupBean.groupMasterUid,
+      memberNum: appUserGroupBean.members.length,
+      members: JSON.stringify(appUserGroupBean.members),
+      mute: appUserGroupBean.mute
+    }, true);
+  });
+};
+
+let _saveImUsers = function (imUserBeanList) {
+  imUserBeanList.forEach(function (imUserBean) {
+    _saveImUser(imUserBean);
+  });
+};
+
+let _saveImUser = function (imUserBean) {
+  _realm.write(() => {
+    _realm.create(IMUSERINFO, {
+      userId: imUserBean.userId,
+      address: imUserBean.address,
+      realName: imUserBean.realName,
+      nameCardFileUrl: imUserBean.nameCardFileUrl,
+      department: imUserBean.department,
+      jobTitle: imUserBean.jobTitle,
+      qqNo: imUserBean.qqNo,
+      email: imUserBean.email,
+      weChatNo: imUserBean.weChatNo,
+      mute: imUserBean.mute,
+      mobileNumber: imUserBean.mobileNumber,
+      photoFileUrl: imUserBean.photoFileUrl,
+      orgId: imUserBean.orgBeanId,
+      phoneNumber: imUserBean.phoneNumber,
+      publicTitle: !!(imUserBean.publicTitle == true || imUserBean.publicTitle == null),
+      publicMobile:  !!(imUserBean.publicMobile == true || imUserBean.publicMobile == null),
+      publicDepart:  !!(imUserBean.publicDepart == true || imUserBean.publicDepart == null),
+      publicPhone: !!(imUserBean.publicPhone == true || imUserBean.publicPhone == null),
+      publicEmail:  !!(imUserBean.publicEmail == true || imUserBean.publicEmail == null),
+      publicAddress:  !!(imUserBean.publicAddress == true || imUserBean.publicAddress == null),
+      publicWeChat:  !!(imUserBean.publicWeChat == true || imUserBean.publicWeChat == null),
+      publicQQ:  !!(imUserBean.publicQQ == true || imUserBean.publicQQ == null)
+
+
+    }, true);
+  });
+};
+
+let _saveOrgBeanList = function (orgBeanList) {
+  orgBeanList.forEach(function (orgBean) {
+    console.log(orgBean);
+    _saveOrgBeanItem(orgBean);
   });
 };
 
@@ -121,12 +185,11 @@ let _getAPNSToken = function () {
   _realm.write(() => {
     _realm.create(DEVICE, {
       id: 1,
-      deviceOS: 'IOS',
+      deviceOS: Platform.OS,
       APNSToken: 'asdfghjklzxcvbnm'
     }, true);
   });
   let device = _realm.objects(DEVICE);
-
   return device[0].APNSToken;
 };
 
@@ -153,7 +216,7 @@ let _getToken = function () {
 let _clearToken = function (userId) {
   _realm.write(() => {
     _realm.create(LOGINUSERINFO, {
-      userId:userId,
+      userId: userId,
       token: ''
     }, true);
   });
@@ -170,9 +233,9 @@ let _getLoginUserInfo = function () {
 };
 
 let _getUserId = function () {
-  if (_getLoginUserInfo){
+  if (_getLoginUserInfo) {
     return _getLoginUserInfo.userId;
-  }else{
+  } else {
     return '';
   }
 };
@@ -186,6 +249,21 @@ let _getOrgByOrgId = function (orgId) {
   }
 };
 
+let _updateUserInfo = function (column, value) {
+  _realm.write(() => {
+    _realm.create(LOGINUSERINFO, {
+      column: value
+    }, true);
+  });
+};
+
+let _getContact = function () {
+
+};
+
+let _getUsers = function () {
+
+};
 
 let _getLoginUserInfoByUserId = function (userId) {
   let imUsers = _realm.objects(IMUSERINFO);
@@ -226,10 +304,17 @@ let _saveFilters = function () {
 let _getFilters = function () {
   let filterItems = _realm.objects(FILTERITEMS);
   let orderItems = _realm.objects(ORDERITEM);
-  console.log(filterItems);
+  let filtersArray = new Array();
+  let orderArray = new Array();
+  filterItems.forEach(function (filterItem) {
+    filtersArray.push(filterItem)
+  });
+  orderItems.forEach(function (orderItem) {
+    orderArray.push(orderItem)
+  });
   return {
-    filterItems: filterItems,
-    orderItems: orderItems
+    filterItems: filtersArray,
+    orderItems: orderArray
   }
 };
 

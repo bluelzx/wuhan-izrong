@@ -53,7 +53,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=> _getOrgList(),
-  updateUserInfo:()=> _updateUserInfo()
+  updateUserInfo: (column, value)=> _updateUserInfo(column, value)
 });
 
 // Private Functions
@@ -71,12 +71,13 @@ let _appInit = () => {
       _info.netWorkState = isConnected;
     }
   );
+  Persister.saveFilters();
+
   _info.initLoadingState = false;
   _.assign(_data, {
     token: _getToken(),
     filters: Persister.getFilters()
   });
-  Persister.saveFilters();
   AppStore.emitChange();
 };
 
@@ -149,7 +150,8 @@ let _getOrgList = ()=> {
   return orgBuildList;
 };
 
-let _updateUserInfo = ()=>{
-
+let _updateUserInfo = (column, value)=> {
+  Persister.updateUserInfo(column, value);
+  AppStore.emitChange();
 };
 module.exports = AppStore;

@@ -26,7 +26,7 @@ let Login = require('../../biz/login/login');
 let UserInfo = React.createClass({
   getInitialState: function () {
     let userInfo = UserInfoAction.getLoginUserInfo();
-    let orgBean = UserInfoAction.getOrgById(userInfo.orgBeanId);
+    let orgBean = UserInfoAction.getOrgById(userInfo.orgId);
     return {
       photoFileUrl: userInfo.photoFileUrl,
       realName: userInfo.realName,
@@ -156,16 +156,6 @@ let UserInfo = React.createClass({
 
           <Item desc="电子邮箱" imgPath={require('../../image/user/email.png')} value={this.state.email} page='userInfo'
                 func={() => this.toEdit("邮箱", 'email', this.state.email,'publicEmail',this.state.publicEmail, '', 60, Validation.isEmail)}/>
-
-          <Item style={{marginTop:20}} desc="机构" imgPath={require('../../image/user/comp.png')}
-                value={this.state.orgBeanName} page='userInfo'
-                func={() => this.toEdit("机构", 'organization', this.state.orgBeanName,'',true, 'name', 20, '')}/>
-
-          <Item desc="部门" imgPath={require('../../image/user/comp.png')} value={this.state.department} page='userInfo'
-                func={() => this.toEdit("部门", 'depart', this.state.department,'publicDepart',this.state.publicDepart, 'name', 20, '')}/>
-
-          <Item desc="职位" imgPath={require('../../image/user/jobTitle.png')} value={this.state.jobTitle} page='userInfo'
-                func={() => this.toEdit("职位", 'jobTitle', this.state.jobTitle,'publicTitle',this.state.publicTitle ,'name', 20, '')}/>
 
         </ScrollView>
       </NavBarView>

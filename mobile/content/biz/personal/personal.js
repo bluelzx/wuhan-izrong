@@ -26,7 +26,7 @@ let LoginAction = require('../../framework/action/loginAction');
 let Personal = React.createClass({
   getInitialState: function () {
     let userInfo = UserInfoAction.getLoginUserInfo();
-    let orgBean = UserInfoAction.getOrgById(userInfo.orgBeanId);
+    let orgBean = UserInfoAction.getOrgById(userInfo.orgId);
     return {
       userName: userInfo.realName,
       orgName: orgBean.orgValue

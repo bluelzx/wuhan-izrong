@@ -17,6 +17,7 @@ let date = dateFormat(new Date(), 'yyyy-mm-dd');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let { Alert, Button ,Device} = require('mx-artifacts');
 let UserInfoAction = require('../../framework/action/userInfoAction');
+let AppStore = require('../../framework/store/appStore');
 
 let TextEdit = React.createClass({
   getInitialState: function () {
@@ -32,13 +33,14 @@ let TextEdit = React.createClass({
     let year = this.props.param.type == "date" ? (this.props.param.value == '' ? Number(date.split("-")[0]) : Number(this.props.param.value.split("-")[0])) : '';
     let month = this.props.param.type == "date" ? (this.props.param.value == '' ? Number(date.split("-")[1]) : Number(this.props.param.value.split("-")[1])) : '';
     return {
-      publicValue: this.props.param.publicValue,
+      oldPublicValue: this.props.param.publicValue,
       publicName: this.props.param.publicName,
       oldValue: (value == null || value == '') ? '' : this.props.param.value.toString(),
       year: year,
       month: month,
       day: this.props.param.type == "date" ? (this.props.param.value == '' ? Number(date.split("-")[2]) : Number(this.props.param.value.split("-")[2])) : '',
       newValue: this.props.param.value,
+      newPublicValue: this.props.param.publicValue,
       type: type,
       tele: this.props.param.type == "telephone" ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[0] ) : '',
       phone: this.props.param.type == "telephone" ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[1]) : '',
@@ -123,26 +125,51 @@ let TextEdit = React.createClass({
       )
 
   },
-  updateUserInfo: function(){
-    if (this.state.newValue != this.state.oldValue && this.state.publicValue!= this.props.param)
+
+  updateUserInfo: function () {
+    let data = {};
+    if (this.state.newValue != this.state.oldValue) {
+      if (this.state.newPublicValue == this.state.oldPublicValue || this.state.publicName == '') {
+        data = [{
+          column: this.props.param.name,
+          value: this.state.newValue
+        }];
+        this.update(data);
+      } else {
+        data = [{
+          column: this.props.param.name,
+          value: this.state.newValue
+        },
+          {
+            column: this.props.param.publicName,
+            value: this.state.newPublicValue
+          }];
+        this.update(data);
+      }
+    }else if (this.state.newPublicValue != this.state.oldPublicValue){
+      data = [{
+        column: this.props.param.publicName,
+        value: this.state.newPublicValue
+      }];
+      this.update(data);
+    }
+  },
+
+  update: function (data) {
     this.props.exec(() => {
-      return  UserInfoAction.updateUserInfo(
-        {
-          value:this.props.param.name,
-          column:this.state.newValue
-        },{
-          value:this.props.param.publicName,
-          column:this.state.publicValue
-        }
-      ).then((response) => {
-        const { navigator } = this.props;
-        if (navigator) {
-          // navigator.popToTop();
-          this.props.navigator.pop();
-        }
-      }).catch((errorData) => {
-        Alert(errorData.toString());
-      });
+      return UserInfoAction.updateUserInfo(data)
+        .then((response) => {
+             data.forEach((dataItem)=>{
+               AppStore.updateUserInfo(dataItem.column,dataItem.value);
+               const { navigator } = this.props;
+               if (navigator) {
+                 // navigator.popToTop();
+                 this.props.navigator.pop();
+               }
+             });
+        }).catch((errorData) => {
+          Alert(errorData);
+        });
     });
   },
 
@@ -157,7 +184,22 @@ let TextEdit = React.createClass({
   },
 
   switchControl(open){
-    this.setState({publicValue: open})
+    this.setState({newPublicValue: open})
+  },
+
+  renderSwitch(){
+    if (this.state.publicName) {
+      return (
+        <View style={{backgroundColor:'#162a40',height:50}}>
+          <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+            <Text style={{color: '#ffffff',fontSize:18,marginLeft:20}}>公开此信息</Text>
+            <Switch style={{margin:20}}
+                    value={this.state.newPublicValue}
+                    onValueChange={this.switchControl}/>
+          </View>
+        </View>
+      );
+    }
   },
 
   render: function () {
@@ -236,14 +278,7 @@ let TextEdit = React.createClass({
                          autoCapitalize="none"
                          autoCorrect={false}/>
             </View>
-            <View style={{backgroundColor:'#162a40',height:50}}>
-              <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                <Text style={{color: '#ffffff',fontSize:18,marginLeft:20}}>公开此信息</Text>
-                <Switch style={{margin:20}}
-                        value={this.state.publicValue}
-                        onValueChange={this.switchControl}/>
-              </View>
-            </View>
+            {this.renderSwitch()}
           </View>
         </NavBarView>
       )
@@ -263,14 +298,7 @@ let TextEdit = React.createClass({
                          autoCorrect={false}
               />
             </View>
-            <View style={{backgroundColor:'#162a40',height:50}}>
-              <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                <Text style={{color: '#ffffff',fontSize:18,marginLeft:20}}>公开此信息</Text>
-                <Switch style={{margin:20}}
-                        value={this.state.publicValue}
-                        onValueChange={this.switchControl}/>
-              </View>
-            </View>
+            {this.renderSwitch()}
           </View>
         </NavBarView>
       )
