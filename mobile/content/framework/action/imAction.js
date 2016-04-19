@@ -17,11 +17,12 @@ let _send = (data) => {
 
 let ImAction = {
   imInit: () => ImSocket.init(),
+  sessionInit: (data) => ImStore.sessionInit(data),
   send: (data) => _send(data),
   receive: (data) => ImStore.saveMsg(data),
   notificationRegister: (token) => _notificationRegister(token),
   onNotification: (notification) => _onNotification(notification),
-  freshNotification: (notification) => _onNotification(notification),
+  freshNotification: (notification) => _onNotification(notification)
 };
 
 module.exports = ImAction;

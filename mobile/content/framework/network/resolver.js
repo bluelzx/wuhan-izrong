@@ -1,4 +1,5 @@
 let ImAction = require('../action/imAction');
+let ImStore = require('../store/imStore');
 let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE } = require('../../constants/dictIm');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 
@@ -7,14 +8,16 @@ let Resolver = {
   deal: function (message) {
     switch (message.type) {
       case 'message':
-        this._dealMessage(message.data);
+        this._dealMessage(JSON.parse(message.data));
     }
   },
   _dealMessage: function (message) {
     switch (message.msgType) {
       case MSG_TYPE.REC_P2P_MSG:
-        ImAction.receive({
-          sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.fromUid),
+        // ImAction.receive({
+        ImStore.saveMsg({
+          // sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.fromUid),
+          sessionId: 'user:3',
           msgId: message.msgId,
           fromUId: message.fromUid,
           groupId: null,

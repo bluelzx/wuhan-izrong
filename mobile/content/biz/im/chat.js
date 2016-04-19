@@ -13,11 +13,14 @@ const Messenger = require('./../../comp/messenger/messenger');
 let { MSG_TYPE, MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 let AppStore = require('../../framework/store/appStore');
 let ContactStore = require('../../framework/store/contactStore');
-
+let ImAction = require('../../framework/action/imAction');
 
 let Chat = React.createClass({
 
   componentDidMount() {
+    ImAction.sessionInit({
+      sessionId: this.props.param.sessionId
+    });
     AppStore.addChangeListener(this._onChange);
   },
 

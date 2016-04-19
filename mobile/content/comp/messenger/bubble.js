@@ -47,7 +47,7 @@ export default class Bubble extends React.Component {
   render(){
     var flexStyle = {};
     //if ( this.props.text.length > 40 ) {
-    if ( this._getLength(this.props.text) > 40 ) {
+    if ( this._getLength(this.props.content) > 40 ) {
       flexStyle.flex = 1;
     }
 
@@ -69,7 +69,7 @@ export default class Bubble extends React.Component {
     return (
       <View style={[styles.bubble, customStyle, flexStyle]}>
         {this.props.name}
-        {this.renderText(this.props.text, this.props.position)}
+        {this.renderText(this.props.content, this.props.position)}
       </View>
     );
   }
@@ -78,7 +78,7 @@ export default class Bubble extends React.Component {
 Bubble.propTypes = {
   position: React.PropTypes.oneOf(['left', 'right']),
   status: React.PropTypes.string,
-  text: React.PropTypes.string,
+  content: React.PropTypes.string,
   renderCustomText: React.PropTypes.func,
   name: React.PropTypes.element,
   leftBackgroundColor: React.PropTypes.string,

@@ -21,6 +21,7 @@ var {
 var dismissKeyboard = require('react-native-dismiss-keyboard');
 var moment = require('moment');
 var Icon = require('react-native-vector-icons/Ionicons');
+var TimerMixin = require('react-timer-mixin');
 
 let { Spinner, Button } = require('mx-artifacts');
 
@@ -35,6 +36,7 @@ let ImagePicker = require('../utils/imagePicker');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 
 var GiftedMessenger = React.createClass({
+  mixins: [TimerMixin],
 
   firstDisplay: true,
   listHeight: 0,
@@ -294,6 +296,13 @@ var GiftedMessenger = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
+    if (this._data.length !== this.props.messages.length) {
+      this.setTimeout(() => {
+        // inspired by http://stackoverflow.com/a/34838513/1385109
+        this.scrollToBottom();
+      }, (Platform.OS === 'android' ? 500 : 400));
+    }
+
     this._data = [];
     this._rowIds = [];
     this.appendMessages(nextProps.messages);
@@ -358,7 +367,7 @@ var GiftedMessenger = React.createClass({
       this.scrollResponder.scrollTo({
         y: -scrollDistance,
         x: 0,
-        animated: true
+        animated: false
       });
     }
   },
@@ -366,7 +375,7 @@ var GiftedMessenger = React.createClass({
   onSend() {
     var msgId = KeyGenerator.getMessageKey(this.props.sessionId);
     var message = {
-      text: this.state.text.trim(),
+      content: this.state.text.trim(),
       name: this.props.senderName,
       image: this.props.senderImage,
       position: 'right',
@@ -490,10 +499,11 @@ var GiftedMessenger = React.createClass({
   },
 
   appendMessage(message = {}, scrollToBottom = true) {
-    var rowID = this.appendMessages([message]);
+    // var rowID = this.appendMessages([message]);
+    var rowID = this._data.length;
 
     if (scrollToBottom === true) {
-      setTimeout(() => {
+      this.setTimeout(() => {
         // inspired by http://stackoverflow.com/a/34838513/1385109
         this.scrollToBottom();
       }, (Platform.OS === 'android' ? 200 : 100));

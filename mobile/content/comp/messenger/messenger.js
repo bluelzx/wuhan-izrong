@@ -31,16 +31,15 @@ let Messenger = React.createClass({
         sessionId: 'sessionId',
         chatType: SESSION_TYPE.USER,
         userId: ''
-      },
-    }
-      ;
+      }
+    };
   },
 
   propTypes: {
     param: React.PropTypes.object,
   },
 
-  _getStateFromStores: function () {
+  _getStateFromStores() {
     return {
       messages: ImStore.getMessages(),
       // token: AppStore.getToken()
@@ -53,32 +52,43 @@ let Messenger = React.createClass({
     });
   },
 
+  componentDidMount() {
+    ImStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount() {
+    ImStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange() {
+    this.setState(this._getStateFromStores());
+  },
+
   handleSend(message = {}, rowID = null) {
     // Your logic here
-    // Send message.text to your server
+    // Send message.content to your server
     let msgToSend = {
       sessionId: this.props.param.sessionId,
       msgId: message.msgId,
       fromUId: null,
       contentType: MSG_CONTENT_TYPE.TEXT,
-      content: message.text,
-      msgType: {type: 'string', optional: true},
-      revTime: null,
+      content: message.content,
+      revTime: message.date,
       isRead: true
     };
     if (this.props.param.chatType === SESSION_TYPE.USER) {
-      msgToSend.data = {
+      _.assign(msgToSend, {
         // toId: this.props.param.userId,
         toId: 'u002',
         type: SESSION_TYPE.USER,
         msgType: COMMAND_TYPE.SEND_P2P_MSG
-      };
+      });
     } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
-      msgToSend.data = {
+      _.assign(msgToSend, {
         groupId: this.props.param.groupId,
         type: SESSION_TYPE.GROUP,
         msgType: COMMAND_TYPE.SEND_GROUP_MSG
-      };
+      });
     }
 
     ImAction.send(msgToSend);
@@ -100,13 +110,13 @@ let Messenger = React.createClass({
     // newest messages have to be at the begining of the array
     let earlierMessages = [
       {
-        text: 'This is a touchable phone number 0606060606 parsed by taskrabbit/react-native-parsed-text',
+        content: 'This is a touchable phone number 0606060606 parsed by taskrabbit/react-native-parsed-text',
         name: 'Developer',
         image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
         position: 'right',
         date: new Date(2014, 0, 1, 20, 0),
       }, {
-        text: 'React Native enables you to build world-class application experiences on native platforms using a consistent developer experience based on JavaScript and React. https://github.com/facebook/react-native',
+        content: 'React Native enables you to build world-class application experiences on native platforms using a consistent developer experience based on JavaScript and React. https://github.com/facebook/react-native',
         name: 'React-Native',
         image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
         position: 'left',
@@ -119,37 +129,37 @@ let Messenger = React.createClass({
     }, 1000);
   },
 
-  handleReceive(message = {}) {
-    // this._GiftedMessenger.appendMessage(message);
-    let tmpMessages = this.state.messages.concat(message);
-    this.setState({
-      messages: tmpMessages
-    });
-  },
+  // handleReceive(message = {}) {
+  //   // this._GiftedMessenger.appendMessage(message);
+  //   let tmpMessages = this.state.messages.concat(message);
+  //   this.setState({
+  //     messages: tmpMessages
+  //   });
+  // },
 
   onErrorButtonPress(message = {}, rowID = null) {
     // Your logic here
     // Eg: Re-send the message to your server
     this.handleSend(message, rowID);
 
-    setTimeout(() => {
-      // will set the message to a custom status 'Sent' (you can replace 'Sent' by what you want - it will be displayed under the row)
-      this._GiftedMessenger.setMessageStatus('Sent', rowID);
-      setTimeout(() => {
-        // will set the message to a custom status 'Seen' (you can replace 'Seen' by what you want - it will be displayed under the row)
-        this._GiftedMessenger.setMessageStatus('Seen', rowID);
-        setTimeout(() => {
-          // append an answer
-          this.handleReceive({
-            text: 'I saw your message',
-            name: 'React-Native',
-            image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-            position: 'left',
-            date: new Date()
-          });
-        }, 500);
-      }, 1000);
-    }, 500);
+    // setTimeout(() => {
+    //   // will set the message to a custom status 'Sent' (you can replace 'Sent' by what you want - it will be displayed under the row)
+    //   this._GiftedMessenger.setMessageStatus('Sent', rowID);
+    //   setTimeout(() => {
+    //     // will set the message to a custom status 'Seen' (you can replace 'Seen' by what you want - it will be displayed under the row)
+    //     this._GiftedMessenger.setMessageStatus('Seen', rowID);
+    //     setTimeout(() => {
+    //       // append an answer
+    //       this.handleReceive({
+    //         content: 'I saw your message',
+    //         name: 'React-Native',
+    //         image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
+    //         position: 'left',
+    //         date: new Date()
+    //       });
+    //     }, 500);
+    //   }, 1000);
+    // }, 500);
   },
 
   // will be triggered when the Image of a row is touched
