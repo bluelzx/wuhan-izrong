@@ -52,7 +52,10 @@ let _getUsersExpress = function(groupId) {
 }
 
 let _getUserInfo = function() {
-  return PersisterFacade.getLoginUserInfo();
+  return {
+    userId:1
+  };
+  //return PersisterFacade.getLoginUserInfo();
 }
 
 let _getUsersByGroupId = function (groupId) {
@@ -87,12 +90,16 @@ let _createGroup = function(groupId, groupName,groupMasterUid,members,mute){
   PersisterFacade.createGroup(groupId, groupName,groupMasterUid,members.length,members,mute);
 }
 
-let _kickOutMember = function(groupId, members){
+let _kickOutMember = function(groupId, members) {
   PersisterFacade.kickOutMember(groupId, members);
 }
 
-let _modifyGroupName = function(groupId, groupName){
+let _modifyGroupName = function(groupId, groupName) {
   PersisterFacade.modifyGroupName(groupId, groupName);
+}
+
+let _dismissGroup = function(groupId) {
+  PersisterFacade.dismissGroup(groupId);
 }
 
 let ContactStore = {
@@ -110,6 +117,7 @@ let ContactStore = {
   createGroup:_createGroup,
   kickOutMember:_kickOutMember,    //踢人
   modifyGroupName:_modifyGroupName,
+  dismissGroup:_dismissGroup,
 };
 
 module.exports = ContactStore;

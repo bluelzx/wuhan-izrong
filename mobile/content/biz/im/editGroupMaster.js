@@ -59,7 +59,14 @@ let EditGroup = React.createClass({
   },
 
   dismissGroup: function(){
-    ContactAction.dismissGroup(this.props.param.groupId);
+    this.props.exec(()=>{
+      return  ContactAction.dismissGroup(this.props.param.groupId).then(
+        ()=>{
+          this.props.navigator.popToTop();
+        }
+      );
+    });
+
   },
 
   render: function() {

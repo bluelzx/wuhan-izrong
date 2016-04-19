@@ -45,6 +45,8 @@ let PersisterFacade = {
   createGroup:(groupId, groupName,groupMasterUid,number,members,mute) => _createGroup(groupId, groupName,groupMasterUid,number,members,mute),
   kickOutMember:(groupId, members) => _kickOutMember(groupId, members),
   modifyGroupName:(groupId, groupName) => _modifyGroupName(groupId, groupName),
+  dismissGroup:(groupId) => _dismissGroup(groupId),
+
   //interface for AppStore
   saveAppData: (data) => _saveAppData(data),
   saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
@@ -489,6 +491,23 @@ let _modifyGroupName = function(groupId, groupName){
     _realm.create(GROUP, newGroup, true);
   });
 
+}
+
+let _dismissGroup = function(groupId) {
+  let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
+  //let newGroup = {
+  //  groupId:group[0].groupId,
+  //  groupName:'',
+  //  groupMasterUid:group[0].groupMasterUid,
+  //  memberNum:group[0].memberNum,
+  //  members:[],
+  //  mute:group[0].mute
+  //}
+  //console.log(newGroup);
+  _realm.write(() => {
+    //_realm.create(GROUP, newGroup, true);
+    _realm.delete(group);
+  });
 }
 
 module.exports = PersisterFacade;

@@ -43,6 +43,7 @@ let AppLinks = {
   kickOutMember: NodeHost + 'kickOutMember',
   updateGroupName: NodeHost + 'updateGroupName',
   acceptInvitation: NodeHost + 'acceptInvitation',
+  dismissGroup: NodeHost + 'dismissGroup',
 };
 
 module.exports = AppLinks;

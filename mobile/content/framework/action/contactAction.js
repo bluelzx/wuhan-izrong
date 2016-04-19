@@ -69,7 +69,15 @@ let _deleteGroup = function(groupId){
  * @param groupId 群组Id
  * */
 let _dismissGroup = function(groupId){
-  return ;
+  let param = {
+    gid:groupId
+  };
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.dismissGroup, param).then((response)=>{
+      contactStore.dismissGroup(groupId);
+      resolve(response);
+    }, reject);
+  });
 }
 
 /**
