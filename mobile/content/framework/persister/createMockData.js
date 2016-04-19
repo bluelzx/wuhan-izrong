@@ -211,7 +211,7 @@ let group2 = {
   groupName: 'group B',
   groupMasterUid: '001',
   memberNum: 10,
-  members: JSON.stringify[4,5],
+  members: [user4,user5],
   mute: false
 }
 
