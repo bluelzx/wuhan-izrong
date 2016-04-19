@@ -73,12 +73,12 @@ let WhitePage = React.createClass({
       bizOrientationID: '',
       termID: '',
       amountID: '',
-      marketData: marketData,
+      marketData: marketData
     }
   },
 
   componentWillMount: function () {
-    {this.bizOrderMarketSearchsearch();}
+    //{this.bizOrderMarketSearchsearch();}
   },
 
   render: function () {

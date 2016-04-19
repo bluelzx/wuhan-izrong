@@ -50,6 +50,7 @@ let PersisterFacade = {
   getLoginUserInfo: ()=> _getLoginUserInfo(),
   getUserId: ()=> _getUserId(),
   getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
+  updateUserInfo: (column, value)=>_updateUserInfo(column, value),
   //interface for ContactStore
   getContact: ()=>_getContact(),
   _getIMNotificationMessage: ()=>_getIMNotificationMessage(),
@@ -109,14 +110,14 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
       orgId: loginUserInfo.orgBeanId,
       token: token,
       lastLoginTime: new Date(),
-      publicTitle: _.isEmpty(loginUserInfo.publicTitle) ? true : loginUserInfo.publicTitle,
-      publicMobile: _.isEmpty(loginUserInfo.publicMobile) ? true : loginUserInfo.publicMobile,
-      publicDepart: _.isEmpty(loginUserInfo.publicDepart) ? true : loginUserInfo.publicDepart,
-      publicPhone: _.isEmpty(loginUserInfo.publicPhone) ? true : loginUserInfo.publicPhone,
-      publicEmail: _.isEmpty(!loginUserInfo.publicEmail) ? true : loginUserInfo.publicEmail,
-      publicAddress: _.isEmpty(loginUserInfo.publicAddress) ? true : loginUserInfo.publicAddress,
-      publicWeChat: _.isEmpty(loginUserInfo.publicWeChat) ? true : loginUserInfo.publicWeChat,
-      publicQQ: _.isEmpty(loginUserInfo.publicQQ) ? true : loginUserInfo.publicQQ
+      publicTitle: !!(loginUserInfo.publicTitle == true || loginUserInfo.publicTitle == null),
+      publicMobile: !!(loginUserInfo.publicMobile == true || loginUserInfo.publicMobile == null),
+      publicDepart: !!(loginUserInfo.publicDepart == true || loginUserInfo.publicDepart == null),
+      publicPhone: !!(loginUserInfo.publicPhone == true || loginUserInfo.publicPhone == null),
+      publicEmail: !!(loginUserInfo.publicEmail == true || loginUserInfo.publicEmail == null),
+      publicAddress: !!(loginUserInfo.publicAddress == true || loginUserInfo.publicAddress == null),
+      publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat == null),
+      publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ == null)
     }, true);
   });
 };
@@ -157,23 +158,25 @@ let _saveImUser = function (imUserBean) {
       realName: imUserBean.realName,
       nameCardFileUrl: imUserBean.nameCardFileUrl,
       department: imUserBean.department,
-      publicDepart: imUserBean.publicDepart,
       jobTitle: imUserBean.jobTitle,
       qqNo: imUserBean.qqNo,
       email: imUserBean.email,
-      publicTitle: imUserBean.publicTitle,
-      mobileNumber: imUserBean.mobileNumber,
-      publicMobile: imUserBean.publicMobile,
-      phoneNumber: imUserBean.phoneNumber,
-      publicPhone: imUserBean.publicPhone,
-      publicEmail: imUserBean.publicEmail,
-      publicAddress: imUserBean.publicAddress,
-      publicWeChat: imUserBean.publicWeChat,
-      photoFileUrl: imUserBean.photoFileUrl,
-      publicQQ: imUserBean.publicQQ,
       weChatNo: imUserBean.weChatNo,
       mute: imUserBean.mute,
-      orgId: imUserBean.orgBeanId
+      mobileNumber: imUserBean.mobileNumber,
+      photoFileUrl: imUserBean.photoFileUrl,
+      orgId: imUserBean.orgBeanId,
+      phoneNumber: imUserBean.phoneNumber,
+      publicTitle: !!(imUserBean.publicTitle == true || imUserBean.publicTitle == null),
+      publicMobile:  !!(imUserBean.publicMobile == true || imUserBean.publicMobile == null),
+      publicDepart:  !!(imUserBean.publicDepart == true || imUserBean.publicDepart == null),
+      publicPhone: !!(imUserBean.publicPhone == true || imUserBean.publicPhone == null),
+      publicEmail:  !!(imUserBean.publicEmail == true || imUserBean.publicEmail == null),
+      publicAddress:  !!(imUserBean.publicAddress == true || imUserBean.publicAddress == null),
+      publicWeChat:  !!(imUserBean.publicWeChat == true || imUserBean.publicWeChat == null),
+      publicQQ:  !!(imUserBean.publicQQ == true || imUserBean.publicQQ == null)
+
+
     }, true);
   });
 };
@@ -275,6 +278,14 @@ let _getOrgByOrgId = function (orgId) {
   } else {
     return orgBeans.filtered('id=' + orgId)[0];
   }
+};
+
+let _updateUserInfo = function (column, value) {
+  _realm.write(() => {
+    _realm.create(LOGINUSERINFO, {
+      column: value
+    }, true);
+  });
 };
 
 let _getContact = function () {
