@@ -37,7 +37,7 @@ let AppLinks = {
   downselfBizOrder: Host + api + '/BizOrderManage/downselfBizOrder',
   updateBizOrder: Host + api + '/BizOrderManage/updateBizOrder',
   getBizOrderCategoryAndItem : Host + api + '/BizOrderManage/getBizOrderCategoryAndItem',
-  updateUserInfo: Host + api +'/Account/updateUserInfo'
+  updateUserInfo: Host + api +'/Account/updateUserInfo',
   //contact
   createGroup: NodeHost + 'createGroup',
   kickOutMember: NodeHost + 'kickOutMember',
