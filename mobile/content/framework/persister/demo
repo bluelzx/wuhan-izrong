@@ -1,6 +1,0 @@
-groupId: 1,
-    groupName: 'group A',
-    groupMasterUid: '001',
-    memberNum: 10,
-    members: {type: 'list', objectType: 'userInfo'},
-    mute: false

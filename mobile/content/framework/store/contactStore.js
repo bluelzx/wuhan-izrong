@@ -4,6 +4,7 @@
 
 let { MSG_TYPE } = require('../../constants/dictIm');
 let PersisterFacade = require('../persister/persisterFacade');
+let AppStore = require('./appStore');
 
 let _getContact = function(){
   //我的群  第一个元素必须为群组
@@ -88,24 +89,34 @@ let _getGroupInfoBySessionId = function(id, currentUserId) {
 
 let _createGroup = function(groupId, groupName,groupMasterUid,members,mute){
   PersisterFacade.createGroup(groupId, groupName,groupMasterUid,members.length,members,mute);
+  AppStore.emitChange();
 }
 
 let _kickOutMember = function(groupId, members) {
   PersisterFacade.kickOutMember(groupId, members);
+  AppStore.emitChange();
 }
 
 let _modifyGroupName = function(groupId, groupName) {
   PersisterFacade.modifyGroupName(groupId, groupName);
+  AppStore.emitChange();
 }
 
 let _dismissGroup = function(groupId) {
   PersisterFacade.dismissGroup(groupId);
+  AppStore.emitChange();
 }
 let _setContactMute = function(userId, value) {
   PersisterFacade.setContactMute(userId, value);
+  AppStore.emitChange();
 }
 let _setGroupMute = function(groupId, value){
   PersisterFacade.setGroupMute(groupId, value);
+  AppStore.emitChange();
+}
+let _leaveGroup = function(groupId){
+  PersisterFacade.leaveGroup(groupId);
+  AppStore.emitChange();
 }
 
 let ContactStore = {
@@ -113,7 +124,7 @@ let ContactStore = {
   getUserInfoBySessionId:_getUserInfoBySessionId,       //根据会话Id获得用户信息
   getContact:_getContact ,                 //获得联系人和群组信息   ok
   getIMNotificationMessage:_getIMNotificationMessage,  //获得推送的通知消息
-  getUsers:_getUsers,                             //获得所有用户    ok
+  getUsers:_getUsers,                             //获得所有用户 按照org分组    ok
   getUserInfoByUserId:_getUserInfoByUserId,       // 根据userId获得用户信息   ok
   getGroupDetailById:_getGroupDetailById,          //更具groupId获得群组信息    ok
   getUsersExpress:_getUsersExpress,               //获得除了已存在groupId群组中的用户
@@ -126,6 +137,7 @@ let ContactStore = {
   dismissGroup:_dismissGroup,
   setContactMute:_setContactMute, //屏蔽用户
   setGroupMute:_setGroupMute,
+  leaveGroup:_leaveGroup
 };
 
 module.exports = ContactStore;

@@ -837,7 +837,7 @@ var GiftedMessenger = React.createClass({
   },
 
   render() {
-    LayoutAnimation.spring();
+    //LayoutAnimation.spring();
     return (
       <View
         style={this.styles.container}

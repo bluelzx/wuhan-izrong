@@ -1,9 +1,6 @@
 /**
  * Created by vison on 16/3/31.
  */
-
-
-
 let DeviceSchema = {
   name: "device",
   primaryKey: 'id',
@@ -84,7 +81,7 @@ let ImUserInfoSchema = {
     publicAddress: {type: 'bool', optional: true},
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
-    orgBeanId: {type: 'int', optional: true},
+    orgId: {type: 'int', optional: true},
     mute: {type: 'bool', optional: true}  //是否屏蔽该用户
   }
 };
@@ -114,7 +111,7 @@ let LoginUserInfoSchema = {
     publicAddress: {type: 'bool', optional: true},
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
-    orgBeanId: {type: 'int', optional: true},
+    orgId: {type: 'int', optional: true},
     lastLoginTime:{type: 'date', optional: true},  //本地增加,用于多用户登陆排序
     token: {type: 'string', optional: true}
   }

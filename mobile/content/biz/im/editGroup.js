@@ -13,17 +13,32 @@ let DeleteMember = require('./deleteMember');
 let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let DictIcon = require('../../constants/dictIcon');
-
+let AppStore = require('../../framework/store/appStore');
 let MembersBar = require('./membersBar');
 
 let EditGroup = React.createClass({
 
-  getInitialState:function () {
+  componentDidMount() {
+    AppStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function () {
+    AppStore.removeChangeListener(this._onChange);
+  },
+  _onChange: function () {
+      this.setState(this.getStateFromStores());
+  },
+
+  getStateFromStores: function() {
     let groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
     return {
-      falseSwitchIsOn:groupInfo.isMute,
+      falseSwitchIsOn:groupInfo.mute,
       groupInfo:groupInfo
     };
+  },
+
+  getInitialState: function(){
+    return this.getStateFromStores();
   },
 
   renderMember: function() {
@@ -51,12 +66,11 @@ let EditGroup = React.createClass({
       ()=>{
         return  ContactAction.deleteGroup(this.props.param.groupId).then(
           ()=>{
-            this.props.navigator.pop();
+            this.props.navigator.popToTop();
           }
         );
       }
     );
-
   },
 
   render: function() {
