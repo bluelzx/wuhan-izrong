@@ -153,7 +153,7 @@ let Register_uploadNameCard = React.createClass({
         this.state.nameCardFileUrl = response.fileId;
       }).catch((errorData) => {
         //Alert(msg.msgContent);
-        throw errorData;
+        Alert(errorData);
       });
     });
   },

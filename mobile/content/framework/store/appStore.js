@@ -70,12 +70,13 @@ let _appInit = () => {
       _info.netWorkState = isConnected;
     }
   );
+  Persister.saveFilters();
+
   _info.initLoadingState = false;
   _.assign(_data, {
     token: _getToken(),
     filters: Persister.getFilters()
   });
-  Persister.saveFilters();
   AppStore.emitChange();
 };
 

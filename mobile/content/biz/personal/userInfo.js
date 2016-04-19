@@ -92,11 +92,7 @@ let UserInfo = React.createClass({
       return LoginAction.logout(this.state.userId)
         .then((response) => {
           const { navigator } = this.props;
-          if (navigator) {
-            navigator.push({
-              comp: Login
-            });
-          }
+          navigator.resetTo(Login);
         }).catch((errorData) => {
           Alert(errorData);
         });
@@ -138,24 +134,29 @@ let UserInfo = React.createClass({
             </View>
           </TouchableHighlight>
 
-          {this.renderRow("手机号",require('../../image/user/mobileNo.png'),'mobile', this.state.mobileNumber,'publicMobile',this.state.publicMobile, 'name', 20, Validation.isPhone)}
+          {this.renderRow("手机号", require('../../image/user/mobileNo.png'), 'mobile', this.state.mobileNumber, 'publicMobile',
+            this.state.publicMobile, 'name', 20, Validation.isPhone)}
 
-          <Item desc="手机号" imgPath={require('../../image/user/mobileNo.png')} page='userInfo'
-                value={this.state.mobileNumber}
-                func={() => this.toEdit("手机号", 'mobile', this.state.mobileNumber,'publicMobile',this.state.publicMobile, 'name', 20, Validation.isPhone)}/>
+          {this.renderRow("座机号", require('../../image/user/telephoneNo.png'), 'telephoneNo', this.state.phoneNumber, 'publicPhone',
+            this.state.publicPhone, 'telephone', 13, Validation.isTelephone)}
 
-          <Item desc="座机号" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.phoneNumber}
-                page='userInfo'
-                func={() => this.toEdit("座机号", 'telephoneNo', this.state.phoneNumber,'publicPhone',this.state.publicPhone, 'telephone', 13, Validation.isTelephone)}/>
+          {this.renderRow("QQ", require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'publicQQ',
+            this.state.publicQQ, 'number', 20, Validation.isQQ)}
 
-          <Item desc="QQ" imgPath={require('../../image/user/qqNo.png')} value={this.state.qqNo} page='userInfo'
-                func={() => this.toEdit("QQ", 'qqNo', this.state.qqNo,'publicQQ',this.state.publicQQ, 'number', 20, Validation.isQQ)}/>
+          {this.renderRow("微信", require('../../image/user/wechatNo.png'), 'wechatNo', this.state.weChatNo, 'publicWeChat',
+            this.state.publicWeChat, '', 40, '')}
 
-          <Item desc="微信" imgPath={require('../../image/user/wechatNo.png')} value={this.state.weChatNo} page='userInfo'
-                func={() => this.toEdit("微信", 'wechatNo', this.state.weChatNo,'publicWeChat',this.state.publicWeChat, '', 40, '')}/>
+          {this.renderRow("电子邮箱", require('../../image/user/email.png'), 'email', this.state.email, 'publicEmail',
+            this.state.publicEmail, '', 60, Validation.isEmail)}
 
-          <Item desc="电子邮箱" imgPath={require('../../image/user/email.png')} value={this.state.email} page='userInfo'
-                func={() => this.toEdit("邮箱", 'email', this.state.email,'publicEmail',this.state.publicEmail, '', 60, Validation.isEmail)}/>
+          {this.renderRow("机构", require('../../image/user/comp.png'), 'organization', this.state.orgBeanName, '',
+           '', 'name', 20, '')}
+
+          {this.renderRow("部门", require('../../image/user/comp.png'), 'depart', this.state.department, 'publicDepart',
+            this.state.publicDepart, 'name', 20, '')}
+
+          {this.renderRow("职位", require('../../image/user/jobTitle.png'), 'jobTitle', this.state.jobTitle, 'publicTitle',
+            this.state.publicTitle, 'name', 20, '')}
 
           <Item style={{marginTop:20}} desc="机构" imgPath={require('../../image/user/comp.png')}
                 value={this.state.orgBeanName} page='userInfo'

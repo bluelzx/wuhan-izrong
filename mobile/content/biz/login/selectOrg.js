@@ -14,11 +14,13 @@ let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let AlphabetListView = require('react-native-alphabetlistview');
+var thisValue = '';
 
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
     this.getOrgList();
     let orgBuildList = AppStore.getOrgList();
+    //thisValue: this.props.param.func;
     return {
       data: orgBuildList
     };

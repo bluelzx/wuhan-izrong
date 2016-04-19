@@ -19,10 +19,11 @@ let GroupSchema = {
   primaryKey: 'groupId',
   properties: {
     groupId: {type: 'int', optional: true},
+    groupImageUrl:{type: 'string', optional: true},
     groupName: {type: 'string', optional: true},
     groupMasterUid: {type: 'int', optional: true},
     memberNum: {type: 'int', optional: true},
-    members: {type: 'list', objectType: 'imUserInfo'},
+    members: {type: 'string', optional: true},
     mute: {type: 'bool', optional: true}
   }
 };
@@ -32,7 +33,7 @@ let MessageSchema = {
   primaryKey: 'sessionId',
   properties: {
     sessionId: {type: 'int', optional: true},
-    msgId: {type: 'int', optional: true},
+    msgId: {type: 'string', optional: true},
     fromUId: {type: 'int', optional: true},
     groupId: {type: 'int', optional: true},
     toId: {type: 'int', optional: true},
@@ -41,7 +42,8 @@ let MessageSchema = {
     content: {type: 'string', optional: true},
     msgType: {type: 'string', optional: true},
     revTime: {type: 'date', optional: true},
-    isRead: {type: 'bool', option: true}
+    isRead: {type: 'bool', option: true},
+    status:{type: 'string', optional: true}//状态: 是否发送成功
   }
 };
 
@@ -84,8 +86,8 @@ let ImUserInfoSchema = {
     publicAddress: {type: 'bool', optional: true},
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
-    orgBeanId: {type: 'int', optional: true},
-    mute: {type: 'bool', optional: true}  //是否屏蔽该用户
+    mute: {type: 'bool', optional: true},  //是否屏蔽该用户
+    orgId:{type: 'int', optional: true}
   }
 };
 
@@ -114,7 +116,7 @@ let LoginUserInfoSchema = {
     publicAddress: {type: 'bool', optional: true},
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
-    orgBeanId: {type: 'int', optional: true},
+    orgId: {type: 'int', optional: true},
     lastLoginTime:{type: 'date', optional: true},  //本地增加,用于多用户登陆排序
     token: {type: 'string', optional: true}
   }
@@ -141,27 +143,6 @@ let OrgBeanSchema = {
     isDeleted: {type: 'bool', optional: true},
     isApply: {type: 'bool', optional: true},
     remark: {type: 'string', optional: true}
-  }
-};
-
-let BizOrderCategorySchema = {
-  name: "bizOrderCategory",
-  primaryKey: 'displaySeq',
-  properties: {
-    displaySeq: {type: 'string', optional: true},
-    bizCategory: {type: 'string', optional: true},
-    bizCategoryDesc: {type: 'string', optional: true},
-    bizOrderItemBeans: {type: 'list', objectType: 'bizOrderItem'}
-  }
-};
-
-let BizOrderItemSchema = {
-  name: "bizOrderItem",
-  primaryKey: 'displaySeq',
-  properties: {
-    displaySeq: {type: 'string', optional: true},
-    bizItem: {type: 'string', optional: true},
-    bizItemDesc: {type: 'string', optional: true}
   }
 };
 
@@ -215,8 +196,6 @@ module.exports = {
   ImUserInfoSchema: ImUserInfoSchema,
   LoginUserInfoSchema: LoginUserInfoSchema,
   OrgBeanSchema: OrgBeanSchema,
-  BizOrderCategorySchema: BizOrderCategorySchema,
-  BizOrderItemSchema: BizOrderItemSchema,
   FilterItemSchema:FilterItemSchema,
   FilterItemsSchema:FilterItemsSchema,
   OrderItemSchema:OrderItemSchema,
@@ -227,8 +206,6 @@ module.exports = {
   IMUSERINFO: 'imUserInfo',
   LOGINUSERINFO: 'loginUserInfo',
   ORGBEAN: 'orgBean',
-  BIZORDERCATEGORY: 'bizOrderCategory',
-  BIZORDERITEM: 'bizOrderItem',
   FILTERITEMS:'filterItems',
   FILTERITEM:'filterItem',
   ORDERITEM:'orderItem',

@@ -1,4 +1,4 @@
-let { Host, NodeHost ,ImHost } = require('../../config');
+let { Host, ImHost ,NodeHost} = require('../../config');
 let imSocket = 'ws://' + ImHost + '/';
 let imHttp = 'http://' + ImHost + '/';
 
@@ -27,7 +27,7 @@ let AppLinks = {
   logout: Host + api + '/Account/logout',
   register: Host + pub + '/register',
   uploadFile: Host + pub + '/File/upload',
-  updateUserInfo: Host + api + '/Account/updateUserInfo',
+  updateUserInfo: Host + api + '/Account/updateUserInfoList',
   getOrgList: Host + pub + '/getOrgList/',
 
   bizOrderMarketSearchDefaultSearch: Host + api + '/BizOrderMarketSearch/defaultSearch',
@@ -41,7 +41,7 @@ let AppLinks = {
   createGroup: NodeHost + 'createGroup',
   kickOutMember: NodeHost + 'kickOutMember',
   updateGroupName: NodeHost + 'updateGroupName',
-  acceptInvitation: NodeHost + 'acceptInvitation',
+  acceptInvitation: NodeHost + 'acceptInvitation'
 
 };
 
