@@ -383,8 +383,6 @@ let _getGroupInfoByGroupId = function (groupId) {
   return _realm.objects(GROUP).filtered('groupId = ' + groupId)[0];
 };
 
-let _getGroupMembersByGroupId = function (groupId) {
-  return _getGroupInfoByGroupId(groupId).members;
 let _getGroupMembersByGroupId = function(groupId) {
   let orgs = _realm.objects(ORGBEAN);
   let users = _getGroupInfoByGroupId(groupId).members;
@@ -426,7 +424,7 @@ let _getUserInfoByUserId = function (id) {
   return users;
 };
 
-let _isInGroup = function (orgMembers, id) {
+
 let _isInGroup = function(existMembers, id){
   let array = [];
   for (let mem of existMembers) {
@@ -495,10 +493,10 @@ let _createGroup = function(groupId, groupName,groupMasterUid,number,members,mut
       memberNum:number,
       members:members,
       mute:mute
-    }
+    };
     _realm.create(GROUP, group, true);
   });
-}
+};
 
 let _kickOutMember = function (groupId, members) {
   let memberList = _realm.objects(GROUP).filtered('groupId = ' + groupId);
@@ -513,7 +511,7 @@ let _kickOutMember = function (groupId, members) {
     !f?mem.push(m):'';
   }
   //memberList[0] = mem;
-  let d = memberList[0]
+  let d = memberList[0];
   let group = {
     groupId:d.groupId,
     groupName:d.groupName,
@@ -521,11 +519,11 @@ let _kickOutMember = function (groupId, members) {
     memberNum:d.memberNum - members.length,
     members:mem,
     mute:d.mute
-  }
+  };
   _realm.write(() => {
     _realm.create(GROUP, group, true);
   });
-}
+};
 
 let _modifyGroupName = function(groupId, groupName){
   let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
@@ -536,12 +534,12 @@ let _modifyGroupName = function(groupId, groupName){
     memberNum:group[0].memberNum,
     members:group[0].members,
     mute:group[0].mute
-  }
+  };
   console.log(newGroup);
   _realm.write(() => {
     _realm.create(GROUP, newGroup, true);
   });
 
-}
+};
 
 module.exports = PersisterFacade;
