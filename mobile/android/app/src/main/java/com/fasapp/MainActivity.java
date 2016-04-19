@@ -2,6 +2,7 @@ package com.fasapp;
 
 import com.facebook.react.ReactActivity;
 import io.realm.react.RealmReactPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
 import com.fasapp.BuildConfig;
 import com.fasapp.pakage.ZXReactPackage;
@@ -40,6 +41,7 @@ public class MainActivity extends ReactActivity {
     @Override
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
+            new RNDeviceInfo(),
             new MainReactPackage(),
             new RealmReactPackage(),
             new VectorIconsPackage(),

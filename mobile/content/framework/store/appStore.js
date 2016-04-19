@@ -15,6 +15,11 @@ let _info = {
   isForceLogout: false
 };
 
+let DeviceInfo = require('react-native-device-info');
+let _device = {
+  id: DeviceInfo.getUniqueID()
+};
+
 let _data = {};
 
 let AppStore = _.assign({}, EventEmitter.prototype, {
@@ -27,6 +32,8 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   emitChange: function (event = _info.CHANGE_EVENT) {
     this.emit(event);
   },
+
+  getDeviceId: () => _device.id,
   getNetWorkState: () => _info.netWorkState,
   getInitLoadingState: () => _info.initLoadingState,
   isLogout: () => _info.isLogout,

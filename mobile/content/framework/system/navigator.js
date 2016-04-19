@@ -12,6 +12,7 @@ var {
   ToastAndroid
   } = React;
 var AppAction = require('../action/appAction');
+var ImAction = require('../action/imAction');
 AppAction.appInit();
 var TabView = require('./tabView');
 var Login = require('../../biz/login/login');
@@ -148,7 +149,7 @@ var Main = React.createClass({
     //var initComp = Chat;
     if (this.state.token) {
       initComp = TabView;
-      AppAction.imInit();
+      ImAction.imInit();
     }
     return (
       <View style={{ width: Device.width, height: Device.height }}>

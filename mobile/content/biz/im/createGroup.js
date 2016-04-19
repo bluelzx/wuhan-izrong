@@ -13,9 +13,8 @@ let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Chat = require('./chat');
-let CONSTANT = require('./itemType');
 let ChooseList = require('./chooseList');
-let ItemType = require('./itemType');
+let { SESSION_TYPE } = require('../../constants/dictIm');
 
 let CreateGroup = React.createClass({
 
@@ -83,7 +82,7 @@ let CreateGroup = React.createClass({
       this.props.navigator.replacePreviousAndPop(
         {
           comp: Chat,
-          param: {title: userInfo.userName, chatType: ItemType.USER, userId: userId}
+          param: {title: userInfo.userName, chatType: SESSION_TYPE.USER, userId: userId}
         }
       );
     }else{
@@ -102,7 +101,7 @@ let CreateGroup = React.createClass({
               this.props.navigator.replacePreviousAndPop(
                 {
                   comp: Chat,
-                  param: {title: this.state.groupName, chatType: ItemType.GROUP, groupMasterUid: this.state.userInfo.userId}
+                  param: {title: this.state.groupName, chatType: SESSION_TYPE.GROUP, groupMasterUid: this.state.userInfo.userId}
                 }
               );
             }).catch((errorData) => {

@@ -32,6 +32,8 @@ let DictIcon = require('../../constants/dictIcon');
 
 let ImagePicker = require('../utils/imagePicker');
 
+let KeyGenerator = require('../../comp/utils/keyGenerator');
+
 var GiftedMessenger = React.createClass({
 
   firstDisplay: true,
@@ -362,12 +364,14 @@ var GiftedMessenger = React.createClass({
   },
 
   onSend() {
+    var msgId = KeyGenerator.getMessageKey(this.props.sessionId);
     var message = {
       text: this.state.text.trim(),
       name: this.props.senderName,
       image: this.props.senderImage,
       position: 'right',
-      date: new Date()
+      date: new Date(),
+      msgId: msgId
     };
     if (this.props.onCustomSend) {
       this.props.onCustomSend(message);
