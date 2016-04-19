@@ -1,4 +1,4 @@
-let { Host, ImHost } = require('../../config');
+let { Host, NodeHost ,ImHost } = require('../../config');
 let imSocket = 'ws://' + ImHost + '/';
 let imHttp = 'http://' + ImHost + '/';
 
@@ -37,7 +37,6 @@ let AppLinks = {
   downselfBizOrder: Host + api + '/BizOrderManage/downselfBizOrder',
   updateBizOrder: Host + api + '/BizOrderManage/updateBizOrder',
   getBizOrderCategoryAndItem : Host + api + '/BizOrderManage/getBizOrderCategoryAndItem',
-  updateUserInfo: Host + api +'/Account/updateUserInfo',
   //contact
   createGroup: NodeHost + 'createGroup',
   kickOutMember: NodeHost + 'kickOutMember',
