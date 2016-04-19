@@ -146,11 +146,11 @@ let UserInfo = React.createClass({
           {this.renderRow("微信", require('../../image/user/wechatNo.png'), 'wechatNo', this.state.weChatNo, 'publicWeChat',
             this.state.publicWeChat, '', 40, '')}
 
-          {this.renderRow("电子邮箱", require('../../image/user/email.png'), 'email', this.state.email, 'publicEmail',
+          {this.renderRow("邮箱", require('../../image/user/email.png'), 'email', this.state.email, 'publicEmail',
             this.state.publicEmail, '', 60, Validation.isEmail)}
 
           {this.renderRow("机构", require('../../image/user/comp.png'), 'organization', this.state.orgBeanName, '',
-           '', 'name', 20, '')}
+            '', 'name', 20, '')}
 
           {this.renderRow("部门", require('../../image/user/comp.png'), 'depart', this.state.department, 'publicDepart',
             this.state.publicDepart, 'name', 20, '')}
