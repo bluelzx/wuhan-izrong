@@ -56,23 +56,28 @@ let Messenger = React.createClass({
   handleSend(message = {}, rowID = null) {
     // Your logic here
     // Send message.text to your server
-    let msgToSend = { sessionId: this.props.param.sessionId };
+    let msgToSend = {
+      sessionId: this.props.param.sessionId,
+      msgId: message.msgId,
+      fromUId: null,
+      contentType: MSG_CONTENT_TYPE.TEXT,
+      content: message.text,
+      msgType: {type: 'string', optional: true},
+      revTime: null,
+      isRead: true
+    };
     if (this.props.param.chatType === SESSION_TYPE.USER) {
       msgToSend.data = {
-        // toUid: this.props.param.userId,
-        toUid: 'u002',
-        contentType: MSG_CONTENT_TYPE.TEXT,
-        content: message.text,
-        msgId: message.msgId,
-        command: COMMAND_TYPE.SEND_P2P_MSG
+        // toId: this.props.param.userId,
+        toId: 'u002',
+        type: SESSION_TYPE.USER,
+        msgType: COMMAND_TYPE.SEND_P2P_MSG
       };
     } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
       msgToSend.data = {
-        toUid: this.props.param.groupId,
-        contentType: MSG_CONTENT_TYPE.TEXT,
-        content: message.text,
-        msgId: message.msgId,
-        command: COMMAND_TYPE.SEND_GROUP_MSG
+        groupId: this.props.param.groupId,
+        type: SESSION_TYPE.GROUP,
+        msgType: COMMAND_TYPE.SEND_GROUP_MSG
       };
     }
 
