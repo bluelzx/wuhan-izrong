@@ -4,13 +4,14 @@
 
 let React = require('react-native');
 let {Text, View, TextInput, Platform, TouchableOpacity, Image} = React;
-let { Device } = require('mx-artifacts');
+let { Device, Alert } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let CheckBox = require('./checkBox');
 let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
+let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Chat = require('./chat');
 let ChooseList = require('./chooseList');
 let { SESSION_TYPE } = require('../../constants/dictIm');
@@ -72,7 +73,7 @@ let CreateGroup = React.createClass({
 
   createGroup: function(members) {
     console.log(members);
-    if(!members || members.length == 0)
+    if(0 == Object.keys(members).length)
       return;
     else if(members.length == 1){
       let userId = members[0];
@@ -85,30 +86,44 @@ let CreateGroup = React.createClass({
         }
       );
     }else{
-      //setp1: 发送建群的请求   返回groupId
-      let groupId = ContactAction.createGroup(members, this.state.groupName, this.state.userInfo.userId);
-      //setp2: 跳转到群聊页面
-      this.props.navigator.replacePreviousAndPop(
-        {
-          comp: Chat,
-          param: {title: this.state.groupName, chatType: SESSION_TYPE.GROUP, groupMasterUid: 0}
+      dismissKeyboard();
+      this.props.exec(() => {
+          return ContactAction.createGroup(members, this.state.groupName, this.state.userInfo.userId)
+            .then((response)=>{
+              if(!!response.errCode)
+                throw response;
+              //else{
+              //  let groupId = response.gid;
+              //   ContactAction.saveGroup(members, this.state.groupName, this.state.userInfo.userId);
+              //}
+            }).then(()=>{
+              //setp2: 跳转到群聊页面
+              this.props.navigator.replacePreviousAndPop(
+                {
+                  comp: Chat,
+                  param: {title: this.state.groupName, chatType: SESSION_TYPE.GROUP, groupMasterUid: this.state.userInfo.userId}
+                }
+              );
+            }).catch((errorData) => {
+            Alert(errorData.errCode);
+          });
         }
       );
+
+
     }
   },
 
   renderLabel: function() {
     let memberList = this.state.memberList;
     let count = 0;
-    let members = [];
     for(let userId in memberList){
       if(!!memberList[userId]){
         count ++ ;
-        members.push(userId);
       }
     }
     return (
-      <TouchableOpacity onPress={() => this.createGroup(members)}>
+      <TouchableOpacity onPress={() => this.createGroup(memberList)}>
         <Text style={{ marginLeft:-20,color:count==0?'#6B849C':'white'}}>{'创建(' + count + ')'}</Text>
       </TouchableOpacity>
     );

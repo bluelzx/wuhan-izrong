@@ -100,8 +100,7 @@ var Main = React.createClass({
     co(function* () {
       yield func()
         .then((response) => {
-          //console.log(response);
-          //Alert(response);
+          console.log(response);
         })
         .catch((errorData) => {
           if (showLoading) {
