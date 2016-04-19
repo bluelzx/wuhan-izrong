@@ -2,6 +2,7 @@ let Manager = require('./manager');
 
 let { ImWebSocket } = require('../../constants/appLinks');
 let AppStore = require('../store/appStore');
+let Resolver = require('./resolver');
 
 let _socket = null;
 
@@ -19,6 +20,7 @@ let ImSocket = {
 
     _socket.on('message', function (data) {
       console.log('###### message %s', JSON.stringify(data));
+      Resolver.deal(data);
     });
 
     _socket.on('close', function (reason) {

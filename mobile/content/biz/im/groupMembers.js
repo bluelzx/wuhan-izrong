@@ -14,7 +14,7 @@ let GroupMembers = React.createClass({
   getInitialState: function() {
     let groupId = this.props.param.groupId;
     return {
-      data:ContactStore.getUsersGroupByOrgByGroupId(groupId)
+      data:ContactStore.getUsersByGroupId(groupId)
     };
   },
 

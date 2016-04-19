@@ -74,8 +74,25 @@ let _getGroupInfoBySessionId = function(id, currentUserId) {
   return _getGroupDetailById(groupId);
 }
 
-let _getUsersGroupByOrgByGroupId = function(groupId){
-  return PersisterFacade.getUsersGroupByOrgByGroupId(groupId);
+/**
+ *  groupId: {type: 'int', optional: true},
+ groupName: {type: 'string', optional: true},
+ groupMasterUid: {type: 'int', optional: true},
+ memberNum: {type: 'int', optional: true},
+ members: {type: 'list', objectType: 'imUserInfo'},
+ mute: {type: 'bool', optional: true}
+ */
+
+let _createGroup = function(groupId, groupName,groupMasterUid,members,mute){
+  PersisterFacade.createGroup(groupId, groupName,groupMasterUid,members.length,members,mute);
+}
+
+let _kickOutMember = function(groupId, members){
+  PersisterFacade.kickOutMember(groupId, members);
+}
+
+let _modifyGroupName = function(groupId, groupName){
+  PersisterFacade.modifyGroupName(groupId, groupName);
 }
 
 let ContactStore = {
@@ -89,7 +106,10 @@ let ContactStore = {
   getUsersExpress:_getUsersExpress,               //获得除了已存在groupId群组中的用户
   getUserInfo:_getUserInfo,                       // 获得当前用户信息  ok
   getUsersByGroupId:_getUsersByGroupId ,           //获得群组成员  ok
-  getUsersGroupByOrgByGroupId :_getUsersGroupByOrgByGroupId          //获得群组成员按照机构分类
+
+  createGroup:_createGroup,
+  kickOutMember:_kickOutMember,    //踢人
+  modifyGroupName:_modifyGroupName,
 };
 
 module.exports = ContactStore;

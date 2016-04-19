@@ -38,6 +38,12 @@ let AppLinks = {
   updateBizOrder: Host + api + '/BizOrderManage/updateBizOrder',
   getBizOrderCategoryAndItem : Host + api + '/BizOrderManage/getBizOrderCategoryAndItem',
   updateUserInfo: Host + api +'/Account/updateUserInfo'
+  //contact
+  createGroup: NodeHost + 'createGroup',
+  kickOutMember: NodeHost + 'kickOutMember',
+  updateGroupName: NodeHost + 'updateGroupName',
+  acceptInvitation: NodeHost + 'acceptInvitation',
+
 };
 
 module.exports = AppLinks;

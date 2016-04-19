@@ -1,3 +1,13 @@
+let contactStore = require('../store/contactStore');
+let { NodeHost } = require('../../../config');
+let AppLinks = require('../../constants/appLinks');
+
+let {
+  BFetch,
+  PFetch,
+  UFetch
+  } = require('../network/fetch');
+
 /***
  * 创建群组
  * @param members 成员id
@@ -6,9 +16,26 @@
  */
 
 let _createGroup = function(members, groupName, groupMasterUid) {
-  //return or callback
-
-  return 0;
+  //groupName:'gname',
+  //groupImageUrl:'http:',
+  //members:['u002','u003']
+  let param = {
+    groupName:groupName,
+    groupImageUrl:'http://localhost/group',// 默认的头像
+    members:[]
+  };
+  let memberList = [];
+  for(let i in members){
+    param.members.push(members[i].userId);
+    memberList.push(members[i]);
+  }
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.createGroup, param).then((response)=>{
+      console.log(response.gid);
+      contactStore.createGroup(response.gid, groupName,groupMasterUid,memberList,false);
+      resolve(response.gid);
+    }, reject);
+  });
 };
 
 
@@ -51,7 +78,16 @@ let _dismissGroup = function(groupId){
  * @param groupName
  * */
 let _modifyGroupName = function(groupId, groupName) {
-  return ;
+  let param = {
+    gid:groupId,
+    groupName:groupName
+  }
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.updateGroupName, param).then((response)=>{
+      contactStore.modifyGroupName(groupId, groupName);
+      resolve(response);
+    }, reject);
+  });
 }
 
 /**
@@ -69,11 +105,25 @@ let _addGroupMembers = function(groupId, members) {
  * @param members
  * */
 let _deleteGroupMembers = function(groupId, members) {
-  return ;
+  let param = {
+    gid:groupId,
+    uid:[]
+  };
+  let memberList = [];
+  for(let i in members){
+    param.uid.push(members[i].userId);
+    memberList.push(members[i]);
+  }
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.kickOutMember, param).then((response)=>{
+      contactStore.kickOutMember(groupId, memberList);
+      resolve(response.gid);
+    }, reject);
+  });
 }
 
 let ContactAction = {
-  createGroup:_createGroup,
+  createGroup:(members, groupName, groupMasterUid) => _createGroup(members, groupName, groupMasterUid),
   muteUser:_muteUser,
   muteGroup:_muteGroup,
   deleteGroup:_deleteGroup,

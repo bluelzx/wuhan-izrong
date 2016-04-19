@@ -29,12 +29,12 @@ let Item = React.createClass({
     }
   },
 
-  renderArrow: function(showArrow){
-    if(!showArrow){
+  renderArrow: function (showArrow) {
+    if (!showArrow) {
       return (
         <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
       );
-    }else{
+    } else {
       return null;
     }
   },
@@ -49,8 +49,10 @@ let Item = React.createClass({
               {this.returnImg()}
               <Text style={styles.title}>{this.props.desc}</Text>
             </View>
-            <View style={{flexDirection:'row',alignItems:'center',flex:1,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
-              <Text style={[{fontSize: 15,color: '#ffffff',width:140}]}  numberOfLines={1}>{this.props.value ? this.props.value:"未填写"}</Text>
+            <View
+              style={{flexDirection:'row',alignItems:'center',flex:1,backgroundColor:'#162a40',justifyContent: 'flex-end'}}>
+              <Text style={[{fontSize: 15,color: '#ffffff',width:140,textAlign:'right',marginRight:20}]}
+                    numberOfLines={1}>{this.props.value}</Text>
               {this.renderArrow(this.props.showArrow)}
             </View>
           </View>
@@ -87,7 +89,7 @@ let styles = StyleSheet.create({
   bottomStyle: {
     height: 0.5,
     backgroundColor: '#0a1926',
-    marginLeft:20
+    marginLeft: 20
   }
 });
 module.exports = Item;

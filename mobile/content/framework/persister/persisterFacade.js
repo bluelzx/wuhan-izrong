@@ -37,13 +37,14 @@ let PersisterFacade = {
   getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
   getAllGroups: () => _getAllGroups(),
   getUsersGroupByOrg: () => _getUsersGroupByOrg(),
-  getUsersGroupByOrgByGroupId:(id) => _getUsersGroupByOrgByGroupId(id),
   getUserInfoByUserId: (id) => _getUserInfoByUserId(id),
   getGroupMembersByGroupId: (id) => _getGroupMembersByGroupId(id),
   getGroupInfoByGroupId:(id) => _getGroupInfoByGroupId(id),
   getUsersExpress:(groupId) => _getUsersExpress(groupId),
   getAllSession:() => _getAllSession(),
-
+  createGroup:(groupId, groupName,groupMasterUid,number,members,mute) => _createGroup(groupId, groupName,groupMasterUid,number,members,mute),
+  kickOutMember:(groupId, members) => _kickOutMember(groupId, members),
+  modifyGroupName:(groupId, groupName) => _modifyGroupName(groupId, groupName),
   //interface for AppStore
   saveAppData: (data) => _saveAppData(data),
   saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
@@ -203,11 +204,9 @@ let _getLoginUserInfo = function () {
 };
 
 let _getUserId = function () {
-  let loginUsers = _realm.objects(LOGINUSERINFO);
-  if (loginUsers.length != 0) {
-    let sortedUser = loginUsers.sorted('lastLoginTime', [true]);
-    return sortedUser[0].userId;
-  } else {
+  if (_getLoginUserInfo){
+    return _getLoginUserInfo.userId;
+  }else{
     return '';
   }
 };
@@ -334,7 +333,20 @@ let _getGroupInfoByGroupId = function (groupId) {
 };
 
 let _getGroupMembersByGroupId = function(groupId) {
-  return _getGroupInfoByGroupId(groupId).members;
+  let orgs = _realm.objects(ORGBEAN);
+  let users = _getGroupInfoByGroupId(groupId).members;
+  let orgArray = [];
+  for (let org of orgs) {
+    let id = org.id;
+    let orgMembers = users.filtered('orgBeanId = ' + id);
+    if(orgMembers.length > 0 ){
+      org.orgMembers = orgMembers;
+      orgArray.push(org);
+    }
+
+  }
+  return orgArray;
+
 };
 
 
@@ -345,8 +357,10 @@ let _getUsersGroupByOrg = function () {
   for (let org of orgs) {
     let id = org.id;
     let orgMembers = users.filtered('orgBeanId = ' + id);
-    org.orgMembers = orgMembers;
-    orgArray.push(org);
+    if(orgMembers.length > 0 ){
+      org.orgMembers = orgMembers;
+      orgArray.push(org);
+    }
   }
   return orgArray;
 };
@@ -359,10 +373,10 @@ let _getUserInfoByUserId = function (id) {
   return users;
 };
 
-let _isInGroup = function(orgMembers, id){
+let _isInGroup = function(existMembers, id){
   let array = [];
-  for (let mem of orgMembers) {
-    if (mem.orgBeanId == id) {
+  for (let mem of existMembers) {
+    if (mem.userId == id) {
       array.push(mem);
     }
   }
@@ -391,23 +405,23 @@ let _getUsersExpress = function(groupId) {
   for (let org of orgs) {
     let id = org.id;
     let orgMembers = users.filtered('orgBeanId = ' + id);//机构下的成员
-    org.orgMembers = _isNotInGroup(orgMembers, existMembers);
+    if(existMembers.length != 0) {
+      let m;
+      for (m of existMembers) {
+        if (m.id == id) {
+          break;
+        }
+      }
+      org.orgMembers = _isNotInGroup(orgMembers, m.orgMembers);
+    }else{
+      org.orgMembers = orgMembers;
+    }
     orgArray.push(org);
   }
+
   return orgArray;
 };
 
-let _getUsersGroupByOrgByGroupId = function(groupId) {
-  let orgs = _realm.objects(ORGBEAN);//获得所有机构
-  let existMembers = _getGroupMembersByGroupId(groupId);//获得群组用户
-  let orgArray = [];
-  for (let org of orgs) {
-    let id = org.id;
-    org.orgMembers = _isInGroup(existMembers, id);
-    orgArray.push(org);
-  }
-  return orgArray;
-};
 
 let _getLastMessageBySessionId = function(id) {
   let msgs = _realm.objects(MESSAGE).filtered('sessionId = ' + id);
@@ -418,5 +432,63 @@ let _getLastMessageBySessionId = function(id) {
 let _getAllSession = function() {
   return _realm.objects(MESSAGELIST);
 };
+
+let _createGroup = function(groupId, groupName,groupMasterUid,number,members,mute){
+  _realm.write(() => {
+    let group = {
+      groupId:groupId,
+      groupName:groupName,
+      groupMasterUid:groupMasterUid,
+      memberNum:number,
+      members:members,
+      mute:mute
+    }
+    _realm.create(GROUP, group, true);
+  });
+}
+
+let _kickOutMember = function (groupId, members) {
+  let memberList = _realm.objects(GROUP).filtered('groupId = ' + groupId);
+  let mem = [];
+  for(let m of memberList[0].members){
+    let f = false;
+    for(let kout of members){
+      if(m.userId == kout.userId){
+        f = true;
+      }
+    }
+    !f?mem.push(m):'';
+  }
+  //memberList[0] = mem;
+  let d = memberList[0]
+  let group = {
+    groupId:d.groupId,
+    groupName:d.groupName,
+    groupMasterUid:d.groupMasterUid,
+    memberNum:d.memberNum - members.length,
+    members:mem,
+    mute:d.mute
+  }
+  _realm.write(() => {
+    _realm.create(GROUP, group, true);
+  });
+}
+
+let _modifyGroupName = function(groupId, groupName){
+  let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
+  let newGroup = {
+    groupId:group[0].groupId,
+    groupName:groupName,
+    groupMasterUid:group[0].groupMasterUid,
+    memberNum:group[0].memberNum,
+    members:group[0].members,
+    mute:group[0].mute
+  }
+  console.log(newGroup);
+  _realm.write(() => {
+    _realm.create(GROUP, newGroup, true);
+  });
+
+}
 
 module.exports = PersisterFacade;
