@@ -15,14 +15,14 @@ let pub = "/pub";
 
 let MarketActions ={
 
-  bizOrderMarketSearchDefaultSearch: (url) => _bfetchWithUrl(AppLinks.bizOrderMarketSearchDefaultSearch),
-  bizOrderMarketSearchsearch: (url,p) => _bizOrderMarketSearchsearch(AppLinks.bizOrderMarketSearchsearch, p),
-  getBizOrderInMarket: (url,p) =>_pfetchWithUrlAndP(AppLinks.getBizOrderInMarket, p),
+  bizOrderMarketSearchDefaultSearch: () => _bfetchWithUrl(AppLinks.bizOrderMarketSearchDefaultSearch),
+  bizOrderMarketSearchsearch: (p) => _bfetchWithUrlAndP(AppLinks.bizOrderMarketSearchsearch, p),
+  getBizOrderInMarket: (p) =>_pfetchWithUrlAndP(AppLinks.getBizOrderInMarket, p),
 
-  addBizOrder: (url,p) => _bfetchWithUrlAndP(AppLinks.addBizOrder, p),
-  downselfBizOrder: (url,p) => _pfetchWithUrlAndP(AppLinks.downselfBizOrder, p),
-  updateBizOrder: (url,p) => _bfetchWithUrlAndP(AppLinks.updateBizOrder, p),
-  getBizOrderCategoryAndItem: (url) => _pfetch1WithUrl(AppLinks.getBizOrderCategoryAndItem)
+  addBizOrder: (p) => _bfetchWithUrlAndP(AppLinks.addBizOrder, p),
+  downselfBizOrder: (p) => _pfetchWithUrlAndP(AppLinks.downselfBizOrder, p),
+  updateBizOrder: (p) => _bfetchWithUrlAndP(AppLinks.updateBizOrder, p),
+  getBizOrderCategoryAndItem: () => _pfetch1WithUrl(AppLinks.getBizOrderCategoryAndItem)
 
 };
 
