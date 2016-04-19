@@ -5,8 +5,12 @@ let ImSocket = require('../network/imSocket');
 
 
 // Private Functions
-let _send = (data) => {
-  ImStore.saveMsg(data);
+let _send = (data, bFlag) => {
+  if (!bFlag) {
+    console.log('Message sent again!');
+    ImStore.saveMsg(data);
+  }
+
   ImSocket.send(data)
     .then(() => {
       // ImStore.send();
@@ -18,7 +22,7 @@ let _send = (data) => {
 let ImAction = {
   imInit: () => ImSocket.init(),
   sessionInit: (data) => ImStore.sessionInit(data),
-  send: (data) => _send(data),
+  send: (data, bFlag) => _send(data, bFlag),
   receive: (data) => ImStore.saveMsg(data),
   notificationRegister: (token) => _notificationRegister(token),
   onNotification: (notification) => _onNotification(notification),

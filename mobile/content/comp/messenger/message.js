@@ -112,7 +112,7 @@ export default class Message extends React.Component {
           rowID={rowID}
           styles={styles}
         />
-      )
+      );
     }
     return null;
   }

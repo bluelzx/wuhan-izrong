@@ -923,7 +923,7 @@ var GiftedMessenger = React.createClass({
     };
 
     Object.assign(this.styles, this.props.styles);
-  },
+  }
 });
 
 module.exports = GiftedMessenger;

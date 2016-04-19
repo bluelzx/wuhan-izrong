@@ -64,7 +64,7 @@ let Messenger = React.createClass({
     this.setState(this._getStateFromStores());
   },
 
-  handleSend(message = {}, rowID = null) {
+  handleSend(message = {}, rowID = null, isReSend = false) {
     // Your logic here
     // Send message.content to your server
     let msgToSend = {
@@ -74,7 +74,8 @@ let Messenger = React.createClass({
       contentType: MSG_CONTENT_TYPE.TEXT,
       content: message.content,
       revTime: message.date,
-      isRead: true
+      isRead: true,
+      status: 'ErrorButton'
     };
     if (this.props.param.chatType === SESSION_TYPE.USER) {
       _.assign(msgToSend, {
@@ -91,7 +92,7 @@ let Messenger = React.createClass({
       });
     }
 
-    ImAction.send(msgToSend);
+    ImAction.send(msgToSend, isReSend);
 
     // => In this case, you need also to set onErrorButtonPress
     // this._GiftedMessenger.setMessageStatus('Sent', rowID);
@@ -140,7 +141,7 @@ let Messenger = React.createClass({
   onErrorButtonPress(message = {}, rowID = null) {
     // Your logic here
     // Eg: Re-send the message to your server
-    this.handleSend(message, rowID);
+    this.handleSend(message, rowID, true);
 
     // setTimeout(() => {
     //   // will set the message to a custom status 'Sent' (you can replace 'Sent' by what you want - it will be displayed under the row)

@@ -30,6 +30,9 @@ let Resolver = {
           isRead: false
         });
         break;
+      case MSG_TYPE.SERVER_REC_CONFIRM:
+        ImStore.ackMsg(message.msgId, message.toUid);
+        break;
       default:
         console.log('None message type matched! [%s]', message.msgType);
     }

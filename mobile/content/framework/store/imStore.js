@@ -18,6 +18,7 @@ const {CHANGE_EVENT} = require('../../constants/dictIm');
 
 let testMessages = [
   {
+    msgId: 'user:3:1261049417501:0A6848BA-5E72-410B-A259-1DDA7E7F71C8',
     content: 'Are you building a chat app?',
     name: 'React-Native',
     image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
@@ -25,6 +26,7 @@ let testMessages = [
     date: new Date(2015, 10, 16, 19, 0)
   },
   {
+    msgId: 'user:3:1361049417501:0A6848BA-5E72-410B-A259-1DDA7E7F71C8',
     content: "Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger!",
     name: 'Developer',
     image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
@@ -36,6 +38,7 @@ let testMessages = [
 
 let _data = {
   sessionId: '',
+  toId: '',
   userId: AppStore.getUserId(),
   userPhotoFileUrl: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
   messages: testMessages
@@ -66,6 +69,7 @@ let _imInit = () => {
 
 let _sessionInit = (data) => {
   _data.sessionId = data.sessionId;
+  _data.toId = data.toId;
 };
 
 let _saveMsg = (message) => {
@@ -77,6 +81,7 @@ let _saveMsg = (message) => {
       // TODO. Get user info by id.
 
       _data.messages.push({
+        msgId: message.msgId,
         contentType: message.contentType,
         content: message.content,
         name: message.fromUId,
@@ -86,12 +91,14 @@ let _saveMsg = (message) => {
       });
     } else { // Send
       _data.messages.push({
+        msgId: message.msgId,
         contentType: message.contentType,
         content: message.content,
         name: _data.userId,
         image: _data.userPhotoFileUrl,
         position: 'right',
-        date: message.revTime
+        date: message.revTime,
+        status: message.status
       });
     }
 
@@ -100,8 +107,21 @@ let _saveMsg = (message) => {
 };
 
 let _ackMsg = (msgId, toUid) => {
+  if (_data.toId === toUid) {
+    _data.messages.find((value, index, arr) => {
+      if (value.msgId === msgId) {
+        value.status = 'Sent';
+        return true;
+      }
+      return false;
+    });
 
-  ImStore.emitChange(CHANGE_EVENT.UPDATE, message);
+    ImStore.emitChange(CHANGE_EVENT.CHANGE);
+  }
+
+  // TODO. Update realm of the status for message.
+
+  // ImStore.emitChange(CHANGE_EVENT.UPDATE, message);
 };
 
 module.exports = ImStore;

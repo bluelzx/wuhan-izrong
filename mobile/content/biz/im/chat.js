@@ -19,7 +19,9 @@ let Chat = React.createClass({
 
   componentDidMount() {
     ImAction.sessionInit({
-      sessionId: this.props.param.sessionId
+      sessionId: this.props.param.sessionId,
+      // toId: this.props.param.chatType === SESSION_TYPE.USER ? this.props.param.userId : this.props.param.groupId
+      toId: 'u002'
     });
     AppStore.addChangeListener(this._onChange);
   },
@@ -75,7 +77,7 @@ let Chat = React.createClass({
     }
     this.props.navigator.push({
       comp: comp,
-      param:item
+      param: item
     });
   },
 
