@@ -29,18 +29,18 @@ const {
 let {Platform} = React;
 
 let PersisterFacade = {
-  getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
+  getLastMessageBySessionId: (id) => _getLastMessageBySessionId(id),
   getAllGroups: () => _getAllGroups(),
   getUsersGroupByOrg: () => _getUsersGroupByOrg(),
-  getUsersGroupByOrgByGroupId:(id) => _getUsersGroupByOrgByGroupId(id),
+  getUsersGroupByOrgByGroupId: (id) => _getUsersGroupByOrgByGroupId(id),
   getUserInfoByUserId: (id) => _getUserInfoByUserId(id),
   getGroupMembersByGroupId: (id) => _getGroupMembersByGroupId(id),
-  getGroupInfoByGroupId:(id) => _getGroupInfoByGroupId(id),
-  getUsersExpress:(groupId) => _getUsersExpress(groupId),
-  getAllSession:() => _getAllSession(),
-  createGroup:(groupId, groupName,groupMasterUid,number,members,mute) => _createGroup(groupId, groupName,groupMasterUid,number,members,mute),
-  kickOutMember:(groupId, members) => _kickOutMember(groupId, members),
-  modifyGroupName:(groupId, groupName) => _modifyGroupName(groupId, groupName),
+  getGroupInfoByGroupId: (id) => _getGroupInfoByGroupId(id),
+  getUsersExpress: (groupId) => _getUsersExpress(groupId),
+  getAllSession: () => _getAllSession(),
+  createGroup: (groupId, groupName, groupMasterUid, number, members, mute) => _createGroup(groupId, groupName, groupMasterUid, number, members, mute),
+  kickOutMember: (groupId, members) => _kickOutMember(groupId, members),
+  modifyGroupName: (groupId, groupName) => _modifyGroupName(groupId, groupName),
   //interface for AppStore
   saveAppData: (data) => _saveAppData(data),
   saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
@@ -61,18 +61,18 @@ let PersisterFacade = {
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=>_getOrgList(),
-  deleteDevice:()=> _deleteDevice()
+  deleteDevice: ()=> _deleteDevice()
 };
 
 console.log(Realm.defaultPath);
 let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema, LoginUserInfoSchema, OrgBeanSchema,
     FilterItemSchema, FilterItemsSchema, OrderItemSchema, MessageListSchema],
-  schemaVersion: 2
+  schemaVersion: 4
 });
 
 //test method
-let _deleteDevice = function(){
+let _deleteDevice = function () {
   _realm.write(() => {
     let devices = _realm.objects(DEVICE);
     _realm.delete(devices); // Deletes all books
@@ -82,16 +82,16 @@ let _deleteDevice = function(){
 let _saveAppData = function (data) {
   let loginUserInfo = data.appUserInfoOutBean;
   let token = data.appToken;
-  let orgBeanMap = data.orgBeanMap;
+  let orgBeanList = data.orgBeanList;
   let appUserGroupBeanList = data.appUserGroupBeanList;
   let imUserBeanList = data.imUserBeanList;
-  _saveLoginUserInfo(loginUserInfo,token);
+  _saveLoginUserInfo(loginUserInfo, token);
   _saveImUsers(imUserBeanList);
-  //_saveOrgBeanMap(orgBeanMap);
-  //_saveAppUserGroupBeanList(appUserGroupBeanList);
+  _saveOrgBeanList(orgBeanList);
+  _saveAppUserGroupBeanList(appUserGroupBeanList);
 };
 
-let _saveLoginUserInfo = function (loginUserInfo,token) {
+let _saveLoginUserInfo = function (loginUserInfo, token) {
   _realm.write(() => {
     _realm.create(LOGINUSERINFO, {
       userId: loginUserInfo.userId,
@@ -106,7 +106,7 @@ let _saveLoginUserInfo = function (loginUserInfo,token) {
       jobTitle: loginUserInfo.jobTitle,
       phoneNumber: loginUserInfo.phoneNumber,
       photoFileUrl: loginUserInfo.photoFileUrl,
-      orgBeanId: loginUserInfo.orgBeanId,
+      orgId: loginUserInfo.orgBeanId,
       token: token,
       lastLoginTime: new Date(),
       publicTitle: _.isEmpty(loginUserInfo.publicTitle) ? true : loginUserInfo.publicTitle,
@@ -129,14 +129,15 @@ let _saveAppUserGroupBeanList = function (appUserGroupBeanList) {
 
 };
 
-let _saveAppUserGroupBean =function(appUserGroupBean){
+let _saveAppUserGroupBean = function (appUserGroupBean) {
   _realm.write(() => {
     _realm.create(GROUP, {
       groupId: appUserGroupBean.groupId,
+      groupImageUrl: appUserGroupBean.groupImageUrl,
       groupName: appUserGroupBean.groupName,
       groupMasterUid: appUserGroupBean.groupMasterUid,
-      memberNum: appUserGroupBean.memberNum,
-      members: appUserGroupBean.members,
+      memberNum: appUserGroupBean.members.length,
+      members: JSON.stringify(appUserGroupBean.members),
       mute: appUserGroupBean.mute
     }, true);
   });
@@ -144,12 +145,11 @@ let _saveAppUserGroupBean =function(appUserGroupBean){
 
 let _saveImUsers = function (imUserBeanList) {
   imUserBeanList.forEach(function (imUserBean) {
-    console.log(imUserBean);
     _saveImUser(imUserBean);
   });
 };
 
-let _saveImUser = function(imUserBean){
+let _saveImUser = function (imUserBean) {
   _realm.write(() => {
     _realm.create(IMUSERINFO, {
       userId: imUserBean.userId,
@@ -178,8 +178,8 @@ let _saveImUser = function(imUserBean){
   });
 };
 
-let _saveOrgBeanMap = function (orgBeanMap) {
-  orgBeanMap.forEach(function (orgBean) {
+let _saveOrgBeanList = function (orgBeanList) {
+  orgBeanList.forEach(function (orgBean) {
     console.log(orgBean);
     _saveOrgBeanItem(orgBean);
   });
@@ -333,10 +333,17 @@ let _saveFilters = function () {
 let _getFilters = function () {
   let filterItems = _realm.objects(FILTERITEMS);
   let orderItems = _realm.objects(ORDERITEM);
-  console.log(filterItems);
+  let filtersArray = new Array();
+  let orderArray = new Array();
+  filterItems.forEach(function (filterItem) {
+    filtersArray.push(filterItem)
+  });
+  orderItems.forEach(function (orderItem) {
+    orderArray.push(orderItem)
+  });
   return {
-    filterItems: filterItems,
-    orderItems: orderItems
+    filterItems: filtersArray,
+    orderItems: orderArray
   }
 };
 
@@ -383,14 +390,14 @@ let _getGroupInfoByGroupId = function (groupId) {
   return _realm.objects(GROUP).filtered('groupId = ' + groupId)[0];
 };
 
-let _getGroupMembersByGroupId = function(groupId) {
+let _getGroupMembersByGroupId = function (groupId) {
   let orgs = _realm.objects(ORGBEAN);
   let users = _getGroupInfoByGroupId(groupId).members;
   let orgArray = [];
   for (let org of orgs) {
     let id = org.id;
     let orgMembers = users.filtered('orgBeanId = ' + id);
-    if(orgMembers.length > 0 ){
+    if (orgMembers.length > 0) {
       org.orgMembers = orgMembers;
       orgArray.push(org);
     }
@@ -408,7 +415,7 @@ let _getUsersGroupByOrg = function () {
   for (let org of orgs) {
     let id = org.id;
     let orgMembers = users.filtered('orgBeanId = ' + id);
-    if(orgMembers.length > 0 ){
+    if (orgMembers.length > 0) {
       org.orgMembers = orgMembers;
       orgArray.push(org);
     }
@@ -425,7 +432,7 @@ let _getUserInfoByUserId = function (id) {
 };
 
 
-let _isInGroup = function(existMembers, id){
+let _isInGroup = function (existMembers, id) {
   let array = [];
   for (let mem of existMembers) {
     if (mem.userId == id) {
@@ -457,7 +464,7 @@ let _getUsersExpress = function (groupId) {
   for (let org of orgs) {
     let id = org.id;
     let orgMembers = users.filtered('orgBeanId = ' + id);//机构下的成员
-    if(existMembers.length != 0) {
+    if (existMembers.length != 0) {
       let m;
       for (m of existMembers) {
         if (m.id == id) {
@@ -465,7 +472,7 @@ let _getUsersExpress = function (groupId) {
         }
       }
       org.orgMembers = _isNotInGroup(orgMembers, m.orgMembers);
-    }else{
+    } else {
       org.orgMembers = orgMembers;
     }
     orgArray.push(org);
@@ -474,25 +481,25 @@ let _getUsersExpress = function (groupId) {
 };
 
 
-let _getLastMessageBySessionId = function(id) {
+let _getLastMessageBySessionId = function (id) {
   let msgs = _realm.objects(MESSAGE).filtered('sessionId = ' + id);
   let msg = msgs.sorted('revTime')[0];
   return msg;
 };
 
-let _getAllSession = function() {
+let _getAllSession = function () {
   return _realm.objects(MESSAGELIST);
 };
 
-let _createGroup = function(groupId, groupName,groupMasterUid,number,members,mute){
+let _createGroup = function (groupId, groupName, groupMasterUid, number, members, mute) {
   _realm.write(() => {
     let group = {
-      groupId:groupId,
-      groupName:groupName,
-      groupMasterUid:groupMasterUid,
-      memberNum:number,
-      members:members,
-      mute:mute
+      groupId: groupId,
+      groupName: groupName,
+      groupMasterUid: groupMasterUid,
+      memberNum: number,
+      members: members,
+      mute: mute
     };
     _realm.create(GROUP, group, true);
   });
@@ -501,39 +508,39 @@ let _createGroup = function(groupId, groupName,groupMasterUid,number,members,mut
 let _kickOutMember = function (groupId, members) {
   let memberList = _realm.objects(GROUP).filtered('groupId = ' + groupId);
   let mem = [];
-  for(let m of memberList[0].members){
+  for (let m of memberList[0].members) {
     let f = false;
-    for(let kout of members){
-      if(m.userId == kout.userId){
+    for (let kout of members) {
+      if (m.userId == kout.userId) {
         f = true;
       }
     }
-    !f?mem.push(m):'';
+    !f ? mem.push(m) : '';
   }
   //memberList[0] = mem;
   let d = memberList[0];
   let group = {
-    groupId:d.groupId,
-    groupName:d.groupName,
-    groupMasterUid:d.groupMasterUid,
-    memberNum:d.memberNum - members.length,
-    members:mem,
-    mute:d.mute
+    groupId: d.groupId,
+    groupName: d.groupName,
+    groupMasterUid: d.groupMasterUid,
+    memberNum: d.memberNum - members.length,
+    members: mem,
+    mute: d.mute
   };
   _realm.write(() => {
     _realm.create(GROUP, group, true);
   });
 };
 
-let _modifyGroupName = function(groupId, groupName){
+let _modifyGroupName = function (groupId, groupName) {
   let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
   let newGroup = {
-    groupId:group[0].groupId,
-    groupName:groupName,
-    groupMasterUid:group[0].groupMasterUid,
-    memberNum:group[0].memberNum,
-    members:group[0].members,
-    mute:group[0].mute
+    groupId: group[0].groupId,
+    groupName: groupName,
+    groupMasterUid: group[0].groupMasterUid,
+    memberNum: group[0].memberNum,
+    members: group[0].members,
+    mute: group[0].mute
   };
   console.log(newGroup);
   _realm.write(() => {

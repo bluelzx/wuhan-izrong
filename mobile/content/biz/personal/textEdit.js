@@ -128,13 +128,11 @@ let TextEdit = React.createClass({
   updateUserInfo: function () {
     let data = {};
     if (this.state.newValue != this.state.oldValue) {
-
-      data = [{
-        column: this.props.param.name,
-        value: this.state.newValue
-      }];
-
       if (this.state.newPublicValue == this.state.oldPublicValue || this.state.publicName == '') {
+        data = [{
+          column: this.props.param.name,
+          value: this.state.newValue
+        }];
         this.update(data);
       } else {
         data = [{
@@ -147,6 +145,12 @@ let TextEdit = React.createClass({
           }];
         this.update(data);
       }
+    }else if (this.state.newPublicValue != this.state.oldPublicValue){
+      data = [{
+        column: this.props.param.publicName,
+        value: this.state.newPublicValue
+      }];
+      this.update(data);
     }
   },
 
