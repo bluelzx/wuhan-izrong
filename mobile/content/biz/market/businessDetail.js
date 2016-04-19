@@ -22,18 +22,19 @@ let screenHeight = Dimensions.get('window').height;
 
 let NavBarView = require('../../framework/system/navBarView');
 
-let MarketStore = require('../../framework/store/marketStore');
+let MarketAction = require('../../framework/action/marketAction');
 
 let BusinessDetail = React.createClass({
   getInitialState(){
     return {
-      detailData: ''
+      detailData: '',
+      bizOrderOwnerBean:''
     }
   },
   componentWillMount: function () {
-    //{
-    //  this.getBizOrderInMarket(this.props.param.marketInfo.id)
-    //}
+    {
+      this.getBizOrderInMarket(this.props.param.marketInfo.id);
+    }
   },
   render: function () {
     return (
@@ -42,22 +43,22 @@ let BusinessDetail = React.createClass({
         <ScrollView style={{backgroundColor:'#194269'}}>
           <View style={{backgroundColor:'#194269'}}>
             <View style={{marginLeft:10}}>
-              {this.returnItem('业务类型:', '资金业务-同业存款')}
-              {this.returnItem('方向:', '收')}
-              {this.returnItem('期限:', '364天')}
-              {this.returnItem('金额:', '2000万')}
-              {this.returnItem('利率:', '1200%')}
-              {this.returnItem('备注:', '虽百年的写的啊是开发好看阿福送快递方阿福')}
-              {this.returnItem('更新时间:', '2016/03/27 20:58')}
+              {this.returnItem('业务类型:', (this.state.detailData.bizCategoryDesc + '-' + this.state.detailData.bizItemDesc))}
+              {this.returnItem('方向:', this.state.detailData.bizOrientationDesc)}
+              {this.returnItem('期限:', this.state.detailData.term + '天')}
+              {this.returnItem('金额:', this.state.detailData.amount / 10000 + '万')}
+              {this.returnItem('利率:', this.state.detailData.rate * 100 + '%')}
+              {this.returnItem('备注:', this.state.detailData.remark)}
+              {this.returnItem('更新时间:', this.state.detailData.lastModifyDate)}
             </View>
             {this.renderAdjunct()}
             <View style={{backgroundColor:'#153757',borderRadius:2,margin:10}}>
               {this.renderPromulgator()}
-              {this.returnInfoItem(require('../../image/market/tel.png'), '1234567890')}
-              {this.returnInfoItem(require('../../image/market/mobile.png'), '1234567890')}
-              {this.returnInfoItem(require('../../image/market/QQ.png'), '1234567890')}
-              {this.returnInfoItem(require('../../image/market/weChat.png'), '1234567890')}
-              {this.returnInfoItem(require('../../image/market/org.png'), '1234567890')}
+              {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber,this.state.bizOrderOwnerBean.isPublicPhone)}
+              {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber,this.state.bizOrderOwnerBean.isPublicMobile)}
+              {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo,this.state.bizOrderOwnerBean.isPublicQQNo)}
+              {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo,this.state.bizOrderOwnerBean.isPublicWeChatNo)}
+              {this.returnInfoItem(require('../../image/market/org.png'), this.state.bizOrderOwnerBean.orgName)}
             </View>
           </View>
         </ScrollView>
@@ -108,7 +109,7 @@ let BusinessDetail = React.createClass({
                source={require('../../image/market/next.png')}
         />
 
-        <Text style={{fontSize:16,color:'white',}}>姚某某</Text>
+        <Text style={{fontSize:16,color:'white',}}>{this.state.bizOrderOwnerBean.userName}</Text>
         <TouchableHighlight onPress={this.gotoIM()}
                             underlayColor='white'>
           <Text style={{fontSize:12,color:'#68bbaa',marginTop:5}}>{'(点击洽谈)'}</Text>
@@ -116,15 +117,21 @@ let BusinessDetail = React.createClass({
       </View>
     )
   },
-  returnInfoItem: function (url, value) {
-    return (
-      <View style={{flexDirection:'row',alignItems:'center',paddingVertical:5,marginLeft:10}}>
-        <Image style={{width:16,height:16}}
-               source={url}
-        />
-        <Text style={{marginLeft:10,fontSize:16,color:'white',width:200}}>{value}</Text>
-      </View>
-    )
+  returnInfoItem: function (url, value, isPublic) {
+    if (isPublic) {
+      return (
+        <View style={{flexDirection:'row',alignItems:'center',paddingVertical:5,marginLeft:10}}>
+          <Image style={{width:16,height:16}}
+                 source={url}
+          />
+          <Text style={{marginLeft:10,fontSize:16,color:'white',width:200}}>{value}</Text>
+        </View>
+      )
+    } else {
+      return (
+        <View></View>
+      )
+    }
   },
   gotoIM: function () {
 
@@ -133,12 +140,15 @@ let BusinessDetail = React.createClass({
   getBizOrderInMarket: function (id) {
     this.props.exec(
       ()=> {
-        return MarketAction.getBizOrderInMarket(
+        return MarketAction.getBizOrderInMarket({
+            orderId: id
+          }
         ).then((response)=> {
           let detail = (JSON.stringify(response));
-          console.log(arr);
+          console.log(detail);
           this.setState({
-            detailData: detail,
+            detailData: response,
+            bizOrderOwnerBean:response.bizOrderOwnerBean
           })
         }).catch(
           (errorData) => {

@@ -31,6 +31,14 @@ var PAGES = [
   'https://images.unsplash.com/photo-1441448770220-76743f9e6af6?h=1024',
   'https://images.unsplash.com/photo-1441260038675-7329ab4cc264?h=1024'
 ];
+var marketData = {
+  contentList: [
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'}]
+};
 var Home = React.createClass({
   getInitialState: function () {
     var dataSource = new ViewPager.DataSource({

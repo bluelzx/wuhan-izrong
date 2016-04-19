@@ -24,14 +24,12 @@ var screenHeight = Dimensions.get('window').height;
 var Adjust = require('../../comp/utils/adjust');
 var BusinessDetail = require('./businessDetail');
 
-var MarketStore = require('../../framework/store/marketStore');
-
 var data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 let MarketList = React.createClass({
   getInitialState: function () {
     return {
-      dataSource: data.cloneWithRows(this.props.marketData.contentList)
+      dataSource: data.cloneWithRows(this.props.marketData.contentList),
     };
   },
   componentWillMount: function () {

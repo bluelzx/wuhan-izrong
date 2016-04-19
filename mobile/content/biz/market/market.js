@@ -78,7 +78,7 @@ let WhitePage = React.createClass({
   },
 
   componentWillMount: function () {
-    //{this.bizOrderMarketSearchsearch();}
+    {this.bizOrderMarketSearchsearch();}
   },
 
   render: function () {
@@ -346,23 +346,6 @@ let WhitePage = React.createClass({
     if (navigator) {
       navigator.push({comp: name})
     }
-  },
-
-  bizOrderMarketSearchDefaultSearch: function () {
-    this.props.exec(
-      ()=> {
-        return MarketAction.bizOrderMarketSearchDefaultSearch(
-        ).then((response)=> {
-          let arr = new Array();
-          arr = (JSON.stringify(response));
-          console.log(arr);
-        }).catch(
-          (errorData) => {
-            throw errorData;
-          }
-        );
-      }
-    );
   },
 
   bizOrderMarketSearchsearch: function () {
