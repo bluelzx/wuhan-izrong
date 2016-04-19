@@ -27,12 +27,21 @@ var BusinessDetail = require('./businessDetail');
 var MarketStore = require('../../framework/store/marketStore');
 
 var data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+var marketData = [
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'}];
+
 
 let MarketList = React.createClass({
   getInitialState: function () {
-
     return {
-      dataSource: data.cloneWithRows(this.props.marketData.contentList),
+      dataSource: data.cloneWithRows(MarketStore.getMarketData()),
     };
   },
   componentWillMount: function () {
@@ -102,7 +111,7 @@ let MarketList = React.createClass({
 
   _changeData: function () {
     this.setState({
-      dataSource: data.cloneWithRows(this.props.marketData.contentList),
+      dataSource: data.cloneWithRows(marketData),
     })
   }
 })

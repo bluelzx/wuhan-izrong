@@ -24,7 +24,11 @@ let ImUserInfo = React.createClass({
 
 
   getStateFromStores: function() {
-    return ContactStore.getUserInfoByUserId(this.props.param.userId);
+    let userInfo = ContactStore.getUserInfoByUserId(this.props.param.userId);
+    return{
+      data:userInfo,
+      mute:userInfo.mute
+    };
   },
 
   getInitialState: function () {
@@ -39,9 +43,12 @@ let ImUserInfo = React.createClass({
   },
 
   switchControl(open){
-    this.setState({switchOpen: open});
+    this.setState({mute: open});
     //TODO: 在这里调用后台借口可能会卡机
-    ContactAction.muteUser(this.props.param.userId, value);
+    this.props.exec(() => {
+      return ContactAction.muteUser(this.props.param.userId, open);
+    });
+
   },
 
   render: function () {
@@ -59,19 +66,19 @@ let ImUserInfo = React.createClass({
               <Text style={{color:'#ffffff',fontSize:18, marginRight:20}}>张某某</Text>
             </View>
           </TouchableHighlight>
-          <Item showArrow={false} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.publicMobile?this.state.mobileNumber:privateDesc}/>
-          <Item showArrow={false} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.publicPhone?this.state.phoneNumber:privateDesc}/>
-          <Item showArrow={false} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.publicQQ?this.state.qqNo:privateDesc}/>
-          <Item showArrow={false} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.publicWeChat?this.state.weChatNo:privateDesc}/>
-          <Item showArrow={false} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.publicEmail?this.state.email:privateDesc}/>
-          <Item showArrow={false} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.orgValue}/>
-          <Item showArrow={false} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.publicDepart?this.state.department:privateDesc}/>
-          <Item showArrow={false} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.publicTitle?this.state.jobTitle:privateDesc}/>
+          <Item hiddenArrow={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.data.publicMobile?this.state.data.mobileNumber:privateDesc}/>
+          <Item hiddenArrow={true} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.data.publicPhone?this.state.data.phoneNumber:privateDesc}/>
+          <Item hiddenArrow={true} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.data.publicQQ?this.state.data.qqNo:privateDesc}/>
+          <Item hiddenArrow={true} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.data.publicWeChat?this.state.data.weChatNo:privateDesc}/>
+          <Item hiddenArrow={true} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.data.publicEmail?this.state.data.email:privateDesc}/>
+          <Item hiddenArrow={true} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.data.orgValue}/>
+          <Item hiddenArrow={true} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicDepart?this.state.data.department:privateDesc}/>
+          <Item hiddenArrow={true} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicTitle?this.state.data.jobTitle:privateDesc}/>
           <View style={{backgroundColor:'#162a40',height:50,marginTop:20}}>
             <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
               <Text style={{color: '#ffffff',fontSize:18,marginLeft:20}}>屏蔽此人</Text>
               <Switch style={{margin:20}}
-                      value={this.state.switchOpen}
+                      value={this.state.mute}
                       onValueChange={this.switchControl}/>
             </View>
           </View>

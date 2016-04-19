@@ -8,7 +8,8 @@ let {
   Text,
   TouchableHighlight,
   TouchableOpacity,
-  Image
+  Image,
+  InteractionManager
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
 let CreateGroup = require('./createGroup');
@@ -32,7 +33,9 @@ let Contacts = React.createClass({
     AppStore.removeChangeListener(this._onChange);
   },
   _onChange: function () {
-    this.setState(this.getStateFromStores());
+    //InteractionManager.runAfterInteractions(()=>{
+      this.setState(this.getStateFromStores());
+    //});
   },
 
   getStateFromStores: function() {

@@ -17,6 +17,7 @@ let date = dateFormat(new Date(), 'yyyy-mm-dd');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let { Alert, Button ,Device} = require('mx-artifacts');
 let UserInfoAction = require('../../framework/action/userInfoAction');
+let AppStore = require('../../framework/store/appStore');
 
 let TextEdit = React.createClass({
   getInitialState: function () {
@@ -158,11 +159,14 @@ let TextEdit = React.createClass({
     this.props.exec(() => {
       return UserInfoAction.updateUserInfo(data)
         .then((response) => {
-          const { navigator } = this.props;
-          if (navigator) {
-            // navigator.popToTop();
-            this.props.navigator.pop();
-          }
+             data.forEach((dataItem)=>{
+               AppStore.updateUserInfo(dataItem.column,dataItem.value);
+               const { navigator } = this.props;
+               if (navigator) {
+                 // navigator.popToTop();
+                 this.props.navigator.pop();
+               }
+             });
         }).catch((errorData) => {
           Alert(errorData);
         });

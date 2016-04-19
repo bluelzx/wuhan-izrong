@@ -41,6 +41,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
   getToken: () => _data.token || '',
+  //getToken:() => 't001',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),
@@ -52,7 +53,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=> _getOrgList(),
-  updateUserInfo:()=> _updateUserInfo()
+  updateUserInfo: (column, value)=> _updateUserInfo(column, value)
 });
 
 // Private Functions
@@ -149,7 +150,8 @@ let _getOrgList = ()=> {
   return orgBuildList;
 };
 
-let _updateUserInfo = ()=>{
-
+let _updateUserInfo = (column, value)=> {
+  Persister.updateUserInfo(column, value);
+  AppStore.emitChange();
 };
 module.exports = AppStore;
