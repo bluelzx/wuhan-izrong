@@ -38,27 +38,27 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
 
 
 //造假数据
-_realm.write(() => {
-  for (let item of MockData.users) {
-    _realm.create(IMUSERINFO, item, true);
-  }
-
-  for (let org of MockData.orgs) {
-    _realm.create(ORGBEAN, org, true);
-  }
-
-  for (let group of MockData.groups) {
-    _realm.create(GROUP, group, true);
-  }
-
-  for (let message of MockData.message){
-    _realm.create(MESSAGE, message, true);
-  }
-
-  for(let session of MockData.sessionList){
-    _realm.create(MESSAGELIST, session, true);
-  }
-});
+//_realm.write(() => {
+//  for (let item of MockData.users) {
+//    _realm.create(IMUSERINFO, item, true);
+//  }
+//
+//  for (let org of MockData.orgs) {
+//    _realm.create(ORGBEAN, org, true);
+//  }
+//
+//  for (let group of MockData.groups) {
+//    _realm.create(GROUP, group, true);
+//  }
+//
+//  for (let message of MockData.message){
+//    _realm.create(MESSAGE, message, true);
+//  }
+//
+//  for(let session of MockData.sessionList){
+//    _realm.create(MESSAGELIST, session, true);
+//  }
+//});
 
 
 
