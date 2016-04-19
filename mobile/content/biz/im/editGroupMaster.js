@@ -75,18 +75,18 @@ let EditGroup = React.createClass({
               style={{backgroundColor: '#15263A', paddingVertical:10,borderTopColor:'#132132',borderTopWidth:0.5}}>
               <View
                 style={{flexDirection:'row', justifyContent:'space-between', marginTop:5,alignItems:'center',paddingHorizontal:10}}>
-                <Text style={{color:'#ffffff'}}>全部群成员(20)</Text>
+                <Text style={{color:'#ffffff'}}>{'全部群成员(' + this.state.groupInfo.memberNum + ')'}</Text>
                 <Icon name="ios-arrow-right" size={20} color='#ffffff'/>
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => this.props.navigator.push({comp:ModifyGroupName,param:this.props.param.groupId})}
+            <TouchableOpacity onPress={() => this.props.navigator.push({comp:ModifyGroupName,param:{groupId:this.props.param.groupId,groupName:this.state.groupInfo.groupName}})}
               style={{borderTopColor:'#132132',borderTopWidth:0.5,height:50,marginTop: 10,backgroundColor: '#15263A'}}>
               <View
                 style={{height:50,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center'}}>
                 <Text style={{color:'#ffffff'}}>群名称</Text>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
-                  <Text style={{color:'#6B849C',marginRight:5}}>群名称</Text>
+                  <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.groupName}</Text>
                   <Icon name="ios-arrow-right" size={20} color='#ffffff'/>
                 </View>
               </View>

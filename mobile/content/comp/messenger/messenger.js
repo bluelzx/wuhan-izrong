@@ -7,66 +7,87 @@ let {
   ActionSheetIOS,
   View,
   Text
-  } = React;
+} = React;
 
+let _ = require('lodash');
 let GiftedMessenger = require('./giftedMessenger');
-let { Communications, Device } = require('mx-artifacts');
+let {Communications, Device} = require('mx-artifacts');
 
-let ImSocket = require('../../framework/network/imSocket');
-let { MSG_CONTENT_TYPE, COMMAND_TYPE } = require('../../constants/dictIm');
+let ImAction = require('../../framework/action/imAction');
+let ImStore = require('../../framework/store/imStore');
+let { MSG_CONTENT_TYPE, COMMAND_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
+
+
+// let _getMessageKey = (f, t) => {
+//   // return (f > t ? f + ':' + t : t + ':' + f) + ':' + new Date().getTime() + ':' + _device_id;
+//   return f + ':' + t + ':' + new Date().getTime() + ':' + _device_id;
+// };
 
 let Messenger = React.createClass({
 
   getDefaultProps() {
     return {
-      sessionId: 'sessionId',
-      toUid: 'u002',
-    };
+      param: {
+        sessionId: 'sessionId',
+        chatType: SESSION_TYPE.USER,
+        userId: ''
+      },
+    }
+      ;
   },
 
   propTypes: {
-    sessionId: React.PropTypes.string,
-    toUid: React.PropTypes.string
+    param: React.PropTypes.object,
   },
 
-  getMessages() {
-    return [
-      {text: 'Are you building a chat app?', name: 'React-Native', image: {uri: 'https://facebook.github.io/react/img/logo_og.png'}, position: 'left', date: new Date(2015, 10, 16, 19, 0)},
-      {
-        text: "Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger!",
-        name: 'Developer',
-        image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-        position: 'right',
-        date: new Date(2015, 10, 17, 19, 0)
-        // If needed, you can add others data (eg: userId, messageId)
-      },
-    ];
+  _getStateFromStores: function () {
+    return {
+      messages: ImStore.getMessages(),
+      // token: AppStore.getToken()
+    };
+  },
+
+  getInitialState() {
+    return _.assign(this._getStateFromStores(), {
+      // messages: this.getMessages()
+    });
   },
 
   handleSend(message = {}, rowID = null) {
     // Your logic here
     // Send message.text to your server
-    let msgToSend = {
-      toUid: this.props.toUid,
-      contentType: MSG_CONTENT_TYPE.TEXT,
-      content: message.text,
-      msgId: 'uuid',
-      command: COMMAND_TYPE.SEND_P2P_MSG
-    };
+    let msgToSend = { sessionId: this.props.param.sessionId };
+    if (this.props.param.chatType === SESSION_TYPE.USER) {
+      msgToSend.data = {
+        // toUid: this.props.param.userId,
+        toUid: 'u002',
+        contentType: MSG_CONTENT_TYPE.TEXT,
+        content: message.text,
+        msgId: message.msgId,
+        command: COMMAND_TYPE.SEND_P2P_MSG
+      };
+    } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
+      msgToSend.data = {
+        toUid: this.props.param.groupId,
+        contentType: MSG_CONTENT_TYPE.TEXT,
+        content: message.text,
+        msgId: message.msgId,
+        command: COMMAND_TYPE.SEND_GROUP_MSG
+      };
+    }
 
-    ImSocket.send(msgToSend)
-      .then(() => {
-        // this._GiftedMessenger.setMessageStatus('Seen', rowID);
-        // this._GiftedMessenger.setMessageStatus('Custom label status', rowID);
-        this._GiftedMessenger.setMessageStatus('Sent', rowID);
-      }).catch((error) => {
-        // => In this case, you need also to set onErrorButtonPress
-        this._GiftedMessenger.setMessageStatus('ErrorButton', rowID);
-      });
+    ImAction.send(msgToSend);
+
+    // => In this case, you need also to set onErrorButtonPress
+    // this._GiftedMessenger.setMessageStatus('Sent', rowID);
+    // this._GiftedMessenger.setMessageStatus('Seen', rowID);
+    // this._GiftedMessenger.setMessageStatus('Custom label status', rowID);
+    // this._GiftedMessenger.setMessageStatus('ErrorButton', rowID);
   },
 
   // @oldestMessage is the oldest message already added to the list
-  onLoadEarlierMessages(oldestMessage = {}, callback = () => {}) {
+  onLoadEarlierMessages(oldestMessage = {}, callback = () => {
+  }) {
 
     // Your logic here
     // Eg: Retrieve old messages from your server
@@ -94,12 +115,17 @@ let Messenger = React.createClass({
   },
 
   handleReceive(message = {}) {
-    this._GiftedMessenger.appendMessage(message);
+    // this._GiftedMessenger.appendMessage(message);
+    let tmpMessages = this.state.messages.concat(message);
+    this.setState({
+      messages: tmpMessages
+    });
   },
 
   onErrorButtonPress(message = {}, rowID = null) {
     // Your logic here
     // Eg: Re-send the message to your server
+    this.handleSend(message, rowID);
 
     setTimeout(() => {
       // will set the message to a custom status 'Sent' (you can replace 'Sent' by what you want - it will be displayed under the row)
@@ -109,7 +135,13 @@ let Messenger = React.createClass({
         this._GiftedMessenger.setMessageStatus('Seen', rowID);
         setTimeout(() => {
           // append an answer
-          this.handleReceive({text: 'I saw your message', name: 'React-Native', image: {uri: 'https://facebook.github.io/react/img/logo_og.png'}, position: 'left', date: new Date()});
+          this.handleReceive({
+            text: 'I saw your message',
+            name: 'React-Native',
+            image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
+            position: 'left',
+            date: new Date()
+          });
         }, 500);
       }, 1000);
     }, 500);
@@ -137,7 +169,7 @@ let Messenger = React.createClass({
         displayNamesInsideBubble={false}
 
         autoFocus={false}
-        messages={this.getMessages()}
+        messages={this.state.messages}
         handleSend={this.handleSend}
         onErrorButtonPress={this.onErrorButtonPress}
         maxHeight={Device.height - Device.navBarHeight}
@@ -157,6 +189,8 @@ let Messenger = React.createClass({
         handleEmailPress={this.handleEmailPress}
 
         inverted={true}
+
+        sessionId={this.props.param.sessionId}
       />
 
     );

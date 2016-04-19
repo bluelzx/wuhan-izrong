@@ -62,7 +62,7 @@ let EditGroup = React.createClass({
               style={{backgroundColor: '#15263A', paddingVertical:10,borderTopColor:'#132132',borderTopWidth:0.5}}>
               <View
                 style={{flexDirection:'row', justifyContent:'space-between', marginTop:5,alignItems:'center',paddingHorizontal:10}}>
-                <Text style={{color:'#ffffff'}}>全部群成员(20)</Text>
+                <Text style={{color:'#ffffff'}}>{'全部群成员(' + this.state.groupInfo.memberNum + ')'}</Text>
                 <Icon name="ios-arrow-right" size={20} color='#ffffff'/>
               </View>
             </TouchableOpacity>
@@ -73,7 +73,7 @@ let EditGroup = React.createClass({
                 style={{height:50,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center'}}>
                 <Text style={{color:'#ffffff'}}>群名称</Text>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
-                  <Text style={{color:'#6B849C',marginRight:5}}>群名称</Text>
+                  <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.groupName}</Text>
                 </View>
               </View>
             </View>

@@ -30,13 +30,20 @@ let AppLinks = {
   updateUserInfo: Host + api + '/Account/updateUserInfoList',
   getOrgList: Host + pub + '/getOrgList/',
 
-  bizOrderMarketSearchDefaultSearch: api + '/BizOrderMarketSearch/defaultSearch',
-  bizOrderMarketSearchsearch: api + '/BizOrderMarketSearch/search',
-  getBizOrderInMarket: api + '/BizOrderManage/getBizOrderInMarket',
-  addBizOrder: api + '/BizOrderManage/addBizOrder',
-  downselfBizOrder: api + '/BizOrderManage/downselfBizOrder',
-  updateBizOrder: api + '/BizOrderManage/updateBizOrder',
-  getBizOrderCategoryAndItem : api + '/BizOrderManage/getBizOrderCategoryAndItem'
+  bizOrderMarketSearchDefaultSearch: Host + api + '/BizOrderMarketSearch/defaultSearch',
+  bizOrderMarketSearchsearch:Host + api + '/BizOrderMarketSearch/search',
+  getBizOrderInMarket: Host + api + '/BizOrderManage/getBizOrderInMarket',
+  addBizOrder: Host + api + '/BizOrderManage/addBizOrder',
+  downselfBizOrder: Host + api + '/BizOrderManage/downselfBizOrder',
+  updateBizOrder: Host + api + '/BizOrderManage/updateBizOrder',
+  getBizOrderCategoryAndItem : Host + api + '/BizOrderManage/getBizOrderCategoryAndItem',
+  updateUserInfo: Host + api +'/Account/updateUserInfo',
+  //contact
+  createGroup: NodeHost + 'createGroup',
+  kickOutMember: NodeHost + 'kickOutMember',
+  updateGroupName: NodeHost + 'updateGroupName',
+  acceptInvitation: NodeHost + 'acceptInvitation',
+
 };
 
 module.exports = AppLinks;
