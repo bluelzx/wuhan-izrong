@@ -167,7 +167,7 @@ let TextEdit = React.createClass({
             this.props.navigator.pop();
           }
         }).catch((errorData) => {
-          Alert(errorData);
+          Alert(errorData.msgContent);
         });
     });
   },
@@ -254,7 +254,7 @@ let TextEdit = React.createClass({
           </View>
         </NavBarView>
       )
-    } else if (this.props.param.type == "telephone") {
+    } else if (this.props.param.type == "phoneNumber") {
       return (
         <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                     contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
