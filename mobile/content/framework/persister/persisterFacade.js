@@ -249,6 +249,31 @@ let _getOrgByOrgId = function (orgId) {
 
 let _updateUserInfo = function (column, value) {
   _realm.write(() => {
+    //let ret = {
+    //  userId: users.userId,
+    //  address: users.address,
+    //  realName: users.realName,
+    //  weChatNo: users.weChatNo,
+    //  email: users.email,
+    //  nameCardFileUrl: users.nameCardFileUrl,
+    //  qqNo: users.qqNo,
+    //  department: users.department,
+    //  mobileNumber: users.mobileNumber,
+    //  jobTitle: users.jobTitle,
+    //  phoneNumber: users.phoneNumber,
+    //  photoFileUrl: users.photoFileUrl,
+    //  publicTitle: users.publicTitle,
+    //  publicMobile: users.publicMobile,
+    //  publicDepart: users.publicDepart,
+    //  publicPhone: users.publicPhone,
+    //  publicEmail: users.publicEmail,
+    //  publicAddress: users.publicAddress,
+    //  publicWeChat: users.publicWeChat,
+    //  publicQQ: users.publicQQ,
+    //  orgId: users.orgId,
+    //  lastLoginTime:users.lastLoginTime,  //本地增加,用于多用户登陆排序
+    //  token: users.token
+    //}
     _realm.create(LOGINUSERINFO, {
       column: value
     }, true);
