@@ -63,7 +63,7 @@ let SelectBusiness1 = React.createClass({
       this.props.navigator.push({
         comp: SelectBusiness2,
         param: {
-          filterItems: this.props.param.filterItems,
+          bizItem: MarketStore.getFilterOptions(this.props.param.filterItems, 'bizItem').options,
           category:rowData
         }
       })

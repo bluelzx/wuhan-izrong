@@ -23,8 +23,11 @@ let data = new ListView.DataSource({
 
 let SelectBusiness2 = React.createClass({
   getInitialState(){
+    let bizCategory = this.props.param.category;
+    let bizItem = this.props.param.bizItem;
+    let itemArr = this.getItemWithCategory(bizItem, bizCategory);
     return {
-      dataSource: ['同业存款', '同业拆借', '债券回购', '存单', '其他'],
+      dataSource: itemArr,
     }
   },
   render: function () {
@@ -42,16 +45,34 @@ let SelectBusiness2 = React.createClass({
   renderRow(rowData, sectionID, rowID){
     return (
       <TouchableHighlight
-        onPress={()=>this.pressRow(rowID)} underlayColor='#2b4f79'>
-        <View style={{width:screenWidth,height:50,flexDirection:'row',alignItems: "center",justifyContent: "space-between",backgroundColor:'#244266',borderBottomColor:"#0a1926",borderBottomWidth:0.7}}>
-          <Text style={{marginLeft:10,fontSize:16,color:'white'}}>{rowData}</Text>
+        onPress={()=>this.pressRow(rowData)} underlayColor='#2b4f79'>
+        <View
+          style={{width:screenWidth,height:50,flexDirection:'row',alignItems: "center",justifyContent: "space-between",backgroundColor:'#244266',borderBottomColor:"#0a1926",borderBottomWidth:0.7}}>
+          <Text style={{marginLeft:10,fontSize:16,color:'white'}}>{rowData.displayName}</Text>
         </View>
       </TouchableHighlight>
     )
   },
-  pressRow: function () {
-    this.props.navigator.popToTop();
+  pressRow: function (rowData) {
+    this.props.navigator.popToTop({
+      param: {
+        bizItem: rowData,
+        category: this.props.param.category
+      }
+    });
   },
+
+  getItemWithCategory: function (bizItem, bizCategory) {
+    let itemArr = new Array();
+    for (let item of bizItem) {
+      if (item.displayCode.substring(0, 3) == bizCategory.displayCode) {
+        itemArr.push(item);
+      }
+    }
+    return (
+      itemArr
+    )
+  }
 
 });
 
