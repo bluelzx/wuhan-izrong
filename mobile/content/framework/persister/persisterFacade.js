@@ -134,13 +134,13 @@ let _saveImUser = function (imUserBean) {
       orgId: imUserBean.orgId,
       phoneNumber: imUserBean.phoneNumber,
       publicTitle: !!(imUserBean.publicTitle == true || imUserBean.publicTitle == null),
-      publicMobile:  !!(imUserBean.publicMobile == true || imUserBean.publicMobile == null),
-      publicDepart:  !!(imUserBean.publicDepart == true || imUserBean.publicDepart == null),
+      publicMobile: !!(imUserBean.publicMobile == true || imUserBean.publicMobile == null),
+      publicDepart: !!(imUserBean.publicDepart == true || imUserBean.publicDepart == null),
       publicPhone: !!(imUserBean.publicPhone == true || imUserBean.publicPhone == null),
-      publicEmail:  !!(imUserBean.publicEmail == true || imUserBean.publicEmail == null),
-      publicAddress:  !!(imUserBean.publicAddress == true || imUserBean.publicAddress == null),
-      publicWeChat:  !!(imUserBean.publicWeChat == true || imUserBean.publicWeChat == null),
-      publicQQ:  !!(imUserBean.publicQQ == true || imUserBean.publicQQ == null)
+      publicEmail: !!(imUserBean.publicEmail == true || imUserBean.publicEmail == null),
+      publicAddress: !!(imUserBean.publicAddress == true || imUserBean.publicAddress == null),
+      publicWeChat: !!(imUserBean.publicWeChat == true || imUserBean.publicWeChat == null),
+      publicQQ: !!(imUserBean.publicQQ == true || imUserBean.publicQQ == null)
 
 
     }, true);
@@ -230,7 +230,7 @@ let _getLoginUserInfo = function () {
 };
 
 let _getUserId = function () {
-  let d  = _getLoginUserInfo();
+  let d = _getLoginUserInfo();
   if (d) {
     return d.userId;
   } else {
@@ -251,7 +251,7 @@ let _updateUserInfo = function (column, value) {
   let userId = _getUserId();
   _realm.write(() => {
     _realm.create(LOGINUSERINFO, {
-      userId:userId,
+      userId: userId,
       publicMobile: value
     }, true);
   });
@@ -323,5 +323,5 @@ let _getOrgList = function () {
   return ConvertChineseKey.buildOrgList(orgList);
 };
 
-
-module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'));
+module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
+  require('./userPersisterFacade'));
