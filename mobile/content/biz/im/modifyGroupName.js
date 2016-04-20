@@ -4,8 +4,9 @@
 let React = require('react-native');
 const {TouchableOpacity, Text, View, TextInput, Platform} = React;
 let NavBarView = require('../../framework/system/navBarView');
-let { Device } = require('mx-artifacts');
+let { Device, Alert } = require('mx-artifacts');
 let ContactAction = require('../../framework/action/contactAction');
+let Setting = require('../../constants/setting');
 
 let ModifyGroupName = React.createClass({
 
@@ -16,7 +17,10 @@ let ModifyGroupName = React.createClass({
   },
 
   modifyGroupName: function(){
-
+    if(this.state.groupName.length > Setting.groupNameLengt){
+      Alert('群名称不能超过20个字符');
+      return ;
+    }
     this.props.exec(()=>{
       return ContactAction.modifyGroupName(this.props.param.groupId, this.state.groupName).then((response)=>{
         this.props.navigator.pop();
@@ -30,7 +34,7 @@ let ModifyGroupName = React.createClass({
       <TouchableOpacity onPress={()=>{
       this.modifyGroupName();
       }}>
-        <Text style={{color:'#ffffff'}}>完成</Text>
+        <Text style={{color:this.state.groupName.length > Setting.groupNameLengt ?'#6B849C':'white'}}>完成</Text>
       </TouchableOpacity>
 
     );

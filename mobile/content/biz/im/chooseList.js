@@ -3,16 +3,15 @@
  */
 let React = require('react-native');
 const {View, ScrollView} = React;
+let NameCircular = require('./nameCircular');
+
 let ChooseList = React.createClass({
 
 
   renderMemberView: function(data) {
     return data.map((item, index)=>{
       return (
-        <View  key={item.userId} style={{alignItems:'center',padding:5}}>
-          <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 30,width: 30,borderRadius: 15}}>
-          </View>
-        </View>
+        <NameCircular key={item.userId} name={item.realName}/>
       );
     });
   },

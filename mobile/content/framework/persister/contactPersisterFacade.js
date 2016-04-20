@@ -6,18 +6,11 @@ let MockData = require('./createMockData');
 const DEFAULT_GROUP_IMAGE = "";
 const _ = require('lodash');
 const {
-  DEVICE,
   GROUP,
   MESSAGE,
   IMUSERINFO,
-  LOGINUSERINFO,
   ORGBEAN,
-  BIZORDERCATEGORY,
-  BIZORDERITEM,
-  FILTERITEMS,
-  FILTERITEM,
-  ORDERITEM,
-  MESSAGELIST
+  SESSION
   } = require('./schemas');
 let ContactPersisterFacade = {
 getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
@@ -38,7 +31,7 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
 }
 
 
-//造假数据
+////造假数据
 //_realm.write(() => {
 //  for (let item of MockData.users) {
 //    _realm.create(IMUSERINFO, item, true);
@@ -57,7 +50,7 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
 //  }
 //
 //  for(let session of MockData.sessionList){
-//    _realm.create(MESSAGELIST, session, true);
+//    _realm.create(SESSION, session, true);
 //  }
 //});
 

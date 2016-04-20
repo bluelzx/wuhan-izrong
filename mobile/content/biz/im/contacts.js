@@ -22,6 +22,7 @@ let AppStore = require('../../framework/store/appStore');
 let DictIcon = require('../../constants/dictIcon');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Spread = require('./spread');
+let NameCircular = require('./nameCircular');
 
 let Contacts = React.createClass({
 
@@ -109,7 +110,7 @@ let Contacts = React.createClass({
                             onPress={() => this.toUser(data)}
                             style={{borderTopWidth:0.5,  borderTopColor: '#132232'}}>
           <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
-            {this.renderImg(data)}
+            <NameCircular name={data.realName}/>
             <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
           </View>
         </TouchableHighlight>

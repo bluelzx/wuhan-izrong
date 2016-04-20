@@ -28,6 +28,8 @@ let HeadPic = require('./headerPic');
 let AppStore = require('../../framework/store/appStore');
 
 let ContactStore = require('../../framework/store/contactStore');
+let SessionStore = require('../../framework/store/sessionStore');
+let SessionAction = require('../../framework/action/sessionAction');
 let { MSG_TYPE, MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 
 let KeyGenerator = require('../../comp/utils/keyGenerator');
@@ -59,6 +61,12 @@ let WhitePage = React.createClass({
   renderContact: function() {
     return (
       <TouchableOpacity onPress={()=>{
+//      SessionAction.updateSession(MSG_TYPE.REC_P2P_MSG,'2',
+//'hahahaha',
+//'hello',
+// new Date(),
+// MSG_CONTENT_TYPE.TEXT
+//      );
       this.props.navigator.push({
             comp: Contacts
       });
@@ -92,14 +100,14 @@ let WhitePage = React.createClass({
     let option = null;
     let param = {};
     if(MSG_TYPE.REC_GROUP_MSG == item.type){ // 区分聊天窗口类型
-      let g = ContactStore.getGroupInfoBySessionId(item.sessionId,userinfo.userId)
+      let g = SessionStore.getGroupInfoBySessionId(item.sessionId,userinfo.userId)
       param.chatType = SESSION_TYPE.GROUP;
       param.title = item.title;
       param.groupId = g.groupId; //query
       param.groupMasterUid = g.groupMasterUid; //query
       param.sessionId = KeyGenerator.getSessionKey(param.chatType, param.groupId);
     }else{
-      let u = ContactStore.getUserInfoBySessionId(item.sessionId,userinfo.userId)
+      let u = SessionStore.getUserInfoBySessionId(item.sessionId,userinfo.userId)
       param.chatType = SESSION_TYPE.USER;
       param.title = item.title;
       param.userId = u.userId;  //query
