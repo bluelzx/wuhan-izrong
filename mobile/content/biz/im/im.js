@@ -30,8 +30,6 @@ let AppStore = require('../../framework/store/appStore');
 let ContactStore = require('../../framework/store/contactStore');
 let { MSG_TYPE, MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 
-let KeyGenerator = require('../../comp/utils/keyGenerator');
-
 let WhitePage = React.createClass({
 
   componentDidMount() {
@@ -97,13 +95,11 @@ let WhitePage = React.createClass({
       param.title = item.title;
       param.groupId = g.groupId; //query
       param.groupMasterUid = g.groupMasterUid; //query
-      param.sessionId = KeyGenerator.getSessionKey(param.chatType, param.groupId);
     }else{
       let u = ContactStore.getUserInfoBySessionId(item.sessionId,userinfo.userId)
       param.chatType = SESSION_TYPE.USER;
       param.title = item.title;
       param.userId = u.userId;  //query
-      param.sessionId = KeyGenerator.getSessionKey(param.chatType, param.userId);
     }
     this.props.navigator.push({
       comp: Chat,

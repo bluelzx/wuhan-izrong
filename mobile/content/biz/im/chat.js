@@ -15,13 +15,25 @@ let AppStore = require('../../framework/store/appStore');
 let ContactStore = require('../../framework/store/contactStore');
 let ImAction = require('../../framework/action/imAction');
 
+let KeyGenerator = require('../../comp/utils/keyGenerator');
+
 let Chat = React.createClass({
 
   componentDidMount() {
+    let { param } = this.props;
+    // let toId = param.chatType === SESSION_TYPE.USER ? param.userId : param.groupId;
+    // let sessionId = KeyGenerator.getSessionKey(param.chatType, toId);
+    let toId = 'u002';
+    let sessionId = KeyGenerator.getSessionKey(SESSION_TYPE.USER, toId);
+
+    param.chatType = SESSION_TYPE.USER;
+    param.userId = 'u002';
+    param.title = 'u002';
+    param.sessionId = sessionId;
+
     ImAction.sessionInit({
-      sessionId: this.props.param.sessionId,
-      // toId: this.props.param.chatType === SESSION_TYPE.USER ? this.props.param.userId : this.props.param.groupId
-      toId: 'u002'
+      toId: toId,
+      sessionId: sessionId
     });
     AppStore.addChangeListener(this._onChange);
   },

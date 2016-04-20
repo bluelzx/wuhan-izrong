@@ -356,4 +356,4 @@ let _getOrgList = function () {
 };
 
 
-module.exports = Object.assign(PersisterFacade,require('./contactPersisterFacade'));
+module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./imPersister'));

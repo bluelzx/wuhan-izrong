@@ -6,9 +6,10 @@ let ImSocket = require('../network/imSocket');
 let AppLinks = require('../../constants/appLinks');
 let { UFetch } = require('../network/fetch');
 // Private Functions
-let _send = (data, bFlag) => {
-  if (!bFlag) {
+let _send = (data, bFlag = false) => {
+  if (bFlag) {
     console.log('Message sent again!');
+  } else {
     ImStore.saveMsg(data);
   }
 

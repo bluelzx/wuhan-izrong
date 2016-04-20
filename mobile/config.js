@@ -5,7 +5,7 @@ let Config = {
   //Host: 'http://192.168.64.197:9081/fas',
   ImHost: 'ws://127.0.0.1:8123/',
   //ImHost: 'localhost:3000'
-  NodeHost:'http://localhost:3001/'
+  NodeHost: 'http://localhost:3001/'
 };
 
 module.exports = Config;
