@@ -3,6 +3,7 @@
  */
 let _realm = require('./realmManager');
 let MockData = require('./createMockData');
+const DEFAULT_GROUP_IMAGE = "";
 const _ = require('lodash');
 const {
   DEVICE,
@@ -38,27 +39,27 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
 
 
 //造假数据
-//_realm.write(() => {
-//  for (let item of MockData.users) {
-//    _realm.create(IMUSERINFO, item, true);
-//  }
-//
-//  for (let org of MockData.orgs) {
-//    _realm.create(ORGBEAN, org, true);
-//  }
-//
-//  for (let group of MockData.groups) {
-//    _realm.create(GROUP, group, true);
-//  }
-//
-//  for (let message of MockData.message){
-//    _realm.create(MESSAGE, message, true);
-//  }
-//
-//  for(let session of MockData.sessionList){
-//    _realm.create(MESSAGELIST, session, true);
-//  }
-//});
+_realm.write(() => {
+  for (let item of MockData.users) {
+    _realm.create(IMUSERINFO, item, true);
+  }
+
+  for (let org of MockData.orgs) {
+    _realm.create(ORGBEAN, org, true);
+  }
+
+  for (let group of MockData.groups) {
+    _realm.create(GROUP, group, true);
+  }
+
+  for (let message of MockData.message){
+    _realm.create(MESSAGE, message, true);
+  }
+
+  for(let session of MockData.sessionList){
+    _realm.create(MESSAGELIST, session, true);
+  }
+});
 
 
 
@@ -110,6 +111,7 @@ let _getGroupInfoByGroupId = function (groupId) {
       groupName: result[0].groupName,
       groupMasterUid: result[0].groupMasterUid,
       memberNum: result[0].memberNum,
+      groupImageUrl:DEFAULT_GROUP_IMAGE,
       members: members,
       mute: result[0].mute
     };
@@ -143,6 +145,7 @@ let _createGroup = function(groupId, groupName,groupMasterUid,number,members,mut
       groupName:groupName,
       groupMasterUid:groupMasterUid,
       memberNum:number,
+      groupImageUrl:DEFAULT_GROUP_IMAGE,
       members:JSON.stringify(members),
       mute:mute
     }
@@ -160,7 +163,7 @@ let _getGroupMembersByGroupId = function(groupId) {
     return _helperGroupByOrg(members);
   }
 };
-//*** 修改群名片
+//*** 修改群名
 let _modifyGroupName = function(groupId, groupName){
   let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
   let newGroup = {
@@ -169,6 +172,7 @@ let _modifyGroupName = function(groupId, groupName){
     groupMasterUid:group[0].groupMasterUid,
     memberNum:group[0].memberNum,
     members:group[0].members,
+    groupImageUrl:DEFAULT_GROUP_IMAGE,
     mute:group[0].mute
   }
   console.log(newGroup);
@@ -206,8 +210,34 @@ let _getUserInfoByUserId = function (id) {
   let users = _realm.objects(IMUSERINFO).filtered('userId = ' + id)[0];
   let orgs = _realm.objects(ORGBEAN);
   let org = orgs.filtered('id = ' + users.orgId);
-  users.orgValue = org[0].orgValue;
-  return users;
+  let ret = {
+    userId: users.userId,
+    address: users.address,
+    realName: users.realName,
+    weChatNo: users.weChatNo,
+    email: users.email,
+    nameCardFileUrl: users.nameCardFileUrl,
+    qqNo: users.qqNo,
+    department: users.department,
+    mobileNumber: users.mobileNumber,
+    jobTitle: users.jobTitle,
+    phoneNumber: users.phoneNumber,
+    photoFileUrl: users.photoFileUrl,
+    publicTitle: users.publicTitle,
+    publicMobile: users.publicMobile,
+    publicDepart: users.publicDepart,
+    publicPhone: users.publicPhone,
+    publicEmail: users.publicEmail,
+    publicAddress: users.publicAddress,
+    publicWeChat: users.publicWeChat,
+    publicQQ: users.publicQQ,
+    orgId: users.orgId,
+    lastLoginTime:users.lastLoginTime,  //本地增加,用于多用户登陆排序
+    token: users.token
+  }
+  if(org.length > 0)
+    ret.orgValue = org[0].orgValue;
+  return ret;
 };
 
 let _getLastMessageBySessionId = function(id) {
@@ -230,6 +260,7 @@ let _kickOutMember = function (groupId, members) {
     groupName:memberList[0].groupName,
     groupMasterUid:memberList[0].groupMasterUid,
     memberNum:memList.length,
+    groupImageUrl:DEFAULT_GROUP_IMAGE,
     members:JSON.stringify(memList),
     mute:memberList[0].mute
   }
@@ -271,6 +302,7 @@ let _setGroupMute = function(groupId, value){
     groupMasterUid:group[0].groupMasterUid,
     memberNum:group[0].memberNum,
     members:group[0].members,
+    groupImageUrl:DEFAULT_GROUP_IMAGE,
     mute:value
   }
   _realm.write(()=>{
