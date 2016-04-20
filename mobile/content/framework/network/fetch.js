@@ -20,7 +20,7 @@ var BFetch1 = function (url, param, callback, failure, options) {
   var headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    'Authorization': ''
+    'Authorization': 'Basic  ' + AppStore.getToken()
   };
 
   return rawFetch(url, {
@@ -95,7 +95,6 @@ var process = function (_promise, option) {
             } else {
               resolve(json);
             }
-
             console.log('以下打印一次获取到的json:');
             console.log(json);
           }

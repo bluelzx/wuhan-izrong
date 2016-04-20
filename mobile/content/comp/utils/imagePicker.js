@@ -13,7 +13,6 @@ let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
 let ImagePicker = React.createClass({
-
   propTypes: {
     type: React.PropTypes.oneOf(['all', 'camera', 'library']),
     onSelected: React.PropTypes.func.isRequired,
@@ -86,8 +85,8 @@ let ImagePicker = React.createClass({
 
   _selectAndroid: function () {
     // PhotoPicker.showImagePic(true,'nameCard',(response)=>console.log('Response = ', response));
-    UserPhotoPicModule.showImagePic(true, this.props.fileId,
-      (response) => {
+    UserPhotoPicModule.showImagePic(this.props.type,true, this.props.fileId,
+       (response) => {
         console.log('Response = ', response.uri);
         this.props.onSelected(response.uri);
       });
