@@ -27,9 +27,7 @@ let Register_accountInfo = React.createClass({
     return {
       realName: '',
       userName: '',
-      orgId: '1',
-      orgValue: '选择机构'
-      // mobileNo: this.props.param.mobileNo
+      orgValue: '选择机构',
     };
   },
   getInitialState: function () {
@@ -62,7 +60,7 @@ let Register_accountInfo = React.createClass({
   callback: function (item) {
     this.setState({
       orgValue: item.orgValue,
-      id: item.id
+      orgId: item.id
     })
   },
 
@@ -109,7 +107,7 @@ let Register_accountInfo = React.createClass({
             styleDisabled={{color: 'red'}}
             onPress={()=>this.toPage(Register_uploadNameCard,
                  {
-                    mobileNo: this.state.mobileNo,
+                    mobileNo: this.props.param.mobileNo,
                     realName:this.state.realName,
                     userName:this.state.userName,
                     orgId:this.state.orgId
