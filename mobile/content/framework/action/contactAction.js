@@ -28,11 +28,10 @@ let _createGroup = function(members, groupName, groupMasterUid) {
     param.members.push(members[i].userId);
   }
   return new Promise((resolve, reject) => {
-    BFetch(AppLinks.createGroup, param).then((response)=>{
-      console.log(response.gid);
-      contactStore.createGroup(response.gid, groupName,groupMasterUid,param.members,false);
+    BFetch(AppLinks.createGroup, param).then((response)=> {
+      contactStore.createGroup(response.gid, groupName, groupMasterUid, param.members, false);
       resolve(response);
-    }, reject);
+    },reject);
   });
 };
 

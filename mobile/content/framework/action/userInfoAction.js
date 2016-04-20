@@ -31,7 +31,7 @@ _getOrgById = function (orgBeanId) {
 _updateUserInfo = function (url, p) {
   return new Promise((resolve, reject) => {
     BFetch(url, p).then((response) => {
-      resolve(AppStore.updateUserInfo());
+      resolve(response);
     }).catch((errorData) => {
       reject(errorData);
     });

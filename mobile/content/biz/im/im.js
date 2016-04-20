@@ -14,6 +14,7 @@ let {
   Image
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
+let _ = require('lodash');
 let Icon = require('react-native-vector-icons/Ionicons');
 let DateHelper = require('../../comp/utils/dateHelper');
 let { Device } = require('mx-artifacts');
@@ -112,6 +113,10 @@ let WhitePage = React.createClass({
 
 
   renderSpread: function(item) {
+    if(_.isEmpty(item)){
+      return;
+    }
+
     let {width} = Device;
     return (
       <TouchableHighlight onPress={()=> this.props.navigator.push({comp: Spread})}>

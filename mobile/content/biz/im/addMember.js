@@ -43,15 +43,13 @@ let AddMember = React.createClass({
   renderState: function () {
     let memberList = this.state.memberList;
     let count = 0;
-    let members = [];
     for(let userId in memberList){
       if(!!memberList[userId]){
         count ++ ;
-        members.push(userId);
       }
     }
     return (
-      <TouchableOpacity onPress={() => this.addUser(this.props.param.groupId, members)}>
+      <TouchableOpacity onPress={() => this.addUser(this.props.param.groupId, memberList)}>
         <Text style={{ marginLeft:-20,color:count==0?'#6B849C':'white'}}>{'完成(' + count + ')'}</Text>
       </TouchableOpacity>
     );

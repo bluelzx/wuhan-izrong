@@ -29,7 +29,7 @@ let MessageSchema = {
   name: "message",
   primaryKey: 'sessionId',
   properties: {
-    sessionId: {type: 'int', optional: true},
+    sessionId: {type: 'string', optional: true},
     msgId: {type: 'string', optional: true},
     fromUId: {type: 'int', optional: true},
     groupId: {type: 'int', optional: true},
@@ -48,7 +48,7 @@ let MessageListSchema = {
   name: "messageList",
   primaryKey: 'sessionId',
   properties: {
-    sessionId: {type: 'int', optional: true},
+    sessionId: {type: 'string', optional: true},
     type: {type: 'string', optional: true},
     badge:{type: 'int', optional: true},
     title: {type: 'string', optional: true},

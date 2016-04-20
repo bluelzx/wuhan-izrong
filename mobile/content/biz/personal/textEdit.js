@@ -146,7 +146,7 @@ let TextEdit = React.createClass({
           }];
         this.update(data);
       }
-    }else if (this.state.newPublicValue != this.state.oldPublicValue){
+    } else if (this.state.newPublicValue != this.state.oldPublicValue) {
       data = [{
         column: this.props.param.publicName,
         value: this.state.newPublicValue
@@ -158,15 +158,14 @@ let TextEdit = React.createClass({
   update: function (data) {
     this.props.exec(() => {
       return UserInfoAction.updateUserInfo(data)
-        .then((response) => {
-             data.forEach((dataItem)=>{
-               AppStore.updateUserInfo(dataItem.column,dataItem.value);
-               const { navigator } = this.props;
-               if (navigator) {
-                 // navigator.popToTop();
-                 this.props.navigator.pop();
-               }
-             });
+        .then(() => {
+          data.forEach((dataItem)=> {
+            AppStore.updateUserInfo(dataItem.column, dataItem.value);
+          });
+          const { navigator } = this.props;
+          if (navigator) {
+            this.props.navigator.pop();
+          }
         }).catch((errorData) => {
           Alert(errorData);
         });

@@ -90,15 +90,7 @@ let CreateGroup = React.createClass({
       this.props.exec(() => {
           return ContactAction.createGroup(members, this.state.groupName, this.state.userInfo.userId)
             .then((response)=>{
-              if(!!response.errCode)
-                throw response;
-              else{
-                return response.gid
-              }
-              //else{
-              //  let groupId = response.gid;
-              //   ContactAction.saveGroup(members, this.state.groupName, this.state.userInfo.userId);
-              //}
+               return response.gid
             }).then((gid)=>{
               //setp2: 跳转到群聊页面
               this.props.navigator.replacePreviousAndPop(
@@ -108,7 +100,7 @@ let CreateGroup = React.createClass({
                 }
               );
             }).catch((errorData) => {
-            Alert(errorData.errCode);
+            Alert(errorData.toLocaleString());
           });
         }
       );
