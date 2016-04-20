@@ -16,6 +16,20 @@ var BFetch = function (url, param, callback, failure, options) {
   }, options);
 };
 
+var BFetch1 = function (url, param, callback, failure, options) {
+  var headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'Authorization': 'Basic  ' + AppStore.getToken()
+  };
+
+  return rawFetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(param)
+  }, options);
+};
+
 var PFetch = function (url, param, callback, failure, options) {
   var headers = {
     'Accept': 'application/json',
@@ -103,5 +117,6 @@ var process = function (_promise, option) {
 module.exports = {
   BFetch: BFetch,
   PFetch: PFetch,
-  UFetch: UFetch
+  UFetch: UFetch,
+  BFetch1: BFetch1
 };

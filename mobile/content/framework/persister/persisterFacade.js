@@ -131,7 +131,7 @@ let _saveImUser = function (imUserBean) {
       mute: imUserBean.mute,
       mobileNumber: imUserBean.mobileNumber,
       photoFileUrl: imUserBean.photoFileUrl,
-      orgId: imUserBean.orgBeanId,
+      orgId: imUserBean.orgId,
       phoneNumber: imUserBean.phoneNumber,
       publicTitle: !!(imUserBean.publicTitle == true || imUserBean.publicTitle == null),
       publicMobile:  !!(imUserBean.publicMobile == true || imUserBean.publicMobile == null),
@@ -230,8 +230,9 @@ let _getLoginUserInfo = function () {
 };
 
 let _getUserId = function () {
-  if (_getLoginUserInfo) {
-    return _getLoginUserInfo.userId;
+  let d  = _getLoginUserInfo();
+  if (d) {
+    return d.userId;
   } else {
     return '';
   }
@@ -247,44 +248,13 @@ let _getOrgByOrgId = function (orgId) {
 };
 
 let _updateUserInfo = function (column, value) {
+  let userId = _getUserId();
   _realm.write(() => {
-    //let ret = {
-    //  userId: users.userId,
-    //  address: users.address,
-    //  realName: users.realName,
-    //  weChatNo: users.weChatNo,
-    //  email: users.email,
-    //  nameCardFileUrl: users.nameCardFileUrl,
-    //  qqNo: users.qqNo,
-    //  department: users.department,
-    //  mobileNumber: users.mobileNumber,
-    //  jobTitle: users.jobTitle,
-    //  phoneNumber: users.phoneNumber,
-    //  photoFileUrl: users.photoFileUrl,
-    //  publicTitle: users.publicTitle,
-    //  publicMobile: users.publicMobile,
-    //  publicDepart: users.publicDepart,
-    //  publicPhone: users.publicPhone,
-    //  publicEmail: users.publicEmail,
-    //  publicAddress: users.publicAddress,
-    //  publicWeChat: users.publicWeChat,
-    //  publicQQ: users.publicQQ,
-    //  orgId: users.orgId,
-    //  lastLoginTime:users.lastLoginTime,  //本地增加,用于多用户登陆排序
-    //  token: users.token
-    //}
     _realm.create(LOGINUSERINFO, {
-      column: value
+      userId:userId,
+      publicMobile: value
     }, true);
   });
-};
-
-let _getContact = function () {
-
-};
-
-let _getUsers = function () {
-
 };
 
 let _getLoginUserInfoByUserId = function (userId) {
@@ -339,7 +309,6 @@ let _getFilters = function () {
     orderItems: orderArray
   }
 };
-
 
 let _saveOrgList = function (orgList) {
   orgList.forEach(function (n) {
