@@ -39,15 +39,19 @@ var WhitePage = React.createClass({
       bizOrientationDefault: 0,
       termDefault: 0,
       amountDefault: 0,
+      termText: '',
+      amountText: '',
+      rateText: '',
+      checked: '',
       //networt
-      term:33,
-      rate:0.03,
-      remark:'这里就只是一个备注',
-      bizOrientation:'天津银行',
-      bizCategory:'MCA',
-      bizItem:'MCA_ABS',
-      amount:10000000,
-      fileIds:[
+      term: 33,
+      rate: 0.03,
+      remark: '这里就只是一个备注',
+      bizOrientation: '出',
+      bizCategory: 'MCA',
+      bizItem: 'MCA_ABS',
+      amount: 10000000,
+      fileIds: [
         ''
       ]
     }
@@ -93,6 +97,21 @@ var WhitePage = React.createClass({
       amountDefault: index
     })
   },
+  _termTextChange (text) {
+    this.setState({
+      termText: text
+    })
+  },
+  _amountTextChange (text) {
+    this.setState({
+      amountText: text
+    })
+  },
+  _rateTextChange (text) {
+    this.setState({
+      rateText: text
+    })
+  },
   renderSelectOrg: function () {
     return (
       <TouchableOpacity onPress={()=>this.toPage(SelectBusiness1)} activeOpacity={0.8} underlayColor="#f0f0f0">
@@ -114,7 +133,8 @@ var WhitePage = React.createClass({
           <Text style={{color:'red',}}>{'*'}</Text>
         </View>
         <View style={{marginTop:10,flexDirection:'row'}}>
-          <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault} change={this._dataChange1}/>
+          <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
+                     change={this._dataChange1}/>
         </View>
       </View>
     )
@@ -130,6 +150,7 @@ var WhitePage = React.createClass({
               placeholderTextColor='#325779'
               returnKeyType="search"
               maxLength={8}
+              onChangeText={(text) => this._termTextChange(text)}
               style={{width:100,height:40,marginLeft:10,color:'#ffd547'}}/>
           </View>
           <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._dataChange2}/>
@@ -149,6 +170,7 @@ var WhitePage = React.createClass({
               placeholderTextColor='#325779'
               returnKeyType="search"
               maxLength={8}
+              onChangeText={(text) => this._amountTextChange(text)}
               style={{width:100,height:40,marginLeft:10,color:'#ffd547',}}/>
           </View>
           <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._dataChange3}/>
@@ -168,6 +190,7 @@ var WhitePage = React.createClass({
               placeholderTextColor='#325779'
               returnKeyType="search"
               maxLength={8}
+              onChangeText={(text) => this._rateTextChange(text)}
               style={{width:100,height:40,marginLeft:10,color:'#ffd547'}}/>
           </View>
           <Text style={{marginLeft:10,fontWeight: 'bold', color:'white',}}>{'%'}</Text>
@@ -247,15 +270,15 @@ var WhitePage = React.createClass({
     this.props.exec(
       ()=> {
         return MarketAction.addBizOrder({
-          id:'',
-          term:33,
-          rate:0.03,
-          remark:'这里就只是一个备注',
-          bizOrientation:'天津银行',
-          bizCategory:'MCA',
-          bizItem:'MCA_ABS',
-          amount:10000000,
-          fileIds:[
+          id: '1',
+          term: this.state.termText,
+          rate: this.state.rateText,
+          remark: '这里就只是一个备注',
+          bizOrientation: '天津银行',
+          bizCategory: 'MCA',
+          bizItem: 'MCA_ABS',
+          amount: this.state.amountText,
+          fileIds: [
             ''
           ]
         }).then((response)=> {

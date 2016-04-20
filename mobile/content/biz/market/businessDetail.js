@@ -31,9 +31,7 @@ let BusinessDetail = React.createClass({
     }
   },
   componentWillMount: function () {
-    //{
-    //  this.getBizOrderInMarket(this.props.param.marketInfo.id)
-    //}
+    {this.getBizOrderInMarket(this.props.param.marketInfo.id);}
   },
   render: function () {
     return (
@@ -133,7 +131,9 @@ let BusinessDetail = React.createClass({
   getBizOrderInMarket: function (id) {
     this.props.exec(
       ()=> {
-        return MarketAction.getBizOrderInMarket(
+        return MarketAction.getBizOrderInMarket({
+            orderId:id
+        }
         ).then((response)=> {
           let detail = (JSON.stringify(response));
           console.log(arr);

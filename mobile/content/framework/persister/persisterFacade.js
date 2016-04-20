@@ -12,8 +12,6 @@ const {
   ImUserInfoSchema,
   LoginUserInfoSchema,
   OrgBeanSchema,
-  BizOrderCategorySchema,
-  BizOrderItemSchema,
   FilterItemSchema,
   FilterItemsSchema,
   OrderItemSchema,
@@ -24,10 +22,7 @@ const {
   IMUSERINFO,
   LOGINUSERINFO,
   ORGBEAN,
-  BIZORDERCATEGORY,
-  BIZORDERITEM,
   FILTERITEMS,
-  FILTERITEM,
   ORDERITEM,
   MESSAGELIST
   } = require('./schemas');
@@ -37,6 +32,7 @@ let PersisterFacade = {
   getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
   getAllGroups: () => _getAllGroups(),
   getUsersGroupByOrg: () => _getUsersGroupByOrg(),
+  getUsersGroupByOrgByGroupId:(id) => _getUsersGroupByOrgByGroupId(id),
   getUserInfoByUserId: (id) => _getUserInfoByUserId(id),
   getGroupMembersByGroupId: (id) => _getGroupMembersByGroupId(id),
   getGroupInfoByGroupId:(id) => _getGroupInfoByGroupId(id),
@@ -64,29 +60,38 @@ let PersisterFacade = {
   saveFilters: ()=> _saveFilters(),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
-  getOrgList: ()=>_getOrgList()
+  getOrgList: ()=>_getOrgList(),
+  deleteDevice:()=> _deleteDevice()
 };
 
 console.log(Realm.defaultPath);
 let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema, LoginUserInfoSchema, OrgBeanSchema,
-    BizOrderCategorySchema, BizOrderItemSchema, FilterItemSchema, FilterItemsSchema, OrderItemSchema, MessageListSchema],
-  schemaVersion: 14
+    FilterItemSchema, FilterItemsSchema, OrderItemSchema, MessageListSchema],
+  schemaVersion: 2
 });
 
-let _saveAppData = function (data) {
-  let orgBeanSet = data.orgBeanSet;
-  let appUser = data.appUserInfoBean;
-  let appUserGroupBeanList = data.appUserGroupBeanList;
-  let bizOrderCategoryBeanList = data.bizOrderCategoryBeanList;
-  let imUserBeanList = data.imUserBeanList;
-  _saveLoginUserInfo(data);
-  _saveImUsers();
-  _saveOrgBeanSet();
+//test method
+let _deleteDevice = function(){
+  _realm.write(() => {
+    let devices = _realm.objects(DEVICE);
+    _realm.delete(devices); // Deletes all books
+  });
 };
 
-let _saveLoginUserInfo = function (data) {
-  let loginUserInfo = data.appUserInfoBean;
+let _saveAppData = function (data) {
+  let loginUserInfo = data.appUserInfoOutBean;
+  let token = data.appToken;
+  let orgBeanMap = data.orgBeanMap;
+  let appUserGroupBeanList = data.appUserGroupBeanList;
+  let imUserBeanList = data.imUserBeanList;
+  _saveLoginUserInfo(loginUserInfo,token);
+  _saveImUsers(imUserBeanList);
+  //_saveOrgBeanMap(orgBeanMap);
+  //_saveAppUserGroupBeanList(appUserGroupBeanList);
+};
+
+let _saveLoginUserInfo = function (loginUserInfo,token) {
   _realm.write(() => {
     _realm.create(LOGINUSERINFO, {
       userId: loginUserInfo.userId,
@@ -102,7 +107,7 @@ let _saveLoginUserInfo = function (data) {
       phoneNumber: loginUserInfo.phoneNumber,
       photoFileUrl: loginUserInfo.photoFileUrl,
       orgBeanId: loginUserInfo.orgBeanId,
-      token: data.appToken,
+      token: token,
       lastLoginTime: new Date(),
       publicTitle: _.isEmpty(loginUserInfo.publicTitle) ? true : loginUserInfo.publicTitle,
       publicMobile: _.isEmpty(loginUserInfo.publicMobile) ? true : loginUserInfo.publicMobile,
@@ -116,14 +121,67 @@ let _saveLoginUserInfo = function (data) {
   });
 };
 
-let _saveImUsers = function () {
+let _saveAppUserGroupBeanList = function (appUserGroupBeanList) {
+  appUserGroupBeanList.forEach(function (n) {
+    console.log(n);
+    _saveAppUserGroupBean(n);
+  });
 
 };
 
-let _saveOrgBeanSet = function () {
-  TestData.mockOrgBeanSet.forEach(function (n) {
-    console.log(n);
-    _saveOrgBeanItem(n);
+let _saveAppUserGroupBean =function(appUserGroupBean){
+  _realm.write(() => {
+    _realm.create(GROUP, {
+      groupId: appUserGroupBean.groupId,
+      groupName: appUserGroupBean.groupName,
+      groupMasterUid: appUserGroupBean.groupMasterUid,
+      memberNum: appUserGroupBean.memberNum,
+      members: appUserGroupBean.members,
+      mute: appUserGroupBean.mute
+    }, true);
+  });
+};
+
+let _saveImUsers = function (imUserBeanList) {
+  imUserBeanList.forEach(function (imUserBean) {
+    console.log(imUserBean);
+    _saveImUser(imUserBean);
+  });
+};
+
+let _saveImUser = function(imUserBean){
+  _realm.write(() => {
+    _realm.create(IMUSERINFO, {
+      userId: imUserBean.userId,
+      address: imUserBean.address,
+      realName: imUserBean.realName,
+      nameCardFileUrl: imUserBean.nameCardFileUrl,
+      department: imUserBean.department,
+      publicDepart: imUserBean.publicDepart,
+      jobTitle: imUserBean.jobTitle,
+      qqNo: imUserBean.qqNo,
+      email: imUserBean.email,
+      publicTitle: imUserBean.publicTitle,
+      mobileNumber: imUserBean.mobileNumber,
+      publicMobile: imUserBean.publicMobile,
+      phoneNumber: imUserBean.phoneNumber,
+      publicPhone: imUserBean.publicPhone,
+      publicEmail: imUserBean.publicEmail,
+      publicAddress: imUserBean.publicAddress,
+      publicWeChat: imUserBean.publicWeChat,
+      photoFileUrl: imUserBean.photoFileUrl,
+      publicQQ: imUserBean.publicQQ,
+      weChatNo: imUserBean.weChatNo,
+      mute: imUserBean.mute,
+      orgId: imUserBean.orgBeanId
+    }, true);
+  });
+};
+
+let _saveOrgBeanMap = function (orgBeanMap) {
+  orgBeanMap.forEach(function (orgBean) {
+    console.log(orgBean);
+    _saveOrgBeanItem(orgBean);
   });
 };
 
@@ -155,12 +213,11 @@ let _getAPNSToken = function () {
   _realm.write(() => {
     _realm.create(DEVICE, {
       id: 1,
-      deviceOS: 'IOS',
+      deviceOS: Platform.OS,
       APNSToken: 'asdfghjklzxcvbnm'
     }, true);
   });
   let device = _realm.objects(DEVICE);
-
   return device[0].APNSToken;
 };
 
@@ -187,7 +244,7 @@ let _getToken = function () {
 let _clearToken = function (userId) {
   _realm.write(() => {
     _realm.create(LOGINUSERINFO, {
-      userId:userId,
+      userId: userId,
       token: ''
     }, true);
   });
@@ -204,9 +261,9 @@ let _getLoginUserInfo = function () {
 };
 
 let _getUserId = function () {
-  if (_getLoginUserInfo){
+  if (_getLoginUserInfo) {
     return _getLoginUserInfo.userId;
-  }else{
+  } else {
     return '';
   }
 };
@@ -298,30 +355,24 @@ let _getOrgList = function () {
 };
 
 
-
 //造假数据
-_realm.write(() => {
-  for (let item of MockData.users) {
-    _realm.create(IMUSERINFO, item, true);
-  }
-
-  for (let org of MockData.orgs) {
-    _realm.create(ORGBEAN, org, true);
-  }
-
-  for (let group of MockData.groups) {
-    _realm.create(GROUP, group, true);
-  }
-
-  for (let message of MockData.message){
-    _realm.create(MESSAGE, message, true);
-  }
-
-  for(let session of MockData.sessionList){
-    _realm.create(MESSAGELIST, session, true);
-  }
-});
-
+//_realm.write(() => {
+//  for (let item of MockData.users) {
+//    _realm.create(IMUSERINFO, item, true);
+//  }
+//
+//  for (let group of MockData.groups) {
+//    _realm.create(GROUP, group, true);
+//  }
+//
+//  for (let message of MockData.message) {
+//    _realm.create(MESSAGE, message, true);
+//  }
+//
+//  for (let session of MockData.sessionList) {
+//    _realm.create(MESSAGELIST, session, true);
+//  }
+//});
 
 
 let _getAllGroups = function () {
@@ -373,6 +424,7 @@ let _getUserInfoByUserId = function (id) {
   return users;
 };
 
+
 let _isInGroup = function(existMembers, id){
   let array = [];
   for (let mem of existMembers) {
@@ -383,12 +435,12 @@ let _isInGroup = function(existMembers, id){
   return array;
 };
 
-let _isNotInGroup = function(orgMembers, existMembers){
+let _isNotInGroup = function (orgMembers, existMembers) {
   let array = [];
-  for(let mem of orgMembers){
+  for (let mem of orgMembers) {
     let f = false;
-    for(let ex of existMembers){
-      if(mem.userId == ex.userId){
+    for (let ex of existMembers) {
+      if (mem.userId == ex.userId) {
         f = true;
       }
     }
@@ -397,7 +449,7 @@ let _isNotInGroup = function(orgMembers, existMembers){
   return array;
 };
 
-let _getUsersExpress = function(groupId) {
+let _getUsersExpress = function (groupId) {
   let orgs = _realm.objects(ORGBEAN);//获得所有机构
   let users = _realm.objects(IMUSERINFO);//获得所有用户
   let existMembers = _getGroupMembersByGroupId(groupId);//获得群组用户
@@ -418,7 +470,6 @@ let _getUsersExpress = function(groupId) {
     }
     orgArray.push(org);
   }
-
   return orgArray;
 };
 
@@ -442,10 +493,10 @@ let _createGroup = function(groupId, groupName,groupMasterUid,number,members,mut
       memberNum:number,
       members:members,
       mute:mute
-    }
+    };
     _realm.create(GROUP, group, true);
   });
-}
+};
 
 let _kickOutMember = function (groupId, members) {
   let memberList = _realm.objects(GROUP).filtered('groupId = ' + groupId);
@@ -460,7 +511,7 @@ let _kickOutMember = function (groupId, members) {
     !f?mem.push(m):'';
   }
   //memberList[0] = mem;
-  let d = memberList[0]
+  let d = memberList[0];
   let group = {
     groupId:d.groupId,
     groupName:d.groupName,
@@ -468,11 +519,11 @@ let _kickOutMember = function (groupId, members) {
     memberNum:d.memberNum - members.length,
     members:mem,
     mute:d.mute
-  }
+  };
   _realm.write(() => {
     _realm.create(GROUP, group, true);
   });
-}
+};
 
 let _modifyGroupName = function(groupId, groupName){
   let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
@@ -483,12 +534,12 @@ let _modifyGroupName = function(groupId, groupName){
     memberNum:group[0].memberNum,
     members:group[0].members,
     mute:group[0].mute
-  }
+  };
   console.log(newGroup);
   _realm.write(() => {
     _realm.create(GROUP, newGroup, true);
   });
 
-}
+};
 
 module.exports = PersisterFacade;
