@@ -11,17 +11,13 @@ let {
 
 let _ = require('lodash');
 let GiftedMessenger = require('./giftedMessenger');
-let {Communications, Device} = require('mx-artifacts');
+let { Alert, Communications, Device } = require('mx-artifacts');
 
 let ImAction = require('../../framework/action/imAction');
 let ImStore = require('../../framework/store/imStore');
 let { MSG_CONTENT_TYPE, COMMAND_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 
-
-// let _getMessageKey = (f, t) => {
-//   // return (f > t ? f + ':' + t : t + ':' + f) + ':' + new Date().getTime() + ':' + _device_id;
-//   return f + ':' + t + ':' + new Date().getTime() + ':' + _device_id;
-// };
+let KeyGenerator = require('../../comp/utils/keyGenerator');
 
 let Messenger = React.createClass({
 
@@ -31,16 +27,15 @@ let Messenger = React.createClass({
         sessionId: 'sessionId',
         chatType: SESSION_TYPE.USER,
         userId: ''
-      },
-    }
-      ;
+      }
+    };
   },
 
   propTypes: {
     param: React.PropTypes.object,
   },
 
-  _getStateFromStores: function () {
+  _getStateFromStores() {
     return {
       messages: ImStore.getMessages(),
       // token: AppStore.getToken()
@@ -53,36 +48,98 @@ let Messenger = React.createClass({
     });
   },
 
-  handleSend(message = {}, rowID = null) {
+  componentDidMount() {
+    ImStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount() {
+    ImStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange() {
+    this.setState(this._getStateFromStores());
+  },
+
+  handleSend(message = {}, rowID = null, isReSend = false) {
     // Your logic here
-    // Send message.text to your server
-    let msgToSend = { sessionId: this.props.param.sessionId };
+    // Send message.content to your server
+    let msgId = KeyGenerator.getMessageKey(this.props.param.sessionId);
+    let msgToSend = {
+      sessionId: this.props.param.sessionId,
+      msgId: msgId,
+      fromUId: null,
+      contentType: MSG_CONTENT_TYPE.TEXT,
+      content: message.content,
+      revTime: message.date,
+      isRead: true,
+      status: 'ErrorButton'
+    };
     if (this.props.param.chatType === SESSION_TYPE.USER) {
-      msgToSend.data = {
-        // toUid: this.props.param.userId,
-        toUid: 'u002',
-        contentType: MSG_CONTENT_TYPE.TEXT,
-        content: message.text,
-        msgId: message.msgId,
-        command: COMMAND_TYPE.SEND_P2P_MSG
-      };
+      _.assign(msgToSend, {
+        // toId: this.props.param.userId,
+        toId: 'u002',
+        type: SESSION_TYPE.USER,
+        msgType: COMMAND_TYPE.SEND_P2P_MSG
+      });
     } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
-      msgToSend.data = {
-        toUid: this.props.param.groupId,
-        contentType: MSG_CONTENT_TYPE.TEXT,
-        content: message.text,
-        msgId: message.msgId,
-        command: COMMAND_TYPE.SEND_GROUP_MSG
-      };
+      _.assign(msgToSend, {
+        groupId: this.props.param.groupId,
+        type: SESSION_TYPE.GROUP,
+        msgType: COMMAND_TYPE.SEND_GROUP_MSG
+      });
     }
 
-    ImAction.send(msgToSend);
+    ImAction.send(msgToSend, isReSend);
 
     // => In this case, you need also to set onErrorButtonPress
     // this._GiftedMessenger.setMessageStatus('Sent', rowID);
     // this._GiftedMessenger.setMessageStatus('Seen', rowID);
     // this._GiftedMessenger.setMessageStatus('Custom label status', rowID);
     // this._GiftedMessenger.setMessageStatus('ErrorButton', rowID);
+  },
+
+  handleSendImage(uri) {
+    // Your logic here
+    // Send message.content to your server
+
+    ImAction.uploadImage(uri)
+      .then((response) => {
+        let msgId = KeyGenerator.getMessageKey(this.props.param.sessionId);
+        let msgToSend = {
+          sessionId: this.props.param.sessionId,
+          msgId: msgId,
+          fromUId: null,
+          contentType: MSG_CONTENT_TYPE.IMAGE,
+          content: response.fileId,
+          revTime: new Date(),
+          isRead: true,
+          status: 'ErrorButton'
+        };
+        if (this.props.param.chatType === SESSION_TYPE.USER) {
+          _.assign(msgToSend, {
+            // toId: this.props.param.userId,
+            toId: 'u002',
+            type: SESSION_TYPE.USER,
+            msgType: COMMAND_TYPE.SEND_P2P_MSG
+          });
+        } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
+          _.assign(msgToSend, {
+            groupId: this.props.param.groupId,
+            type: SESSION_TYPE.GROUP,
+            msgType: COMMAND_TYPE.SEND_GROUP_MSG
+          });
+        }
+
+        ImAction.send(msgToSend);
+      }).catch((errorData) => {
+        console.log('Image upload error ' + JSON.stringify(errorData));
+        Alert('图片上传失败');
+      });
+  },
+
+  handleImageError(error) {
+    console.log('Image select error ' + JSON.stringify(error));
+    Alert('图片选择失败');
   },
 
   // @oldestMessage is the oldest message already added to the list
@@ -95,13 +152,13 @@ let Messenger = React.createClass({
     // newest messages have to be at the begining of the array
     let earlierMessages = [
       {
-        text: 'This is a touchable phone number 0606060606 parsed by taskrabbit/react-native-parsed-text',
+        content: 'This is a touchable phone number 0606060606 parsed by taskrabbit/react-native-parsed-text',
         name: 'Developer',
         image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
         position: 'right',
         date: new Date(2014, 0, 1, 20, 0),
       }, {
-        text: 'React Native enables you to build world-class application experiences on native platforms using a consistent developer experience based on JavaScript and React. https://github.com/facebook/react-native',
+        content: 'React Native enables you to build world-class application experiences on native platforms using a consistent developer experience based on JavaScript and React. https://github.com/facebook/react-native',
         name: 'React-Native',
         image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
         position: 'left',
@@ -114,37 +171,38 @@ let Messenger = React.createClass({
     }, 1000);
   },
 
-  handleReceive(message = {}) {
-    // this._GiftedMessenger.appendMessage(message);
-    let tmpMessages = this.state.messages.concat(message);
-    this.setState({
-      messages: tmpMessages
-    });
-  },
+  // handleReceive(message = {}) {
+  //   // this._GiftedMessenger.appendMessage(message);
+  //   let tmpMessages = this.state.messages.concat(message);
+  //   this.setState({
+  //     messages: tmpMessages
+  //   });
+  // },
 
   onErrorButtonPress(message = {}, rowID = null) {
     // Your logic here
     // Eg: Re-send the message to your server
-    this.handleSend(message, rowID);
+    // this.handleSend(message, rowID, true);
+    ImAction.send(message, true);
 
-    setTimeout(() => {
-      // will set the message to a custom status 'Sent' (you can replace 'Sent' by what you want - it will be displayed under the row)
-      this._GiftedMessenger.setMessageStatus('Sent', rowID);
-      setTimeout(() => {
-        // will set the message to a custom status 'Seen' (you can replace 'Seen' by what you want - it will be displayed under the row)
-        this._GiftedMessenger.setMessageStatus('Seen', rowID);
-        setTimeout(() => {
-          // append an answer
-          this.handleReceive({
-            text: 'I saw your message',
-            name: 'React-Native',
-            image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-            position: 'left',
-            date: new Date()
-          });
-        }, 500);
-      }, 1000);
-    }, 500);
+    // setTimeout(() => {
+    //   // will set the message to a custom status 'Sent' (you can replace 'Sent' by what you want - it will be displayed under the row)
+    //   this._GiftedMessenger.setMessageStatus('Sent', rowID);
+    //   setTimeout(() => {
+    //     // will set the message to a custom status 'Seen' (you can replace 'Seen' by what you want - it will be displayed under the row)
+    //     this._GiftedMessenger.setMessageStatus('Seen', rowID);
+    //     setTimeout(() => {
+    //       // append an answer
+    //       this.handleReceive({
+    //         content: 'I saw your message',
+    //         name: 'React-Native',
+    //         image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
+    //         position: 'left',
+    //         date: new Date()
+    //       });
+    //     }, 500);
+    //   }, 1000);
+    // }, 500);
   },
 
   // will be triggered when the Image of a row is touched
@@ -171,6 +229,8 @@ let Messenger = React.createClass({
         autoFocus={false}
         messages={this.state.messages}
         handleSend={this.handleSend}
+        handleSendImage={this.handleSendImage}
+        handleImageError={this.handleImageError}
         onErrorButtonPress={this.onErrorButtonPress}
         maxHeight={Device.height - Device.navBarHeight}
         loadEarlierMessagesButton={true}
