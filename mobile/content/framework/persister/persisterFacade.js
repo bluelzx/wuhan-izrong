@@ -132,7 +132,7 @@ let _saveImUser = function (imUserBean) {
       mute: imUserBean.mute,
       mobileNumber: imUserBean.mobileNumber,
       photoFileUrl: imUserBean.photoFileUrl,
-      orgId: imUserBean.orgBeanId,
+      orgId: imUserBean.orgId,
       phoneNumber: imUserBean.phoneNumber,
       publicTitle: !!(imUserBean.publicTitle == true || imUserBean.publicTitle == null),
       publicMobile:  !!(imUserBean.publicMobile == true || imUserBean.publicMobile == null),
@@ -231,8 +231,9 @@ let _getLoginUserInfo = function () {
 };
 
 let _getUserId = function () {
-  if (_getLoginUserInfo) {
-    return _getLoginUserInfo.userId;
+  let d  = _getLoginUserInfo();
+  if (d) {
+    return d.userId;
   } else {
     return '';
   }
@@ -252,7 +253,7 @@ let _updateUserInfo = function (column, value) {
   _realm.write(() => {
     _realm.create(LOGINUSERINFO, {
       userId:userId,
-      column: value
+      publicMobile: value
     }, true);
   });
 };

@@ -17,10 +17,9 @@ let LoginActions = {
   sendSmsCodeToLoginMobile: (p)=> _sendSmsCodeToLoginMobile(AppLinks.sendSmsCodeToLoginMobile,p),
   sendSmsCodeToRegisterMobile: (p)=> _sendSmsCodeToRegisterMobile(AppLinks.sendSmsCodeToRegisterMobile,p),
   validateSmsCode: (p) => _validateSmsCode(AppLinks.validateSmsCode,p),
-  uploadNameCard: (fileFieldName,p) => _uploadNameCard(AppLinks.uploadFile,fileFieldName,p),
+  uploadFile: (p,fileFieldName) => _uploadFile(AppLinks.uploadFile,p,fileFieldName),
   getOrgList: () => _getOrgList(AppLinks.getOrgList),
   bizOrderMarketSearchDefaultSearch: (url) => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch)
-
 };
 
 let _sendSmsCodeToLoginMobile = function (url,p) {
@@ -84,10 +83,10 @@ let _logout = function (url,p) {
   });
 };
 
-let _uploadNameCard = function (url,fileFieldName,p) {
+let _uploadFile = function (url,p,fileFieldName) {
   return new Promise((resolve, reject) => {
     UFetch(url, {
-      uri: p[fileFieldName],
+      uri: p,
       type: 'image/jpeg',
       name: fileFieldName
     }).then((response) => {
