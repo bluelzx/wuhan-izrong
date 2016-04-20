@@ -15,18 +15,13 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Chat = require('./chat');
 let ChooseList = require('./chooseList');
 let { SESSION_TYPE } = require('../../constants/dictIm');
+let NameCircular = require('./nameCircular');
+let Setting = require('../../constants/setting');
 
 let CreateGroup = React.createClass({
 
   textChange: function() {
 
-  },
-
-  renderImg: function(data) {
-    return (
-      <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20}}>
-      </View>
-    );
   },
 
   //******************** 扩展列表
@@ -41,10 +36,20 @@ let CreateGroup = React.createClass({
     );
   },
 
+  getMemberList: function(item) {
+    let r = 0;
+    for(let k of Object.keys(item)) {
+      if (!!item[k])
+        r++;
+    }
+    return r;
+  },
+
   checkBoxChoice: function(item) {
     let memberList = this.state.memberList;
     memberList[item.userId] = item;
-    this.setState({memberList:memberList});
+    this.setState({memberList: memberList});
+
   },
 
   unCheckBoxChoice: function(item) {
@@ -63,7 +68,7 @@ let CreateGroup = React.createClass({
                 unChoice={this.unCheckBoxChoice}
                 style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
         <View style={{flexDirection:'row'}}>
-          {this.renderImg(data)}
+          <NameCircular name={data.realName}/>
           <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
         </View>
       </CheckBox>
@@ -73,16 +78,23 @@ let CreateGroup = React.createClass({
 
   createGroup: function(members) {
     console.log(members);
+    if(this.state.groupName.length > Setting.groupNameLengt){
+      Alert('群名称不能超过20个字符');
+      return ;
+    }
+    if(this.getMemberList(members) > Setting.groupMemberUpperLimit){
+      Alert('群组成员人数不能超过' + Setting.groupMemberUpperLimit);
+      return;
+    }
     if(0 == Object.keys(members).length)
       return;
-    else if(members.length == 1){
-      let userId = members[0];
+    else if(Object.keys(members).length == 1){
+      let user = members[Object.keys(members)[0]];
       //获取用户名
-      let userInfo = ContactStore.getUserInfoByUserId()
       this.props.navigator.replacePreviousAndPop(
         {
           comp: Chat,
-          param: {title: userInfo.userName, chatType: SESSION_TYPE.USER, userId: userId}
+          param: {title: user.realName, chatType: SESSION_TYPE.USER, userId: user.userId}
         }
       );
     }else{
@@ -104,8 +116,6 @@ let CreateGroup = React.createClass({
           });
         }
       );
-
-
     }
   },
 
@@ -118,8 +128,8 @@ let CreateGroup = React.createClass({
       }
     }
     return (
-      <TouchableOpacity onPress={() => this.createGroup(memberList)}>
-        <Text style={{ marginLeft:-20,color:count==0?'#6B849C':'white'}}>{'创建(' + count + ')'}</Text>
+      <TouchableOpacity onPress={() => count > 0 && this.createGroup(memberList)}>
+        <Text style={{ marginLeft:-40,color:(this.getMemberList(memberList) > Setting.groupMemberUpperLimit||this.state.groupName.length > Setting.groupNameLengt || count==0)?'#6B849C':'white'}}>{'创建(' + count + '/' + Setting.groupMemberUpperLimit + ')'}</Text>
       </TouchableOpacity>
     );
   },

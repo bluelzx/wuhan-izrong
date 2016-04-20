@@ -11,7 +11,7 @@ let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let DictIcon = require('../../constants/dictIcon');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let HeadPic = require('./headerPic');
+let NameCircular = require('./nameCircular');
 
 let DeleteMember = React.createClass({
 
@@ -53,13 +53,6 @@ let DeleteMember = React.createClass({
     );
   },
 
-  renderImg: function(data) {
-    return (
-      <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20}}>
-      </View>
-    );
-  },
-
   //******************** 扩展列表
   //渲染组标题
   titleRender: function(data) {
@@ -93,7 +86,9 @@ let DeleteMember = React.createClass({
                 unChoice={this.unCheckBoxChoice}
                 style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
         <View style={{flexDirection:'row'}}>
-          <HeadPic showBadge={false} style={{height: 40,width: 40, marginTop:5}} source={DictIcon.imSpread} />
+          <View style={{height: 40,width: 40}}>
+            <NameCircular name={data.realName}/>
+          </View>
           <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
         </View>
       </CheckBox>

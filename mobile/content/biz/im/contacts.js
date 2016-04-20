@@ -22,6 +22,7 @@ let AppStore = require('../../framework/store/appStore');
 let DictIcon = require('../../constants/dictIcon');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Spread = require('./spread');
+let NameCircular = require('./nameCircular');
 
 let Contacts = React.createClass({
 
@@ -48,7 +49,7 @@ let Contacts = React.createClass({
 
   renderImg: function(data) {
     return (
-      <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20}}>
+      <View style={{backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20}}>
       </View>
     );
   },
@@ -109,7 +110,7 @@ let Contacts = React.createClass({
                             onPress={() => this.toUser(data)}
                             style={{borderTopWidth:0.5,  borderTopColor: '#132232'}}>
           <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
-            {this.renderImg(data)}
+            <NameCircular name={data.realName}/>
             <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
           </View>
         </TouchableHighlight>
@@ -158,7 +159,7 @@ let Contacts = React.createClass({
                   actionButton={this.renderAdd}>
         <SearchBar textChange={this.textChange}/>
         {this.renderGlobal()}
-        <ExtenList itemHeight={56}
+        <ExtenList itemHeight={51}
                    groundColor={'#15263A'}
                    groupBorderColor={"#132232"}
                    arrowColor={'#ffffff'}
