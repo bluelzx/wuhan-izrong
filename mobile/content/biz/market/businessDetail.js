@@ -124,7 +124,7 @@ let BusinessDetail = React.createClass({
           <Image style={{width:16,height:16}}
                  source={url}
           />
-          <Text style={{marginLeft:10,fontSize:16,color:'white',width:200}}>{value}</Text>
+          <Text style={{marginLeft:10,fontSize:16,color:'white',width:screenWidth - 60}}>{value}</Text>
         </View>
       )
     } else {
