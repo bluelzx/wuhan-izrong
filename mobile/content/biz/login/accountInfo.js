@@ -10,14 +10,14 @@ let {
   Text,
   View,
   Image
-  } = React;
+} = React;
 let AppStore = require('../../framework/store/appStore');
 //let UserStore = require('../../framework/store/userStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Input = require('../../comp/utils/input');
-let { Alert, Button } = require('mx-artifacts');
+let {Alert, Button} = require('mx-artifacts');
 let Register_selectOrg = require('./selectOrg');
 let Register_uploadNameCard = require('./uploadNameCard');
 let Icon = require('react-native-vector-icons/Ionicons');
@@ -27,11 +27,9 @@ let Register_accountInfo = React.createClass({
     return {
       realName: '',
       userName: '',
-      orgId: '1',
-      mobileNo:this.props.param.mobileNo
+      orgValue: '选择机构',
     };
   },
-
   getInitialState: function () {
     return this.getStateFromStores();
   },
@@ -48,15 +46,22 @@ let Register_accountInfo = React.createClass({
   },
 
   toPage: function (name, param) {
-    const { navigator } = this.props;
+    const {navigator} = this.props;
     if (navigator) {
       navigator.push(
         {
           comp: name,
-          param: param
+          param: param,
+          callBack: this.callback
         }
       )
     }
+  },
+  callback: function (item) {
+    this.setState({
+      orgValue: item.orgValue,
+      orgId: item.id
+    })
   },
 
   _onChangeText(key, value){
@@ -82,13 +87,13 @@ let Register_accountInfo = React.createClass({
           <Input type="default" placeholder='用户名(邮箱)' maxlength={20} field='userName'
                  onChangeText={this._onChangeText} icon='user'/>
           <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
-                              onPress={()=>this.toPage(Register_selectOrg,{callback:(orgId)=>{this.state.orgId= orgId}})}>
+                              onPress={()=>this.toPage(Register_selectOrg)}>
             <View style={styles.selectOrg}>
               <View style={{marginLeft:20,flexDirection:'row'}}>
                 <Image
                   style={{height:20,width:20}}
                   source={require('../../image/login/select_org.png')}/>
-                <Text style={{color:'#ffffff',fontSize:18,marginLeft:20}}>选择机构</Text>
+                <Text style={{color:'#ffffff',fontSize:18,marginLeft:20,width:260}} numberOfLines={1}>{this.state.orgValue}</Text>
               </View>
 
               <Icon
@@ -102,7 +107,7 @@ let Register_accountInfo = React.createClass({
             styleDisabled={{color: 'red'}}
             onPress={()=>this.toPage(Register_uploadNameCard,
                  {
-                    mobileNo: this.state.mobileNo,
+                    mobileNo: this.props.param.mobileNo,
                     realName:this.state.realName,
                     userName:this.state.userName,
                     orgId:this.state.orgId

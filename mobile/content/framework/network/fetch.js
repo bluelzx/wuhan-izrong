@@ -95,6 +95,7 @@ var process = function (_promise, option) {
             } else {
               resolve(json);
             }
+
             console.log('以下打印一次获取到的json:');
             console.log(json);
           }
