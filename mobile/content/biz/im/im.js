@@ -113,24 +113,28 @@ let WhitePage = React.createClass({
 
   renderSpread: function(item) {
     let {width} = Device;
-    return (
-      <TouchableHighlight onPress={()=> this.props.navigator.push({comp: Spread})}>
-        <View
-          style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
-          <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imSpread} />
+    if(item = {}){
+
+    }else{
+      return (
+        <TouchableHighlight onPress={()=> this.props.navigator.push({comp: Spread})}>
           <View
-            style={{ height:40, width:width-70}}>
+            style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
+            <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imSpread} />
             <View
-              style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
-              <Text style={{color:'#ffffff'}}>{'环渤海银银合作平台'}</Text>
-              <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
+              style={{ height:40, width:width-70}}>
+              <View
+                style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
+                <Text style={{color:'#ffffff'}}>{'环渤海银银合作平台'}</Text>
+                <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
+              </View>
+              <Text numberOfLines={1}
+                    style={{marginTop:5,color:'#687886'}}>{item.content}</Text>
             </View>
-            <Text numberOfLines={1}
-                  style={{marginTop:5,color:'#687886'}}>{item.content}</Text>
           </View>
-        </View>
-      </TouchableHighlight>
-    );
+        </TouchableHighlight>
+      );
+    }
   },
 
 

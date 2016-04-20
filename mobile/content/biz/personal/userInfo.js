@@ -127,10 +127,14 @@ let UserInfo = React.createClass({
 
           <TouchableHighlight style={{backgroundColor:'#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
                               onPress={()=>this.selectPhoto()}>
-            <View style={styles.layout}>
-              <Image style={styles.head} resizeMode="cover" source={require('../../image/user/head.png')}/>
-              <Text style={{color:'#ffffff',fontSize:18}}>{this.state.realName}</Text>
-              <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+            <View style = {styles.layout}>
+              <View style = {{flex:1}}>
+                <Image style={styles.head} resizeMode="cover" source={require('../../image/user/head.png')}/>
+              </View>
+              <View style = {{flex:1,flexDirection:"row",justifyContent:'flex-end',alignItems:'center'}}>
+                <Text style={{color:'#ffffff',fontSize:18,textAlign:'right',paddingRight:20}}>{this.state.realName}</Text>
+                <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+              </View>
             </View>
           </TouchableHighlight>
 

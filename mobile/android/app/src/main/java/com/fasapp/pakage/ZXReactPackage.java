@@ -5,7 +5,7 @@ import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
-import com.fasapp.view.viewpager.*;
+import com.fasapp.modules.UserPhotoPicModule;
 import com.fasapp.view.viewpager.ZXViewPagerManager;
 
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ public class ZXReactPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
+        modules.add(new UserPhotoPicModule(reactContext));
         return modules;
     }
 
