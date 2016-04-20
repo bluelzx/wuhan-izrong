@@ -33,9 +33,9 @@ let ImSocket = {
 
   },
 
-  send: function (data) {
+  send: function (message) {
     return new Promise((resolve, reject) => {
-      _socket && _socket.send(data, (error) => {
+      _socket && _socket.send(Resolver.solve(message), (error) => {
         if (error) {
           reject(error);
         } else {

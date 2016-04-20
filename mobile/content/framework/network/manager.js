@@ -453,5 +453,6 @@ Manager.prototype.send = function (data, fn) {
     return;
   }
   let _socket = this.engine;
+  console.log('**websocket** send %s', JSON.stringify(data));
   _socket.send(JSON.stringify(data));
 };

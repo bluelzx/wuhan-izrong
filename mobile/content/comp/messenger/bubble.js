@@ -41,15 +41,10 @@ export default class Bubble extends React.Component {
   }
 
   _getLength(str) {
-    return str.replace(/[^\x00-\xff]/g,"01").length;
+    return str.replace(/[^\x00-\xff]/g, '01').length;
   }
 
   render(){
-    var flexStyle = {};
-    //if ( this.props.text.length > 40 ) {
-    if ( this._getLength(this.props.text) > 40 ) {
-      flexStyle.flex = 1;
-    }
 
     let customStyle = {};
     if (this.props.position === 'left') {
@@ -66,10 +61,31 @@ export default class Bubble extends React.Component {
       };
     }
 
+    if (this.props.contentType === 'image') {
+      return (
+        <View style={[styles.bubble, customStyle]}>
+          <Image
+            style={{
+              flex: 1,
+              width: 100,
+              height: 100,
+            }}
+            source={{uri: this.props.content}}
+          ></Image>
+        </View>
+      );
+    }
+
+    var flexStyle = {};
+    //if ( this.props.text.length > 40 ) {
+    if ( this._getLength(this.props.content) > 40 ) {
+      flexStyle.flex = 1;
+    }
+
     return (
       <View style={[styles.bubble, customStyle, flexStyle]}>
         {this.props.name}
-        {this.renderText(this.props.text, this.props.position)}
+        {this.renderText(this.props.content, this.props.position)}
       </View>
     );
   }
@@ -78,7 +94,8 @@ export default class Bubble extends React.Component {
 Bubble.propTypes = {
   position: React.PropTypes.oneOf(['left', 'right']),
   status: React.PropTypes.string,
-  text: React.PropTypes.string,
+  contentType: React.PropTypes.string,
+  content: React.PropTypes.string,
   renderCustomText: React.PropTypes.func,
   name: React.PropTypes.element,
   leftBackgroundColor: React.PropTypes.string,

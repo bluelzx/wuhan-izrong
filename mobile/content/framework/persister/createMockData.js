@@ -202,6 +202,7 @@ let group1 = {
   groupName: 'group A',
   groupMasterUid: 1,
   memberNum: 10,
+  groupImageUrl:'http://',
   members: JSON.stringify([1,2,3]),
   mute: false
 }
@@ -211,13 +212,14 @@ let group2 = {
   groupName: 'group B',
   groupMasterUid: 2,
   memberNum: 10,
+  groupImageUrl:'http://',
   members: JSON.stringify([4,5]),
   mute: false
 }
 
 
 let session1 = {
-  sessionId: 1,
+  sessionId: '1',
   type: MSG_TYPE.PLATFORM_INFO,
   badge: 1,
   title: 'new11',
@@ -228,7 +230,7 @@ let session1 = {
 
 
 let session2 = {
-  sessionId: 2,
+  sessionId: '2',
   type: MSG_TYPE.REC_P2P_MSG,
   badge:2,
   title: 'user',
@@ -240,7 +242,7 @@ let session2 = {
 
 
 let session3 = {
-  sessionId: 3,
+  sessionId: '3',
   type: MSG_TYPE.REC_GROUP_MSG,
   badge:3,
   title: 'group1',
@@ -250,8 +252,8 @@ let session3 = {
 }
 
 let message1 = {
-  sessionId: 2,
-  msgId: 1,
+  sessionId: '2',
+  msgId: '1',
   fromUId: 2,
   groupId: 0,
   toId: 3,
@@ -260,12 +262,13 @@ let message1 = {
   content: 'haha',
   msgType: MSG_TYPE.REC_P2P_MSG,
   revTime: new Date(),
-  isRead: false
+  isRead: false,
+  status:'111',
 }
 
 let message2 = {
-  sessionId: 3,
-  msgId: 1,
+  sessionId: '3',
+  msgId: '1',
   fromUId: 2,
   groupId: 1,
   toId: 3,
@@ -274,7 +277,8 @@ let message2 = {
   content: 'haha',
   msgType: MSG_TYPE.REC_GROUP_MSG,
   revTime: new Date(),
-  isRead: false
+  isRead: false,
+  status:'222',
 }
 
 module.exports = {
