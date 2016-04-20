@@ -16,20 +16,29 @@ var {height, width} = Dimensions.get('window');
 var ViewPager = require('react-native-viewpager');
 var MarketList = require('../market/marketList');
 
+var marketData = {
+  contentList: [
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'}]
+};
+
 var PAGES = [
   'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024',
   'https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?h=1024',
   'https://images.unsplash.com/photo-1441448770220-76743f9e6af6?h=1024',
   'https://images.unsplash.com/photo-1441260038675-7329ab4cc264?h=1024'
 ];
-
-var marketData = {contentList:[
-  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
-  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
-  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
-  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
-  {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'}]};
-
+var marketData = {
+  contentList: [
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
+    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'}]
+};
 var Home = React.createClass({
   getInitialState: function () {
     var dataSource = new ViewPager.DataSource({
@@ -87,15 +96,15 @@ var Home = React.createClass({
       );
     }
   },
-  rendViewPager: function(){
-    return(
+  rendViewPager: function () {
+    return (
       <ViewPager
         style={[this.props.style,styles.viewPager]}
         dataSource={this.state.dataSource}
         renderPage={this._renderPage}
         isLoop={true}
         autoPlay={true}/>
-      )
+    )
   },
 
   render() {
@@ -106,18 +115,18 @@ var Home = React.createClass({
           {this.rendViewPager()}
           <View style={{height: width/3*2,flexDirection:"column",backgroundColor: "#162a40",justifyContent: "center"}}>
             <View style={{flex:1,flexDirection:"row",borderBottomColor:"#000000",borderBottomWidth:1}}>
-              {this.returnItem(false, require('../../image/home/assetTransaction.png'), '资产交易','assetTransaction')}
-              {this.returnItem(true, require('../../image/home/billTransaction.png'), '票据交易','billTransaction')}
-              {this.returnItem(false, require('../../image/home/capitalBusiness.png'), '资金业务','capitalBusiness')}
+              {this.returnItem(false, require('../../image/home/assetTransaction.png'), '资产交易', 'assetTransaction')}
+              {this.returnItem(true, require('../../image/home/billTransaction.png'), '票据交易', 'billTransaction')}
+              {this.returnItem(false, require('../../image/home/capitalBusiness.png'), '资金业务', 'capitalBusiness')}
             </View>
             <View style={{flex:1,flexDirection:"row"}}>
-              {this.returnItem(false, require('../../image/home/companyBank.png'), '公司投行','companyBank')}
-              {this.returnItem(true, require('../../image/home/interbankAgent.png'), '同业代理','interbankAgent')}
-              {this.returnItem(false, require('../../image/home/myBusiness.png'), '我的业务','myBusiness')}
+              {this.returnItem(false, require('../../image/home/companyBank.png'), '公司投行', 'companyBank')}
+              {this.returnItem(true, require('../../image/home/interbankAgent.png'), '同业代理', 'interbankAgent')}
+              {this.returnItem(false, require('../../image/home/myBusiness.png'), '我的业务', 'myBusiness')}
             </View>
           </View>
           <View style={styles.listHead}>
-                 <Text style={{marginLeft:20,fontSize:16,color:'#ffffff'}}>资金业务--同业存款</Text>
+            <Text style={{marginLeft:20,fontSize:16,color:'#ffffff'}}>资金业务--同业存款</Text>
           </View>
           <MarketList navigator={this.props.navigator} marketData={marketData}/>
         </ScrollView>
@@ -156,17 +165,17 @@ var styles = StyleSheet.create({
     fontSize: 16
   },
   menuItem: {
-    flexDirection:'column',
-    alignItems:'center',
-    flex:1,
-    justifyContent:'center'
+    flexDirection: 'column',
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center'
   },
-  listHead:{
-    height:50,
-    backgroundColor:'#18304D',
-    borderBottomWidth:0.5,
-    borderBottomColor:'#000000',
-    justifyContent:'center'
+  listHead: {
+    height: 50,
+    backgroundColor: '#18304D',
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#000000',
+    justifyContent: 'center'
   }
 
 });

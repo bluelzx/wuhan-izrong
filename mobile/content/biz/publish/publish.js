@@ -27,6 +27,7 @@ var SelectBtn = require('./selectBtn');
 var Remarks = require('./remarks');
 var SelectBusiness1 = require('./selectBusiness1');
 
+let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
 
 var bizOrientationUnit = ['出', '收'];
@@ -35,7 +36,10 @@ var amountUnit = ['万', '亿'];
 
 var WhitePage = React.createClass({
   getInitialState(){
+    let filterItems = AppStore.getFilters().filterItems;
+
     return {
+      filterItems: filterItems,
       bizOrientationDefault: 0,
       termDefault: 0,
       amountDefault: 0,
@@ -44,16 +48,14 @@ var WhitePage = React.createClass({
       rateText: '',
       checked: '',
       //networt
-      term: 33,
-      rate: 0.03,
-      remark: '这里就只是一个备注',
+      term: '',
+      rate: '',
+      remark: '',
       bizOrientation: '出',
-      bizCategory: 'MCA',
-      bizItem: 'MCA_ABS',
-      amount: 10000000,
-      fileIds: [
-        ''
-      ]
+      bizCategory: '',
+      bizItem: '',
+      amount: '',
+      fileIds: []
     }
   },
 
@@ -84,12 +86,13 @@ var WhitePage = React.createClass({
   },
   _dataChange1 (index) {
     this.setState({
-      bizOrientationDefault: index
+      bizOrientationDefault: index,
+      bizOrientation: (index == 0) ? 'IN' : 'OUT'
     })
   },
   _dataChange2 (index) {
     this.setState({
-      termDefault: index
+      termDefault: index,
     })
   },
   _dataChange3 (index) {
@@ -99,17 +102,17 @@ var WhitePage = React.createClass({
   },
   _termTextChange (text) {
     this.setState({
-      termText: text
+      termText: (this.state.termDefault == 0) ? Number(text) : (this.state.termDefault == 1) ? Number(text) * 30 : Number(text) * 365
     })
   },
   _amountTextChange (text) {
     this.setState({
-      amountText: text
+      amountText: (this.state.amountDefault == 0) ? Number(text) * 10000 : Number(text) * 100000000
     })
   },
   _rateTextChange (text) {
     this.setState({
-      rateText: text
+      rateText: Number(text)
     })
   },
   renderSelectOrg: function () {
@@ -262,7 +265,10 @@ var WhitePage = React.createClass({
   toPage: function (name) {
     const { navigator } = this.props;
     if (navigator) {
-      navigator.push({comp: name})
+      navigator.push({
+        comp: name,
+        param: {filterItems: this.state.filterItems}
+      })
     }
   },
 
@@ -270,21 +276,19 @@ var WhitePage = React.createClass({
     this.props.exec(
       ()=> {
         return MarketAction.addBizOrder({
-          id: '1',
+          id: this.state.id,
           term: this.state.termText,
           rate: this.state.rateText,
-          remark: '这里就只是一个备注',
-          bizOrientation: '天津银行',
-          bizCategory: 'MCA',
-          bizItem: 'MCA_ABS',
+          remark: this.state.remark,
+          bizOrientation: this.state.bizOrientation,
+          bizCategory: this.state.bizCategory,
+          bizItem: this.state.bizItem,
           amount: this.state.amountText,
           fileIds: [
             ''
           ]
         }).then((response)=> {
-          let arr = new Array();
-          arr = (JSON.stringify(response));
-          console.log(arr);
+          console.log(JSON.stringify(response));
         }).catch(
           (errorData) => {
             throw errorData;

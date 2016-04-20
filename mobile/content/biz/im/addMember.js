@@ -27,10 +27,17 @@ let AddMember = React.createClass({
   },
 
   addUser: function( groupId, members) {
-    //step1: 添加成员
-    ContactAction.addGroupMembers(this.props.param.groupId, members)
-    //step2: 回退
-    this.props.navigator.pop();
+    this.props.exec(
+      ()=>{
+        //step1: 添加成员
+       return  ContactAction.addGroupMembers(this.props.param.groupId, members).then(
+         (response)=>{
+           //step2: 回退
+           this.props.navigator.pop();
+         }
+       );
+      }
+    );
   },
 
   renderState: function () {

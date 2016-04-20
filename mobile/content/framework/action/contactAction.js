@@ -24,16 +24,14 @@ let _createGroup = function(members, groupName, groupMasterUid) {
     groupImageUrl:'http://localhost/group',// 默认的头像
     members:[]
   };
-  let memberList = [];
   for(let i in members){
     param.members.push(members[i].userId);
-    memberList.push(members[i]);
   }
   return new Promise((resolve, reject) => {
     BFetch(AppLinks.createGroup, param).then((response)=>{
       console.log(response.gid);
-      contactStore.createGroup(response.gid, groupName,groupMasterUid,memberList,false);
-      resolve(response.gid);
+      contactStore.createGroup(response.gid, groupName,groupMasterUid,param.members,false);
+      resolve(response);
     }, reject);
   });
 };
@@ -45,7 +43,16 @@ let _createGroup = function(members, groupName, groupMasterUid) {
  * @param value  true:屏蔽  false:不屏蔽
  * */
 let _muteUser = function(userId, value){
-  return ;
+  let param = {
+    uid:userId,
+    state:value
+  }
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.setContactMute,param).then((response) => {
+      contactStore.setContactMute(userId, value);
+      resolve(response);
+    },reject);
+  });
 }
 
 /**
@@ -54,14 +61,31 @@ let _muteUser = function(userId, value){
  * @param value  true:屏蔽  false:不屏蔽
  * */
 let _muteGroup = function(groupId, value){
-  return ;
+  let param = {
+    gid:groupId,
+    state:value
+  }
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.setGroupMute,param).then((response) => {
+      contactStore.setGroupMute(groupId, value);
+      resolve(response);
+    },reject);
+  });
 }
 /**
  * 退出群
  * @param groupId  群组Id
  * */
 let _deleteGroup = function(groupId){
-  return ;
+  let param = {
+      gid:groupId
+  };
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.leaveGroup, param).then((response) => {
+      contactStore.leaveGroup(groupId);
+      resolve();
+    },reject);
+  });
 }
 
 /**
@@ -69,7 +93,15 @@ let _deleteGroup = function(groupId){
  * @param groupId 群组Id
  * */
 let _dismissGroup = function(groupId){
-  return ;
+  let param = {
+    gid:groupId
+  };
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.dismissGroup, param).then((response)=>{
+      contactStore.dismissGroup(groupId);
+      resolve(response);
+    }, reject);
+  });
 }
 
 /**
@@ -96,7 +128,18 @@ let _modifyGroupName = function(groupId, groupName) {
  * @param members
  * */
 let _addGroupMembers = function(groupId, members) {
-  return ;
+  let param = {
+    gid:groupId,
+    members:[]
+  }
+  for(let i in members){
+    param.members.push(members[i].userId);
+  }
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.inviteMember,param).then((response) => {
+      resolve();//TODO:等通知
+    },reject);
+  });
 }
 
 /**
@@ -109,14 +152,12 @@ let _deleteGroupMembers = function(groupId, members) {
     gid:groupId,
     uid:[]
   };
-  let memberList = [];
   for(let i in members){
     param.uid.push(members[i].userId);
-    memberList.push(members[i]);
   }
   return new Promise((resolve, reject) => {
     BFetch(AppLinks.kickOutMember, param).then((response)=>{
-      contactStore.kickOutMember(groupId, memberList);
+      contactStore.kickOutMember(groupId, param.uid);
       resolve(response.gid);
     }, reject);
   });

@@ -12,19 +12,37 @@ let AddMember = require('./addMember');
 let DeleteMember = require('./deleteMember');
 let CircularButton = require('./circularButton');
 let ContactStore = require('../../framework/store/contactStore');
+let dismissKeyboard = require('react-native-dismiss-keyboard');
 let DictIcon = require('../../constants/dictIcon');
 let MembersBar = require('./membersBar');
 let ContactAction = require('../../framework/action/contactAction');
+let AppStore = require('../../framework/store/appStore');
 
 let EditGroup = React.createClass({
 
-  getInitialState:function () {
+  componentDidMount() {
+    AppStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function () {
+    AppStore.removeChangeListener(this._onChange);
+  },
+  _onChange: function () {
+    this.setState(this.getStateFromStores());
+  },
+
+  getStateFromStores: function() {
     let groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
     return {
-      falseSwitchIsOn:groupInfo.isMute,
+      falseSwitchIsOn:groupInfo.mute,
       groupInfo:groupInfo
     };
   },
+
+  getInitialState: function(){
+    return this.getStateFromStores();
+  },
+
 
   renderCircularButton: function () {
 
@@ -54,12 +72,21 @@ let EditGroup = React.createClass({
 
   setMute: function(value){
     this.setState({falseSwitchIsOn: value});
-    ContactAction.muteGroup(this.props.param.groupId, value)
-
+    this.props.exec(()=>{
+      return ContactAction.muteGroup(this.props.param.groupId, value);
+    });
   },
 
   dismissGroup: function(){
-    ContactAction.dismissGroup(this.props.param.groupId);
+    dismissKeyboard();
+    this.props.exec(()=>{
+      return  ContactAction.dismissGroup(this.props.param.groupId).then(
+        (response)=>{
+          this.props.navigator.popToTop();
+        }
+      );
+    });
+
   },
 
   render: function() {
