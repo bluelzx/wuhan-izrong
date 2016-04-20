@@ -44,8 +44,8 @@ let MessageSchema = {
   }
 };
 
-let MessageListSchema = {
-  name: "messageList",
+let SessionSchema = {
+  name: "session",
   primaryKey: 'sessionId',
   properties: {
     sessionId: {type: 'string', optional: true},
@@ -219,7 +219,7 @@ module.exports = {
   FilterItemSchema:FilterItemSchema,
   FilterItemsSchema:FilterItemsSchema,
   OrderItemSchema:OrderItemSchema,
-  MessageListSchema:MessageListSchema,
+  SessionSchema:SessionSchema,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
@@ -231,5 +231,5 @@ module.exports = {
   FILTERITEMS:'filterItems',
   FILTERITEM:'filterItem',
   ORDERITEM:'orderItem',
-  MESSAGELIST:'messageList'
+  SESSION:'session'
 };

@@ -8,6 +8,7 @@ let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let ContactStore = require('../../framework/store/contactStore');
+let NameCircular = require('./nameCircular');
 
 let GroupMembers = React.createClass({
 
@@ -20,13 +21,6 @@ let GroupMembers = React.createClass({
 
   textChange: function(){
 
-  },
-
-  renderImg: function(data) {
-    return (
-      <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20}}>
-      </View>
-    );
   },
 
   //******************** 扩展列表
@@ -47,7 +41,7 @@ let GroupMembers = React.createClass({
     return (
       <View key={data.userId}
             style={{borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
-        {this.renderImg(data)}
+        <NameCircular name={data.realName}/>
         <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
       </View>
 

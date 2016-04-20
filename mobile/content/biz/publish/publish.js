@@ -120,7 +120,8 @@ var WhitePage = React.createClass({
       <TouchableOpacity onPress={()=>this.toPage(SelectBusiness1)} activeOpacity={0.8} underlayColor="#f0f0f0">
         <View
           style={{width: screenWidth-20,marginLeft:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
-          <Text style={{fontSize:16,marginLeft:10,color:'white'}}>{'选择业务类型'}</Text>
+          <Text
+            style={{fontSize:16,marginLeft:10,color:'white'}}>{(this.state.bizCategory == '' && this.state.bizItem == '') ? '选择业务类型' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName}</Text>
           <Image style={{margin:10,width:16,height:16}}
                  source={require('../../image/market/next.png')}
           />
@@ -229,15 +230,15 @@ var WhitePage = React.createClass({
   renderRemarks: function () {
     return (
       <View style={{marginTop:10}}>
-        <TouchableHighlight onPress={() => this.toPage(Remarks)} underlayColor='rgba(129,127,201,0)'>
+        <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
           <View
             style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: '#102a42'}}>
             <Text style={{marginLeft:10, fontWeight: 'bold', color:'white',}}>
               {'备注'}
             </Text>
             <View>
-              <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779',}}>
-                {'20字以内'}
+              <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779',}}
+                    numberOfLines={1}>{(this.state.remarksText == '')?'20字以内':this.state.remark}
               </Text>
             </View>
           </View>
@@ -262,12 +263,41 @@ var WhitePage = React.createClass({
       this.addBizOrder();
     }
   },
+
+  callBackCategoryAndItem: function (category, item) {
+    this.setState({
+      bizCategory: category,
+      bizItem: item
+    })
+  },
+
+  callBackRemarks: function (remarkText) {
+    this.setState({
+      remark:remarkText
+    })
+  },
+
   toPage: function (name) {
     const { navigator } = this.props;
     if (navigator) {
       navigator.push({
         comp: name,
-        param: {filterItems: this.state.filterItems}
+        param: {
+          filterItems: this.state.filterItems,
+          callBackCategoryAndItem: this.callBackCategoryAndItem
+        },
+      })
+    }
+  },
+
+  toRemarks: function (name) {
+    const { navigator } = this.props;
+    if (navigator) {
+      navigator.push({
+        comp: name,
+        param: {
+          callBackRemarks: this.callBackRemarks
+        },
       })
     }
   },
@@ -281,8 +311,8 @@ var WhitePage = React.createClass({
           rate: this.state.rateText,
           remark: this.state.remark,
           bizOrientation: this.state.bizOrientation,
-          bizCategory: this.state.bizCategory,
-          bizItem: this.state.bizItem,
+          bizCategory: this.state.bizCategory.displayCode,
+          bizItem: this.state.bizItem.displayCode,
           amount: this.state.amountText,
           fileIds: [
             ''

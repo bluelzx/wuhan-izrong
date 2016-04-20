@@ -16,15 +16,6 @@ var {height, width} = Dimensions.get('window');
 var ViewPager = require('react-native-viewpager');
 var MarketList = require('../market/marketList');
 
-var marketData = {
-  contentList: [
-    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
-    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
-    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
-    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
-    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'}]
-};
-
 var PAGES = [
   'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024',
   'https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?h=1024',

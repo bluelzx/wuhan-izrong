@@ -12,8 +12,7 @@ const {
   ORGBEAN,
   FILTERITEMS,
   FILTERITEM,
-  ORDERITEM,
-  MESSAGELIST
+  ORDERITEM
   } = require('./schemas');
 let {Platform} = React;
 
@@ -356,4 +355,4 @@ let _getOrgList = function () {
 };
 
 
-module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./imPersister'));
+module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'), require('./imPersister'));

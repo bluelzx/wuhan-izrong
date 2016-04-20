@@ -54,12 +54,8 @@ let SelectBusiness2 = React.createClass({
     )
   },
   pressRow: function (rowData) {
-    this.props.navigator.popToTop({
-      param: {
-        bizItem: rowData,
-        category: this.props.param.category
-      }
-    });
+    this.props.param.callBackCategoryAndItem(this.props.param.category,rowData);
+    this.props.navigator.popToTop();
   },
 
   getItemWithCategory: function (bizItem, bizCategory) {
