@@ -212,30 +212,6 @@ let WhitePage = React.createClass({
     else {
       return this.renderGroup(item, index);
     }
-    //let id = item.groupId;
-    //if(item.type == CONSTANT.USER){
-    //  id = item.userId;
-    //}
-    //return (
-    //  <Swipeout key={id} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
-    //    <TouchableHighlight onPress={()=>this.toOther(item, item.type)}>
-    //      <View
-    //        style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
-    //        <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={item.type==CONSTANT.GROUP?DictIcon.imMyGroup:require('../../image/user/head.png')} />
-    //        <View
-    //          style={{ height:40, width:width-70}}>
-    //          <View
-    //            style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
-    //            <Text style={{color:'#ffffff'}}>{item.title}</Text>
-    //            <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.recTime)}</Text>
-    //          </View>
-    //          <Text numberOfLines={1}
-    //                style={{marginTop:5,color:'#687886'}}>{item.content}</Text>
-    //        </View>
-    //      </View>
-    //    </TouchableHighlight>
-    //  </Swipeout>
-    //);
   },
 
   renderMessage: function() {

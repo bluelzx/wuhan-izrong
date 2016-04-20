@@ -46,7 +46,7 @@ let EditGroup = React.createClass({
       members: this.state.groupInfo.members,
       showDelete: false,
       imgSource: DictIcon.imSpread,
-      addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId}})
+      addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId}}),
     };
 
     return (

@@ -41,7 +41,6 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
   getToken: () => _data.token || '',
-  //getToken:() => 't001',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),

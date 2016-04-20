@@ -48,7 +48,7 @@ let Contacts = React.createClass({
 
   renderImg: function(data) {
     return (
-      <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20}}>
+      <View style={{backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20}}>
       </View>
     );
   },
@@ -158,7 +158,7 @@ let Contacts = React.createClass({
                   actionButton={this.renderAdd}>
         <SearchBar textChange={this.textChange}/>
         {this.renderGlobal()}
-        <ExtenList itemHeight={56}
+        <ExtenList itemHeight={51}
                    groundColor={'#15263A'}
                    groupBorderColor={"#132232"}
                    arrowColor={'#ffffff'}

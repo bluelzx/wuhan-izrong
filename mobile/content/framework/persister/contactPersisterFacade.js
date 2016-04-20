@@ -67,6 +67,9 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
 let _helperGroupByOrg = function(members){
   let res = {};
   for(let mem of members){
+    if(!mem.orgId){
+      throw '用户机构ID不能为null';
+    }
     let org = _realm.objects(ORGBEAN).filtered('id = ' + mem.orgId);
     if(org.length > 0 ){
       if(!res[mem.orgId]) {

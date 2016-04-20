@@ -24,7 +24,12 @@ let CreateGroup = React.createClass({
 
   renderImg: function(data) {
     return (
-      <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20}}>
+      <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20,justifyContent:'center',alignItems:'center'}}>
+        <View style={{backgroundColor: 'white', height: 38,width: 38,borderRadius: 19,justifyContent:'center',alignItems:'center'}}>
+          <View style={{backgroundColor: '#F3AD2C', height: 36,width: 36,borderRadius: 18,justifyContent:'center',alignItems:'center'}}>
+            <Text style={{color:'white',fontWeight:'900',fontSize:20}}>{!data.realName?'':data.realName[0]}</Text>
+          </View>
+        </View>
       </View>
     );
   },
@@ -75,14 +80,13 @@ let CreateGroup = React.createClass({
     console.log(members);
     if(0 == Object.keys(members).length)
       return;
-    else if(members.length == 1){
-      let userId = members[0];
+    else if(Object.keys(members).length == 1){
+      let user = members[Object.keys(members)[0]];
       //获取用户名
-      let userInfo = ContactStore.getUserInfoByUserId()
       this.props.navigator.replacePreviousAndPop(
         {
           comp: Chat,
-          param: {title: userInfo.userName, chatType: SESSION_TYPE.USER, userId: userId}
+          param: {title: user.realName, chatType: SESSION_TYPE.USER, userId: user.userId}
         }
       );
     }else{
@@ -104,8 +108,6 @@ let CreateGroup = React.createClass({
           });
         }
       );
-
-
     }
   },
 
@@ -118,8 +120,8 @@ let CreateGroup = React.createClass({
       }
     }
     return (
-      <TouchableOpacity onPress={() => this.createGroup(memberList)}>
-        <Text style={{ marginLeft:-20,color:count==0?'#6B849C':'white'}}>{'创建(' + count + ')'}</Text>
+      <TouchableOpacity onPress={() => this.state.groupName.length < 20 && count > 0 && this.createGroup(memberList)}>
+        <Text style={{ marginLeft:-40,color:(this.state.groupName.length > 20 || count==0)?'#6B849C':'white'}}>{'创建(' + count + '/200)'}</Text>
       </TouchableOpacity>
     );
   },

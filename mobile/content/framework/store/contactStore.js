@@ -53,10 +53,7 @@ let _getUsersExpress = function(groupId) {
 }
 
 let _getUserInfo = function() {
-  return {
-    userId:1
-  };
-  //return PersisterFacade.getLoginUserInfo();
+  return PersisterFacade.getLoginUserInfo();
 }
 
 let _getUsersByGroupId = function (groupId) {
