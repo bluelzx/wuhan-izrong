@@ -11,6 +11,7 @@ var {
   Platform,
   ToastAndroid
   } = React;
+var Register_accountInfo=require('../../biz/login/accountInfo')
 var AppAction = require('../action/appAction');
 var ImAction = require('../action/imAction');
 AppAction.appInit();
@@ -145,7 +146,7 @@ var Main = React.createClass({
       );
     }
 
-    var initComp = Login;
+    var initComp = Register_accountInfo;
     //var initComp = Chat;
     if (this.state.token) {
       initComp = TabView;

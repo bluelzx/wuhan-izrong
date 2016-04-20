@@ -9,15 +9,15 @@ let {
   Text,
   View,
   TouchableHighlight
-  } = React;
+} = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let AlphabetListView = require('react-native-alphabetlistview');
-
+var that;
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
-    this.getOrgList();
+    that = this;
     let orgBuildList = AppStore.getOrgList();
     return {
       data: orgBuildList
@@ -42,7 +42,7 @@ let Register_selectOrg = React.createClass({
     return this.getStateFromStores();
   },
   componentDidMount() {
-
+    this.getOrgList();
   },
 
   componentWillUnmount: function () {
@@ -110,7 +110,11 @@ let Cell = React.createClass({
   },
 
   selectOrgItem: function (item) {
-     console.log(item);
+    that.props.callback({
+      orgValue: item.orgValue,
+      id: item.id
+    })
+    that.props.navigator.pop()
   }
 });
 
