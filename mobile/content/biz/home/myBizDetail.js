@@ -1,32 +1,28 @@
 /**
- * Created by baoyinghai on 16/4/3.
+ * Created by cui on 16/4/21.
  */
 
 'use strict';
 
 let React = require('react-native');
 let {
-  ListView,
   TouchableHighlight,
   Text,
   TextInput,
   View,
   ScrollView,
-  Platform,
   Dimensions,
   Image,
   StyleSheet,
   TouchableOpacity,
-  InteractionManager
   }=React;
 
 let { Alert } = require('mx-artifacts');
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
 let NavBarView = require('../../framework/system/navBarView');
-let SelectBtn = require('./selectBtn');
-let Remarks = require('./remarks');
-let SelectBusiness1 = require('./selectBusiness1');
+let SelectBtn = require('../publish/selectBtn');
+let Remarks = require('../publish/remarks');
 let ImagePicker = require('../../comp/utils/imagePicker');
 
 
@@ -38,11 +34,14 @@ let bizOrientationUnit = ['出', '收'];
 let termUnit = ['日', '月', '年'];
 let amountUnit = ['万', '亿'];
 
-let Publish = React.createClass({
+let MyBizDetail = React.createClass({
   getInitialState(){
     let filterItems = AppStore.getFilters().filterItems;
-
+    let marketInfo = this.props.param.marketInfo;
     return {
+      detailData: '',
+      bizOrderOwnerBean: '',
+      marketInfo: marketInfo,
       filterItems: filterItems,
       bizOrientationDefault: 0,
       termDefault: 0,
@@ -50,11 +49,14 @@ let Publish = React.createClass({
       termText: '',
       amountText: '',
       rateText: '',
+      remarkText: '',
+      lastModifyDate: '',
       //networt
+      id: '',
       term: '',
       rate: '',
       remark: '',
-      bizOrientation: 'IN',
+      bizOrientation: '',
       bizCategory: '',
       bizItem: '',
       amount: '',
@@ -63,14 +65,18 @@ let Publish = React.createClass({
   },
 
   componentWillMount: function () {
+    {
+      this.getBizOrderByCreator(this.state.marketInfo.id);
+    }
   },
 
   render: function () {
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='发布' showBack={false} showBar={true}>
-        <View style={{height:screenHeight-113,backgroundColor:'#153757'}}>
+                  contentBackgroundColor='#18304D' title='业务详情' showBack={true} showBar={true}
+                  actionButton={this.renderShutDownBiz}>
+        <View style={{height:screenHeight-64,backgroundColor:'#153757'}}>
           <View style={{flex:1}}>
             <ScrollView>
               {this.renderSelectOrg()}
@@ -80,8 +86,9 @@ let Publish = React.createClass({
               {this.renderRate()}
               {this.renderAddImg()}
               {this.renderRemarks()}
+              {this.renderModifyData()}
             </ScrollView>
-            {this.renderReleaseBtn()}
+            {this.renderSaveBtn()}
           </View>
         </View>
       </NavBarView>
@@ -120,18 +127,21 @@ let Publish = React.createClass({
       rateText: Number(text)/100
     })
   },
+  renderShutDownBiz: function () {
+    return (
+      <TouchableOpacity style={{width:75}}
+                        onPress={()=>this.shutDownBiz()}>
+        <Text style={{color:'#ffffff'}}>{'下架'}</Text>
+      </TouchableOpacity>
+    );
+  },
   renderSelectOrg: function () {
     return (
-      <TouchableOpacity onPress={()=>this.toPage(SelectBusiness1)} activeOpacity={0.8} underlayColor="#f0f0f0">
-        <View
-          style={{width: screenWidth-20,marginLeft:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
-          <Text
-            style={{fontSize:16,marginLeft:10,color:'white'}}>{(this.state.bizCategory == '' && this.state.bizItem == '') ? '选择业务类型' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName}</Text>
-          <Image style={{margin:10,width:16,height:16}}
-                 source={require('../../image/market/next.png')}
-          />
-        </View>
-      </TouchableOpacity>
+      <View
+        style={{marginTop:10,height:36,alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
+        <Text
+          style={{fontSize:16,marginLeft:10,color:'white'}}>{'业务类型: ' + this.state.detailData.bizCategoryDesc + '-' + this.state.detailData.bizItemDesc}</Text>
+      </View>
     )
   },
   renderBusinessType: function () {
@@ -155,6 +165,7 @@ let Publish = React.createClass({
         <View style={{marginTop:10,flexDirection:'row'}}>
           <View style={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10}}>
             <TextInput
+              value={this.state.termText}
               placeholder={'天数'}
               placeholderTextColor='#325779'
               returnKeyType="search"
@@ -175,6 +186,7 @@ let Publish = React.createClass({
         <View style={{marginTop:10,flexDirection:'row'}}>
           <View style={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10}}>
             <TextInput
+              value={this.state.amountText}
               placeholder={'1万-1000亿'}
               placeholderTextColor='#325779'
               returnKeyType="search"
@@ -195,6 +207,7 @@ let Publish = React.createClass({
         <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
           <View style={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10}}>
             <TextInput
+              value={this.state.rateText}
               placeholder={'0-100.00'}
               placeholderTextColor='#325779'
               returnKeyType="search"
@@ -239,7 +252,7 @@ let Publish = React.createClass({
             </Text>
             <View>
               <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
-                    numberOfLines={1}>{(this.state.remarksText == '') ? '20字以内' : this.state.remark}
+                    numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
               </Text>
             </View>
           </View>
@@ -247,48 +260,36 @@ let Publish = React.createClass({
       </View>
     )
   },
-  renderReleaseBtn: function () {
+  renderModifyData: function () {
     return (
-      <TouchableHighlight onPress={() => this._pressPublish()} underlayColor='rgba(129,127,201,0)'>
+      <View style={{flexDirection:'row',alignItems:'center',marginTop:10}}>
+        <Text style={{marginLeft:10,color:'white'}}>{'最近修改时间:'}</Text>
+        <Text style={{marginLeft:10,color:'#ffd547'}}>{this.state.lastModifyDate}</Text>
+      </View>
+    )
+  },
+  renderSaveBtn: function () {
+    return (
+      <TouchableHighlight onPress={() => this._pressSave()} underlayColor='rgba(129,127,201,0)'>
         <View
           style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
           <Text style={{fontWeight: 'bold', color:'white'}}>
-            {'发布'}
+            {'保存'}
           </Text>
         </View>
       </TouchableHighlight>
     )
   },
-  _pressPublish: function () {
-    {
-      this.addBizOrder();
-    }
+  _pressSave: function () {
+    {this.updateBizOrder();}
   },
+  shutDownBiz: function () {
 
-  callBackCategoryAndItem: function (category, item) {
-    this.setState({
-      bizCategory: category,
-      bizItem: item
-    })
   },
-
   callBackRemarks: function (remarkText) {
     this.setState({
-      remark: remarkText
+      remarkText: remarkText
     })
-  },
-
-  toPage: function (name) {
-    const { navigator } = this.props;
-    if (navigator) {
-      navigator.push({
-        comp: name,
-        param: {
-          filterItems: this.state.filterItems,
-          callBackCategoryAndItem: this.callBackCategoryAndItem
-        },
-      })
-    }
   },
 
   toRemarks: function (name) {
@@ -303,52 +304,89 @@ let Publish = React.createClass({
     }
   },
 
-  addBizOrder: function () {
-    if (this.state.amountText.length == 0 || this.state.termText.length == 0 || this.state.rateText.length == 0) {
+  getBizOrderByCreator: function (id) {
+    this.props.exec(
+      ()=> {
+        return MarketAction.getBizOrderByCreator({
+            orderId: id
+          }
+        ).then((response)=> {
+          let detail = (JSON.stringify(response));
+          console.log(detail);
+          {
+            this.setStsteWithBizDetail(response);
+          }
+        }).catch(
+          (errorData) => {
+            throw errorData;
+          }
+        );
+      }
+    );
+  },
 
-    } else {
-      this.props.exec(
-        ()=> {
-          return MarketAction.addBizOrder({
-            id: '',
-            term: this.state.termText,
-            rate: this.state.rateText,
-            remark: this.state.remark,
+  setStsteWithBizDetail: function (response) {
+    this.setState({
+      id:response.id,
+      detailData: response,
+      bizOrderOwnerBean: response.bizOrderOwnerBean,
+      fileUrlList: response.fileIds,
+      bizOrientation: response.bizOrientation,
+      bizOrientationDefault: (response.bizOrientation == 'IN') ? 0 : 1,
+      termText: (response.term < 30) ? ((response.term).toString()) : (response.term < 365) ? (response.term / 30).toString() : (response.term / 365).toString(),
+      termDefault: (response.term < 30) ? 0 : (response.term < 365) ? 1 : 2,
+      amountText: (response.amount >= 100000000) ? (response.amount / 100000000).toString() : (response.amount / 10000).toString(),
+      amountDefault: (response.amount >= 100000000) ? 0 : 1,
+      rateText: response.rate.toString(),
+      remarkText: response.remark,
+      lastModifyDate: response.lastModifyDate,
+      bizCategory: response.bizCategory,
+      bizItem: response.bizItem,
+    })
+  },
+
+  updateBizOrder: function () {
+    this.props.exec(
+      ()=> {
+        return MarketAction.updateBizOrder({
+            id: this.state.id,
+            bizCategory: this.state.bizCategory,
+            bizItem: this.state.bizItem,
             bizOrientation: this.state.bizOrientation,
-            bizCategory: this.state.bizCategory.displayCode,
-            bizItem: this.state.bizItem.displayCode,
+            term: this.state.termText,
             amount: this.state.amountText,
-            fileUrlList: this.state.fileUrlList
-          }).then((response)=> {
-            Alert('发布成功');
-          }).catch(
-            (errorData) => {
-              throw errorData;
-            }
-          );
-        }
-      );
-    }
-  },
-  handleSendImage(uri) {
-    ImAction.uploadImage(uri)
-      .then((response) => {
-        let arr = new Array();
-        arr = this.state.fileUrlList;
-        arr.push(response.fileUrl);
-        this.setState({
-          fileUrlList: arr
-        });
-      }).catch((errorData) => {
-      console.log('Image upload error ' + JSON.stringify(errorData));
-    });
+            rate: this.state.rateText,
+            fileUrlList: this.state.fileUrlList,
+            remark: this.state.remarkText
+          }
+        ).then((response)=> {
+          Alert('保存成功');
+        }).catch(
+          (errorData) => {
+            throw errorData;
+          }
+        );
+      }
+    );
   },
 
-  handleImageError(error) {
-    console.log('Image select error ' + JSON.stringify(error));
-    Alert('图片选择失败');
+  downselfBizOrder: function (id) {
+    this.props.exec(
+      ()=> {
+        return MarketAction.downselfBizOrder({
+            orderId: id
+          }
+        ).then((response)=> {
+          Alert('下架成功')
+        }).catch(
+          (errorData) => {
+            throw errorData;
+          }
+        );
+      }
+    );
   },
 
 });
 
-module.exports = Publish;
+module.exports = MyBizDetail;
