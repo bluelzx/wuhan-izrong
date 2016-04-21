@@ -44,7 +44,7 @@ var Home = React.createClass({
   },
 
   getInitialState: function () {
-    this.getStateFromStores();
+    return this.getStateFromStores();
   },
 
   componentDidMount() {
