@@ -9,12 +9,13 @@ var {
   Dimensions,
   Image,
   TouchableHighlight,
-  }=React;
+  } = React;
 
 var NavBarView = require('../../framework/system/navBarView');
 var {height, width} = Dimensions.get('window');
 var ViewPager = require('react-native-viewpager');
 var MarketList = require('../market/marketList');
+let AppStore = require('../../framework/store/appStore');
 
 var PAGES = [
   'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024',
@@ -31,28 +32,35 @@ var marketData = {
     {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'}]
 };
 var Home = React.createClass({
-  getInitialState: function () {
+
+  getStateFromStores: function () {
     var dataSource = new ViewPager.DataSource({
       pageHasChanged: (p1, p2) => p1 !== p2
     });
-
     return {
       dataSource: dataSource.cloneWithPages(PAGES)
     };
   },
 
-  componentWillMount(){
-    //this.toArray();
+  getInitialState: function () {
+    this.getStateFromStores();
   },
 
   componentDidMount() {
-    //setInterval(this.set, 20)
+    AppStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function () {
+    AppStore.removeChangeListener(this._onChange);
+  },
+  _onChange: function () {
+    this.setState(this.getStateFromStores());
   },
 
   toPage: function (name) {
     const { navigator } = this.props;
     if (navigator) {
-      navigator.push({comp: name})
+      navigator.push({comp: name});
     }
   },
 
@@ -60,7 +68,8 @@ var Home = React.createClass({
     return (
       <Image
         style={styles.page}
-        source={{uri:data}}/>
+        source={{uri: data}}
+      />
     );
   },
 
@@ -68,17 +77,8 @@ var Home = React.createClass({
     if (border) {
       return (
         <TouchableHighlight style={styles.borderTableItem} activeOpacity={0.8}
-                            underlayColor='#18304b' onPress={()=>console.log(toPage)}>
-          <View style={styles.menuItem}>
-            <Image style={styles.menuImage} resizeMode='cover' source={url}/>
-            <Text style={styles.menuText}>{text}</Text>
-          </View>
-        </TouchableHighlight>
-      );
-    } else {
-      return (
-        <TouchableHighlight style={{flex:1,flexDirection:"column"}} activeOpacity={0.8}
-                            underlayColor='#18304b' onPress={()=>console.log(toPage)}>
+                            underlayColor='#18304b' onPress={()=>console.log(toPage)}
+        >
           <View style={styles.menuItem}>
             <Image style={styles.menuImage} resizeMode='cover' source={url}/>
             <Text style={styles.menuText}>{text}</Text>
@@ -86,38 +86,53 @@ var Home = React.createClass({
         </TouchableHighlight>
       );
     }
+    return (
+      <TouchableHighlight style={{flex: 1, flexDirection: 'column'}} activeOpacity={0.8}
+                          underlayColor='#18304b' onPress={()=>console.log(toPage)}
+      >
+        <View style={styles.menuItem}>
+          <Image style={styles.menuImage} resizeMode='cover' source={url}/>
+          <Text style={styles.menuText}>{text}</Text>
+        </View>
+      </TouchableHighlight>
+    );
+
   },
   rendViewPager: function () {
     return (
       <ViewPager
-        style={[this.props.style,styles.viewPager]}
+        style={[this.props.style, styles.viewPager]}
         dataSource={this.state.dataSource}
         renderPage={this._renderPage}
         isLoop={true}
-        autoPlay={true}/>
-    )
+        autoPlay={true}
+      />
+    );
   },
 
   render() {
     return (
       <NavBarView navigator={this.props.navigator} title='首页' fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' showBack={false} showBar={true}>
+                  contentBackgroundColor='#18304D' showBack={false} showBar={true}
+      >
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
           {this.rendViewPager()}
-          <View style={{height: width/3*2,flexDirection:"column",backgroundColor: "#162a40",justifyContent: "center"}}>
-            <View style={{flex:1,flexDirection:"row",borderBottomColor:"#000000",borderBottomWidth:1}}>
+          <View
+            style={{height: width / 3 * 2, flexDirection: 'column', backgroundColor: '#162a40', justifyContent: 'center'}}
+          >
+            <View style={{flex: 1, flexDirection: 'row', borderBottomColor: '#000000', borderBottomWidth: 1}}>
               {this.returnItem(false, require('../../image/home/assetTransaction.png'), '资产交易', 'assetTransaction')}
               {this.returnItem(true, require('../../image/home/billTransaction.png'), '票据交易', 'billTransaction')}
               {this.returnItem(false, require('../../image/home/capitalBusiness.png'), '资金业务', 'capitalBusiness')}
             </View>
-            <View style={{flex:1,flexDirection:"row"}}>
+            <View style={{flex: 1, flexDirection: 'row'}}>
               {this.returnItem(false, require('../../image/home/companyBank.png'), '公司投行', 'companyBank')}
               {this.returnItem(true, require('../../image/home/interbankAgent.png'), '同业代理', 'interbankAgent')}
               {this.returnItem(false, require('../../image/home/myBusiness.png'), '我的业务', 'myBusiness')}
             </View>
           </View>
           <View style={styles.listHead}>
-            <Text style={{marginLeft:20,fontSize:16,color:'#ffffff'}}>资金业务--同业存款</Text>
+            <Text style={{marginLeft: 20, fontSize: 16, color: '#ffffff'}}>资金业务--同业存款</Text>
           </View>
           <MarketList navigator={this.props.navigator} marketData={marketData}/>
         </ScrollView>
@@ -140,9 +155,9 @@ var styles = StyleSheet.create({
   },
   borderTableItem: {
     flex: 1,
-    flexDirection: "column",
-    borderRightColor: "#000000",
-    borderLeftColor: "#000000",
+    flexDirection: 'column',
+    borderRightColor: '#000000',
+    borderLeftColor: '#000000',
     borderLeftWidth: 1,
     borderRightWidth: 1
   },
