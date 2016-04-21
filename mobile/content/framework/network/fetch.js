@@ -92,6 +92,8 @@ var process = function (_promise, option) {
               } else {
                 reject(json);
               }
+            }else if(json.errMsg){
+              reject(json.errMsg);
             } else {
               resolve(json);
             }

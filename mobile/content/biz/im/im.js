@@ -97,7 +97,7 @@ let WhitePage = React.createClass({
     let userinfo = ContactStore.getUserInfo();
     let option = null;
     let param = {};
-    if(MSG_TYPE.REC_GROUP_MSG == item.type){ // 区分聊天窗口类型
+    if(SESSION_TYPE.GROUP == item.type){ // 区分聊天窗口类型
       let g = SessionStore.getGroupInfoBySessionId(item.sessionId,userinfo.userId)
       param.chatType = SESSION_TYPE.GROUP;
       param.title = item.title;
@@ -150,7 +150,7 @@ let WhitePage = React.createClass({
         text: '删除',
         backgroundColor: 'red',
         onPress: function(){
-
+          SessionStore.deleteSession(item.sessionId);
         }
       }
     ];

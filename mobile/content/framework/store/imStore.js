@@ -1,10 +1,12 @@
 let _ = require('lodash');
 let EventEmitter = require('events').EventEmitter;
 
-//let { MsgTypes } = require('../../constants/notification');
+let { MSG_TYPE, MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 
 let AppStore = require('./appStore');
 let Persister = require('../persister/persisterFacade');
+let SessionAction = require('../action/sessionAction');
+let ContactStore = require('./contactStore');
 
 let _info = {
   initLoadingState: true,
@@ -127,6 +129,16 @@ let _sessionInit = (data) => {
 };
 
 let _saveMsg = (message) => {
+
+  //console.log(message);
+  if(message.type == SESSION_TYPE.USER){
+    let user = ContactStore.getUserInfoByUserId(message.toId||message.fromUId);
+    SessionAction.updateSession(message.type, message.sessionId,user.realName,message.content,message.revTime,message.contentType);
+  }else{
+    let group = ContactStore.getGroupDetailById(message.groupId);
+    SessionAction.updateSession(message.type, message.sessionId,group.groupName,message.content,message.revTime,message.contentType);
+
+  }
 
   if (message.sessionId === _data.sessionId) {
     if (message.fromUId) { // Received
