@@ -27,20 +27,20 @@ let GroupSchema = {
 
 let MessageSchema = {
   name: "message",
-  primaryKey: 'sessionId',
+  primaryKey: 'msgId',
   properties: {
     sessionId: {type: 'string', optional: true},
     msgId: {type: 'string', optional: true},
-    fromUId: {type: 'int', optional: true},
-    groupId: {type: 'int', optional: true},
-    toId: {type: 'int', optional: true},
+    fromUId: {type: 'string', optional: true},
+    groupId: {type: 'string', optional: true},
+    toId: {type: 'string', optional: true},
     type: {type: 'string', optional: true},
     contentType: {type: 'string', optional: true},
     content: {type: 'string', optional: true},
     msgType: {type: 'string', optional: true},
     revTime: {type: 'date', optional: true},
     isRead: {type: 'bool', option: true},
-    status:{type: 'string', optional: true}//状态: 是否发送成功
+    status: {type: 'string', optional: true}//状态: 是否发送成功
   }
 };
 

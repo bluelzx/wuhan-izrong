@@ -55,7 +55,7 @@ var UFetch = function (url, param, callback, failure, options) {
     method: 'POST',
     headers: headers,
     body: formdata
-  }, {custLoading: true});
+  }, options);
 };
 
 
@@ -97,7 +97,7 @@ var process = function (_promise, option) {
             }
 
             console.log('以下打印一次获取到的json:');
-            console.log(json);
+            console.log(response);
           }
         })
         .catch((errorData) => {

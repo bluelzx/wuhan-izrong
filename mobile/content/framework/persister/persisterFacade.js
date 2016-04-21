@@ -230,7 +230,7 @@ let _getLoginUserInfo = function () {
 };
 
 let _getUserId = function () {
-  let d = _getLoginUserInfo();
+  let d  = _getLoginUserInfo();
   if (d) {
     return d.userId;
   } else {

@@ -60,17 +60,14 @@ let Messenger = React.createClass({
     this.setState(this._getStateFromStores());
   },
 
-  handleSend(message = {}, rowID = null, isReSend = false) {
-    // Your logic here
-    // Send message.content to your server
-    let msgId = KeyGenerator.getMessageKey(this.props.param.sessionId);
+  _sendMessage(contentType, content, isReSend = false, msgId = '') {
     let msgToSend = {
       sessionId: this.props.param.sessionId,
-      msgId: msgId,
+      msgId: isReSend ? msgId : KeyGenerator.getMessageKey(this.props.param.sessionId),
       fromUId: null,
-      contentType: MSG_CONTENT_TYPE.TEXT,
-      content: message.content,
-      revTime: message.date,
+      contentType: contentType,
+      content: content,
+      revTime: new Date(),
       isRead: true,
       status: 'ErrorButton'
     };
@@ -78,11 +75,13 @@ let Messenger = React.createClass({
       _.assign(msgToSend, {
         // toId: this.props.param.userId,
         toId: 'u002',
+        groupId: null,
         type: SESSION_TYPE.USER,
         msgType: COMMAND_TYPE.SEND_P2P_MSG
       });
     } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
       _.assign(msgToSend, {
+        toId: null,
         groupId: this.props.param.groupId,
         type: SESSION_TYPE.GROUP,
         msgType: COMMAND_TYPE.SEND_GROUP_MSG
@@ -90,6 +89,10 @@ let Messenger = React.createClass({
     }
 
     ImAction.send(msgToSend, isReSend);
+  },
+
+  handleSend(message = {}, rowID = null) {
+    this._sendMessage(MSG_CONTENT_TYPE.TEXT, message.content);
 
     // => In this case, you need also to set onErrorButtonPress
     // this._GiftedMessenger.setMessageStatus('Sent', rowID);
@@ -99,38 +102,9 @@ let Messenger = React.createClass({
   },
 
   handleSendImage(uri) {
-    // Your logic here
-    // Send message.content to your server
-
     ImAction.uploadImage(uri)
       .then((response) => {
-        let msgId = KeyGenerator.getMessageKey(this.props.param.sessionId);
-        let msgToSend = {
-          sessionId: this.props.param.sessionId,
-          msgId: msgId,
-          fromUId: null,
-          contentType: MSG_CONTENT_TYPE.IMAGE,
-          content: response.fileId,
-          revTime: new Date(),
-          isRead: true,
-          status: 'ErrorButton'
-        };
-        if (this.props.param.chatType === SESSION_TYPE.USER) {
-          _.assign(msgToSend, {
-            // toId: this.props.param.userId,
-            toId: 'u002',
-            type: SESSION_TYPE.USER,
-            msgType: COMMAND_TYPE.SEND_P2P_MSG
-          });
-        } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
-          _.assign(msgToSend, {
-            groupId: this.props.param.groupId,
-            type: SESSION_TYPE.GROUP,
-            msgType: COMMAND_TYPE.SEND_GROUP_MSG
-          });
-        }
-
-        ImAction.send(msgToSend);
+        this._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl);
       }).catch((errorData) => {
         console.log('Image upload error ' + JSON.stringify(errorData));
         Alert('图片上传失败');
@@ -148,26 +122,27 @@ let Messenger = React.createClass({
 
     // Your logic here
     // Eg: Retrieve old messages from your server
+    let earlierMessages = ImStore.getEarlier();
 
     // newest messages have to be at the begining of the array
-    let earlierMessages = [
-      {
-        content: 'This is a touchable phone number 0606060606 parsed by taskrabbit/react-native-parsed-text',
-        name: 'Developer',
-        image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-        position: 'right',
-        date: new Date(2014, 0, 1, 20, 0),
-      }, {
-        content: 'React Native enables you to build world-class application experiences on native platforms using a consistent developer experience based on JavaScript and React. https://github.com/facebook/react-native',
-        name: 'React-Native',
-        image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-        position: 'left',
-        date: new Date(2013, 0, 1, 12, 0),
-      },
-    ];
+    // let earlierMessages = [
+    //   {
+    //     content: 'This is a touchable phone number 0606060606 parsed by taskrabbit/react-native-parsed-text',
+    //     name: 'Developer',
+    //     image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
+    //     position: 'right',
+    //     date: new Date(2014, 0, 1, 20, 0),
+    //   }, {
+    //     content: 'React Native enables you to build world-class application experiences on native platforms using a consistent developer experience based on JavaScript and React. https://github.com/facebook/react-native',
+    //     name: 'React-Native',
+    //     image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
+    //     position: 'left',
+    //     date: new Date(2013, 0, 1, 12, 0),
+    //   },
+    // ];
 
     setTimeout(() => {
-      callback(earlierMessages, false); // when second parameter is true, the "Load earlier messages" button will be hidden
+      callback(earlierMessages, earlierMessages.length < 5 ? true : false); // when second parameter is true, the "Load earlier messages" button will be hidden
     }, 1000);
   },
 
@@ -183,7 +158,8 @@ let Messenger = React.createClass({
     // Your logic here
     // Eg: Re-send the message to your server
     // this.handleSend(message, rowID, true);
-    ImAction.send(message, true);
+    this._sendMessage(MSG_CONTENT_TYPE.TEXT, message.content, true, message.msgId);
+    // ImAction.send(message, true);
 
     // setTimeout(() => {
     //   // will set the message to a custom status 'Sent' (you can replace 'Sent' by what you want - it will be displayed under the row)
