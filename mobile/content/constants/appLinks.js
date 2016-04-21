@@ -31,8 +31,11 @@ let AppLinks = {
   getOrgList: Host + pub + '/getOrgList/',
 
   bizOrderMarketSearchDefaultSearch: Host + api + '/BizOrderMarketSearch/defaultSearch',
-  bizOrderMarketSearchsearch:Host + api + '/BizOrderMarketSearch/search',
+  bizOrderMarketSearch:Host + api + '/BizOrderMarketSearch/search',
+  bizOrderAdminSearch:Host + api + '/BizOrderAdminSearch/search',
+  refreshBizOrder:Host + api + '/BizOrderManage/refreshBizOrder',
   getBizOrderInMarket: Host + api + '/BizOrderManage/getBizOrderInMarket',
+  getBizOrderByCreator: Host + api + '/BizOrderManage/getBizOrderByCreator',
   addBizOrder: Host + api + '/BizOrderManage/addBizOrder',
   downselfBizOrder: Host + api + '/BizOrderManage/downselfBizOrder',
   updateBizOrder: Host + api + '/BizOrderManage/updateBizOrder',

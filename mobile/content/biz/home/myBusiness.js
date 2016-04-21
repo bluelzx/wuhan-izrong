@@ -1,7 +1,6 @@
 /**
- * Created by baoyinghai on 16/4/3.
+ * Created by cui on 16/4/21.
  */
-
 'use strict';
 
 let React = require('react-native');
@@ -21,11 +20,11 @@ let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
 
 let NavBarView = require('../../framework/system/navBarView');
-let RadioControl = require('./radioControl');
-let FilterSelectBtn = require('./filterSelectBtn');
-let MarketList = require('./marketList');
-let SelectOrg = require('./selectOrg');
+let FilterSelectBtn = require('../market/filterSelectBtn');
+let MyBizList = require('./myBizList');
+let SelectOrg = require('../market/selectOrg');
 let Icon = require('react-native-vector-icons/Ionicons');
+let Publish = require('../publish/publish');
 
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
@@ -57,8 +56,8 @@ let Market = React.createClass({
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: '资金业务',
-      levelTwoText: '同业存款',
+      levelOneText: '全部',
+      levelTwoText: '全部',
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -68,8 +67,8 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: 243,
-      bizItemID: 249,
+      bizCategoryID: 242,
+      bizItemID: 248,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -79,7 +78,7 @@ let Market = React.createClass({
 
   componentWillMount: function () {
     {
-      this.bizOrderMarketSearch();
+      this.bizOrderAdminSearch();
     }
   },
 
@@ -87,17 +86,18 @@ let Market = React.createClass({
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='市场' showBack={false} showBar={true}>
+                  contentBackgroundColor='#18304D' title='我的业务' showBack={true} showBar={true}>
         <View
           style={{width: screenWidth,alignItems: "center",justifyContent: "flex-start",flexDirection: "row"}}>
           {this.renderFilter(this.pressFilterType, this.pressFilterTime, this.pressFilterOther)}
         </View>
-        <MarketList ref="MARKETLIST" navigator={this.props.navigator} exec={this.props.exec}
+        <MyBizList ref="MYBIZLIST" navigator={this.props.navigator} exec={this.props.exec}
                     orderField={this.state.orderField} orderType={this.state.orderType}
                     pageIndex={this.state.pageIndex} marketData={this.state.marketData}/>
         {this.renderOptionType()}
         {this.renderOptionTime()}
         {this.renderOptionOther()}
+        {this.renderPubilshBtn()}
       </NavBarView>
     );
   },
@@ -140,7 +140,7 @@ let Market = React.createClass({
       bizItemID: this.state.dataSource2[rowId].id
     });
     {
-      this.bizOrderMarketSearch();
+      this.bizOrderAdminSearch();
     }
   },
   pressTimeRow(rowId){
@@ -152,7 +152,7 @@ let Market = React.createClass({
       orderType: this.state.dataSource3[rowId].asc ? 'asc' : 'desc',
     })
     {
-      this.bizOrderMarketSearch();
+      this.bizOrderAdminSearch();
     }
   }, renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
     return (
@@ -320,29 +320,27 @@ let Market = React.createClass({
       </TouchableOpacity>
     )
   },
-  callBack: function (item, title) {
-    if (title == '方向') {
-      this.setState({
-        bizOrientationID: (item.id == 'ALL') ? '' : item.id
-      })
-    } else if (title == '期限') {
-      this.setState({
-        termID: (item.id == 'ALL') ? '' : item.id
-      })
-    } else if (title == '金额') {
-      this.setState({
-        amountID: (item.id == 'ALL') ? '' : item.id
-      })
-    } else {
-
-    }
+  renderPubilshBtn: function () {
+    return (
+      <TouchableHighlight onPress={() => this._pressPublish()} underlayColor='rgba(129,127,201,0)'>
+        <View
+          style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
+          <Text style={{fontWeight: 'bold', color:'white'}}>
+            {'发布新业务'}
+          </Text>
+        </View>
+      </TouchableHighlight>
+    )
+  },
+  _pressPublish: function () {
+    this.toPage(Publish);
   },
   confirmBtn: function () {
     {
       this.pressFilterOther();
     }
     {
-      this.bizOrderMarketSearch();
+      this.bizOrderAdminSearch();
     }
   },
   toPage: function (name) {
@@ -352,10 +350,10 @@ let Market = React.createClass({
     }
   },
 
-  bizOrderMarketSearch: function () {
+  bizOrderAdminSearch: function () {
     this.props.exec(
       ()=> {
-        return MarketAction.bizOrderMarketSearch({
+        return MarketAction.bizOrderAdminSearch({
             orderField: this.state.orderField,
             orderType: this.state.orderType,
             pageIndex: this.state.pageIndex,
@@ -371,7 +369,7 @@ let Market = React.createClass({
           this.setState({
             marketData: response
           })
-          this.refs["MARKETLIST"]._changeData();
+          this.refs["MYBIZLIST"]._changeData();
         }).catch(
           (errorData) => {
             throw errorData;

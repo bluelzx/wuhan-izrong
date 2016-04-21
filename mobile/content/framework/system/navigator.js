@@ -149,7 +149,7 @@ var Main = React.createClass({
     //var initComp = Chat;
     if (this.state.token) {
       initComp = TabView;
-      ImAction.imInit();
+      //ImAction.imInit();
     }
     return (
       <View style={{ width: Device.width, height: Device.height }}>

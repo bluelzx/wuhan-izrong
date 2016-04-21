@@ -19,7 +19,7 @@ let {
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
 let NavBarView = require('../../framework/system/navBarView');
-let Input = require('./input');
+
 
 let Remarks = React.createClass({
   getInitialState(){
@@ -39,7 +39,7 @@ let Remarks = React.createClass({
             returnKeyType="search"
             maxLength={20}
             onChangeText={(value) => this.onChangeText(value)}
-            style={{width:screenWidth,height:40,marginLeft:10,color:'#ffd547',}}/>
+            style={{width:screenWidth,height:40,marginLeft:10,color:'white',}}/>
         </View>
       </NavBarView>
     )

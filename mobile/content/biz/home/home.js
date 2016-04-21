@@ -15,6 +15,7 @@ var NavBarView = require('../../framework/system/navBarView');
 var {height, width} = Dimensions.get('window');
 var ViewPager = require('react-native-viewpager');
 var MarketList = require('../market/marketList');
+let myBusiness = require('./myBusiness');
 
 var PAGES = [
   'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024',
@@ -68,7 +69,7 @@ var Home = React.createClass({
     if (border) {
       return (
         <TouchableHighlight style={styles.borderTableItem} activeOpacity={0.8}
-                            underlayColor='#18304b' onPress={()=>console.log(toPage)}>
+                            underlayColor='#18304b' onPress={()=>this.toPage(toPage)}>
           <View style={styles.menuItem}>
             <Image style={styles.menuImage} resizeMode='cover' source={url}/>
             <Text style={styles.menuText}>{text}</Text>
@@ -78,7 +79,7 @@ var Home = React.createClass({
     } else {
       return (
         <TouchableHighlight style={{flex:1,flexDirection:"column"}} activeOpacity={0.8}
-                            underlayColor='#18304b' onPress={()=>console.log(toPage)}>
+                            underlayColor='#18304b' onPress={()=>this.toPage(toPage)}>
           <View style={styles.menuItem}>
             <Image style={styles.menuImage} resizeMode='cover' source={url}/>
             <Text style={styles.menuText}>{text}</Text>
@@ -106,14 +107,14 @@ var Home = React.createClass({
           {this.rendViewPager()}
           <View style={{height: width/3*2,flexDirection:"column",backgroundColor: "#162a40",justifyContent: "center"}}>
             <View style={{flex:1,flexDirection:"row",borderBottomColor:"#000000",borderBottomWidth:1}}>
-              {this.returnItem(false, require('../../image/home/assetTransaction.png'), '资产交易', 'assetTransaction')}
-              {this.returnItem(true, require('../../image/home/billTransaction.png'), '票据交易', 'billTransaction')}
-              {this.returnItem(false, require('../../image/home/capitalBusiness.png'), '资金业务', 'capitalBusiness')}
+              {this.returnItem(false, require('../../image/home/assetTransaction.png'), '资产交易', myBusiness)}
+              {this.returnItem(true, require('../../image/home/billTransaction.png'), '票据交易', myBusiness)}
+              {this.returnItem(false, require('../../image/home/capitalBusiness.png'), '资金业务', myBusiness)}
             </View>
             <View style={{flex:1,flexDirection:"row"}}>
-              {this.returnItem(false, require('../../image/home/companyBank.png'), '公司投行', 'companyBank')}
-              {this.returnItem(true, require('../../image/home/interbankAgent.png'), '同业代理', 'interbankAgent')}
-              {this.returnItem(false, require('../../image/home/myBusiness.png'), '我的业务', 'myBusiness')}
+              {this.returnItem(false, require('../../image/home/companyBank.png'), '公司投行', myBusiness)}
+              {this.returnItem(true, require('../../image/home/interbankAgent.png'), '同业代理', myBusiness)}
+              {this.returnItem(false, require('../../image/home/myBusiness.png'), '我的业务', myBusiness)}
             </View>
           </View>
           <View style={styles.listHead}>

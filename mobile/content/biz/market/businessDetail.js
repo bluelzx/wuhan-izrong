@@ -3,37 +3,37 @@
  */
 let React = require('react-native');
 let {
-  ListView,
   TouchableHighlight,
   Text,
-  TextInput,
   View,
   ScrollView,
-  Platform,
   Dimensions,
   Image,
-  StyleSheet,
-  TouchableOpacity,
-  InteractionManager
+  StyleSheet
   } = React;
 
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
 
 let NavBarView = require('../../framework/system/navBarView');
+let imagePicker = require('../../comp/utils/imagePicker');
+let DateHelper = require('../../comp/utils/dateHelper');
 
 let MarketAction = require('../../framework/action/marketAction');
 
 let BusinessDetail = React.createClass({
   getInitialState(){
+    let marketInfo = this.props.param.marketInfo;
     return {
       detailData: '',
-      bizOrderOwnerBean:''
+      bizOrderOwnerBean: '',
+      fileIds: [],
+      marketInfo: marketInfo
     }
   },
   componentWillMount: function () {
     {
-      this.getBizOrderInMarket(this.props.param.marketInfo.id);
+      this.getBizOrderInMarket(this.state.marketInfo.id);
     }
   },
   render: function () {
@@ -54,10 +54,10 @@ let BusinessDetail = React.createClass({
             {this.renderAdjunct()}
             <View style={{backgroundColor:'#153757',borderRadius:2,margin:10}}>
               {this.renderPromulgator()}
-              {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber,this.state.bizOrderOwnerBean.isPublicPhone)}
-              {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber,this.state.bizOrderOwnerBean.isPublicMobile)}
-              {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo,this.state.bizOrderOwnerBean.isPublicQQNo)}
-              {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo,this.state.bizOrderOwnerBean.isPublicWeChatNo)}
+              {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone)}
+              {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile)}
+              {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo)}
+              {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo)}
               {this.returnInfoItem(require('../../image/market/org.png'), this.state.bizOrderOwnerBean.orgName)}
             </View>
           </View>
@@ -76,43 +76,21 @@ let BusinessDetail = React.createClass({
   renderAdjunct: function () {
     return (
       <View>
-        <Text style={{marginLeft:10,fontSize:16, color:'white',}}>{'附件'}</Text>
-        <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-          <Image
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
-            source={require('../../image/market/next.png')}
-          />
-          <Image
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
-            source={require('../../image/market/next.png')}
-          />
-          <Image
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
-            source={require('../../image/market/next.png')}
-          />
-          <Image
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
-            source={require('../../image/market/next.png')}
-          />
-          <Image
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
-            source={require('../../image/market/next.png')}
-          />
-        </View>
+        {this.renderImageTitle()}
+        {this.renderImageItem()}
       </View>
     )
   },
   renderPromulgator: function () {
     return (
       <View style={{flexDirection:'row',alignItems:'center'}}>
-        <Image style={{width:40,height:40,margin:10,backgroundColor:'#0a1926',borderRadius:5,alignItems:'center',}}
-               source={require('../../image/market/next.png')}
+        <Image style={{width:40,height:40,margin:10,backgroundColor:'#0a1926',borderRadius:5,alignItems:'center'}}
+               source={require('../../image/market/QQ.png')}
         />
 
-        <Text style={{fontSize:16,color:'white',}}>{this.state.bizOrderOwnerBean.userName}</Text>
-        <TouchableHighlight onPress={this.gotoIM()}
-                            underlayColor='white'>
-          <Text style={{fontSize:12,color:'#68bbaa',marginTop:5}}>{'(点击洽谈)'}</Text>
+        <Text style={{fontSize:16,color:'white'}}>{this.state.bizOrderOwnerBean.userName}</Text>
+        <TouchableHighlight onPress={()=>this.gotoIM()} underlayColor='#153757' activeOpacity={0.8}>
+          <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
         </TouchableHighlight>
       </View>
     )
@@ -133,8 +111,33 @@ let BusinessDetail = React.createClass({
       )
     }
   },
-  gotoIM: function () {
+  renderImageTitle(){
+    if (this.state.fileIds.length > 0) {
+      return (
+        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:'white'}}>{'附件:'}</Text>
+      );
+    }
+  },
+  renderImageItem: function () {
+    return (
+      <View style={{marginTop:10}}>
+        {
+          this.state.fileIds.map((item, index) => {
+            console.log('image' + item);
+            return (
+              <Image
+                key={index}
+                style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
+                source={{uri:item, isStatic: true}}
+              />
+            )
+          })
+        }
+      </View>
+    );
+  },
 
+  gotoIM: function () {
   },
 
   getBizOrderInMarket: function (id) {
@@ -148,8 +151,10 @@ let BusinessDetail = React.createClass({
           console.log(detail);
           this.setState({
             detailData: response,
-            bizOrderOwnerBean:response.bizOrderOwnerBean
-          })
+            bizOrderOwnerBean: response.bizOrderOwnerBean,
+            fileIds: response.fileIds
+          });
+          console.log(this.state.fileIds);
         }).catch(
           (errorData) => {
             throw errorData;
@@ -157,7 +162,7 @@ let BusinessDetail = React.createClass({
         );
       }
     );
-  },
+  }
 
 });
 
