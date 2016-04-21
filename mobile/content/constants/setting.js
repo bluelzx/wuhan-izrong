@@ -3,7 +3,7 @@
  */
 let DEFAULT_VALUE = {
   groupNameLengt:20,
-  groupMemberUpperLimit:2
+  groupMemberUpperLimit:200
 }
 
 module.exports = DEFAULT_VALUE;

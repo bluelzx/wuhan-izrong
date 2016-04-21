@@ -17,11 +17,12 @@ let ChooseList = require('./chooseList');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let NameCircular = require('./nameCircular');
 let Setting = require('../../constants/setting');
+let {groupFilter} = require('./searchBarHelper');
 
 let CreateGroup = React.createClass({
 
-  textChange: function() {
-
+  textChange: function(text) {
+    this.setState({keyWord:text});
   },
 
   //******************** 扩展列表
@@ -60,6 +61,7 @@ let CreateGroup = React.createClass({
 
   //渲染组成员
   itemRender: function(data) {
+    console.log(data.userId);
     return (
       <CheckBox
                 item={data}
@@ -140,7 +142,8 @@ let CreateGroup = React.createClass({
       memberList:{},
       userData: ContactStore.getUsers(),
       groupName:'我新建的群',
-      userInfo:ContactStore.getUserInfo() // 用户信息
+      userInfo:ContactStore.getUserInfo(), // 用户信息
+      keyWord:'',
     };
   },
 
@@ -148,6 +151,11 @@ let CreateGroup = React.createClass({
     this.setState({groupName: text});
   },
 
+  getDataSource: function() {
+    let ret =  groupFilter(this.state.userData,'orgValue','orgMembers','realName',this.state.keyWord);
+
+    return ret;
+  },
   render: function() {
 
     return (
@@ -166,13 +174,13 @@ let CreateGroup = React.createClass({
 
         <SearchBar textChange={this.textChange}/>
 
-        <ExtenList itemHeight={56}
+        <ExtenList itemHeight={51}
                    groundColor={'#15263A'}
                    groupBorderColor={"#132232"}
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={this.state.userData}
+                   dataSource={this.getDataSource()}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />

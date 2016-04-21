@@ -12,6 +12,7 @@ let ContactAction = require('../../framework/action/contactAction');
 let DictIcon = require('../../constants/dictIcon');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let NameCircular = require('./nameCircular');
+let {groupFilter} = require('./searchBarHelper');
 
 let DeleteMember = React.createClass({
 
@@ -34,8 +35,8 @@ let DeleteMember = React.createClass({
     });
   },
 
-  textChange: function() {
-
+  textChange: function(text) {
+    this.setState({keyWord:text});
   },
 
   renderState: function () {
@@ -103,13 +104,13 @@ let DeleteMember = React.createClass({
                   showBar={true}
                   actionButton={this.renderState}>
         <SearchBar textChange={this.textChange}/>
-        <ExtenList itemHeight={56}
+        <ExtenList itemHeight={51}
                    groundColor={'#15263A'}
                    groupBorderColor={"#132232"}
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={this.state.data}
+                   dataSource={groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord)}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />

@@ -55,7 +55,6 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
 //});
 
 
-
 //***** helper
 let _helperGroupByOrg = function(members){
   let res = {};
