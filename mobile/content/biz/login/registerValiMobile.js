@@ -24,10 +24,10 @@ let RegisterPotocol = require('./registerPotocol');
 let Register_valiMobile = React.createClass({
   getStateFromStores() {
     return {
-      mobileNo:'',
+      mobileNo: '',
       verify: '',
       checkbox: true,
-      checked:true
+      disabled: true
     };
   },
   getInitialState: function () {
@@ -47,22 +47,22 @@ let Register_valiMobile = React.createClass({
   toPage: function (name) {
     const { navigator } = this.props;
     if (navigator) {
-      navigator.push({comp: name})
+      navigator.push({comp: name});
     }
   },
 
-  validateSmsCode: function(){
+  validateSmsCode: function () {
     console.log(this.state.mobileNo);
     if (this.state.mobileNo && this.state.verify) {
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.validateSmsCode({
-          mobileNo:this.state.mobileNo,
-          inputSmsCode:this.state.verify
+          mobileNo: this.state.mobileNo,
+          inputSmsCode: this.state.verify
         }).then((response) => {
           const { navigator } = this.props;
           if (navigator) {
-            if (!this.state.checked) {
+            if (!this.state.disabled) {
               navigator.push(
                 {
                   comp: Register_AccountInfo,
@@ -82,50 +82,58 @@ let Register_valiMobile = React.createClass({
 
   _onChangeText(key, value){
     this.setState({[key]: value});
-    if (this.state.mobileNo.length == 0 || this.state.verify.length == 0) {
-      this.setState({checked: true});
+    if (this.state.mobileNo.length == 0 || this.state.verify.length == 0 || !this.state.checkbox) {
+      this.setState({disabled: true});
     } else {
-      this.setState({checked: false});
+      this.setState({disabled: false});
     }
   },
 
   selectChange(select){
-    this.setState({checkbox: select})
+    this.setState({checkbox: select});
   },
 
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='短信验证' showBack={true} showBar={true}>
+                  contentBackgroundColor='#18304D' title='短信验证' showBack={true} showBar={true}
+      >
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <Input type="default" placeholder='手机号' maxlength={20} field='mobileNo'
-                 onChangeText={this._onChangeText} icon='user'/>
-          <SMSTimer  ref="smsTimer" onChanged={this._onChangeText}
-                     func={'sendSmsCodeToRegisterMobile'}
-                     parameter = {this.state.mobileNo} exec={this.props.exec}/>
-          <View style={{flexDirection:'row'}}>
+                 onChangeText={this._onChangeText} icon='user'
+          />
+          <SMSTimer ref="smsTimer"
+                    func={'sendSmsCodeToRegisterMobile'}
+                    parameter={this.state.mobileNo}
+                    onChanged={this._onChangeText}
+                    exec={this.props.exec}
+          />
+          <View style={{flexDirection: 'row'}}>
             <CheakBox content="已阅读并同意"
                       onChange={this.selectChange}
                       checkedUrl={require('../../image/utils/checkbox_checked.png')}
                       unCheckedUrl={require('../../image/utils/checkbox_normal.png')}
-                      checked={this.state.checkbox}/>
+                      disabled={this.state.checkbox}
+            />
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
-                                onPress={()=>this.toPage(RegisterPotocol)}>
-            <Text style={{alignItems: 'center',marginTop: 20,color:'#ffffff',fontSize: 16,lineHeight: 20}}>用户协议</Text>
-              </TouchableHighlight>
+                                onPress={()=>this.toPage(RegisterPotocol)}
+            >
+              <Text style={{alignItems: 'center', marginTop: 20, color: '#ffffff', fontSize: 16, lineHeight: 20}}>用户协议</Text>
+            </TouchableHighlight>
           </View>
 
           <Button
-            containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
+            containerStyle={{marginTop: 20, backgroundColor: '#1151B1'}}
             style={{fontSize: 20, color: '#ffffff'}}
-            styleDisabled={{color: 'red'}}
-            onPress={()=>this.validateSmsCode()}>
+            disabled={this.state.disabled}
+            onPress={()=>this.validateSmsCode()}
+          >
             下一步
           </Button>
         </View>
 
       </NavBarView>
-    )
+    );
   }
 });
 let styles = StyleSheet.create({
