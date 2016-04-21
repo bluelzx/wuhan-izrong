@@ -5,21 +5,21 @@ let assign = require('object-assign');
 let EventEmitter = require('events').EventEmitter;
 
 let MarketStore = ({
-
   getCategoryAndItem: function (filterItems) {
-    let bizCategory = filterItems[0];
-    let bizItem = filterItems[1];
+
+    let bizCategory = this.getFilterOptions(filterItems, 'bizCategory');
+    let bizItem = this.getFilterOptions(filterItems, 'bizItem');
     console.log(bizCategory);
     console.log(bizItem);
     let totalArr = new Array();
-    for (let category of bizCategory.options) {
+    bizCategory.options.forEach(function (category) {
       console.log(category);
       let itemArr = new Array();
-      for (let item of bizItem.options) {
+      bizItem.options.forEach(function (item) {
         if (item.displayCode.substring(0, 3) == category.displayCode) {
           itemArr.push(item);
         }
-      }
+      });
       let categoryobj = {
         itemArr: itemArr,
         id: category.id,
@@ -29,21 +29,19 @@ let MarketStore = ({
         isSelected: category.isSelected
       };
       totalArr.push(categoryobj);
-    }
-    return (
-      totalArr
-    )
+    });
+    return totalArr;
   },
 
-  getFilterOptions: function (filterItems,descrCode) {
-    for(let item of filterItems){
-        if(item.descrCode == descrCode){
-          return(
-            item
-          )
-        }
-    }
-  },
+  getFilterOptions: function (filterItems, descrCode) {
+    let item = {};
+    filterItems.forEach(function (filterItem) {
+      if (filterItem.descrCode == descrCode) {
+        item = filterItem;
+      }
+    });
+    return item;
+  }
 
 });
 

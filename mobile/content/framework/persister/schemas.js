@@ -27,7 +27,7 @@ let GroupSchema = {
 
 let MessageSchema = {
   name: "message",
-  primaryKey: 'sessionId',
+  primaryKey: 'msgId',
   properties: {
     sessionId: {type: 'string', optional: true},
     msgId: {type: 'string', optional: true},
@@ -40,12 +40,12 @@ let MessageSchema = {
     msgType: {type: 'string', optional: true},
     revTime: {type: 'date', optional: true},
     isRead: {type: 'bool', option: true},
-    status:{type: 'string', optional: true}//状态: 是否发送成功
+    status: {type: 'string', optional: true}//状态: 是否发送成功
   }
 };
 
-let MessageListSchema = {
-  name: "messageList",
+let SessionSchema = {
+  name: "session",
   primaryKey: 'sessionId',
   properties: {
     sessionId: {type: 'string', optional: true},
@@ -219,7 +219,7 @@ module.exports = {
   FilterItemSchema:FilterItemSchema,
   FilterItemsSchema:FilterItemsSchema,
   OrderItemSchema:OrderItemSchema,
-  MessageListSchema:MessageListSchema,
+  SessionSchema:SessionSchema,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
@@ -231,5 +231,5 @@ module.exports = {
   FILTERITEMS:'filterItems',
   FILTERITEM:'filterItem',
   ORDERITEM:'orderItem',
-  MESSAGELIST:'messageList'
+  SESSION:'session'
 };

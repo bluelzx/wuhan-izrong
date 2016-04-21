@@ -8,25 +8,21 @@ let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let ContactStore = require('../../framework/store/contactStore');
+let NameCircular = require('./nameCircular');
+let {groupFilter} = require('./searchBarHelper');
 
 let GroupMembers = React.createClass({
 
   getInitialState: function() {
     let groupId = this.props.param.groupId;
     return {
-      data:ContactStore.getUsersByGroupId(groupId)
+      data:ContactStore.getUsersByGroupId(groupId),
+      keyWord:''
     };
   },
 
-  textChange: function(){
-
-  },
-
-  renderImg: function(data) {
-    return (
-      <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20}}>
-      </View>
-    );
+  textChange: function(text){
+    this.setState({keyWord:text});
   },
 
   //******************** 扩展列表
@@ -47,7 +43,7 @@ let GroupMembers = React.createClass({
     return (
       <View key={data.userId}
             style={{borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
-        {this.renderImg(data)}
+        <NameCircular name={data.realName}/>
         <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
       </View>
 
@@ -63,13 +59,13 @@ let GroupMembers = React.createClass({
 
         <SearchBar textChange={this.textChange}/>
 
-        <ExtenList itemHeight={56}
+        <ExtenList itemHeight={51}
                    groundColor={'#15263A'}
                    groupBorderColor={"#132232"}
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={this.state.data}
+                   dataSource={groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord)}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />

@@ -1,5 +1,4 @@
 let contactStore = require('../store/contactStore');
-let { NodeHost } = require('../../../config');
 let AppLinks = require('../../constants/appLinks');
 
 let {
@@ -136,7 +135,7 @@ let _addGroupMembers = function(groupId, members) {
   }
   return new Promise((resolve, reject) => {
     BFetch(AppLinks.inviteMember,param).then((response) => {
-      resolve();//TODO:等通知
+      resolve();//等被邀请人接受之后,在更改本地数据
     },reject);
   });
 }
@@ -162,6 +161,35 @@ let _deleteGroupMembers = function(groupId, members) {
   });
 }
 
+/**
+ * 接受邀请
+ * @param groupId 邀请加入的群组id
+ */
+let _acceptInvitation = function (groupId) {
+  let param = {
+    gid: groupId
+  }
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.acceptInvitation, param).then((response)=> {
+      //TODO:默认不屏蔽
+      _updateGroupInfo(response.gid,response.groupName, response.groupOwnerId, response.members, false, response.groupImageUrl);
+      resolve(response);
+    }, reject);
+  });
+}
+
+/*** 更新群组信息
+ * @param groupId int
+ * @param groupImageUrl string
+ * @param groupName string
+ * @param groupMasterUid int
+ * @param members int[]
+ * @param mute bool
+ * */
+let _updateGroupInfo = function (groupId, groupName, groupMasterUid, members, mute, groupImageUrl) {
+  contactStore.createGroup(groupId, groupName, groupMasterUid, members, mute)
+}
+
 let ContactAction = {
   createGroup:(members, groupName, groupMasterUid) => _createGroup(members, groupName, groupMasterUid),
   muteUser:_muteUser,
@@ -170,7 +198,9 @@ let ContactAction = {
   dismissGroup:_dismissGroup,
   modifyGroupName:_modifyGroupName,
   addGroupMembers:_addGroupMembers,
-  deleteGroupMembers:_deleteGroupMembers
+  deleteGroupMembers:_deleteGroupMembers,
+  acceptInvitation:_acceptInvitation,
+  updateGroupInfo:_updateGroupInfo,
 };
 
 module.exports = ContactAction;

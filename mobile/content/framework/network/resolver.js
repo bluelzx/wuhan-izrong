@@ -19,8 +19,8 @@ let Resolver = {
       case MSG_TYPE.REC_P2P_MSG:
         // ImAction.receive({
         ImStore.saveMsg({
-          // sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.fromUid),
-          sessionId: 'user:3',
+          sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.fromUid),
+          // sessionId: 'user:3',
           msgId: message.msgId,
           fromUId: message.fromUid,
           groupId: null,
@@ -29,8 +29,9 @@ let Resolver = {
           contentType: message.contentType,
           content: message.content,
           msgType: message.msgType,
-          revTime: message.sendDate,
-          isRead: false
+          revTime: new Date(message.sendDate),
+          isRead: Boolean(false),
+          status: 'Seen'
         });
         break;
       case MSG_TYPE.SERVER_REC_CONFIRM:

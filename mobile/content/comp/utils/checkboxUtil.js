@@ -28,11 +28,11 @@ let CheckBox = React.createClass({
       checked: true,
       checkedUrl: '',
       unCheckedUrl: ''
-    }
+    };
   },
 
   onChange() {
-    this.props.onChange(!this.props.checked)
+    this.props.onChange(!this.props.checked);
   },
 
   render() {
@@ -71,7 +71,7 @@ let styles = StyleSheet.create({
   label: {
     fontSize: 16,
     lineHeight: 20,
-    color: 'grey',
+    color: 'grey'
   }
 });
 

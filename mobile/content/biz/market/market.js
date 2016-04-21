@@ -38,12 +38,12 @@ let Market = React.createClass({
 
   getInitialState(){
     let filterItems = AppStore.getFilters().filterItems;
-    let orderItems = AppStore.getFilters().orderItems;
     let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
     let item = MarketStore.getCategoryAndItem(filterItems);
     let bizOrientation = MarketStore.getFilterOptions(filterItems, 'bizOrientation').options;
     let term = MarketStore.getFilterOptions(filterItems, 'term').options;
     let amount = MarketStore.getFilterOptions(filterItems, 'amount').options;
+    let orderItems = AppStore.getFilters().orderItems;
 
     return {
       item: item,

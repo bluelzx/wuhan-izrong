@@ -13,7 +13,6 @@ let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
 let ImagePicker = React.createClass({
-
   propTypes: {
     type: React.PropTypes.oneOf(['all', 'camera', 'library']),
     onSelected: React.PropTypes.func.isRequired,
@@ -40,8 +39,8 @@ let ImagePicker = React.createClass({
       cameraType: 'back', // 'front' or 'back'
       mediaType: 'photo', // 'photo' or 'video'
       videoQuality: 'high', // 'low', 'medium', or 'high'
-      maxWidth: 100, // photos only
-      maxHeight: 100, // photos only
+      maxWidth: 300, // photos only
+      maxHeight: 300, // photos only
       aspectX: 1, // aspectX:aspectY, the cropping image's ratio of width to height
       aspectY: 1, // aspectX:aspectY, the cropping image's ratio of width to height
       quality: 1, // photos only
@@ -86,8 +85,8 @@ let ImagePicker = React.createClass({
 
   _selectAndroid: function () {
     // PhotoPicker.showImagePic(true,'nameCard',(response)=>console.log('Response = ', response));
-    UserPhotoPicModule.showImagePic(true, this.props.fileId,
-      (response) => {
+    UserPhotoPicModule.showImagePic(this.props.type,true, this.props.fileId,
+       (response) => {
         console.log('Response = ', response.uri);
         this.props.onSelected(response.uri);
       });

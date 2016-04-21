@@ -13,15 +13,35 @@ const Messenger = require('./../../comp/messenger/messenger');
 let { MSG_TYPE, MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 let AppStore = require('../../framework/store/appStore');
 let ContactStore = require('../../framework/store/contactStore');
+let SessionStore = require('../../framework/store/sessionStore');
 let ImAction = require('../../framework/action/imAction');
+
+let KeyGenerator = require('../../comp/utils/keyGenerator');
 
 let Chat = React.createClass({
 
   componentDidMount() {
+    let { param } = this.props;
+    // let toId = param.chatType === SESSION_TYPE.USER ? param.userId : param.groupId;
+    // let sessionId = KeyGenerator.getSessionKey(param.chatType, toId);
+    //let toId = 'u002';
+    //let sessionId = KeyGenerator.getSessionKey(SESSION_TYPE.USER, toId);
+    //
+    //param.chatType = SESSION_TYPE.USER;
+    //param.userId = 'u002';
+    //param.title = 'u002';
+    //param.sessionId = sessionId;
+    //
+    //ImAction.sessionInit({
+    //  toId: toId,
+    //  sessionId: sessionId
+    //});
+    //查询是否存在session 不存在的画创建
+    param.sessionId = SessionStore.querySessionById(this.props.param.userId || this.props.param.groupId,this.props.param.chatType);
+    param.sessionId || (param.sessionId=KeyGenerator.getSessionKey(param.chatType, param.userId));
     ImAction.sessionInit({
-      sessionId: this.props.param.sessionId,
-      // toId: this.props.param.chatType === SESSION_TYPE.USER ? this.props.param.userId : this.props.param.groupId
-      toId: 'u002'
+      toId: param.userId,
+      sessionId: param.sessionId
     });
     AppStore.addChangeListener(this._onChange);
   },

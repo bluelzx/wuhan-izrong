@@ -16,6 +16,20 @@ var BFetch = function (url, param, callback, failure, options) {
   }, options);
 };
 
+var BFetch1 = function (url, param, callback, failure, options) {
+  var headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'Authorization': 'Basic  ' + AppStore.getToken()
+  };
+
+  return rawFetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(param)
+  }, options);
+};
+
 var PFetch = function (url, param, callback, failure, options) {
   var headers = {
     'Accept': 'application/json',
@@ -41,7 +55,7 @@ var UFetch = function (url, param, callback, failure, options) {
     method: 'POST',
     headers: headers,
     body: formdata
-  }, {custLoading: true});
+  }, options);
 };
 
 
@@ -78,12 +92,14 @@ var process = function (_promise, option) {
               } else {
                 reject(json);
               }
+            }else if(json.errMsg){
+              reject(json.errMsg);
             } else {
               resolve(json);
             }
 
             console.log('以下打印一次获取到的json:');
-            console.log(json);
+            console.log(response);
           }
         })
         .catch((errorData) => {
@@ -103,5 +119,6 @@ var process = function (_promise, option) {
 module.exports = {
   BFetch: BFetch,
   PFetch: PFetch,
-  UFetch: UFetch
+  UFetch: UFetch,
+  BFetch1: BFetch1
 };

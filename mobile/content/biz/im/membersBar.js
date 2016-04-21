@@ -5,7 +5,8 @@
 let React = require('react-native');
 const {Text, View} = React;
 let CircularButton = require('./circularButton');
-let HeadPic = require('./headerPic');
+
+let NameCircular = require('./nameCircular');
 
 let MembersBar = React.createClass({
 
@@ -28,7 +29,9 @@ let MembersBar = React.createClass({
     for(let i = 0 ; !!members && i < members.length; i++){
       m.push(
         <View key={members[i].userId} style={{alignItems:'center',padding:5}}>
-          <HeadPic showBadge={false} style={{marginTop:5,height: 40,width: 40}} source={imgSource}/>
+          <View style={{marginTop:5,height: 40,width: 40}}>
+            <NameCircular name={members[i].realName}/>
+          </View>
           <Text style={{color:'#ffffff',marginTop:4}}>{members[i].realName}</Text>
         </View>
       );

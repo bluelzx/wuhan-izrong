@@ -4,14 +4,16 @@
 let React = require('react-native');
 const {View, TouchableOpacity, Text} = React;
 let NavBarView = require('../../framework/system/navBarView');
-let { ExtenList, Device } = require('mx-artifacts');
+let { ExtenList, Device, Alert } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let CheckBox = require('./checkBox');
 let ContactStore = require('../../framework/store/contactStore');
 let DictIcon = require('../../constants/dictIcon');
-let HeadPic = require('./headerPic');
 let ChooseList = require('./chooseList');
 let ContactAction = require('../../framework/action/contactAction');
+let NameCircular = require('./nameCircular');
+let Setting = require('../../constants/setting');
+let {groupFilter} = require('./searchBarHelper');
 
 let AddMember = React.createClass({
 
@@ -19,14 +21,21 @@ let AddMember = React.createClass({
     let groupId = this.props.param.groupId;
     return {
       data:ContactStore.getUsersExpress(groupId),
-      memberList:{}
+      memberList:{},
+      existMembers:this.props.param.existMembers,
+      keyWord:'',
     }
   },
 
-  textChange: function() {
+  textChange: function(text) {
+    this.setState({keyWord:text});
   },
 
   addUser: function( groupId, members) {
+    if(Object.keys(members).length + this.state.existMembers > Setting.groupMemberUpperLimit){
+      Alert('群组成员人数不能超过' + Setting.groupMemberUpperLimit);
+      return;
+    }
     this.props.exec(
       ()=>{
         //step1: 添加成员
@@ -50,7 +59,7 @@ let AddMember = React.createClass({
     }
     return (
       <TouchableOpacity onPress={() => this.addUser(this.props.param.groupId, memberList)}>
-        <Text style={{ marginLeft:-20,color:count==0?'#6B849C':'white'}}>{'完成(' + count + ')'}</Text>
+        <Text style={{ marginLeft:-40,color:count==0?'#6B849C':'white'}}>{'完成(' + count + '/'+ (Setting.groupMemberUpperLimit - this.state.existMembers)+')'}</Text>
       </TouchableOpacity>
     );
   },
@@ -90,7 +99,9 @@ let AddMember = React.createClass({
               unChoice={this.unCheckBoxChoice}
               style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
       <View style={{flexDirection:'row'}}>
-        <HeadPic showBadge={false} style={{height: 40,width: 40, marginTop:5}} source={DictIcon.imSpread} />
+        <View style={{height: 40,width: 40}}>
+          <NameCircular name={data.realName}/>
+        </View>
         <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
       </View>
     </CheckBox>
@@ -106,13 +117,13 @@ let AddMember = React.createClass({
         <ChooseList  memberList={this.state.memberList}/>
 
         <SearchBar textChange={this.textChange}/>
-        <ExtenList itemHeight={56}
+        <ExtenList itemHeight={51}
                    groundColor={'#15263A'}
                    groupBorderColor={"#132232"}
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={this.state.data}
+                   dataSource={groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord)}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />

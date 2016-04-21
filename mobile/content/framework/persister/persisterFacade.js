@@ -12,8 +12,7 @@ const {
   ORGBEAN,
   FILTERITEMS,
   FILTERITEM,
-  ORDERITEM,
-  MESSAGELIST
+  ORDERITEM
   } = require('./schemas');
 let {Platform} = React;
 
@@ -132,16 +131,16 @@ let _saveImUser = function (imUserBean) {
       mute: imUserBean.mute,
       mobileNumber: imUserBean.mobileNumber,
       photoFileUrl: imUserBean.photoFileUrl,
-      orgId: imUserBean.orgBeanId,
+      orgId: imUserBean.orgId,
       phoneNumber: imUserBean.phoneNumber,
       publicTitle: !!(imUserBean.publicTitle == true || imUserBean.publicTitle == null),
-      publicMobile:  !!(imUserBean.publicMobile == true || imUserBean.publicMobile == null),
-      publicDepart:  !!(imUserBean.publicDepart == true || imUserBean.publicDepart == null),
+      publicMobile: !!(imUserBean.publicMobile == true || imUserBean.publicMobile == null),
+      publicDepart: !!(imUserBean.publicDepart == true || imUserBean.publicDepart == null),
       publicPhone: !!(imUserBean.publicPhone == true || imUserBean.publicPhone == null),
-      publicEmail:  !!(imUserBean.publicEmail == true || imUserBean.publicEmail == null),
-      publicAddress:  !!(imUserBean.publicAddress == true || imUserBean.publicAddress == null),
-      publicWeChat:  !!(imUserBean.publicWeChat == true || imUserBean.publicWeChat == null),
-      publicQQ:  !!(imUserBean.publicQQ == true || imUserBean.publicQQ == null)
+      publicEmail: !!(imUserBean.publicEmail == true || imUserBean.publicEmail == null),
+      publicAddress: !!(imUserBean.publicAddress == true || imUserBean.publicAddress == null),
+      publicWeChat: !!(imUserBean.publicWeChat == true || imUserBean.publicWeChat == null),
+      publicQQ: !!(imUserBean.publicQQ == true || imUserBean.publicQQ == null)
 
 
     }, true);
@@ -231,8 +230,9 @@ let _getLoginUserInfo = function () {
 };
 
 let _getUserId = function () {
-  if (_getLoginUserInfo) {
-    return _getLoginUserInfo.userId;
+  let d  = _getLoginUserInfo();
+  if (d) {
+    return d.userId;
   } else {
     return '';
   }
@@ -248,44 +248,129 @@ let _getOrgByOrgId = function (orgId) {
 };
 
 let _updateUserInfo = function (column, value) {
-  _realm.write(() => {
-    //let ret = {
-    //  userId: users.userId,
-    //  address: users.address,
-    //  realName: users.realName,
-    //  weChatNo: users.weChatNo,
-    //  email: users.email,
-    //  nameCardFileUrl: users.nameCardFileUrl,
-    //  qqNo: users.qqNo,
-    //  department: users.department,
-    //  mobileNumber: users.mobileNumber,
-    //  jobTitle: users.jobTitle,
-    //  phoneNumber: users.phoneNumber,
-    //  photoFileUrl: users.photoFileUrl,
-    //  publicTitle: users.publicTitle,
-    //  publicMobile: users.publicMobile,
-    //  publicDepart: users.publicDepart,
-    //  publicPhone: users.publicPhone,
-    //  publicEmail: users.publicEmail,
-    //  publicAddress: users.publicAddress,
-    //  publicWeChat: users.publicWeChat,
-    //  publicQQ: users.publicQQ,
-    //  orgId: users.orgId,
-    //  lastLoginTime:users.lastLoginTime,  //本地增加,用于多用户登陆排序
-    //  token: users.token
-    //}
-    _realm.create(LOGINUSERINFO, {
-      column: value
-    }, true);
-  });
-};
-
-let _getContact = function () {
-
-};
-
-let _getUsers = function () {
-
+  let userId = _getUserId();
+  switch(column){
+    case "mobileNumber":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          mobileNumber: value
+        }, true);
+      });
+      break;
+    case "publicMobile":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          publicMobile: value
+        }, true);
+      });
+      break;
+    case "phoneNumber":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          phoneNumber: value
+        }, true);
+      });
+      break;
+    case "publicPhone":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          publicPhone: value
+        }, true);
+      });
+      break;
+    case "qqNo":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          qqNo: value
+        }, true);
+      });
+      break;
+    case "publicQQ":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          publicQQ: value
+        }, true);
+      });
+      break;
+    case "weChatNo":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          weChatNo: value
+        }, true);
+      });
+      break;
+    case "publicWeChat":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          publicWeChat: value
+        }, true);
+      });
+      break;
+    case "email":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          email: value
+        }, true);
+      });
+      break;
+    case "publicEmail":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          publicEmail: value
+        }, true);
+      });
+      break;
+    case "department":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          department: value
+        }, true);
+      });
+      break;
+    case "publicDepart":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          publicDepart: value
+        }, true);
+      });
+      break;
+    case "jobTitle":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          jobTitle: value
+        }, true);
+      });
+      break;
+    case "publicTitle":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          publicTitle: value
+        }, true);
+      });
+      break;
+    case "photoFileUrl":
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId:userId,
+          photoFileUrl: value
+        }, true);
+      });
+      break;
+  }
 };
 
 let _getLoginUserInfoByUserId = function (userId) {
@@ -341,7 +426,6 @@ let _getFilters = function () {
   }
 };
 
-
 let _saveOrgList = function (orgList) {
   orgList.forEach(function (n) {
     console.log(n);
@@ -355,5 +439,5 @@ let _getOrgList = function () {
   return ConvertChineseKey.buildOrgList(orgList);
 };
 
-
-module.exports = Object.assign(PersisterFacade,require('./contactPersisterFacade'));
+module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
+  require('./userPersisterFacade'), require('./imPersister'));

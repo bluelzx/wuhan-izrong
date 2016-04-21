@@ -27,6 +27,7 @@ let AppLinks = {
   logout: Host + api + '/Account/logout',
   register: Host + pub + '/register',
   uploadFile: Host + pub + '/File/upload',
+  downLoadFile: Host + pub + '/File/downLoad/',
   updateUserInfo: Host + api + '/Account/updateUserInfoList',
   getOrgList: Host + pub + '/getOrgList/',
 

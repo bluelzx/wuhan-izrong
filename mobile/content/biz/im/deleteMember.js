@@ -11,7 +11,8 @@ let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let DictIcon = require('../../constants/dictIcon');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let HeadPic = require('./headerPic');
+let NameCircular = require('./nameCircular');
+let {groupFilter} = require('./searchBarHelper');
 
 let DeleteMember = React.createClass({
 
@@ -29,13 +30,13 @@ let DeleteMember = React.createClass({
       return ContactAction.deleteGroupMembers(this.props.param.groupId, members).then(()=>{
         this.props.navigator.pop();
       }).catch((errorData) => {
-        Alert(errorData.errCode);
+        Alert(errorData);
       });;
     });
   },
 
-  textChange: function() {
-
+  textChange: function(text) {
+    this.setState({keyWord:text});
   },
 
   renderState: function () {
@@ -50,13 +51,6 @@ let DeleteMember = React.createClass({
       <TouchableOpacity onPress={() => this.delUser(this.props.param.groupId, memberList)}>
         <Text style={{ marginLeft:-20,color:count==0?'#6B849C':'white'}}>{'删除(' + count + ')'}</Text>
       </TouchableOpacity>
-    );
-  },
-
-  renderImg: function(data) {
-    return (
-      <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20}}>
-      </View>
     );
   },
 
@@ -93,7 +87,9 @@ let DeleteMember = React.createClass({
                 unChoice={this.unCheckBoxChoice}
                 style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
         <View style={{flexDirection:'row'}}>
-          <HeadPic showBadge={false} style={{height: 40,width: 40, marginTop:5}} source={DictIcon.imSpread} />
+          <View style={{height: 40,width: 40}}>
+            <NameCircular name={data.realName}/>
+          </View>
           <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
         </View>
       </CheckBox>
@@ -108,13 +104,13 @@ let DeleteMember = React.createClass({
                   showBar={true}
                   actionButton={this.renderState}>
         <SearchBar textChange={this.textChange}/>
-        <ExtenList itemHeight={56}
+        <ExtenList itemHeight={51}
                    groundColor={'#15263A'}
                    groupBorderColor={"#132232"}
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={this.state.data}
+                   dataSource={groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord)}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />

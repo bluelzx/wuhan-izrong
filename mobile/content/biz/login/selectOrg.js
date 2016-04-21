@@ -9,15 +9,15 @@ let {
   Text,
   View,
   TouchableHighlight
-  } = React;
+} = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let AlphabetListView = require('react-native-alphabetlistview');
-
+var that;
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
-    this.getOrgList();
+    that = this;
     let orgBuildList = AppStore.getOrgList();
     return {
       data: orgBuildList
@@ -42,7 +42,7 @@ let Register_selectOrg = React.createClass({
     return this.getStateFromStores();
   },
   componentDidMount() {
-
+    this.getOrgList();
   },
 
   componentWillUnmount: function () {
@@ -52,14 +52,15 @@ let Register_selectOrg = React.createClass({
 
   },
   onCellSelect: function (item) {
-    console.log(item)
+    console.log(item);
   },
 
 
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='选择机构' showBack={true} showBar={true}>
+                  contentBackgroundColor='#18304D' title='选择机构' showBack={true} showBar={true}
+      >
         <View style={{flexDirection: 'column', flex: 1}}>
           <AlphabetListView
             data={this.state.data}
@@ -70,11 +71,12 @@ let Register_selectOrg = React.createClass({
             sectionHeaderHeight={22.5}
             updateScrollState={true}
             onCellSelect={()=>{
-               console.log('onCellSelect')
-            }}/>
+               console.log('onCellSelect');
+            }}
+          />
         </View>
       </NavBarView>
-    )
+    );
   }
 });
 
@@ -91,7 +93,7 @@ let SectionHeader = React.createClass({
 let SectionItem = React.createClass({
   render() {
     return (
-      <Text style={{color:"#327efb"}}>{this.props.title}</Text>
+      <Text style={{color: '#327efb'}}>{this.props.title}</Text>
     );
   }
 });
@@ -100,17 +102,22 @@ let Cell = React.createClass({
 
   render() {
     return (
-      <TouchableHighlight style={{backgroundColor:'#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
-                          onPress={()=>this.selectOrgItem(this.props.item)}>
-        <View style={{height:40,marginLeft:20,justifyContent:"center",borderBottomWidth:1,borderBottomColor:'#122335'}}>
-          <Text style={{color:"#FFFFFF",textAlign:"left"}}>{this.props.item.orgValue}</Text>
+      <TouchableHighlight style={{backgroundColor: '#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
+                          onPress={()=>this.selectOrgItem(this.props.item)}
+      >
+        <View style={{height: 40, marginLeft: 20, justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#122335'}}>
+          <Text style={{color: '#FFFFFF', textAlign: 'left'}}>{this.props.item.orgValue}</Text>
         </View>
       </TouchableHighlight>
     );
   },
 
   selectOrgItem: function (item) {
-     console.log(item);
+    that.props.callback({
+      orgValue: item.orgValue,
+      id: item.id
+    });
+    that.props.navigator.pop();
   }
 });
 
@@ -130,7 +137,7 @@ let styles = StyleSheet.create({
     backgroundColor: '#244266',
     marginTop: -1,
     height: 30,
-    justifyContent: "center"
+    justifyContent: 'center'
   }
 });
 
