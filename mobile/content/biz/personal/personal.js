@@ -12,7 +12,8 @@ let {
   ScrollView,
   Image,
   TouchableHighlight,
-  }=React;
+  } = React;
+let _ = require('lodash');
 let NavBarView = require('../../framework/system/navBarView');
 let Login = require('../../biz/login/login');
 let Item = require('../../comp/utils/item');
@@ -32,7 +33,7 @@ let Personal = React.createClass({
       userName: userInfo.realName,
       orgName: orgBean.orgValue,
       photoFileUrl: userInfo.photoFileUrl
-    }
+    };
   },
 
   getInitialState: function () {
@@ -54,7 +55,7 @@ let Personal = React.createClass({
   toPage: function (name) {
     const { navigator } = this.props;
     if (navigator) {
-      navigator.push({comp: name})
+      navigator.push({comp: name});
     }
   },
 
@@ -62,36 +63,39 @@ let Personal = React.createClass({
     let url = require('../../image/user/head.png');
     if (!_.isEmpty(this.state.photoFileUrl)) {
       url = {uri: this.state.photoFileUrl};
-      return url
-    } else {
-      return url
+      return url;
     }
+      return url;
   },
 
   render: function () {
-    let {title}  = this.props;
+    let {title} = this.props;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='个人' showBack={false} showBar={true}>
+                  contentBackgroundColor='#18304D' title='个人' showBack={false} showBar={true}
+      >
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
-          <View style={{backgroundColor:"#18304b",height:10}}/>
+          <View style={{backgroundColor: '#18304b', height:10}}/>
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b' style={{backgroundColor:'#162a40'}}
-                                onPress={()=>this.toPage(UserInfo)}>
+                                onPress={()=>this.toPage(UserInfo)}
+            >
               <View style={styles.layout}>
-                <View style={{flexDirection:'row'}}>
+                <View style={{flexDirection: 'row'}}>
                   <Image style={styles.head} resizeMode="cover" source={this.returnImg()}/>
-                  <View style={{marginLeft:20,marginTop:10}}>
-                    <Text style={{fontSize: 18,color: '#ffffff'}}>{this.state.userName}</Text>
-                    <Text style={{fontSize: 18,color: '#ffffff',marginTop:10,width:200}} numberOfLines={1}>{this.state.orgName}</Text>
+                  <View style={{marginLeft: 20, marginTop:10}}>
+                    <Text style={{fontSize: 18, color: '#ffffff'}}>{this.state.userName}</Text>
+                    <Text style={{fontSize: 18, color: '#ffffff', marginTop: 10, width: 200}} numberOfLines={1}>{this.state.orgName}</Text>
                   </View>
                 </View>
               </View>
             </TouchableHighlight>
-          <View style={{backgroundColor:"#18304b",height:10}}/>
+          <View style={{backgroundColor: '#18304b', height:10}}/>
           <Item desc="用户指导" img = {false} value={this.state.realName}
-                func={() => this.toPage(AboutUs)}/>
+                func={() => this.toPage(AboutUs)}
+          />
           <Item desc="关于我们" img = {false} value={this.state.realName}
-                func={() => this.toPage(AboutUs)}/>
+                func={() => this.toPage(AboutUs)}
+          />
         </ScrollView>
       </NavBarView>
     );

@@ -26,6 +26,7 @@ let ValiSMS = React.createClass({
     }
     let APNSToken = AppStore.getAPNSToken();
     return {
+      disabled:true,
       verify:'',
       deviceModel: deviceModel,
       APNSToken:APNSToken
@@ -77,16 +78,17 @@ let ValiSMS = React.createClass({
   _onChangeText(key, value){
     this.setState({[key]: value});
     if (this.state.verify.length == 0) {
-      this.setState({checked: true});
+      this.setState({disabled: true});
     } else {
-      this.setState({checked: false});
+      this.setState({disabled: false});
     }
   },
 
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='短信验证' showBack={true} showBar={true}>
+                  contentBackgroundColor='#18304D' title='短信验证' showBack={true} showBar={true}
+      >
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <View style={{flexDirection:'row'}}>
             <Text style={{fontSize:16,color:'#ffffff',marginTop:20}}>已发送短信验证码至</Text>
@@ -96,13 +98,14 @@ let ValiSMS = React.createClass({
           <Button
             containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
             style={{fontSize: 20, color: '#ffffff'}}
-            styleDisabled={{color: 'red'}}
-            onPress={()=>this.login()}>
+            disabled={this.state.disabled}
+            onPress={()=>this.login()}
+          >
             确定
           </Button>
         </View>
       </NavBarView>
-    )
+    );
   }
 });
 let styles = StyleSheet.create({

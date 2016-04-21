@@ -121,7 +121,7 @@ let _getUsersGroupByOrg = function () {
   //获得所有机构
   let orgs = _realm.objects(ORGBEAN);
   let result = [];
-  for(let org of orgs){
+  orgs.forEach((org) => {
     let tmp = {
       orgValue:org.orgValue,
       orgMembers:null
@@ -129,7 +129,7 @@ let _getUsersGroupByOrg = function () {
     let users = _realm.objects(IMUSERINFO).filtered('orgId = ' + org.id);
     tmp.orgMembers = users;
     result.push(tmp);
-  }
+  });
   return result;
 };
 

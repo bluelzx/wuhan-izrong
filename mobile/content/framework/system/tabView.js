@@ -163,7 +163,9 @@ var TabView = React.createClass({
           <Market navigator={this.props.navigator}
                   tabDesc="市场"
                   icon={require('../../image/tab/market.png')}
-                  selectedIcon={require('../../image/tab/market-selected.png')}>
+                  selectedIcon={require('../../image/tab/market-selected.png')}
+                  exec={this.props.exec}
+          >
           </Market>
 
           <Publish navigator={this.props.navigator}

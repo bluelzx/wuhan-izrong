@@ -27,13 +27,13 @@ let _getIMNotificationMessage = function() {
   let platformInfo = {};
   //按照msgType 分两组, p2p 和 group, p2p 按照fromUid再分组,取组内最新的一条瓶装数据,并统计未读数量  ,最终结果再按照时间排序
   let msgs = [];
-  for(let session of sessions){
+  sessions.forEach((session) => {
     if(session.type == MSG_TYPE.PLATFORM_INFO){ // TODO:两种判断
       platformInfo = session;
     }else{
       msgs.push(session);
     }
-  }
+  });
   return {
     platformInfo:platformInfo,  // 平台通知
     msg:msgs           // 用户和群组的通知
