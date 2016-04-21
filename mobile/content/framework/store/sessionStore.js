@@ -9,6 +9,7 @@ let AppStore = require('./appStore');
 
 let _deleteSession = function(sessionId) {
   PersisterFacade.deleteSession(sessionId);
+  AppStore.emitChange();
 }
 
 let _queryAllSession = function() {
@@ -17,12 +18,12 @@ let _queryAllSession = function() {
 
 let _getGroupInfoBySessionId = function(sessionId, currentUserId) {
   let groupId = PersisterFacade.getGroupIdBySessionId(sessionId, currentUserId);
-  return ContactStore.getUserInfoByUserId(groupId);
+  return ContactStore.getGroupDetailById(groupId);
 }
 
 let _getUserInfoBySessionId = function(sessionId, currentUserId) {
   let uid = PersisterFacade.getUserIdBySessionId(sessionId, currentUserId);
-  return ContactStore.getGroupDetailById(uid);
+  return ContactStore.getUserInfoByUserId(uid);
 
 }
 
@@ -31,9 +32,14 @@ let _updateSession = function(param){
   AppStore.emitChange();
 }
 
+let _querySessionById = function(id, type){
+  PersisterFacade.querySessionById(id, type);
+}
+
 let sessionStore = {
   deleteSession:_deleteSession,
   queryAllSession:_queryAllSession,
+  querySessionById:_querySessionById,
   getGroupInfoBySessionId:_getGroupInfoBySessionId,
   getUserInfoBySessionId:_getUserInfoBySessionId,
   updateSession:_updateSession

@@ -61,7 +61,6 @@ let CreateGroup = React.createClass({
 
   //渲染组成员
   itemRender: function(data) {
-    console.log(data.userId);
     return (
       <CheckBox
                 item={data}
@@ -79,7 +78,7 @@ let CreateGroup = React.createClass({
   //*********************
 
   createGroup: function(members) {
-    console.log(members);
+
     if(this.state.groupName.length > Setting.groupNameLengt){
       Alert('群名称不能超过20个字符');
       return ;

@@ -74,7 +74,7 @@ let Messenger = React.createClass({
     if (this.props.param.chatType === SESSION_TYPE.USER) {
       _.assign(msgToSend, {
         // toId: this.props.param.userId,
-        toId: 'u002',
+        toId: this.props.param.userId,
         groupId: null,
         type: SESSION_TYPE.USER,
         msgType: COMMAND_TYPE.SEND_P2P_MSG

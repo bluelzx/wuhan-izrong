@@ -60,7 +60,8 @@ let _helperGroupByOrg = function(members){
   let res = {};
   for(let mem of members){
     if(!mem.orgId){
-      throw '用户机构ID不能为null';
+      continue;
+     // throw '用户机构ID不能为null';
     }
     let org = _realm.objects(ORGBEAN).filtered('id = ' + mem.orgId);
     if(org.length > 0 ){
@@ -94,7 +95,6 @@ let _getGroupInfoByGroupId = function (groupId) {
   else{
     let members = [];
     let memlist = JSON.parse(result[0].members);
-    console.log(memlist);
     for(let userId of memlist){
       let user = _realm.objects(IMUSERINFO).filtered('userId = ' + userId);
       if(user.length > 0)
@@ -162,15 +162,9 @@ let _getGroupMembersByGroupId = function(groupId) {
 let _modifyGroupName = function(groupId, groupName){
   let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
   let newGroup = {
-    groupId:group[0].groupId,
+    groupId:groupId,
     groupName:groupName,
-    groupMasterUid:group[0].groupMasterUid,
-    memberNum:group[0].memberNum,
-    members:group[0].members,
-    groupImageUrl:DEFAULT_GROUP_IMAGE,
-    mute:group[0].mute
   }
-  console.log(newGroup);
   _realm.write(() => {
     _realm.create(GROUP, newGroup, true);
   });
@@ -204,6 +198,9 @@ let _getUsersExpress = function(groupId) {
 let _getUserInfoByUserId = function (id) {
   let users = _realm.objects(IMUSERINFO).filtered('userId = ' + id)[0];
   let orgs = _realm.objects(ORGBEAN);
+  if(!users.orgId){
+    throw '_getUserInfoByUserId users.orgId == null';
+  }
   let org = orgs.filtered('id = ' + users.orgId);
   let ret = {
     userId: users.userId,
@@ -251,13 +248,8 @@ let _kickOutMember = function (groupId, members) {
   let memList = JSON.parse(memberList[0].members);
   _.pull(memList,...members);
   let group = {
-    groupId:memberList[0].groupId,
-    groupName:memberList[0].groupName,
-    groupMasterUid:memberList[0].groupMasterUid,
-    memberNum:memList.length,
-    groupImageUrl:DEFAULT_GROUP_IMAGE,
-    members:JSON.stringify(memList),
-    mute:memberList[0].mute
+    groupId:groupId,
+    members:JSON.stringify(memList)
   }
   _realm.write(() => {
     _realm.create(GROUP, group, true);
@@ -292,12 +284,7 @@ let _setContactMute = function(userId, value){
 let _setGroupMute = function(groupId, value){
   let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
   let param = {
-    groupId:group[0].groupId,
-    groupName:group[0].groupName,
-    groupMasterUid:group[0].groupMasterUid,
-    memberNum:group[0].memberNum,
-    members:group[0].members,
-    groupImageUrl:DEFAULT_GROUP_IMAGE,
+    groupId:groupId,
     mute:value
   }
   _realm.write(()=>{

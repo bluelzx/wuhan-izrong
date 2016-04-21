@@ -31,9 +31,9 @@ let MessageSchema = {
   properties: {
     sessionId: {type: 'string', optional: true},
     msgId: {type: 'string', optional: true},
-    fromUId: {type: 'string', optional: true},
-    groupId: {type: 'string', optional: true},
-    toId: {type: 'string', optional: true},
+    fromUId: {type: 'int', optional: true},
+    groupId: {type: 'int', optional: true},
+    toId: {type: 'int', optional: true},
     type: {type: 'string', optional: true},
     contentType: {type: 'string', optional: true},
     content: {type: 'string', optional: true},
