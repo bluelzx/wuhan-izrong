@@ -58,23 +58,24 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
 //***** helper
 let _helperGroupByOrg = function(members){
   let res = {};
-  for(let mem of members){
+  members.forEach((mem)=>{
     if(!mem.orgId){
-      continue;
-     // throw '用户机构ID不能为null';
-    }
-    let org = _realm.objects(ORGBEAN).filtered('id = ' + mem.orgId);
-    if(org.length > 0 ){
-      if(!res[mem.orgId]) {
-        res[mem.orgId]={
-          orgValue:org[0].orgValue,
-          orgMembers:[]
-        };
+      console.log('用户机构ID不能为null');
+      // throw '用户机构ID不能为null';
+    }else {
+      let org = _realm.objects(ORGBEAN).filtered('id = ' + mem.orgId);
+      if (org.length > 0) {
+        if (!res[mem.orgId]) {
+          res[mem.orgId] = {
+            orgValue: org[0].orgValue,
+            orgMembers: []
+          };
+        }
+        let cache = res[mem.orgId];
+        cache.orgMembers.push(mem);
       }
-      let cache = res[mem.orgId];
-      cache.orgMembers.push(mem);
     }
-  }
+  });
   let ret = [];
   for(let mem in res){
     ret.push(res[mem]);
@@ -95,11 +96,14 @@ let _getGroupInfoByGroupId = function (groupId) {
   else{
     let members = [];
     let memlist = JSON.parse(result[0].members);
-    for(let userId of memlist){
-      let user = _realm.objects(IMUSERINFO).filtered('userId = ' + userId);
-      if(user.length > 0)
-        members.push(user[0]);
-    }
+    memlist.forEach(
+      (userId) => {
+        let user = _realm.objects(IMUSERINFO).filtered('userId = ' + userId);
+        if(user.length > 0)
+          members.push(user[0]);
+      }
+    );
+
     //result[0].members = members;
     let ret = {
       groupId:result[0].groupId,
@@ -178,18 +182,17 @@ let _getUsersExpress = function(groupId) {
     let users = _realm.objects(IMUSERINFO);//获得所有用户
     let existM = existMembers.members;
     let userArray = [];
-    for(let u of users){
+    users.forEach((u)=>{
       let f = true;
-      for(let e of existM){
+      existM.forEach((e)=>{
         if(u.userId == e.userId){
           f = false;
-          break;
         }
-      }
+      });
       if(f){
         userArray.push(u);
       }
-    }
+    });
     return _helperGroupByOrg(userArray);
   }
 

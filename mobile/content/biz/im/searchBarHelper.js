@@ -14,7 +14,7 @@ let groupFilter = function(data, groupName,groupMembers,groupMembersName, keyWor
     return data;
   }
   let ret = [];
-  for(let group of data){
+  data.forEach((group)=>{
     let gName = group[groupName];
     if(!!gName && gName.length && !!~gName.indexOf(keyWord)){
       ret.push(group);
@@ -34,18 +34,18 @@ let groupFilter = function(data, groupName,groupMembers,groupMembersName, keyWor
         ret.push(tagGroup);
       }
     }
-  }
+  });
   return ret;
 }
 
 let gFilter = function (group ,groupMembers,gName, keyWord) {
   let ary = [];
-  for(let g of group[groupMembers]){
+  group[groupMembers].forEach((g)=>{
     let gn = g[gName] ;
     if(!!gn && gn.length && !!~gn.indexOf(keyWord)){
       ary.push(g);
     }
-  }
+  });
   if(ary.length > 0){
     group[groupMembers] = ary;
     return group;
