@@ -239,7 +239,7 @@ Manager.prototype.connect = function (fn) {
     var timer = setTimeout(function () {
       console.log('**websocket** connect attempt timed out after %d', timeout);
       socket.close();
-      socket.emit('error', 'timeout');
+      //socket.emit('error', 'timeout');
       self.emitAll('connect_timeout', timeout);
     }, timeout);
 

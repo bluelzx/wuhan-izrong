@@ -27,10 +27,9 @@ let ImagePicker = require('../../comp/utils/imagePicker');
 let AppStore = require('../../framework/store/appStore');
 
 
-
 let UserInfo = React.createClass({
 
-  getStateFromStores: function(){
+  getStateFromStores: function () {
     let userInfo = UserInfoAction.getLoginUserInfo();
     let orgBean = UserInfoAction.getOrgById(userInfo.orgId);
     return {
@@ -78,20 +77,20 @@ let UserInfo = React.createClass({
     console.log(response);
     this.setState({uri: response});
     this.props.exec(() => {
-      return LoginAction.uploadFile(uri,'photoFileUrl')
+      return LoginAction.uploadFile(response, 'photoFileUrl')
         .then((response) => {
           console.log(response);
-          this.state.photoFileUrl = response.fileUrl;
+          AppStore.updateUserInfo('photoFileUrl', response.fileUrl);
         }).catch((errorData) => {
           throw errorData;
         });
     });
   },
 
-  returnImg: function(){
+  returnImg: function () {
     let url = require('../../image/user/head.png');
     if (!_.isEmpty(this.state.photoFileUrl)) {
-      url = {uri: UserAction.getFile(this.state.photoStoreId), isStatic: true};
+      url = {uri: this.state.photoFileUrl};
       return url
     } else {
       return url
@@ -212,7 +211,6 @@ let UserInfo = React.createClass({
         <Text style={{color:'#ffffff'}}>退出登陆</Text>
       </TouchableOpacity>
     );
-
   }
 });
 

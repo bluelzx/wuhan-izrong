@@ -110,7 +110,7 @@ let Register_uploadNameCard = React.createClass({
           title="选择图片"
           style={[styles.imageArea,styles.nameCard]}
         >
-          <Image style={{flexDirection:'column',flex:1,alignItems:'center',justifyContent:'space-around'}}
+          <Image style={{flexDirection:'column',flex:1,alignItems:'center',width:200,height:120,justifyContent:'space-around'}}
                  resizeMode='contain'
                  source={{uri:this.state.uri, isStatic: true}}
           />
