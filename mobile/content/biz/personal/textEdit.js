@@ -35,7 +35,7 @@ let TextEdit = React.createClass({
     return {
       oldPublicValue: this.props.param.publicValue,
       publicName: this.props.param.publicName,
-      oldValue: (value == null || value == '') ? '' : this.props.param.value.toString(),
+      oldValue: (value == null || value == ''||value=='未填写') ? '' : this.props.param.value.toString(),
       year: year,
       month: month,
       day: this.props.param.type == "date" ? (this.props.param.value == '' ? Number(date.split("-")[2]) : Number(this.props.param.value.split("-")[2])) : '',
@@ -254,7 +254,7 @@ let TextEdit = React.createClass({
           </View>
         </NavBarView>
       )
-    } else if (this.props.param.type == "phoneNumber") {
+    } else if (this.props.param.type == "telephone") {
       return (
         <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                     contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}

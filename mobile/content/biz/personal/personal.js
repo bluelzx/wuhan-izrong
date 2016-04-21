@@ -24,30 +24,47 @@ let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 
 let Personal = React.createClass({
-  getInitialState: function () {
+
+  getStateFromStores: function(){
     let userInfo = UserInfoAction.getLoginUserInfo();
     let orgBean = UserInfoAction.getOrgById(userInfo.orgId);
     return {
       userName: userInfo.realName,
-      orgName: orgBean.orgValue
+      orgName: orgBean.orgValue,
+      photoFileUrl: userInfo.photoFileUrl
     }
   },
-  componentDidMount() {
 
+  getInitialState: function () {
+    return this.getStateFromStores();
+  },
+
+  componentDidMount() {
+    AppStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function () {
-
+    AppStore.removeChangeListener(this._onChange);
   },
 
-  toPage: function () {
+  _onChange: function () {
+    this.setState(this.getStateFromStores());
+  },
+
+  toPage: function (name) {
     const { navigator } = this.props;
     if (navigator) {
-      if (AppStore.getToken()){
-        navigator.push({comp: UserInfo});
-      }else{
-        navigator.push({comp: Login});
-      }
+      navigator.push({comp: name})
+    }
+  },
+
+  returnImg: function(){
+    let url = require('../../image/user/head.png');
+    if (!_.isEmpty(this.state.photoFileUrl)) {
+      url = {uri: this.state.photoFileUrl};
+      return url
+    } else {
+      return url
     }
   },
 
@@ -58,12 +75,11 @@ let Personal = React.createClass({
                   contentBackgroundColor='#18304D' title='个人' showBack={false} showBar={true}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
           <View style={{backgroundColor:"#18304b",height:10}}/>
-          <View style={{backgroundColor:'#162a40'}}>
-            <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
-                                onPress={()=>this.toPage()}>
+            <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b' style={{backgroundColor:'#162a40'}}
+                                onPress={()=>this.toPage(UserInfo)}>
               <View style={styles.layout}>
                 <View style={{flexDirection:'row'}}>
-                  <Image style={styles.head} resizeMode="cover" source={require('../../image/user/head.png')}/>
+                  <Image style={styles.head} resizeMode="cover" source={this.returnImg()}/>
                   <View style={{marginLeft:20,marginTop:10}}>
                     <Text style={{fontSize: 18,color: '#ffffff'}}>{this.state.userName}</Text>
                     <Text style={{fontSize: 18,color: '#ffffff',marginTop:10,width:200}} numberOfLines={1}>{this.state.orgName}</Text>
@@ -71,7 +87,6 @@ let Personal = React.createClass({
                 </View>
               </View>
             </TouchableHighlight>
-          </View>
           <View style={{backgroundColor:"#18304b",height:10}}/>
           <Item desc="用户指导" img = {false} value={this.state.realName}
                 func={() => this.toPage(AboutUs)}/>

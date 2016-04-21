@@ -27,17 +27,17 @@ let AppLinks = {
   logout: Host + api + '/Account/logout',
   register: Host + pub + '/register',
   uploadFile: Host + pub + '/File/upload',
-
+  downLoadFile: Host + pub + '/File/downLoad/',
   updateUserInfo: Host + api + '/Account/updateUserInfoList',
   getOrgList: Host + pub + '/getOrgList/',
 
   bizOrderMarketSearchDefaultSearch: Host + api + '/BizOrderMarketSearch/defaultSearch',
-  bizOrderMarketSearchsearch:Host + api + '/BizOrderMarketSearch/search',
+  bizOrderMarketSearchsearch: Host + api + '/BizOrderMarketSearch/search',
   getBizOrderInMarket: Host + api + '/BizOrderManage/getBizOrderInMarket',
   addBizOrder: Host + api + '/BizOrderManage/addBizOrder',
   downselfBizOrder: Host + api + '/BizOrderManage/downselfBizOrder',
   updateBizOrder: Host + api + '/BizOrderManage/updateBizOrder',
-  getBizOrderCategoryAndItem : Host + api + '/BizOrderManage/getBizOrderCategoryAndItem',
+  getBizOrderCategoryAndItem: Host + api + '/BizOrderManage/getBizOrderCategoryAndItem',
   //contact
   createGroup: NodeHost + 'createGroup',
   kickOutMember: NodeHost + 'kickOutMember',
