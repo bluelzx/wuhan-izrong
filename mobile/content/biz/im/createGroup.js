@@ -39,10 +39,10 @@ let CreateGroup = React.createClass({
 
   getMemberList: function(item) {
     let r = 0;
-    for(let k of Object.keys(item)) {
+    Object.keys(item).forEach((k)=>{
       if (!!item[k])
         r++;
-    }
+    })
     return r;
   },
 
