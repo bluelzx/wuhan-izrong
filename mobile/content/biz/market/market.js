@@ -232,7 +232,7 @@ let Market = React.createClass({
         <View style={{position:"absolute",left:0,top:36}}>
           <TouchableOpacity onPress={()=>this.pressFilterTime()} activeOpacity={0.8} underlayColor="#f0f0f0">
             <View
-              style={{flex: 1, backgroundColor: 'black',opacity:0.2,position:"absolute",left:0,top:108,height:screenHeight - 108,width:screenWidth}}>
+              style={{flex: 1, backgroundColor: 'black',opacity:0.2,height:screenHeight,width:screenWidth}}>
             </View>
           </TouchableOpacity>
           <ListView
@@ -253,7 +253,7 @@ let Market = React.createClass({
     } else {
       return (
         <View
-          style={{backgroundColor:'#244266',width:screenWidth,height:screenHeight - 36,position:"absolute",left:0,top:36}}>
+          style={{backgroundColor:'#244266',width:screenWidth,height:screenHeight - 149,position:"absolute",left:0,top:36}}>
           <ScrollView>
             <TouchableOpacity onPress={()=>this.toPage(SelectOrg)} activeOpacity={0.8} underlayColor="#f0f0f0">
               <View

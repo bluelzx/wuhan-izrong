@@ -28,7 +28,8 @@ let BusinessDetail = React.createClass({
       detailData: '',
       bizOrderOwnerBean: '',
       fileIds: [],
-      marketInfo: marketInfo
+      marketInfo: marketInfo,
+      lastModifyDate: ''
     }
   },
   componentWillMount: function () {
@@ -49,7 +50,7 @@ let BusinessDetail = React.createClass({
               {this.returnItem('金额:', this.state.detailData.amount / 10000 + '万')}
               {this.returnItem('利率:', this.state.detailData.rate * 100 + '%')}
               {this.returnItem('备注:', this.state.detailData.remark)}
-              {this.returnItem('更新时间:', this.state.detailData.lastModifyDate)}
+              {this.returnItem('更新时间:', this.state.lastModifyDate)}
             </View>
             {this.renderAdjunct()}
             <View style={{backgroundColor:'#153757',borderRadius:2,margin:10}}>
@@ -123,7 +124,6 @@ let BusinessDetail = React.createClass({
       <View style={{marginTop:10}}>
         {
           this.state.fileIds.map((item, index) => {
-            console.log('image' + item);
             return (
               <Image
                 key={index}
@@ -147,14 +147,13 @@ let BusinessDetail = React.createClass({
             orderId: id
           }
         ).then((response)=> {
-          let detail = (JSON.stringify(response));
-          console.log(detail);
+          let t = new Date(response.lastModifyDate);
           this.setState({
             detailData: response,
             bizOrderOwnerBean: response.bizOrderOwnerBean,
-            fileIds: response.fileIds
+            fileIds: response.fileIds,
+            lastModifyDate: DateHelper.formatBillDetail(t)
           });
-          console.log(this.state.fileIds);
         }).catch(
           (errorData) => {
             throw errorData;

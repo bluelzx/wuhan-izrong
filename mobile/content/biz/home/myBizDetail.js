@@ -24,6 +24,7 @@ let NavBarView = require('../../framework/system/navBarView');
 let SelectBtn = require('../publish/selectBtn');
 let Remarks = require('../publish/remarks');
 let ImagePicker = require('../../comp/utils/imagePicker');
+let DateHelper = require('../../comp/utils/dateHelper');
 
 
 let AppStore = require('../../framework/store/appStore');
@@ -103,7 +104,7 @@ let MyBizDetail = React.createClass({
   _dataChange2 (index) {
     this.setState({
       termDefault: index,
-      termText: (this.state.termDefault == 0) ? Number(this.state.termText) : (this.state.termDefault == 1) ? Number(this.state.termText) * 30 : Number(text) * 365
+      termText: (this.state.termDefault == 0) ? Number(this.state.termText) : (this.state.termDefault == 1) ? Number(this.state.termText) * 30 : Number(this.state.termText) * 365
     })
   },
   _dataChange3 (index) {
@@ -124,7 +125,7 @@ let MyBizDetail = React.createClass({
   },
   _rateTextChange (text) {
     this.setState({
-      rateText: Number(text)/100
+      rateText: Number(text) / 100
     })
   },
   renderShutDownBiz: function () {
@@ -281,10 +282,14 @@ let MyBizDetail = React.createClass({
     )
   },
   _pressSave: function () {
-    {this.updateBizOrder();}
+    {
+      this.updateBizOrder();
+    }
   },
   shutDownBiz: function () {
-
+    {
+      this.downselfBizOrder(this.state.marketInfo.id)
+    }
   },
   callBackRemarks: function (remarkText) {
     this.setState({
@@ -326,8 +331,9 @@ let MyBizDetail = React.createClass({
   },
 
   setStsteWithBizDetail: function (response) {
+    let t = new Date(response.lastModifyDate);
     this.setState({
-      id:response.id,
+      id: response.id,
       detailData: response,
       bizOrderOwnerBean: response.bizOrderOwnerBean,
       fileUrlList: response.fileIds,
@@ -339,7 +345,7 @@ let MyBizDetail = React.createClass({
       amountDefault: (response.amount >= 100000000) ? 0 : 1,
       rateText: response.rate.toString(),
       remarkText: response.remark,
-      lastModifyDate: response.lastModifyDate,
+      lastModifyDate: DateHelper.formatBillDetail(t),
       bizCategory: response.bizCategory,
       bizItem: response.bizItem,
     })

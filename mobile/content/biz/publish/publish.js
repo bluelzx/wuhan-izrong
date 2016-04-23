@@ -28,6 +28,7 @@ let SelectBtn = require('./selectBtn');
 let Remarks = require('./remarks');
 let SelectBusiness1 = require('./selectBusiness1');
 let ImagePicker = require('../../comp/utils/imagePicker');
+let Adjust = require('../../comp/utils/adjust');
 
 
 let AppStore = require('../../framework/store/appStore');
@@ -96,7 +97,7 @@ let Publish = React.createClass({
   _dataChange2 (index) {
     this.setState({
       termDefault: index,
-      termText: (this.state.termDefault == 0) ? Number(this.state.termText) : (this.state.termDefault == 1) ? Number(this.state.termText) * 30 : Number(text) * 365
+      termText: (this.state.termDefault == 0) ? Number(this.state.termText) : (this.state.termDefault == 1) ? Number(this.state.termText) * 30 : Number(this.state.termText) * 365
     })
   },
   _dataChange3 (index) {
@@ -160,7 +161,7 @@ let Publish = React.createClass({
               returnKeyType="search"
               maxLength={8}
               onChangeText={(text) => this._termTextChange(text)}
-              style={{width:100,height:40,marginLeft:10,color:'#ffd547'}}/>
+              style={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}/>
           </View>
           <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._dataChange2}/>
 
@@ -180,7 +181,7 @@ let Publish = React.createClass({
               returnKeyType="search"
               maxLength={8}
               onChangeText={(text) => this._amountTextChange(text)}
-              style={{width:100,height:40,marginLeft:10,color:'#ffd547'}}/>
+              style={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}/>
           </View>
           <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._dataChange3}/>
 
@@ -200,7 +201,7 @@ let Publish = React.createClass({
               returnKeyType="search"
               maxLength={8}
               onChangeText={(text) => this._rateTextChange(text)}
-              style={{width:100,height:40,marginLeft:10,color:'#ffd547'}}/>
+              style={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}/>
           </View>
           <Text style={{marginLeft:10,fontWeight: 'bold', color:'white'}}>{'%'}</Text>
         </View>
