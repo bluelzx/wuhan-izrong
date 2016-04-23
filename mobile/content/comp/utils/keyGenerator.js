@@ -1,7 +1,5 @@
-
-let AppStore = require('../../framework/store/appStore');
-const _device_id = AppStore.getDeviceId();
-const _user_id = AppStore.getUserId();
+let DeviceInfoDetail = require('./deviceInfo');
+const _device_id = DeviceInfoDetail.getDeviceId();
 
 let _getSessionKey = (t, id) => {
   // return (f > t ? f + ':' + t : t + ':' + f) + ':' + new Date().getTime() + ':' + _device_id;

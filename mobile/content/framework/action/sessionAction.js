@@ -19,11 +19,11 @@ let SessiontStore = require('../store/sessionStore');
  lastTime: {type: 'date', optional: true},
  contentType: {type: 'string', optional: true}
  */
-let _updateSession = function(type, sessionId, title, content, lastTime, contentType){
+let _updateSession = function(type, sessionId, title, content, lastTime, contentType,groupId){
   let param = {
     sessionId:sessionId,
     type: type,
-    badge:0,
+    badge:groupId||0,
     title: title,
     content:content,
     lastTime: lastTime,

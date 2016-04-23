@@ -1,11 +1,12 @@
 let { NetInfo } = require('react-native');
 let _ = require('lodash');
 let EventEmitter = require('events').EventEmitter;
+//let ImSocket = require('../network/imSocket');
 
 //let { MsgTypes } = require('../../constants/notification');
 
 let Persister = require('../persister/persisterFacade');
-let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
+//let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 
 let _info = {
   initLoadingState: true,
@@ -15,10 +16,6 @@ let _info = {
   isForceLogout: false
 };
 
-let DeviceInfo = require('react-native-device-info');
-let _device = {
-  id: DeviceInfo.getUniqueID()
-};
 
 let _data = {};
 
@@ -32,8 +29,6 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   emitChange: function (event = _info.CHANGE_EVENT) {
     this.emit(event);
   },
-
-  getDeviceId: () => _device.id,
   getNetWorkState: () => _info.netWorkState,
   getInitLoadingState: () => _info.initLoadingState,
   isLogout: () => _info.isLogout,
@@ -78,6 +73,7 @@ let _appInit = () => {
     token: _getToken(),
     filters: Persister.getFilters()
   });
+  //ImSocket.init(_data.token);
   AppStore.emitChange();
 };
 
@@ -94,13 +90,14 @@ let _login = (data) => {
   _.assign(_data, {
     token: _getToken()
   });
-
+ // imSocket.init(data.token);
   AppStore.emitChange();
 };
 
 let _logout = (userId) => {
   Persister.clearToken(userId);
   _info.isLogout = true;
+  //TODO:'登出'
   AppStore.emitChange();
 };
 
@@ -108,6 +105,7 @@ let _force_logout = () => {
   Persister.clearToken();
   _info.isLogout = true;
   _info.isForceLogout = true;
+  //TODO:'登出'
   AppStore.emitChange();
 };
 

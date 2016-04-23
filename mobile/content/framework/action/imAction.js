@@ -37,7 +37,10 @@ let _uploadImage = function (url, fileFieldName) {
 
 let ImAction = {
   imInit: () => ImSocket.init(),
-  sessionInit: (data) => ImStore.sessionInit(data),
+  sessionInit: function(data) {
+    ImStore.sessionInit(data);
+    //ImSocket.init();
+  },
   send: (data, bFlag) => _send(data, bFlag),
   receive: (data) => ImStore.saveMsg(data),
   uploadImage: (fileFieldName) => _uploadImage(AppLinks.uploadFile, fileFieldName),
