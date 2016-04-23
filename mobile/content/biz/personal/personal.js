@@ -15,14 +15,11 @@ let {
   } = React;
 let _ = require('lodash');
 let NavBarView = require('../../framework/system/navBarView');
-let Login = require('../../biz/login/login');
 let Item = require('../../comp/utils/item');
 let UserInfo = require('../../biz/personal/userInfo');
 let AboutUs = require('./aboutUs');
-let {Button} = require('mx-artifacts');
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let AppStore = require('../../framework/store/appStore');
-let LoginAction = require('../../framework/action/loginAction');
 
 let Personal = React.createClass({
 

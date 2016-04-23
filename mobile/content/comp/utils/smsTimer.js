@@ -98,10 +98,12 @@ let SMSTimer = React.createClass({
       this.clearInterval(this.state.tim);
     }
   },
+
   textOnchange: function (text, type) {
     this.setState({[type]: text});
     this.props.onChanged(type, this.state.verify);
   },
+
   render() {
     let {height, width} = Dimensions.get('window');
     return (
@@ -112,7 +114,7 @@ let SMSTimer = React.createClass({
           />
           <TextInput style={[styles.input, {width: width - 170}]} underlineColorAndroid="transparent"
                      placeholder="短信验证码" onChangeText={(text) => this.textOnchange(text, 'verify')}
-                     autoCorrect={false} maxLength={6} keyboardType="numeric" placeholderTextColor="#7f7f7f"
+                     autoCorrect={false} maxLength={6} keyboardType="number-pad" placeholderTextColor="#7f7f7f"
                      clearButtonMode="while-editing"
           />
         </View>

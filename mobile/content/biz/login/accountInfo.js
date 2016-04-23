@@ -83,11 +83,11 @@ let Register_accountInfo = React.createClass({
                   contentBackgroundColor='#18304D' title='输入账号信息' showBack={true} showBar={true}
       >
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
-          <Input type="default" placeholder='真实姓名' maxLength={20} field='realName'
-                 onChangeText={this._onChangeText} icon='user'
+          <Input placeholder='真实姓名' maxLength={20} field='realName'
+                 onChangeText={this._onChangeText} icon='user' inputType='ascii-capable'
           />
-          <Input type="default" placeholder='用户名(邮箱)' maxLength={20} field='userName'
-                 onChangeText={this._onChangeText} icon='user'
+          <Input placeholder='用户名(邮箱)' maxLength={20} field='userName'
+                 onChangeText={this._onChangeText} icon='user' inputType='email-address'
           />
           <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
                               onPress={()=>this.toPage(Register_selectOrg)}
