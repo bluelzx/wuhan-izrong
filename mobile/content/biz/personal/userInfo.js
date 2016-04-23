@@ -179,28 +179,28 @@ let UserInfo = React.createClass({
           </ImagePicker>
 
           {this.renderRow('手机号', require('../../image/user/mobileNo.png'), 'mobileNumber', this.state.mobileNumber, 'publicMobile',
-            this.state.publicMobile, 'name', 20, Validation.isPhone)}
+            this.state.publicMobile, 'number-pad', 1, Validation.isPhone)}
 
           {this.renderRow('座机号', require('../../image/user/telephoneNo.png'), 'phoneNumber', this.state.phoneNumber, 'publicPhone',
-            this.state.publicPhone, 'telephone', 13, Validation.isTelephone)}
+            this.state.publicPhone, 'number-pad', 1, Validation.isTelephone)}
 
           {this.renderRow('QQ', require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'publicQQ',
-            this.state.publicQQ, 'number', 20, Validation.isQQ)}
+            this.state.publicQQ, 'number-pad', 1, Validation.isQQ)}
 
           {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'publicWeChat',
-            this.state.publicWeChat, '', 40, '')}
+            this.state.publicWeChat, 'ascii-capable', 1, '')}
 
           {this.renderRow('邮箱', require('../../image/user/email.png'), 'email', this.state.email, 'publicEmail',
-            this.state.publicEmail, '', 60, Validation.isEmail)}
+            this.state.publicEmail, 'email-address', 1, Validation.isEmail)}
 
           {this.renderRow('机构', require('../../image/user/comp.png'), 'organization', this.state.orgBeanName, '',
-            '', 'name', 20, '')}
+            'ascii-capable', 'ascii-capable', 1, '')}
 
           {this.renderRow('部门', require('../../image/user/department.png'), 'department', this.state.department, 'publicDepart',
-            this.state.publicDepart, 'name', 20, '')}
+            this.state.publicDepart, 'ascii-capable', 1, '')}
 
           {this.renderRow('职位', require('../../image/user/jobTitle.png'), 'jobTitle', this.state.jobTitle, 'publicTitle',
-            this.state.publicTitle, 'name', 20, '')}
+            this.state.publicTitle, 'ascii-capable', 1, '')}
 
         </ScrollView>
       </NavBarView>

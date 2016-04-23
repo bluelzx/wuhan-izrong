@@ -46,8 +46,10 @@ let Input = React.createClass({
         width: Dimensions.get('window').width * (375 - 80) / 375
       },
       placeholder: '',
-      placeholderTextColor: '#7f7f7f'
+      placeholderTextColor: '#7f7f7f',
+      focusColor: '#ff0000',
       //value: ''
+      inputType: 'ascii-capable'
     };
   },
 
@@ -68,7 +70,7 @@ let Input = React.createClass({
           placeholder={this.props.placeholder}
           placeholderTextColor={this.props.placeholderTextColor}
           clearButtonMode="while-editing"
-          keyboardType={this.props.inputType === 'number' ? 'numeric' : 'ascii-capable'}
+          keyboardType={this.props.inputType}
         />
       </View>
     );

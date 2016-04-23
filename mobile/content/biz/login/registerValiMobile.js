@@ -100,7 +100,7 @@ let Register_valiMobile = React.createClass({
       >
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <Input type="default" placeholder='手机号' maxlength={20} field='mobileNo'
-                 onChangeText={this._onChangeText} icon='user'
+                 onChangeText={this._onChangeText} icon='user' inputType='number-pad'
           />
           <SMSTimer ref="smsTimer"
                     func={'sendSmsCodeToRegisterMobile'}

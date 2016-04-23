@@ -100,8 +100,8 @@ let Login = React.createClass({
       >
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.renderLogo()}
-          <Input containerStyle={styles.inputStyle} type="default" placeholder='手机号' maxLength={20}
-                 field='mobileNo' onChangeText={this._onChangeText} icon='user'
+          <Input containerStyle={styles.inputStyle} type="default" placeholder='手机号' maxLength={11}
+                 field='mobileNo' onChangeText={this._onChangeText} icon='user' inputType="number-pad"
           />
 
           <Button
