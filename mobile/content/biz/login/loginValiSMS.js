@@ -60,7 +60,7 @@ let ValiSMS = React.createClass({
         }).then((response) => {
           const { navigator } = this.props;
           if (navigator) {
-            this.props.navigator.push({
+            this.props.navigator.resetTo({
               comp: 'tabView'
             });
           }

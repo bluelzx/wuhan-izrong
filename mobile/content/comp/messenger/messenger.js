@@ -227,6 +227,7 @@ let Messenger = React.createClass({
         handlePhonePress={this.handlePhonePress}
         handleUrlPress={this.handleUrlPress}
         handleEmailPress={this.handleEmailPress}
+
         inverted={true}
 
         sessionId={this.props.param.sessionId}
