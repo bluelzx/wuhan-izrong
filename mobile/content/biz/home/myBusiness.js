@@ -24,7 +24,6 @@ let FilterSelectBtn = require('../market/filterSelectBtn');
 let MyBizList = require('./myBizList');
 let SelectOrg = require('../market/selectOrg');
 let Icon = require('react-native-vector-icons/Ionicons');
-let Publish = require('../publish/publish');
 
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
@@ -333,7 +332,7 @@ let Market = React.createClass({
     )
   },
   _pressPublish: function () {
-    this.toPage(Publish);
+
   },
   confirmBtn: function () {
     {
