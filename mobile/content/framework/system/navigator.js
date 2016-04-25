@@ -122,12 +122,14 @@ var Main = React.createClass({
   _renderScene: function (route, navigator) {
     this._navigator = navigator;
     var Comp = route.comp;
+    let tabName = null;
     if (Comp == 'tabView') {
+      if(route.tabName) tabName = route.tabName;
       Comp = TabView;
     }
     navigator.cur = Comp;
     return (
-      <Comp param={route.param} navigator={navigator} callback={route.callBack} exec={this._exec}/>
+      <Comp param={route.param} navigator={navigator} callback={route.callBack} exec={this._exec} tabName={tabName}/>
     );
   },
   render: function () {

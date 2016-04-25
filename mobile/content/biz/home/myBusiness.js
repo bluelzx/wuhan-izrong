@@ -332,7 +332,7 @@ let Market = React.createClass({
     )
   },
   _pressPublish: function () {
-
+    this.props.navigator.resetTo({comp: 'tabView',tabName:'publish'});
   },
   confirmBtn: function () {
     {
@@ -367,7 +367,7 @@ let Market = React.createClass({
         ).then((response)=> {
           this.setState({
             marketData: response
-          })
+          });
           this.refs["MYBIZLIST"]._changeData();
         }).catch(
           (errorData) => {

@@ -25,7 +25,14 @@ var AppStore = require('../store/appStore');
 
 var ScrollableTabView = require('../../comp/tabBar/scrollableTabView');
 var AndroidTabBar = require('../../comp/tabBar/tabBar');
+const PageDic = {
+  home:0,
+  market:1,
+  publish:2,
+  IM: 3,
+  personalCenter:4
 
+};
 var TabView = React.createClass({
   getStateFromStores() {
     var token = AppStore.getToken();
@@ -47,7 +54,8 @@ var TabView = React.createClass({
     //  }
     //} else {
       return {
-        token: token
+        token: token,
+        initialPage: 0
       }
     //}
   },
@@ -94,9 +102,14 @@ var TabView = React.createClass({
   },
 
   getInitialState: function () {
+    let tabName = this.props.tabName;
+    if(!tabName){
+      tabName = 'home';
+    }
+    let initialPage = PageDic[tabName];
     return _.assign(
       this.getStateFromStores(),
-      {selectedTab: 'home'}
+      {selectedTab: tabName, initialPage: initialPage}
     );
   },
 
@@ -151,7 +164,7 @@ var TabView = React.createClass({
       );
     } else {
       return (
-        <ScrollableTabView initialPage={0} locked={true}
+        <ScrollableTabView initialPage={this.state.initialPage} locked={true}
                            renderTabBar={() => <AndroidTabBar />}
         >
           <Home navigator={this.props.navigator}
