@@ -380,9 +380,10 @@ let Market = React.createClass({
             ]
           }
         ).then((response)=> {
+          console.log(response);
           this.setState({
             marketData: response
-          })
+          });
           this.refs["MARKETLIST"]._changeData();
         }).catch(
           (errorData) => {

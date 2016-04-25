@@ -83,7 +83,7 @@ let MyBizList = React.createClass({
   },
 
   renderFreshBtn: function (rowData){
-    if(rowData.status =! "DRAFT"){
+    if(rowData.status =!"DRAFT"){
       reutrn(
         <TouchableHighlight onPress={() => this.freshBiz()} underlayColor='rgba(129,127,201,0)'>
           <View
