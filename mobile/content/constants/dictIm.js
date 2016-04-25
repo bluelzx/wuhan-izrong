@@ -1,6 +1,8 @@
 const MSG_CONTENT_TYPE = {
   TEXT: 'text',
-  IMAGE: 'image'
+  IMAGE: 'image',
+  NAMECARD:'namecard',
+  BIZINFO:'bizInfo',
 };
 
 const COMMAND_TYPE = {
@@ -19,12 +21,15 @@ const MSG_TYPE = {
   CONTANCT_INFO_UPDATE: 'CONTANCT_INFO_UPDATE',
   CONTANCT_INFO_DELETE: 'CONTANCT_INFO_DELETE',
   GROUP_INFO_UPDATE: 'GROUP_INFO_UPDATE',
-  GROUP_INFO_DELETE: 'GROUP_INFO_DELETE'
+  GROUP_INFO_DELETE: 'GROUP_INFO_DELETE',
+  GROUP_JOIN_INVITE:'GROUP_JOIN_INVITE'
 };
 
 const SESSION_TYPE = {
   GROUP: 'group',
-  USER: 'user'
+  USER: 'user',
+  INVITE:'invite',
+  PLATFORMINFO:'platforminfo',
 };
 
 const CHANGE_EVENT = {

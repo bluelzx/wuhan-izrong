@@ -32,7 +32,7 @@ let MembersBar = React.createClass({
           <View style={{marginTop:5,height: 40,width: 40}}>
             <NameCircular name={members[i].realName}/>
           </View>
-          <Text style={{color:'#ffffff',marginTop:4}}>{members[i].realName}</Text>
+          <Text numberOfLines={1} style={{color:'#ffffff',marginTop:4, width:40}}>{members[i].realName}</Text>
         </View>
       );
     }

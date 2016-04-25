@@ -29,13 +29,14 @@ let Remarks = require('./remarks');
 let SelectBusiness1 = require('./selectBusiness1');
 let ImagePicker = require('../../comp/utils/imagePicker');
 let Adjust = require('../../comp/utils/adjust');
+let MyBusiness = require('../home/myBusiness');
 
 
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
 let ImAction = require('../../framework/action/imAction');
 
-let bizOrientationUnit = ['出', '收'];
+let bizOrientationUnit = ['收', '出'];
 let termUnit = ['日', '月', '年'];
 let amountUnit = ['万', '亿'];
 
@@ -51,6 +52,7 @@ let Publish = React.createClass({
       termText: '',
       amountText: '',
       rateText: '',
+      remarkText: '',
       //networt
       term: '',
       rate: '',
@@ -70,7 +72,8 @@ let Publish = React.createClass({
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='发布' showBack={false} showBar={true}>
+                  contentBackgroundColor='#18304D' title='发布' showBack={false} showBar={true}
+                  actionButton={this.renderToMyBiz}>
         <View style={{height:screenHeight-113,backgroundColor:'#153757'}}>
           <View style={{flex:1}}>
             <ScrollView>
@@ -118,14 +121,14 @@ let Publish = React.createClass({
   },
   _rateTextChange (text) {
     this.setState({
-      rateText: Number(text)/100
+      rateText: Number(text) / 100
     })
   },
   renderSelectOrg: function () {
     return (
       <TouchableOpacity onPress={()=>this.toPage(SelectBusiness1)} activeOpacity={0.8} underlayColor="#f0f0f0">
         <View
-          style={{width: screenWidth-20,marginLeft:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
+          style={{width: screenWidth-20,marginLeft:10,marginTop:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
           <Text
             style={{fontSize:16,marginLeft:10,color:'white'}}>{(this.state.bizCategory == '' && this.state.bizItem == '') ? '选择业务类型' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName}</Text>
           <Image style={{margin:10,width:16,height:16}}
@@ -159,8 +162,9 @@ let Publish = React.createClass({
               placeholder={'天数'}
               placeholderTextColor='#325779'
               returnKeyType="search"
-              maxLength={8}
+              maxLength={3}
               onChangeText={(text) => this._termTextChange(text)}
+              underlineColorAndroid={'transparent'}
               style={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}/>
           </View>
           <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._dataChange2}/>
@@ -181,6 +185,7 @@ let Publish = React.createClass({
               returnKeyType="search"
               maxLength={8}
               onChangeText={(text) => this._amountTextChange(text)}
+              underlineColorAndroid={'transparent'}
               style={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}/>
           </View>
           <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._dataChange3}/>
@@ -199,8 +204,9 @@ let Publish = React.createClass({
               placeholder={'0-100.00'}
               placeholderTextColor='#325779'
               returnKeyType="search"
-              maxLength={8}
+              maxLength={3}
               onChangeText={(text) => this._rateTextChange(text)}
+              underlineColorAndroid={'transparent'}
               style={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}/>
           </View>
           <Text style={{marginLeft:10,fontWeight: 'bold', color:'white'}}>{'%'}</Text>
@@ -222,7 +228,7 @@ let Publish = React.createClass({
           >
             <Image
               style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-              source={{uri:this.state.fileUrlList[0]}}
+              source={this.state.fileUrlList.length != 0?{uri:this.state.fileUrlList[0]}:require('../../image/market/addImage.png')}
             />
           </ImagePicker>
         </View>
@@ -240,7 +246,7 @@ let Publish = React.createClass({
             </Text>
             <View>
               <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
-                    numberOfLines={1}>{(this.state.remarksText == '') ? '20字以内' : this.state.remark}
+                    numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
               </Text>
             </View>
           </View>
@@ -252,14 +258,23 @@ let Publish = React.createClass({
     return (
       <TouchableHighlight onPress={() => this._pressPublish()} underlayColor='rgba(129,127,201,0)'>
         <View
-          style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
-          <Text style={{fontWeight: 'bold', color:'white'}}>
+          style={{marginTop:10,flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
+          <Text style={{fontSize:15, color:'white'}}>
             {'发布'}
           </Text>
         </View>
       </TouchableHighlight>
     )
   },
+
+  renderToMyBiz: function () {
+    return (
+      <TouchableOpacity style={{width: 150 ,marginLeft: -20}} onPress={()=>this.toMyBiz()}>
+        <Text style={{color: '#ffffff'}}>我的业务</Text>
+      </TouchableOpacity>
+    );
+  },
+
   _pressPublish: function () {
     {
       this.addBizOrder();
@@ -275,7 +290,8 @@ let Publish = React.createClass({
 
   callBackRemarks: function (remarkText) {
     this.setState({
-      remark: remarkText
+      remark: remarkText,
+      remarkText: remarkText
     })
   },
 
@@ -298,9 +314,17 @@ let Publish = React.createClass({
       navigator.push({
         comp: name,
         param: {
-          callBackRemarks: this.callBackRemarks
+          callBackRemarks: this.callBackRemarks,
+          remarkText: this.state.remarkText
         },
       })
+    }
+  },
+
+  toMyBiz: function () {
+    const { navigator } = this.props;
+    if (navigator) {
+      navigator.push({comp: MyBusiness});
     }
   },
 

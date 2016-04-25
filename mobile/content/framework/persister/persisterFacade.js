@@ -303,4 +303,4 @@ let _getOrgList = function () {
 };
 
 module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
-  require('./userPersisterFacade'), require('./imPersister'));
+  require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'), require('./homePagePersisterFacade'));

@@ -265,17 +265,23 @@ let Market = React.createClass({
               </View>
             </TouchableOpacity>
             <View>
-              <FilterSelectBtn typeTitle={'方向'} dataList={this.state.bizOrientation} section={3}
+              <FilterSelectBtn ref="ORIENTATION" typeTitle={'方向'} dataList={this.state.bizOrientation} section={3}
                                callBack={this.callBack}/>
-              <FilterSelectBtn typeTitle={'期限'} dataList={this.state.term} section={3} callBack={this.callBack}/>
-              <FilterSelectBtn typeTitle={'金额'} dataList={this.state.amount} section={2} callBack={this.callBack}/>
+              <FilterSelectBtn ref="TERM" typeTitle={'期限'} dataList={this.state.term} section={3} callBack={this.callBack}/>
+              <FilterSelectBtn ref="AMOUNT" typeTitle={'金额'} dataList={this.state.amount} section={2} callBack={this.callBack}/>
             </View>
+            <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
+              <View style={{alignItems: 'center',justifyContent:'center'}}>
+                <View
+                  style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:30,borderColor:'#ed135a',borderWidth:1}}>
+                  <Text style={{color:'#ed135a',}}>{'清空'}</Text>
+                </View>
+              </View>
+            </TouchableHighlight>
             <TouchableHighlight onPress={() => this.confirmBtn()} underlayColor='rgba(129,127,201,0)'>
               <View
-                style={{margin:10,borderRadius:5,flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
-                <Text style={{fontWeight: 'bold', color:'white',}}>
-                  {'确定'}
-                </Text>
+                style={{margin:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
+                <Text style={{fontWeight: 'bold', color:'white',}}>{'确定'}</Text>
               </View>
             </TouchableHighlight>
           </ScrollView>
@@ -336,6 +342,12 @@ let Market = React.createClass({
     } else {
 
     }
+  },
+
+  clearOptions: function () {
+    this.refs["ORIENTATION"].setDefaultState();
+    this.refs["TERM"].setDefaultState();
+    this.refs["AMOUNT"].setDefaultState();
   },
   confirmBtn: function () {
     {

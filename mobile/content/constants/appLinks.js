@@ -1,4 +1,4 @@
-let { Host, ImHost ,NodeHost} = require('../../config');
+let { Host, ImHost } = require('../../config');
 let imSocket = 'ws://' + ImHost + '/';
 let imHttp = 'http://' + ImHost + '/';
 
@@ -42,15 +42,15 @@ let AppLinks = {
   updateBizOrder: Host + api + '/BizOrderManage/updateBizOrder',
   getBizOrderCategoryAndItem : Host + api + '/BizOrderManage/getBizOrderCategoryAndItem',
   //contact
-  createGroup: NodeHost + 'createGroup',
-  kickOutMember: NodeHost + 'kickOutMember',
-  updateGroupName: NodeHost + 'updateGroupName',
-  acceptInvitation: NodeHost + 'acceptInvitation',
-  dismissGroup: NodeHost + 'dismissGroup',
-  setContactMute: NodeHost + 'setContactMute',
-  setGroupMute: NodeHost + 'setGroupMute',
-  inviteMember: NodeHost + 'inviteMember',
-  leaveGroup: NodeHost + 'leaveGroup',
+  createGroup: imHttp + 'createGroup',
+  kickOutMember: imHttp + 'kickOutMember',
+  updateGroupName: imHttp + 'updateGroupName',
+  acceptInvitation: imHttp + 'acceptInvitation',
+  dismissGroup: imHttp + 'dismissGroup',
+  setContactMute: imHttp + 'setContactMute',
+  setGroupMute: imHttp + 'setGroupMute',
+  inviteMember: imHttp + 'inviteMember',
+  leaveGroup: imHttp + 'leaveGroup',
 };
 
 module.exports = AppLinks;

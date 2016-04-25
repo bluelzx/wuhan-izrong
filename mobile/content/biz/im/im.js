@@ -29,8 +29,9 @@ let AppStore = require('../../framework/store/appStore');
 
 let ContactStore = require('../../framework/store/contactStore');
 let SessionStore = require('../../framework/store/sessionStore');
-let SessionAction = require('../../framework/action/sessionAction');
-let { MSG_TYPE, MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
+let ContactAction = require('../../framework/action/contactAction');
+let { MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
+let NameCircular = require('./nameCircular');
 
 let WhitePage = React.createClass({
 
@@ -94,7 +95,10 @@ let WhitePage = React.createClass({
   },
 
   toOther: function(item) {
+    // TODO:  事务
     let userinfo = ContactStore.getUserInfo();
+    SessionStore.setBadgeZero(item.sessionId);
+
     let option = null;
     let param = {};
     if(SESSION_TYPE.GROUP == item.type){ // 区分聊天窗口类型
@@ -161,9 +165,9 @@ let WhitePage = React.createClass({
             style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
             <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup} />
             <View
-              style={{ height:40, width:width-70}}>
+              style={{ height:40, width:width-70, paddingHorizontal:10,justifyContent:'center'}}>
               <View
-                style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
+                style={{flexDirection:'row', justifyContent:'space-between'}}>
                 <Text style={{color:'#ffffff'}}>{item.title}</Text>
                 <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
@@ -192,11 +196,13 @@ let WhitePage = React.createClass({
         <TouchableHighlight onPress={()=>this.toOther(item)}>
           <View
             style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
-            <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={require('../../image/user/head.png')} />
+            <View style={{height: 40,width: 40, marginRight:15}}>
+              <NameCircular badge={item.badge} name={item.title}/>
+            </View>
             <View
-              style={{ height:40, width:width-70}}>
+              style={{ height:40, width:width-70,paddingHorizontal:10, justifyContent:'center'}}>
               <View
-                style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
+                style={{flexDirection:'row', justifyContent:'space-between'}}>
                 <Text style={{color:'#ffffff'}}>{item.title}</Text>
                 <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
@@ -209,12 +215,56 @@ let WhitePage = React.createClass({
     );
   },
 
-  renderItem: function(item, index) {
+  acceptInvite: function(item) {
+    this.props.exec(
+      ()=>{
+        return ContactAction.acceptInvitation(item.badge);
+      }
+    );
+  },
 
-    if(item.type == MSG_TYPE.REC_P2P_MSG)
-    return this.renderUser(item, index);
-    else {
+  renderInvite:function(item, index) {
+    let {width} = Device;
+    let swipeoutBtns = [
+      {
+        text: '删除',
+        backgroundColor: 'red',
+        onPress: function(){
+          SessionStore.deleteSession(item.sessionId);
+        }
+      }
+    ];
+    return (
+      <Swipeout key={item.sessionId} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
+        <View
+          style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
+          <HeadPic badge={0} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup}/>
+          <View
+            style={{ flexDirection:'row',paddingHorizontal:10, height:40, width:width-70, justifyContent:'space-between', alignItems:'center'}}>
+            <View>
+              <Text style={{color:'#ffffff'}}>{item.title}</Text>
+              <Text numberOfLines={1}
+                    style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT == item.contentType ? item.content : '点击查看详情'}</Text>
+            </View>
+            <TouchableHighlight style={{marginRight:10}} onPress={()=>this.acceptInvite(item)}>
+              <Text
+                style={{borderRadius:5,color:'#ffffff', paddingHorizontal:20,paddingVertical:5,backgroundColor:'#3EC3A4'}}>{'接受'}</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Swipeout>
+    );
+  },
+
+  renderItem: function(item, index) {
+    if(item.type == SESSION_TYPE.USER){
+      return this.renderUser(item, index);
+    }else if(item.type == SESSION_TYPE.GROUP){
       return this.renderGroup(item, index);
+    }else if(item.type == SESSION_TYPE.INVITE){
+      return this.renderInvite(item, index);
+    }else{
+      throw 'IM 会话类型不存在';
     }
   },
 

@@ -1,4 +1,5 @@
 import React, {Text, View, Animated, Image, StyleSheet} from 'react-native';
+import {MSG_CONTENT_TYPE} from '../../constants/dictIm';
 
 let styles = StyleSheet.create({
   bubble: {
@@ -61,7 +62,7 @@ export default class Bubble extends React.Component {
       };
     }
 
-    if (this.props.contentType === 'image') {
+    if (this.props.contentType === MSG_CONTENT_TYPE.IMAGE) {
       return (
         <View style={[styles.bubble, customStyle]}>
           <Image
@@ -74,6 +75,29 @@ export default class Bubble extends React.Component {
           ></Image>
         </View>
       );
+    }
+
+    if(this.props.contentType === MSG_CONTENT_TYPE.NAMECARD){
+      return (
+        <View style={[styles.bubble, customStyle]}>
+          <Image
+            style={{
+              flex: 1,
+              width: 100,
+              height: 100,
+            }}
+            source={{uri: this.props.content}}
+          ></Image>
+        </View>
+      )
+    }
+
+    if(this.props.contentType === MSG_CONTENT_TYPE.BIZINFO){
+      return (
+        <View style={[styles.bubble, customStyle]}>
+          <Text>这是业务</Text>
+        </View>
+      )
     }
 
     var flexStyle = {};
