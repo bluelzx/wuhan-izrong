@@ -95,7 +95,10 @@ let WhitePage = React.createClass({
   },
 
   toOther: function(item) {
+    // TODO:  事务
     let userinfo = ContactStore.getUserInfo();
+    SessionStore.setBadgeZero(item.sessionId);
+
     let option = null;
     let param = {};
     if(SESSION_TYPE.GROUP == item.type){ // 区分聊天窗口类型

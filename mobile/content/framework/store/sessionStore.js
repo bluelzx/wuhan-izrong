@@ -42,7 +42,8 @@ let sessionStore = {
   querySessionById:_querySessionById,
   getGroupInfoBySessionId:_getGroupInfoBySessionId,
   getUserInfoBySessionId:_getUserInfoBySessionId,
-  updateSession:_updateSession
+  updateSession:_updateSession,
+  setBadgeZero: (sessionId) => PersisterFacade.setBadgeZero(sessionId),
 }
 
 module.exports = sessionStore;

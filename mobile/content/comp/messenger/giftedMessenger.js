@@ -393,6 +393,25 @@ let GiftedMessenger = React.createClass({
     this._resetTextInput();
   },
 
+  handleNameCard() {
+    let message = {
+      content: '名片url',
+      name: this.props.senderName,
+      image: this.props.senderImage,
+      position: 'right',
+      date: new Date()
+    };
+    if (this.props.onCustomSend) {
+      this.props.onCustomSend(message);
+    } else {
+      let rowID = this.appendMessage(message, true);
+      this.props.handleNameCard(message, rowID);
+     // this.onChangeText('');
+    }
+
+   // this._resetTextInput();
+  },
+
   postLoadEarlierMessages(messages = [], allLoaded = false) {
     this.prependMessages(messages);
     this.setState({
@@ -833,7 +852,7 @@ let GiftedMessenger = React.createClass({
 
           <TouchableOpacity
             style={this.styles.panelItem}
-            onPress= {() => {}}
+            onPress= {() => this.handleNameCard()}
           >
             <Image
               style={this.styles.panelIcon}

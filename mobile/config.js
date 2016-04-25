@@ -1,6 +1,6 @@
 let Config = {
   Host: 'http://192.168.64.205:8686/fas',
-  Host: 'http://192.168.64.205:8484/fas',//dev
+ // Host: 'http://192.168.64.205:8484/fas',//dev
   //Host: 'http://192.168.64.205:8686/fas',//qa
   //Host: 'http://192.168.64.133:9081/fas',
   //Host: 'http://192.168.64.169:9081/fas',

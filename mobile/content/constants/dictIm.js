@@ -1,6 +1,8 @@
 const MSG_CONTENT_TYPE = {
   TEXT: 'text',
-  IMAGE: 'image'
+  IMAGE: 'image',
+  NAMECARD:'namecard',
+  BIZINFO:'bizInfo',
 };
 
 const COMMAND_TYPE = {
@@ -26,7 +28,8 @@ const MSG_TYPE = {
 const SESSION_TYPE = {
   GROUP: 'group',
   USER: 'user',
-  INVITE:'invite'
+  INVITE:'invite',
+  PLATFORMINFO:'platforminfo',
 };
 
 const CHANGE_EVENT = {

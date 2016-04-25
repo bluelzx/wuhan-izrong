@@ -13,6 +13,7 @@ let Resolver = {
     }
   },
   _dealMessage: function (message) {
+    console.log(message);
     switch (message.msgType) {
       case MSG_TYPE.EXCEPTION:
         console.log('[error] %s', message.errMsg);
@@ -39,7 +40,6 @@ let Resolver = {
         ImStore.ackMsg(message.msgId, message.toUid);
         break;
       case MSG_TYPE.GROUP_JOIN_INVITE:
-        console.log(message);
         ImStore.saveMsg({
           groupId:message.groupId,
           groupName:message.groupName,
@@ -64,15 +64,23 @@ let Resolver = {
         });
         break;
       case MSG_TYPE.PLATFORM_INFO:
+        ImStore.createPlatFormInfo(message.req, message.url);
         break;
       case MSG_TYPE.HOME_PAGE:
+        ImStore.createHomePageInfo(message.info, message.title, message.content, message.createDate);
         break;
       case MSG_TYPE.CONTANCT_INFO_UPDATE:
+        ImStore.updateContactInfo(message.address,
+          message.realName, message.email, message.nameCardFileUrl, message.department,
+          message.publicDepart, message.jobTitle, message.publicTitle, message.mobileNumber, message.publicMobile,
+          message.phoneNumber, message.publicPhone, message.publicEmail, message.publicAddress, message.publicWeChat,
+          message.photoFileUrl, message.qqNo, message.publicQQ, message.weChatNo, message.userId, message.orgId)
         break;
       case MSG_TYPE.CONTANCT_INFO_DELETE:
+        ImStore.deleteContactInfo(message.userIdList);
         break;
       case MSG_TYPE.GROUP_INFO_UPDATE:
-        ContactSotre.createGroup(message.groupId, message.groupName,message.groupOwnerId,message.members,false)
+        ContactSotre.createGroup(message.groupId, message.groupName,message.groupOwnerId,message.members,false);
         break;
       case MSG_TYPE.GROUP_INFO_DELETE:
         ContactSotre.leaveGroup(message.groupId);

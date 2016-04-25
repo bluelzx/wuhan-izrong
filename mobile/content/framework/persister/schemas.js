@@ -245,7 +245,7 @@ module.exports = {
   OrderItemSchema:OrderItemSchema,
   SessionSchema:SessionSchema,
   HomePageSchema:HomePageSchema,
-  PlatFormInfo:PlatFormInfo,
+  PlatFormInfoSchema:PlatFormInfo,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',

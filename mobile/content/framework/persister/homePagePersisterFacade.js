@@ -10,7 +10,7 @@ let {SESSION_TYPE } = require('../../constants/dictIm');
 
 let HomePagePersisterFacade = {
   createHomePageInfo:(seq, url)=>_createHomePageInfo(seq, url),
-  queryAll: () => _queryAll(),
+  queryAllHomePageInfo: () => _queryAll(),
 }
 
 let _createHomePageInfo = function(seq, url) {

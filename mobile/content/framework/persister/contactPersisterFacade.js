@@ -28,32 +28,10 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
   setContactMute:(userId, value) => _setContactMute(userId, value),
   setGroupMute:(groupId, value) => _setGroupMute(groupId, value),
   leaveGroup:(groupId) => _leaveGroup(groupId),
+  deleteContactInfo:(userIdList) => _deleteContactInfo(userIdList),
+  updateContactInfo: (address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId) =>
+    _updateContactInfo(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId),
 }
-
-
-////造假数据
-//_realm.write(() => {
-//  for (let item of MockData.users) {
-//    _realm.create(IMUSERINFO, item, true);
-//  }
-//
-//  for (let org of MockData.orgs) {
-//    _realm.create(ORGBEAN, org, true);
-//  }
-//
-//  for (let group of MockData.groups) {
-//    _realm.create(GROUP, group, true);
-//  }
-//
-//  for (let message of MockData.message){
-//    _realm.create(MESSAGE, message, true);
-//  }
-//
-//  for(let session of MockData.sessionList){
-//    _realm.create(SESSION, session, true);
-//  }
-//});
-
 
 //***** helper
 let _helperGroupByOrg = function(members){
@@ -197,6 +175,46 @@ let _getUsersExpress = function(groupId) {
   }
 
 };
+
+
+let _updateContactInfo = function(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId){
+
+  let param = {
+    userId:userId,
+    address:address,
+    realName:realName,
+    weChatNo:weChatNo,
+    email:email,
+    nameCardFileUrl:nameCardFileUrl,
+    qqNo:qqNo,
+    department:department,
+    mobileNumber:mobileNumber,
+    jobTitle:jobTitle,
+    publicDepart:publicDepart,
+    publicTitle:publicTitle,
+    publicMobile:publicMobile,
+    phoneNumber:phoneNumber,
+    publicPhone:publicPhone,
+    publicEmail:publicEmail,
+    publicAddress:publicAddress,
+    publicWeChat:publicWeChat,
+    photoFileUrl:photoFileUrl,
+    publicQQ:publicQQ,
+    orgId:orgId,
+  };
+  _realm.write(()=>{
+    _realm.create(IMUSERINFO,param, true);
+  });
+}
+
+let _deleteContactInfo = function(userIdList) {
+  _realm.write(() => {
+    userIdList && userIdList.forEach((item) => {
+      let tag = _realm.objects(IMUSERINFO).filtered('userId = $0', item);
+      _realm.delete(tag);
+    });
+  });
+}
 
 let _getUserInfoByUserId = function (id) {
   let users = _realm.objects(IMUSERINFO).filtered('userId = ' + id)[0];
