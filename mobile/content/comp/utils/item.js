@@ -18,14 +18,14 @@ let Item = React.createClass({
       img: true,
       top: false,
       icon: true
-    }
+    };
   },
 
   returnImg(){
     if (this.props.img) {
       return (
         <Image style={styles.circle} source={this.props.imgPath}/>
-      )
+      );
     }
   },
 
@@ -44,14 +44,14 @@ let Item = React.createClass({
       <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={this.props.func}>
         <View>
           <View style={[styles.listLayout, this.props.top && styles.borderTop]}>
-            <View style={{flexDirection: 'row', backgroundColor: '#162a40', flex:1}}>
+            <View style={{flexDirection: 'row', backgroundColor: '#162a40', flex: 2}}>
               {this.returnImg()}
               <Text style={styles.title}>{this.props.desc}</Text>
             </View>
             <View
-              style={{flexDirection: 'row', alignItems: 'center', flex:2, backgroundColor: '#162a40', justifyContent: 'flex-end'}}
+              style={{flexDirection: 'row', alignItems: 'center', flex: 3, backgroundColor: '#162a40', justifyContent: 'flex-end'}}
             >
-              <Text style={[{fontSize: 15, color: '#ffffff', width: 180, textAlign: 'right', marginRight: 20}]}
+              <Text style={[{fontSize: 15, color: '#ffffff', width: 150, textAlign: 'right', marginRight: 20}]}
                     numberOfLines={1}
               >
                 {this.props.value}
@@ -62,7 +62,7 @@ let Item = React.createClass({
           <View style={styles.bottomStyle}/>
         </View>
       </TouchableHighlight>
-    )
+    );
   }
 });
 let styles = StyleSheet.create({

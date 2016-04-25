@@ -22,7 +22,8 @@ let SMSTimer = React.createClass({
       verify: '',
       time: '点击获取',
       active: '',
-      click: false
+      click: false,
+      disabled: false
     };
   },
   getDefaultProps(){
@@ -36,12 +37,14 @@ let SMSTimer = React.createClass({
       this.setState({
         startTime: new Date().getTime(),
         deadline: 60,
+        disabled: true,
         tim: this.setInterval(this.updateText, 1000)
       });
     } else if (this.state.time == '点击获取') {
       this.setState({
         startTime: new Date().getTime(),
         deadline: 60,
+        disabled: true,
         tim: this.setInterval(this.updateText, 1000)
       });
     }
@@ -58,16 +61,15 @@ let SMSTimer = React.createClass({
         this.changeVerify();
       }).catch((errorData) => {
         //Alert(msg.msgContent);
-        this.changeVerify();
         throw errorData;
       });
     });
   },
 
   selectVerifyFunction: function () {
-    if(this.props.func === 'sendSMSCodeToNewMobile') {
-
-    }else if (this.props.func === 'sendSmsCodeToRegisterMobile') {
+    if (this.state.disabled == false && this.props.func === 'sendSMSCodeToNewMobile') {
+      this.updateText();
+    } else if (this.state.disabled == false && this.props.func === 'sendSmsCodeToRegisterMobile') {
       this.sendSmsCodeToRegisterMobile();
     } else {
       this.changeVerify();
@@ -79,7 +81,7 @@ let SMSTimer = React.createClass({
     let timeGo = Math.floor((nowTime - this.state.startTime) / 1000);
 
     let t = --this.state.deadline;
-     if (t + timeGo > 60) {
+    if (t + timeGo > 60) {
       if (timeGo >= 60) {
         t = 0;
       } else {
@@ -93,7 +95,8 @@ let SMSTimer = React.createClass({
     if (t == 0) {
       this.setState({
         time: '重新获取',
-        click: true
+        click: true,
+        disabled: false
       });
       this.clearInterval(this.state.tim);
     }
@@ -120,8 +123,10 @@ let SMSTimer = React.createClass({
         </View>
         <View style={{width: 75, marginLeft: 12}}>
           <TouchableOpacity
-            style={[{width: 75, height: 47}, styles.radius, styles.button, this.state.click && styles.color]}
+            style={[{width: 75, height: 47}, styles.radius, styles.button,
+            {backgroundColor: this.state.disabled ? '#86929e' : '#8bb0d9'}]}
             onPress={this.selectVerifyFunction}
+            activeOpacity = {this.state.disabled ? 1 : 0.5 }
           >
             <Text style={[styles.fontColor]}>{this.state.time}</Text>
           </TouchableOpacity>
@@ -147,7 +152,6 @@ let styles = StyleSheet.create({
     borderRadius: 4
   },
   button: {
-    backgroundColor: '#8bb0d9',
     height: 47,
     paddingTop: 10,
     paddingBottom: 10,

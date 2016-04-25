@@ -96,11 +96,13 @@ let TextEdit = React.createClass({
   },
 
   updateUserInfo: function () {
-    if (this.props.param.type == 'telephone') {
+    if (this.props.param.name == 'phoneNumber') {
       if (this.state.tele.length > 0 && this.state.phone.length > 0) {
         this.setState({
           newValue: this.state.tele + '-' + this.state.phone
         });
+      }else{
+        Alert('请填写完整的电话号码');
       }
     }
     let data = {};

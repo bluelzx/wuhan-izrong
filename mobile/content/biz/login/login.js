@@ -105,7 +105,7 @@ let Login = React.createClass({
           />
 
           <Button
-            containerStyle={{marginTop: 20, backgroundColor: '#1151B1'}}
+            containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
             disabled={this.state.disabled}
             onPress={()=>this.sendSmsCodeToLoginMobile()}
@@ -116,7 +116,6 @@ let Login = React.createClass({
           <Button
             containerStyle={{marginTop: 20, backgroundColor: '#ffffff'}}
             style={{fontSize: 20, color: '#1151B1'}}
-            styleDisabled={{color: 'red'}}
             onPress={()=>this.toOther(Register_valiMobile)}
           >
             新用户注册

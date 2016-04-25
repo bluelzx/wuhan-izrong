@@ -125,7 +125,11 @@ let UserInfo = React.createClass({
           const { navigator } = this.props;
           navigator.resetTo({comp: Login});
         }).catch((errorData) => {
-          Alert(errorData.msgContent);
+          if(errorData.toString().startsWith('{')){
+            Alert(errorData.msgContent);
+          }else{
+            Alert('网络异常');
+          }
         });
     });
   },
@@ -157,17 +161,16 @@ let UserInfo = React.createClass({
                   actionButton={this.renderLogout}
       >
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false} backgroundColor='#18304b'>
-
-          <ImagePicker
-            type="all"
-            onSelected={(response) => this.uploadUserPoto(response)}
-            onError={(error) => Alert(error)}
-            title="选择图片"
-            style={styles.layout}
-          >
-            <View style={{flex: 1}}>
-              <Image style={styles.head} resizeMode="cover" source={this.returnImg()}/>
-            </View>
+          <View>
+            <ImagePicker
+              type="all"
+              onSelected={(response) => this.uploadUserPoto(response)}
+              onError={(error) => Alert(error)}
+              title="选择图片"
+              style={styles.layout}
+            >
+                <Image style={styles.head} resizeMode="cover" source={this.returnImg()}/>
+            </ImagePicker>
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
               <Text
                 style={{color: '#ffffff', fontSize: 18, textAlign: 'right', marginRight: 20}}
@@ -176,32 +179,34 @@ let UserInfo = React.createClass({
               </Text>
               <Icon style={{marginRight: 20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
             </View>
-          </ImagePicker>
+          </View>
+
+
 
           {this.renderRow('手机号', require('../../image/user/mobileNo.png'), 'mobileNumber', this.state.mobileNumber, 'publicMobile',
-            this.state.publicMobile, 'number-pad', 1, Validation.isPhone)}
+            this.state.publicMobile, 'number-pad', 11, Validation.isPhone)}
 
           {this.renderRow('座机号', require('../../image/user/telephoneNo.png'), 'phoneNumber', this.state.phoneNumber, 'publicPhone',
-            this.state.publicPhone, 'number-pad', 1, Validation.isTelephone)}
+            this.state.publicPhone, 'number-pad', 11, Validation.isTelephone)}
 
           {this.renderRow('QQ', require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'publicQQ',
-            this.state.publicQQ, 'number-pad', 1, Validation.isQQ)}
+            this.state.publicQQ, 'number-pad', 20, Validation.isQQ)}
 
           {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'publicWeChat',
-            this.state.publicWeChat, 'ascii-capable', 1, '')}
+            this.state.publicWeChat, 'ascii-capable', 20, '')}
 
           {this.renderRow('邮箱', require('../../image/user/email.png'), 'email', this.state.email, 'publicEmail',
-            this.state.publicEmail, 'email-address', 1, Validation.isEmail)}
+            this.state.publicEmail, 'email-address', 60, Validation.isEmail)}
+          <View style = {{marginTop: 5}}>
+            {this.renderRow('机构', require('../../image/user/comp.png'), 'organization', this.state.orgBeanName, '',
+              'ascii-capable', 'ascii-capable', 20, '')}
 
-          {this.renderRow('机构', require('../../image/user/comp.png'), 'organization', this.state.orgBeanName, '',
-            'ascii-capable', 'ascii-capable', 1, '')}
+            {this.renderRow('部门', require('../../image/user/department.png'), 'department', this.state.department, 'publicDepart',
+              this.state.publicDepart, 'ascii-capable', 20, '')}
 
-          {this.renderRow('部门', require('../../image/user/department.png'), 'department', this.state.department, 'publicDepart',
-            this.state.publicDepart, 'ascii-capable', 1, '')}
-
-          {this.renderRow('职位', require('../../image/user/jobTitle.png'), 'jobTitle', this.state.jobTitle, 'publicTitle',
-            this.state.publicTitle, 'ascii-capable', 1, '')}
-
+            {this.renderRow('职位', require('../../image/user/jobTitle.png'), 'jobTitle', this.state.jobTitle, 'publicTitle',
+              this.state.publicTitle, 'ascii-capable', 20, '')}
+          </View>
         </ScrollView>
       </NavBarView>
     );

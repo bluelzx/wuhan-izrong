@@ -14,7 +14,7 @@ let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let { Alert,Button } = require('mx-artifacts');
+let { Alert, Button } = require('mx-artifacts');
 let SMSTimer = require('../../comp/utils/smsTimer');
 let TabView = require('../../framework/system/tabView');
 
@@ -22,14 +22,14 @@ let ValiSMS = React.createClass({
   getStateFromStores() {
     let deviceModel = 'IOS';
     if (Platform.OS != 'ios') {
-      deviceModel = 'ANDROID'
+      deviceModel = 'ANDROID';
     }
     let APNSToken = AppStore.getAPNSToken();
     return {
-      disabled:true,
-      verify:'',
+      disabled: true,
+      verify: '',
       deviceModel: deviceModel,
-      APNSToken:APNSToken
+      APNSToken: APNSToken
     };
   },
   getInitialState: function () {
@@ -57,7 +57,6 @@ let ValiSMS = React.createClass({
         }).then((response) => {
           const { navigator } = this.props;
           if (navigator) {
-             // navigator.popToTop();
             this.props.navigator.push({
               comp: 'tabView'
             });
@@ -71,7 +70,7 @@ let ValiSMS = React.createClass({
 
   toOther: function (name) {
     this.props.navigator.push({
-      comp:name
+      comp: name
     });
   },
 
@@ -90,13 +89,13 @@ let ValiSMS = React.createClass({
                   contentBackgroundColor='#18304D' title='短信验证' showBack={true} showBar={true}
       >
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
-          <View style={{flexDirection:'row'}}>
-            <Text style={{fontSize:16,color:'#ffffff',marginTop:20}}>已发送短信验证码至</Text>
-            <Text style={{fontSize:16,color:'#ffffff',marginTop:20}}>{this.props.param.mobileNo}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>已发送短信验证码至</Text>
+            <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>{this.props.param.mobileNo}</Text>
           </View>
-          <SMSTimer  ref="smsTimer" onChanged={this._onChangeText} func={'sendSMSCodeToNewMobile'}/>
+          <SMSTimer ref="smsTimer" onChanged={this._onChangeText} func={'sendSMSCodeToNewMobile'}/>
           <Button
-            containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
+            containerStyle={{marginTop: 20, backgroundColor: '#1151B1'}}
             style={{fontSize: 20, color: '#ffffff'}}
             disabled={this.state.disabled}
             onPress={()=>this.login()}
