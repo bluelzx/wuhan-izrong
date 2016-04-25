@@ -1,9 +1,8 @@
 let _ = require('lodash');
 let EventEmitter = require('events').EventEmitter;
 
-let { MSG_TYPE, MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
+let { SESSION_TYPE } = require('../../constants/dictIm');
 
-let AppStore = require('./appStore');
 let Persister = require('../persister/persisterFacade');
 let SessionAction = require('../action/sessionAction');
 let ContactStore = require('./contactStore');
@@ -17,43 +16,13 @@ let _info = {
 };
 const {CHANGE_EVENT} = require('../../constants/dictIm');
 
-
-let testMessages = [
-  {
-    msgId: 'user:3:1261049417501:0A6848BA-5E72-410B-A259-1DDA7E7F71C8',
-    content: 'Are you building a chat app?',
-    name: 'React-Native',
-    image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-    position: 'left',
-    date: new Date(2015, 10, 16, 19, 0)
-  },
-  {
-    msgId: 'user:3:1361049417501:0A6848BA-5E72-410B-A259-1DDA7E7F71C8',
-    content: "Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger! Yes, and I use Gifted Messenger!",
-    name: 'Developer',
-    image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-    position: 'right',
-    date: new Date(2015, 10, 17, 19, 0)
-    // If needed, you can add others data (eg: userId, messageId)
-  },
-  {
-    msgId: 'user:3:1461049417501:0A6848BA-5E72-410B-A259-1DDA7E7F71C8',
-    contentType: 'image',
-    content: 'http://192.168.64.169:9081/fas/app/pub/File/downLoad/571614d8961ace061a5c2099',
-    name: 'Developer',
-    image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-    position: 'right',
-    date: new Date(2015, 10, 18, 19, 0)
-  }
-];
-
 let _data = {
   toId: '',
   sessionId: '',
   page: 1,
-  userId: AppStore.getUserId(),
+  userId: '',
   userPhotoFileUrl: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
-  messages: testMessages
+  messages: []
 };
 
 let ImStore = _.assign({}, EventEmitter.prototype, {
@@ -72,7 +41,13 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
   getMessages: () => _data.messages,
   saveMsg: (message) => _saveMsg(message),
   ackMsg: (msgId, toUid) => _ackMsg(msgId, toUid),
-  getEarlier: () => _getEarlier()
+  getEarlier: () => _getEarlier(),
+  createHomePageInfo:(seq, url)=>Persister.createHomePageInfo(seq, url),
+  createPlatFormInfo:(infoId, title, content, createDate)=>Persister.createPlatFormInfo(infoId, title, content, createDate),
+  deleteContactInfo:(userIdList)=>Persister.deleteContactInfo(userIdList),
+  updateContactInfo:(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId) =>
+    Persister.updateContactInfo(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId)
+
 });
 
 // Private Functions
@@ -130,20 +105,25 @@ let _sessionInit = (data) => {
 
 let _saveMsg = (message) => {
 
-  //console.log(message);
+  console.log(message);
   if(message.type == SESSION_TYPE.USER){
-    let user = ContactStore.getUserInfoByUserId(message.toId||message.fromUId);
+    let user = ContactStore.getUserInfoByUserId(message.toId || message.fromUId);
     SessionAction.updateSession(message.type, message.sessionId,user.realName,message.content,message.revTime,message.contentType);
-  }else{
+  }else if(message.type == SESSION_TYPE.GROUP){
     let group = ContactStore.getGroupDetailById(message.groupId);
     SessionAction.updateSession(message.type, message.sessionId,group.groupName,message.content,message.revTime,message.contentType);
-
+  } else if(message.type == SESSION_TYPE.INVITE){
+    //TODO  这种情况考虑换个地方处理
+    let group = ContactStore.getGroupDetailById(message.groupId);
+    SessionAction.updateSession(message.type, message.sessionId,group.groupName,'群邀请',message.revTime,message.contentType, message.groupId);
+    return ;
   }
+
+
 
   if (message.sessionId === _data.sessionId) {
     if (message.fromUId) { // Received
       // TODO. Get user info by id.
-
       _data.messages.push({
         msgId: message.msgId,
         contentType: message.contentType,

@@ -52,7 +52,6 @@ let Register_valiMobile = React.createClass({
   },
 
   validateSmsCode: function () {
-    console.log(this.state.mobileNo);
     if (this.state.mobileNo && this.state.verify) {
       dismissKeyboard();
       this.props.exec(() => {

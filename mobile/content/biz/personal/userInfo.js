@@ -119,7 +119,8 @@ let UserInfo = React.createClass({
   },
 
   logout: function () {
-    this.props.exec(() => {
+    Alert('确认退出当前账号？', ()=>{
+      this.props.exec(() => {
       return LoginAction.logout(this.state.userId)
         .then((response) => {
           const { navigator } = this.props;
@@ -132,6 +133,7 @@ let UserInfo = React.createClass({
           }
         });
     });
+    }, ()=>{});
   },
 
   renderRow: function (desc, imagePath, name, value, pubName, pubValue, type, maxLength, valid) {
@@ -161,27 +163,24 @@ let UserInfo = React.createClass({
                   actionButton={this.renderLogout}
       >
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false} backgroundColor='#18304b'>
-          <View>
-            <ImagePicker
-              type="all"
-              onSelected={(response) => this.uploadUserPoto(response)}
-              onError={(error) => Alert(error)}
-              title="选择图片"
-              style={styles.layout}
-            >
-                <Image style={styles.head} resizeMode="cover" source={this.returnImg()}/>
-            </ImagePicker>
+
+          <ImagePicker
+            type="all"
+            onSelected={(response) => this.uploadUserPoto(response)}
+            onError={(error) => Alert(error)}
+            title="选择图片"
+            style={styles.layout}
+          >
+            <View style={{flex: 1}}>
+              <Image style={styles.head} resizeMode="cover" source={this.returnImg()}/>
+            </View>
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
               <Text
-                style={{color: '#ffffff', fontSize: 18, textAlign: 'right', marginRight: 20}}
-              >
-                {this.state.realName}
-              </Text>
+                style={{color: '#ffffff', fontSize: 18, textAlign: 'right', paddingRight: 20}}
+              >{this.state.realName}</Text>
               <Icon style={{marginRight: 20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
             </View>
-          </View>
-
-
+          </ImagePicker>
 
           {this.renderRow('手机号', require('../../image/user/mobileNo.png'), 'mobileNumber', this.state.mobileNumber, 'publicMobile',
             this.state.publicMobile, 'number-pad', 11, Validation.isPhone)}

@@ -7,15 +7,16 @@ const {
   SESSION,
   MESSAGE
   } = require('./schemas');
-let { MSG_TYPE, MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
+let { SESSION_TYPE } = require('../../constants/dictIm');
 
 let SessionPersisterFacade = {
-  deleteSession:(sessionId) => _deleteSession(sessionId),
-  queryAllSession:() => _queryAllSession(),
+  deleteSession: (sessionId) => _deleteSession(sessionId),
+  queryAllSession: () => _queryAllSession(),
   getGroupIdBySessionId: (sid, cuid) => _getGroupIdBySessionId(sid, cuid),
-  getUserIdBySessionId:(sid, cuid) => _getUserIdBySessionId(sid, cuid),
-  updateSession:(param)=>_updateSession(param),
-  querySessionById:(id, type) => _querySessionById(id, type),
+  getUserIdBySessionId: (sid, cuid) => _getUserIdBySessionId(sid, cuid),
+  updateSession: (param)=>_updateSession(param),
+  querySessionById: (id, type) => _querySessionById(id, type),
+  setBadgeZero: (sessionId) => _setBadgeZero(sessionId),
 }
 
 let _deleteSession = function(sessionId) {
@@ -26,7 +27,20 @@ let _deleteSession = function(sessionId) {
 }
 
 let _queryAllSession = function() {
-  return _realm.objects(SESSION);
+  let ret = [];
+  _realm.objects(SESSION).forEach((item)=>{
+    let p = {
+      sessionId: item.sessionId,
+      type: item.type,
+      badge:item.badge,
+      title: item.title,
+      content:item.content,
+      lastTime: item.lastTime,
+      contentType: item.contentType
+    };
+    ret.push(p);
+  });
+  return ret;
 }
 
 let _getGroupIdBySessionId = function(sid, cuid) {
@@ -45,7 +59,17 @@ let _getUserIdBySessionId = function(sid, cuid) {
 
 let _updateSession = function (param){
   _realm.write(()=>{
-    _realm.create(SESSION,param,true);
+    let p = _realm.objects(SESSION).filtered("sessionId = '" + param.sessionId + "'");
+    if(p.length > 0){
+      param.badge = p[0].badge + 1;
+    }
+    _realm.create(SESSION, param, true);
+  });
+}
+
+let _setBadgeZero = function (sessionId) {
+  _realm.write(()=> {
+    _realm.create(SESSION, {sessionId: sessionId, badge: 0}, true);
   });
 }
 

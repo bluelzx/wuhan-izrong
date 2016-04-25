@@ -1,11 +1,12 @@
 let { NetInfo } = require('react-native');
 let _ = require('lodash');
 let EventEmitter = require('events').EventEmitter;
+//let ImSocket = require('../network/imSocket');
 
 //let { MsgTypes } = require('../../constants/notification');
 
 let Persister = require('../persister/persisterFacade');
-let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
+//let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 
 let _info = {
   initLoadingState: true,
@@ -15,10 +16,6 @@ let _info = {
   isForceLogout: false
 };
 
-let DeviceInfo = require('react-native-device-info');
-let _device = {
-  id: DeviceInfo.getUniqueID()
-};
 
 let _data = {};
 
@@ -32,8 +29,6 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   emitChange: function (event = _info.CHANGE_EVENT) {
     this.emit(event);
   },
-
-  getDeviceId: () => _device.id,
   getNetWorkState: () => _info.netWorkState,
   getInitLoadingState: () => _info.initLoadingState,
   isLogout: () => _info.isLogout,
@@ -41,7 +36,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
   getToken: () => _data.token || '',
-  //getToken:() => 't001',
+  //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtNjEiLCJpYXQiOjE0NjEyOTMxNzgsInN1YiI6Inhnd2VuQGFtYXJzb2Z0LmNvbSIsImlzcyI6IlVzZXJJZC02MSJ9.cb3EybMvQyI0QVNgy-JaHJuDUctZTNlYiQB-1LI58Co',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),
@@ -50,6 +45,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
+  saveFilters: (filters) => _saveFilters(filters),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=> _getOrgList(),
@@ -71,13 +67,12 @@ let _appInit = () => {
       _info.netWorkState = isConnected;
     }
   );
-  Persister.saveFilters();
-
   _info.initLoadingState = false;
   _.assign(_data, {
     token: _getToken(),
     filters: Persister.getFilters()
   });
+  //ImSocket.init(_data.token);
   AppStore.emitChange();
 };
 
@@ -94,13 +89,14 @@ let _login = (data) => {
   _.assign(_data, {
     token: _getToken()
   });
-
+ // imSocket.init(data.token);
   AppStore.emitChange();
 };
 
 let _logout = (userId) => {
   Persister.clearToken(userId);
   _info.isLogout = true;
+  //TODO:'登出'
   AppStore.emitChange();
 };
 
@@ -108,6 +104,7 @@ let _force_logout = () => {
   Persister.clearToken();
   _info.isLogout = true;
   _info.isForceLogout = true;
+  //TODO:'登出'
   AppStore.emitChange();
 };
 
@@ -135,6 +132,10 @@ let _getLoginUserInfo = () => {
 
 let _getOrgByOrgId = (orgId)=> {
   return Persister.getOrgByOrgId(orgId);
+};
+
+let _saveFilters = function(filters){
+  Persister.saveFilters(filters);
 };
 
 let _getFilters = ()=> {

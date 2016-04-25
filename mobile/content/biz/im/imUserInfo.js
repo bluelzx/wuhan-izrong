@@ -59,13 +59,12 @@ let ImUserInfo = React.createClass({
                   contentBackgroundColor='#18304D' title='详细资料' showBack={true} showBar={true}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false} backgroundColor='#18304b'>
 
-          <TouchableHighlight style={{backgroundColor:'#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
-                              onPress={()=>this.selectPhoto()}>
+          <View style={{backgroundColor:'#162a40'}} >
             <View style={styles.layout}>
               <Image style={styles.head} resizeMode="cover" source={require('../../image/user/head.png')}/>
               <Text style={{color:'#ffffff',fontSize:18, marginRight:20}}>张某某</Text>
             </View>
-          </TouchableHighlight>
+          </View>
           <Item hiddenArrow={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.data.publicMobile?this.state.data.mobileNumber:privateDesc}/>
           <Item hiddenArrow={true} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.data.publicPhone?this.state.data.phoneNumber:privateDesc}/>
           <Item hiddenArrow={true} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.data.publicQQ?this.state.data.qqNo:privateDesc}/>
