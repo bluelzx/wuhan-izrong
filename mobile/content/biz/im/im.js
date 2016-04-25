@@ -31,7 +31,7 @@ let ContactStore = require('../../framework/store/contactStore');
 let SessionStore = require('../../framework/store/sessionStore');
 let ContactAction = require('../../framework/action/contactAction');
 let { MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
-let NameCircular = require('./nameCircular');
+let NameCircular = require('./nameCircular').NameCircular;
 
 let WhitePage = React.createClass({
 
@@ -220,7 +220,7 @@ let WhitePage = React.createClass({
       ()=>{
         //item.badge == groupId
         return ContactAction.acceptInvitation(item.badge).then(()=>{
-          SessionStore.deleteSession(item.sessionId);
+          SessionStore.updateInViteSession(item.sessionId);
         });
       }
     );
@@ -259,6 +259,39 @@ let WhitePage = React.createClass({
     );
   },
 
+  renderInvited:function(item, index) {
+    let {width} = Device;
+    let swipeoutBtns = [
+      {
+        text: '删除',
+        backgroundColor: 'red',
+        onPress: function(){
+          SessionStore.deleteSession(item.sessionId);
+        }
+      }
+    ];
+    return (
+      <Swipeout key={item.sessionId} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
+        <View
+          style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
+          <HeadPic badge={0} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup}/>
+          <View
+            style={{ flexDirection:'row',paddingHorizontal:10, height:40, width:width-70, justifyContent:'space-between', alignItems:'center'}}>
+            <View>
+              <Text style={{color:'#ffffff'}}>{item.title}</Text>
+              <Text numberOfLines={1}
+                    style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT == item.contentType ? item.content : '点击查看详情'}</Text>
+            </View>
+
+              <Text
+                style={{borderRadius:5,color:'#ffffff', paddingHorizontal:20,paddingVertical:5}}>{'已接受'}</Text>
+
+          </View>
+        </View>
+      </Swipeout>
+    );
+  },
+
   renderItem: function(item, index) {
     if(item.type == SESSION_TYPE.USER){
       return this.renderUser(item, index);
@@ -266,6 +299,8 @@ let WhitePage = React.createClass({
       return this.renderGroup(item, index);
     }else if(item.type == SESSION_TYPE.INVITE){
       return this.renderInvite(item, index);
+    }else if(item.type == SESSION_TYPE.INVITED){
+      return this.renderInvited(item, index);
     }else{
       throw 'IM 会话类型不存在';
     }

@@ -17,6 +17,7 @@ let SessionPersisterFacade = {
   updateSession: (param)=>_updateSession(param),
   querySessionById: (id, type) => _querySessionById(id, type),
   setBadgeZero: (sessionId) => _setBadgeZero(sessionId),
+  updateInViteSession:(sessionId) => _updateInViteSession(sessionId),
 }
 
 let _deleteSession = function(sessionId) {
@@ -81,6 +82,12 @@ let _querySessionById = function(id, type){
     r =  _realm.objects(MESSAGE).filtered('type == $0 ', type).filtered('groupId == $0', id);
   }
   return (!!r &&  !!r[0] )? r[0].sessionId:null;
+}
+
+let _updateInViteSession = function(sessionId) {
+  _realm.write(()=>{
+    _realm.create(SESSION,{sessionId:sessionId, type:SESSION_TYPE.INVITED}, true);
+  })
 }
 
 module.exports = SessionPersisterFacade;

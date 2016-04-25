@@ -11,7 +11,7 @@ let ContactStore = require('../../framework/store/contactStore');
 let DictIcon = require('../../constants/dictIcon');
 let ChooseList = require('./chooseList');
 let ContactAction = require('../../framework/action/contactAction');
-let NameCircular = require('./nameCircular');
+let NameCircular = require('./nameCircular').NameCircular;
 let Setting = require('../../constants/setting');
 let {groupFilter} = require('./searchBarHelper');
 

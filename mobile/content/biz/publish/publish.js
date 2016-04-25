@@ -20,7 +20,7 @@ let {
   InteractionManager
   }=React;
 
-let { Alert } = require('mx-artifacts');
+let { Alert ,Button } = require('mx-artifacts');
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
 let NavBarView = require('../../framework/system/navBarView');
@@ -28,8 +28,10 @@ let SelectBtn = require('./selectBtn');
 let Remarks = require('./remarks');
 let SelectBusiness1 = require('./selectBusiness1');
 let ImagePicker = require('../../comp/utils/imagePicker');
+let Input = require('../../comp/utils/input');
 let Adjust = require('../../comp/utils/adjust');
 let MyBusiness = require('../home/myBusiness');
+let dismissKeyboard = require('react-native-dismiss-keyboard');
 
 
 let AppStore = require('../../framework/store/appStore');
@@ -53,6 +55,7 @@ let Publish = React.createClass({
       amountText: '',
       rateText: '',
       remarkText: '',
+      disabled: true,
       //networt
       term: '',
       rate: '',
@@ -72,7 +75,7 @@ let Publish = React.createClass({
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='发布' showBack={false} showBar={true}
+                  contentBackgroundColor='#18304D' title='发布新业务' showBack={false} showBar={true}
                   actionButton={this.renderToMyBiz}>
         <View style={{height:screenHeight-113,backgroundColor:'#153757'}}>
           <View style={{flex:1}}>
@@ -91,46 +94,51 @@ let Publish = React.createClass({
       </NavBarView>
     );
   },
-  _dataChange1 (index) {
+  _bizOrientationDataChange (index) {
     this.setState({
       bizOrientationDefault: index,
       bizOrientation: (index == 0) ? 'IN' : 'OUT'
-    })
+    });
+
   },
-  _dataChange2 (index) {
+  _termDataChange (index) {
     this.setState({
       termDefault: index,
-      termText: (this.state.termDefault == 0) ? Number(this.state.termText) : (this.state.termDefault == 1) ? Number(this.state.termText) * 30 : Number(this.state.termText) * 365
-    })
+      term: (index == 0) ? Number(this.state.termText) : (index == 1) ? Number(this.state.termText) * 30 : Number(this.state.termText) * 365
+    });
+
   },
-  _dataChange3 (index) {
+  _amountDataChange (index) {
     this.setState({
       amountDefault: index,
-      amountText: (this.state.amountDefault == 0) ? Number(this.state.amountText) * 10000 : Number(this.state.amountText) * 100000000
-    })
+      amount: (index == 0) ? Number(this.state.amountText) * 10000 : Number(this.state.amountText) * 100000000
+    });
+
   },
-  _termTextChange (text) {
-    this.setState({
-      termText: (this.state.termDefault == 0) ? Number(text) : (this.state.termDefault == 1) ? Number(text) * 30 : Number(text) * 365
-    })
+
+  _onChangeText(key, value){
+    this.setState({[key]: value});
+    if(key == 'termText'){
+      this.setState({term: (this.state.termDefault == 0) ? Number(value) : (this.state.termDefault == 1) ? Number(value) * 30 : Number(value) * 365});
+    }else if (key == 'amountText'){
+      this.setState({amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000});
+    }else {
+      this.setState({rate:Number(value)});
+    }
+    if (this.state.termText.length == 0 || this.state.amountText.length == 0 || this.state.rateText.length == 0) {
+      this.setState({disabled: true});
+    } else {
+      this.setState({disabled: false});
+    }
   },
-  _amountTextChange (text) {
-    this.setState({
-      amountText: (this.state.amountDefault == 0) ? Number(text) * 10000 : Number(text) * 100000000
-    })
-  },
-  _rateTextChange (text) {
-    this.setState({
-      rateText: Number(text) / 100
-    })
-  },
+
   renderSelectOrg: function () {
     return (
       <TouchableOpacity onPress={()=>this.toPage(SelectBusiness1)} activeOpacity={0.8} underlayColor="#f0f0f0">
         <View
           style={{width: screenWidth-20,marginLeft:10,marginTop:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
           <Text
-            style={{fontSize:16,marginLeft:10,color:'white'}}>{(this.state.bizCategory == '' && this.state.bizItem == '') ? '选择业务类型' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName}</Text>
+            style={{fontSize:16,marginLeft:10,color:'white'}}>{(this.state.bizCategory == '' && this.state.bizItem == '') ? '资金业务 - 同业存款' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName}</Text>
           <Image style={{margin:10,width:16,height:16}}
                  source={require('../../image/market/next.png')}
           />
@@ -147,7 +155,7 @@ let Publish = React.createClass({
         </View>
         <View style={{marginTop:10,flexDirection:'row'}}>
           <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
-                     change={this._dataChange1}/>
+                     change={this._bizOrientationDataChange}/>
         </View>
       </View>
     )
@@ -157,17 +165,13 @@ let Publish = React.createClass({
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:'white'}}>{'期限'}</Text>
         <View style={{marginTop:10,flexDirection:'row'}}>
-          <View style={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10}}>
-            <TextInput
-              placeholder={'天数'}
-              placeholderTextColor='#325779'
-              returnKeyType="search"
-              maxLength={3}
-              onChangeText={(text) => this._termTextChange(text)}
-              underlineColorAndroid={'transparent'}
-              style={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}/>
-          </View>
-          <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._dataChange2}/>
+          <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
+                 iconStyle={{}} placeholderTextColor='#325779'
+                 inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                 placeholder='天数' maxLength={3} field='termText' inputType="numeric"
+                 onChangeText={this._onChangeText}
+          />
+          <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._termDataChange}/>
 
         </View>
       </View>
@@ -178,17 +182,13 @@ let Publish = React.createClass({
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:'white'}}>{'金额'}</Text>
         <View style={{marginTop:10,flexDirection:'row'}}>
-          <View style={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10}}>
-            <TextInput
-              placeholder={'1万-1000亿'}
-              placeholderTextColor='#325779'
-              returnKeyType="search"
-              maxLength={8}
-              onChangeText={(text) => this._amountTextChange(text)}
-              underlineColorAndroid={'transparent'}
-              style={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}/>
-          </View>
-          <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._dataChange3}/>
+          <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
+                 iconStyle={{}} placeholderTextColor='#325779'
+                 inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                 placeholder='1万-1000亿' maxLength={8} field='amountText' inputType="numeric"
+                 onChangeText={this._onChangeText}
+          />
+          <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._amountDataChange}/>
 
         </View>
       </View>
@@ -199,16 +199,12 @@ let Publish = React.createClass({
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:'white'}}>{'利率'}</Text>
         <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-          <View style={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10}}>
-            <TextInput
-              placeholder={'0-100.00'}
-              placeholderTextColor='#325779'
-              returnKeyType="search"
-              maxLength={3}
-              onChangeText={(text) => this._rateTextChange(text)}
-              underlineColorAndroid={'transparent'}
-              style={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}/>
-          </View>
+          <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
+                 iconStyle={{}} placeholderTextColor='#325779'
+                 inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                 placeholder='0-100.00' maxLength={3} field='rateText' inputType="numeric"
+                 onChangeText={this._onChangeText}
+          />
           <Text style={{marginLeft:10,fontWeight: 'bold', color:'white'}}>{'%'}</Text>
         </View>
       </View>
@@ -237,17 +233,20 @@ let Publish = React.createClass({
   },
   renderRemarks: function () {
     return (
-      <View style={{marginTop:10}}>
+      <View style={{marginTop:10,marginBottom:10}}>
         <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
           <View
             style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: '#102a42'}}>
             <Text style={{marginLeft:10, fontWeight: 'bold', color:'white'}}>
               {'备注'}
             </Text>
-            <View>
+            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
               <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
                     numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
               </Text>
+              <Image style={{margin:10,width:16,height:16}}
+                     source={require('../../image/market/next.png')}
+              />
             </View>
           </View>
         </TouchableHighlight>
@@ -256,14 +255,16 @@ let Publish = React.createClass({
   },
   renderReleaseBtn: function () {
     return (
-      <TouchableHighlight onPress={() => this._pressPublish()} underlayColor='rgba(129,127,201,0)'>
-        <View
-          style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
-          <Text style={{fontSize:15, color:'white'}}>
-            {'发布'}
-          </Text>
-        </View>
-      </TouchableHighlight>
+      <View style={{height:44}}>
+        <Button
+          containerStyle={{height:44,borderRadius:0}}
+          style={{fontSize: 15, color: '#ffffff'}}
+          disabled={this.state.disabled}
+          onPress={() => this._pressPublish()}
+        >
+          发布
+        </Button>
+      </View>
     )
   },
 
@@ -329,37 +330,39 @@ let Publish = React.createClass({
   },
 
   addBizOrder: function () {
-    if (this.state.amountText.length == 0 || this.state.termText.length == 0 || this.state.rateText.length == 0) {
 
+    if (this.state.amountText.length == 0 || this.state.termText.length == 0 || this.state.rateText.length == 0) {
+      this.setState({disabled: false});
     } else {
-      this.props.exec(
-        ()=> {
-          return MarketAction.addBizOrder({
-            id: '',
-            term: this.state.termText,
-            rate: this.state.rateText,
-            remark: this.state.remark,
-            bizOrientation: this.state.bizOrientation,
-            bizCategory: this.state.bizCategory.displayCode,
-            bizItem: this.state.bizItem.displayCode,
-            amount: this.state.amountText,
-            fileUrlList: this.state.fileUrlList
-          }).then((response)=> {
-            Alert('发布成功');
-          }).catch(
-            (errorData) => {
-              throw errorData;
-            }
-          );
+      dismissKeyboard();
+      //this.props.exec(
+      //  ()=> {
+      this.setState({disabled: true});
+      return MarketAction.addBizOrder({
+        id: '',
+        term: this.state.term,
+        rate: this.state.rate/100,
+        remark: this.state.remark,
+        bizOrientation: this.state.bizOrientation,
+        bizCategory: this.state.bizCategory.displayCode,
+        bizItem: this.state.bizItem.displayCode,
+        amount: this.state.amount,
+        fileUrlList: this.state.fileUrlList
+      }).then((response)=> {
+        Alert('发布成功');
+      }).catch(
+        (errorData) => {
+          throw errorData;
         }
       );
+      //  }
+      //);
     }
   },
   handleSendImage(uri) {
     ImAction.uploadImage(uri)
       .then((response) => {
         let arr = new Array();
-        arr = this.state.fileUrlList;
         arr.push(response.fileUrl);
         this.setState({
           fileUrlList: arr

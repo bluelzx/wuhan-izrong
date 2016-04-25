@@ -11,7 +11,7 @@ let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let DictIcon = require('../../constants/dictIcon');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let NameCircular = require('./nameCircular');
+let NameCircular = require('./nameCircular').NameCircular;
 let {groupFilter} = require('./searchBarHelper');
 
 let DeleteMember = React.createClass({

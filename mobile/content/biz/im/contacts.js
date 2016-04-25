@@ -22,7 +22,7 @@ let AppStore = require('../../framework/store/appStore');
 let DictIcon = require('../../constants/dictIcon');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Spread = require('./spread');
-let NameCircular = require('./nameCircular');
+let NameCircular = require('./nameCircular').NameCircular;
 let {groupFilter,contactFilter} = require('./searchBarHelper');
 
 let Contacts = React.createClass({

@@ -54,4 +54,8 @@ let NameCircular = React.createClass({
   }
 });
 
-module.exports = NameCircular;
+let Main = {
+  NameCircular:NameCircular
+}
+
+module.exports = Main

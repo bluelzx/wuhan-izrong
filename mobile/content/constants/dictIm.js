@@ -29,6 +29,7 @@ const SESSION_TYPE = {
   GROUP: 'group',
   USER: 'user',
   INVITE:'invite',
+  INVITED:'invited',
   PLATFORMINFO:'platforminfo',
 };
 

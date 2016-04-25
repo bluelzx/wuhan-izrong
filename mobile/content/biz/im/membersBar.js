@@ -6,7 +6,7 @@ let React = require('react-native');
 const {Text, View} = React;
 let CircularButton = require('./circularButton');
 
-let NameCircular = require('./nameCircular');
+let NameCircular = require('./nameCircular').NameCircular;
 
 let MembersBar = React.createClass({
 

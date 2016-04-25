@@ -3,7 +3,7 @@
  */
 let React = require('react-native');
 const {View, ScrollView} = React;
-let NameCircular = require('./nameCircular');
+let NameCircular = require('./nameCircular').NameCircular;
 let _ = require('lodash');
 
 let ChooseList = React.createClass({

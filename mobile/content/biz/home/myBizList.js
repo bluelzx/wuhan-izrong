@@ -135,7 +135,7 @@ let MyBizList = React.createClass({
         });
       }
     );
-  },
+  }
 
 })
 
