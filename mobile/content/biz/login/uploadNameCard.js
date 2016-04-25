@@ -6,7 +6,6 @@
 let React = require('react-native');
 let {
   StyleSheet,
-  TouchableHighlight,
   Text,
   View,
   Image,
@@ -63,7 +62,7 @@ let Register_uploadNameCard = React.createClass({
         }).then((response) => {
           const { navigator } = this.props;
           if (navigator) {
-            navigator.push(TabView);
+            navigator.push({comp: 'tabView'});
           }
         }).catch((errorData) => {
           throw errorData;
@@ -94,49 +93,55 @@ let Register_uploadNameCard = React.createClass({
           onSelected={(response) => this.uploadNameCard(response)}
           onError={(error) => Alert(error)}
           title="选择图片"
-          style={[styles.imageArea,styles.nameCard]}
+          style={[styles.imageArea, styles.nameCard]}
         >
           <Image
             resizeMode='cover'
-            source={require("../../image/login/nameCard.png")}/>
-          <Text style={{color:'#ffffff'}}>点击上传名片</Text>
-        </ImagePicker>
-      );
-    } else {
-      return (
-        <ImagePicker
-          type="all"
-          onSelected={(response) => this.uploadNameCard(response)}
-          onError={(error) => Alert(error)}
-          title="选择图片"
-          style={[styles.imageArea,styles.nameCard]}
-        >
-          <Image
-            style={{flexDirection:'column',flex:1,alignItems:'center',width:200,height:120,justifyContent:'space-around'}}
-            resizeMode='contain'
-            source={{uri:this.state.uri, isStatic: true}}
+            source={require('../../image/login/nameCard.png')}
           />
+          <Text style={{color: '#ffffff'}}>点击上传名片</Text>
         </ImagePicker>
       );
     }
+    return (
+      <ImagePicker
+        type="all"
+        onSelected={(response) => this.uploadNameCard(response)}
+        onError={(error) => Alert(error)}
+        title="选择图片"
+        style={[styles.imageArea, styles.nameCard]}
+      >
+        <Image
+          style={{flexDirection: 'column', flex: 1, alignItems: 'center', width: 200, height: 120, justifyContent: 'space-around'}}
+          resizeMode='contain'
+          source={{uri: this.state.uri, isStatic: true}}
+        />
+      </ImagePicker>
+    );
+
   },
 
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  title='上传名片' showBack={true} showBar={true}>
+                  title='上传名片' showBack={true} showBar={true}
+      >
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.returnImage()}
+          <Text style={{marginTop: 20, color: '#ffffff'}} >
+            注: 名片信息将辅助我们验证您的身份
+          </Text>
           <Button
-            containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
+            containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
             disabled={this.state.disabled}
-            onPress={()=>this.register()}>
+            onPress={()=>this.register()}
+          >
             完成
           </Button>
         </View>
       </NavBarView>
-    )
+    );
   }
 });
 let styles = StyleSheet.create({

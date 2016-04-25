@@ -99,9 +99,10 @@ let Register_valiMobile = React.createClass({
                   contentBackgroundColor='#18304D' title='短信验证' showBack={true} showBar={true}
       >
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
-          <Input type="default" placeholder='手机号' maxlength={20} field='mobileNo'
-                 onChangeText={this._onChangeText} icon='user'
+          <Input containerStyle={styles.inputStyle} placeholder='手机号' maxLength={11} field='mobileNo'
+                 onChangeText={this._onChangeText} icon='user' inputType='number-pad'
           />
+
           <SMSTimer ref="smsTimer"
                     func={'sendSmsCodeToRegisterMobile'}
                     parameter={this.state.mobileNo}
@@ -118,12 +119,14 @@ let Register_valiMobile = React.createClass({
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
                                 onPress={()=>this.toPage(RegisterPotocol)}
             >
-              <Text style={{alignItems: 'center', marginTop: 20, color: '#ffffff', fontSize: 16, lineHeight: 20}}>用户协议</Text>
+              <Text style={{alignItems: 'center', marginTop: 20, color: '#ffffff', fontSize: 16, lineHeight: 20}}>
+                《用户协议》
+              </Text>
             </TouchableHighlight>
           </View>
 
           <Button
-            containerStyle={{marginTop: 20, backgroundColor: '#1151B1'}}
+            containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
             disabled={this.state.disabled}
             onPress={()=>this.validateSmsCode()}

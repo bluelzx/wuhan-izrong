@@ -11,129 +11,133 @@ const {
 let PersisterFacade = require('./persisterFacade');
 
 let UserPersisterFacade = {
-  //updateUserInfo: (column) => _updateUserInfo(value)
-
+  updateUserInfo: (column, value) => _updateUserInfo(column, value)
 };
 
 let _updateUserInfo = function (column, value) {
-  let userId = PersisterFacade.getUserId();
-  switch(column){
-    case "mobileNumber":
+  let loginUsers = _realm.objects(LOGINUSERINFO);
+  let userId;
+  if (loginUsers.length != 0) {
+    let sortedUsers = loginUsers.sorted('lastLoginTime', [true]);
+    userId = sortedUsers[0].userId;
+  }
+  switch (column) {
+    case 'mobileNumber':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           mobileNumber: value
         }, true);
       });
       break;
-    case "publicMobile":
+    case 'publicMobile':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           publicMobile: value
         }, true);
       });
       break;
-    case "phoneNumber":
+    case 'phoneNumber':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           phoneNumber: value
         }, true);
       });
       break;
-    case "publicPhone":
+    case 'publicPhone':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           publicPhone: value
         }, true);
       });
       break;
-    case "qqNo":
+    case 'qqNo':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           qqNo: value
         }, true);
       });
       break;
-    case "publicQQ":
+    case 'publicQQ':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           publicQQ: value
         }, true);
       });
       break;
-    case "weChatNo":
+    case 'weChatNo':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           weChatNo: value
         }, true);
       });
       break;
-    case "publicWeChat":
+    case 'publicWeChat':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           publicWeChat: value
         }, true);
       });
       break;
-    case "email":
+    case 'email':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           email: value
         }, true);
       });
       break;
-    case "publicEmail":
+    case 'publicEmail':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           publicEmail: value
         }, true);
       });
       break;
-    case "department":
+    case 'department':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           department: value
         }, true);
       });
       break;
-    case "publicDepart":
+    case 'publicDepart':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           publicDepart: value
         }, true);
       });
       break;
-    case "jobTitle":
+    case 'jobTitle':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           jobTitle: value
         }, true);
       });
       break;
-    case "publicTitle":
+    case 'publicTitle':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           publicTitle: value
         }, true);
       });
       break;
-    case "photoFileUrl":
+    case 'photoFileUrl':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
-          userId:userId,
+          userId: userId,
           photoFileUrl: value
         }, true);
       });

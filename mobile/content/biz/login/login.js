@@ -100,12 +100,12 @@ let Login = React.createClass({
       >
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.renderLogo()}
-          <Input containerStyle={styles.inputStyle} type="default" placeholder='手机号' maxLength={20}
-                 field='mobileNo' onChangeText={this._onChangeText} icon='user'
+          <Input containerStyle={styles.inputStyle} type="default" placeholder='手机号' maxLength={11}
+                 field='mobileNo' onChangeText={this._onChangeText} icon='user' inputType="number-pad"
           />
 
           <Button
-            containerStyle={{marginTop: 20, backgroundColor: '#1151B1'}}
+            containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
             disabled={this.state.disabled}
             onPress={()=>this.sendSmsCodeToLoginMobile()}
@@ -116,7 +116,6 @@ let Login = React.createClass({
           <Button
             containerStyle={{marginTop: 20, backgroundColor: '#ffffff'}}
             style={{fontSize: 20, color: '#1151B1'}}
-            styleDisabled={{color: 'red'}}
             onPress={()=>this.toOther(Register_valiMobile)}
           >
             新用户注册

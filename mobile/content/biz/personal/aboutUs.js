@@ -24,9 +24,10 @@ var AboutUs = React.createClass({
   render(){
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='关于我们' showBack={true} showBar={true}>
-        <View style={{paddingBottom:24,backgroundColor:'#162a40'}}>
-          <View style={{marginTop:20,flexDirection:'column',alignItems:'center',paddingHorizontal:16}}>
+                  contentBackgroundColor='#18304D' title='关于我们' showBack={true} showBar={true}
+      >
+        <View style={{paddingBottom: 24, backgroundColor: '#162a40'}}>
+          <View style={{marginTop: 20, flexDirection: 'column', alignItems: 'center', paddingHorizontal: 16}}>
             <Image style={styles.logo} source={require('../../image/login/logo.png')}/>
             <Text style={styles.title}>环渤海银银合作平台</Text>
           </View>
@@ -35,15 +36,15 @@ var AboutUs = React.createClass({
           </Text>
         </View>
         <View>
-          <Item desc="客服热线:" img={false} icon={false} top={true} value={this.state.phone}/>
-          <Item desc="网站邮箱:" img={false} icon={false} value={this.state.email}/>
-          <Item desc="版本号:" img={false} icon={false} value={this.state.web}/>
+          <Item desc="客服热线:" img={false} icon={false} top={true} hiddenArrow = {true} value={this.state.phone}/>
+          <Item desc="网站邮箱:" img={false} icon={false} hiddenArrow = {true} value={this.state.email}/>
+          <Item desc="版本号:" img={false} icon={false} hiddenArrow = {true} value={this.state.versionNo}/>
         </View>
-        <View style={{paddingTop:32,alignItems:'center'}}>
+        <View style={{paddingTop:32, alignItems: 'center'}}>
           <Text style={styles.font}>隐私政策</Text>
           <Text style={styles.font}>© 2015,all rights reserved.</Text>
         </View>
-        <View style={[styles.borderBottom,{marginTop:6,marginHorizontal:12}]}/>
+        <View style={[styles.borderBottom, {marginTop:6, marginHorizontal:12}]}/>
       </NavBarView>
     )
   }
