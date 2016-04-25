@@ -2,6 +2,7 @@ import React, {View, Text, StyleSheet, TouchableHighlight, Image} from 'react-na
 import Bubble from './bubble';
 import ErrorButton from './errorButton';
 import Angle from './angle';
+import {NameCircular} from '../../biz/im/nameCircular';
 
 var styles = StyleSheet.create({
   rowContainer: {
@@ -79,18 +80,38 @@ export default class Message extends React.Component {
 
       if (diffMessage === null || (diffMessage != null && (rowData.name !== diffMessage.name || rowData.id !== diffMessage.id))) {
         if (typeof onImagePress === 'function') {
+
+          //return (
+          //  <NameCircular name={rowData.name} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+          //);
           return (
             <TouchableHighlight
               underlayColor='transparent'
               onPress={() => onImagePress(rowData, rowID)}
             >
-              <Image source={rowData.image} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+              <View>
+                <NameCircular name={rowData.name}
+                              style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+              </View>
             </TouchableHighlight>
           );
+
+          //return (
+          //  <TouchableHighlight
+          //    underlayColor='transparent'
+          //    onPress={() => onImagePress(rowData, rowID)}
+          //  >
+          //    <Image source={rowData.image} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+          //  </TouchableHighlight>
+          //);
         } else {
+
           return (
-            <Image source={rowData.image} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+            <NameCircular name={rowData.name} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
           );
+          //return (
+          //  <Image source={rowData.image} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+          //);
         }
       } else {
         return (

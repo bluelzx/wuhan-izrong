@@ -10,6 +10,7 @@ let _socket = null;
 let ImSocket = {
 
   init: function (token) {
+    if (_socket) return;
     // this.uri = ImWebSocket + AppStore.getToken();
     this.uri = 'ws://' + ImHost + '/' + token;
     //this.uri = 'ws://localhost:3000/t001';
@@ -29,6 +30,7 @@ let ImSocket = {
     });
 
     _socket.on('close', function (reason) {
+      //_socket = null;
       console.log('###### close %s', JSON.stringify(reason));
     });
 
