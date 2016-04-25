@@ -54,7 +54,7 @@ let SMSTimer = React.createClass({
   },
 
   sendSmsCodeToRegisterMobile: function () {
-    if(!Validation.isPhone(this.state.mobileNo)){
+    if(!Validation.isPhone(this.props.parameter)){
       Alert('请输入完成的手机号码');
     }else{
       dismissKeyboard();

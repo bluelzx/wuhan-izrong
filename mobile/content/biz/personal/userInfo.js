@@ -176,7 +176,7 @@ let UserInfo = React.createClass({
             </View>
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
               <Text
-                style={{color: '#ffffff', fontSize: 18, textAlign: 'right', paddingRight: 20}}
+                style={{color: '#ffffff', fontSize: 18, textAlign: 'right', marginRight: 20}}
               >{this.state.realName}</Text>
               <Icon style={{marginRight: 20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
             </View>
