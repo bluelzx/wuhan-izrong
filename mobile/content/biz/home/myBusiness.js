@@ -376,7 +376,7 @@ let Market = React.createClass({
         );
       }
     );
-  },
+  }
 
 
 });

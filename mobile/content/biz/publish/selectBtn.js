@@ -33,7 +33,7 @@ let SelectBtn = React.createClass({
                                             underlayColor='rgba(21,55,87,0)'>
                             <View
                                 style={{alignItems:'center',justifyContent:'center',marginLeft:10,width:Adjust.width(70),height: 40,borderRadius:5, backgroundColor:(this.props.defaultData == i )? '#817fc9' : '#102a42'}}>
-                                <Text style={{ fontWeight: 'bold', color:'white',}}>
+                                <Text style={{ fontWeight: 'bold', color:'white'}}>
                                     {item}
                                 </Text>
                             </View>
