@@ -15,7 +15,7 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Chat = require('./chat');
 let ChooseList = require('./chooseList');
 let { SESSION_TYPE } = require('../../constants/dictIm');
-let NameCircular = require('./nameCircular');
+let NameCircular = require('./nameCircular').NameCircular;
 let Setting = require('../../constants/setting');
 let {groupFilter} = require('./searchBarHelper');
 

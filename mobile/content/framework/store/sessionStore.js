@@ -29,11 +29,21 @@ let _getUserInfoBySessionId = function(sessionId, currentUserId) {
 
 let _updateSession = function(param){
   PersisterFacade.updateSession(param);
- // AppStore.emitChange();
+  AppStore.emitChange();
 }
 
 let _querySessionById = function(id, type){
   PersisterFacade.querySessionById(id, type);
+}
+
+let _setBadgeZero = function(sessionId) {
+  PersisterFacade.setBadgeZero(sessionId);
+  AppStore.emitChange();
+}
+
+let _updateInViteSession = function(sessionId) {
+  PersisterFacade.updateInViteSession(sessionId);
+  AppStore.emitChange();
 }
 
 let sessionStore = {
@@ -43,7 +53,8 @@ let sessionStore = {
   getGroupInfoBySessionId:_getGroupInfoBySessionId,
   getUserInfoBySessionId:_getUserInfoBySessionId,
   updateSession:_updateSession,
-  setBadgeZero: (sessionId) => PersisterFacade.setBadgeZero(sessionId),
+  setBadgeZero: (sessionId) => _setBadgeZero(sessionId),
+  updateInViteSession:(sessionId) => _updateInViteSession(sessionId),
 }
 
 module.exports = sessionStore;

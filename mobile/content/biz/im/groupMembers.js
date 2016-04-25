@@ -8,7 +8,7 @@ let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let ContactStore = require('../../framework/store/contactStore');
-let NameCircular = require('./nameCircular');
+let NameCircular = require('./nameCircular').NameCircular;
 let {groupFilter} = require('./searchBarHelper');
 
 let GroupMembers = React.createClass({
