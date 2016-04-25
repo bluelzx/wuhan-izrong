@@ -58,21 +58,21 @@ let MyBizList = React.createClass({
   },
   _renderRow: function (rowData, sectionID, rowID) {
     return (
-      <TouchableHighlight onPress={() => this.toDetail(MyBizDetail,rowData)} underlayColor='#000'>
+      <TouchableHighlight onPress={rowData.status == 'ACTIVE'?() => this.toDetail(MyBizDetail,rowData):null} underlayColor='#000'>
         <View
           style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926'}}>
           <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
-          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:'white'}}>
+          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}>
             {rowData.term + '天'}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)'}}>
+            style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'?'rgba(175,134,86,1)':'#386085'}}>
             {rowData.amount / 10000 + '万'}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:'white'}}
+            style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}
             numberOfLines={1}>
             {rowData.rate + '%'}
           </Text>
@@ -82,21 +82,21 @@ let MyBizList = React.createClass({
     )
   },
 
-  renderFreshBtn: function (rowData){
-    if(rowData.status =!"DRAFT"){
-      reutrn(
-        <TouchableHighlight onPress={() => this.freshBiz()} underlayColor='rgba(129,127,201,0)'>
-          <View
-            style={{flexDirection:'row',justifyContent:'center',alignItems:'center',borderRadius:5,position:"absolute",left:Adjust.width(240),top:0,marginTop:-15,backgroundColor: '#4fb9fc',height:30,width:Adjust.width(85)}}>
-            <Text style={{fontWeight: 'bold', color:'white'}}>{'刷新'}</Text>
-          </View>
-        </TouchableHighlight>
-      );
-    }else{
-      return(
-        <View></View>
-      );
-    }
+  renderFreshBtn: function (rowData) {
+  if(rowData.status == 'ACTIVE') {
+    return (
+      <TouchableHighlight onPress={() => this.freshBiz(rowData)} underlayColor='rgba(129,127,201,0)'>
+        <View
+          style={{flexDirection:'row',justifyContent:'center',alignItems:'center',borderRadius:5,position:"absolute",left:Adjust.width(240),top:0,marginTop:-15,backgroundColor: '#4fb9fc',height:30,width:Adjust.width(85)}}>
+          <Text style={{fontWeight: 'bold', color:'white'}}>{'刷新'}</Text>
+        </View>
+      </TouchableHighlight>
+    );
+  }else{
+    return(
+      <View></View>
+    );
+  }
   },
 
   freshBiz: function (rowData) {

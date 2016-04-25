@@ -324,7 +324,7 @@ let Publish = React.createClass({
   toMyBiz: function () {
     const { navigator } = this.props;
     if (navigator) {
-      navigator.push({comp: MyBusiness});
+      navigator.push({comp: MyBusiness, param: {fromPublish: true}});
     }
   },
 
