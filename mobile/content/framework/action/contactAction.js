@@ -175,7 +175,9 @@ let _acceptInvitation = function (groupId) {
       //TODO:默认不屏蔽
       _updateGroupInfo(response.gid,response.groupName, response.groupOwnerId, response.members, false, response.groupImageUrl);
       resolve(response);
-    }, reject);
+    }).catch((err)=>{
+      reject(err);
+    });
   });
 }
 

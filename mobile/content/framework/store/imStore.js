@@ -106,20 +106,19 @@ let _sessionInit = (data) => {
 let _saveMsg = (message) => {
 
   console.log(message);
+  if(message.msgType == SESSION_TYPE.INVITE){
+    //TODO  这种情况考虑换个地方处理
+    //let group = ContactStore.getGroupDetailById(message.groupId);
+    SessionAction.updateSession(SESSION_TYPE.INVITE, message.sessionId,message.groupName,'群邀请',message.revTime,message.contentType, message.groupId);
+    return ;
+  }
   if(message.type == SESSION_TYPE.USER){
     let user = ContactStore.getUserInfoByUserId(message.toId || message.fromUId);
     SessionAction.updateSession(message.type, message.sessionId,user.realName,message.content,message.revTime,message.contentType);
   }else if(message.type == SESSION_TYPE.GROUP){
     let group = ContactStore.getGroupDetailById(message.groupId);
     SessionAction.updateSession(message.type, message.sessionId,group.groupName,message.content,message.revTime,message.contentType);
-  } else if(message.type == SESSION_TYPE.INVITE){
-    //TODO  这种情况考虑换个地方处理
-    let group = ContactStore.getGroupDetailById(message.groupId);
-    SessionAction.updateSession(message.type, message.sessionId,group.groupName,'群邀请',message.revTime,message.contentType, message.groupId);
-    return ;
   }
-
-
 
   if (message.sessionId === _data.sessionId) {
     if (message.fromUId) { // Received

@@ -218,7 +218,10 @@ let WhitePage = React.createClass({
   acceptInvite: function(item) {
     this.props.exec(
       ()=>{
-        return ContactAction.acceptInvitation(item.badge);
+        //item.badge == groupId
+        return ContactAction.acceptInvitation(item.badge).then(()=>{
+          SessionStore.deleteSession(item.sessionId);
+        });
       }
     );
   },
