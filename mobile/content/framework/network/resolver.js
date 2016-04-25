@@ -41,10 +41,12 @@ let Resolver = {
         break;
       case MSG_TYPE.GROUP_JOIN_INVITE:
         ImStore.saveMsg({
+          sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId),
           groupId:message.groupId,
           groupName:message.groupName,
           groupOwnerId:message.groupOwnerId,
-          msgType:SESSION_TYPE.INVITE
+          msgType:SESSION_TYPE.INVITE,
+          revTime:new Date()
         });
         break;
       case MSG_TYPE.REC_GROUP_MSG:
