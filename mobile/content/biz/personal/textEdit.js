@@ -18,6 +18,7 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let { Alert, Button} = require('mx-artifacts');
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let AppStore = require('../../framework/store/appStore');
+let Validation = require('../../comp/utils/validation');
 
 let TextEdit = React.createClass({
   getInitialState: function () {
@@ -95,16 +96,46 @@ let TextEdit = React.createClass({
       );
   },
 
-  updateUserInfo: function () {
-    if (this.props.param.name == 'phoneNumber') {
-      if (this.state.tele.length > 0 && this.state.phone.length > 0) {
+  validate: function () {
+    switch (this.props.param.name) {
+      case 'mobileNumber':
+        if (Validation.isPhone(this.state.newValue)) {
+          this.updateUserInfo();
+        } else {
+          Alert('请输入正确的手机号码');
+        }
+        break;
+      case 'phoneNumber':
         this.setState({
           newValue: this.state.tele + '-' + this.state.phone
         });
-      }else{
-        Alert('请填写完整的电话号码');
-      }
+        if (Validation.isTelephone(this.state.newValue)) {
+          this.updateUserInfo();
+        } else {
+          Alert('请输入正确的座机号码');
+        }
+        break;
+      case 'qqNo':
+        if (Validation.isQQ(this.state.newValue)) {
+          this.updateUserInfo();
+        } else {
+          Alert('请输入正确的qq号码');
+        }
+        break;
+      case 'weChatNo':
+        this.updateUserInfo();
+        break;
+      case 'email':
+        if (Validation.isEmail(this.state.newValue)) {
+          this.updateUserInfo();
+        } else {
+          Alert('请输入正确的邮箱');
+        }
+        break;
     }
+  },
+
+  updateUserInfo: function () {
     let data = {};
     if (this.state.newValue != this.state.oldValue) {
       if (this.state.newPublicValue == this.state.oldPublicValue || this.state.publicName == '') {
@@ -134,6 +165,7 @@ let TextEdit = React.createClass({
   },
 
   update: function (data) {
+
     this.props.exec(() => {
       return UserInfoAction.updateUserInfo(data)
         .then(() => {
@@ -153,7 +185,7 @@ let TextEdit = React.createClass({
   renderUpdate: function () {
     return (
       <TouchableOpacity style={{width: 150}}
-                        onPress={()=>this.updateUserInfo()}
+                        onPress={()=>this.validate()}
       >
         <Text style={{color: '#ffffff'}}>完成</Text>
       </TouchableOpacity>
@@ -219,7 +251,7 @@ let TextEdit = React.createClass({
                 )}
               </Picker>
             </View>
-            <View style={{flex:1}}>
+            <View style={{flex: 1}}>
               <Picker
                 selectedValue={this.state.day}
                 onValueChange={(itemValue)=>this.changeTime(itemValue, 'day')}

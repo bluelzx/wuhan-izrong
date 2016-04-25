@@ -7,7 +7,9 @@ let { Host } = require('../../../config');
 let AppStore = require('../store/appStore');
 let _ = require('lodash');
 let AppLinks = require('../../constants/appLinks');
-var pub = "/pub";
+var pub = '/pub';
+let MarketActions = require('./marketAction');
+
 let LoginActions = {
   getProtocol: () => AppLinks.protocal,
   forceLogOut: () => AppStore.forceLogout(),
@@ -58,6 +60,7 @@ let _login = function (url, p) {
   return new Promise((resolve, reject) => {
     BFetch(url, p).then((response) => {
       resolve(AppStore.login(response));
+      MarketActions.bizOrderMarketSearchDefaultSearch();
     }).catch((errorData) => {
       reject(errorData);
     });
@@ -68,6 +71,7 @@ let _register = function (url, p) {
   return new Promise((resolve, reject) => {
     BFetch(url, p).then((response) => {
       resolve(AppStore.register(response));
+      MarketActions.bizOrderMarketSearchDefaultSearch();
     }).catch((errorData) => {
       reject(errorData);
     });

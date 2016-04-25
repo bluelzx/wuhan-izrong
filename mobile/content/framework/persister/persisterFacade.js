@@ -28,7 +28,7 @@ let PersisterFacade = {
   getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
   //interface for ContactStore
   getLoginUserInfoByUserId: (userId)=>_getLoginUserInfoByUserId(userId),
-  saveFilters: ()=> _saveFilters(),
+  saveFilters: (filters)=> _saveFilters(filters),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=>_getOrgList(),
@@ -242,14 +242,13 @@ let _getLoginUserInfoByUserId = function (userId) {
   return imUsers.filtered('"userId" = ' + userId);
 };
 
-let _saveFilters = function () {
-  let data = TestData.filterData;
-  let filterItems = data.filterItems;
-  let orderItems = data.orderItems;
-  orderItems.forEach(function (orderItem) {
+let _saveFilters = function (filters) {
+  let filterItems = filters.filterItems;
+  let orderItems = filters.orderItems;
+  orderItems.forEach(function (orderItem, index) {
     _realm.write(() => {
       _realm.create(ORDERITEM, {
-        id: orderItem.id,
+        id: index + 1,
         fieldName: orderItem.fieldName,
         fieldDisplayName: orderItem.fieldDisplayName,
         fieldDisplayCode: orderItem.fieldDisplayCode,

@@ -14,6 +14,8 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let LoginAction = require('../../framework/action/loginAction');
 //let BillAction = require('../../framework/action/billAction');
 let TimerMixin = require('react-timer-mixin');
+let {Alert} = require('mx-artifacts');
+let Validation = require('../../comp/utils/validation');
 
 let SMSTimer = React.createClass({
   mixins: [TimerMixin],
@@ -52,18 +54,22 @@ let SMSTimer = React.createClass({
   },
 
   sendSmsCodeToRegisterMobile: function () {
-    dismissKeyboard();
-    this.props.exec(() => {
-      return LoginAction.sendSmsCodeToRegisterMobile({
-        mobileNo: this.props.parameter
-      }).then((response) => {
-        console.log(response);
-        this.changeVerify();
-      }).catch((errorData) => {
-        //Alert(msg.msgContent);
-        throw errorData;
+    if(!Validation.isPhone(this.state.mobileNo)){
+      Alert('请输入完成的手机号码');
+    }else{
+      dismissKeyboard();
+      this.props.exec(() => {
+        return LoginAction.sendSmsCodeToRegisterMobile({
+          mobileNo: this.props.parameter
+        }).then((response) => {
+          console.log(response);
+          this.changeVerify();
+        }).catch((errorData) => {
+          //Alert(msg.msgContent);
+          throw errorData;
+        });
       });
-    });
+    }
   },
 
   selectVerifyFunction: function () {

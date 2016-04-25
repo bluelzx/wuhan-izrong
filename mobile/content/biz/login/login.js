@@ -18,6 +18,7 @@ let Input = require('../../comp/utils/input');
 let {Alert, Button} = require('mx-artifacts');
 let Register_valiMobile = require('./registerValiMobile');
 let Login_ValiSMS = require('./loginValiSMS');
+let Validation = require('../../comp/utils/validation');
 
 let Login = React.createClass({
   getStateFromStores() {
@@ -42,11 +43,13 @@ let Login = React.createClass({
   },
 
   sendSmsCodeToLoginMobile: function () {
-    if (this.state.mobileNo) {
+    if(!Validation.isPhone(this.state.mobileNo)){
+      Alert('请输入完整的手机号码');
+    }else {
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.sendSmsCodeToLoginMobile({
-          mobileNo:this.state.mobileNo
+          mobileNo: this.state.mobileNo
         }).then((response) => {
           const { navigator } = this.props;
           if (navigator) {

@@ -10,11 +10,11 @@ let { Host } = require('../../../config');
 let AppStore = require('../store/appStore');
 let _ = require('lodash');
 let AppLinks = require('../../constants/appLinks');
-let pub = "/pub";
+let pub = '/pub';
 
-let MarketActions ={
+let MarketActions = {
 
-  bizOrderMarketSearchDefaultSearch: () => _bfetchWithUrl(AppLinks.bizOrderMarketSearchDefaultSearch),
+  bizOrderMarketSearchDefaultSearch: () => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch),
   bizOrderMarketSearch: (p) => _bfetchWithUrlAndP(AppLinks.bizOrderMarketSearch, p),
   getBizOrderInMarket: (p) => _pfetchWithUrlAndP(AppLinks.getBizOrderInMarket, p),
 
@@ -27,6 +27,17 @@ let MarketActions ={
   updateBizOrder: (p) => _bfetchWithUrlAndP(AppLinks.updateBizOrder, p),
   getBizOrderCategoryAndItem: () => _pfetch1WithUrl(AppLinks.getBizOrderCategoryAndItem)
 
+};
+
+let _bizOrderMarketSearchDefaultSearch = function(url){
+  return new Promise((resolve, reject) => {
+    BFetch(url).then((response) => {
+      resolve(response);
+      AppStore.saveFilters(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
 };
 
 let _bfetchWithUrl = function (url) {

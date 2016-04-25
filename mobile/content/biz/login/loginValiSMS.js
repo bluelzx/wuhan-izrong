@@ -17,6 +17,7 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let { Alert, Button } = require('mx-artifacts');
 let SMSTimer = require('../../comp/utils/smsTimer');
 let TabView = require('../../framework/system/tabView');
+let Validation = require('../../comp/utils/validation');
 
 let ValiSMS = React.createClass({
   getStateFromStores() {
@@ -46,7 +47,9 @@ let ValiSMS = React.createClass({
     this.setState(this.getStateFromStores());
   },
   login: function () {
-    if (this.state.verify) {
+    if (this.state.verify.length != 6) {
+      Alert('请输入完整的短信验证码');
+    }else{
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.login({
@@ -95,7 +98,7 @@ let ValiSMS = React.createClass({
           </View>
           <SMSTimer ref="smsTimer" onChanged={this._onChangeText} func={'sendSMSCodeToNewMobile'}/>
           <Button
-            containerStyle={{marginTop: 20, backgroundColor: '#1151B1'}}
+            containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
             disabled={this.state.disabled}
             onPress={()=>this.login()}

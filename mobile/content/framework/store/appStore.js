@@ -50,6 +50,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
+  saveFilters: (filters) => _saveFilters(filters),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=> _getOrgList(),
@@ -71,8 +72,6 @@ let _appInit = () => {
       _info.netWorkState = isConnected;
     }
   );
-  Persister.saveFilters();
-
   _info.initLoadingState = false;
   _.assign(_data, {
     token: _getToken(),
@@ -135,6 +134,10 @@ let _getLoginUserInfo = () => {
 
 let _getOrgByOrgId = (orgId)=> {
   return Persister.getOrgByOrgId(orgId);
+};
+
+let _saveFilters = function(filters){
+  Persister.saveFilters(filters);
 };
 
 let _getFilters = ()=> {
