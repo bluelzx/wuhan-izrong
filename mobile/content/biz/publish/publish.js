@@ -258,7 +258,7 @@ let Publish = React.createClass({
     return (
       <TouchableHighlight onPress={() => this._pressPublish()} underlayColor='rgba(129,127,201,0)'>
         <View
-          style={{marginTop:10,flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
+          style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
           <Text style={{fontSize:15, color:'white'}}>
             {'发布'}
           </Text>
