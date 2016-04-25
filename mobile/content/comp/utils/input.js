@@ -49,7 +49,7 @@ let Input = React.createClass({
       placeholderTextColor: '#7f7f7f',
       focusColor: '#ff0000',
       //value: ''
-      inputType: 'ascii-capable'
+      inputType: 'default'
     };
   },
 

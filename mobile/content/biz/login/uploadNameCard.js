@@ -128,8 +128,11 @@ let Register_uploadNameCard = React.createClass({
       >
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.returnImage()}
+          <Text style={{marginTop: 20, color: '#ffffff'}} >
+            注: 名片信息将辅助我们验证您的身份
+          </Text>
           <Button
-            containerStyle={{marginTop: 20, backgroundColor: '#1151B1'}}
+            containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
             disabled={this.state.disabled}
             onPress={()=>this.register()}

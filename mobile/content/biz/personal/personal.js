@@ -13,6 +13,7 @@ let {
   Image,
   TouchableHighlight,
   } = React;
+let Icon = require('react-native-vector-icons/Ionicons');
 let _ = require('lodash');
 let NavBarView = require('../../framework/system/navBarView');
 let Item = require('../../comp/utils/item');
@@ -69,21 +70,20 @@ let Personal = React.createClass({
     let {title} = this.props;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='个人' showBack={false} showBar={true}
+                  contentBackgroundColor='#18304D' title='个人中心' showBack={false} showBar={true}
       >
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
           <View style={{backgroundColor: '#18304b', height:10}}/>
-            <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b' style={{backgroundColor:'#162a40'}}
+            <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b' style={{backgroundColor: '#162a40'}}
                                 onPress={()=>this.toPage(UserInfo)}
             >
               <View style={styles.layout}>
-                <View style={{flexDirection: 'row'}}>
                   <Image style={styles.head} resizeMode="cover" source={this.returnImg()}/>
-                  <View style={{marginLeft: 20, marginTop:10}}>
+                  <View>
                     <Text style={{fontSize: 18, color: '#ffffff'}}>{this.state.userName}</Text>
-                    <Text style={{fontSize: 18, color: '#ffffff', marginTop: 10, width: 200}} numberOfLines={1}>{this.state.orgName}</Text>
+                    <Text style={{fontSize: 18, color: '#ffffff', marginTop: 10, width: 150}} numberOfLines={1}>{this.state.orgName}</Text>
                   </View>
-                </View>
+                  <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
               </View>
             </TouchableHighlight>
           <View style={{backgroundColor: '#18304b', height:10}}/>

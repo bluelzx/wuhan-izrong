@@ -28,6 +28,12 @@ let FilterSelectBtn = React.createClass({
       rowDefault: 10000,
     }
   },
+  setDefaultState: function () {
+    this.setState({
+      isAll: true,
+      rowDefault: 10000,
+    });
+  },
   render: function () {
     return (
       <View>
