@@ -43,7 +43,7 @@ let Login = React.createClass({
   },
 
   sendSmsCodeToLoginMobile: function () {
-    if(!Validation.isPhone(this.state.mobileNo)){
+    if(this.state.mobileNo.length!= 11){
       Alert('请输入完整的手机号码');
     }else {
       dismissKeyboard();

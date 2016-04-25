@@ -62,7 +62,7 @@ let Register_uploadNameCard = React.createClass({
         }).then((response) => {
           const { navigator } = this.props;
           if (navigator) {
-            navigator.push({comp: 'tabView'});
+              navigator.resetTo({comp: 'tabView'});
           }
         }).catch((errorData) => {
           throw errorData;
