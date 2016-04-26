@@ -12,6 +12,7 @@ let {
   Image,
   TouchableOpacity
   } = React;
+
 let _ = require('lodash');
 let NavBarView = require('../../framework/system/navBarView');
 let Validation = require('../../comp/utils/validation');
@@ -24,7 +25,8 @@ let LoginAction = require('../../framework/action/loginAction');
 let Login = require('../../biz/login/login');
 let ImagePicker = require('../../comp/utils/imagePicker');
 let AppStore = require('../../framework/store/appStore');
-
+let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
+let NameCircular = require('../im/nameCircular').NameCircular;
 
 let UserInfo = React.createClass({
 
@@ -78,24 +80,34 @@ let UserInfo = React.createClass({
     this.props.exec(() => {
       return LoginAction.uploadFile(response, 'photoFileUrl')
         .then((response) => {
-          console.log(response);
-          AppStore.updateUserInfo('photoFileUrl', response.fileUrl);
+          return UserInfoAction.updateUserInfo([{
+            column: 'photoStoredFileUrl',
+            value: response.fileUrl
+          }]).then(
+            ()=> {
+              AppStore.updateUserInfo('photoFileUrl', response.fileUrl);
+            }
+          ).catch((errorData) => {
+            throw errorData;
+          });
         }).catch((errorData) => {
           throw errorData;
         });
     });
   },
 
-  returnImg: function () {
-    let url = require('../../image/user/head.png');
+  returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
-      url = {uri: this.state.photoFileUrl};
-      return url;
+      return (
+        <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+      );
     }
-    return url;
+    return (
+      <NameCircular name={this.state.realName}/>
+    );
   },
 
-  toEdit: function (title, name, value, publicName, publicValue, type, maxLength, valid) {
+  toEdit: function (title, name, value, publicName, publicValue, type, maxLength, needEdit, needPublic) {
     if (value == '未设置') {
       value = '';
     }
@@ -111,7 +123,8 @@ let UserInfo = React.createClass({
           publicValue: publicValue,
           type: type,
           maxLength: maxLength,
-          valid: valid
+          needEdit: needEdit,
+          needPublic: needPublic
         },
         callBack: this.callBack
       });
@@ -119,24 +132,25 @@ let UserInfo = React.createClass({
   },
 
   logout: function () {
-    Alert('确认退出当前账号？', ()=>{
+    Alert('确认退出当前账号？', ()=> {
       this.props.exec(() => {
-      return LoginAction.logout(this.state.userId)
-        .then((response) => {
-          const { navigator } = this.props;
-          navigator.resetTo({comp: Login});
-        }).catch((errorData) => {
-          if(errorData.toString().startsWith('{')){
-            Alert(errorData.msgContent);
-          }else{
-            Alert('网络异常');
-          }
-        });
+        return LoginAction.logout(this.state.userId)
+          .then((response) => {
+            const { navigator } = this.props;
+            navigator.resetTo({comp: Login});
+          }).catch((errorData) => {
+            if (errorData.toString().startsWith('{')) {
+              Alert(errorData.msgContent);
+            } else {
+              Alert('网络异常');
+            }
+          });
+      });
+    }, ()=> {
     });
-    }, ()=>{});
   },
 
-  renderRow: function (desc, imagePath, name, value, pubName, pubValue, type, maxLength, valid) {
+  renderRow: function (desc, imagePath, name, value, pubName, pubValue, type, maxLength, needEdit, needPublic, hiddenArrow) {
 
     let showValue = '';
     if (value === null || value == '未填写') {
@@ -148,9 +162,15 @@ let UserInfo = React.createClass({
         showValue = value + '(不公开)';
       }
     }
+    if (hiddenArrow) {
+      return (
+        <Item desc={desc} imgPath={imagePath} value={showValue} hiddenArrow={true}
+              func={() => {}}
+        />);
+    }
     return (
       <Item desc={desc} imgPath={imagePath} value={showValue}
-            func={() => this.toEdit(desc, name, value, pubName, pubValue, type, maxLength, valid)}
+            func={() => this.toEdit(desc, name, value, pubName, pubValue, type, maxLength, needEdit, needPublic)}
       />
     );
   },
@@ -163,48 +183,51 @@ let UserInfo = React.createClass({
                   actionButton={this.renderLogout}
       >
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false} backgroundColor='#18304b'>
-
-          <ImagePicker
-            type="all"
-            onSelected={(response) => this.uploadUserPoto(response)}
-            onError={(error) => Alert(error)}
-            title="选择图片"
-            style={styles.layout}
-          >
-            <View style={{flex: 1}}>
-              <Image style={styles.head} resizeMode="cover" source={this.returnImg()}/>
-            </View>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
-              <Text
-                style={{color: '#ffffff', fontSize: 18, textAlign: 'right', marginRight: 20}}
-              >{this.state.realName}</Text>
+          <View style={styles.layout}>
+            <ImagePicker
+              type="all"
+              onSelected={(response) => this.uploadUserPoto(response)}
+              onError={(error) => Alert(error)}
+              title="选择图片"
+              style={{marginLeft: 20}}
+            >
+              {this.returnImage()}
+            </ImagePicker>
+            <TouchableOpacity
+              style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}
+              onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'publicRealName', true, 'default', 10, true, false)}
+            >
+              <Text style={{color: '#ffffff', fontSize: 18, textAlign: 'right', marginRight: 20}}>
+                {this.state.realName}
+              </Text>
               <Icon style={{marginRight: 20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
-            </View>
-          </ImagePicker>
+            </TouchableOpacity>
+          </View>
 
-          {this.renderRow('手机号', require('../../image/user/mobileNo.png'), 'mobileNumber', this.state.mobileNumber, 'publicMobile',
-            this.state.publicMobile, 'number-pad', 11, Validation.isPhone)}
+          {this.renderRow('手机号', require('../../image/user/mobileNo.png'), 'mobileNumber', PhoneNumber(this.state.mobileNumber),
+            'publicMobile', this.state.publicMobile, 'number-pad', 11, false, true, false)}
 
           {this.renderRow('座机号', require('../../image/user/telephoneNo.png'), 'phoneNumber', this.state.phoneNumber, 'publicPhone',
-            this.state.publicPhone, 'number-pad', 11, Validation.isTelephone)}
+            this.state.publicPhone, 'number-pad', 11, true, true, false)}
 
-          {this.renderRow('QQ', require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'publicQQ',
-            this.state.publicQQ, 'number-pad', 20, Validation.isQQ)}
+          {this.renderRow('QQ', require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'publicQq',
+            this.state.publicQQ, 'number-pad', 20, true, true, false)}
 
           {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'publicWeChat',
-            this.state.publicWeChat, 'ascii-capable', 20, '')}
+            this.state.publicWeChat, 'default', 40, true, true, false)}
 
           {this.renderRow('邮箱', require('../../image/user/email.png'), 'email', this.state.email, 'publicEmail',
-            this.state.publicEmail, 'email-address', 60, Validation.isEmail)}
-          <View style = {{marginTop: 5}}>
+            this.state.publicEmail, 'email-address', 60, false, false, true)}
+
+          <View style={{marginTop: 5}}>
             {this.renderRow('机构', require('../../image/user/comp.png'), 'organization', this.state.orgBeanName, '',
-              'ascii-capable', 'ascii-capable', 20, '')}
+              'ascii-capable', 'default', 20, false, false, true)}
 
             {this.renderRow('部门', require('../../image/user/department.png'), 'department', this.state.department, 'publicDepart',
-              this.state.publicDepart, 'ascii-capable', 20, '')}
+              this.state.publicDepart, 'default', 20, true, true, false)}
 
             {this.renderRow('职位', require('../../image/user/jobTitle.png'), 'jobTitle', this.state.jobTitle, 'publicTitle',
-              this.state.publicTitle, 'ascii-capable', 20, '')}
+              this.state.publicTitle, 'default', 20, true, true, false)}
           </View>
         </ScrollView>
       </NavBarView>
@@ -214,7 +237,7 @@ let UserInfo = React.createClass({
   renderLogout: function () {
     return (
       <TouchableOpacity style={{width: 150, marginLeft: -20}} onPress={()=>this.logout()}>
-        <Text style={{color: '#ffffff'}}>退出登陆</Text>
+        <Text style={{color: '#ffffff'}}>退出登录</Text>
       </TouchableOpacity>
     );
   }
@@ -244,8 +267,15 @@ let styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     borderColor: '#cccccc',
-    borderWidth: 1,
-    marginLeft: 20
+    borderWidth: 1
+  },
+  headText: {
+    color: '#FF0000',
+    fontSize: 50,
+    fontStyle: 'italic',
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    fontWeight: 'bold'
   }
 });
 

@@ -36,9 +36,9 @@ let CheckBox = React.createClass({
   },
 
   render() {
-    let source = this.props.checkedUrl;
+    let source = this.props.unCheckedUrl;
     if (this.props.checked) {
-      source = this.props.unCheckedUrl;
+      source = this.props.checkedUrl;
     }
     return (
       <TouchableHighlight onPress={this.onChange} underlayColor='transparent'>

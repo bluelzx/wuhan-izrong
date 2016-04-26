@@ -2,22 +2,21 @@
 let React = require('react-native');
 let _ = require('lodash');
 module.exports = {
-  isPhone: function (data) {
-    if (data.length == 0) {
-      console.log('请输入手机号');
-      return false;
-    }
-    let reg = /^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;
-    if (!reg.test(data)) {
-      console.log("您输入的手机号码格式不对");
-      return false;
+  isMobile: function (data) {
+    if (!_.isEmpty(data)) {
+      let re = /^0\d{10}$/;
+      if (!re.test(data)) {
+        console.log("您输入的座机号有误，请重新输入");
+        return false;
+      }
+      return true;
     }
     return true;
   },
   isComp: function (data, desc) {
     let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
     if (!reg.test(data)) {
-      console.log("请输入由数字和字母组成的" + desc);
+      console.log('请输入由数字和字母组成的' + desc);
       return false;
     }
     return true;
@@ -25,7 +24,7 @@ module.exports = {
   realName: function (data) {
     if (!_.isEmpty(data)) {
       if (data.length > 20) {
-        console.log("姓名长度不能超过20，请重新输入");
+        console.log('姓名长度不能超过20，请重新输入');
         return false;
       }
       return true;
@@ -43,11 +42,59 @@ module.exports = {
     }
     return true;
   },
+  //4位以上数字
   isQQ: function (data) {
     if (!_.isEmpty(data)) {
-      let reg = /[1-9][0-9]{4,}/;
+      let reg = /^[1-9][0-9]{4,}$/;
       if (!reg.test(data)) {
         console.log("您输入的QQ号有误，请重新输入");
+        return false;
+      }
+      return true;
+    }
+    return true;
+
+  },
+  //中文和英文:职务
+  isChineseAndEnglish: function (data) {
+    if (!_.isEmpty(data)) {
+      let reg = /^[\u4e00-\u9fa5a-zA-Z]+$/;
+      if (!reg.test(data)) {
+        return false;
+      }
+      return true;
+    }
+    return true;
+  },
+  //中文和英文:微信
+  isWechat: function (data) {
+    if (!_.isEmpty(data)) {
+      let reg = /^[\u4e00-\u9fa5a-zA-Z0-9]+$/;
+      if (!reg.test(data)) {
+        return false;
+      }
+      return true;
+    }
+    return true;
+
+  },
+  //是否包含中文
+  hasChinese: function (data) {
+    if (!_.isEmpty(data)) {
+      let reg = /[\u4e00-\u9fa5]+/;
+      if (!reg.test(data)) {
+        return false;
+      }
+      return true;
+    }
+    return true;
+  },
+
+  isRealName: function (data) {
+    if (!_.isEmpty(data)) {
+      let reg = /^[\u4e00-\u9fa5_a-zA-Z]+$/;
+      if (!reg.test(data)) {
+        console.log("您输入的真实姓名号有误，请重新输入");
         return false;
       }
       return true;

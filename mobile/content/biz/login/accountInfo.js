@@ -104,29 +104,31 @@ let Register_accountInfo = React.createClass({
           />
           <TouchableHighlight activeOpacity={0.8} underlayColor='#4fb9fc'
                               onPress={()=>this.toPage(Register_selectOrg)}
+                              style ={{marginTop: 20, borderRadius: 6}}
           >
             <View style={styles.selectOrg}>
-              <View style={{marginLeft: 20, flexDirection: 'row'}}>
+              <View style = {{flex: 1, alignItems: 'center'}}>
                 <Image
                   style={{height: 20, width: 20}}
                   source={require('../../image/user/comp.png')}
                 />
-                <Text style={{color: '#ffffff', fontSize: 18, marginLeft: 20, width: 260}}
+              </View>
+
+                <Text style={{color: '#ffffff', fontSize: 18, flex: 5}}
                       numberOfLines={1}
                 >
                   {this.state.orgValue}
                 </Text>
-              </View>
 
               <Icon
-                style={{marginRight: 20}}
+                style={{flex: 1}}
                 name="ios-arrow-right" size={28} color={'#ffffff'}
               />
             </View>
           </TouchableHighlight>
 
           <Button
-            containerStyle={{marginTop: 20, backgroundColor: '#1151B1'}}
+            containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
             disabled={this.state.disabled}
             onPress={()=>this.next(Register_uploadNameCard,
@@ -154,7 +156,6 @@ let styles = StyleSheet.create({
     flex: 1,
     height: 47,
     backgroundColor: '#148bf9',
-    marginTop: 20,
     borderRadius: 6,
     flexDirection: 'row',
     alignItems: 'center',

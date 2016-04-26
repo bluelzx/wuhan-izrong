@@ -15,7 +15,7 @@ let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Input = require('../../comp/utils/input');
-let {Alert, Button} = require('mx-artifacts');
+let {Alert, Button, Communications} = require('mx-artifacts');
 let Register_valiMobile = require('./registerValiMobile');
 let Login_ValiSMS = require('./loginValiSMS');
 let Validation = require('../../comp/utils/validation');
@@ -43,9 +43,9 @@ let Login = React.createClass({
   },
 
   sendSmsCodeToLoginMobile: function () {
-    if(!Validation.isPhone(this.state.mobileNo)){
-      Alert('请输入完整的手机号码');
-    }else {
+    if (Validation.isMobile(this.state.mobileNo)) {
+      Alert('请输入已注册的手机号码');
+    } else {
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.sendSmsCodeToLoginMobile({
@@ -91,7 +91,7 @@ let Login = React.createClass({
                resizeMode='cover'
                source={require('../../image/login/logo.png')}
         />
-        <Text style={{color: '#ffffff', marginTop: 20, fontSize: 18}}>环渤海银银合作平台</Text>
+        <Text style={{color: '#ffffff', marginTop: 18, fontSize: 15}}>环渤海银银合作平台</Text>
       </View>
     );
   },
@@ -104,7 +104,7 @@ let Login = React.createClass({
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.renderLogo()}
           <Input containerStyle={styles.inputStyle} type="default" placeholder='手机号' maxLength={11}
-                 field='mobileNo' onChangeText={this._onChangeText} icon='user' inputType="number-pad"
+                 field='mobileNo' onChangeText={this._onChangeText} icon='phone' inputType="number-pad"
           />
 
           <Button
@@ -127,7 +127,9 @@ let Login = React.createClass({
         <View style={{flexDirection: 'column', marginTop: 30}}>
           <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30}}>
             <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服:</Text>
-            <Text style={{fontSize: 16, color: '#ffffff', textDecorationLine: 'underline'}}>021-35885888</Text>
+            <TouchableOpacity onPress={()=>{}}>
+              <Text style={{fontSize: 16, color: '#ffffff', textDecorationLine: 'underline'}}>021-35885888</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </NavBarView>
@@ -176,8 +178,8 @@ let styles = StyleSheet.create({
   },
   logo: {
     marginTop: 30,
-    height: 80,
-    width: 160
+    height: 60,
+    width: 120
   },
   inputStyle: {
     height: 47,

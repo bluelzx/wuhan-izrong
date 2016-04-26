@@ -56,6 +56,7 @@ var Main = React.createClass({
     }
     NotificationManager.closeNotification();
   },
+
   _onAndroidBackPressed: function () {
     if (this._navigator) {
       if (this._navigator.getCurrentRoutes().length > 1) {

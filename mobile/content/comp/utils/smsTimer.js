@@ -54,22 +54,19 @@ let SMSTimer = React.createClass({
   },
 
   sendSmsCodeToRegisterMobile: function () {
-    if(!Validation.isPhone(this.props.parameter)){
-      Alert('请输入完成的手机号码');
-    }else{
+    //if(this.props.parameter.length != 11){
+    //  Alert('请输入完整的手机号码');
+    //}else{
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.sendSmsCodeToRegisterMobile({
           mobileNo: this.props.parameter
         }).then((response) => {
-          console.log(response);
           this.changeVerify();
         }).catch((errorData) => {
-          //Alert(msg.msgContent);
           throw errorData;
         });
       });
-    }
   },
 
   selectVerifyFunction: function () {
@@ -118,12 +115,12 @@ let SMSTimer = React.createClass({
     return (
       <View style={{flexDirection: 'row', flex: 1, marginTop: 20}}>
         <View style={[styles.view, styles.radius]}>
-          <Image source={require('../../image/utils/smsCode.png')}
+          <Image source={require('../../image/utils/phone.png')}
                  style={{height: 16, width: 16, marginLeft:9}}
           />
           <TextInput style={[styles.input, {width: width - 170}]} underlineColorAndroid="transparent"
                      placeholder="短信验证码" onChangeText={(text) => this.textOnchange(text, 'verify')}
-                     autoCorrect={false} maxLength={6} keyboardType="number-pad" placeholderTextColor="#7f7f7f"
+                     autoCorrect={false} maxLength={6} keyboardType="number-pad" placeholderTextColor="#386085"
                      clearButtonMode="while-editing"
           />
         </View>
@@ -152,7 +149,9 @@ let styles = StyleSheet.create({
     alignItems: 'center', flex: 1
   },
   input: {
-    fontSize: 18, color: '#7f7f7f', marginLeft: 9
+    fontSize: 18,
+    color: '#ffffff',
+    marginLeft: 9
   },
   radius: {
     borderRadius: 4

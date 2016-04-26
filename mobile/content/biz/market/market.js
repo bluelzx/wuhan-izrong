@@ -15,7 +15,7 @@ let {
   StyleSheet,
   TouchableOpacity,
   ScrollView
-  }=React;
+  } = React;
 
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
