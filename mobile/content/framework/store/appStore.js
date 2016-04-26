@@ -50,7 +50,9 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=> _getOrgList(),
-  updateUserInfo: (column, value)=> _updateUserInfo(column, value)
+  updateUserInfo: (column, value)=> _updateUserInfo(column, value),
+  saveCategoryAndItem: (data) => _saveCategoryAndItem(data),
+  getCategoryAndItem: ()=> _getCategoryAndItem()
 });
 
 // Private Functions
@@ -155,5 +157,16 @@ let _getOrgList = ()=> {
 let _updateUserInfo = (column, value)=> {
   Persister.updateUserInfo(column, value);
   AppStore.emitChange();
+};
+
+let _saveCategoryAndItem = (data) => {
+  _.assign(_data, {
+    categoryAndItem: data
+  });
+  AppStore.emitChange();
+};
+
+let _getCategoryAndItem = () => {
+  return _data.categoryAndItem;
 };
 module.exports = AppStore;

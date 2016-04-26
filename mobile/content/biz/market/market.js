@@ -75,18 +75,22 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: 221,
-      bizItemID: 227,
-      bizOrientationID: item[0].id,
-      termID: item[0].itemArr[0].id,
+      bizCategoryID: item[0].id,
+      bizItemID: item[0].itemArr[0].id,
+      bizOrientationID: '',
+      termID: '',
       amountID: '',
       marketData: marketData
-    }
+    };
   },
 
   componentWillMount: function () {
     {
       this.bizOrderMarketSearch();
+      AppStore.saveCategoryAndItem({
+        category: this.state.bizCategoryID,
+        item: this.state.bizItemID
+      });
     }
   },
 
@@ -109,6 +113,7 @@ let Market = React.createClass({
     );
   },
   pressFilterType(){
+    let a = AppStore.getCategoryAndItem();
     this.setState({
       clickFilterTime: 0,
       clickFilterOther: 0,
