@@ -54,22 +54,19 @@ let SMSTimer = React.createClass({
   },
 
   sendSmsCodeToRegisterMobile: function () {
-    if(!Validation.isPhone(this.props.parameter)){
-      Alert('请输入完成的手机号码');
-    }else{
+    //if(this.props.parameter.length != 11){
+    //  Alert('请输入完整的手机号码');
+    //}else{
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.sendSmsCodeToRegisterMobile({
           mobileNo: this.props.parameter
         }).then((response) => {
-          console.log(response);
           this.changeVerify();
         }).catch((errorData) => {
-          //Alert(msg.msgContent);
           throw errorData;
         });
       });
-    }
   },
 
   selectVerifyFunction: function () {

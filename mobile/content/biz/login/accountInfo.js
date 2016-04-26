@@ -126,7 +126,7 @@ let Register_accountInfo = React.createClass({
           </TouchableHighlight>
 
           <Button
-            containerStyle={{marginTop: 20, backgroundColor: '#1151B1'}}
+            containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
             disabled={this.state.disabled}
             onPress={()=>this.next(Register_uploadNameCard,

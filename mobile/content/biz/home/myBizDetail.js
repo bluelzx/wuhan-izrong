@@ -25,6 +25,8 @@ let SelectBtn = require('../publish/selectBtn');
 let Remarks = require('../publish/remarks');
 let ImagePicker = require('../../comp/utils/imagePicker');
 let DateHelper = require('../../comp/utils/dateHelper');
+let Input = require('../../comp/utils/input');
+let Adjust = require('../../comp/utils/adjust');
 
 
 let AppStore = require('../../framework/store/appStore');
@@ -95,38 +97,42 @@ let MyBizDetail = React.createClass({
       </NavBarView>
     );
   },
-  _dataChange1 (index) {
+  _bizOrientationDataChange (index) {
     this.setState({
       bizOrientationDefault: index,
       bizOrientation: (index == 0) ? 'IN' : 'OUT'
-    })
+    });
+
   },
-  _dataChange2 (index) {
+  _termDataChange (index) {
     this.setState({
       termDefault: index,
-      termText: (this.state.termDefault == 0) ? Number(this.state.termText) : (this.state.termDefault == 1) ? Number(this.state.termText) * 30 : Number(this.state.termText) * 365
-    })
+      term: (index == 0) ? Number(this.state.termText) : (index == 1) ? Number(this.state.termText) * 30 : Number(this.state.termText) * 365
+    });
+
   },
-  _dataChange3 (index) {
+  _amountDataChange (index) {
     this.setState({
       amountDefault: index,
-      amountText: (this.state.amountDefault == 0) ? Number(this.state.amountText) * 10000 : Number(this.state.amountText) * 100000000
-    })
+      amount: (index == 0) ? Number(this.state.amountText) * 10000 : Number(this.state.amountText) * 100000000
+    });
+
   },
-  _termTextChange (text) {
-    this.setState({
-      termText: (this.state.termDefault == 0) ? Number(text) : (this.state.termDefault == 1) ? Number(text) * 30 : Number(text) * 365
-    })
-  },
-  _amountTextChange (text) {
-    this.setState({
-      amountText: (this.state.amountDefault == 0) ? Number(text) * 10000 : Number(text) * 100000000
-    })
-  },
-  _rateTextChange (text) {
-    this.setState({
-      rateText: Number(text) / 100
-    })
+
+  _onChangeText(key, value){
+    this.setState({[key]: value});
+    if(key == 'termText'){
+      this.setState({term: (this.state.termDefault == 0) ? Number(value) : (this.state.termDefault == 1) ? Number(value) * 30 : Number(value) * 365});
+    }else if (key == 'amountText'){
+      this.setState({amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000});
+    }else {
+      this.setState({rate:Number(value)});
+    }
+    if (this.state.termText.length == 0 || this.state.amountText.length == 0 || this.state.rateText.length == 0) {
+      this.setState({disabled: true});
+    } else {
+      this.setState({disabled: false});
+    }
   },
   renderShutDownBiz: function () {
     return (
@@ -154,7 +160,7 @@ let MyBizDetail = React.createClass({
         </View>
         <View style={{marginTop:10,flexDirection:'row'}}>
           <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
-                     change={this._dataChange1}/>
+                     change={this._bizOrientationDataChange}/>
         </View>
       </View>
     )
@@ -164,17 +170,14 @@ let MyBizDetail = React.createClass({
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:'white'}}>{'期限'}</Text>
         <View style={{marginTop:10,flexDirection:'row'}}>
-          <View style={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10}}>
-            <TextInput
-              value={this.state.termText}
-              placeholder={'天数'}
-              placeholderTextColor='#325779'
-              returnKeyType="search"
-              maxLength={8}
-              onChangeText={(text) => this._termTextChange(text)}
-              style={{width:100,height:40,marginLeft:10,color:'#ffd547'}}/>
-          </View>
-          <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._dataChange2}/>
+          <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
+                 iconStyle={{}} placeholderTextColor='#325779'
+                 inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                 placeholder='天数' maxLength={3} field='termText' inputType="numeric"
+                 onChangeText={this._onChangeText}
+                 value={this.state.termText}
+          />
+          <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._termDataChange}/>
 
         </View>
       </View>
@@ -185,17 +188,14 @@ let MyBizDetail = React.createClass({
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:'white'}}>{'金额'}</Text>
         <View style={{marginTop:10,flexDirection:'row'}}>
-          <View style={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10}}>
-            <TextInput
-              value={this.state.amountText}
-              placeholder={'1万-1000亿'}
-              placeholderTextColor='#325779'
-              returnKeyType="search"
-              maxLength={8}
-              onChangeText={(text) => this._amountTextChange(text)}
-              style={{width:100,height:40,marginLeft:10,color:'#ffd547'}}/>
-          </View>
-          <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._dataChange3}/>
+          <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
+                 iconStyle={{}} placeholderTextColor='#325779'
+                 inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                 placeholder='1万-1000亿' maxLength={8} field='amountText' inputType="numeric"
+                 onChangeText={this._onChangeText}
+                 value={this.state.amountText}
+          />
+          <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._amountDataChange}/>
 
         </View>
       </View>
@@ -206,16 +206,13 @@ let MyBizDetail = React.createClass({
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:'white'}}>{'利率'}</Text>
         <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-          <View style={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10}}>
-            <TextInput
-              value={this.state.rateText}
-              placeholder={'0-100.00'}
-              placeholderTextColor='#325779'
-              returnKeyType="search"
-              maxLength={8}
-              onChangeText={(text) => this._rateTextChange(text)}
-              style={{width:100,height:40,marginLeft:10,color:'#ffd547'}}/>
-          </View>
+          <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
+                 iconStyle={{}} placeholderTextColor='#325779'
+                 inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                 placeholder='0-100.00' maxLength={3} field='rateText' inputType="numeric"
+                 onChangeText={this._onChangeText}
+                 value={this.state.rateText}
+          />
           <Text style={{marginLeft:10,fontWeight: 'bold', color:'white'}}>{'%'}</Text>
         </View>
       </View>
@@ -343,7 +340,7 @@ let MyBizDetail = React.createClass({
       termDefault: (response.term < 30) ? 0 : (response.term < 365) ? 1 : 2,
       amountText: (response.amount >= 100000000) ? (response.amount / 100000000).toString() : (response.amount / 10000).toString(),
       amountDefault: (response.amount >= 100000000) ? 0 : 1,
-      rateText: response.rate.toString(),
+      rateText: (response.rate*100).toString(),
       remarkText: response.remark,
       lastModifyDate: DateHelper.formatBillDetail(t),
       bizCategory: response.bizCategory,

@@ -15,16 +15,15 @@ let {
   StyleSheet,
   TouchableOpacity,
   ScrollView
-  }=React;
+  } = React;
 
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
 
 let NavBarView = require('../../framework/system/navBarView');
-let RadioControl = require('./radioControl');
 let FilterSelectBtn = require('./filterSelectBtn');
 let MarketList = require('./marketList');
-let SelectOrg = require('./selectOrg');
+let SelectOrg = require('../login/selectOrg');
 let Icon = require('react-native-vector-icons/Ionicons');
 
 let MarketAction = require('../../framework/action/marketAction');
@@ -73,7 +72,9 @@ let Market = React.createClass({
       bizOrientationID: '',
       termID: '',
       amountID: '',
-      marketData: marketData
+      marketData: marketData,
+      orgValue: '',
+      orgId: ''
     }
   },
 
@@ -87,7 +88,7 @@ let Market = React.createClass({
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='市场' showBack={false} showBar={true}>
+                  contentBackgroundColor='#18304D' title='市场信息' showBack={false} showBar={true}>
         <View
           style={{width: screenWidth,alignItems: "center",justifyContent: "flex-start",flexDirection: "row"}}>
           {this.renderFilter(this.pressFilterType, this.pressFilterTime, this.pressFilterOther)}
@@ -154,7 +155,8 @@ let Market = React.createClass({
     {
       this.bizOrderMarketSearch();
     }
-  }, renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
+  },
+  renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
     return (
       <View style={{flex:1,flexDirection:'row'}}>
         <TouchableOpacity onPress={pressFilterType} activeOpacity={1}
@@ -255,10 +257,12 @@ let Market = React.createClass({
         <View
           style={{backgroundColor:'#244266',width:screenWidth,height:screenHeight - 149,position:"absolute",left:0,top:36}}>
           <ScrollView>
-            <TouchableOpacity onPress={()=>this.toPage(SelectOrg)} activeOpacity={0.8} underlayColor="#f0f0f0">
+            <TouchableOpacity onPress={()=>this.toSelectOrg(SelectOrg)} activeOpacity={0.8} underlayColor="#f0f0f0">
               <View
                 style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
-                <Text style={{fontSize:16,marginLeft:10,color:'white'}}>{'选择发布机构'}</Text>
+                <Text
+                  style={{fontSize:16,marginLeft:10,width: screenWidth-66,color:'white'}}
+                  numberOfLines={1}>{this.state.orgValue == '' ? '选择发布机构' : this.state.orgValue}</Text>
                 <Image style={{margin:10,width:16,height:16}}
                        source={require('../../image/market/next.png')}
                 />
@@ -267,8 +271,10 @@ let Market = React.createClass({
             <View>
               <FilterSelectBtn ref="ORIENTATION" typeTitle={'方向'} dataList={this.state.bizOrientation} section={3}
                                callBack={this.callBack}/>
-              <FilterSelectBtn ref="TERM" typeTitle={'期限'} dataList={this.state.term} section={3} callBack={this.callBack}/>
-              <FilterSelectBtn ref="AMOUNT" typeTitle={'金额'} dataList={this.state.amount} section={2} callBack={this.callBack}/>
+              <FilterSelectBtn ref="TERM" typeTitle={'期限'} dataList={this.state.term} section={3}
+                               callBack={this.callBack}/>
+              <FilterSelectBtn ref="AMOUNT" typeTitle={'金额'} dataList={this.state.amount} section={2}
+                               callBack={this.callBack}/>
             </View>
             <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
               <View style={{alignItems: 'center',justifyContent:'center'}}>
@@ -344,6 +350,23 @@ let Market = React.createClass({
     }
   },
 
+  callback: function (item) {
+    this.setState({
+      orgValue: item.orgValue,
+      orgId: item.id
+    });
+  },
+
+  toSelectOrg: function (name) {
+    const { navigator } = this.props;
+    if (navigator) {
+      navigator.push({
+        comp: name,
+        callBack: this.callback
+      })
+    }
+  },
+
   clearOptions: function () {
     this.refs["ORIENTATION"].setDefaultState();
     this.refs["TERM"].setDefaultState();
@@ -378,6 +401,44 @@ let Market = React.createClass({
               this.state.termID,
               this.state.amountID
             ]
+          //custFilterList: {
+          //  bizCategory: {
+          //    values: [this.state.bizCategoryValues],
+          //    opt: (this.state.bizCategoryValues == 'ALL')?'':'Eq',
+          //    filedName: 'bizCategory',
+          //    valueType: (this.state.bizCategoryValues == 'ALL')?'':'String'
+          //  },
+          //  bizItem: {
+          //    values: [this.state.bizItemValues],
+          //    opt: (this.state.bizItemValues == 'ALL')?'':'Eq',
+          //    filedName: 'bizItem',
+          //    valueType: (this.state.bizItemValues == 'ALL')?'':'String'
+          //  },
+          //  bizOrientation: {
+          //    values: [this.state.bizOrientationValues],
+          //    opt: (this.state.bizOrientationValues == 'ALL')?'':'Eq',
+          //    filedName: 'bizOrientation',
+          //    valueType: (this.state.bizOrientationValues == 'ALL')?'':'String'
+          //  },
+          //  term: {
+          //    values: [this.state.termValues],
+          //    opt: (this.state.termValues == 'ALL')?'':'Eq',
+          //    filedName: 'term',
+          //    valueType: (this.state.termValues == 'ALL')?'':'Double'
+          //  },
+          //  amount: {
+          //    values: [this.state.amountValues],
+          //    opt: (this.state.amountValues == 'ALL')?'':'Eq',
+          //    filedName: 'amount',
+          //    valueType: (this.state.amountValues == 'ALL')?'':'Double'
+          //  },
+          //  org: {
+          //    values: [this.state.orgValues],
+          //    opt: (this.state.orgValues == 'ALL')?'':'Eq',
+          //    filedName: 'amount',
+          //    valueType: (this.state.orgValues == 'ALL')?'':'Double'
+          //  }
+          //}
           }
         ).then((response)=> {
           console.log(response);

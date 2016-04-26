@@ -90,6 +90,11 @@ let Register_valiMobile = React.createClass({
 
   selectChange(select){
     this.setState({checkbox: select});
+    if(this.state.checkbox && this.state.mobileNo.length != 0 && this.state.verify.length != 0){
+      this.setState({disabled: false});
+    }else{
+      this.setState({disabled: true});
+    }
   },
 
   render: function () {
@@ -113,7 +118,7 @@ let Register_valiMobile = React.createClass({
                       onChange={this.selectChange}
                       checkedUrl={require('../../image/utils/checkbox_checked.png')}
                       unCheckedUrl={require('../../image/utils/checkbox_normal.png')}
-                      disabled={this.state.checkbox}
+                      checked={this.state.checkbox}
             />
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
                                 onPress={()=>this.toPage(RegisterPotocol)}

@@ -31,56 +31,19 @@ let TextEdit = React.createClass({
     } else {
       type = 'ascii-capable';
     }
-    let year = this.props.param.type == 'date' ? (this.props.param.value == '' ? Number(date.split('-')[0]) : Number(this.props.param.value.split('-')[0])) : '';
-    let month = this.props.param.type == 'date' ? (this.props.param.value == '' ? Number(date.split('-')[1]) : Number(this.props.param.value.split('-')[1])) : '';
     return {
       oldPublicValue: this.props.param.publicValue,
       publicName: this.props.param.publicName,
       oldValue: (value === null || value == '' || value == '未填写') ? '' : this.props.param.value.toString(),
-      year: year,
-      month: month,
-      day: this.props.param.type == 'date' ? (this.props.param.value == '' ? Number(date.split('-')[2]) : Number(this.props.param.value.split('-')[2])) : '',
       newValue: this.props.param.value,
       newPublicValue: this.props.param.publicValue,
       type: type,
       tele: this.props.param.type == 'telephone' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[0] ) : '',
       phone: this.props.param.type == 'telephone' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[1]) : '',
-      yearList: new Array(200).fill({}).map((obj, index)=>obj = {name: 1949 + index + '年', value: 1949 + index}),
-      monthList: new Array(12).fill({}).map((obj, index)=>obj = {name: 1 + index + '月', value: 1 + index}),
-      dayList: new Array(this.calDay(year, month)).fill({}).map((obj, index)=>obj = {
-        name: 1 + index + '日',
-        value: 1 + index
-      })
+      disabled: true
     };
   },
 
-  calDay(year, month){
-    if (this.state) {
-      year = this.state.year;
-      month = this.state.month;
-    }
-    let a = 0;
-    if (_.indexOf([1, 3, 5, 7, 8, 10, 12], month) > -1) {
-      a = 31;
-    } else if (_.indexOf([4, 6, 9, 11], month) > -1) {
-      a = 30;
-    } else if (month == 2) {
-      if (!(year % 4)) {
-        a = 29;
-      } else {
-        a = 28;
-      }
-    }
-    return a;
-  },
-  setDayList(year, month){
-    this.setState({
-      dayList: new Array(this.calDay(year, month)).fill({}).map((obj, index)=>obj = {
-        name: 1 + index + '日',
-        value: 1 + index
-      })
-    });
-  },
   button(){
     return (
       <Button func={this.saveValue} content="保存"/>
@@ -102,7 +65,7 @@ let TextEdit = React.createClass({
         if (Validation.isPhone(this.state.newValue)) {
           this.updateUserInfo();
         } else {
-          Alert('请输入正确的手机号码');
+          Alert('请输入13个数字内的有效的手机号码');
         }
         break;
       case 'phoneNumber':
@@ -112,26 +75,40 @@ let TextEdit = React.createClass({
         if (Validation.isTelephone(this.state.newValue)) {
           this.updateUserInfo();
         } else {
-          Alert('请输入正确的座机号码');
+          Alert('请输入13个字符内的有效的座机号');
         }
         break;
       case 'qqNo':
         if (Validation.isQQ(this.state.newValue)) {
           this.updateUserInfo();
         } else {
-          Alert('请输入正确的qq号码');
+          Alert('请输入20个数字内的QQ号码');
         }
         break;
       case 'weChatNo':
-        this.updateUserInfo();
-        break;
-      case 'email':
-        if (Validation.isEmail(this.state.newValue)) {
+        if (Validation.isWechat(this.state.newValue)){
           this.updateUserInfo();
-        } else {
-          Alert('请输入正确的邮箱');
+        }else{
+          Alert('请输入40个字符内的微信号号码');
         }
         break;
+
+      case 'department':
+        if (Validation.isChineseAndEnglish(this.state.newValue)) {
+          this.updateUserInfo();
+        } else {
+          Alert('请输入20个字符内的部门信息');
+        }
+        break;
+      case 'jobTitle':
+        if (Validation.isChineseAndEnglish(this.state.newValue)) {
+          this.updateUserInfo();
+        } else {
+          Alert('请输入20个字符内的职位信息');
+        }
+        break;
+      default:
+        this.updateUserInfo();
     }
   },
 
@@ -184,13 +161,12 @@ let TextEdit = React.createClass({
 
   renderUpdate: function () {
     return (
-      <TouchableOpacity style={{width: 150}}
-                        onPress={()=>this.validate()}
-      >
-        <Text style={{color: '#ffffff'}}>完成</Text>
+      <TouchableOpacity style={{width: 150}} onPress={()=>this.validate()}>
+        <Text style={{color: this.state.disabled ? '#ffffff' : '#ffffff'}}>
+          完成
+        </Text>
       </TouchableOpacity>
     );
-
   },
 
   switchControl: function (open) {
@@ -214,62 +190,7 @@ let TextEdit = React.createClass({
   },
 
   render: function () {
-    if (this.props.param.name == 'date') {
-      return (
-        <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true}
-                    showBar={true} actionButton={this.renderUpdate}
-        >
-          <View style={{flexDirection: 'row'}}>
-            <View style={{flex:1}}>
-              <Picker mode="dropdown"
-                      selectedValue={this.state.year}
-                      onValueChange={(itemValue)=>this.changeTime(itemValue, 'year')}
-              >
-                {this.state.yearList.map((obj, index) => (
-                    <Picker.Item
-                      key={obj.value}
-                      value={obj.value}
-                      label={obj.name.toString()}
-                    />
-                  )
-                )}
-              </Picker>
-            </View>
-            <View style={{flex: 1}}>
-              <Picker
-                selectedValue={this.state.month}
-                onValueChange={(itemValue)=>this.changeTime(itemValue, 'month')}
-              >
-                {this.state.monthList.map((obj, index) => (
-                    <Picker.Item
-                      key={obj.value}
-                      value={obj.value}
-                      label={obj.name.toString()}
-                    />
-                  )
-                )}
-              </Picker>
-            </View>
-            <View style={{flex: 1}}>
-              <Picker
-                selectedValue={this.state.day}
-                onValueChange={(itemValue)=>this.changeTime(itemValue, 'day')}
-              >
-                {this.state.dayList.map((obj, index) => (
-                    <Picker.Item
-                      key={obj.value}
-                      value={obj.value}
-                      label={obj.name.toString()}
-                    />
-                  )
-                )}
-              </Picker>
-            </View>
-          </View>
-        </NavBarView>
-      );
-    } else if (this.props.param.name == 'phoneNumber') {
+    if (this.props.param.name == 'phoneNumber') {
       return (
         <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                     contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
@@ -279,7 +200,7 @@ let TextEdit = React.createClass({
             style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
           >
             <View style={[styles.view, {flexDirection: 'row'}]}>
-              <TextInput style={[styles.text, {width: 80}]} defaultValue={this.state.oldValue.split('-')[0]}
+              <TextInput style={[styles.text, {width: 60}]} defaultValue={this.state.oldValue.split('-')[0]}
                          keyboardType='numeric'
                          underlineColorAndroid="transparent"
                          maxLength={4}
@@ -288,13 +209,37 @@ let TextEdit = React.createClass({
                          autoCapitalize="none"
                          autoCorrect={false}
               />
-              <Text style={styles.text}>_</Text>
+              <Text style={styles.text}>-</Text>
               <TextInput style={[styles.text, {flex: 1, marginLeft: 10}]}
                          underlineColorAndroid="transparent"
                          defaultValue={this.state.oldValue.split('-')[1]}
                          keyboardType='numeric'
                          maxLength={8}
                          onChangeText={(text) => this.setState({phone: text})}
+                         autoCapitalize="none"
+                         autoCorrect={false}
+              />
+            </View>
+            {this.renderSwitch()}
+          </View>
+        </NavBarView>
+      );
+    } else if (this.props.param.needEdit) {
+      return (
+        <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
+                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
+                    actionButton={this.renderUpdate}
+        >
+          <View
+            style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
+          >
+            <View style={styles.view}>
+              <TextInput style={styles.text} defaultValue={this.state.oldValue}
+                         keyboardType={this.props.param.type}
+                         underlineColorAndroid="transparent"
+                         maxLength={this.props.param.maxLength}
+                         onChangeText={(text) => {this.setState({newValue: text})}}
+                         autoFocus={true}
                          autoCapitalize="none"
                          autoCorrect={false}
               />
@@ -313,15 +258,7 @@ let TextEdit = React.createClass({
           style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
         >
           <View style={styles.view}>
-            <TextInput style={styles.text} defaultValue={this.state.oldValue}
-                       keyboardType={this.props.param.type}
-                       underlineColorAndroid="transparent"
-                       maxLength={this.props.param.maxLength}
-                       onChangeText={(text) => this.setState({newValue: text})}
-                       autoFocus={true}
-                       autoCapitalize="none"
-                       autoCorrect={false}
-            />
+            <Text style={styles.text}>{this.state.oldValue}</Text>
           </View>
           {this.renderSwitch()}
         </View>
