@@ -73,13 +73,14 @@ let Register_accountInfo = React.createClass({
   callback: function (item) {
     this.setState({
       orgValue: item.orgValue,
-      orgId: item.id
+      orgId: item.id,
+      disabled:false
     });
   },
 
   _onChangeText(key, value){
     this.setState({[key]: value});
-    if (this.state.realName.length == 0 || this.state.userName.length == 0 || this.state.orgValue.length == 0) {
+    if (this.state.realName.length == 0 || this.state.userName.length == 0 || this.state.orgValue == '选择机构') {
       this.setState({disabled: true});
     } else {
       this.setState({disabled: false});

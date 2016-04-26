@@ -24,7 +24,6 @@ let AppStore = require('../../framework/store/appStore');
 let NameCircular = require('../im/nameCircular').NameCircular;
 
 let Personal = React.createClass({
-
   getStateFromStores: function () {
     let userInfo = UserInfoAction.getLoginUserInfo();
     let orgBean = UserInfoAction.getOrgById(userInfo.orgId);
