@@ -90,7 +90,7 @@ let Register_valiMobile = React.createClass({
 
   selectChange(select){
     this.setState({checkbox: select});
-    if(this.state.checkbox){
+    if(this.state.checkbox && this.state.mobileNo.length != 0 && this.state.verify.length != 0){
       this.setState({disabled: false});
     }else{
       this.setState({disabled: true});

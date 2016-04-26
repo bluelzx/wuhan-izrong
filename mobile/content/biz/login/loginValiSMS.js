@@ -18,6 +18,7 @@ let { Alert, Button } = require('mx-artifacts');
 let SMSTimer = require('../../comp/utils/smsTimer');
 let TabView = require('../../framework/system/tabView');
 let Validation = require('../../comp/utils/validation');
+let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
 
 let ValiSMS = React.createClass({
   getStateFromStores() {
@@ -94,7 +95,7 @@ let ValiSMS = React.createClass({
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <View style={{flexDirection: 'row'}}>
             <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>已发送短信验证码至</Text>
-            <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>{this.props.param.mobileNo}</Text>
+            <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>{PhoneNumber(this.props.param.mobileNo)}</Text>
           </View>
           <SMSTimer ref="smsTimer" onChanged={this._onChangeText} func={'sendSMSCodeToNewMobile'}/>
           <Button

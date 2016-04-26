@@ -16,7 +16,6 @@ let _info = {
   isForceLogout: false
 };
 
-
 let _data = {};
 
 let AppStore = _.assign({}, EventEmitter.prototype, {
@@ -35,8 +34,8 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   isForceLogout: () => _info.isForceLogout,
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
-  //getToken: () => _data.token || '',
-  getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
+  getToken: () => _data.token || '',
+  //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),
