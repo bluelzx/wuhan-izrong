@@ -16,7 +16,7 @@ let _ = require('lodash');
 let AppLinks = require('../../constants/appLinks');
 
 let UserInfoAction = {
-  getLoginUserInfo: ()=>_getLoginUserInfo(),
+  getLoginUserInfo: ()=> _getLoginUserInfo(),
   getOrgById: (orgBeanId)=> _getOrgById(orgBeanId),
   updateUserInfo: (p)=> _updateUserInfo(AppLinks.updateUserInfo, p),
   uploadFile: (p, fileFieldName) => _uploadFile(AppLinks.uploadFile, p, fileFieldName)

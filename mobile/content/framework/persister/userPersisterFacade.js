@@ -22,6 +22,14 @@ let _updateUserInfo = function (column, value) {
     userId = sortedUsers[0].userId;
   }
   switch (column) {
+    case 'realName':
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId: userId,
+          realName: value
+        }, true);
+      });
+      break;
     case 'mobileNumber':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
@@ -62,7 +70,7 @@ let _updateUserInfo = function (column, value) {
         }, true);
       });
       break;
-    case 'publicQQ':
+    case 'publicQq':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
           userId: userId,

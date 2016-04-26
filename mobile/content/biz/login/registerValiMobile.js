@@ -17,7 +17,7 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Input = require('../../comp/utils/input');
 let { Alert, Button } = require('mx-artifacts');
 let SMSTimer = require('../../comp/utils/smsTimer');
-let CheakBox = require('../../comp/utils/checkboxUtil');
+let CheckBox = require('../../comp/utils/checkboxUtil');
 let Register_AccountInfo = require('./accountInfo');
 let RegisterPotocol = require('./registerPotocol');
 
@@ -104,7 +104,7 @@ let Register_valiMobile = React.createClass({
       >
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <Input containerStyle={styles.inputStyle} placeholder='手机号' maxLength={11} field='mobileNo'
-                 onChangeText={this._onChangeText} icon='user' inputType='number-pad'
+                 onChangeText={this._onChangeText} icon='phone' inputType='number-pad'
           />
 
           <SMSTimer ref="smsTimer"
@@ -114,10 +114,10 @@ let Register_valiMobile = React.createClass({
                     exec={this.props.exec}
           />
           <View style={{flexDirection: 'row'}}>
-            <CheakBox content="已阅读并同意"
+            <CheckBox content="已阅读并同意"
                       onChange={this.selectChange}
-                      checkedUrl={require('../../image/utils/checkbox_checked.png')}
-                      unCheckedUrl={require('../../image/utils/checkbox_normal.png')}
+                      checkedUrl={require('../../image/utils/radioChecked.png')}
+                      unCheckedUrl={require('../../image/utils/radioUncheck.png')}
                       checked={this.state.checkbox}
             />
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
