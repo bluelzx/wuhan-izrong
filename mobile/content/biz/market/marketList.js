@@ -68,11 +68,11 @@ let MarketList = React.createClass({
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
           <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:'white',}}>
-            {rowData.term + '天'}
+            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
-            {rowData.amount / 10000 + '万'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount / 10000 + '万'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
