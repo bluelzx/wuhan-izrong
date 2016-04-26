@@ -66,6 +66,39 @@ module.exports = {
     }
     return true;
   },
+  isAmount: function (data) {
+    if (!_.isEmpty(data)) {
+      let reg = /^([1-9][0-9]{0,6}|10000000)$/;
+      if (!reg.test(data)) {
+        console.log('格式不合法：请输入整数');
+        return false;
+      }
+      return true;
+    }
+    return true;
+  },
+  isTerm: function (data) {
+    if (!_.isEmpty(data)) {
+      let reg = /^[1-9][0-9]{0,2}$/;
+      if (!reg.test(data)) {
+        console.log('格式不合法：请输入整数');
+        return false;
+      }
+      return true;
+    }
+    return true;
+  },
+  isRate: function (data) {
+    if (!_.isEmpty(data)) {
+      let reg = /^(?=.*[0-9])\d{0,2}(?:\.\d{0,2})?$/;
+      if (!reg.test(data)) {
+        console.log('格式不合法：请输入0-99.99之间的小数');
+        return false;
+      }
+      return true;
+    }
+    return true;
+  },
   notNull: function (data, desc) {
     if (!data) {
       console.log(desc + "为必填项，不能为空");

@@ -65,16 +65,16 @@ let MyBizList = React.createClass({
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
           <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}>
-            {rowData.term + '天'}
+            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'?'rgba(175,134,86,1)':'#386085'}}>
-            {rowData.amount / 10000 + '万'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount / 10000 + '万'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}
             numberOfLines={1}>
-            {rowData.rate + '%'}
+            {rowData.rate == null || rowData.rate == 0 ? '--' : rowData.rate + '%'}
           </Text>
           {this.renderFreshBtn(rowData)}
         </View>

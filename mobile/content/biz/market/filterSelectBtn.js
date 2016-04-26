@@ -23,9 +23,11 @@ let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 let FilterSelectBtn = React.createClass({
   getInitialState(){
+    let rowDefault = this.props.rowDefault;
+    let isAll = this.props.isAll;
     return {
-      isAll: true,
-      rowDefault: 10000,
+      isAll: isAll,
+      rowDefault: rowDefault,
     }
   },
   setDefaultState: function () {
@@ -33,6 +35,7 @@ let FilterSelectBtn = React.createClass({
       isAll: true,
       rowDefault: 10000,
     });
+    {this._returnSelectOption(0, this.props.typeTitle , 10000, this.state.isAll)}
   },
   render: function () {
     return (
@@ -42,7 +45,7 @@ let FilterSelectBtn = React.createClass({
           <TouchableHighlight onPress={() => this._pressAll()} underlayColor='rgba(0,0,0,0)'>
             <View>
               <View
-                style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:Adjust.width(79), height: 40, backgroundColor: this.state.isAll ? '#817fc9':'#102a42', alignItems: 'center', borderRadius: 5,}}>
+                style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:Adjust.width(80), height: 40, backgroundColor: this.state.isAll ? '#817fc9':'#102a42', alignItems: 'center', borderRadius: 5,}}>
                 <Text style={{flex: 1, marginTop: 5, color:'white'}}>
                   {this.props.dataList[0].displayName}
                 </Text>
@@ -65,7 +68,7 @@ let FilterSelectBtn = React.createClass({
                           underlayColor='rgba(0,0,0,0)'>
         <View>
           <View
-            style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:(this.props.section == 3)?Adjust.width(79):Adjust.width(124), height: 40, backgroundColor: this.state.isAll ? '#102a42' : (this.state.rowDefault == rowID ? '#817fc9':'#102a42'), alignItems: 'center', borderRadius: 5, }}>
+            style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:(this.props.section == 3)?Adjust.width(80):Adjust.width(125.5), height: 40, backgroundColor: this.state.isAll ? '#102a42' : (this.state.rowDefault == rowID ? '#817fc9':'#102a42'), alignItems: 'center', borderRadius: 5, }}>
             <Text
               style={{flex: 1, marginTop: 8, fontSize:12, color:'white'}}
               numberOfLines={1}>
@@ -82,7 +85,7 @@ let FilterSelectBtn = React.createClass({
       rowDefault: rowID
     });
     {
-      this._returnSelectOption(Number(rowID) + 1, this.props.typeTitle)
+      this._returnSelectOption(Number(rowID) + 1, this.props.typeTitle, Number(rowID), this.state.isAll)
     }
   },
   _pressAll: function () {
@@ -90,11 +93,11 @@ let FilterSelectBtn = React.createClass({
       isAll: true,
     });
     {
-      this._returnSelectOption(0, this.props.typeTitle)
+      this._returnSelectOption(0, this.props.typeTitle , 10000, this.state.isAll)
     }
   },
-  _returnSelectOption: function (number, title) {
-    this.props.callBack(this.props.dataList[number], title);
+  _returnSelectOption: function (number, title, rowDefault, isAll) {
+    this.props.callBack(this.props.dataList[number], title, rowDefault, isAll);
   },
   deleteFirstObj: function (obj) {
     let arr = new Array();

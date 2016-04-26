@@ -30,12 +30,14 @@ let SelectBusiness1 = require('./selectBusiness1');
 let ImagePicker = require('../../comp/utils/imagePicker');
 let Input = require('../../comp/utils/input');
 let Adjust = require('../../comp/utils/adjust');
+let Validation = require('../../comp/utils/validation');
 let MyBusiness = require('../home/myBusiness');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 
 
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
+let MarketStore = require('../../framework/store/marketStore');
 let ImAction = require('../../framework/action/imAction');
 
 let bizOrientationUnit = ['收', '出'];
@@ -45,6 +47,7 @@ let amountUnit = ['万', '亿'];
 let Publish = React.createClass({
   getInitialState(){
     let filterItems = AppStore.getFilters().filterItems;
+    let item = MarketStore.getCategoryAndItem(filterItems);
 
     return {
       filterItems: filterItems,
@@ -55,14 +58,14 @@ let Publish = React.createClass({
       amountText: '',
       rateText: '',
       remarkText: '',
-      disabled: true,
+      disabled: false,
       //networt
       term: '',
       rate: '',
       remark: '',
       bizOrientation: 'IN',
-      bizCategory: '',
-      bizItem: '',
+      bizCategory: item[3],
+      bizItem: item[3].itemArr[0],
       amount: '',
       fileUrlList: []
     }
@@ -124,11 +127,6 @@ let Publish = React.createClass({
       this.setState({amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000});
     }else {
       this.setState({rate:Number(value)});
-    }
-    if (this.state.termText.length == 0 || this.state.amountText.length == 0 || this.state.rateText.length == 0) {
-      this.setState({disabled: true});
-    } else {
-      this.setState({disabled: false});
     }
   },
 
@@ -202,7 +200,7 @@ let Publish = React.createClass({
           <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor='#325779'
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
-                 placeholder='0-100.00' maxLength={3} field='rateText' inputType="numeric"
+                 placeholder='0-100.00' maxLength={5} field='rateText' inputType="numeric"
                  onChangeText={this._onChangeText}
           />
           <Text style={{marginLeft:10,fontWeight: 'bold', color:'white'}}>{'%'}</Text>
@@ -277,8 +275,66 @@ let Publish = React.createClass({
   },
 
   _pressPublish: function () {
-    {
-      this.addBizOrder();
+    if(this.state.termText.length != 0 || this.state.amountText.length != 0 || this.state.rateText.length != 0){
+      if(this.state.termText.length != 0){
+        if(Validation.isTerm(this.state.termText)){
+          if(this.state.amountText.length != 0){
+            if(Validation.isAmount(this.state.amountText)){
+              if(this.state.rateText.length != 0){
+                if(Validation.isRate(this.state.rateText)){
+                  {this.addBizOrder();}
+                }else{
+                  Alert('格式不合法：请输入0-99.99之间的小数');
+                }
+              }else{
+                {this.addBizOrder();}
+              }
+            }else{
+              Alert('格式不合法：请输入整数');
+            }
+          }else {
+            if(this.state.rateText.length != 0){
+              if(Validation.isRate(this.state.rateText)){
+                {this.addBizOrder();}
+              }else{
+                Alert('格式不合法：请输入0-99.99之间的小数');
+              }
+            }else{
+              {this.addBizOrder();}
+            }
+          }
+        }else{
+          Alert('格式不合法：请输入整数');
+        }
+      }else{
+        if(this.state.amountText.length != 0){
+          if(Validation.isAmount(this.state.amountText)){
+            if(this.state.rateText.length != 0){
+              if(Validation.isRate(this.state.rateText)){
+                {this.addBizOrder();}
+              }else{
+                Alert('格式不合法：请输入0-99.99之间的小数');
+              }
+            }else{
+              {this.addBizOrder();}
+            }
+          }else{
+            Alert('格式不合法：请输入整数');
+          }
+        }else {
+          if(this.state.rateText.length != 0){
+            if(Validation.isRate(this.state.rateText)){
+              {this.addBizOrder();}
+            }else{
+              Alert('格式不合法：请输入0-99.99之间的小数');
+            }
+          }else{
+            {this.addBizOrder();}
+          }
+        }
+      }
+    }else {
+      {this.addBizOrder();}
     }
   },
 
@@ -330,35 +386,30 @@ let Publish = React.createClass({
   },
 
   addBizOrder: function () {
-
-    if (this.state.amountText.length == 0 || this.state.termText.length == 0 || this.state.rateText.length == 0) {
-      this.setState({disabled: false});
-    } else {
-      dismissKeyboard();
-      //this.props.exec(
-      //  ()=> {
-      this.setState({disabled: true});
-      return MarketAction.addBizOrder({
-        id: '',
-        term: this.state.term,
-        rate: this.state.rate/100,
-        remark: this.state.remark,
-        bizOrientation: this.state.bizOrientation,
-        bizCategory: this.state.bizCategory.displayCode,
-        bizItem: this.state.bizItem.displayCode,
-        amount: this.state.amount,
-        fileUrlList: this.state.fileUrlList
-      }).then((response)=> {
-        Alert('发布成功');
-      }).catch(
-        (errorData) => {
-          throw errorData;
-        }
-      );
-      //  }
-      //);
-    }
+    dismissKeyboard();
+    //this.props.exec(
+    //  ()=> {
+    return MarketAction.addBizOrder({
+      id: '',
+      term: this.state.term,
+      rate: this.state.rate / 100,
+      remark: this.state.remark,
+      bizOrientation: this.state.bizOrientation,
+      bizCategory: this.state.bizCategory.displayCode,
+      bizItem: this.state.bizItem.displayCode,
+      amount: this.state.amount,
+      fileUrlList: this.state.fileUrlList
+    }).then((response)=> {
+      Alert('发布成功');
+    }).catch(
+      (errorData) => {
+        throw errorData;
+      }
+    );
+    //  }
+    //);
   },
+
   handleSendImage(uri) {
     ImAction.uploadImage(uri)
       .then((response) => {
