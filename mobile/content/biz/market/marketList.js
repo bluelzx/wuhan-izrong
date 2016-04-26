@@ -36,7 +36,7 @@ let MarketList = React.createClass({
   },
   render() {
     return (
-      <View style={{width:screenWidth,height:screenHeight-149,backgroundColor: '#162a40'}}>
+      <View style={{width:screenWidth,flex:1,backgroundColor: '#162a40'}}>
         <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5}}>
           <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:'#8d8d8d',}}>
             {'方向'}

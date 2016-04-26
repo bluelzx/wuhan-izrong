@@ -125,8 +125,7 @@ let UserInfo = React.createClass({
           maxLength: maxLength,
           needEdit: needEdit,
           needPublic: needPublic
-        },
-        callBack: this.callBack
+        }
       });
     }
   },

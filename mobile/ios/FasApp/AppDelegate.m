@@ -31,27 +31,27 @@ typedef enum{
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   [NSThread sleepForTimeInterval:1.0];
-  
+
   AppStarMode startType=Debug;
-  
+
   NSURL* latestJSCodeLocation;
   if(startType==AutoUpdate){
     NSURL* defaultJSCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-    
+
     ReactNativeAutoUpdater* updater = [ReactNativeAutoUpdater sharedInstance];
     [updater setDelegate:self];
     [updater showProgress: NO];
-    
+
     // We set the location of the metadata file that has information about the JS Code that is shipped with the app.
     // This metadata is used to compare the shipped code against the updates.
-    
+
     NSURL* defaultMetadataFileLocation = [[NSBundle mainBundle] URLForResource:@"metadata" withExtension:@"json"];
     [updater initializeWithUpdateMetadataUrl:[NSURL URLWithString:JS_CODE_METADATA_URL]
                        defaultJSCodeLocation:defaultJSCodeLocation
                  defaultMetadataFileLocation:defaultMetadataFileLocation ];
     [updater setHostnameForRelativeDownloadURLs:@"http://192.168.64.205:9101"];
     [updater checkUpdate];
-    
+
     latestJSCodeLocation = [updater latestJSCodeLocation];
   }else if(startType==Debug){
     latestJSCodeLocation=[NSURL URLWithString:@"http:localhost:8081/index.ios.bundle?platform=ios"];
@@ -60,7 +60,7 @@ typedef enum{
   }
 
 
-  
+
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
   self.window.rootViewController = rootViewController;
@@ -88,7 +88,7 @@ typedef enum{
                                         alertControllerWithTitle:NSLocalizedString(@"版本升级", nil)
                                         message:NSLocalizedString(@"程序有新的版本更新，立即安装？", nil)
                                         preferredStyle:UIAlertControllerStyleAlert];
-  
+
   UIAlertAction *cancelAction = [UIAlertAction
                                  actionWithTitle:NSLocalizedString(@"取消", @"Cancel action")
                                  style:UIAlertActionStyleCancel
@@ -96,7 +96,7 @@ typedef enum{
                                  {
                                    NSLog(@"Cancel action");
                                  }];
-  
+
   UIAlertAction *okAction = [UIAlertAction
                              actionWithTitle:NSLocalizedString(@"确定", @"OK action")
                              style:UIAlertActionStyleDefault
@@ -105,15 +105,15 @@ typedef enum{
                                // [self createReactRootViewFromURL: url];
                                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.apple.com"]];
                              }];
-  
+
   [alertController addAction:cancelAction];
   [alertController addAction:okAction];
-  
+
   // make sure this runs on main thread. Apple doesn't like if you change UI from background thread.
   dispatch_async(dispatch_get_main_queue(), ^{
     [self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
   });
-  
+
 }
 
 - (void)ReactNativeAutoUpdater_updateDownloadFailed {
