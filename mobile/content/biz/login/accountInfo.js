@@ -62,7 +62,7 @@ let Register_accountInfo = React.createClass({
     if(!Validation.realName(this.state.realName)){
       Alert('请输入20个字符内的中文或英文');
     }else if(!Validation.isEmail(this.state.userName)){
-      Alert('请输入有效的邮箱地址');
+      Alert('请输入60个字符内的有效的邮箱地址');
     }else if(this.state.orgValue == '选择机构'){
       Alert('请选择机构');
     }else{
@@ -73,13 +73,14 @@ let Register_accountInfo = React.createClass({
   callback: function (item) {
     this.setState({
       orgValue: item.orgValue,
-      orgId: item.id
+      orgId: item.id,
+      disabled:false
     });
   },
 
   _onChangeText(key, value){
     this.setState({[key]: value});
-    if (this.state.realName.length == 0 || this.state.userName.length == 0 || this.state.orgValue.length == 0) {
+    if (this.state.realName.length == 0 || this.state.userName.length == 0 || this.state.orgValue == '选择机构') {
       this.setState({disabled: true});
     } else {
       this.setState({disabled: false});
@@ -99,27 +100,29 @@ let Register_accountInfo = React.createClass({
           <Input placeholder='真实姓名' maxLength={20} field='realName'
                  onChangeText={this._onChangeText} icon='user' inputType='default'
           />
-          <Input placeholder='用户名(邮箱)' maxLength={20} field='userName'
+          <Input placeholder='用户名(邮箱)' maxLength={60} field='userName'
                  onChangeText={this._onChangeText} icon='user' inputType ='email-address'
           />
           <TouchableHighlight activeOpacity={0.8} underlayColor='#4fb9fc'
                               onPress={()=>this.toPage(Register_selectOrg)}
+                              style ={{marginTop: 20, borderRadius: 6}}
           >
             <View style={styles.selectOrg}>
-              <View style={{marginLeft: 20, flexDirection: 'row'}}>
+              <View style = {{flex: 1, alignItems: 'center'}}>
                 <Image
                   style={{height: 20, width: 20}}
                   source={require('../../image/user/comp.png')}
                 />
-                <Text style={{color: '#ffffff', fontSize: 18, marginLeft: 20, width: 260}}
+              </View>
+
+                <Text style={{color: '#ffffff', fontSize: 18, flex: 5}}
                       numberOfLines={1}
                 >
                   {this.state.orgValue}
                 </Text>
-              </View>
 
               <Icon
-                style={{marginRight: 20}}
+                style={{flex: 1}}
                 name="ios-arrow-right" size={28} color={'#ffffff'}
               />
             </View>
@@ -154,7 +157,6 @@ let styles = StyleSheet.create({
     flex: 1,
     height: 47,
     backgroundColor: '#148bf9',
-    marginTop: 20,
     borderRadius: 6,
     flexDirection: 'row',
     alignItems: 'center',

@@ -53,7 +53,6 @@ function Manager (uri, opts) {
   this.readyState = 'closed';
   this.uri = uri;
   this.connecting = [];
-  this.lastPing = null;
   this.autoConnect = opts.autoConnect !== false;
   if (this.autoConnect) this.open();
 }
@@ -321,18 +320,11 @@ Manager.prototype.destroy = function (socket) {
 
 Manager.prototype.cleanup = function () {
   // console.log('**websocket** cleanup');
-
   var subsLength = this.subs.length;
   for (var i = 0; i < subsLength; i++) {
     var sub = this.subs.shift();
     sub.destroy();
   }
-
-  this.packetBuffer = [];
-  //this.encoding = false;
-  this.lastPing = null;
-
-  //this.decoder.destroy();
 };
 
 /**

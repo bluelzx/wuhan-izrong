@@ -41,12 +41,12 @@ let Input = React.createClass({
       },
       inputStyle: {
         fontSize: 18,
-        color: '#7f7f7f',
+        color: '#ffffff',
         marginLeft: 9,
         width: Dimensions.get('window').width * (375 - 80) / 375
       },
       placeholder: '',
-      placeholderTextColor: '#7f7f7f',
+      placeholderTextColor: '#386085',
       focusColor: '#ff0000',
       //value: ''
       inputType: 'default'

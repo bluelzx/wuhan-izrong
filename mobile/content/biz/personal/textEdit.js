@@ -24,13 +24,6 @@ let TextEdit = React.createClass({
   getInitialState: function () {
     let value = this.props.param.value;
     let type = this.props.param.type;
-    if (type == 'number') {
-      type = 'numeric';
-    } else if (type == 'name') {
-      type = 'default';
-    } else {
-      type = 'ascii-capable';
-    }
     return {
       oldPublicValue: this.props.param.publicValue,
       publicName: this.props.param.publicName,
@@ -38,8 +31,8 @@ let TextEdit = React.createClass({
       newValue: this.props.param.value,
       newPublicValue: this.props.param.publicValue,
       type: type,
-      tele: this.props.param.type == 'telephone' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[0] ) : '',
-      phone: this.props.param.type == 'telephone' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[1]) : '',
+      tele: this.props.param.name == 'phoneNumber' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[0] ) : '',
+      phone: this.props.param.name == 'phoneNumber' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[1]) : '',
       disabled: true
     };
   },
@@ -61,13 +54,6 @@ let TextEdit = React.createClass({
 
   validate: function () {
     switch (this.props.param.name) {
-      case 'mobileNumber':
-        if (Validation.isPhone(this.state.newValue)) {
-          this.updateUserInfo();
-        } else {
-          Alert('请输入13个数字内的有效的手机号码');
-        }
-        break;
       case 'phoneNumber':
         this.setState({
           newValue: this.state.tele + '-' + this.state.phone
@@ -86,9 +72,9 @@ let TextEdit = React.createClass({
         }
         break;
       case 'weChatNo':
-        if (Validation.isWechat(this.state.newValue)){
+        if (Validation.isWechat(this.state.newValue)) {
           this.updateUserInfo();
-        }else{
+        } else {
           Alert('请输入40个字符内的微信号号码');
         }
         break;
@@ -201,7 +187,7 @@ let TextEdit = React.createClass({
           >
             <View style={[styles.view, {flexDirection: 'row'}]}>
               <TextInput style={[styles.text, {width: 60}]} defaultValue={this.state.oldValue.split('-')[0]}
-                         keyboardType='numeric'
+                         keyboardType='number-pad'
                          underlineColorAndroid="transparent"
                          maxLength={4}
                          onChangeText={(text) => this.setState({tele: text})}
@@ -213,7 +199,7 @@ let TextEdit = React.createClass({
               <TextInput style={[styles.text, {flex: 1, marginLeft: 10}]}
                          underlineColorAndroid="transparent"
                          defaultValue={this.state.oldValue.split('-')[1]}
-                         keyboardType='numeric'
+                         keyboardType='number-pad'
                          maxLength={8}
                          onChangeText={(text) => this.setState({phone: text})}
                          autoCapitalize="none"
@@ -224,7 +210,7 @@ let TextEdit = React.createClass({
           </View>
         </NavBarView>
       );
-    } else if (this.props.param.needEdit) {
+    } else if (this.props.param.needPublic && this.props.param.needEdit) {
       return (
         <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                     contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
@@ -248,31 +234,57 @@ let TextEdit = React.createClass({
           </View>
         </NavBarView>
       );
-    }
-    return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
-                  actionButton={this.renderUpdate}
-      >
-        <View
-          style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
+    } else if (!this.props.param.needPublic && this.props.param.needEdit) {
+      return (
+        <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
+                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
+                    actionButton={this.renderUpdate}
         >
-          <View style={styles.view}>
-            <Text style={styles.text}>{this.state.oldValue}</Text>
+          <View
+            style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
+          >
+            <View style={styles.view}>
+              <TextInput style={styles.text} defaultValue={this.state.oldValue}
+                         keyboardType={this.props.param.type}
+                         underlineColorAndroid="transparent"
+                         maxLength={this.props.param.maxLength}
+                         onChangeText={(text) => {this.setState({newValue: text})}}
+                         autoFocus={true}
+                         autoCapitalize="none"
+                         autoCorrect={false}
+              />
+            </View>
           </View>
-          {this.renderSwitch()}
-        </View>
-      </NavBarView>
-    );
+        </NavBarView>
+      );
+    } else if (this.props.param.needPublic && !this.props.param.needEdit) {
+      return (
+        <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
+                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
+                    actionButton={this.renderUpdate}
+        >
+          <View
+            style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
+          >
+            <View style={styles.view}>
+              <Text style={styles.text}>{this.state.oldValue}</Text>
+            </View>
+            {this.renderSwitch()}
+          </View>
+        </NavBarView>
+      );
+    }
   }
 });
 let styles = StyleSheet.create({
   view: {
     marginTop: 10,
-    marginHorizontal: 20
+    marginHorizontal: 20,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#0a1926'
   },
   text: {
-    fontSize: 20,
+    fontSize: 18,
     height: 40,
     color: '#ffffff',
     paddingBottom: 10

@@ -1,4 +1,18 @@
 'use strict';
+
+/**
+ * Rewrite function console.log
+ * @type {(function(this:(Console|*)))|*|Server}
+ * @private
+ */
+const __log = window.console.log.bind(console);
+const {Dev} = require('../../../config');
+window.console.log = function () {
+  if (Dev) {
+    __log(...arguments);
+  }
+};
+
 var React = require('react-native');
 var {
   StatusBar,

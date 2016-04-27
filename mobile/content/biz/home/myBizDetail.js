@@ -121,12 +121,12 @@ let MyBizDetail = React.createClass({
 
   _onChangeText(key, value){
     this.setState({[key]: value});
-    if(key == 'termText'){
+    if (key == 'termText') {
       this.setState({term: (this.state.termDefault == 0) ? Number(value) : (this.state.termDefault == 1) ? Number(value) * 30 : Number(value) * 365});
-    }else if (key == 'amountText'){
+    } else if (key == 'amountText') {
       this.setState({amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000});
-    }else {
-      this.setState({rate:Number(value)});
+    } else {
+      this.setState({rate: Number(value)});
     }
     if (this.state.termText.length == 0 || this.state.amountText.length == 0 || this.state.rateText.length == 0) {
       this.setState({disabled: true});
@@ -147,7 +147,9 @@ let MyBizDetail = React.createClass({
       <View
         style={{marginTop:10,height:36,alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
         <Text
-          style={{fontSize:16,marginLeft:10,color:'white'}}>{'业务类型: ' + this.state.detailData.bizCategoryDesc + '-' + this.state.detailData.bizItemDesc}</Text>
+          style={{fontSize:16,marginLeft:10,color:'white'}}
+        >{'业务类型: ' + this.state.detailData.bizCategoryDesc + '-' + this.state.detailData.bizItemDesc
+        }</Text>
       </View>
     )
   },
@@ -336,11 +338,11 @@ let MyBizDetail = React.createClass({
       fileUrlList: response.fileIds,
       bizOrientation: response.bizOrientation,
       bizOrientationDefault: (response.bizOrientation == 'IN') ? 0 : 1,
-      termText: (response.term < 30) ? ((response.term).toString()) : (response.term < 365) ? (response.term / 30).toString() : (response.term / 365).toString(),
+      termText: response.term == null ? '' : (response.term < 30) ? ((response.term).toString()) : (response.term < 365) ? (response.term / 30).toString() : (response.term / 365).toString(),
       termDefault: (response.term < 30) ? 0 : (response.term < 365) ? 1 : 2,
-      amountText: (response.amount >= 100000000) ? (response.amount / 100000000).toString() : (response.amount / 10000).toString(),
+      amountText: response.amount == null ? '' : (response.amount >= 100000000) ? (response.amount / 100000000).toString() : (response.amount / 10000).toString(),
       amountDefault: (response.amount >= 100000000) ? 0 : 1,
-      rateText: (response.rate*100).toString(),
+      rateText: response.rate == null ? '' : (response.rate * 100).toString(),
       remarkText: response.remark,
       lastModifyDate: DateHelper.formatBillDetail(t),
       bizCategory: response.bizCategory,

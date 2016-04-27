@@ -1,17 +1,17 @@
-let DeviceInfoDetail = require('./deviceInfo');
+const DeviceInfoDetail = require('./deviceInfo');
 const _device_id = DeviceInfoDetail.getDeviceId();
 
-let _getSessionKey = (t, id) => {
+const _getSessionKey = (t, id) => {
   // return (f > t ? f + ':' + t : t + ':' + f) + ':' + new Date().getTime() + ':' + _device_id;
-  return t + ':' + id;
+  return '${t}:${id}';
 };
 
-let _getMessageKey = (s) => {
+const _getMessageKey = (s) => {
   // return (f > t ? f + ':' + t : t + ':' + f) + ':' + new Date().getTime() + ':' + _device_id;
-  return s + ':' + new Date().getTime() + ':' + _device_id;
+  return '${s}:${new Date().getTime()}:${_device_id}';
 };
 
-let KeyGenerator = {
+const KeyGenerator = {
   getSessionKey: (t, id) => _getSessionKey(t, id),
   getMessageKey: (s) => _getMessageKey(s),
 };

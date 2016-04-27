@@ -50,13 +50,12 @@ let SMSTimer = React.createClass({
         tim: this.setInterval(this.updateText, 1000)
       });
     }
-
   },
 
   sendSmsCodeToRegisterMobile: function () {
-    //if(this.props.parameter.length != 11){
-    //  Alert('请输入完整的手机号码');
-    //}else{
+    if (this.props.parameter.length != 11) {
+      Alert('请输入完整的手机号码');
+    } else {
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.sendSmsCodeToRegisterMobile({
@@ -67,6 +66,7 @@ let SMSTimer = React.createClass({
           throw errorData;
         });
       });
+    }
   },
 
   selectVerifyFunction: function () {
@@ -115,12 +115,12 @@ let SMSTimer = React.createClass({
     return (
       <View style={{flexDirection: 'row', flex: 1, marginTop: 20}}>
         <View style={[styles.view, styles.radius]}>
-          <Image source={require('../../image/utils/smsCode.png')}
+          <Image source={require('../../image/utils/phone.png')}
                  style={{height: 16, width: 16, marginLeft:9}}
           />
           <TextInput style={[styles.input, {width: width - 170}]} underlineColorAndroid="transparent"
                      placeholder="短信验证码" onChangeText={(text) => this.textOnchange(text, 'verify')}
-                     autoCorrect={false} maxLength={6} keyboardType="number-pad" placeholderTextColor="#7f7f7f"
+                     autoCorrect={false} maxLength={6} keyboardType="number-pad" placeholderTextColor="#386085"
                      clearButtonMode="while-editing"
           />
         </View>
@@ -129,7 +129,7 @@ let SMSTimer = React.createClass({
             style={[{width: 75, height: 47}, styles.radius, styles.button,
             {backgroundColor: this.state.disabled ? '#86929e' : '#8bb0d9'}]}
             onPress={this.selectVerifyFunction}
-            activeOpacity = {this.state.disabled ? 1 : 0.5 }
+            activeOpacity={this.state.disabled ? 1 : 0.5 }
           >
             <Text style={[styles.fontColor]}>{this.state.time}</Text>
           </TouchableOpacity>
@@ -149,7 +149,9 @@ let styles = StyleSheet.create({
     alignItems: 'center', flex: 1
   },
   input: {
-    fontSize: 18, color: '#7f7f7f', marginLeft: 9
+    fontSize: 18,
+    color: '#ffffff',
+    marginLeft: 9
   },
   radius: {
     borderRadius: 4
