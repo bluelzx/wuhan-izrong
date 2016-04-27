@@ -14,6 +14,7 @@ let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let AlphabetListView = require('react-native-alphabetlistview');
+let SearchBar = require('../im/searchBar');
 var that;
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
@@ -55,12 +56,17 @@ let Register_selectOrg = React.createClass({
     console.log(item);
   },
 
+  textChange: function(text){
+    this.setState({text: text});
+  },
+
 
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='选择机构' showBack={true} showBar={true}
       >
+        <SearchBar textChange={this.textChange}/>
         <View style={{flexDirection: 'column', flex: 1}}>
           <AlphabetListView
             data={this.state.data}

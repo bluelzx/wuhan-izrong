@@ -3,6 +3,8 @@ let React = require('react-native');
 let TestData = require('./testData');
 let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 let _realm = require('./realmManager');
+let co = require('co');
+let nextFrame = require('next-frame');
 const {
   DEVICE,
   GROUP,
@@ -44,17 +46,35 @@ let _deleteDevice = function () {
     _realm.delete(devices); // Deletes all books
   });
 };
+//1461725152393
+//1461725153730
+
+//1461725788323
+//1461725792041
 
 let _saveAppData = function (data) {
+  console.log("start" + new Date().getTime());
+  //let loginUserInfo = data.appUserInfoOutBean;
+  //let token = data.appToken;
+  //let orgBeanList = data.orgBeanList;
+  //let appUserGroupBeanList = data.appUserGroupBeanList;
+  //let imUserBeanList = data.imUserBeanList;
+  //_saveLoginUserInfo(loginUserInfo, token);
+  //_saveImUsers(imUserBeanList);
+  //_saveOrgBeanList(orgBeanList);
+  //_saveAppUserGroupBeanList(appUserGroupBeanList);
   let loginUserInfo = data.appUserInfoOutBean;
   let token = data.appToken;
   let orgBeanList = data.orgBeanList;
   let appUserGroupBeanList = data.appUserGroupBeanList;
   let imUserBeanList = data.imUserBeanList;
-  _saveLoginUserInfo(loginUserInfo, token);
-  _saveImUsers(imUserBeanList);
-  _saveOrgBeanList(orgBeanList);
-  _saveAppUserGroupBeanList(appUserGroupBeanList);
+  return new Promise((resolve)=> {
+    resolve(_saveLoginUserInfo(loginUserInfo, token));
+  })
+    .then(_saveImUsers(imUserBeanList))
+    .then(_saveOrgBeanList(orgBeanList))
+    .then(_saveAppUserGroupBeanList(appUserGroupBeanList));
+  //console.log("over"+new Date().getTime());
 };
 
 let _saveLoginUserInfo = function (loginUserInfo, token) {
@@ -111,70 +131,82 @@ let _saveAppUserGroupBean = function (appUserGroupBean) {
 };
 
 let _saveImUsers = function (imUserBeanList) {
-  imUserBeanList.forEach(function (imUserBean) {
-    _saveImUser(imUserBean);
+   return co(function *() {
+    for (var i = 0; i < imUserBeanList.length; i++) {
+      _saveImUser(imUserBeanList[i]);
+      if (i % 10 == 0){
+        yield nextFrame();
+      }
+    }
   });
 };
 
 let _saveImUser = function (imUserBean) {
-  _realm.write(() => {
-    _realm.create(IMUSERINFO, {
-      userId: imUserBean.userId,
-      address: imUserBean.address,
-      realName: imUserBean.realName,
-      nameCardFileUrl: imUserBean.nameCardFileUrl,
-      department: imUserBean.department,
-      jobTitle: imUserBean.jobTitle,
-      qqNo: imUserBean.qqNo,
-      email: imUserBean.email,
-      weChatNo: imUserBean.weChatNo,
-      mute: imUserBean.mute,
-      mobileNumber: imUserBean.mobileNumber,
-      photoFileUrl: imUserBean.photoFileUrl,
-      orgId: imUserBean.orgId,
-      phoneNumber: imUserBean.phoneNumber,
-      publicTitle: !!(imUserBean.publicTitle == true || imUserBean.publicTitle === null),
-      publicMobile: !!(imUserBean.publicMobile == true || imUserBean.publicMobile === null),
-      publicDepart: !!(imUserBean.publicDepart == true || imUserBean.publicDepart === null),
-      publicPhone: !!(imUserBean.publicPhone == true || imUserBean.publicPhone === null),
-      publicEmail: !!(imUserBean.publicEmail == true || imUserBean.publicEmail === null),
-      publicAddress: !!(imUserBean.publicAddress == true || imUserBean.publicAddress === null),
-      publicWeChat: !!(imUserBean.publicWeChat == true || imUserBean.publicWeChat === null),
-      publicQQ: !!(imUserBean.publicQQ == true || imUserBean.publicQQ === null)
-
-
-    }, true);
+  //wrap promise
+  return new Promise((resolve)=> {
+    resolve(_realm.write(() => {
+      _realm.create(IMUSERINFO, {
+        userId: imUserBean.userId,
+        address: imUserBean.address,
+        realName: imUserBean.realName,
+        nameCardFileUrl: imUserBean.nameCardFileUrl,
+        department: imUserBean.department,
+        jobTitle: imUserBean.jobTitle,
+        qqNo: imUserBean.qqNo,
+        email: imUserBean.email,
+        weChatNo: imUserBean.weChatNo,
+        mute: imUserBean.mute,
+        mobileNumber: imUserBean.mobileNumber,
+        photoFileUrl: imUserBean.photoFileUrl,
+        orgId: imUserBean.orgId,
+        phoneNumber: imUserBean.phoneNumber,
+        publicTitle: !!(imUserBean.publicTitle == true || imUserBean.publicTitle === null),
+        publicMobile: !!(imUserBean.publicMobile == true || imUserBean.publicMobile === null),
+        publicDepart: !!(imUserBean.publicDepart == true || imUserBean.publicDepart === null),
+        publicPhone: !!(imUserBean.publicPhone == true || imUserBean.publicPhone === null),
+        publicEmail: !!(imUserBean.publicEmail == true || imUserBean.publicEmail === null),
+        publicAddress: !!(imUserBean.publicAddress == true || imUserBean.publicAddress === null),
+        publicWeChat: !!(imUserBean.publicWeChat == true || imUserBean.publicWeChat === null),
+        publicQQ: !!(imUserBean.publicQQ == true || imUserBean.publicQQ === null)
+      }, true);
+    }));
   });
 };
 
 let _saveOrgBeanList = function (orgBeanList) {
-  orgBeanList.forEach(function (orgBean) {
-    console.log(orgBean);
-    _saveOrgBeanItem(orgBean);
+  return co(function *() {
+    for (var i = 0; i < orgBeanList.length; i++) {
+      _saveOrgBeanItem(orgBeanList[i]);
+      if (i % 10 == 0){
+        yield nextFrame();
+      }
+    }
   });
 };
 
 let _saveOrgBeanItem = function (orgBean) {
-  _realm.write(() => {
-    _realm.create(ORGBEAN, {
-      id: orgBean.id,
-      orgCategory: orgBean.orgCategory,
-      orgCode: orgBean.orgCode,
-      orgValue: orgBean.orgValue,
-      corporationType: orgBean.corporationType,
-      orgValueAlias: orgBean.orgValueAlias,
-      isDisabled: orgBean.isDisabled,
-      creator: orgBean.creator,
-      creatorDate: orgBean.creatorDate,
-      lastUpdateBy: orgBean.lastUpdateBy,
-      lastUpdateDate: orgBean.lastUpdateDate,
-      isNeedAudit: orgBean.isNeedAudit,
-      totalQuota: orgBean.totalQuota,
-      occupiedQuota: orgBean.occupiedQuota,
-      isDeleted: orgBean.isDeleted,
-      isApply: orgBean.isApply,
-      remark: orgBean.remark
-    }, true);
+  return new Promise((resolve)=> {
+    resolve(_realm.write(() => {
+      _realm.create(ORGBEAN, {
+        id: orgBean.id,
+        orgCategory: orgBean.orgCategory,
+        orgCode: orgBean.orgCode,
+        orgValue: orgBean.orgValue,
+        corporationType: orgBean.corporationType,
+        orgValueAlias: orgBean.orgValueAlias,
+        isDisabled: orgBean.isDisabled,
+        creator: orgBean.creator,
+        creatorDate: orgBean.creatorDate,
+        lastUpdateBy: orgBean.lastUpdateBy,
+        lastUpdateDate: orgBean.lastUpdateDate,
+        isNeedAudit: orgBean.isNeedAudit,
+        totalQuota: orgBean.totalQuota,
+        occupiedQuota: orgBean.occupiedQuota,
+        isDeleted: orgBean.isDeleted,
+        isApply: orgBean.isApply,
+        remark: orgBean.remark
+      }, true);
+    }));
   });
 };
 

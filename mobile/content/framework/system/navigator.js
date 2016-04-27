@@ -62,7 +62,6 @@ var Main = React.createClass({
       // });
     }
     NotificationManager.openNotification();
-
   },
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange);
@@ -127,7 +126,6 @@ var Main = React.createClass({
               isLoadingVisible: false
             });
           }
-
           console.log(errorData);
           Alert(errorData.msgContent || errorData.message);
         });

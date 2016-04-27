@@ -6,7 +6,6 @@ module.exports = {
     if (!_.isEmpty(data)) {
       let re = /^0\d{10}$/;
       if (!re.test(data)) {
-        console.log("您输入的座机号有误，请重新输入");
         return false;
       }
       return true;
@@ -16,7 +15,6 @@ module.exports = {
   isComp: function (data, desc) {
     let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
     if (!reg.test(data)) {
-      console.log('请输入由数字和字母组成的' + desc);
       return false;
     }
     return true;
@@ -35,7 +33,6 @@ module.exports = {
     if (!_.isEmpty(data)) {
       let re = /^0\d{2,3}-?\d{7,8}$/;
       if (!re.test(data)) {
-        console.log("您输入的座机号有误，请重新输入");
         return false;
       }
       return true;
