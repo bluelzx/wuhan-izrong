@@ -38,8 +38,14 @@ var Home = React.createClass({
     var dataSource = new ViewPager.DataSource({
       pageHasChanged: (p1, p2) => p1 !== p2
     });
+
+    let myCategory = AppStore.getCategory();
+    let myItem = AppStore.getItem();
+
     return {
-      dataSource: dataSource.cloneWithPages(PAGES)
+      dataSource: dataSource.cloneWithPages(PAGES),
+      category: myCategory != null ? myCategory.displayName : '资金业务',
+      item: myItem != null ? myItem.displayName : '同业存款'
     };
   },
 
@@ -130,7 +136,7 @@ var Home = React.createClass({
             </View>
           </View>
           <View style={styles.listHead}>
-            <Text style={{marginLeft: 20, fontSize: 15, color: '#ffffff'}}>资金业务--同业存款</Text>
+            <Text style={{marginLeft: 20, fontSize: 15, color: '#ffffff'}}>{this.state.category + '--' + this.state.item}</Text>
           </View>
           <MarketList navigator={this.props.navigator} marketData={marketData}/>
         </ScrollView>

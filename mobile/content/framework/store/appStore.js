@@ -51,8 +51,10 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=> _getOrgList(),
   updateUserInfo: (column, value)=> _updateUserInfo(column, value),
-  saveCategoryAndItem: (data) => _saveCategoryAndItem(data),
-  getCategoryAndItem: ()=> _getCategoryAndItem()
+  saveCategory: (data) => _saveCategory(data),
+  getCategory: ()=> _getCategory(),
+  saveItem: (data) => _saveItem(data),
+  getItem: ()=> _getItem()
 });
 
 // Private Functions
@@ -159,14 +161,25 @@ let _updateUserInfo = (column, value)=> {
   AppStore.emitChange();
 };
 
-let _saveCategoryAndItem = (data) => {
+let _saveCategory = (data) => {
   _.assign(_data, {
-    categoryAndItem: data
+    category: data
   });
   AppStore.emitChange();
 };
 
-let _getCategoryAndItem = () => {
-  return _data.categoryAndItem;
+let _saveItem = (data) => {
+  _.assign(_data, {
+    item: data
+  });
+  AppStore.emitChange();
+};
+
+let _getCategory = () => {
+  return _data.category;
+};
+
+let _getItem = () => {
+  return _data.item;
 };
 module.exports = AppStore;

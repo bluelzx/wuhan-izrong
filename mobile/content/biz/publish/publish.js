@@ -49,6 +49,9 @@ let Publish = React.createClass({
     let filterItems = AppStore.getFilters().filterItems;
     let item = MarketStore.getCategoryAndItem(filterItems);
 
+    let myCategory = AppStore.getCategory();
+    let myItem = AppStore.getItem();
+
     return {
       filterItems: filterItems,
       bizOrientationDefault: 0,
@@ -64,8 +67,8 @@ let Publish = React.createClass({
       rate: '',
       remark: '',
       bizOrientation: 'IN',
-      bizCategory: item[3],
-      bizItem: item[3].itemArr[0],
+      bizCategory: myCategory != null ? myCategory : item[3],
+      bizItem: myItem != null ? myItem : item[3].itemArr[0],
       amount: '',
       fileUrlList: []
     }
@@ -342,7 +345,9 @@ let Publish = React.createClass({
     this.setState({
       bizCategory: category,
       bizItem: item
-    })
+    });
+    AppStore.saveCategory(category);
+    AppStore.saveItem(item);
   },
 
   callBackRemarks: function (remarkText) {
@@ -401,6 +406,7 @@ let Publish = React.createClass({
       fileUrlList: this.state.fileUrlList
     }).then((response)=> {
       Alert('发布成功');
+      this.props.navigator.resetTo({comp: 'tabView', tabName: 'market'});
     }).catch(
       (errorData) => {
         throw errorData;
@@ -426,7 +432,7 @@ let Publish = React.createClass({
   handleImageError(error) {
     console.log('Image select error ' + JSON.stringify(error));
     Alert('图片选择失败');
-  },
+  }
 
 });
 
