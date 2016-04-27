@@ -61,15 +61,15 @@ let _handleConnectivityChange = (isConnected) => {
 };
 
 let _appInit = () => {
-  //NetInfo.isConnected.addEventListener(
-  //  'change',
-  //  _handleConnectivityChange
-  //);
-  //NetInfo.isConnected.fetch().done(
-  //  (isConnected) => {
-  //    _info.netWorkState = isConnected;
-  //  }
-  //);
+  NetInfo.isConnected.addEventListener(
+    'change',
+    _handleConnectivityChange
+  );
+  NetInfo.isConnected.fetch().done(
+    (isConnected) => {
+      _info.netWorkState = isConnected;
+    }
+  );
   _info.initLoadingState = false;
   _.assign(_data, {
     token: _getToken(),

@@ -23,8 +23,8 @@ module.exports = {
   },
   realName: function (data) {
     if (!_.isEmpty(data)) {
-      if (data.length > 20) {
-        console.log('姓名长度不能超过20，请重新输入');
+      let reg = /^[\u4e00-\u9fa5a-zA-Z]+$/;
+      if (!reg.test(data)) {
         return false;
       }
       return true;
