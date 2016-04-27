@@ -62,7 +62,7 @@ let Register_accountInfo = React.createClass({
     if(!Validation.realName(this.state.realName)){
       Alert('请输入20个字符内的中文或英文');
     }else if(!Validation.isEmail(this.state.userName)){
-      Alert('请输入有效的邮箱地址');
+      Alert('请输入60个字符内的有效的邮箱地址');
     }else if(this.state.orgValue == '选择机构'){
       Alert('请选择机构');
     }else{
@@ -100,7 +100,7 @@ let Register_accountInfo = React.createClass({
           <Input placeholder='真实姓名' maxLength={20} field='realName'
                  onChangeText={this._onChangeText} icon='user' inputType='default'
           />
-          <Input placeholder='用户名(邮箱)' maxLength={20} field='userName'
+          <Input placeholder='用户名(邮箱)' maxLength={60} field='userName'
                  onChangeText={this._onChangeText} icon='user' inputType ='email-address'
           />
           <TouchableHighlight activeOpacity={0.8} underlayColor='#4fb9fc'
