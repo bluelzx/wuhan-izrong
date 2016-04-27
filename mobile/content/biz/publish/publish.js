@@ -5,7 +5,7 @@
 'use strict';
 
 let React = require('react-native');
-var {
+let {
   ListView,
   TouchableHighlight,
   Text,
@@ -20,23 +20,34 @@ var {
   InteractionManager
   }=React;
 
-var screenWidth = Dimensions.get('window').width;
-var screenHeight = Dimensions.get('window').height;
-var NavBarView = require('../../framework/system/navBarView');
-var SelectBtn = require('./selectBtn');
-var Remarks = require('./remarks');
-var SelectBusiness1 = require('./selectBusiness1');
+let { Alert ,Button } = require('mx-artifacts');
+let screenWidth = Dimensions.get('window').width;
+let screenHeight = Dimensions.get('window').height;
+let NavBarView = require('../../framework/system/navBarView');
+let SelectBtn = require('./selectBtn');
+let Remarks = require('./remarks');
+let SelectBusiness1 = require('./selectBusiness1');
+let ImagePicker = require('../../comp/utils/imagePicker');
+let Input = require('../../comp/utils/input');
+let Adjust = require('../../comp/utils/adjust');
+let Validation = require('../../comp/utils/validation');
+let MyBusiness = require('../home/myBusiness');
+let dismissKeyboard = require('react-native-dismiss-keyboard');
+
 
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
+let MarketStore = require('../../framework/store/marketStore');
+let ImAction = require('../../framework/action/imAction');
 
-var bizOrientationUnit = ['出', '收'];
-var termUnit = ['日', '月', '年'];
-var amountUnit = ['万', '亿'];
+let bizOrientationUnit = ['收', '出'];
+let termUnit = ['日', '月', '年'];
+let amountUnit = ['万', '亿'];
 
-var WhitePage = React.createClass({
+let Publish = React.createClass({
   getInitialState(){
     let filterItems = AppStore.getFilters().filterItems;
+    let item = MarketStore.getCategoryAndItem(filterItems);
 
     return {
       filterItems: filterItems,
@@ -46,16 +57,17 @@ var WhitePage = React.createClass({
       termText: '',
       amountText: '',
       rateText: '',
-      checked: '',
+      remarkText: '',
+      disabled: false,
       //networt
       term: '',
       rate: '',
       remark: '',
-      bizOrientation: '出',
-      bizCategory: '',
-      bizItem: '',
+      bizOrientation: 'IN',
+      bizCategory: item[3],
+      bizItem: item[3].itemArr[0],
       amount: '',
-      fileIds: []
+      fileUrlList: []
     }
   },
 
@@ -66,7 +78,8 @@ var WhitePage = React.createClass({
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='发布' showBack={false} showBar={true}>
+                  contentBackgroundColor='#18304D' title='发布新业务' showBack={false} showBar={true}
+                  actionButton={this.renderToMyBiz}>
         <View style={{height:screenHeight-113,backgroundColor:'#153757'}}>
           <View style={{flex:1}}>
             <ScrollView>
@@ -84,44 +97,46 @@ var WhitePage = React.createClass({
       </NavBarView>
     );
   },
-  _dataChange1 (index) {
+  _bizOrientationDataChange (index) {
     this.setState({
       bizOrientationDefault: index,
       bizOrientation: (index == 0) ? 'IN' : 'OUT'
-    })
+    });
+
   },
-  _dataChange2 (index) {
+  _termDataChange (index) {
     this.setState({
       termDefault: index,
-    })
+      term: (index == 0) ? Number(this.state.termText) : (index == 1) ? Number(this.state.termText) * 30 : Number(this.state.termText) * 365
+    });
+
   },
-  _dataChange3 (index) {
+  _amountDataChange (index) {
     this.setState({
-      amountDefault: index
-    })
+      amountDefault: index,
+      amount: (index == 0) ? Number(this.state.amountText) * 10000 : Number(this.state.amountText) * 100000000
+    });
+
   },
-  _termTextChange (text) {
-    this.setState({
-      termText: (this.state.termDefault == 0) ? Number(text) : (this.state.termDefault == 1) ? Number(text) * 30 : Number(text) * 365
-    })
+
+  _onChangeText(key, value){
+    this.setState({[key]: value});
+    if(key == 'termText'){
+      this.setState({term: (this.state.termDefault == 0) ? Number(value) : (this.state.termDefault == 1) ? Number(value) * 30 : Number(value) * 365});
+    }else if (key == 'amountText'){
+      this.setState({amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000});
+    }else {
+      this.setState({rate:Number(value)});
+    }
   },
-  _amountTextChange (text) {
-    this.setState({
-      amountText: (this.state.amountDefault == 0) ? Number(text) * 10000 : Number(text) * 100000000
-    })
-  },
-  _rateTextChange (text) {
-    this.setState({
-      rateText: Number(text)
-    })
-  },
+
   renderSelectOrg: function () {
     return (
       <TouchableOpacity onPress={()=>this.toPage(SelectBusiness1)} activeOpacity={0.8} underlayColor="#f0f0f0">
         <View
-          style={{width: screenWidth-20,marginLeft:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
+          style={{width: screenWidth-20,marginLeft:10,marginTop:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
           <Text
-            style={{fontSize:16,marginLeft:10,color:'white'}}>{(this.state.bizCategory == '' && this.state.bizItem == '') ? '选择业务类型' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName}</Text>
+            style={{fontSize:16,marginLeft:10,color:'white'}}>{(this.state.bizCategory == '' && this.state.bizItem == '') ? '资金业务 - 同业存款' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName}</Text>
           <Image style={{margin:10,width:16,height:16}}
                  source={require('../../image/market/next.png')}
           />
@@ -133,12 +148,12 @@ var WhitePage = React.createClass({
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
         <View style={{flexDirection:'row'}}>
-          <Text style={{marginLeft:10, color:'white',}}>{'方向'}</Text>
-          <Text style={{color:'red',}}>{'*'}</Text>
+          <Text style={{marginLeft:10, color:'white'}}>{'方向'}</Text>
+          <Text style={{color:'red'}}>{'*'}</Text>
         </View>
         <View style={{marginTop:10,flexDirection:'row'}}>
           <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
-                     change={this._dataChange1}/>
+                     change={this._bizOrientationDataChange}/>
         </View>
       </View>
     )
@@ -146,18 +161,15 @@ var WhitePage = React.createClass({
   renderTimeLimit: function () {
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
-        <Text style={{marginLeft:10, color:'white',}}>{'期限'}</Text>
+        <Text style={{marginLeft:10, color:'white'}}>{'期限'}</Text>
         <View style={{marginTop:10,flexDirection:'row'}}>
-          <View style={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10}}>
-            <TextInput
-              placeholder={'天数'}
-              placeholderTextColor='#325779'
-              returnKeyType="search"
-              maxLength={8}
-              onChangeText={(text) => this._termTextChange(text)}
-              style={{width:100,height:40,marginLeft:10,color:'#ffd547'}}/>
-          </View>
-          <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._dataChange2}/>
+          <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
+                 iconStyle={{}} placeholderTextColor='#325779'
+                 inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                 placeholder='天数' maxLength={3} field='termText' inputType="numeric"
+                 onChangeText={this._onChangeText}
+          />
+          <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._termDataChange}/>
 
         </View>
       </View>
@@ -166,18 +178,15 @@ var WhitePage = React.createClass({
   renderAmount: function () {
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
-        <Text style={{marginLeft:10, color:'white',}}>{'金额'}</Text>
+        <Text style={{marginLeft:10, color:'white'}}>{'金额'}</Text>
         <View style={{marginTop:10,flexDirection:'row'}}>
-          <View style={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10}}>
-            <TextInput
-              placeholder={'1万-1000亿'}
-              placeholderTextColor='#325779'
-              returnKeyType="search"
-              maxLength={8}
-              onChangeText={(text) => this._amountTextChange(text)}
-              style={{width:100,height:40,marginLeft:10,color:'#ffd547',}}/>
-          </View>
-          <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._dataChange3}/>
+          <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
+                 iconStyle={{}} placeholderTextColor='#325779'
+                 inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                 placeholder='1万-1000亿' maxLength={8} field='amountText' inputType="numeric"
+                 onChangeText={this._onChangeText}
+          />
+          <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._amountDataChange}/>
 
         </View>
       </View>
@@ -186,18 +195,15 @@ var WhitePage = React.createClass({
   renderRate: function () {
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
-        <Text style={{marginLeft:10, color:'white',}}>{'利率'}</Text>
+        <Text style={{marginLeft:10, color:'white'}}>{'利率'}</Text>
         <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-          <View style={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10}}>
-            <TextInput
-              placeholder={'0-100.00'}
-              placeholderTextColor='#325779'
-              returnKeyType="search"
-              maxLength={8}
-              onChangeText={(text) => this._rateTextChange(text)}
-              style={{width:100,height:40,marginLeft:10,color:'#ffd547'}}/>
-          </View>
-          <Text style={{marginLeft:10,fontWeight: 'bold', color:'white',}}>{'%'}</Text>
+          <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
+                 iconStyle={{}} placeholderTextColor='#325779'
+                 inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                 placeholder='0-100.00' maxLength={5} field='rateText' inputType="numeric"
+                 onChangeText={this._onChangeText}
+          />
+          <Text style={{marginLeft:10,fontWeight: 'bold', color:'white'}}>{'%'}</Text>
         </View>
       </View>
     )
@@ -205,41 +211,40 @@ var WhitePage = React.createClass({
   renderAddImg: function () {
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
-        <Text style={{marginLeft:10, color:'white',}}>{'添加图片'}</Text>
+        <Text style={{marginLeft:10, color:'white'}}>{'添加图片'}</Text>
         <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-          <Image
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
-            source={require('../../image/market/next.png')}/>
-          <Image
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
-            source={require('../../image/market/next.png')}/>
-          <Image
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
-            source={require('../../image/market/next.png')}/>
-          <Image
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
-            source={require('../../image/market/next.png')}/>
-          <Image
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,backgroundColor:'#0a1926',borderRadius:5,}}
-            source={require('../../image/market/next.png')}/>
-
+          <ImagePicker
+            type="all"
+            onSelected={(response) => {this.handleSendImage(response)}}
+            onError={(error) => this.handleImageError(error)}
+            title="选择图片"
+            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+          >
+            <Image
+              style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+              source={this.state.fileUrlList.length != 0?{uri:this.state.fileUrlList[0]}:require('../../image/market/addImage.png')}
+            />
+          </ImagePicker>
         </View>
       </View>
     )
   },
   renderRemarks: function () {
     return (
-      <View style={{marginTop:10}}>
+      <View style={{marginTop:10,marginBottom:10}}>
         <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
           <View
             style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: '#102a42'}}>
-            <Text style={{marginLeft:10, fontWeight: 'bold', color:'white',}}>
+            <Text style={{marginLeft:10, fontWeight: 'bold', color:'white'}}>
               {'备注'}
             </Text>
-            <View>
-              <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779',}}
-                    numberOfLines={1}>{(this.state.remarksText == '')?'20字以内':this.state.remark}
+            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+              <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
+                    numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
               </Text>
+              <Image style={{margin:10,width:16,height:16}}
+                     source={require('../../image/market/next.png')}
+              />
             </View>
           </View>
         </TouchableHighlight>
@@ -248,19 +253,88 @@ var WhitePage = React.createClass({
   },
   renderReleaseBtn: function () {
     return (
-      <TouchableHighlight onPress={() => this._pressPublish()} underlayColor='rgba(129,127,201,0)'>
-        <View
-          style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
-          <Text style={{fontWeight: 'bold', color:'white',}}>
-            {'发布'}
-          </Text>
-        </View>
-      </TouchableHighlight>
+      <View style={{height:44}}>
+        <Button
+          containerStyle={{height:44,borderRadius:0}}
+          style={{fontSize: 15, color: '#ffffff'}}
+          disabled={this.state.disabled}
+          onPress={() => this._pressPublish()}
+        >
+          发布
+        </Button>
+      </View>
     )
   },
+
+  renderToMyBiz: function () {
+    return (
+      <TouchableOpacity style={{width: 150 ,marginLeft: -20}} onPress={()=>this.toMyBiz()}>
+        <Text style={{color: '#ffffff'}}>我的业务</Text>
+      </TouchableOpacity>
+    );
+  },
+
   _pressPublish: function () {
-    {
-      this.addBizOrder();
+    if(this.state.termText.length != 0 || this.state.amountText.length != 0 || this.state.rateText.length != 0){
+      if(this.state.termText.length != 0){
+        if(Validation.isTerm(this.state.termText)){
+          if(this.state.amountText.length != 0){
+            if(Validation.isAmount(this.state.amountText)){
+              if(this.state.rateText.length != 0){
+                if(Validation.isRate(this.state.rateText)){
+                  {this.addBizOrder();}
+                }else{
+                  Alert('格式不合法：请输入0-99.99之间的小数');
+                }
+              }else{
+                {this.addBizOrder();}
+              }
+            }else{
+              Alert('格式不合法：请输入整数');
+            }
+          }else {
+            if(this.state.rateText.length != 0){
+              if(Validation.isRate(this.state.rateText)){
+                {this.addBizOrder();}
+              }else{
+                Alert('格式不合法：请输入0-99.99之间的小数');
+              }
+            }else{
+              {this.addBizOrder();}
+            }
+          }
+        }else{
+          Alert('格式不合法：请输入整数');
+        }
+      }else{
+        if(this.state.amountText.length != 0){
+          if(Validation.isAmount(this.state.amountText)){
+            if(this.state.rateText.length != 0){
+              if(Validation.isRate(this.state.rateText)){
+                {this.addBizOrder();}
+              }else{
+                Alert('格式不合法：请输入0-99.99之间的小数');
+              }
+            }else{
+              {this.addBizOrder();}
+            }
+          }else{
+            Alert('格式不合法：请输入整数');
+          }
+        }else {
+          if(this.state.rateText.length != 0){
+            if(Validation.isRate(this.state.rateText)){
+              {this.addBizOrder();}
+            }else{
+              Alert('格式不合法：请输入0-99.99之间的小数');
+            }
+          }else{
+            {this.addBizOrder();}
+          }
+        }
+      }
+    }else {
+      {this.addBizOrder();}
     }
   },
 
@@ -273,7 +347,8 @@ var WhitePage = React.createClass({
 
   callBackRemarks: function (remarkText) {
     this.setState({
-      remark:remarkText
+      remark: remarkText,
+      remarkText: remarkText
     })
   },
 
@@ -296,37 +371,63 @@ var WhitePage = React.createClass({
       navigator.push({
         comp: name,
         param: {
-          callBackRemarks: this.callBackRemarks
+          callBackRemarks: this.callBackRemarks,
+          remarkText: this.state.remarkText
         },
       })
     }
   },
 
+  toMyBiz: function () {
+    const { navigator } = this.props;
+    if (navigator) {
+      navigator.push({comp: MyBusiness, param: {fromPublish: true}});
+    }
+  },
+
   addBizOrder: function () {
-    this.props.exec(
-      ()=> {
-        return MarketAction.addBizOrder({
-          id: this.state.id,
-          term: this.state.termText,
-          rate: this.state.rateText,
-          remark: this.state.remark,
-          bizOrientation: this.state.bizOrientation,
-          bizCategory: this.state.bizCategory.displayCode,
-          bizItem: this.state.bizItem.displayCode,
-          amount: this.state.amountText,
-          fileIds: [
-            ''
-          ]
-        }).then((response)=> {
-          console.log(JSON.stringify(response));
-        }).catch(
-          (errorData) => {
-            throw errorData;
-          }
-        );
+    dismissKeyboard();
+    //this.props.exec(
+    //  ()=> {
+    return MarketAction.addBizOrder({
+      id: '',
+      term: this.state.term,
+      rate: this.state.rate / 100,
+      remark: this.state.remark,
+      bizOrientation: this.state.bizOrientation,
+      bizCategory: this.state.bizCategory.displayCode,
+      bizItem: this.state.bizItem.displayCode,
+      amount: this.state.amount,
+      fileUrlList: this.state.fileUrlList
+    }).then((response)=> {
+      Alert('发布成功');
+    }).catch(
+      (errorData) => {
+        throw errorData;
       }
     );
+    //  }
+    //);
   },
+
+  handleSendImage(uri) {
+    ImAction.uploadImage(uri)
+      .then((response) => {
+        let arr = new Array();
+        arr.push(response.fileUrl);
+        this.setState({
+          fileUrlList: arr
+        });
+      }).catch((errorData) => {
+      console.log('Image upload error ' + JSON.stringify(errorData));
+    });
+  },
+
+  handleImageError(error) {
+    console.log('Image select error ' + JSON.stringify(error));
+    Alert('图片选择失败');
+  },
+
 });
 
-module.exports = WhitePage;
+module.exports = Publish;

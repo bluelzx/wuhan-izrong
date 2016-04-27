@@ -12,71 +12,100 @@ let {
   ScrollView,
   Image,
   TouchableHighlight,
-  }=React;
+  } = React;
+let Icon = require('react-native-vector-icons/Ionicons');
+let _ = require('lodash');
 let NavBarView = require('../../framework/system/navBarView');
-let Login = require('../../biz/login/login');
 let Item = require('../../comp/utils/item');
 let UserInfo = require('../../biz/personal/userInfo');
 let AboutUs = require('./aboutUs');
-let {Button} = require('mx-artifacts');
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let AppStore = require('../../framework/store/appStore');
-let LoginAction = require('../../framework/action/loginAction');
+let NameCircular = require('../im/nameCircular').NameCircular;
 
 let Personal = React.createClass({
-  getInitialState: function () {
+  getStateFromStores: function () {
     let userInfo = UserInfoAction.getLoginUserInfo();
     let orgBean = UserInfoAction.getOrgById(userInfo.orgId);
     return {
-      userName: userInfo.realName,
-      orgName: orgBean.orgValue
-    }
+      realName: userInfo.realName,
+      orgName: orgBean.orgValue,
+      photoFileUrl: userInfo.photoFileUrl
+    };
   },
-  componentDidMount() {
 
+  getInitialState: function () {
+    return this.getStateFromStores();
+  },
+
+  componentDidMount() {
+    AppStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function () {
-
+    AppStore.removeChangeListener(this._onChange);
   },
 
-  toPage: function () {
+  _onChange: function () {
+    this.setState(this.getStateFromStores());
+  },
+
+  toPage: function (name) {
     const { navigator } = this.props;
     if (navigator) {
-      if (AppStore.getToken()){
-        navigator.push({comp: UserInfo});
-      }else{
-        navigator.push({comp: Login});
-      }
+      navigator.push({comp: name});
     }
   },
 
+  /* returnImg: function(){
+   let url = require('../../image/user/head.png');
+   if (!_.isEmpty(this.state.photoFileUrl)) {
+   url = {uri: this.state.photoFileUrl};
+   return url;
+   }
+   return url;
+   },*/
+
+  returnImage: function () {
+    if (!_.isEmpty(this.state.photoFileUrl)) {
+      return (
+        <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+      );
+    }
+    return (
+      <View style = {{marginLeft:20}}>
+        <NameCircular name={this.state.realName}/>
+      </View>
+    );
+  },
+
   render: function () {
-    let {title}  = this.props;
+    let {title} = this.props;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='个人' showBack={false} showBar={true}>
+                  contentBackgroundColor='#18304D' title='个人中心' showBack={false} showBar={true}
+      >
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
-          <View style={{backgroundColor:"#18304b",height:10}}/>
-          <View style={{backgroundColor:'#162a40'}}>
-            <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
-                                onPress={()=>this.toPage()}>
-              <View style={styles.layout}>
-                <View style={{flexDirection:'row'}}>
-                  <Image style={styles.head} resizeMode="cover" source={require('../../image/user/head.png')}/>
-                  <View style={{marginLeft:20,marginTop:10}}>
-                    <Text style={{fontSize: 18,color: '#ffffff'}}>{this.state.userName}</Text>
-                    <Text style={{fontSize: 18,color: '#ffffff',marginTop:10,width:200}} numberOfLines={1}>{this.state.orgName}</Text>
-                  </View>
-                </View>
+          <View style={{backgroundColor: '#18304b', height: 10}}/>
+          <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b' style={{backgroundColor: '#162a40'}}
+                              onPress={()=>this.toPage(UserInfo)}
+          >
+            <View style={styles.layout}>
+              {this.returnImage()}
+              <View>
+                <Text style={{fontSize: 18, color: '#ffffff'}}>{this.state.realName}</Text>
+                <Text style={{fontSize: 18, color: '#ffffff', marginTop: 10, width: 150}}
+                      numberOfLines={1}
+                >
+                  {this.state.orgName}
+                </Text>
               </View>
-            </TouchableHighlight>
-          </View>
-          <View style={{backgroundColor:"#18304b",height:10}}/>
-          <Item desc="用户指导" img = {false} value={this.state.realName}
-                func={() => this.toPage(AboutUs)}/>
-          <Item desc="关于我们" img = {false} value={this.state.realName}
-                func={() => this.toPage(AboutUs)}/>
+              <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+            </View>
+          </TouchableHighlight>
+          <View style={{backgroundColor: '#18304b', height: 10}}/>
+          <Item desc="用户指导" img={false} func={() => this.toPage(AboutUs)}/>
+          <Item desc="关于我们" img={false} func={() => this.toPage(AboutUs)}/>
         </ScrollView>
       </NavBarView>
     );
@@ -98,6 +127,14 @@ let styles = StyleSheet.create({
     borderColor: '#cccccc',
     borderWidth: 1,
     marginLeft: 20
+  },
+  headText: {
+    color: '#FF0000',
+    fontSize: 50,
+    fontStyle: 'italic',
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    fontWeight: 'bold'
   }
 });
 

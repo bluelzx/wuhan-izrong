@@ -10,40 +10,39 @@ let {
   TouchableHighlight,
   Text,
   View,
-  Platform,
   Dimensions,
   Image,
   StyleSheet,
   TouchableOpacity,
-  }=React;
+  ScrollView
+  } = React;
 
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
 
 let NavBarView = require('../../framework/system/navBarView');
-let RadioControl = require('./radioControl');
 let FilterSelectBtn = require('./filterSelectBtn');
 let MarketList = require('./marketList');
-let SelectOrg = require('./selectOrg');
+let SelectOrg = require('../login/selectOrg');
 let Icon = require('react-native-vector-icons/Ionicons');
 
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
 
-var marketData = {contentList:[]};
+var marketData = {contentList: []};
 
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-let WhitePage = React.createClass({
+let Market = React.createClass({
 
   getInitialState(){
     let filterItems = AppStore.getFilters().filterItems;
-    let orderItems = AppStore.getFilters().orderItems;
     let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
     let item = MarketStore.getCategoryAndItem(filterItems);
     let bizOrientation = MarketStore.getFilterOptions(filterItems, 'bizOrientation').options;
     let term = MarketStore.getFilterOptions(filterItems, 'term').options;
     let amount = MarketStore.getFilterOptions(filterItems, 'amount').options;
+    let orderItems = AppStore.getFilters().orderItems;
 
     return {
       item: item,
@@ -51,9 +50,9 @@ let WhitePage = React.createClass({
       bizOrientation: bizOrientation,
       term: term,
       amount: amount,
-      dataSource: category.options,
-      dataSource2: item[0].itemArr,
-      dataSource3: orderItems,
+      categorySource: category.options,
+      itemSource: item[0].itemArr,
+      termSource: orderItems,
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
@@ -64,28 +63,38 @@ let WhitePage = React.createClass({
       pickTypeRow2: 0,
       pickTimeRow: 0,
       pickRowColor: '#244266',
+      orientionDefault: 10000,
+      orientionIsAll: true,
+      termDefault: 10000,
+      termIsAll: true,
+      amountDefault: 10000,
+      amountIsAll: true,
+      orgValue: '',
+      orgId: '',
       //network
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: 243,
-      bizItemID: 251,
-      bizOrientationID: '',
-      termID: '',
+      bizCategoryID: 221,
+      bizItemID: 227,
+      bizOrientationID: item[0].id,
+      termID: item[0].itemArr[0].id,
       amountID: '',
       marketData: marketData
     }
   },
 
   componentWillMount: function () {
-    {this.bizOrderMarketSearchsearch();}
+    {
+      this.bizOrderMarketSearch();
+    }
   },
 
   render: function () {
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='市场' showBack={false} showBar={true}>
+                  contentBackgroundColor='#18304D' title='市场信息' showBack={false} showBar={true}>
         <View
           style={{width: screenWidth,alignItems: "center",justifyContent: "flex-start",flexDirection: "row"}}>
           {this.renderFilter(this.pressFilterType, this.pressFilterTime, this.pressFilterOther)}
@@ -124,35 +133,36 @@ let WhitePage = React.createClass({
     this.setState({
       pickTypeRow1: rowId,
       pickTypeRow2: 0,
-      levelOneText: this.state.dataSource[rowId].displayName,
-      dataSource2: this.state.item[rowId].itemArr,
+      levelOneText: this.state.categorySource[rowId].displayName,
+      itemSource: this.state.item[rowId].itemArr,
       levelTwoText: this.state.item[rowId].itemArr[0].displayName,
-      bizCategoryID: this.state.dataSource[rowId].id
+      bizCategoryID: this.state.categorySource[rowId].id
     })
   },
   pressTypeRow2(rowId){
     this.setState({
       clickFilterType: 0,
       pickTypeRow2: rowId,
-      levelTwoText: this.state.dataSource2[rowId].displayName,
-      bizItemID: this.state.dataSource2[rowId].id
+      levelTwoText: this.state.itemSource[rowId].displayName,
+      bizItemID: this.state.itemSource[rowId].id
     });
     {
-      this.bizOrderMarketSearchsearch();
+      this.bizOrderMarketSearch();
     }
   },
   pressTimeRow(rowId){
     this.setState({
       clickFilterTime: 0,
       pickTimeRow: rowId,
-      optionTwoText: this.state.dataSource3[rowId].fieldDisplayName,
-      orderField: this.state.dataSource3[rowId].fieldName,
-      orderType: this.state.dataSource3[rowId].asc ? 'asc' : 'desc',
+      optionTwoText: this.state.termSource[rowId].fieldDisplayName,
+      orderField: this.state.termSource[rowId].fieldName,
+      orderType: this.state.termSource[rowId].asc ? 'asc' : 'desc',
     })
     {
-      this.bizOrderMarketSearchsearch();
+      this.bizOrderMarketSearch();
     }
-  }, renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
+  },
+  renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
     return (
       <View style={{flex:1,flexDirection:'row'}}>
         <TouchableOpacity onPress={pressFilterType} activeOpacity={1}
@@ -210,11 +220,11 @@ let WhitePage = React.createClass({
           </TouchableOpacity>
           <ListView
             style={{backgroundColor:'#162a40',height:180,position:"absolute",left:0,top:0,opacity:this.state.clickFilterType}}
-            dataSource={data.cloneWithRows(this.state.dataSource)}
+            dataSource={data.cloneWithRows(this.state.categorySource)}
             renderRow={this.renderTypeRow1}/>
           <ListView
             style={{backgroundColor:'#244266',height:180,position:"absolute",left:screenWidth/3,top:0,opacity:this.state.clickFilterType}}
-            dataSource={data.cloneWithRows(this.state.dataSource2)}
+            dataSource={data.cloneWithRows(this.state.itemSource)}
             renderRow={this.renderTypeRow2}/>
         </View>
       )
@@ -230,12 +240,12 @@ let WhitePage = React.createClass({
         <View style={{position:"absolute",left:0,top:36}}>
           <TouchableOpacity onPress={()=>this.pressFilterTime()} activeOpacity={0.8} underlayColor="#f0f0f0">
             <View
-              style={{flex: 1, backgroundColor: 'black',opacity:0.2,position:"absolute",left:0,top:108,height:screenHeight - 108,width:screenWidth}}>
+              style={{flex: 1, backgroundColor: 'black',opacity:0.2,height:screenHeight,width:screenWidth}}>
             </View>
           </TouchableOpacity>
           <ListView
             style={{backgroundColor:'#244266',height:108,position:"absolute",left:0,top:0,opacity:this.state.clickFilterTime}}
-            dataSource={data.cloneWithRows(this.state.dataSource3)}
+            dataSource={data.cloneWithRows(this.state.termSource)}
             renderRow={this.renderTimeRow}
           />
         </View>
@@ -251,34 +261,46 @@ let WhitePage = React.createClass({
     } else {
       return (
         <View
-          style={{backgroundColor:'#244266',width:screenWidth,height:screenHeight - 36,position:"absolute",left:0,top:36}}>
-          <TouchableOpacity onPress={()=>this.toPage(SelectOrg)} activeOpacity={0.8} underlayColor="#f0f0f0">
-            <View
-              style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
-              <Text style={{fontSize:16,marginLeft:10,color:'white'}}>{'选择发布机构'}</Text>
-              <Image style={{margin:10,width:16,height:16}}
-                     source={require('../../image/market/next.png')}
-              />
+          style={{backgroundColor:'#244266',width:screenWidth,height:screenHeight - 149,position:"absolute",left:0,top:36}}>
+          <ScrollView>
+            <TouchableOpacity onPress={()=>this.toSelectOrg(SelectOrg)} activeOpacity={0.8} underlayColor="#f0f0f0">
+              <View
+                style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
+                <Text
+                  style={{fontSize:16,marginLeft:10,width: screenWidth-66,color:'white'}}
+                  numberOfLines={1}>{this.state.orgValue == '' ? '选择发布机构' : this.state.orgValue}</Text>
+                <Image style={{margin:10,width:16,height:16}}
+                       source={require('../../image/market/next.png')}
+                />
+              </View>
+            </TouchableOpacity>
+            <View>
+              <FilterSelectBtn ref="ORIENTATION" typeTitle={'方向'} dataList={this.state.bizOrientation} section={3}
+                               callBack={this.callBack} rowDefault={this.state.orientionDefault} isAll={this.state.orientionIsAll}/>
+              <FilterSelectBtn ref="TERM" typeTitle={'期限'} dataList={this.state.term} section={3}
+                               callBack={this.callBack} rowDefault={this.state.termDefault} isAll={this.state.termIsAll}/>
+              <FilterSelectBtn ref="AMOUNT" typeTitle={'金额'} dataList={this.state.amount} section={2}
+                               callBack={this.callBack} rowDefault={this.state.amountDefault} isAll={this.state.amountIsAll}/>
             </View>
-          </TouchableOpacity>
-          <View>
-            <FilterSelectBtn typeTitle={'方向'} dataList={this.state.bizOrientation} section={3}
-                             callBack={this.callBack}/>
-            <FilterSelectBtn typeTitle={'期限'} dataList={this.state.term} section={3} callBack={this.callBack}/>
-            <FilterSelectBtn typeTitle={'金额'} dataList={this.state.amount} section={2} callBack={this.callBack}/>
-          </View>
-          <TouchableHighlight onPress={() => this.confirmBtn()} underlayColor='rgba(129,127,201,0)'>
-            <View
-              style={{margin:10,borderRadius:5,flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
-              <Text style={{fontWeight: 'bold', color:'white',}}>
-                {'确定'}
-              </Text>
-            </View>
-          </TouchableHighlight>
+            <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
+              <View style={{alignItems: 'center',justifyContent:'center'}}>
+                <View
+                  style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:30,borderColor:'#ed135a',borderWidth:1}}>
+                  <Text style={{color:'#ed135a',}}>{'清空'}</Text>
+                </View>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={() => this.confirmBtn()} underlayColor='rgba(129,127,201,0)'>
+              <View
+                style={{margin:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
+                <Text style={{fontWeight: 'bold', color:'white',}}>{'确定'}</Text>
+              </View>
+            </TouchableHighlight>
+          </ScrollView>
         </View>
       )
     }
-
+    {this.clearOptions();}
   },
   renderTypeRow1(rowData, sectionID, rowID){
     return (
@@ -316,29 +338,58 @@ let WhitePage = React.createClass({
       </TouchableOpacity>
     )
   },
-  callBack: function (item, title) {
+  callBack: function (item, title, rowDefault, isAll) {
     if (title == '方向') {
       this.setState({
-        bizOrientationID: (item.id == 'ALL') ? '' : item.id
-      })
+        bizOrientationID: (item.id == 'ALL') ? '' : item.id,
+        orientionDefault: rowDefault,
+        orientionIsAll: isAll
+      });
     } else if (title == '期限') {
       this.setState({
-        termID: (item.id == 'ALL') ? '' : item.id
-      })
+        termID: (item.id == 'ALL') ? '' : item.id,
+        termDefault: rowDefault,
+        termIsAll: isAll
+      });
     } else if (title == '金额') {
       this.setState({
-        amountID: (item.id == 'ALL') ? '' : item.id
-      })
+        amountID: (item.id == 'ALL') ? '' : item.id,
+        amountDefault: rowDefault,
+        amountIsAll: isAll
+      });
     } else {
 
     }
+  },
+
+  callback: function (item) {
+    this.setState({
+      orgValue: item.orgValue,
+      orgId: item.id
+    });
+  },
+
+  toSelectOrg: function (name) {
+    const { navigator } = this.props;
+    if (navigator) {
+      navigator.push({
+        comp: name,
+        callBack: this.callback
+      })
+    }
+  },
+
+  clearOptions: function () {
+    this.refs["ORIENTATION"].setDefaultState();
+    this.refs["TERM"].setDefaultState();
+    this.refs["AMOUNT"].setDefaultState();
   },
   confirmBtn: function () {
     {
       this.pressFilterOther();
     }
     {
-      this.bizOrderMarketSearchsearch();
+      this.bizOrderMarketSearch();
     }
   },
   toPage: function (name) {
@@ -348,10 +399,10 @@ let WhitePage = React.createClass({
     }
   },
 
-  bizOrderMarketSearchsearch: function () {
+  bizOrderMarketSearch: function () {
     this.props.exec(
       ()=> {
-        return MarketAction.bizOrderMarketSearchsearch({
+        return MarketAction.bizOrderMarketSearch({
             orderField: this.state.orderField,
             orderType: this.state.orderType,
             pageIndex: this.state.pageIndex,
@@ -362,11 +413,50 @@ let WhitePage = React.createClass({
               this.state.termID,
               this.state.amountID
             ]
+          //custFilterList: {
+          //  bizCategory: {
+          //    values: [this.state.bizCategoryValues],
+          //    opt: (this.state.bizCategoryValues == 'ALL')?'':'Eq',
+          //    filedName: 'bizCategory',
+          //    valueType: (this.state.bizCategoryValues == 'ALL')?'':'String'
+          //  },
+          //  bizItem: {
+          //    values: [this.state.bizItemValues],
+          //    opt: (this.state.bizItemValues == 'ALL')?'':'Eq',
+          //    filedName: 'bizItem',
+          //    valueType: (this.state.bizItemValues == 'ALL')?'':'String'
+          //  },
+          //  bizOrientation: {
+          //    values: [this.state.bizOrientationValues],
+          //    opt: (this.state.bizOrientationValues == 'ALL')?'':'Eq',
+          //    filedName: 'bizOrientation',
+          //    valueType: (this.state.bizOrientationValues == 'ALL')?'':'String'
+          //  },
+          //  term: {
+          //    values: [this.state.termValues],
+          //    opt: (this.state.termValues == 'ALL')?'':'Eq',
+          //    filedName: 'term',
+          //    valueType: (this.state.termValues == 'ALL')?'':'Double'
+          //  },
+          //  amount: {
+          //    values: [this.state.amountValues],
+          //    opt: (this.state.amountValues == 'ALL')?'':'Eq',
+          //    filedName: 'amount',
+          //    valueType: (this.state.amountValues == 'ALL')?'':'Double'
+          //  },
+          //  org: {
+          //    values: [this.state.orgValues],
+          //    opt: (this.state.orgValues == 'ALL')?'':'Eq',
+          //    filedName: 'amount',
+          //    valueType: (this.state.orgValues == 'ALL')?'':'Double'
+          //  }
+          //}
           }
         ).then((response)=> {
+          console.log(response);
           this.setState({
             marketData: response
-          })
+          });
           this.refs["MARKETLIST"]._changeData();
         }).catch(
           (errorData) => {
@@ -380,4 +470,4 @@ let WhitePage = React.createClass({
 
 });
 
-module.exports = WhitePage;
+module.exports = Market;

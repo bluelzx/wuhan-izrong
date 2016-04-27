@@ -11,8 +11,9 @@ let ContactStore = require('../../framework/store/contactStore');
 let DictIcon = require('../../constants/dictIcon');
 let ChooseList = require('./chooseList');
 let ContactAction = require('../../framework/action/contactAction');
-let NameCircular = require('./nameCircular');
+let NameCircular = require('./nameCircular').NameCircular;
 let Setting = require('../../constants/setting');
+let {groupFilter} = require('./searchBarHelper');
 
 let AddMember = React.createClass({
 
@@ -21,11 +22,13 @@ let AddMember = React.createClass({
     return {
       data:ContactStore.getUsersExpress(groupId),
       memberList:{},
-      existMembers:this.props.param.existMembers
+      existMembers:this.props.param.existMembers,
+      keyWord:'',
     }
   },
 
-  textChange: function() {
+  textChange: function(text) {
+    this.setState({keyWord:text});
   },
 
   addUser: function( groupId, members) {
@@ -114,13 +117,13 @@ let AddMember = React.createClass({
         <ChooseList  memberList={this.state.memberList}/>
 
         <SearchBar textChange={this.textChange}/>
-        <ExtenList itemHeight={56}
+        <ExtenList itemHeight={51}
                    groundColor={'#15263A'}
                    groupBorderColor={"#132232"}
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={this.state.data}
+                   dataSource={groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord)}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />

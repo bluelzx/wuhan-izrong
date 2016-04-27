@@ -26,11 +26,9 @@ let PersisterFacade = {
   getLoginUserInfo: ()=> _getLoginUserInfo(),
   getUserId: ()=> _getUserId(),
   getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
-  updateUserInfo: (column, value)=>_updateUserInfo(column, value),
   //interface for ContactStore
   getLoginUserInfoByUserId: (userId)=>_getLoginUserInfoByUserId(userId),
-  saveOrgBeanSet: () => _saveOrgBeanSet(),
-  saveFilters: ()=> _saveFilters(),
+  saveFilters: (filters)=> _saveFilters(filters),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=>_getOrgList(),
@@ -76,14 +74,14 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
       orgId: loginUserInfo.orgBeanId,
       token: token,
       lastLoginTime: new Date(),
-      publicTitle: !!(loginUserInfo.publicTitle == true || loginUserInfo.publicTitle == null),
-      publicMobile: !!(loginUserInfo.publicMobile == true || loginUserInfo.publicMobile == null),
-      publicDepart: !!(loginUserInfo.publicDepart == true || loginUserInfo.publicDepart == null),
-      publicPhone: !!(loginUserInfo.publicPhone == true || loginUserInfo.publicPhone == null),
-      publicEmail: !!(loginUserInfo.publicEmail == true || loginUserInfo.publicEmail == null),
-      publicAddress: !!(loginUserInfo.publicAddress == true || loginUserInfo.publicAddress == null),
-      publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat == null),
-      publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ == null)
+      publicTitle: !!(loginUserInfo.publicTitle == true || loginUserInfo.publicTitle === null),
+      publicMobile: !!(loginUserInfo.publicMobile == true || loginUserInfo.publicMobile === null),
+      publicDepart: !!(loginUserInfo.publicDepart == true || loginUserInfo.publicDepart === null),
+      publicPhone: !!(loginUserInfo.publicPhone == true || loginUserInfo.publicPhone === null),
+      publicEmail: !!(loginUserInfo.publicEmail == true || loginUserInfo.publicEmail === null),
+      publicAddress: !!(loginUserInfo.publicAddress == true || loginUserInfo.publicAddress === null),
+      publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat === null),
+      publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null)
     }, true);
   });
 };
@@ -133,14 +131,14 @@ let _saveImUser = function (imUserBean) {
       photoFileUrl: imUserBean.photoFileUrl,
       orgId: imUserBean.orgId,
       phoneNumber: imUserBean.phoneNumber,
-      publicTitle: !!(imUserBean.publicTitle == true || imUserBean.publicTitle == null),
-      publicMobile:  !!(imUserBean.publicMobile == true || imUserBean.publicMobile == null),
-      publicDepart:  !!(imUserBean.publicDepart == true || imUserBean.publicDepart == null),
-      publicPhone: !!(imUserBean.publicPhone == true || imUserBean.publicPhone == null),
-      publicEmail:  !!(imUserBean.publicEmail == true || imUserBean.publicEmail == null),
-      publicAddress:  !!(imUserBean.publicAddress == true || imUserBean.publicAddress == null),
-      publicWeChat:  !!(imUserBean.publicWeChat == true || imUserBean.publicWeChat == null),
-      publicQQ:  !!(imUserBean.publicQQ == true || imUserBean.publicQQ == null)
+      publicTitle: !!(imUserBean.publicTitle == true || imUserBean.publicTitle === null),
+      publicMobile: !!(imUserBean.publicMobile == true || imUserBean.publicMobile === null),
+      publicDepart: !!(imUserBean.publicDepart == true || imUserBean.publicDepart === null),
+      publicPhone: !!(imUserBean.publicPhone == true || imUserBean.publicPhone === null),
+      publicEmail: !!(imUserBean.publicEmail == true || imUserBean.publicEmail === null),
+      publicAddress: !!(imUserBean.publicAddress == true || imUserBean.publicAddress === null),
+      publicWeChat: !!(imUserBean.publicWeChat == true || imUserBean.publicWeChat === null),
+      publicQQ: !!(imUserBean.publicQQ == true || imUserBean.publicQQ === null)
 
 
     }, true);
@@ -157,7 +155,7 @@ let _saveOrgBeanList = function (orgBeanList) {
 let _saveOrgBeanItem = function (orgBean) {
   _realm.write(() => {
     _realm.create(ORGBEAN, {
-      id: Number(orgBean.id),
+      id: orgBean.id,
       orgCategory: orgBean.orgCategory,
       orgCode: orgBean.orgCode,
       orgValue: orgBean.orgValue,
@@ -169,8 +167,8 @@ let _saveOrgBeanItem = function (orgBean) {
       lastUpdateBy: orgBean.lastUpdateBy,
       lastUpdateDate: orgBean.lastUpdateDate,
       isNeedAudit: orgBean.isNeedAudit,
-      totalQuota: Number(orgBean.id),
-      occupiedQuota: Number(orgBean.id),
+      totalQuota: orgBean.totalQuota,
+      occupiedQuota: orgBean.occupiedQuota,
       isDeleted: orgBean.isDeleted,
       isApply: orgBean.isApply,
       remark: orgBean.remark
@@ -201,13 +199,8 @@ let _saveAPNSToken = function (apnsToken) {
 };
 
 let _getToken = function () {
-  let loginUsers = _realm.objects(LOGINUSERINFO);
-  if (loginUsers.length != 0) {
-    if (loginUsers[0].token) {
-      return loginUsers[0].token;
-    }
-  }
-  return '';
+  let userInfo = _getLoginUserInfo();
+  return userInfo.token;
 };
 
 let _clearToken = function (userId) {
@@ -222,39 +215,26 @@ let _clearToken = function (userId) {
 let _getLoginUserInfo = function () {
   let loginUsers = _realm.objects(LOGINUSERINFO);
   if (loginUsers.length != 0) {
-    let sortedUser = loginUsers.sorted('lastLoginTime', [true]);
-    return sortedUser[0];
-  } else {
-    return '';
+    let sortedUsers = loginUsers.sorted('lastLoginTime', [true]);
+    return sortedUsers[0];
   }
+  return '';
 };
 
 let _getUserId = function () {
-  let d  = _getLoginUserInfo();
-  if (d) {
-    return d.userId;
-  } else {
-    return '';
+  let userInfo = _getLoginUserInfo();
+  if (userInfo) {
+    return userInfo.userId;
   }
+  return '';
 };
 
 let _getOrgByOrgId = function (orgId) {
   let orgBeans = _realm.objects(ORGBEAN);
   if (orgBeans.isEmpty) {
     return null;
-  } else {
-    return orgBeans.filtered('id=' + orgId)[0];
   }
-};
-
-let _updateUserInfo = function (column, value) {
-  let userId = _getUserId();
-  _realm.write(() => {
-    _realm.create(LOGINUSERINFO, {
-      userId:userId,
-      publicMobile: value
-    }, true);
-  });
+  return orgBeans.filtered('id=' + orgId)[0];
 };
 
 let _getLoginUserInfoByUserId = function (userId) {
@@ -262,14 +242,13 @@ let _getLoginUserInfoByUserId = function (userId) {
   return imUsers.filtered('"userId" = ' + userId);
 };
 
-let _saveFilters = function () {
-  let data = TestData.filterData;
-  let filterItems = data.filterItems;
-  let orderItems = data.orderItems;
-  orderItems.forEach(function (orderItem) {
+let _saveFilters = function (filters) {
+  let filterItems = filters.filterItems;
+  let orderItems = filters.orderItems;
+  orderItems.forEach(function (orderItem, index) {
     _realm.write(() => {
       _realm.create(ORDERITEM, {
-        id: orderItem.id,
+        id: index + 1,
         fieldName: orderItem.fieldName,
         fieldDisplayName: orderItem.fieldDisplayName,
         fieldDisplayCode: orderItem.fieldDisplayCode,
@@ -296,18 +275,18 @@ let _saveFilters = function () {
 let _getFilters = function () {
   let filterItems = _realm.objects(FILTERITEMS);
   let orderItems = _realm.objects(ORDERITEM);
-  let filtersArray = new Array();
-  let orderArray = new Array();
+  let filtersArray = [];
+  let orderArray = [];
   filterItems.forEach(function (filterItem) {
-    filtersArray.push(filterItem)
+    filtersArray.push(filterItem);
   });
   orderItems.forEach(function (orderItem) {
-    orderArray.push(orderItem)
+    orderArray.push(orderItem);
   });
   return {
     filterItems: filtersArray,
     orderItems: orderArray
-  }
+  };
 };
 
 let _saveOrgList = function (orgList) {
@@ -323,5 +302,5 @@ let _getOrgList = function () {
   return ConvertChineseKey.buildOrgList(orgList);
 };
 
-
-module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'), require('./imPersister'));
+module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
+  require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'), require('./homePagePersisterFacade'));

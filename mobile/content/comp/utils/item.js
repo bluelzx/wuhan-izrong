@@ -18,48 +18,51 @@ let Item = React.createClass({
       img: true,
       top: false,
       icon: true
-    }
+    };
   },
 
   returnImg(){
     if (this.props.img) {
       return (
         <Image style={styles.circle} source={this.props.imgPath}/>
-      )
+      );
     }
   },
 
   renderArrow: function (hiddenArrow) {
     if (!hiddenArrow) {
       return (
-        <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+        <Icon style={{marginRight: 20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
       );
-    } else {
-      return null;
     }
+      return null;
   },
 
   render(){
-    let {hiddenArrow=false} = this.props;
+    let {hiddenArrow = false} = this.props;
     return (
       <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={this.props.func}>
         <View>
-          <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
-            <View style={{flexDirection:'row',backgroundColor:'#162a40',flex:1}}>
+          <View style={[styles.listLayout, this.props.top && styles.borderTop]}>
+            <View style={{flexDirection: 'row', backgroundColor: '#162a40', flex: 2}}>
               {this.returnImg()}
               <Text style={styles.title}>{this.props.desc}</Text>
             </View>
             <View
-              style={{flexDirection:'row',alignItems:'center',flex:1,backgroundColor:'#162a40',justifyContent: 'flex-end'}}>
-              <Text style={[{fontSize: 15,color: '#ffffff',width:180,textAlign:'right',marginRight:20}]}
-                    numberOfLines={1}>{this.props.value}</Text>
+              style={{flexDirection: 'row', alignItems: 'center', flex: 3, backgroundColor: '#162a40', justifyContent: 'flex-end'}}
+            >
+              <Text style={[{fontSize: 15, color: '#ffffff', width: 150, textAlign: 'right', marginRight: 20}]}
+                    numberOfLines={1}
+              >
+                {this.props.value}
+              </Text>
               {this.renderArrow(this.props.hiddenArrow)}
             </View>
           </View>
           <View style={styles.bottomStyle}/>
         </View>
       </TouchableHighlight>
-    )
+    );
   }
 });
 let styles = StyleSheet.create({

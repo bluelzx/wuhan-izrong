@@ -14,21 +14,24 @@ let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let { Alert,Button } = require('mx-artifacts');
+let { Alert, Button } = require('mx-artifacts');
 let SMSTimer = require('../../comp/utils/smsTimer');
 let TabView = require('../../framework/system/tabView');
+let Validation = require('../../comp/utils/validation');
+let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
 
 let ValiSMS = React.createClass({
   getStateFromStores() {
     let deviceModel = 'IOS';
     if (Platform.OS != 'ios') {
-      deviceModel = 'ANDROID'
+      deviceModel = 'ANDROID';
     }
     let APNSToken = AppStore.getAPNSToken();
     return {
-      verify:'',
+      disabled: true,
+      verify: '',
       deviceModel: deviceModel,
-      APNSToken:APNSToken
+      APNSToken: APNSToken
     };
   },
   getInitialState: function () {
@@ -45,7 +48,9 @@ let ValiSMS = React.createClass({
     this.setState(this.getStateFromStores());
   },
   login: function () {
-    if (this.state.verify) {
+    if (this.state.verify.length != 6) {
+      Alert('请输入完整的短信验证码');
+    }else{
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.login({
@@ -56,8 +61,7 @@ let ValiSMS = React.createClass({
         }).then((response) => {
           const { navigator } = this.props;
           if (navigator) {
-             // navigator.popToTop();
-            this.props.navigator.push({
+            this.props.navigator.resetTo({
               comp: 'tabView'
             });
           }
@@ -70,39 +74,41 @@ let ValiSMS = React.createClass({
 
   toOther: function (name) {
     this.props.navigator.push({
-      comp:name
+      comp: name
     });
   },
 
   _onChangeText(key, value){
     this.setState({[key]: value});
     if (this.state.verify.length == 0) {
-      this.setState({checked: true});
+      this.setState({disabled: true});
     } else {
-      this.setState({checked: false});
+      this.setState({disabled: false});
     }
   },
 
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='短信验证' showBack={true} showBar={true}>
+                  contentBackgroundColor='#18304D' title='短信验证' showBack={true} showBar={true}
+      >
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
-          <View style={{flexDirection:'row'}}>
-            <Text style={{fontSize:16,color:'#ffffff',marginTop:20}}>已发送短信验证码至</Text>
-            <Text style={{fontSize:16,color:'#ffffff',marginTop:20}}>{this.props.param.mobileNo}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>已发送短信验证码至</Text>
+            <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>{PhoneNumber(this.props.param.mobileNo)}</Text>
           </View>
-          <SMSTimer  ref="smsTimer" onChanged={this._onChangeText} func={'sendSMSCodeToNewMobile'}/>
+          <SMSTimer ref="smsTimer" onChanged={this._onChangeText} func={'sendSMSCodeToNewMobile'}/>
           <Button
-            containerStyle={{marginTop:20,backgroundColor:'#1151B1'}}
+            containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
-            styleDisabled={{color: 'red'}}
-            onPress={()=>this.login()}>
+            disabled={this.state.disabled}
+            onPress={()=>this.login()}
+          >
             确定
           </Button>
         </View>
       </NavBarView>
-    )
+    );
   }
 });
 let styles = StyleSheet.create({

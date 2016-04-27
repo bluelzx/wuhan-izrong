@@ -1,4 +1,4 @@
-let { Host, ImHost ,NodeHost} = require('../../config');
+let { Host, ImHost } = require('../../config');
 let imSocket = 'ws://' + ImHost + '/';
 let imHttp = 'http://' + ImHost + '/';
 
@@ -27,27 +27,30 @@ let AppLinks = {
   logout: Host + api + '/Account/logout',
   register: Host + pub + '/register',
   uploadFile: Host + pub + '/File/upload',
-
+  downLoadFile: Host + pub + '/File/downLoad/',
   updateUserInfo: Host + api + '/Account/updateUserInfoList',
   getOrgList: Host + pub + '/getOrgList/',
 
   bizOrderMarketSearchDefaultSearch: Host + api + '/BizOrderMarketSearch/defaultSearch',
-  bizOrderMarketSearchsearch:Host + api + '/BizOrderMarketSearch/search',
+  bizOrderMarketSearch:Host + api + '/BizOrderMarketSearch/search',
+  bizOrderAdminSearch:Host + api + '/BizOrderAdminSearch/search',
+  refreshBizOrder:Host + api + '/BizOrderManage/refreshBizOrder',
   getBizOrderInMarket: Host + api + '/BizOrderManage/getBizOrderInMarket',
+  getBizOrderByCreator: Host + api + '/BizOrderManage/getBizOrderByCreator',
   addBizOrder: Host + api + '/BizOrderManage/addBizOrder',
   downselfBizOrder: Host + api + '/BizOrderManage/downselfBizOrder',
   updateBizOrder: Host + api + '/BizOrderManage/updateBizOrder',
   getBizOrderCategoryAndItem : Host + api + '/BizOrderManage/getBizOrderCategoryAndItem',
   //contact
-  createGroup: NodeHost + 'createGroup',
-  kickOutMember: NodeHost + 'kickOutMember',
-  updateGroupName: NodeHost + 'updateGroupName',
-  acceptInvitation: NodeHost + 'acceptInvitation',
-  dismissGroup: NodeHost + 'dismissGroup',
-  setContactMute: NodeHost + 'setContactMute',
-  setGroupMute: NodeHost + 'setGroupMute',
-  inviteMember: NodeHost + 'inviteMember',
-  leaveGroup: NodeHost + 'leaveGroup',
+  createGroup: imHttp + 'createGroup',
+  kickOutMember: imHttp + 'kickOutMember',
+  updateGroupName: imHttp + 'updateGroupName',
+  acceptInvitation: imHttp + 'acceptInvitation',
+  dismissGroup: imHttp + 'dismissGroup',
+  setContactMute: imHttp + 'setContactMute',
+  setGroupMute: imHttp + 'setGroupMute',
+  inviteMember: imHttp + 'inviteMember',
+  leaveGroup: imHttp + 'leaveGroup',
 };
 
 module.exports = AppLinks;

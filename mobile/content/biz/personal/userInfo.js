@@ -10,9 +10,9 @@ let {
   Text,
   ScrollView,
   Image,
-  TouchableHighlight,
   TouchableOpacity
-  }=React;
+  } = React;
+
 let _ = require('lodash');
 let NavBarView = require('../../framework/system/navBarView');
 let Validation = require('../../comp/utils/validation');
@@ -25,12 +25,12 @@ let LoginAction = require('../../framework/action/loginAction');
 let Login = require('../../biz/login/login');
 let ImagePicker = require('../../comp/utils/imagePicker');
 let AppStore = require('../../framework/store/appStore');
-
-
+let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
+let NameCircular = require('../im/nameCircular').NameCircular;
 
 let UserInfo = React.createClass({
 
-  getStateFromStores: function(){
+  getStateFromStores: function () {
     let userInfo = UserInfoAction.getLoginUserInfo();
     let orgBean = UserInfoAction.getOrgById(userInfo.orgId);
     return {
@@ -55,7 +55,7 @@ let UserInfo = React.createClass({
       address: userInfo.address,
       publicAddress: userInfo.publicAddress,
       nameCardFileUrl: userInfo.nameCardFileUrl
-    }
+    };
   },
 
   getInitialState: function () {
@@ -78,29 +78,38 @@ let UserInfo = React.createClass({
     console.log(response);
     this.setState({uri: response});
     this.props.exec(() => {
-      return LoginAction.uploadFile(uri,'photoFileUrl')
+      return LoginAction.uploadFile(response, 'photoFileUrl')
         .then((response) => {
-          console.log(response);
-          this.state.photoFileUrl = response.fileUrl;
+          return UserInfoAction.updateUserInfo([{
+            column: 'photoStoredFileUrl',
+            value: response.fileUrl
+          }]).then(
+            ()=> {
+              AppStore.updateUserInfo('photoFileUrl', response.fileUrl);
+            }
+          ).catch((errorData) => {
+            throw errorData;
+          });
         }).catch((errorData) => {
           throw errorData;
         });
     });
   },
 
-  returnImg: function(){
-    let url = require('../../image/user/head.png');
+  returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
-      url = {uri: UserAction.getFile(this.state.photoStoreId), isStatic: true};
-      return url
-    } else {
-      return url
+      return (
+        <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+      );
     }
+    return (
+      <NameCircular name={this.state.realName}/>
+    );
   },
 
-  toEdit: function (title, name, value, publicName, publicValue, type, maxLength, valid) {
+  toEdit: function (title, name, value, publicName, publicValue, type, maxLength, needEdit, needPublic) {
     if (value == '未设置') {
-      value = ''
+      value = '';
     }
     let {navigator} = this.props;
     if (navigator) {
@@ -114,29 +123,36 @@ let UserInfo = React.createClass({
           publicValue: publicValue,
           type: type,
           maxLength: maxLength,
-          valid: valid
-        },
-        callBack: this.callBack
-      })
+          needEdit: needEdit,
+          needPublic: needPublic
+        }
+      });
     }
   },
 
   logout: function () {
-    this.props.exec(() => {
-      return LoginAction.logout(this.state.userId)
-        .then((response) => {
-          const { navigator } = this.props;
-          navigator.resetTo(Login);
-        }).catch((errorData) => {
-          Alert(errorData.msgContent);
-        });
+    Alert('确认退出当前账号？', ()=> {
+      this.props.exec(() => {
+        return LoginAction.logout(this.state.userId)
+          .then((response) => {
+            const { navigator } = this.props;
+            navigator.resetTo({comp: Login});
+          }).catch((errorData) => {
+            if (errorData.toString().startsWith('{')) {
+              Alert(errorData.msgContent);
+            } else {
+              Alert('网络异常');
+            }
+          });
+      });
+    }, ()=> {
     });
   },
 
-  renderRow: function (desc, imagePath, name, value, pubName, pubValue, type, maxLength, valid) {
+  renderRow: function (desc, imagePath, name, value, pubName, pubValue, type, maxLength, needEdit, needPublic, hiddenArrow) {
 
     let showValue = '';
-    if (value == null || value == '未填写') {
+    if (value === null || value == '未填写') {
       showValue = '未填写';
     } else {
       if (pubValue) {
@@ -145,61 +161,73 @@ let UserInfo = React.createClass({
         showValue = value + '(不公开)';
       }
     }
+    if (hiddenArrow) {
+      return (
+        <Item desc={desc} imgPath={imagePath} value={showValue} hiddenArrow={true}
+              func={() => {}}
+        />);
+    }
     return (
       <Item desc={desc} imgPath={imagePath} value={showValue}
-            func={() => this.toEdit(desc, name, value, pubName ,pubValue, type, maxLength, valid)}/>
-    )
+            func={() => this.toEdit(desc, name, value, pubName, pubValue, type, maxLength, needEdit, needPublic)}
+      />
+    );
   },
 
   render: function () {
-    let {title}  = this.props;
+    let {title} = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
+      <NavBarView navigator={this.props.navigator} foolor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='个人信息' showBack={true} showBar={true}
-                  actionButton={this.renderLogout}>
+                  actionButton={this.renderLogout}
+      >
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false} backgroundColor='#18304b'>
+          <View style={styles.layout}>
+            <ImagePicker
+              type="all"
+              onSelected={(response) => this.uploadUserPoto(response)}
+              onError={(error) => Alert(error)}
+              title="选择图片"
+              style={{marginLeft: 20}}
+            >
+              {this.returnImage()}
+            </ImagePicker>
+            <TouchableOpacity
+              style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}
+              onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'publicRealName', true, 'default', 10, true, false)}
+            >
+              <Text style={{color: '#ffffff', fontSize: 18, textAlign: 'right', marginRight: 20}}>
+                {this.state.realName}
+              </Text>
+              <Icon style={{marginRight: 20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+            </TouchableOpacity>
+          </View>
 
-          <ImagePicker
-            type="all"
-            onSelected={(response) => this.uploadUserPoto(response)}
-            onError={(error) => Alert(error)}
-            title="选择图片"
-            style={styles.layout}
-          >
-            <View style={{flex:1}}>
-              <Image style={styles.head} resizeMode="cover" source={this.returnImg()}/>
-            </View>
-            <View style={{flex:1,flexDirection:"row",justifyContent:'flex-end',alignItems:'center'}}>
-              <Text
-                style={{color:'#ffffff',fontSize:18,textAlign:'right',paddingRight:20}}>{this.state.realName}</Text>
-              <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
-            </View>
-          </ImagePicker>
+          {this.renderRow('手机号', require('../../image/user/mobileNo.png'), 'mobileNumber', PhoneNumber(this.state.mobileNumber),
+            'publicMobile', this.state.publicMobile, 'number-pad', 11, false, true, false)}
 
-          {this.renderRow("手机号", require('../../image/user/mobileNo.png'), 'mobileNumber', this.state.mobileNumber, 'publicMobile',
-            this.state.publicMobile, 'name', 20, Validation.isPhone)}
+          {this.renderRow('座机号', require('../../image/user/telephoneNo.png'), 'phoneNumber', this.state.phoneNumber, 'publicPhone',
+            this.state.publicPhone, 'number-pad', 11, true, true, false)}
 
-          {this.renderRow("座机号", require('../../image/user/telephoneNo.png'), 'phoneNumber', this.state.phoneNumber, 'publicPhone',
-            this.state.publicPhone, 'telephone', 13, Validation.isTelephone)}
+          {this.renderRow('QQ', require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'publicQq',
+            this.state.publicQQ, 'number-pad', 20, true, true, false)}
 
-          {this.renderRow("QQ", require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'publicQQ',
-            this.state.publicQQ, 'number', 20, Validation.isQQ)}
+          {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'publicWeChat',
+            this.state.publicWeChat, 'default', 40, true, true, false)}
 
-          {this.renderRow("微信", require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'publicWeChat',
-            this.state.publicWeChat, '', 40, '')}
+          {this.renderRow('邮箱', require('../../image/user/email.png'), 'email', this.state.email, 'publicEmail',
+            this.state.publicEmail, 'email-address', 60, false, false, true)}
 
-          {this.renderRow("邮箱", require('../../image/user/email.png'), 'email', this.state.email, 'publicEmail',
-            this.state.publicEmail, '', 60, Validation.isEmail)}
+          <View style={{marginTop: 5}}>
+            {this.renderRow('机构', require('../../image/user/comp.png'), 'organization', this.state.orgBeanName, '',
+              'ascii-capable', 'default', 20, false, false, true)}
 
-          {this.renderRow("机构", require('../../image/user/comp.png'), 'organization', this.state.orgBeanName, '',
-            '', 'name', 20, '')}
+            {this.renderRow('部门', require('../../image/user/department.png'), 'department', this.state.department, 'publicDepart',
+              this.state.publicDepart, 'default', 20, true, true, false)}
 
-          {this.renderRow("部门", require('../../image/user/comp.png'), 'department', this.state.department, 'publicDepart',
-            this.state.publicDepart, 'name', 20, '')}
-
-          {this.renderRow("职位", require('../../image/user/jobTitle.png'), 'jobTitle', this.state.jobTitle, 'publicTitle',
-            this.state.publicTitle, 'name', 20, '')}
-
+            {this.renderRow('职位', require('../../image/user/jobTitle.png'), 'jobTitle', this.state.jobTitle, 'publicTitle',
+              this.state.publicTitle, 'default', 20, true, true, false)}
+          </View>
         </ScrollView>
       </NavBarView>
     );
@@ -207,12 +235,10 @@ let UserInfo = React.createClass({
 
   renderLogout: function () {
     return (
-      <TouchableOpacity style={{width:150,marginLeft:-20}}
-                        onPress={()=>this.logout()}>
-        <Text style={{color:'#ffffff'}}>退出登陆</Text>
+      <TouchableOpacity style={{width: 150, marginLeft: -20}} onPress={()=>this.logout()}>
+        <Text style={{color: '#ffffff'}}>退出登录</Text>
       </TouchableOpacity>
     );
-
   }
 });
 
@@ -225,7 +251,7 @@ let styles = StyleSheet.create({
     height: 84,
     borderBottomWidth: 0.5,
     borderBottomColor: '#0a1926',
-    backgroundColor:'#162a40'
+    backgroundColor: '#162a40'
   },
   img: {
     width: 63,
@@ -240,8 +266,15 @@ let styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     borderColor: '#cccccc',
-    borderWidth: 1,
-    marginLeft: 20
+    borderWidth: 1
+  },
+  headText: {
+    color: '#FF0000',
+    fontSize: 50,
+    fontStyle: 'italic',
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    fontWeight: 'bold'
   }
 });
 

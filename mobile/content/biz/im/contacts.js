@@ -22,7 +22,8 @@ let AppStore = require('../../framework/store/appStore');
 let DictIcon = require('../../constants/dictIcon');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Spread = require('./spread');
-let NameCircular = require('./nameCircular');
+let NameCircular = require('./nameCircular').NameCircular;
+let {groupFilter,contactFilter} = require('./searchBarHelper');
 
 let Contacts = React.createClass({
 
@@ -44,7 +45,7 @@ let Contacts = React.createClass({
   },
 
   getInitialState: function(){
-    return this.getStateFromStores();
+    return Object.assign({ keyWord:''},this.getStateFromStores());
   },
 
   renderImg: function(data) {
@@ -120,8 +121,8 @@ let Contacts = React.createClass({
   },
   //*********************
 
-  textChange: function() {
-
+  textChange: function(text) {
+    this.setState({keyWord:text});
   },
 
   //创建组群
@@ -165,7 +166,7 @@ let Contacts = React.createClass({
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={this.state.dataSource}
+                   dataSource={contactFilter(this.state.dataSource,'orgMembers','groupName','orgValue','orgMembers','realName',this.state.keyWord)}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />

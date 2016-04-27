@@ -74,7 +74,7 @@ let Messenger = React.createClass({
     if (this.props.param.chatType === SESSION_TYPE.USER) {
       _.assign(msgToSend, {
         // toId: this.props.param.userId,
-        toId: 'u002',
+        toId: this.props.param.userId,
         groupId: null,
         type: SESSION_TYPE.USER,
         msgType: COMMAND_TYPE.SEND_P2P_MSG
@@ -93,12 +93,15 @@ let Messenger = React.createClass({
 
   handleSend(message = {}, rowID = null) {
     this._sendMessage(MSG_CONTENT_TYPE.TEXT, message.content);
-
     // => In this case, you need also to set onErrorButtonPress
     // this._GiftedMessenger.setMessageStatus('Sent', rowID);
     // this._GiftedMessenger.setMessageStatus('Seen', rowID);
     // this._GiftedMessenger.setMessageStatus('Custom label status', rowID);
     // this._GiftedMessenger.setMessageStatus('ErrorButton', rowID);
+  },
+
+  handleNameCard(message = {}, rowID = null) {
+    this._sendMessage(MSG_CONTENT_TYPE.NAMECARD, message.content);
   },
 
   handleSendImage(uri) {
@@ -205,6 +208,7 @@ let Messenger = React.createClass({
         autoFocus={false}
         messages={this.state.messages}
         handleSend={this.handleSend}
+        handleNameCard = {this.handleNameCard}
         handleSendImage={this.handleSendImage}
         handleImageError={this.handleImageError}
         onErrorButtonPress={this.onErrorButtonPress}

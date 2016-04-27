@@ -65,16 +65,17 @@ var rawFetch = function (url, param, callback, failure, option) {
   console.log('请求地址:'+url);
 
   if (!option) option = {};
-  var _promise = Promise.race([fetch(url, param), new Promise(function (resolve, reject) {
-    setTimeout(() => reject(new Error('链接超时')), 2000000);
-  })]);
-  //process(fetch(url, param) ,callback,failure,option);
+  //var _promise = Promise.race([fetch(url, param), new Promise(function (resolve, reject) {
+  //  setTimeout(() => reject(new Error('链接超时')), 2000000);
+  //})]);
+ // process(fetch(url, param) ,callback,failure,option);
+  var _promise = fetch(url, param);
   return process(_promise, option);
 };
 
 var process = function (_promise, option) {
   return new Promise((resolve, reject) => {
-    if (AppStore.getNetWorkState()) {
+    //if (AppStore.getNetWorkState()) {
       _promise.then((response) => response.text())
         .then((response) => {
           if (response == '') {
@@ -92,6 +93,8 @@ var process = function (_promise, option) {
               } else {
                 reject(json);
               }
+            }else if(json.errMsg){
+              reject(json.errMsg);
             } else {
               resolve(json);
             }
@@ -104,12 +107,12 @@ var process = function (_promise, option) {
           console.log(errorData);
           reject(errorData);
         });
-    } else {
-      reject({
-        msgContent: '网络异常'
-      });
-      console.log('网络异常');
-    }
+    //} else {
+    //  reject({
+    //    msgContent: '网络异常'
+    //  });
+    //  console.log('网络异常');
+    //}
   });
 
 };

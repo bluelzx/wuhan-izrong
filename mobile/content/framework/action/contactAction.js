@@ -28,7 +28,8 @@ let _createGroup = function(members, groupName, groupMasterUid) {
   }
   return new Promise((resolve, reject) => {
     BFetch(AppLinks.createGroup, param).then((response)=> {
-      contactStore.createGroup(response.gid, groupName, groupMasterUid, param.members, false);
+      //TODO: 等接受邀请后再修改群信息
+      contactStore.createGroup(response.gid, groupName, groupMasterUid, [], false);
       resolve(response);
     },reject);
   });
@@ -174,7 +175,9 @@ let _acceptInvitation = function (groupId) {
       //TODO:默认不屏蔽
       _updateGroupInfo(response.gid,response.groupName, response.groupOwnerId, response.members, false, response.groupImageUrl);
       resolve(response);
-    }, reject);
+    }).catch((err)=>{
+      reject(err);
+    });
   });
 }
 

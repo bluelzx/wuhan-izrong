@@ -10,19 +10,34 @@ let { Host } = require('../../../config');
 let AppStore = require('../store/appStore');
 let _ = require('lodash');
 let AppLinks = require('../../constants/appLinks');
-let pub = "/pub";
+let pub = '/pub';
 
-let MarketActions ={
+let MarketActions = {
 
-  bizOrderMarketSearchDefaultSearch: () => _bfetchWithUrl(AppLinks.bizOrderMarketSearchDefaultSearch),
-  bizOrderMarketSearchsearch: (p) => _bfetchWithUrlAndP(AppLinks.bizOrderMarketSearchsearch, p),
-  getBizOrderInMarket: (p) =>_pfetchWithUrlAndP(AppLinks.getBizOrderInMarket, p),
+  bizOrderMarketSearchDefaultSearch: () => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch),
+  bizOrderMarketSearch: (p) => _bfetchWithUrlAndP(AppLinks.bizOrderMarketSearch, p),
+  getBizOrderInMarket: (p) => _pfetchWithUrlAndP(AppLinks.getBizOrderInMarket, p),
+
+  bizOrderAdminSearch: (p) => _bfetchWithUrlAndP(AppLinks.bizOrderAdminSearch, p),
+  getBizOrderByCreator: (p) => _pfetchWithUrlAndP(AppLinks.getBizOrderByCreator, p),
+  refreshBizOrder: (p) => _pfetchWithUrlAndP(AppLinks.refreshBizOrder, p),
 
   addBizOrder: (p) => _bfetchWithUrlAndP(AppLinks.addBizOrder, p),
   downselfBizOrder: (p) => _pfetchWithUrlAndP(AppLinks.downselfBizOrder, p),
   updateBizOrder: (p) => _bfetchWithUrlAndP(AppLinks.updateBizOrder, p),
   getBizOrderCategoryAndItem: () => _pfetch1WithUrl(AppLinks.getBizOrderCategoryAndItem)
 
+};
+
+let _bizOrderMarketSearchDefaultSearch = function(url){
+  return new Promise((resolve, reject) => {
+    BFetch(url).then((response) => {
+      resolve(response);
+      AppStore.saveFilters(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
 };
 
 let _bfetchWithUrl = function (url) {

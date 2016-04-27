@@ -36,9 +36,9 @@ let CheckBox = React.createClass({
   },
 
   render() {
-    let source = this.props.checkedUrl;
+    let source = this.props.unCheckedUrl;
     if (this.props.checked) {
-      source = this.props.unCheckedUrl;
+      source = this.props.checkedUrl;
     }
     return (
       <TouchableHighlight onPress={this.onChange} underlayColor="transparent">
@@ -71,7 +71,7 @@ let styles = StyleSheet.create({
   label: {
     fontSize: 16,
     lineHeight: 20,
-    color: 'grey',
+    color: 'grey'
   }
 });
 

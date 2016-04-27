@@ -31,9 +31,9 @@ let MessageSchema = {
   properties: {
     sessionId: {type: 'string', optional: true},
     msgId: {type: 'string', optional: true},
-    fromUId: {type: 'string', optional: true},
-    groupId: {type: 'string', optional: true},
-    toId: {type: 'string', optional: true},
+    fromUId: {type: 'int', optional: true},
+    groupId: {type: 'int', optional: true},
+    toId: {type: 'int', optional: true},
     type: {type: 'string', optional: true},
     contentType: {type: 'string', optional: true},
     content: {type: 'string', optional: true},
@@ -206,6 +206,30 @@ let OrderItemSchema = {
   }
 };
 
+//主页轮播图片地址
+let HomePageSchema = {
+  name:"homePage",
+  primaryKey:'seq',
+  properties: {
+    seq:{type:'string', optional:true},
+    url:{type:'string', optional:true},
+  }
+};
+
+//平台推送消息
+let PlatFormInfo = {
+  name:"platFormInfo",
+  primaryKey:'infoId',
+  properties: {
+    infoId:{type:'string', optional:true},
+    title:{type:'string', optional:true},
+    content:{type:'string', optional:true},
+    createDate:{type: 'date', optional: true},
+  }
+};
+
+
+
 
 module.exports = {
   DeviceSchema: DeviceSchema,
@@ -220,6 +244,8 @@ module.exports = {
   FilterItemsSchema:FilterItemsSchema,
   OrderItemSchema:OrderItemSchema,
   SessionSchema:SessionSchema,
+  HomePageSchema:HomePageSchema,
+  PlatFormInfoSchema:PlatFormInfo,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
@@ -231,5 +257,7 @@ module.exports = {
   FILTERITEMS:'filterItems',
   FILTERITEM:'filterItem',
   ORDERITEM:'orderItem',
-  SESSION:'session'
+  SESSION:'session',
+  HOMEPAGE:'homePage',
+  PLATFORMINFO:'platFormInfo'
 };

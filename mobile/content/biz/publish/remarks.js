@@ -19,12 +19,12 @@ let {
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
 let NavBarView = require('../../framework/system/navBarView');
-let Input = require('./input');
+
 
 let Remarks = React.createClass({
   getInitialState(){
     return {
-      remarksText:''
+      remarkText:this.props.param.remarkText
     }
   },
   render: function () {
@@ -34,12 +34,14 @@ let Remarks = React.createClass({
                   actionButton={this.renderFinish}>
         <View style={{backgroundColor:'#1e3754',marginTop:10}}>
           <TextInput
+            value={this.state.remarkText}
             placeholder={'20字以内'}
             placeholderTextColor='#325779'
             returnKeyType="search"
             maxLength={20}
             onChangeText={(value) => this.onChangeText(value)}
-            style={{width:screenWidth,height:40,marginLeft:10,color:'#ffd547',}}/>
+            underlineColorAndroid={'transparent'}
+            style={{width:screenWidth,height:40,marginLeft:10,color:'white',}}/>
         </View>
       </NavBarView>
     )
@@ -53,10 +55,10 @@ let Remarks = React.createClass({
     );
   },
   onChangeText(value){
-    this.setState({remarksText: value});
+    this.setState({remarkText: value});
   },
   finish: function () {
-    this.props.param.callBackRemarks(this.state.remarksText);
+    this.props.param.callBackRemarks(this.state.remarkText);
     this.props.navigator.pop();
   },
 });

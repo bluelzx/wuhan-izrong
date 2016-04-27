@@ -28,53 +28,32 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
   setContactMute:(userId, value) => _setContactMute(userId, value),
   setGroupMute:(groupId, value) => _setGroupMute(groupId, value),
   leaveGroup:(groupId) => _leaveGroup(groupId),
+  deleteContactInfo:(userIdList) => _deleteContactInfo(userIdList),
+  updateContactInfo: (address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId) =>
+    _updateContactInfo(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId),
 }
-
-
-////造假数据
-//_realm.write(() => {
-//  for (let item of MockData.users) {
-//    _realm.create(IMUSERINFO, item, true);
-//  }
-//
-//  for (let org of MockData.orgs) {
-//    _realm.create(ORGBEAN, org, true);
-//  }
-//
-//  for (let group of MockData.groups) {
-//    _realm.create(GROUP, group, true);
-//  }
-//
-//  for (let message of MockData.message){
-//    _realm.create(MESSAGE, message, true);
-//  }
-//
-//  for(let session of MockData.sessionList){
-//    _realm.create(SESSION, session, true);
-//  }
-//});
-
-
 
 //***** helper
 let _helperGroupByOrg = function(members){
   let res = {};
-  for(let mem of members){
+  members.forEach((mem)=>{
     if(!mem.orgId){
-      throw '用户机构ID不能为null';
-    }
-    let org = _realm.objects(ORGBEAN).filtered('id = ' + mem.orgId);
-    if(org.length > 0 ){
-      if(!res[mem.orgId]) {
-        res[mem.orgId]={
-          orgValue:org[0].orgValue,
-          orgMembers:[]
-        };
+      console.log('用户机构ID不能为null');
+      // throw '用户机构ID不能为null';
+    }else {
+      let org = _realm.objects(ORGBEAN).filtered('id = ' + mem.orgId);
+      if (org.length > 0) {
+        if (!res[mem.orgId]) {
+          res[mem.orgId] = {
+            orgValue: org[0].orgValue,
+            orgMembers: []
+          };
+        }
+        let cache = res[mem.orgId];
+        cache.orgMembers.push(mem);
       }
-      let cache = res[mem.orgId];
-      cache.orgMembers.push(mem);
     }
-  }
+  });
   let ret = [];
   for(let mem in res){
     ret.push(res[mem]);
@@ -95,12 +74,14 @@ let _getGroupInfoByGroupId = function (groupId) {
   else{
     let members = [];
     let memlist = JSON.parse(result[0].members);
-    console.log(memlist);
-    for(let userId of memlist){
-      let user = _realm.objects(IMUSERINFO).filtered('userId = ' + userId);
-      if(user.length > 0)
-        members.push(user[0]);
-    }
+    memlist.forEach(
+      (userId) => {
+        let user = _realm.objects(IMUSERINFO).filtered('userId = ' + userId);
+        if(user.length > 0)
+          members.push(user[0]);
+      }
+    );
+
     //result[0].members = members;
     let ret = {
       groupId:result[0].groupId,
@@ -121,7 +102,7 @@ let _getUsersGroupByOrg = function () {
   //获得所有机构
   let orgs = _realm.objects(ORGBEAN);
   let result = [];
-  for(let org of orgs){
+  orgs.forEach((org) => {
     let tmp = {
       orgValue:org.orgValue,
       orgMembers:null
@@ -129,7 +110,7 @@ let _getUsersGroupByOrg = function () {
     let users = _realm.objects(IMUSERINFO).filtered('orgId = ' + org.id);
     tmp.orgMembers = users;
     result.push(tmp);
-  }
+  });
   return result;
 };
 
@@ -163,15 +144,9 @@ let _getGroupMembersByGroupId = function(groupId) {
 let _modifyGroupName = function(groupId, groupName){
   let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
   let newGroup = {
-    groupId:group[0].groupId,
+    groupId:groupId,
     groupName:groupName,
-    groupMasterUid:group[0].groupMasterUid,
-    memberNum:group[0].memberNum,
-    members:group[0].members,
-    groupImageUrl:DEFAULT_GROUP_IMAGE,
-    mute:group[0].mute
   }
-  console.log(newGroup);
   _realm.write(() => {
     _realm.create(GROUP, newGroup, true);
   });
@@ -185,26 +160,68 @@ let _getUsersExpress = function(groupId) {
     let users = _realm.objects(IMUSERINFO);//获得所有用户
     let existM = existMembers.members;
     let userArray = [];
-    for(let u of users){
+    users.forEach((u)=>{
       let f = true;
-      for(let e of existM){
+      existM.forEach((e)=>{
         if(u.userId == e.userId){
           f = false;
-          break;
         }
-      }
+      });
       if(f){
         userArray.push(u);
       }
-    }
+    });
     return _helperGroupByOrg(userArray);
   }
 
 };
 
+
+let _updateContactInfo = function(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId){
+
+  let param = {
+    userId:userId,
+    address:address,
+    realName:realName,
+    weChatNo:weChatNo,
+    email:email,
+    nameCardFileUrl:nameCardFileUrl,
+    qqNo:qqNo,
+    department:department,
+    mobileNumber:mobileNumber,
+    jobTitle:jobTitle,
+    publicDepart:publicDepart,
+    publicTitle:publicTitle,
+    publicMobile:publicMobile,
+    phoneNumber:phoneNumber,
+    publicPhone:publicPhone,
+    publicEmail:publicEmail,
+    publicAddress:publicAddress,
+    publicWeChat:publicWeChat,
+    photoFileUrl:photoFileUrl,
+    publicQQ:publicQQ,
+    orgId:orgId,
+  };
+  _realm.write(()=>{
+    _realm.create(IMUSERINFO,param, true);
+  });
+}
+
+let _deleteContactInfo = function(userIdList) {
+  _realm.write(() => {
+    userIdList && userIdList.forEach((item) => {
+      let tag = _realm.objects(IMUSERINFO).filtered('userId = $0', item);
+      _realm.delete(tag);
+    });
+  });
+}
+
 let _getUserInfoByUserId = function (id) {
   let users = _realm.objects(IMUSERINFO).filtered('userId = ' + id)[0];
   let orgs = _realm.objects(ORGBEAN);
+  if(!users.orgId){
+    throw '_getUserInfoByUserId users.orgId == null';
+  }
   let org = orgs.filtered('id = ' + users.orgId);
   let ret = {
     userId: users.userId,
@@ -252,13 +269,8 @@ let _kickOutMember = function (groupId, members) {
   let memList = JSON.parse(memberList[0].members);
   _.pull(memList,...members);
   let group = {
-    groupId:memberList[0].groupId,
-    groupName:memberList[0].groupName,
-    groupMasterUid:memberList[0].groupMasterUid,
-    memberNum:memList.length,
-    groupImageUrl:DEFAULT_GROUP_IMAGE,
-    members:JSON.stringify(memList),
-    mute:memberList[0].mute
+    groupId:groupId,
+    members:JSON.stringify(memList)
   }
   _realm.write(() => {
     _realm.create(GROUP, group, true);
@@ -293,12 +305,7 @@ let _setContactMute = function(userId, value){
 let _setGroupMute = function(groupId, value){
   let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
   let param = {
-    groupId:group[0].groupId,
-    groupName:group[0].groupName,
-    groupMasterUid:group[0].groupMasterUid,
-    memberNum:group[0].memberNum,
-    members:group[0].members,
-    groupImageUrl:DEFAULT_GROUP_IMAGE,
+    groupId:groupId,
     mute:value
   }
   _realm.write(()=>{

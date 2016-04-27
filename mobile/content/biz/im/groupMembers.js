@@ -8,19 +8,21 @@ let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let ContactStore = require('../../framework/store/contactStore');
-let NameCircular = require('./nameCircular');
+let NameCircular = require('./nameCircular').NameCircular;
+let {groupFilter} = require('./searchBarHelper');
 
 let GroupMembers = React.createClass({
 
   getInitialState: function() {
     let groupId = this.props.param.groupId;
     return {
-      data:ContactStore.getUsersByGroupId(groupId)
+      data:ContactStore.getUsersByGroupId(groupId),
+      keyWord:''
     };
   },
 
-  textChange: function(){
-
+  textChange: function(text){
+    this.setState({keyWord:text});
   },
 
   //******************** 扩展列表
@@ -57,13 +59,13 @@ let GroupMembers = React.createClass({
 
         <SearchBar textChange={this.textChange}/>
 
-        <ExtenList itemHeight={56}
+        <ExtenList itemHeight={51}
                    groundColor={'#15263A'}
                    groupBorderColor={"#132232"}
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={this.state.data}
+                   dataSource={groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord)}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />

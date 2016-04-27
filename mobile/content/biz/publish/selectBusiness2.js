@@ -28,12 +28,13 @@ let SelectBusiness2 = React.createClass({
     let itemArr = this.getItemWithCategory(bizItem, bizCategory);
     return {
       dataSource: itemArr,
+      category: bizCategory
     }
   },
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='资金业务' showBack={true} showBar={true}>
+                  contentBackgroundColor='#18304D' title={this.state.category.displayName} showBack={true} showBar={true}>
         <ListView
           dataSource={data.cloneWithRows(this.state.dataSource)}
           renderRow={this.renderRow}
@@ -60,11 +61,11 @@ let SelectBusiness2 = React.createClass({
 
   getItemWithCategory: function (bizItem, bizCategory) {
     let itemArr = new Array();
-    for (let item of bizItem) {
+    bizItem.forEach(function (item) {
       if (item.displayCode.substring(0, 3) == bizCategory.displayCode) {
         itemArr.push(item);
       }
-    }
+    });
     return (
       itemArr
     )

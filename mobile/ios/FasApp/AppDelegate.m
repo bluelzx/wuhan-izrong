@@ -30,6 +30,8 @@ typedef enum{
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [NSThread sleepForTimeInterval:1.0];
+  
   AppStarMode startType=Debug;
   
   NSURL* latestJSCodeLocation;
@@ -52,7 +54,7 @@ typedef enum{
     
     latestJSCodeLocation = [updater latestJSCodeLocation];
   }else if(startType==Debug){
-    latestJSCodeLocation=[NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios"];
+    latestJSCodeLocation=[NSURL URLWithString:@"http://192.168.64.250:8081/index.ios.bundle?platform=ios"];
   }else{
     latestJSCodeLocation=[[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   }

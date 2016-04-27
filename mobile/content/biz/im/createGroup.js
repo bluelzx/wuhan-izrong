@@ -15,13 +15,14 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Chat = require('./chat');
 let ChooseList = require('./chooseList');
 let { SESSION_TYPE } = require('../../constants/dictIm');
-let NameCircular = require('./nameCircular');
+let NameCircular = require('./nameCircular').NameCircular;
 let Setting = require('../../constants/setting');
+let {groupFilter} = require('./searchBarHelper');
 
 let CreateGroup = React.createClass({
 
-  textChange: function() {
-
+  textChange: function(text) {
+    this.setState({keyWord:text});
   },
 
   //******************** 扩展列表
@@ -38,10 +39,10 @@ let CreateGroup = React.createClass({
 
   getMemberList: function(item) {
     let r = 0;
-    for(let k of Object.keys(item)) {
+    Object.keys(item).forEach((k)=>{
       if (!!item[k])
         r++;
-    }
+    })
     return r;
   },
 
@@ -77,7 +78,7 @@ let CreateGroup = React.createClass({
   //*********************
 
   createGroup: function(members) {
-    console.log(members);
+
     if(this.state.groupName.length > Setting.groupNameLengt){
       Alert('群名称不能超过20个字符');
       return ;
@@ -140,7 +141,8 @@ let CreateGroup = React.createClass({
       memberList:{},
       userData: ContactStore.getUsers(),
       groupName:'我新建的群',
-      userInfo:ContactStore.getUserInfo() // 用户信息
+      userInfo:ContactStore.getUserInfo(), // 用户信息
+      keyWord:'',
     };
   },
 
@@ -148,6 +150,11 @@ let CreateGroup = React.createClass({
     this.setState({groupName: text});
   },
 
+  getDataSource: function() {
+    let ret =  groupFilter(this.state.userData,'orgValue','orgMembers','realName',this.state.keyWord);
+
+    return ret;
+  },
   render: function() {
 
     return (
@@ -166,13 +173,13 @@ let CreateGroup = React.createClass({
 
         <SearchBar textChange={this.textChange}/>
 
-        <ExtenList itemHeight={56}
+        <ExtenList itemHeight={51}
                    groundColor={'#15263A'}
                    groupBorderColor={"#132232"}
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={this.state.userData}
+                   dataSource={this.getDataSource()}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />

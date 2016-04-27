@@ -26,7 +26,8 @@ var {
   ToastAndroid
   } = React;
 var AppAction = require('../action/appAction');
-var ImAction = require('../action/imAction');
+//var ImAction = require('../action/imAction');
+let ImSocket = require('../network/imSocket');
 AppAction.appInit();
 var TabView = require('./tabView');
 var Login = require('../../biz/login/login');
@@ -69,6 +70,7 @@ var Main = React.createClass({
     }
     NotificationManager.closeNotification();
   },
+
   _onAndroidBackPressed: function () {
     if (this._navigator) {
       if (this._navigator.getCurrentRoutes().length > 1) {
@@ -135,12 +137,14 @@ var Main = React.createClass({
   _renderScene: function (route, navigator) {
     this._navigator = navigator;
     var Comp = route.comp;
+    let tabName = null;
     if (Comp == 'tabView') {
+      if(route.tabName) tabName = route.tabName;
       Comp = TabView;
     }
     navigator.cur = Comp;
     return (
-      <Comp param={route.param} navigator={navigator} callback={route.callBack} exec={this._exec}/>
+      <Comp param={route.param} navigator={navigator} callback={route.callBack} exec={this._exec} tabName={tabName}/>
     );
   },
   render: function () {
@@ -163,7 +167,7 @@ var Main = React.createClass({
     //var initComp = Chat;
     if (this.state.token) {
       initComp = TabView;
-      ImAction.imInit();
+      ImSocket.init(this.state.token);
     }
     return (
       <View style={{ width: Device.width, height: Device.height }}>
@@ -181,7 +185,6 @@ var Main = React.createClass({
             gestures: route.gestures
           })}
           initialRoute={{
-            //comp: Login
             comp: initComp
           }}
         />

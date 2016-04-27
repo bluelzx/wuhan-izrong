@@ -25,7 +25,14 @@ var AppStore = require('../store/appStore');
 
 var ScrollableTabView = require('../../comp/tabBar/scrollableTabView');
 var AndroidTabBar = require('../../comp/tabBar/tabBar');
+const PageDic = {
+  home:0,
+  market:1,
+  publish:2,
+  IM: 3,
+  personalCenter:4
 
+};
 var TabView = React.createClass({
   getStateFromStores() {
     var token = AppStore.getToken();
@@ -47,7 +54,8 @@ var TabView = React.createClass({
     //  }
     //} else {
       return {
-        token: token
+        token: token,
+        initialPage: 0
       }
     //}
   },
@@ -94,9 +102,14 @@ var TabView = React.createClass({
   },
 
   getInitialState: function () {
+    let tabName = this.props.tabName;
+    if(!tabName){
+      tabName = 'home';
+    }
+    let initialPage = PageDic[tabName];
     return _.assign(
       this.getStateFromStores(),
-      {selectedTab: 'home'}
+      {selectedTab: tabName, initialPage: initialPage}
     );
   },
 
@@ -136,7 +149,7 @@ var TabView = React.createClass({
             icon={require('../../image/tab/IM.png')}
             selected={this.state.selectedTab === 'IM'}
             onPress={() => {this.setState({selectedTab: 'IM'})}}>
-            <IM navigator={this.props.navigator} />
+            <IM navigator={this.props.navigator} exec={this.props.exec}/>
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
@@ -151,7 +164,7 @@ var TabView = React.createClass({
       );
     } else {
       return (
-        <ScrollableTabView initialPage={0} locked={true}
+        <ScrollableTabView initialPage={this.state.initialPage} locked={true}
                            renderTabBar={() => <AndroidTabBar />}
         >
           <Home navigator={this.props.navigator}
@@ -163,7 +176,9 @@ var TabView = React.createClass({
           <Market navigator={this.props.navigator}
                   tabDesc="市场"
                   icon={require('../../image/tab/market.png')}
-                  selectedIcon={require('../../image/tab/market-selected.png')}>
+                  selectedIcon={require('../../image/tab/market-selected.png')}
+                  exec={this.props.exec}
+          >
           </Market>
 
           <Publish navigator={this.props.navigator}

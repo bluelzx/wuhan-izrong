@@ -10,9 +10,10 @@ let EditGroupMaster = require('./editGroupMaster');
 let DictIcon = require('../../constants/dictIcon');
 let ImUserInfo = require('./imUserInfo');
 const Messenger = require('./../../comp/messenger/messenger');
-let { MSG_TYPE, MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
+let {  SESSION_TYPE } = require('../../constants/dictIm');
 let AppStore = require('../../framework/store/appStore');
 let ContactStore = require('../../framework/store/contactStore');
+let SessionStore = require('../../framework/store/sessionStore');
 let ImAction = require('../../framework/action/imAction');
 
 let KeyGenerator = require('../../comp/utils/keyGenerator');
@@ -21,19 +22,12 @@ let Chat = React.createClass({
 
   componentDidMount() {
     let { param } = this.props;
-    // let toId = param.chatType === SESSION_TYPE.USER ? param.userId : param.groupId;
-    // let sessionId = KeyGenerator.getSessionKey(param.chatType, toId);
-    let toId = 'u002';
-    let sessionId = KeyGenerator.getSessionKey(SESSION_TYPE.USER, toId);
-
-    param.chatType = SESSION_TYPE.USER;
-    param.userId = 'u002';
-    param.title = 'u002';
-    param.sessionId = sessionId;
+    param.sessionId = SessionStore.querySessionById(this.props.param.userId || this.props.param.groupId,this.props.param.chatType);
+    param.sessionId || (param.sessionId=KeyGenerator.getSessionKey(param.chatType, this.props.param.userId || this.props.param.groupId));
 
     ImAction.sessionInit({
-      toId: toId,
-      sessionId: sessionId
+      toId: param.userId,
+      sessionId: param.sessionId
     });
     AppStore.addChangeListener(this._onChange);
   },
