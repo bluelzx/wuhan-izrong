@@ -9,13 +9,13 @@ let _socket = null;
 
 let ImSocket = {
 
-  init: function (token) {
+  init: function (token,lastSyncTime) {
     if (_socket) return;
     // this.uri = ImWebSocket + AppStore.getToken();
     this.uri = 'ws://' + ImHost + '/' + token;
     //this.uri = 'ws://localhost:3000/t001';
     console.log('###### Connect to %s', this.uri);
-    _socket = Manager(this.uri);
+    _socket = Manager(this.uri,{lastSyncTime:lastSyncTime});
 
     _socket.on('open', function () {
       console.log('###### open');

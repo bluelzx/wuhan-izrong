@@ -6,14 +6,13 @@ let {
   PFetch,
   UFetch
   } = require('../network/fetch');
-let { Host } = require('../../../config');
+let {Host} = require('../../../config');
 let AppStore = require('../store/appStore');
 let _ = require('lodash');
 let AppLinks = require('../../constants/appLinks');
 let pub = '/pub';
 
 let MarketActions = {
-
   bizOrderMarketSearchDefaultSearch: () => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch),
   bizOrderMarketSearch: (p) => _bfetchWithUrlAndP(AppLinks.bizOrderMarketSearch, p),
   getBizOrderInMarket: (p) => _pfetchWithUrlAndP(AppLinks.getBizOrderInMarket, p),

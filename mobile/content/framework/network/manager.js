@@ -35,7 +35,6 @@ function Manager (uri, opts) {
     uri = undefined;
   }
   opts = opts || {};
-
   opts.path = opts.path || '/socket.io';
   this.nsps = {};
   this.subs = [];
@@ -54,7 +53,6 @@ function Manager (uri, opts) {
   this.readyState = 'closed';
   this.uri = uri;
   this.connecting = [];
-  this.lastPing = null;
   this.autoConnect = opts.autoConnect !== false;
   if (this.autoConnect) this.open();
 }
@@ -199,9 +197,11 @@ Manager.prototype.open =
 Manager.prototype.connect = function (fn) {
   // console.log('**websocket** readyState %s', this.readyState);
   if (~this.readyState.indexOf('open')) return this;
-
-  console.log('**websocket** opening %s', this.uri);
-  this.engine = new WebSocket(this.uri);
+ // add lastSyncTime
+  //var syncUri  = this.uri + '?' + 'lastSyncTime=' + this.opts.lastSyncTime().getTime();
+  var syncUri  = this.uri;// + '?' + 'lastSyncTime=' + this.opts.lastSyncTime().getTime();
+  console.log('**websocket** opening %s', syncUri);
+  this.engine = new WebSocket(syncUri);
   var socket = this.engine;
   var self = this;
   this.readyState = 'opening';
@@ -321,18 +321,11 @@ Manager.prototype.destroy = function (socket) {
 
 Manager.prototype.cleanup = function () {
   // console.log('**websocket** cleanup');
-
   var subsLength = this.subs.length;
   for (var i = 0; i < subsLength; i++) {
     var sub = this.subs.shift();
     sub.destroy();
   }
-
-  this.packetBuffer = [];
-  //this.encoding = false;
-  this.lastPing = null;
-
-  //this.decoder.destroy();
 };
 
 /**

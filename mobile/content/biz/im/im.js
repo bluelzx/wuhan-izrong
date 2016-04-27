@@ -32,6 +32,7 @@ let SessionStore = require('../../framework/store/sessionStore');
 let ContactAction = require('../../framework/action/contactAction');
 let { MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 let NameCircular = require('./nameCircular').NameCircular;
+let {sessionFilter} = require('./searchBarHelper');
 
 let WhitePage = React.createClass({
 
@@ -51,21 +52,18 @@ let WhitePage = React.createClass({
   },
 
   getInitialState: function(){
-    return this.getStateFromStores();
+    return Object.assign(this.getStateFromStores(),{keyWord:''});
   },
 
-  textChange: function() {
+
+  textChange: function(text) {
+    this.setState({keyWord:text});
   },
 
   renderContact: function() {
     return (
       <TouchableOpacity onPress={()=>{
-//      SessionAction.updateSession(MSG_TYPE.REC_P2P_MSG,'2',
-//'hahahaha',
-//'hello',
-// new Date(),
-// MSG_CONTENT_TYPE.TEXT
-//      );
+       // AppStore.updateLastSyncTime(new Date());
       this.props.navigator.push({
             comp: Contacts
       });
@@ -153,9 +151,7 @@ let WhitePage = React.createClass({
       {
         text: '删除',
         backgroundColor: 'red',
-        onPress: function(){
-          SessionStore.deleteSession(item.sessionId);
-        }
+        onPress: ()=>this.deleteSession(item.sessionId)
       }
     ];
     return (
@@ -172,12 +168,24 @@ let WhitePage = React.createClass({
                 <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
               <Text numberOfLines={1}
-                    style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT==item.contentType?item.content:'点击查看详情'}</Text>
+                    style={{marginTop:5,color:'#687886'}}>{this.showText(item)}</Text>
             </View>
           </View>
         </TouchableHighlight>
       </Swipeout>
     );
+  },
+
+  showText:(item)=> {
+    if (MSG_CONTENT_TYPE.TEXT == item.contentType) {
+      return item.content
+    } else if (MSG_CONTENT_TYPE.TEXT == item.contentType) {
+      return '[图片]'
+    } else if(MSG_CONTENT_TYPE.NAMECARD == item.contentType){
+      return '[名片]';
+    }else{
+      return '点击查看详情'
+    }
   },
 
   renderUser: function(item, index){
@@ -186,9 +194,7 @@ let WhitePage = React.createClass({
       {
         text: '删除',
         backgroundColor: 'red',
-        onPress: function(){
-
-        }
+        onPress: ()=>this.deleteSession(item.sessionId)
       }
     ];
     return (
@@ -207,7 +213,7 @@ let WhitePage = React.createClass({
                 <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
               <Text numberOfLines={1}
-                    style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT==item.contentType?item.content:'点击查看详情'}</Text>
+                    style={{marginTop:5,color:'#687886'}}>{this.showText(item)}</Text>
             </View>
           </View>
         </TouchableHighlight>
@@ -226,16 +232,19 @@ let WhitePage = React.createClass({
     );
   },
 
+  deleteSession: function(sessionId){
+    SessionStore.deleteSession(sessionId);
+  },
+
   renderInvite:function(item, index) {
     let {width} = Device;
     let swipeoutBtns = [
       {
         text: '删除',
         backgroundColor: 'red',
-        onPress: function(){
-          SessionStore.deleteSession(item.sessionId);
-        }
+        onPress: ()=>this.deleteSession(item.sessionId)
       }
+
     ];
     return (
       <Swipeout key={item.sessionId} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
@@ -259,19 +268,32 @@ let WhitePage = React.createClass({
     );
   },
 
+  getIdFromSessionId: function(sessionId){
+    let i = sessionId.indexOf(':');
+    return parseInt(sessionId.substring(i+1));
+  },
+
   renderInvited:function(item, index) {
     let {width} = Device;
     let swipeoutBtns = [
       {
         text: '删除',
         backgroundColor: 'red',
-        onPress: function(){
-          SessionStore.deleteSession(item.sessionId);
-        }
+        onPress: ()=>this.deleteSession(item.sessionId)
       }
     ];
     return (
       <Swipeout key={item.sessionId} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
+        <TouchableHighlight onPress={()=>{
+        let groupId = this.getIdFromSessionId(item.sessionId);
+         let groupInfo = ContactStore.getGroupDetailById(groupId);
+        let param = {};
+        param.chatType = SESSION_TYPE.GROUP;
+        param.title = groupInfo.groupName;
+        param.groupId = groupInfo.groupId;
+        param.groupMasterUid = groupInfo.groupMasterUid;
+          this.props.navigator.push({comp:Chat, param:param});
+        }}>
         <View
           style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
           <HeadPic badge={0} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup}/>
@@ -288,6 +310,7 @@ let WhitePage = React.createClass({
 
           </View>
         </View>
+      </TouchableHighlight>
       </Swipeout>
     );
   },
@@ -308,7 +331,7 @@ let WhitePage = React.createClass({
 
   renderMessage: function() {
     let msg = new Array();
-    this.state.data.msg.map((item, index)=>{
+    sessionFilter(this.state.data.msg,'title','content',this.state.keyWord).map((item, index)=>{
       msg.push(this.renderItem(item, index));
     });
     return msg;

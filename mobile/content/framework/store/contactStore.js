@@ -5,6 +5,7 @@
 let { MSG_TYPE } = require('../../constants/dictIm');
 let PersisterFacade = require('../persister/persisterFacade');
 let AppStore = require('./appStore');
+let SessionStore = require('./sessionStore');
 
 let _getContact = function(){
   //我的群  第一个元素必须为群组
@@ -113,7 +114,11 @@ let _setGroupMute = function(groupId, value){
 }
 let _leaveGroup = function(groupId){
   PersisterFacade.leaveGroup(groupId);
-  AppStore.emitChange();
+  //AppStore.emitChange();
+}
+
+let _syncReq = function(data){
+  //TODO:....
 }
 
 let ContactStore = {
@@ -134,7 +139,11 @@ let ContactStore = {
   dismissGroup:_dismissGroup,
   setContactMute:_setContactMute, //屏蔽用户
   setGroupMute:_setGroupMute,
-  leaveGroup:_leaveGroup
+  leaveGroup:_leaveGroup,
+
+  syncReq:_syncReq, //同步全部信息
 };
+
+
 
 module.exports = ContactStore;

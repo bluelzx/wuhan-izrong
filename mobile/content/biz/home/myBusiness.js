@@ -13,7 +13,8 @@ let {
   Image,
   StyleSheet,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  InteractionManager
   }=React;
 
 let screenWidth = Dimensions.get('window').width;
@@ -84,14 +85,14 @@ let Market = React.createClass({
       bizOrientationID: '',
       termID: '',
       amountID: '',
-      marketData: marketData
+      marketData: marketData,
     }
   },
 
-  componentWillMount: function () {
-    {
+  componentDidMount: function () {
+    InteractionManager.runAfterInteractions(() => {
       this.bizOrderAdminSearch();
-    }
+    });
   },
 
   componentDidMount() {

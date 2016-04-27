@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react-native');
-var {
+let React = require('react-native');
+let {
   View,
   StyleSheet,
   Text,
@@ -11,12 +11,13 @@ var {
   TouchableHighlight,
   } = React;
 
-var NavBarView = require('../../framework/system/navBarView');
-var {height, width} = Dimensions.get('window');
-var ViewPager = require('react-native-viewpager');
-var MarketList = require('../market/marketList');
+let NavBarView = require('../../framework/system/navBarView');
+let {height, width} = Dimensions.get('window');
+let ViewPager = require('react-native-viewpager');
+let MarketList = require('../market/marketList');
 let myBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
+
 
 var PAGES = [
   'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024',
@@ -32,10 +33,9 @@ var marketData = {
     {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
     {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'}]
 };
-var Home = React.createClass({
-
+let Home = React.createClass({
   getStateFromStores: function () {
-    var dataSource = new ViewPager.DataSource({
+    let dataSource = new ViewPager.DataSource({
       pageHasChanged: (p1, p2) => p1 !== p2
     });
 

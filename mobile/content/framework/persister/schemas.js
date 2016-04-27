@@ -115,7 +115,8 @@ let LoginUserInfoSchema = {
     publicQQ: {type: 'bool', optional: true},
     orgId: {type: 'int', optional: true},
     lastLoginTime:{type: 'date', optional: true},  //本地增加,用于多用户登陆排序
-    token: {type: 'string', optional: true}
+    token: {type: 'string', optional: true},
+    lastSyncTime:{type:'date', optional:true}
   }
 };
 

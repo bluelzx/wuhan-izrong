@@ -4,7 +4,7 @@
 let React = require('react-native');
 let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch} = React;
 var Icon  = require('react-native-vector-icons/Ionicons');
-let { Device, Button } = require('mx-artifacts');
+let { Device,Alert, Button } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
 let GroupMembers = require('./groupMembers');
 let ModifyGroupName = require('./modifyGroupName');
@@ -31,6 +31,9 @@ let EditGroup = React.createClass({
 
   getStateFromStores: function() {
     let groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
+    if(!groupInfo){
+      this.props.navigator.popToTop();
+    }
     return {
       falseSwitchIsOn:groupInfo.mute,
       groupInfo:groupInfo
@@ -68,7 +71,9 @@ let EditGroup = React.createClass({
           ()=>{
             this.props.navigator.popToTop();
           }
-        );
+        ).catch((errData)=>{
+          Alert(errData.toLocaleString());
+        });
       }
     );
   },

@@ -72,7 +72,7 @@ let Register_valiMobile = React.createClass({
             }
           }
         }).catch((errorData) => {
-          Alert(errorData.msgContent);
+          Alert(errorData.msgContent || errorData.message);
         });
       });
     }
