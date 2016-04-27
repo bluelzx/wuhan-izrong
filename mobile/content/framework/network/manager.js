@@ -35,7 +35,6 @@ function Manager (uri, opts) {
     uri = undefined;
   }
   opts = opts || {};
-
   opts.path = opts.path || '/socket.io';
   this.nsps = {};
   this.subs = [];
@@ -199,9 +198,10 @@ Manager.prototype.open =
 Manager.prototype.connect = function (fn) {
   // console.log('**websocket** readyState %s', this.readyState);
   if (~this.readyState.indexOf('open')) return this;
-
-  console.log('**websocket** opening %s', this.uri);
-  this.engine = new WebSocket(this.uri);
+ // add lastSyncTime
+  var syncUri  = this.uri + '?' + 'lastSyncTime=' + this.opts.lastSyncTime();
+  console.log('**websocket** opening %s', syncUri);
+  this.engine = new WebSocket(syncUri);
   var socket = this.engine;
   var self = this;
   this.readyState = 'opening';

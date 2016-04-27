@@ -22,6 +22,7 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let moment = require('moment');
 let Icon = require('react-native-vector-icons/Ionicons');
 let TimerMixin = require('react-timer-mixin');
+let Publish = require('../../biz/publish/publish');
 
 let { Spinner, Button } = require('mx-artifacts');
 
@@ -32,6 +33,9 @@ import Message from './message';
 let DictIcon = require('../../constants/dictIcon');
 
 let ImagePicker = require('../utils/imagePicker');
+
+let UserInfoAction = require('../../framework/action/userInfoAction');
+//let BizAction  = require('');
 
 let GiftedMessenger = React.createClass({
   mixins: [TimerMixin],
@@ -393,9 +397,58 @@ let GiftedMessenger = React.createClass({
     this._resetTextInput();
   },
 
+  handleBizInfo() {
+    this.props.navigator({
+      comp:Publish,
+      param:{
+        callBack:(bizId)=>{
+          let message = {
+            content: bizId,
+            name: this.props.senderName,
+            image: this.props.senderImage,
+            position: 'right',
+            date: new Date()
+          };
+          if (this.props.onCustomSend) {
+            this.props.onCustomSend(message);
+          } else {
+            let rowID = this.appendMessage(message, true);
+            this.props.handleBizInfo(message, rowID);
+          }
+        }
+      }
+    });
+
+  },
+
+
   handleNameCard() {
+    let userInfo = UserInfoAction.getLoginUserInfo();
+    let orgBean = UserInfoAction.getOrgById(userInfo.orgId);
+    let p  = {photoFileUrl: userInfo.photoFileUrl,
+      realName: userInfo.realName,
+      userId: userInfo.userId,
+      mobileNumber: userInfo.mobileNumber,
+      publicMobile: userInfo.publicMobile,
+      phoneNumber: userInfo.phoneNumber,
+      publicPhone: userInfo.publicPhone,
+      qqNo: userInfo.qqNo,
+      publicQQ: userInfo.publicQQ,
+      weChatNo: userInfo.weChatNo,
+      publicWeChat: userInfo.publicWeChat,
+      email: userInfo.email,
+      publicEmail: userInfo.publicEmail,
+      orgBeanName: orgBean.orgValue,
+      department: userInfo.department,
+      publicDepart: userInfo.publicDepart,
+      jobTitle: userInfo.jobTitle,
+      publicTitle: userInfo.publicTitle,
+      address: userInfo.address,
+      publicAddress: userInfo.publicAddress,
+      nameCardFileUrl: userInfo.nameCardFileUrl
+    };
     let message = {
-      content: '名片url',
+      content: JSON.stringify(p),
       name: this.props.senderName,
       image: this.props.senderImage,
       position: 'right',
@@ -841,7 +894,9 @@ let GiftedMessenger = React.createClass({
 
           <TouchableOpacity
             style={this.styles.panelItem}
-            onPress= {() => {}}
+            onPress= {() => {
+
+            }}
           >
             <Image
               style={this.styles.panelIcon}

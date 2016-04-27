@@ -51,7 +51,7 @@ let Resolver = {
         break;
       case MSG_TYPE.REC_GROUP_MSG:
         ImStore.saveMsg({
-          sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.gid),
+          sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.GROUP, message.gid),
           msgId:message.msgId,
           fromUId:message.fromUid,
           groupId:message.gid,

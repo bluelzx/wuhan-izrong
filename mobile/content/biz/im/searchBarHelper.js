@@ -65,10 +65,30 @@ let contactFilter = function(data, groupM,gN, groupName,groupMembers,groupMember
   let k = gFilter(group,groupM,gN, keyWord);
   if(k!=null){
     ret.push(k);
+  }else{
+    ret.push([]);
   }
+  console.log('k'+k);
   ret.push(...groupFilter(data.slice(1), groupName,groupMembers,groupMembersName, keyWord));
+  console.log(ret);
   return ret;
 }
 
-module.exports = {groupFilter, contactFilter}
+let sessionFilter = function(data,title,content,keyWord){
+  if(!keyWord || keyWord==''){
+    return data;
+  }
+  let ret = [];
+  data && data.forEach((item)=>{
+    let t = item[title];
+    let c = item[content];
+    if((!!t && t.length && !!~t.indexOf(keyWord))||(!!c && c.length && !!~c.indexOf(keyWord))){
+      ret.push(item);
+    }
+  });
+
+  return ret;
+}
+
+module.exports = {groupFilter, contactFilter, sessionFilter}
 

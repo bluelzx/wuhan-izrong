@@ -29,7 +29,7 @@ let _deleteSession = function(sessionId) {
 
 let _queryAllSession = function() {
   let ret = [];
-  _realm.objects(SESSION).forEach((item)=>{
+  _realm.objects(SESSION).sorted('lastTime',[true]).forEach((item)=>{
     let p = {
       sessionId: item.sessionId,
       type: item.type,

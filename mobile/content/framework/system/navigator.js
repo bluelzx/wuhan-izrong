@@ -153,7 +153,9 @@ var Main = React.createClass({
     //var initComp = Chat;
     if (this.state.token) {
       initComp = TabView;
-      ImSocket.init(this.state.token);
+      ImSocket.init(this.state.token,()=>{
+        return AppStore.getLoginUserInfo()&&AppStore.getLoginUserInfo().lastSyncTime;
+      });
     }
     return (
       <View style={{ width: Device.width, height: Device.height }}>

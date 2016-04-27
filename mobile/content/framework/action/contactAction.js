@@ -28,8 +28,8 @@ let _createGroup = function(members, groupName, groupMasterUid) {
   }
   return new Promise((resolve, reject) => {
     BFetch(AppLinks.createGroup, param).then((response)=> {
-      //TODO: 等接受邀请后再修改群信息
-      contactStore.createGroup(response.gid, groupName, groupMasterUid, [], false);
+      //等接受邀请后再修改群信息\群主默认同意
+      contactStore.createGroup(response.gid, groupName, groupMasterUid, [groupMasterUid], false);
       resolve(response);
     },reject);
   });

@@ -104,6 +104,10 @@ let Messenger = React.createClass({
     this._sendMessage(MSG_CONTENT_TYPE.NAMECARD, message.content);
   },
 
+  handleBizInfo(message = {}, rowID = null){
+    this._sendMessage(MSG_CONTENT_TYPE.BIZINFO, message.content);
+  },
+
   handleSendImage(uri) {
     ImAction.uploadImage(uri)
       .then((response) => {
@@ -118,6 +122,8 @@ let Messenger = React.createClass({
     console.log('Image select error ' + JSON.stringify(error));
     Alert('图片选择失败');
   },
+
+
 
   // @oldestMessage is the oldest message already added to the list
   onLoadEarlierMessages(oldestMessage = {}, callback = () => {
@@ -204,11 +210,12 @@ let Messenger = React.createClass({
 
         displayNames={false}
         displayNamesInsideBubble={false}
-
+        navigator={this.props.navigator}
         autoFocus={false}
         messages={this.state.messages}
         handleSend={this.handleSend}
         handleNameCard = {this.handleNameCard}
+        handleBizInfo = {this.handleBizInfo}
         handleSendImage={this.handleSendImage}
         handleImageError={this.handleImageError}
         onErrorButtonPress={this.onErrorButtonPress}

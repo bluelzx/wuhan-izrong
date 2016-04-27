@@ -25,6 +25,7 @@
     "lodash": "^4.6.1",
     "moment": "^2.12.0",
     "mx-artifacts": "latest",
+    "numeral": "^1.5.3",
     "qs": "^6.1.0",
     "react-native": "^0.21.0",
     "react-native-alphabetlistview": "^0.1.1",

@@ -32,7 +32,8 @@ let PersisterFacade = {
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=>_getOrgList(),
-  deleteDevice: ()=> _deleteDevice()
+  deleteDevice: ()=> _deleteDevice(),
+  updateLastSyncTime:(t)=>_updateLastSyncTime(t),
 };
 
 
@@ -227,6 +228,15 @@ let _getUserId = function () {
     return userInfo.userId;
   }
   return '';
+};
+
+let _updateLastSyncTime = function(t) {
+  _realm.write(()=>{
+    let o = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true]);
+    if(o && o.length>0) {
+      _realm.create(LOGINUSERINFO, {userId:o.userId,lastSyncTime:t}, true);
+    }
+  });
 };
 
 let _getOrgByOrgId = function (orgId) {

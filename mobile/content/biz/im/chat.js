@@ -37,16 +37,33 @@ let Chat = React.createClass({
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
-
   },
 
   getStateFromStores: function() {
     //TODO:群组聊天时被踢
+    let item = this.props.param;
+    let title = '';
+
+    if(item.chatType==SESSION_TYPE.USER){
+      let userInfo = ContactStore.getUserInfoByUserId(item.userId);
+      if(!userInfo || !userInfo.userId){
+        this.props.navigator.popToTop();
+      }
+      title = userInfo.realName + '-' +userInfo.orgValue;
+    }else{
+      let groupInfo = ContactStore.getGroupDetailById(item.groupId);
+      if(!groupInfo || !groupInfo.groupId){
+        this.props.navigator.popToTop();
+      }
+      title = groupInfo?groupInfo.groupName:'未命名';
+    }
+
     return {
       chatInfo: {
         type: this.props.param.type
       },
-      userInfo: ContactStore.getUserInfo()
+      userInfo: ContactStore.getUserInfo(),
+      title:title
     }
   },
 
@@ -60,15 +77,6 @@ let Chat = React.createClass({
         title: '聊天'
       }
     };
-  },
-
-  getInitialState: function() {
-    return {
-      chatInfo: {
-        type: this.props.param.type
-      },
-      userInfo: ContactStore.getUserInfo()
-    }
   },
 
   tagDetail: function(){
@@ -101,15 +109,14 @@ let Chat = React.createClass({
   render: function () {
     let item = this.props.param;
     let title = item.title;
-
     return (
       <NavBarView
         navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-        contentBackgroundColor='#15263A' title={title}
+        contentBackgroundColor='#15263A' title={this.state.title}
         showBar={true}
         actionButton={this.renderEdit}
       >
-        <Messenger param={item}></Messenger>
+        <Messenger param={item} navigator={this.props.navigator}></Messenger>
       </NavBarView>
     );
   }
