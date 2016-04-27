@@ -35,9 +35,10 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   isForceLogout: () => _info.isForceLogout,
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
+  updateLastSyncTime:(t)=>_updateLastSyncTime(t),
   getToken: () => _data.token || '',
   //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
-  //getToken:()=>'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTA5IiwiaWF0IjoxNDYxNTUzMTgzLCJzdWIiOiJ3ZWlzZW4zIiwiaXNzIjoiVXNlcklkLTEwOSJ9.SahHndVnBfJo2RforCkAN0XMXAcrL10Gzi3-EMQQsBM',
+  //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTA5IiwiaWF0IjoxNDYxNTUzMTgzLCJzdWIiOiJ3ZWlzZW4zIiwiaXNzIjoiVXNlcklkLTEwOSJ9.SahHndVnBfJo2RforCkAN0XMXAcrL10Gzi3-EMQQsBM',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),
@@ -159,4 +160,8 @@ let _updateUserInfo = (column, value)=> {
   Persister.updateUserInfo(column, value);
   AppStore.emitChange();
 };
+
+let _updateLastSyncTime = function(t){
+  Persister.updateLastSyncTime(t);
+}
 module.exports = AppStore;

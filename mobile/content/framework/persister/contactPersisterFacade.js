@@ -280,17 +280,25 @@ let _kickOutMember = function (groupId, members) {
 
 
 let _dismissGroup = function(groupId) {
-  let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
   _realm.write(() => {
+    let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
     _realm.delete(group);
   });
+}
 
+
+//invoke in translater
+let _selfDeleteSession = function(sessionId){
+    let session = _realm.objects(SESSION).filtered('sessionId = \'' + sessionId + '\'');
+    _realm.delete(session);
 }
 
 let _leaveGroup = function(groupId) {
-  let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
   _realm.write(() => {
+    let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
     _realm.delete(group);
+    _selfDeleteSession('group:' + groupId);
+    _selfDeleteSession('invite:' + groupId);
   });
 }
 

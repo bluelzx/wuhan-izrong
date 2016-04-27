@@ -11,7 +11,7 @@ let {
   Image,
   Text,
   View,
-  TouchableHighlight
+  TouchableHighlight,
   } = React;
 
 let CheckBox = React.createClass({
@@ -41,7 +41,7 @@ let CheckBox = React.createClass({
       source = this.props.checkedUrl;
     }
     return (
-      <TouchableHighlight onPress={this.onChange} underlayColor='transparent'>
+      <TouchableHighlight onPress={this.onChange} underlayColor="transparent">
         <View style={styles.container1}>
           <Image style={styles.checkbox} source={source}/>
           <View style={styles.labelContainer}>
