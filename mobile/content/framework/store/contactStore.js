@@ -117,6 +117,10 @@ let _leaveGroup = function(groupId){
   //AppStore.emitChange();
 }
 
+let _syncReq = function(data){
+  //TODO:....
+}
+
 let ContactStore = {
   getGroupInfoBySessionId:_getGroupInfoBySessionId,  //根据会话Id获得群组信息
   getUserInfoBySessionId:_getUserInfoBySessionId,       //根据会话Id获得用户信息
@@ -135,7 +139,11 @@ let ContactStore = {
   dismissGroup:_dismissGroup,
   setContactMute:_setContactMute, //屏蔽用户
   setGroupMute:_setGroupMute,
-  leaveGroup:_leaveGroup
+  leaveGroup:_leaveGroup,
+
+  syncReq:_syncReq, //同步全部信息
 };
+
+
 
 module.exports = ContactStore;

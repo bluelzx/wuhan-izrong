@@ -87,6 +87,9 @@ let Resolver = {
       case MSG_TYPE.GROUP_INFO_DELETE:
         ContactSotre.leaveGroup(message.groupId);
         break;
+      case MSG_TYPE.SYNC_REQ:
+        ContactSotre.syncReq();
+        break;
       default:
         console.log('None message type matched! [%s]', message.msgType);
     }
