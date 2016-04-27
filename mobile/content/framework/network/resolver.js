@@ -51,7 +51,7 @@ let Resolver = {
         break;
       case MSG_TYPE.REC_GROUP_MSG:
         ImStore.saveMsg({
-          sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.gid),
+          sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.GROUP, message.gid),
           msgId:message.msgId,
           fromUId:message.fromUid,
           groupId:message.gid,
@@ -86,6 +86,9 @@ let Resolver = {
         break;
       case MSG_TYPE.GROUP_INFO_DELETE:
         ContactSotre.leaveGroup(message.groupId);
+        break;
+      case MSG_TYPE.SYNC_REQ:
+        ContactSotre.syncReq();
         break;
       default:
         console.log('None message type matched! [%s]', message.msgType);

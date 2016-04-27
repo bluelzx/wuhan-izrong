@@ -66,17 +66,16 @@ let NavBarView = React.createClass({
             paddingTop: Device.innerStatusBarSize,
           }}
         >
-          <View style={{width: 44}}>
+          <View style={{width: 44,flex:1}}>
             {this._renderLeft()}
           </View>
 
-          <View>
-            <Text style={{ fontSize: 18, color: this.props.fontColor }}>
+            <Text numberOfLines={1} style={{flex:5,textAlign:'center',fontSize: 18, color: this.props.fontColor}}>
               {this.props.title}
             </Text>
-          </View>
 
-          <View style={{width: 44}}>
+
+          <View style={{width: 44,flex:1}}>
             {this._renderRight()}
           </View>
         </View>

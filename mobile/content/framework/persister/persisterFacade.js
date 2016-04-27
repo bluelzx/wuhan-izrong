@@ -32,7 +32,8 @@ let PersisterFacade = {
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=>_getOrgList(),
-  deleteDevice: ()=> _deleteDevice()
+  deleteDevice: ()=> _deleteDevice(),
+  updateLastSyncTime:(t)=>_updateLastSyncTime(t),
 };
 
 
@@ -81,7 +82,8 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
       publicEmail: !!(loginUserInfo.publicEmail == true || loginUserInfo.publicEmail === null),
       publicAddress: !!(loginUserInfo.publicAddress == true || loginUserInfo.publicAddress === null),
       publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat === null),
-      publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null)
+      publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
+      lastSyncTime:null
     }, true);
   });
 };
@@ -227,6 +229,19 @@ let _getUserId = function () {
     return userInfo.userId;
   }
   return '';
+};
+
+let _updateLastSyncTime = function(t) {
+  _realm.write(()=>{
+    let tag = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true]);
+    if(tag && tag.length>0) {
+      let o = tag[0];
+      _realm.create(LOGINUSERINFO, {
+        userId: o.userId,
+        lastSyncTime:t
+      }, true);
+    }
+  });
 };
 
 let _getOrgByOrgId = function (orgId) {

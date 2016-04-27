@@ -89,16 +89,7 @@ let CreateGroup = React.createClass({
     }
     if(0 == Object.keys(members).length)
       return;
-    else if(Object.keys(members).length == 1){
-      let user = members[Object.keys(members)[0]];
-      //获取用户名
-      this.props.navigator.replacePreviousAndPop(
-        {
-          comp: Chat,
-          param: {title: user.realName, chatType: SESSION_TYPE.USER, userId: user.userId}
-        }
-      );
-    }else{
+    else{
       dismissKeyboard();
       this.props.exec(() => {
           return ContactAction.createGroup(members, this.state.groupName, this.state.userInfo.userId)
