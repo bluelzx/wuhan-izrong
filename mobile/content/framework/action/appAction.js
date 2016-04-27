@@ -12,7 +12,6 @@ let {
 
 // Private Functions
 let _appInit = function() {
-  //MarketActions.bizOrderMarketSearchDefaultSearch();
   AppStore.appInit();
 };
 let _notificationRegister = function(token) {

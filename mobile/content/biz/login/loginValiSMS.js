@@ -14,11 +14,12 @@ let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let { Alert, Button } = require('mx-artifacts');
+let {Alert, Button} = require('mx-artifacts');
 let SMSTimer = require('../../comp/utils/smsTimer');
 let TabView = require('../../framework/system/tabView');
 let Validation = require('../../comp/utils/validation');
 let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
+let MarketActions = require('../../framework/action/marketAction');
 
 let ValiSMS = React.createClass({
   getStateFromStores() {
@@ -58,14 +59,15 @@ let ValiSMS = React.createClass({
           mobileNo: this.props.param.mobileNo,
           inputSmsCode: this.state.verify,
           deviceToken: this.state.APNSToken,
-          deviceModel: this.state.deviceModel
+          deviceModel: this.state.deviceModel,
         }).then((response) => {
-          const { navigator } = this.props;
+          const {navigator} = this.props;
           if (navigator) {
             this.props.navigator.resetTo({
               comp: 'tabView'
             });
           }
+          MarketActions.bizOrderMarketSearchDefaultSearch();
         }).catch((errorData) => {
           throw errorData;
         });
