@@ -59,15 +59,15 @@ let _handleConnectivityChange = (isConnected) => {
 };
 
 let _appInit = () => {
-  NetInfo.isConnected.addEventListener(
-    'change',
-    _handleConnectivityChange
-  );
-  NetInfo.isConnected.fetch().done(
-    (isConnected) => {
-      _info.netWorkState = isConnected;
-    }
-  );
+  //NetInfo.isConnected.addEventListener(
+  //  'change',
+  //  _handleConnectivityChange
+  //);
+  //NetInfo.isConnected.fetch().done(
+  //  (isConnected) => {
+  //    _info.netWorkState = isConnected;
+  //  }
+  //);
   _info.initLoadingState = false;
   _.assign(_data, {
     token: _getToken(),
@@ -86,12 +86,15 @@ let _register = (data) => {
 };
 
 let _login = (data) => {
-  Persister.saveAppData(data);
-  _.assign(_data, {
-    token: _getToken()
+  return Persister.saveAppData(data).then(()=>{
+    _.assign(_data, {
+      token: _getToken()
+    });
+    // imSocket.init(data.token);
+    AppStore.emitChange();
   });
- // imSocket.init(data.token);
-  AppStore.emitChange();
+
+
 };
 
 let _logout = (userId) => {

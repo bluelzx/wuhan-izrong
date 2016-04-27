@@ -28,6 +28,7 @@ let SMSTimer = React.createClass({
       disabled: false
     };
   },
+
   getDefaultProps(){
     return {
       isNeed: false
@@ -69,13 +70,34 @@ let SMSTimer = React.createClass({
     }
   },
 
+  sendSmsCodeToLoginMobile: function (){
+    if (this.props.parameter.length != 11) {
+      Alert('请输入完整的手机号码');
+    } else {
+      dismissKeyboard();
+      this.props.exec(() => {
+        return LoginAction.sendSmsCodeToLoginMobile({
+          mobileNo: this.props.parameter
+        }).then((response) => {
+          this.changeVerify();
+        }).catch((errorData) => {
+          throw errorData;
+        });
+      });
+    }
+  },
+
   selectVerifyFunction: function () {
-    if (this.state.disabled == false && this.props.func === 'sendSMSCodeToNewMobile') {
-      this.updateText();
+    if (this.state.disabled == false && this.props.func === 'sendSmsCodeToLoginMobile') {
+      //this.setState({
+      //  startTime: new Date().getTime(),
+      //  deadline: 60,
+      //  disabled: true,
+      //  tim: this.setInterval(this.updateText, 1000)
+      //});
+      //this.sendSmsCodeToLoginMobile();
     } else if (this.state.disabled == false && this.props.func === 'sendSmsCodeToRegisterMobile') {
       this.sendSmsCodeToRegisterMobile();
-    } else {
-      this.changeVerify();
     }
   },
 

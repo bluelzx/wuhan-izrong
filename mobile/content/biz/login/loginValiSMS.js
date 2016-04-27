@@ -31,7 +31,8 @@ let ValiSMS = React.createClass({
       disabled: true,
       verify: '',
       deviceModel: deviceModel,
-      APNSToken: APNSToken
+      APNSToken: APNSToken,
+      mobileNo: this.props.param.mobileNo
     };
   },
   getInitialState: function () {
@@ -50,7 +51,7 @@ let ValiSMS = React.createClass({
   login: function () {
     if (this.state.verify.length != 6) {
       Alert('请输入完整的短信验证码');
-    }else{
+    } else {
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.login({
@@ -66,7 +67,7 @@ let ValiSMS = React.createClass({
             });
           }
         }).catch((errorData) => {
-          Alert(errorData.msgContent);
+          throw errorData;
         });
       });
     }
@@ -95,9 +96,15 @@ let ValiSMS = React.createClass({
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <View style={{flexDirection: 'row'}}>
             <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>已发送短信验证码至</Text>
-            <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>{PhoneNumber(this.props.param.mobileNo)}</Text>
+            <Text
+              style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>{PhoneNumber(this.props.param.mobileNo)}</Text>
           </View>
-          <SMSTimer ref="smsTimer" onChanged={this._onChangeText} func={'sendSMSCodeToNewMobile'}/>
+          <SMSTimer ref="smsTimer"
+                    onChanged={this._onChangeText}
+                    func={'sendSmsCodeToLoginMobile'}
+                    parameter={this.state.mobileNo}
+                    exec={this.props.exec}
+          />
           <Button
             containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
