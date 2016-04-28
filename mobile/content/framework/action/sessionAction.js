@@ -25,7 +25,7 @@ let _updateSession = function (type, sessionId, title, content, lastTime, conten
   let param = {
     sessionId:sessionId,
     type: type,
-    badge:groupId||0,
+    badge:groupId||1,
     title: title,
     content:content,
     lastTime: lastTime,

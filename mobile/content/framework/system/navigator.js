@@ -174,7 +174,8 @@ var Main = React.createClass({
     if (this.state.token) {
       initComp = TabView;
       ImSocket.init(this.state.token,()=>{
-        return AppStore.getLoginUserInfo()&&AppStore.getLoginUserInfo().lastSyncTime;
+        let sTime = AppStore.getLoginUserInfo();
+        return sTime && sTime.lastSyncTime;
       });
     }
     return (
