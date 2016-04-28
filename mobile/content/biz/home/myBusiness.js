@@ -56,13 +56,13 @@ let Market = React.createClass({
       term: term,
       amount: amount,
       categorySource: categoryArr,
-      itemSource: item[0].itemArr,
+      itemSource: item ? [] : item[0].itemArr,
       termSource: orderItems,
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: myCategory != null ? myCategory.displayName : item[2].displayName,
-      levelTwoText: myItem != null ? myItem.displayName: item[2].itemArr[0].displayName,
+      levelOneText: myCategory != null ? myCategory.displayName : item ? '' : item[2].displayName,
+      levelTwoText: myItem != null ? myItem.displayName: item ? '' : item[2].itemArr[0].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -80,8 +80,8 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: myCategory != null ? myCategory.id : item[2].id,
-      bizItemID: myItem != null ? myItem.id: item[2].itemArr[0].id,
+      bizCategoryID: myCategory != null ? myCategory.id : item ? [] : item[2].id,
+      bizItemID: myItem != null ? myItem.id: item ? [] : item[2].itemArr[0].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -434,16 +434,15 @@ let Market = React.createClass({
 
   deleteFirstObj: function (obj) {
     let arr = [];
-    obj.forEach(function (item) {
-      if (item.displayCode != 'ALL') {
-        arr.push(item);
-      }
-    });
-    return (
-      arr
-    )
+    if (!!obj) {
+      obj.forEach(function (item) {
+        if (item.displayCode != 'ALL') {
+          arr.push(item);
+        }
+      });
+    }
+    return arr;
   }
-
 
 });
 
