@@ -150,6 +150,7 @@ let _getLoginUserInfo = () => {
 };
 
 let _saveFilters = function(filters){
+  _data.filters = filters;
   Persister.saveFilters(filters);
 };
 
