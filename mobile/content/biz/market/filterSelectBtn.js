@@ -15,8 +15,6 @@ let {
   InteractionManager
   } = React;
 
-let screenWidth = Dimensions.get('window').width;
-let screenHeight = Dimensions.get('window').height;
 let Adjust = require('../../comp/utils/adjust');
 
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -62,9 +60,7 @@ let FilterSelectBtn = React.createClass({
   },
   returnAllBtn: function () {
     if (this.props.dataList == null){
-      return(
-        this.props.dataList == null
-      );
+      return null;
     }else{
       return (
         <TouchableHighlight onPress={() => this._pressAll()} underlayColor='rgba(0,0,0,0)'>

@@ -54,9 +54,10 @@ let BusinessDetail = React.createClass({
             {this.returnItem('业务类型:', (this.state.detailData.bizCategoryDesc + '-' + this.state.detailData.bizItemDesc))}
             {this.returnItem('方向:', this.state.detailData.bizOrientationDesc)}
             {this.returnItem('期限:', this.state.detailData.term == null || this.state.detailData.term == 0 ? '--' : this.state.detailData.term + '天')}
-            {this.returnItem('金额:', this.state.detailData.amount == null || this.state.detailData.amount == 0? '--' : this.state.detailData.amount / 10000 + '万')}
-            {this.returnItem('利率:', this.state.detailData.rate == null || this.state.detailData.rate == 0? '--' :this.state.detailData.rate * 100 + '%')}
-            {this.returnItem('备注:', this.state.detailData.remark == null || this.state.detailData.remark == 0? '--' : this.state.detailData.remark)}
+            {this.returnItem('金额:', this.state.detailData.amount == null || this.state.detailData.amount == 0 ? '--'
+              : this.state.detailData.amount <= 100000000 ? this.state.detailData.amount / 10000 + '万' : this.state.detailData.amount / 100000000 + '亿')}
+            {this.returnItem('利率:', this.state.detailData.rate == null || this.state.detailData.rate == 0 ? '--' : this.state.detailData.rate * 100 + '%')}
+            {this.returnItem('备注:', this.state.detailData.remark == null || this.state.detailData.remark == 0 ? '--' : this.state.detailData.remark)}
             {this.returnItem('更新时间:', this.state.lastModifyDate)}
           </View>
           {this.renderAdjunct()}
@@ -74,21 +75,21 @@ let BusinessDetail = React.createClass({
   },
 
   render: function () {
-
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='业务详情' showBack={true} showBar={true}>
         {this._renderContent()}
       </NavBarView>
-    )
+    );
   },
+
   returnItem: function (desc, value) {
     return (
       <View style={{flexDirection:'row',alignItems:'center',paddingVertical:8}}>
         <Text style={{fontSize:16,color:'white',flex:1}}>{desc}</Text>
         <Text style={{fontSize:16,color:(desc == '更新时间:')?'#ffd547':'white',width:235/375*screenWidth}}>{value}</Text>
       </View>
-    )
+    );
   },
   renderAdjunct: function () {
     return (
@@ -96,7 +97,7 @@ let BusinessDetail = React.createClass({
         {this.renderImageTitle()}
         {this.renderImageItem()}
       </View>
-    )
+    );
   },
   renderPromulgator: function () {
     return (
@@ -110,7 +111,7 @@ let BusinessDetail = React.createClass({
           <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
         </TouchableHighlight>
       </View>
-    )
+    );
   },
   returnInfoItem: function (url, value, isPublic) {
     if (isPublic) {
@@ -121,11 +122,11 @@ let BusinessDetail = React.createClass({
           />
           <Text style={{marginLeft:10,fontSize:16,color:'white',width:screenWidth - 60}}>{value}</Text>
         </View>
-      )
+      );
     } else {
       return (
         <View></View>
-      )
+      );
     }
   },
   renderImageTitle(){

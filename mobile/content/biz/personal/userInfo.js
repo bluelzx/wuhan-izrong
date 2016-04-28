@@ -199,7 +199,7 @@ let UserInfo = React.createClass({
             </TouchableOpacity>
           </View>
 
-          {this.renderRow('手机号', require('../../image/user/mobileNo.png'), 'mobileNumber', PhoneNumber(this.state.mobileNumber),
+          {this.renderRow('手机号', require('../../image/user/mobileNo.png'), 'mobileNumber', this.state.mobileNumber,
             'publicMobile', this.state.publicMobile, 'number-pad', 11, false, true, false)}
 
           {this.renderRow('座机号', require('../../image/user/telephoneNo.png'), 'phoneNumber', this.state.phoneNumber, 'publicPhone',
