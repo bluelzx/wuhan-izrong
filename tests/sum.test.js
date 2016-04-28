@@ -5,5 +5,12 @@ describe('sum', function () {
   it('adds 1 + 2 to equal 3', function () {
     expect(sum(1, 2)).to.be.equal(3);
   });
+
+  it('undefined traverse', function () {
+    undefined.every((item) => {
+      console.log(item);
+
+    });
+  });
 });
 

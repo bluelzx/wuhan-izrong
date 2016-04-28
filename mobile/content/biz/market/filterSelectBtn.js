@@ -106,9 +106,7 @@ let FilterSelectBtn = React.createClass({
         arr.push(item);
       }
     });
-    return (
-      arr
-    )
+    return arr;
   }
 });
 
