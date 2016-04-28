@@ -60,7 +60,7 @@ let SelectBusiness2 = React.createClass({
   },
 
   getItemWithCategory: function (bizItem, bizCategory) {
-    let itemArr = new Array();
+    let itemArr = [];
     bizItem.forEach(function (item) {
       if (item.displayCode.substring(0, 3) == bizCategory.displayCode) {
         itemArr.push(item);

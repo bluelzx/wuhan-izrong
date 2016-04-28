@@ -49,7 +49,7 @@ let EditGroup = React.createClass({
 
   renderCircularButton: function () {
 
-    let btns = new Array();
+    let btns = [];
     btns.push(<CircularButton key="cir1" onPress={()=>this.props.navigator.push({comp:AddMember})}>
       <Text style={{fontSize:20, color:'#F3AD2C',fontWeight:'bold'}}>+</Text>
     </CircularButton>);

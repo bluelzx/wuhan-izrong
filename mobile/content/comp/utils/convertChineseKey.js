@@ -18,7 +18,7 @@ var oMultiDiff={"19969":"DZ","19975":"WM","19988":"QJ","20048":"YL","20056":"SC"
 function _makePy(str){
   if(typeof(str) != "string")
     throw new Error(-1,"函数makePy需要字符串类型参数!");
-/*  var arrResult = new Array(); //保存中间结果的数组
+/*  var arrResult = []; //保存中间结果的数组
   for(var i=0,len=str.length;i<len;i++){
 //获得unicode码
     var ch = str.charAt(i);
@@ -44,33 +44,33 @@ function checkCh(ch){
 }
 
 function _buildOrgList(orgList){
-  let A = new Array();
-  let B = new Array();
-  let C = new Array();
-  let D = new Array();
-  let E = new Array();
-  let F = new Array();
-  let G = new Array();
-  let H = new Array();
-  let I = new Array();
-  let J = new Array();
-  let K = new Array();
-  let L = new Array();
-  let M = new Array();
-  let N = new Array();
-  let O = new Array();
-  let P = new Array();
-  let Q = new Array();
-  let R = new Array();
-  let S = new Array();
-  let T = new Array();
-  let U = new Array();
-  let V = new Array();
-  let W = new Array();
-  let X = new Array();
-  let Y = new Array();
-  let Z = new Array();
-  let $ = new Array();
+  let A = [];
+  let B = [];
+  let C = [];
+  let D = [];
+  let E = [];
+  let F = [];
+  let G = [];
+  let H = [];
+  let I = [];
+  let J = [];
+  let K = [];
+  let L = [];
+  let M = [];
+  let N = [];
+  let O = [];
+  let P = [];
+  let Q = [];
+  let R = [];
+  let S = [];
+  let T = [];
+  let U = [];
+  let V = [];
+  let W = [];
+  let X = [];
+  let Y = [];
+  let Z = [];
+  let $ = [];
 
   orgList.forEach(function (orgItem) {
     console.log(orgItem);

@@ -8,7 +8,8 @@ let {
   StyleSheet,
   Text,
   View,
-  Platform
+  Platform,
+  TouchableOpacity
   } = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
@@ -115,6 +116,14 @@ let ValiSMS = React.createClass({
           >
             确定
           </Button>
+        </View>
+        <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
+          <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
+            <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服: </Text>
+            <TouchableOpacity onPress={()=>{}}>
+              <Text style={{fontSize: 16, color: '#ffffff', textDecorationLine: 'underline'}}>022-28405347</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </NavBarView>
     );

@@ -330,7 +330,7 @@ let WhitePage = React.createClass({
   },
 
   renderMessage: function() {
-    let msg = new Array();
+    let msg = [];
     sessionFilter(this.state.data.msg,'title','content',this.state.keyWord).map((item, index)=>{
       msg.push(this.renderItem(item, index));
     });
