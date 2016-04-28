@@ -153,6 +153,7 @@ let _getLoginUserInfo = () => {
 let _saveFilters = function(filters){
   _data.filters = filters;
   Persister.saveFilters(filters);
+  AppStore.emitChange('MARKET_CHANGE');
 };
 
 let _getFilters = ()=> {

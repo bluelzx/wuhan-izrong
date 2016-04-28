@@ -95,16 +95,68 @@ let Market = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange);
+    AppStore.addChangeListener(this._onChange, 'MARKET_CHANGE');
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange);
+    AppStore.removeChangeListener(this._onChange, 'MARKET_CHANGE');
   },
 
   _onChange () {
-    //this.setState(this.bizOrderMarketSearch());
+    let filterItems = AppStore.getFilters().filterItems;
+    let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
+    let categoryArr = this.deleteFirstObj(category.options);
+    let item = MarketStore.getCategoryAndItem(filterItems);
+    item.shift();
+    let bizOrientation = MarketStore.getFilterOptions(filterItems, 'bizOrientation').options;
+    let term = MarketStore.getFilterOptions(filterItems, 'term').options;
+    let amount = MarketStore.getFilterOptions(filterItems, 'amount').options;
+    let orderItems = AppStore.getFilters().orderItems;
+
+    let myCategory = AppStore.getCategory();
+    let myItem = AppStore.getItem();
+
+    this.setState({
+      item: item,
+      filterItems: filterItems,
+      bizOrientation: bizOrientation,
+      term: term,
+      amount: amount,
+      categorySource: categoryArr,
+      itemSource: item ? [] : item[0].itemArr,
+      termSource: orderItems,
+      clickFilterType: 0,
+      clickFilterTime: 0,
+      clickFilterOther: 0,
+      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[2].displayName,
+      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[2].itemArr[0].displayName,
+      optionTwoText: '最新发布',
+      pickTypeRow1: 0,
+      pickTypeRow2: 0,
+      pickTimeRow: 0,
+      pickRowColor: '#244266',
+      orientionDefault: 10000,
+      orientionIsAll: true,
+      termDefault: 10000,
+      termIsAll: true,
+      amountDefault: 10000,
+      amountIsAll: true,
+      orgValue: '',
+      orgId: '',
+      //network
+      orderField: 'lastModifyDate',
+      orderType: 'desc',
+      pageIndex: 1,
+      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[2].id,
+      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 :item[2].itemArr[0].id,
+      bizOrientationID: '',
+      termID: '',
+      amountID: '',
+      marketData: marketData
+    });
   },
+
+
 
   /**
    * Will be called when refreshing
