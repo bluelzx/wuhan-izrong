@@ -7,6 +7,7 @@ let React = require('react-native');
 let {
   StyleSheet,
   TouchableHighlight,
+  TouchableOpacity,
   Text,
   View,
   Image
@@ -143,7 +144,17 @@ let Register_accountInfo = React.createClass({
             下一步
           </Button>
         </View>
-
+        <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
+          <View style={{flexDirection: 'row', justifyContent: 'center',marginBottom:10}}>
+            <Text style={{fontSize: 15, color: '#ffffff'}}>如未找到您所在的机构</Text>
+          </View>
+          <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30}}>
+            <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服: </Text>
+            <TouchableOpacity onPress={()=>{}}>
+              <Text style={{fontSize: 16, color: '#ffffff', textDecorationLine: 'underline'}}>022-28405347</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </NavBarView>
     );
   }

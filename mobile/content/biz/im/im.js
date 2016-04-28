@@ -11,7 +11,8 @@ let {
   TouchableOpacity,
   TouchableHighlight,
   Platform,
-  Image
+  Image,
+  ScrollView
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
 let _ = require('lodash');
@@ -330,7 +331,7 @@ let WhitePage = React.createClass({
   },
 
   renderMessage: function() {
-    let msg = new Array();
+    let msg = [];
     sessionFilter(this.state.data.msg,'title','content',this.state.keyWord).map((item, index)=>{
       msg.push(this.renderItem(item, index));
     });
@@ -344,10 +345,10 @@ let WhitePage = React.createClass({
                   showBar={true}
                   actionButton={this.renderContact}>
        <SearchBar textChange={this.textChange}/>
-        <View>
+        <ScrollView style={{flexDirection: 'column'}}>
           {this.renderSpread(this.state.data.platformInfo)}
           {this.renderMessage()}
-        </View>
+        </ScrollView>
       </NavBarView>
     );
   }

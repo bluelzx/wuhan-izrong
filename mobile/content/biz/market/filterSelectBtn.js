@@ -100,15 +100,13 @@ let FilterSelectBtn = React.createClass({
     this.props.callBack(this.props.dataList[number], title, rowDefault, isAll);
   },
   deleteFirstObj: function (obj) {
-    let arr = new Array();
+    let arr = [];
     obj.forEach(function (item) {
       if (item.displayCode != 'ALL') {
         arr.push(item);
       }
     });
-    return (
-      arr
-    )
+    return arr;
   }
 });
 

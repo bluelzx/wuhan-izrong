@@ -495,7 +495,7 @@ let MyBizDetail = React.createClass({
   handleSendImage(uri) {
     ImAction.uploadImage(uri)
       .then((response) => {
-        let arr = new Array();
+        let arr = [];
         arr.push(response.fileUrl);
         this.setState({
           fileUrlList: arr

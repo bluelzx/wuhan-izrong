@@ -20,7 +20,8 @@ let DeleteMember = React.createClass({
     let groupId = this.props.param.groupId;
     return {
       data:ContactStore.getUsersByGroupId(groupId),
-      memberList:{}
+      memberList:{},
+      userInfo:ContactStore.getUserInfo()
     }
   },
 
@@ -80,21 +81,20 @@ let DeleteMember = React.createClass({
 
   //渲染组成员
   itemRender: function(data) {
-    return (
-      <CheckBox key={data.userId}
-                item={data}
-                choice={this.checkBoxChoice}
-                unChoice={this.unCheckBoxChoice}
-                style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
-        <View style={{flexDirection:'row'}}>
-          <View style={{height: 40,width: 40}}>
-            <NameCircular name={data.realName}/>
+      return (
+        <CheckBox key={data.userId}
+                  item={data}
+                  choice={this.checkBoxChoice}
+                  unChoice={this.unCheckBoxChoice}
+                  style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
+          <View style={{flexDirection:'row'}}>
+            <View style={{height: 40,width: 40}}>
+              <NameCircular name={data.realName}/>
+            </View>
+            <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
           </View>
-          <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
-        </View>
-      </CheckBox>
-
-    );
+        </CheckBox>
+      );
   },
 
 
@@ -110,7 +110,7 @@ let DeleteMember = React.createClass({
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord)}
+                   dataSource={groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId)}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />

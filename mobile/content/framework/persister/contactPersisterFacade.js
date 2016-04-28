@@ -100,7 +100,7 @@ let _getGroupInfoByGroupId = function (groupId) {
 //****按照机构分组
 let _getUsersGroupByOrg = function () {
   //获得所有机构
-  let orgs = _realm.objects(ORGBEAN);
+  let orgs = _realm.objects(ORGBEAN).sorted('orgValue', false);
   let result = [];
   orgs.forEach((org) => {
     let tmp = {
