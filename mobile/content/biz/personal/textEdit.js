@@ -91,7 +91,7 @@ let TextEdit = React.createClass({
         if (Validation.isWechat(this.state.newValue)) {
           this.updateUserInfo();
         } else {
-          Alert('请输入40个字符内的微信号号码');
+          Alert('请输入40个字符内的正确微信号');
         }
         break;
 
@@ -283,7 +283,7 @@ let TextEdit = React.createClass({
                          this.textChange(text);
                          }}
                          autoFocus={true}
-                         autoCapitalize="xnone"
+                         autoCapitalize="none"
                          autoCorrect={false}
               />
             </View>
