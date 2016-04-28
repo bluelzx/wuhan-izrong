@@ -73,7 +73,6 @@ let _register = function (url, p) {
   return new Promise((resolve, reject) => {
     BFetch(url, p).then((response) => {
       resolve(AppStore.register(response));
-      MarketActions.bizOrderMarketSearchDefaultSearch();
     }).catch((errorData) => {
       reject(errorData);
     });

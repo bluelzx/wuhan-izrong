@@ -3,7 +3,7 @@ let React, {
 } = require('react-native');
 
 let AppStore = require('../store/appStore');
-
+let MarketActions = require('./marketAction');
 let {
   BFetch,
   PFetch,

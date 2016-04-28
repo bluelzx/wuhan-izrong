@@ -38,11 +38,16 @@ let Market = React.createClass({
   getInitialState(){
     let filterItems = AppStore.getFilters().filterItems;
     let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
+    let categoryArr = this.deleteFirstObj(category.options);
     let item = MarketStore.getCategoryAndItem(filterItems);
+    item.shift();
     let bizOrientation = MarketStore.getFilterOptions(filterItems, 'bizOrientation').options;
     let term = MarketStore.getFilterOptions(filterItems, 'term').options;
     let amount = MarketStore.getFilterOptions(filterItems, 'amount').options;
     let orderItems = AppStore.getFilters().orderItems;
+
+    let myCategory = AppStore.getCategory();
+    let myItem = AppStore.getItem();
 
     return {
       item: item,
@@ -50,14 +55,14 @@ let Market = React.createClass({
       bizOrientation: bizOrientation,
       term: term,
       amount: amount,
-      categorySource: category.options,
+      categorySource: categoryArr,
       itemSource: item[0].itemArr,
       termSource: orderItems,
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: '资金业务',
-      levelTwoText: '同业存款',
+      levelOneText: myCategory != null ? myCategory.displayName : item[2].displayName,
+      levelTwoText: myItem != null ? myItem.displayName: item[2].itemArr[0].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -75,19 +80,29 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: 221,
-      bizItemID: 227,
-      bizOrientationID: item[0].id,
-      termID: item[0].itemArr[0].id,
+      bizCategoryID: myCategory != null ? myCategory.id : item[2].id,
+      bizItemID: myItem != null ? myItem.id: item[2].itemArr[0].id,
+      bizOrientationID: '',
+      termID: '',
       amountID: '',
       marketData: marketData
-    }
+    };
   },
 
   componentWillMount: function () {
-    {
-      this.bizOrderMarketSearch();
-    }
+    this.bizOrderMarketSearch();
+  },
+
+  componentDidMount() {
+    AppStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function () {
+    AppStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange () {
+    this.setState(this.bizOrderMarketSearch());
   },
 
   render: function () {
@@ -113,21 +128,21 @@ let Market = React.createClass({
       clickFilterTime: 0,
       clickFilterOther: 0,
       clickFilterType: (this.state.clickFilterType == 0) ? 1 : 0,
-    })
+    });
   },
   pressFilterTime(){
     this.setState({
       clickFilterType: 0,
       clickFilterOther: 0,
       clickFilterTime: (this.state.clickFilterTime == 0) ? 1 : 0,
-    })
+    });
   },
   pressFilterOther(){
     this.setState({
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: (this.state.clickFilterOther == 0) ? 1 : 0,
-    })
+    });
   },
   pressTypeRow1(rowId){
     this.setState({
@@ -137,7 +152,8 @@ let Market = React.createClass({
       itemSource: this.state.item[rowId].itemArr,
       levelTwoText: this.state.item[rowId].itemArr[0].displayName,
       bizCategoryID: this.state.categorySource[rowId].id
-    })
+    });
+    AppStore.saveCategory(this.state.categorySource[rowId]);
   },
   pressTypeRow2(rowId){
     this.setState({
@@ -146,9 +162,9 @@ let Market = React.createClass({
       levelTwoText: this.state.itemSource[rowId].displayName,
       bizItemID: this.state.itemSource[rowId].id
     });
-    {
-      this.bizOrderMarketSearch();
-    }
+
+    this.bizOrderMarketSearch();
+    AppStore.saveItem(this.state.itemSource[rowId]);
   },
   pressTimeRow(rowId){
     this.setState({
@@ -157,10 +173,10 @@ let Market = React.createClass({
       optionTwoText: this.state.termSource[rowId].fieldDisplayName,
       orderField: this.state.termSource[rowId].fieldName,
       orderType: this.state.termSource[rowId].asc ? 'asc' : 'desc',
-    })
-    {
-      this.bizOrderMarketSearch();
-    }
+    });
+
+    this.bizOrderMarketSearch();
+
   },
   renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
     return (
@@ -300,7 +316,7 @@ let Market = React.createClass({
         </View>
       )
     }
-    {this.clearOptions();}
+    this.clearOptions();
   },
   renderTypeRow1(rowData, sectionID, rowID){
     return (
@@ -385,12 +401,10 @@ let Market = React.createClass({
     this.refs["AMOUNT"].setDefaultState();
   },
   confirmBtn: function () {
-    {
+
       this.pressFilterOther();
-    }
-    {
       this.bizOrderMarketSearch();
-    }
+
   },
   toPage: function (name) {
     const { navigator } = this.props;
@@ -467,6 +481,17 @@ let Market = React.createClass({
     );
   },
 
+  deleteFirstObj: function (obj) {
+    let arr = new Array();
+    obj.forEach(function (item) {
+      if (item.displayCode != 'ALL') {
+        arr.push(item);
+      }
+    });
+    return (
+      arr
+    )
+  }
 
 });
 

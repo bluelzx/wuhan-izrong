@@ -32,14 +32,13 @@ AppAction.appInit();
 var TabView = require('./tabView');
 var Login = require('../../biz/login/login');
 var AppStore = require('../store/appStore');
-let { Alert, Device } = require('mx-artifacts');
-let ProgressHUD = require('react-native-progress-hud');
+let { Alert, Device, Loading } = require('mx-artifacts');
+let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
 
 var Main = React.createClass({
   _navigator: null,
-  mixins: [ProgressHUD.Mixin],
   _getStateFromStores: function() {
     return {
       initLoading: AppStore.getInitLoadingState(),
@@ -47,7 +46,9 @@ var Main = React.createClass({
     };
   },
   getInitialState: function() {
-    return this._getStateFromStores();
+    return _.assign(this._getStateFromStores(), {
+      isLoadingVisible: false
+    });
   },
   componentDidMount: function() {
     AppStore.addChangeListener(this._onChange);
@@ -110,25 +111,30 @@ var Main = React.createClass({
   _exec: function (func, showLoading = true) {
     let self = this;
     if (showLoading) {
-      this.showProgressHUD();
+      this.setState({
+        isLoadingVisible: true
+      });
     }
 
     co(function* () {
       yield func()
         .then((response) => {
-          console.log(response);
+          console.log(response || '');
         })
         .catch((errorData) => {
           if (showLoading) {
-            self.dismissProgressHUD();
+            self.setState({
+              isLoadingVisible: false
+            });
           }
-
           console.log(errorData);
           Alert(errorData.msgContent || errorData.message);
         });
 
       if (showLoading) {
-        self.dismissProgressHUD();
+        self.setState({
+          isLoadingVisible: false
+        });
       }
     }).catch((e) => {
       console.log(e);
@@ -191,10 +197,9 @@ var Main = React.createClass({
           }}
         />
 
-        <ProgressHUD
-          isVisible={this.state.is_hud_visible}
-          isDismissible={false}
-          overlayColor="rgba(0, 0, 0, 0)"
+        <Loading
+          panelColor="white"
+          isVisible={this.state.isLoadingVisible}
         />
       </View>
     );
