@@ -60,7 +60,8 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getCategory: ()=> _getCategory(),
   saveItem: (data) => _saveItem(data),
   getItem: ()=> _getItem(),
-  queryAllPlatFormInfo:()=>_queryAllPlatFormInfo()
+  queryAllPlatFormInfo:()=>_queryAllPlatFormInfo(),
+  getBadge:()=>_getBadge(),
 });
 
 let _queryAllPlatFormInfo = function(){
@@ -204,5 +205,9 @@ let _getCategory = () => {
 
 let _getItem = () => {
   return _data.item;
+};
+
+let _getBadge = () => {
+  let badge = Persister.getSessionBadge();
 };
 module.exports = AppStore;
