@@ -137,7 +137,7 @@ export default class Bubble extends React.Component {
 
     if (this.props.contentType === MSG_CONTENT_TYPE.BIZINFO) {
       let data = JSON.parse(this.props.content);
-      let amount = data.amount == '' ? '0元' : (data.amount < 99999999 ? data.amount / 10000 : data.amount / 100000000) + '万';
+      let amount = data.amount == '' ? '0元' : data.amount / 10000 + '万';
       let shareContent = data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' +
         (data.term == '' ? '0天' : data.term + '天') + '  ' +
         amount + '  ' + numeral(data.rate * 100).format('0,0.00') + '%';
