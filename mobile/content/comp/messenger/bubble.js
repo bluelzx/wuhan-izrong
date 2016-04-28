@@ -150,7 +150,7 @@ export default class Bubble extends React.Component {
               style={{borderTopWidth: 1, borderTopColor: '#cccccc', paddingTop: 15, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
               <Image style={{}}
                      source={data.bizOrientation == 'IN' ? require('../../image/market/receive.png') : require('../../image/market/issue.png')}/>
-              <View style={{width: screenWidth * 0.6, flex: 1, flexDirection: 'row'}}>
+              <View style={{width: screenWidth * 0.5, flex: 1, flexDirection: 'row'}}>
                 <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight),
                   {flex: 1, textAlign: 'center'}]}>
                   {data.term == '' ? '0天' : data.term + '天'}

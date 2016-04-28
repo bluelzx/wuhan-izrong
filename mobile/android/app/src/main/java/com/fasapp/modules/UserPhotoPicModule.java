@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Date;
 
 /**
@@ -41,6 +43,9 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
     private boolean crop;
     private String fileName;
     private WritableMap response;
+    private File file;
+    private Uri uri;
+
     public UserPhotoPicModule(ReactApplicationContext reactContext) {
         super(reactContext);
         reactContext.addActivityEventListener(this);
@@ -100,7 +105,20 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         Activity activity = getCurrentActivity();
         mCallback = callback;
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        activity.startActivityForResult(cameraIntent, USER_CAMERA_REQUEST_CODE);
+        // 判断存储卡是否可用，存储照片文件
+        if (SDCardUtils.hasSdcard()) {
+            file = new File(Environment.getExternalStorageDirectory(), fileName);
+            uri = Uri.fromFile(file);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            Log.d("Directory", Environment.getExternalStorageDirectory().toString() + fileName);
+            File file = new File(Environment.getExternalStorageDirectory(), fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+        if (activity != null) {
+            activity.startActivityForResult(cameraIntent, USER_CAMERA_REQUEST_CODE);
+        }
     }
 
     @ReactMethod
@@ -147,8 +165,27 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                     if (crop) {
                         beginCrop(Uri.fromFile(tempFile));
                     } else {
+                        try {
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inSampleSize = 2;
+                            Bitmap bitmap = BitmapFactory.decodeFile(file.getPath(), options);
+                            if (bitmap != null) {
+                                if (file.exists()) {
+                                    file.delete();
+                                }
+                                // 保存图片
+                                FileOutputStream fos = null;
+                                fos = new FileOutputStream(file);
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+                                fos.flush();
+                                fos.close();
+                            }
+                        } catch (Exception e) {
+                            // TODO: handle exception
+
+                        }
                         response = Arguments.createMap();
-                        response.putString("uri", Uri.fromFile(tempFile).toString());
+                        response.putString("uri", uri.toString());
                         mCallback.invoke(response);
                     }
                 }
@@ -161,6 +198,23 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                 if (crop) {
                     beginCrop(uri);
                 } else {
+                    try {
+                        File file = new File(new URI(uri.toString()));
+                        File tempFile = new File(Environment.getExternalStorageDirectory(), fileName);
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inSampleSize = 2;
+                        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath(), options);
+                        if (bitmap != null) {
+                            // 保存图片
+                            FileOutputStream fos = null;
+                            fos = new FileOutputStream(tempFile);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 30, fos);
+                            fos.flush();
+                            fos.close();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     response = Arguments.createMap();
                     response.putString("uri", uri.toString());
                     mCallback.invoke(response);

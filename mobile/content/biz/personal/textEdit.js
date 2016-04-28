@@ -215,7 +215,7 @@ let TextEdit = React.createClass({
                          this.setState({tele:text});
                          this.textChange(text);
                          }}
-                         autoFocus={true}
+                         //autoFocus={true}
                          autoCapitalize="none"
                          autoCorrect={false}
               />
@@ -255,7 +255,7 @@ let TextEdit = React.createClass({
                          this.setState({newValue:text});
                          this.textChange(text);
                          }}
-                         autoFocus={true}
+                         //autoFocus={true}
                          autoCapitalize="none"
                          autoCorrect={false}
               />
@@ -282,7 +282,7 @@ let TextEdit = React.createClass({
                          this.setState({newValue:text});
                          this.textChange(text);
                          }}
-                         autoFocus={true}
+                         //autoFocus={true}
                          autoCapitalize="none"
                          autoCorrect={false}
               />
