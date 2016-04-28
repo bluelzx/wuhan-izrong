@@ -22,13 +22,15 @@ let screenHeight = Dimensions.get('window').height;
 
 let NavBarView = require('../../framework/system/navBarView');
 let FilterSelectBtn = require('../market/filterSelectBtn');
-let MyBizList = require('./myBizList');
-let SelectOrg = require('../login/selectOrg');
 let Icon = require('react-native-vector-icons/Ionicons');
+let MyBizDetail = require('./myBizDetail');
 
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
+
+let {Alert, GiftedListView} = require('mx-artifacts');
+let Adjust = require('../../comp/utils/adjust');
 
 var marketData = {contentList: []};
 
@@ -90,9 +92,9 @@ let Market = React.createClass({
   },
 
   componentDidMount() {
-    InteractionManager.runAfterInteractions(() => {
-      this.bizOrderAdminSearch();
-    });
+    //InteractionManager.runAfterInteractions(() => {
+    //  this.bizOrderAdminSearch();
+    //});
     AppStore.addChangeListener(this._onChange);
   },
 
@@ -104,6 +106,164 @@ let Market = React.createClass({
     this.setState(this.bizOrderAdminSearch());
   },
 
+  /**
+   * Will be called when refreshing
+   * Should be replaced by your own logic
+   * @param {number} page Requested page to fetch
+   * @param {function} callback Should pass the rows
+   * @param {object} options Inform if first load
+   */
+  _onFetch(page = 1, callback, options) {
+    MarketAction.bizOrderMarketSearch({
+        orderField: this.state.orderField,
+        orderType: this.state.orderType,
+        pageIndex: page,
+        filterList: [
+          this.state.bizCategoryID,
+          this.state.bizItemID,
+          this.state.bizOrientationID,
+          this.state.termID,
+          this.state.amountID
+        ]
+      }
+    ).then((response)=> {
+      console.log(response);
+      setTimeout(() => {
+        callback(response, {
+          allLoaded: false, // the end of the list is reached
+        });
+      }, 1000); // simulating network fetching
+
+    }).catch(
+      (errorData) => {
+        setTimeout(() => {
+          callback([], {
+            allLoaded: true, // the end of the list is reached
+          });
+        }, 1000); // simulating network fetching
+        Alert(errorData.msgContent);
+      }
+    );
+  },
+  _renderRow: function (rowData) {
+    if (rowData) {
+      return null;
+    }
+
+    return (
+      <TouchableHighlight onPress={() => this.toDetail(MyBizDetail,rowData)} underlayColor='#000'>
+        <View
+          style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926'}}>
+          <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
+                 source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
+          />
+          <Text
+            style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}>
+            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天'}
+          </Text>
+          <Text
+            style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'?'rgba(175,134,86,1)':'#386085'}}>
+            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount / 10000 + '万'}
+          </Text>
+          <Text
+            style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}
+            numberOfLines={1}>
+            {rowData.rate == null || rowData.rate == 0 ? '--' : rowData.rate + '%'}
+          </Text>
+          {this.renderFreshBtn(rowData)}
+        </View>
+      </TouchableHighlight>
+    )
+  },
+  renderFreshBtn: function (rowData) {
+    if (rowData.status == 'ACTIVE') {
+      return (
+        <View>
+          <Button
+            containerStyle={{flexDirection:'row',justifyContent:'center',alignItems:'center',borderRadius:5,position:"absolute",left:Adjust.width(240),top:0,marginTop:-15,backgroundColor: '#4fb9fc',height:30,width:Adjust.width(85)}}
+            style={{fontSize: 15, color: '#ffffff'}}
+            disabled={this.state.disabled}
+            onPress={() => this.freshBiz(rowData)}
+          >
+            刷新
+          </Button>
+        </View>
+      );
+    } else {
+      return (
+        <View></View>
+      );
+    }
+  },
+
+  freshBiz: function (rowData) {
+    this.refreshBizOrder(rowData);
+  },
+  toDetail: function (name, rowData) {
+    const { navigator } = this.props;
+    if (navigator) {
+      navigator.push({
+        comp: name,
+        param: {
+          marketInfo: rowData
+        }
+      })
+    }
+  },
+
+  refreshBizOrder: function (rowData) {
+    this.props.exec(
+      ()=> {
+        return MarketAction.refreshBizOrder({
+            orderId: rowData.id
+          }
+        ).then((response)=> {
+          Alert('刷新成功');
+        }).catch((errorData) => {
+          throw errorData;
+        });
+      }
+    );
+  },
+
+
+  renderMarketList: function () {
+    return (
+      <View style={{width:screenWidth,flex:1,backgroundColor: '#162a40'}}>
+        <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5}}>
+          <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:'#8d8d8d',}}>
+            {'方向'}
+          </Text>
+          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:'#8d8d8d',}}>
+            {'期限'}
+          </Text>
+          <Text style={{position:"absolute",left:Adjust.width(120),top:0,marginLeft:10, color:'#8d8d8d',}}>
+            {'金额'}
+          </Text>
+          <Text style={{position:"absolute",left:Adjust.width(200),top:0,marginLeft:10, color:'#8d8d8d',}}>
+            {'利率'}
+          </Text>
+        </View>
+
+        <GiftedListView
+          ref="certGiftedListView"
+
+          rowView={this._renderRow}
+          onFetch={this._onFetch}
+          firstLoader={true} // display a loader for the first fetching
+          pagination={true} // enable infinite scrolling using touch to load more
+          refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
+          withSections={false} // enable sections
+
+          automaticallyAdjustContentInsets={false}
+
+          style={{flex: 1}}
+        />
+
+      </View>
+    );
+  },
+
   render: function () {
     let {title}  = this.props;
     return (
@@ -113,9 +273,7 @@ let Market = React.createClass({
           style={{width: screenWidth,alignItems: "center",justifyContent: "flex-start",flexDirection: "row"}}>
           {this.renderFilter(this.pressFilterType, this.pressFilterTime, this.pressFilterOther)}
         </View>
-        <MyBizList ref="MYBIZLIST" navigator={this.props.navigator} exec={this.props.exec}
-                   orderField={this.state.orderField} orderType={this.state.orderType}
-                   pageIndex={this.state.pageIndex} marketData={this.state.marketData}/>
+        {this.renderMarketList()}
         {this.renderOptionType()}
         {this.renderOptionTime()}
         {this.renderOptionOther()}

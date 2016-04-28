@@ -9,7 +9,8 @@ let {
   ScrollView,
   Dimensions,
   Image,
-  StyleSheet
+  StyleSheet,
+  InteractionManager
   } = React;
 
 let screenWidth = Dimensions.get('window').width;
@@ -32,11 +33,14 @@ let BusinessDetail = React.createClass({
       lastModifyDate: ''
     }
   },
-  componentWillMount: function () {
-    {
+
+  componentDidMount() {
+    AppStore.addChangeListener(this._onChange);
+    InteractionManager.runAfterInteractions(() => {
       this.getBizOrderInMarket(this.state.marketInfo.id);
-    }
+    });
   },
+
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'

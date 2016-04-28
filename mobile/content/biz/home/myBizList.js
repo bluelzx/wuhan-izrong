@@ -119,12 +119,6 @@ let MyBizList = React.createClass({
     }
   },
 
-  _changeData: function () {
-    this.setState({
-      dataSource: data.cloneWithRows(this.props.marketData.contentList),
-    })
-  },
-
   refreshBizOrder: function (rowData) {
     this.props.exec(
       ()=> {
@@ -138,7 +132,14 @@ let MyBizList = React.createClass({
         });
       }
     );
+  },
+
+  _changeData: function () {
+    this.setState({
+      dataSource: data.cloneWithRows(this.props.marketData.contentList),
+    })
   }
+
 
 })
 
