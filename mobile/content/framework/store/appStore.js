@@ -13,7 +13,8 @@ let _info = {
   CHANGE_EVENT: 'change',
   netWorkState: false,
   isLogout: false,
-  isForceLogout: false
+  isForceLogout: false,
+  apnTokens: null
 };
 
 
@@ -49,6 +50,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
+  getOrgByOrgName:(orgName) => _getOrgByOrgName(orgName),
   saveFilters: (filters) => _saveFilters(filters),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
@@ -81,6 +83,7 @@ let _appInit = () => {
   //  }
   //);
   _info.initLoadingState = false;
+  _info.apnTokens = Persister.getAPNSToken();
   _.assign(_data, {
     token: _getToken(),
     filters: Persister.getFilters()
@@ -105,8 +108,6 @@ let _login = (data) => {
     // imSocket.init(data.token);
     AppStore.emitChange();
   });
-
-
 };
 
 let _logout = (userId) => {
@@ -125,13 +126,15 @@ let _force_logout = () => {
 };
 
 let _save_apns_token = (apnsToken) => {
+  _info.apnTokens = apnsToken;
   Persister.saveAPNSToken(apnsToken);
   console.log('APNSToken' + apnsToken);
   AppStore.emitChange();
 };
 
 let _get_apns_token = () => {
-  return Persister.getAPNSToken();
+  //return Persister.getAPNSToken();
+  return _info.apnTokens || '';
 };
 
 let _getToken = () => {
@@ -146,11 +149,8 @@ let _getLoginUserInfo = () => {
   return Persister.getLoginUserInfo();
 };
 
-let _getOrgByOrgId = (orgId)=> {
-  return Persister.getOrgByOrgId(orgId);
-};
-
 let _saveFilters = function(filters){
+  _data.filters = filters;
   Persister.saveFilters(filters);
 };
 
@@ -163,8 +163,16 @@ let _saveOrgList = (orgList)=> {
 };
 
 let _getOrgList = ()=> {
-  let orgBuildList = Persister.getOrgList();
-  return orgBuildList;
+  return Persister.getOrgList();
+};
+
+
+let _getOrgByOrgId = (orgId)=> {
+  return Persister.getOrgByOrgId(orgId);
+};
+
+let _getOrgByOrgName = (orgName)=> {
+  return Persister.getOrgByOrgName(orgName);
 };
 
 let _updateUserInfo = (column, value)=> {

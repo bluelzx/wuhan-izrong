@@ -15,6 +15,7 @@ let {
   Image,
   StyleSheet,
   TouchableOpacity,
+  InteractionManager
   }=React;
 
 let { Alert } = require('mx-artifacts');
@@ -67,10 +68,10 @@ let MyBizDetail = React.createClass({
     }
   },
 
-  componentWillMount: function () {
-    {
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
       this.getBizOrderByCreator(this.state.marketInfo.id);
-    }
+    });
   },
 
   render: function () {
@@ -495,7 +496,7 @@ let MyBizDetail = React.createClass({
   handleSendImage(uri) {
     ImAction.uploadImage(uri)
       .then((response) => {
-        let arr = new Array();
+        let arr = [];
         arr.push(response.fileUrl);
         this.setState({
           fileUrlList: arr

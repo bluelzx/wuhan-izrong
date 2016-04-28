@@ -199,7 +199,7 @@ var Main = React.createClass({
         />
 
         <Loading
-          panelColor="white"
+          panelColor="rgba(255, 255, 255, 0.3)"
           isVisible={this.state.isLoadingVisible}
         />
       </View>

@@ -66,7 +66,7 @@ module.exports = {
   //中文和英文:微信
   isWechat: function (data) {
     if (!_.isEmpty(data)) {
-      let reg = /^[\u4e00-\u9fa5a-zA-Z0-9]+$/;
+      let reg = /^[a-zA-Z0-9_]+$/;
       if (!reg.test(data)) {
         return false;
       }

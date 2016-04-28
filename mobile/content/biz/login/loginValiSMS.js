@@ -10,7 +10,7 @@ let {
   View,
   Platform,
   TouchableOpacity
-  } = React;
+} = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
@@ -20,7 +20,7 @@ let SMSTimer = require('../../comp/utils/smsTimer');
 let TabView = require('../../framework/system/tabView');
 let Validation = require('../../comp/utils/validation');
 let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
-let MarketActions = require('../../framework/action/marketAction');
+let MarketAction = require('../../framework/action/marketAction');
 
 let ValiSMS = React.createClass({
   getStateFromStores() {
@@ -28,12 +28,11 @@ let ValiSMS = React.createClass({
     if (Platform.OS != 'ios') {
       deviceModel = 'ANDROID';
     }
-    let APNSToken = AppStore.getAPNSToken();
     return {
       disabled: true,
       verify: '',
       deviceModel: deviceModel,
-      APNSToken: APNSToken,
+      APNSToken: AppStore.getAPNSToken(),
       mobileNo: this.props.param.mobileNo
     };
   },
@@ -41,6 +40,7 @@ let ValiSMS = React.createClass({
     return this.getStateFromStores();
   },
   componentDidMount() {
+    this.refs['smsTimer'].changeVerify();
     AppStore.addChangeListener(this._onChange);
   },
 
@@ -68,7 +68,8 @@ let ValiSMS = React.createClass({
               comp: 'tabView'
             });
           }
-          MarketActions.bizOrderMarketSearchDefaultSearch();
+        }).then((response) => {
+          MarketAction.bizOrderMarketSearchDefaultSearch();
         }).catch((errorData) => {
           throw errorData;
         });
@@ -104,7 +105,7 @@ let ValiSMS = React.createClass({
           </View>
           <SMSTimer ref="smsTimer"
                     onChanged={this._onChangeText}
-                    func={'sendSmsCodeToLoginMobile'}
+                    func={LoginAction.sendSmsCodeToLoginMobile}
                     parameter={this.state.mobileNo}
                     exec={this.props.exec}
           />
