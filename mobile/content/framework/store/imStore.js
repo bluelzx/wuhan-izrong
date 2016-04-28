@@ -131,6 +131,8 @@ let _saveMsg = (message) => {
               // 不加1
               notAdd = true;
             }else if(cur.comp.displayName == 'ImUserInfo' && cur.param.userId==(message.toId || message.fromUId)){
+                notAdd = true;
+            }else if(cur.comp.displayName == 'Publish' && cur.param.userId==(message.toId || message.fromUId)){
               notAdd = true;
             }
           }
@@ -160,6 +162,8 @@ let _saveMsg = (message) => {
             }else if(cur.comp.displayName == 'EditGroup' && cur.param.groupId == message.groupId){
               notAdd = true;
             }else if(cur.comp.displayName == 'EditGroupMaster' && cur.param.groupId == message.groupId){
+              notAdd = true;
+            }else if(cur.comp.displayName == 'Publish' && cur.param.groupId == message.groupId){
               notAdd = true;
             }
           }

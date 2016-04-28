@@ -398,26 +398,28 @@ let GiftedMessenger = React.createClass({
   },
 
   handleBizInfo() {
+    let param = Object.assign({
+      callBack:(item)=>{
+        console.log('handleBizInfo callBack');
+        let message = {
+          content: JSON.stringify(item),
+          name: this.props.senderName,
+          image: this.props.senderImage,
+          position: 'right',
+          date: new Date()
+        };
+        if (this.props.onCustomSend) {
+          this.props.onCustomSend(message);
+        } else {
+          let rowID = this.appendMessage(message, true);
+          this.props.handleBizInfo(message, rowID);
+        }
+      }, isFromIM: true,
+    },this.props.chatInfo);
+
     this.props.navigator.push({
       comp:Publish,
-      param:{
-        callBack:(item)=>{
-          console.log('handleBizInfo callBack');
-          let message = {
-            content: JSON.stringify(item),
-            name: this.props.senderName,
-            image: this.props.senderImage,
-            position: 'right',
-            date: new Date()
-          };
-          if (this.props.onCustomSend) {
-            this.props.onCustomSend(message);
-          } else {
-            let rowID = this.appendMessage(message, true);
-            this.props.handleBizInfo(message, rowID);
-          }
-        }, isFromIM: true
-      }
+      param:param
     });
 
   },

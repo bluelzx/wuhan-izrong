@@ -437,8 +437,8 @@ let Publish = React.createClass({
         amount: params.amount,
         rate: params.rate
       };
-      param.callBack(item);
       this.props.navigator.pop();
+      param.callBack(item);
     } else {
       this.props.exec(
         ()=> {
