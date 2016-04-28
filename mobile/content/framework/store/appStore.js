@@ -50,6 +50,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
+  getOrgByOrgName:(orgName) => _getOrgByOrgName(orgName),
   saveFilters: (filters) => _saveFilters(filters),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
@@ -148,10 +149,6 @@ let _getLoginUserInfo = () => {
   return Persister.getLoginUserInfo();
 };
 
-let _getOrgByOrgId = (orgId)=> {
-  return Persister.getOrgByOrgId(orgId);
-};
-
 let _saveFilters = function(filters){
   Persister.saveFilters(filters);
 };
@@ -165,8 +162,16 @@ let _saveOrgList = (orgList)=> {
 };
 
 let _getOrgList = ()=> {
-  let orgBuildList = Persister.getOrgList();
-  return orgBuildList;
+  return Persister.getOrgList();
+};
+
+
+let _getOrgByOrgId = (orgId)=> {
+  return Persister.getOrgByOrgId(orgId);
+};
+
+let _getOrgByOrgName = (orgName)=> {
+  return Persister.getOrgByOrgName(orgName);
 };
 
 let _updateUserInfo = (column, value)=> {

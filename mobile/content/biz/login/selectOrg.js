@@ -17,7 +17,9 @@ let AlphabetListView = require('react-native-alphabetlistview');
 let SearchBar = require('../im/searchBar');
 var that;
 let Register_selectOrg = React.createClass({
+
   getStateFromStores() {
+    this.getOrgList();
     that = this;
     let orgBuildList = AppStore.getOrgList();
     return {
@@ -25,7 +27,7 @@ let Register_selectOrg = React.createClass({
     };
   },
 
-  //网络请求获取
+
   getOrgList: function (orgList) {
     this.props.exec(() => {
       return LoginAction.getOrgList({})
@@ -43,11 +45,11 @@ let Register_selectOrg = React.createClass({
     return this.getStateFromStores();
   },
   componentDidMount() {
-    this.getOrgList();
+    AppStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function () {
-
+    AppStore.removeChangeListener(this._onChange);
   },
   _onChange: function () {
 
@@ -57,7 +59,11 @@ let Register_selectOrg = React.createClass({
   },
 
   textChange: function (text) {
-    this.setState({text: text});
+    this.setState({
+      text: text,
+      data: AppStore.getOrgByOrgName(text)
+    });
+
   },
 
 
@@ -80,9 +86,6 @@ let Register_selectOrg = React.createClass({
             sectionHeader={SectionHeader}
             sectionHeaderHeight={22.5}
             updateScrollState={true}
-            onCellSelect={()=>{
-               console.log('onCellSelect');
-            }}
           />
         </View>
       </NavBarView>

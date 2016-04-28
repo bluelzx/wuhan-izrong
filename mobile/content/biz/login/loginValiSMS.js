@@ -20,7 +20,6 @@ let SMSTimer = require('../../comp/utils/smsTimer');
 let TabView = require('../../framework/system/tabView');
 let Validation = require('../../comp/utils/validation');
 let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
-let MarketActions = require('../../framework/action/marketAction');
 
 let ValiSMS = React.createClass({
   getStateFromStores() {
@@ -68,7 +67,6 @@ let ValiSMS = React.createClass({
               comp: 'tabView'
             });
           }
-          MarketActions.bizOrderMarketSearchDefaultSearch();
         }).catch((errorData) => {
           throw errorData;
         });
