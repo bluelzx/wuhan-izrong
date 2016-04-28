@@ -167,12 +167,12 @@ let Market = React.createClass({
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'?'rgba(175,134,86,1)':'#386085'}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount / 10000 + '万'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount <= 100000000 ? rowData.amount / 10000 + '万' : rowData.amount / 100000000 + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}
             numberOfLines={1}>
-            {rowData.rate == null || rowData.rate == 0 ? '--' : rowData.rate + '%'}
+            {rowData.rate == null || rowData.rate == 0 ? '--' : rowData.rate*100 + '%'}
           </Text>
           {this.renderFreshBtn(rowData)}
         </View>
