@@ -153,6 +153,7 @@ let _getLoginUserInfo = () => {
 let _saveFilters = function(filters){
   _data.filters = filters;
   Persister.saveFilters(filters);
+  AppStore.emitChange('MARKET_CHANGE');
 };
 
 let _getFilters = ()=> {
@@ -189,14 +190,14 @@ let _saveCategory = (data) => {
   _.assign(_data, {
     category: data
   });
-  AppStore.emitChange();
+  //AppStore.emitChange();
 };
 
 let _saveItem = (data) => {
   _.assign(_data, {
     item: data
   });
-  AppStore.emitChange();
+  //AppStore.emitChange();
 };
 
 let _getCategory = () => {

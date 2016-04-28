@@ -19,6 +19,10 @@ let screenHeight = Dimensions.get('window').height;
 let NavBarView = require('../../framework/system/navBarView');
 let imagePicker = require('../../comp/utils/imagePicker');
 let DateHelper = require('../../comp/utils/dateHelper');
+let numeral = require('numeral');
+
+let { SESSION_TYPE } = require('../../constants/dictIm');
+let Contacts = require('../im/contacts');
 
 let MarketAction = require('../../framework/action/marketAction');
 
@@ -56,7 +60,7 @@ let BusinessDetail = React.createClass({
             {this.returnItem('期限:', this.state.detailData.term == null || this.state.detailData.term == 0 ? '--' : this.state.detailData.term + '天')}
             {this.returnItem('金额:', this.state.detailData.amount == null || this.state.detailData.amount == 0 ? '--'
               : this.state.detailData.amount <= 100000000 ? this.state.detailData.amount / 10000 + '万' : this.state.detailData.amount / 100000000 + '亿')}
-            {this.returnItem('利率:', this.state.detailData.rate == null || this.state.detailData.rate == 0 ? '--' : this.state.detailData.rate * 100 + '%')}
+            {this.returnItem('利率:', this.state.detailData.rate == null || this.state.detailData.rate == 0 ? '--' : numeral(this.state.detailData.rate * 100).format('0,0.00') + '%')}
             {this.returnItem('备注:', this.state.detailData.remark == null || this.state.detailData.remark == 0 ? '--' : this.state.detailData.remark)}
             {this.returnItem('更新时间:', this.state.lastModifyDate)}
           </View>
@@ -107,7 +111,7 @@ let BusinessDetail = React.createClass({
         />
 
         <Text style={{fontSize:16,color:'white'}}>{this.state.bizOrderOwnerBean.userName}</Text>
-        <TouchableHighlight onPress={()=>this.gotoIM()} underlayColor='#153757' activeOpacity={0.8}>
+        <TouchableHighlight onPress={()=>this.gotoIM(Contacts)} underlayColor='#153757' activeOpacity={0.8}>
           <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
         </TouchableHighlight>
       </View>
@@ -138,7 +142,7 @@ let BusinessDetail = React.createClass({
   },
   renderImageItem: function () {
     return (
-      <View style={{marginTop:10}}>
+      <View style={{flexDirection:'row',marginTop:10}}>
         {
           this.state.fileIds.map((item, index) => {
             return (
@@ -154,7 +158,17 @@ let BusinessDetail = React.createClass({
     );
   },
 
-  gotoIM: function () {
+  gotoIM: function (name) {
+    const { navigator } = this.props;
+    if (navigator) {
+      navigator.push({
+        comp: name,
+        param: {
+          chatType: SESSION_TYPE.USER,
+          userId: this.state.bizOrderOwnerBean.userId
+        }
+      })
+    }
   },
 
   getBizOrderInMarket: function (id) {

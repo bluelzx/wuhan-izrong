@@ -19,6 +19,7 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let { Alert, Button } = require('mx-artifacts');
 let TabView = require('../../framework/system/tabView');
 let ImagePicker = require('../../comp/utils/imagePicker');
+let MarketAction = require('../../framework/action/marketAction');
 
 let Register_uploadNameCard = React.createClass({
 
@@ -65,6 +66,8 @@ let Register_uploadNameCard = React.createClass({
           if (navigator) {
               navigator.resetTo({comp: 'tabView'});
           }
+        }).then((response) => {
+          MarketAction.bizOrderMarketSearchDefaultSearch();
         }).catch((errorData) => {
           throw errorData;
         });

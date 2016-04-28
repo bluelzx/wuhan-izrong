@@ -78,12 +78,17 @@ var Main = React.createClass({
         return true;
       }
 
-      if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
-        //最近2秒内按过back键，可以退出应用。
-        return false;
-      }
-      this.lastBackPressed = Date.now();
-      ToastAndroid.show('再按一次退出应用');
+      Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {});
+
+      //if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+      //  //最近2秒内按过back键，可以退出应用。
+      //  //this.toast.cancel();
+      //  BackAndroid.exitApp();
+      //  return false;
+      //}
+      //this.lastBackPressed = Date.now();
+
+      //this.toast = ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
       return true;
     }
 
