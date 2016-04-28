@@ -96,9 +96,6 @@ let Market = React.createClass({
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange);
-    //InteractionManager.runAfterInteractions(() => {
-    //  this.bizOrderMarketSearch();
-    //});
   },
 
   componentWillUnmount: function () {
@@ -225,7 +222,14 @@ let Market = React.createClass({
           withSections={false} // enable sections
 
           automaticallyAdjustContentInsets={false}
+          customStyles={{
+            paginationView: {
+              backgroundColor: 'rgba(0, 0, 0, 0)'
+            },
+            spinnerColor: 'white'
+          }}
 
+          refreshableTintColor="white"
           style={{flex: 1}}
         />
 
@@ -526,6 +530,7 @@ let Market = React.createClass({
     this.refs["TERM"].setDefaultState();
     this.refs["AMOUNT"].setDefaultState();
   },
+
   confirmBtn: function () {
 
       this.pressFilterOther();

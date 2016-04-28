@@ -84,10 +84,13 @@ let EditGroupMaster = React.createClass({
     dismissKeyboard();
     this.props.exec(()=>{
       return  ContactAction.dismissGroup(this.props.param.groupId).then(
-        (response)=>{
+        (groupId)=>{
           this.props.navigator.popToTop();
+          return groupId
         }
-      ).catch((errData)=>{
+      ).then((groupId)=>{
+        ContactAction.storeDeleteGroup(groupId);
+      }).catch((errData)=>{
         Alert(errData.toLocaleString());
       });;
     });

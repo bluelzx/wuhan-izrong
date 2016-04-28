@@ -18,22 +18,19 @@ let groupFilter = function(data, groupName,groupMembers,groupMembersName, keyWor
       data.forEach((group)=>{
         let gName = group[groupName];
 
-          let mem = [];
-          for(let member of group[groupMembers]){
-            let gMemName = member[groupMembersName];
-
-              if(uid && uid==member.userId);
-              else
-                mem.push(member);
-
-          }
-          if(mem.length > 0){
-            let tagGroup = {
-              [groupName]:gName,
-              [groupMembers]:mem
-            };
-            ret.push(tagGroup);
-          }
+        let mem = [];
+        group[groupMembers] && group[groupMembers].forEach((member)=> {
+          if (uid && uid == member.userId);
+          else
+            mem.push(member);
+        });
+        if (mem.length > 0) {
+          let tagGroup = {
+            [groupName]: gName,
+            [groupMembers]: mem
+          };
+          ret.push(tagGroup);
+        }
 
       });
       return ret;
@@ -45,14 +42,15 @@ let groupFilter = function(data, groupName,groupMembers,groupMembersName, keyWor
       ret.push(group);
     }else{
       let mem = [];
-      for(let member of group[groupMembers]){
+      group[groupMembers] && group[groupMembers].forEach((member)=>{
         let gMemName = member[groupMembersName];
         if(!!gMemName && gMemName.length && !!~gMemName.indexOf(keyWord)){
           if(uid && uid==member.userId);
           else
-          mem.push(member);
+            mem.push(member);
         }
-      }
+      });
+
       if(mem.length > 0){
         let tagGroup = {
           [groupName]:gName,

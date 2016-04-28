@@ -63,12 +63,12 @@ var TabView = React.createClass({
     //}
   },
 
-  componentWillMount() {
-    MarketAction.bizOrderMarketSearchDefaultSearch()
-      .catch((errorData) => {
-        Alert(errorData.msgContent || errorData.message);
-      });
-  },
+  // componentWillMount() {
+  //   MarketAction.bizOrderMarketSearchDefaultSearch()
+  //     .catch((errorData) => {
+  //       Alert(errorData.msgContent || errorData.message);
+  //     });
+  // },
 
   //componentDidMount() {
   //  AppStore.addChangeListener(this._onChange);

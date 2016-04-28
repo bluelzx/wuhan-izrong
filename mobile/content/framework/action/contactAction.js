@@ -81,10 +81,17 @@ let _deleteGroup = function(groupId){
   };
   return new Promise((resolve, reject) => {
     BFetch(AppLinks.leaveGroup, param).then((response) => {
-      contactStore.leaveGroup(groupId);
-      resolve();
+      resolve(groupId);
     },reject);
   });
+}
+
+let _storeDeleteGroup = function(groupId){
+  contactStore.dismissGroup(groupId);
+}
+
+let _storeLeaveGroup = function(groupId){
+  contactStore.leaveGroup(groupId);
 }
 
 /**
@@ -97,8 +104,7 @@ let _dismissGroup = function(groupId){
   };
   return new Promise((resolve, reject) => {
     BFetch(AppLinks.dismissGroup, param).then((response)=>{
-      contactStore.dismissGroup(groupId);
-      resolve(response);
+      resolve(groupId);
     }, reject);
   });
 }
@@ -204,6 +210,8 @@ let ContactAction = {
   deleteGroupMembers:_deleteGroupMembers,
   acceptInvitation:_acceptInvitation,
   updateGroupInfo:_updateGroupInfo,
+  storeDeleteGroup:_storeDeleteGroup,
+  storeLeaveGroup:_storeLeaveGroup
 };
 
 module.exports = ContactAction;

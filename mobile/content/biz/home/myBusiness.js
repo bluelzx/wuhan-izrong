@@ -29,7 +29,7 @@ let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
 
-let {Alert, GiftedListView} = require('mx-artifacts');
+let {Alert, GiftedListView, Button} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
 
 var marketData = {contentList: []};
@@ -58,13 +58,13 @@ let Market = React.createClass({
       term: term,
       amount: amount,
       categorySource: categoryArr,
-      itemSource: item ? [] : item[0].itemArr,
+      itemSource: item.length == 0 ? [] : item[0].itemArr,
       termSource: orderItems,
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: myCategory != null ? myCategory.displayName : item ? '' : item[2].displayName,
-      levelTwoText: myItem != null ? myItem.displayName: item ? '' : item[2].itemArr[0].displayName,
+      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[2].displayName,
+      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[2].itemArr[0].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -82,8 +82,8 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: myCategory != null ? myCategory.id : item ? [] : item[2].id,
-      bizItemID: myItem != null ? myItem.id: item ? [] : item[2].itemArr[0].id,
+      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? [] : item[2].id,
+      bizItemID: myItem != null ? myItem.id: item.length == 0 ? [] : item[2].itemArr[0].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -92,9 +92,6 @@ let Market = React.createClass({
   },
 
   componentDidMount() {
-    //InteractionManager.runAfterInteractions(() => {
-    //  this.bizOrderAdminSearch();
-    //});
     AppStore.addChangeListener(this._onChange);
   },
 
@@ -103,7 +100,7 @@ let Market = React.createClass({
   },
 
   _onChange () {
-    this.setState(this.bizOrderAdminSearch());
+    //this.setState(this.bizOrderAdminSearch());
   },
 
   /**
@@ -114,10 +111,10 @@ let Market = React.createClass({
    * @param {object} options Inform if first load
    */
   _onFetch(page = 1, callback, options) {
-    MarketAction.bizOrderMarketSearch({
+    return MarketAction.bizOrderAdminSearch({
         orderField: this.state.orderField,
         orderType: this.state.orderType,
-        pageIndex: page,
+        pageIndex: this.state.pageIndex,
         filterList: [
           this.state.bizCategoryID,
           this.state.bizItemID,
@@ -128,12 +125,19 @@ let Market = React.createClass({
       }
     ).then((response)=> {
       console.log(response);
-      setTimeout(() => {
-        callback(response, {
-          allLoaded: false, // the end of the list is reached
-        });
-      }, 1000); // simulating network fetching
-
+      if (response.totalPages === page) {
+        setTimeout(() => {
+          callback(response.contentList, {
+            allLoaded: true, // the end of the list is reached
+          });
+        }, 1000); // simulating network fetching
+      } else {
+        setTimeout(() => {
+          callback(response.contentList, {
+            allLoaded: false, // the end of the list is reached
+          });
+        }, 1000); // simulating network fetching
+      }
     }).catch(
       (errorData) => {
         setTimeout(() => {
@@ -146,7 +150,7 @@ let Market = React.createClass({
     );
   },
   _renderRow: function (rowData) {
-    if (rowData) {
+    if (!rowData) {
       return null;
     }
 
@@ -246,7 +250,7 @@ let Market = React.createClass({
         </View>
 
         <GiftedListView
-          ref="certGiftedListView"
+          ref="marketGiftedListView"
 
           rowView={this._renderRow}
           onFetch={this._onFetch}
@@ -256,7 +260,14 @@ let Market = React.createClass({
           withSections={false} // enable sections
 
           automaticallyAdjustContentInsets={false}
+          customStyles={{
+            paginationView: {
+              backgroundColor: 'rgba(0, 0, 0, 0)',
+            },
+            spinnerColor: 'white'
+          }}
 
+          refreshableTintColor="white"
           style={{flex: 1}}
         />
 
@@ -320,8 +331,8 @@ let Market = React.createClass({
       levelTwoText: this.state.itemSource[rowId].displayName,
       bizItemID: this.state.itemSource[rowId].id
     });
-    this.bizOrderAdminSearch();
     AppStore.saveItem(this.state.itemSource[rowId]);
+    this.refs.marketGiftedListView._refresh();
   },
   pressTimeRow(rowId){
     this.setState({
@@ -331,7 +342,7 @@ let Market = React.createClass({
       orderField: this.state.termSource[rowId].fieldName,
       orderType: this.state.termSource[rowId].asc ? 'asc' : 'desc',
     })
-    this.bizOrderAdminSearch();
+    this.refs.marketGiftedListView._refresh();
   },
 
   renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
@@ -552,7 +563,7 @@ let Market = React.createClass({
   },
   confirmBtn: function () {
       this.pressFilterOther();
-      this.bizOrderAdminSearch();
+    this.refs.marketGiftedListView._refresh();
   },
   toPage: function (name) {
     const { navigator } = this.props;

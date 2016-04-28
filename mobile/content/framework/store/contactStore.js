@@ -114,7 +114,7 @@ let _setGroupMute = function(groupId, value){
 }
 let _leaveGroup = function(groupId){
   PersisterFacade.leaveGroup(groupId);
-  //AppStore.emitChange();
+  AppStore.emitChange();
 }
 
 let _syncReq = function(data){
