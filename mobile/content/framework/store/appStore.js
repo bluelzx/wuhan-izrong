@@ -57,7 +57,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   saveCategory: (data) => _saveCategory(data),
   getCategory: ()=> _getCategory(),
   saveItem: (data) => _saveItem(data),
-  getItem: ()=> _getItem()
+  getItem: ()=> _getItem(),
   queryAllPlatFormInfo:()=>_queryAllPlatFormInfo()
 });
 
