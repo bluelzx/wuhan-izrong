@@ -161,7 +161,7 @@ let TextEdit = React.createClass({
             this.props.navigator.pop();
           }
         }).catch((errorData) => {
-          Alert(errorData.msgContent);
+          Alert(errorData.msgContent || errorData.message);
         });
     });
   },

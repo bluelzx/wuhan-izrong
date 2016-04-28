@@ -1,8 +1,4 @@
-__true__
-
-#   (2016-04-27)
-
-
+# v0.0.1 (2016-04-27)
 
 ---
 
@@ -32,8 +28,3 @@ __true__
   ([42d38368](http://192.168.64.208/tianjin/fas-app/commits/42d383686c7fbcd388f5f1669cc53dd292afcfee))
   - add switch for log, update eslint rules.
   ([f637a9c7](http://192.168.64.208/tianjin/fas-app/commits/f637a9c77342706c1f78114f896e66c1f113f3bf))
-
-
-
----
-<sub><sup>*Generated with [git-changelog](https://github.com/rafinskipg/git-changelog). If you have any problem or suggestion, create an issue.* :) **Thanks** </sub></sup>

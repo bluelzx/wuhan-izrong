@@ -14,11 +14,12 @@ let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let { Alert, Button } = require('mx-artifacts');
+let {Alert, Button} = require('mx-artifacts');
 let SMSTimer = require('../../comp/utils/smsTimer');
 let TabView = require('../../framework/system/tabView');
 let Validation = require('../../comp/utils/validation');
 let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
+let MarketActions = require('../../framework/action/marketAction');
 
 let ValiSMS = React.createClass({
   getStateFromStores() {
@@ -31,7 +32,8 @@ let ValiSMS = React.createClass({
       disabled: true,
       verify: '',
       deviceModel: deviceModel,
-      APNSToken: APNSToken
+      APNSToken: APNSToken,
+      mobileNo: this.props.param.mobileNo
     };
   },
   getInitialState: function () {
@@ -50,23 +52,24 @@ let ValiSMS = React.createClass({
   login: function () {
     if (this.state.verify.length != 6) {
       Alert('请输入完整的短信验证码');
-    }else{
+    } else {
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.login({
           mobileNo: this.props.param.mobileNo,
           inputSmsCode: this.state.verify,
           deviceToken: this.state.APNSToken,
-          deviceModel: this.state.deviceModel
+          deviceModel: this.state.deviceModel,
         }).then((response) => {
-          const { navigator } = this.props;
+          const {navigator} = this.props;
           if (navigator) {
             this.props.navigator.resetTo({
               comp: 'tabView'
             });
           }
+          MarketActions.bizOrderMarketSearchDefaultSearch();
         }).catch((errorData) => {
-          Alert(errorData.msgContent);
+          throw errorData;
         });
       });
     }
@@ -95,9 +98,15 @@ let ValiSMS = React.createClass({
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <View style={{flexDirection: 'row'}}>
             <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>已发送短信验证码至</Text>
-            <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>{PhoneNumber(this.props.param.mobileNo)}</Text>
+            <Text
+              style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>{PhoneNumber(this.props.param.mobileNo)}</Text>
           </View>
-          <SMSTimer ref="smsTimer" onChanged={this._onChangeText} func={'sendSMSCodeToNewMobile'}/>
+          <SMSTimer ref="smsTimer"
+                    onChanged={this._onChangeText}
+                    func={'sendSmsCodeToLoginMobile'}
+                    parameter={this.state.mobileNo}
+                    exec={this.props.exec}
+          />
           <Button
             containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}

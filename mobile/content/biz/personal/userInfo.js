@@ -138,11 +138,7 @@ let UserInfo = React.createClass({
             const { navigator } = this.props;
             navigator.resetTo({comp: Login});
           }).catch((errorData) => {
-            if (errorData.toString().startsWith('{')) {
-              Alert(errorData.msgContent);
-            } else {
-              Alert('网络异常');
-            }
+            Alert(errorData.msgContent || errorData.message);
           });
       });
     }, ()=> {
