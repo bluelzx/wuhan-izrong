@@ -69,7 +69,6 @@ let MyBizDetail = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange);
     InteractionManager.runAfterInteractions(() => {
       this.getBizOrderByCreator(this.state.marketInfo.id);
     });
