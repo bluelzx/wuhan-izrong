@@ -211,14 +211,10 @@ let _saveOrgBeanItem = function (orgBean) {
 };
 
 let _getAPNSToken = function () {
-  _realm.write(() => {
-    _realm.create(DEVICE, {
-      id: 1,
-      deviceOS: Platform.OS,
-      APNSToken: 'asdfghjklzxcvbnm'
-    }, true);
-  });
   let device = _realm.objects(DEVICE);
+  if (device.length === 0) {
+    return '';
+  }
   return device[0].APNSToken;
 };
 
