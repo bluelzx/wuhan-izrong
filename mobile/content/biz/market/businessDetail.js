@@ -35,7 +35,6 @@ let BusinessDetail = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange);
     InteractionManager.runAfterInteractions(() => {
       this.getBizOrderInMarket(this.state.marketInfo.id);
     });

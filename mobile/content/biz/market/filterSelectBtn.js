@@ -66,7 +66,18 @@ let FilterSelectBtn = React.createClass({
         this.props.dataList == null
       );
     }else{
-      return null;
+      return (
+        <TouchableHighlight onPress={() => this._pressAll()} underlayColor='rgba(0,0,0,0)'>
+          <View>
+            <View
+              style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:Adjust.width(80), height: 40, backgroundColor: this.state.isAll ? '#817fc9':'#102a42', alignItems: 'center', borderRadius: 5,}}>
+              <Text style={{flex: 1, marginTop: 5, color:'white'}}>
+                {this.props.dataList[0].displayName}
+              </Text>
+            </View>
+          </View>
+        </TouchableHighlight>
+      );
     }
   },
   _renderRow: function (rowData, sectionID, rowID) {
