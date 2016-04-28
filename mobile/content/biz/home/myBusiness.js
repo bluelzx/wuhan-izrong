@@ -165,16 +165,16 @@ let Market = React.createClass({
           />
           <Text
             style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}>
-            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term <= 30 ?  rowData.term + '天' : rowData.term <= 365 ? rowData.term/30 + '月' : rowData.term/365 + '年'}
+            {rowData.term == null || rowData.term == 0 ? '--' :  rowData.term + '天'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'?'rgba(175,134,86,1)':'#386085'}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount <= 100000000 ? rowData.amount / 10000 + '万' : rowData.amount / 100000000 + '亿'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount <= 100000000 ? numeral(rowData.amount / 10000).format('0,0') + '万' : numeral(rowData.amount / 100000000).format('0,0') + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}
             numberOfLines={1}>
-            {rowData.rate == null || rowData.rate == 0 ? '--' : numeral(rowData.rate*100).format('0,0.00') + '%'}
+            {rowData.rate == null || rowData.rate == 0 ? '--' : numeral(rowData.rate).format('0,0.00') + '%'}
           </Text>
           {this.renderFreshBtn(rowData)}
         </View>
@@ -260,6 +260,7 @@ let Market = React.createClass({
           pagination={true} // enable infinite scrolling using touch to load more
           refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
           withSections={false} // enable sections
+          emptyView={this._emptyView}
 
           automaticallyAdjustContentInsets={false}
           customStyles={{
@@ -274,6 +275,14 @@ let Market = React.createClass({
         />
 
         <View style={{height: (Platform.OS === 'ios') ? 49 : 0}}></View>
+      </View>
+    );
+  },
+
+  _emptyView: function () {
+    return(
+      <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+        <Text style={{color:'white',fontSize:20}}>没有数据</Text>
       </View>
     );
   },

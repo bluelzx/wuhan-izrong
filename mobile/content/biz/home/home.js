@@ -9,6 +9,7 @@ let {
   Dimensions,
   Image,
   TouchableHighlight,
+  Platform
   } = React;
 
 let NavBarView = require('../../framework/system/navBarView');
@@ -140,6 +141,7 @@ let Home = React.createClass({
           </View>
           <MarketList navigator={this.props.navigator} marketData={marketData}/>
         </ScrollView>
+        <View style={{height:(Platform.OS == 'ios') ? 49 : 0}}></View>
       </NavBarView>
     );
   }

@@ -34,6 +34,7 @@ let AppStore = require('../../framework/store/appStore');
 
 let {Alert, GiftedListView} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
+let numeral = require('numeral');
 
 var marketData = {contentList: []};
 
@@ -229,11 +230,11 @@ let Market = React.createClass({
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
           <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:'white',}}>
-            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term <= 30 ?  rowData.term + '天' : rowData.term <= 365 ? rowData.term/30 + '月' : rowData.term/365 + '年'}
+            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天' }
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount <= 100000000 ? rowData.amount / 10000 + '万' : rowData.amount / 100000000 + '亿'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount <= 100000000 ? numeral(rowData.amount / 10000).format('0,0') + '万' : numeral(rowData.amount / 100000000).format('0,0') + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
@@ -243,6 +244,14 @@ let Market = React.createClass({
         </View>
       </TouchableHighlight>
     )
+  },
+
+  _emptyView: function () {
+    return(
+      <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+        <Text style={{color:'white',fontSize:20}}>没有数据</Text>
+      </View>
+    );
   },
 
   renderMarketList: function () {
@@ -272,6 +281,7 @@ let Market = React.createClass({
           pagination={true} // enable infinite scrolling using touch to load more
           refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
           withSections={false} // enable sections
+          emptyView={this._emptyView}
 
           automaticallyAdjustContentInsets={false}
           customStyles={{
