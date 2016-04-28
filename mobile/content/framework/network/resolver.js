@@ -82,7 +82,7 @@ let _dealMsg = function (message) {
     case MSG_TYPE.GROUP_INFO_DELETE:
       ContactSotre.leaveGroup(message.groupId);
       break;
-    case MSG_TYPE.SYNC_RES:
+    case MSG_TYPE.SYNC_REQ:
       message.msgArray.forEach((item)=>{
         _dealMsg(item);
       });
