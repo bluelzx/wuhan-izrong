@@ -14,7 +14,8 @@ let {
   Image,
   StyleSheet,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  InteractionManager
   } = React;
 
 let screenWidth = Dimensions.get('window').width;
@@ -90,11 +91,15 @@ let Market = React.createClass({
   },
 
   componentWillMount: function () {
-    this.bizOrderMarketSearch();
+
   },
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange);
+
+    InteractionManager.runAfterInteractions(() => {
+      this.bizOrderMarketSearch();
+    });
   },
 
   componentWillUnmount: function () {

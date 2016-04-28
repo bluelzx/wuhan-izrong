@@ -134,9 +134,7 @@ let _saveImUsers = function (imUserBeanList) {
    return co(function *() {
     for (var i = 0; i < imUserBeanList.length; i++) {
       _saveImUser(imUserBeanList[i]);
-      if (i % 10 == 0){
-        yield nextFrame();
-      }
+        //yield nextFrame();
     }
   });
 };
@@ -177,9 +175,7 @@ let _saveOrgBeanList = function (orgBeanList) {
   return co(function *() {
     for (var i = 0; i < orgBeanList.length; i++) {
       _saveOrgBeanItem(orgBeanList[i]);
-      if (i % 10 == 0){
-        yield nextFrame();
-      }
+       // yield nextFrame();
     }
   });
 };
