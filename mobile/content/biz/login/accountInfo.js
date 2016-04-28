@@ -75,7 +75,7 @@ let Register_accountInfo = React.createClass({
     this.setState({
       orgValue: item.orgValue,
       orgId: item.id,
-      disabled:false
+      disabled:true
     });
   },
 
@@ -86,10 +86,6 @@ let Register_accountInfo = React.createClass({
     } else {
       this.setState({disabled: false});
     }
-  },
-
-  selectChange(select){
-    this.setState({checkbox: select});
   },
 
   render: function () {

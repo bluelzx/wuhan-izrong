@@ -40,7 +40,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getAPNSToken: () => _get_apns_token(),
   updateLastSyncTime:(t)=>_updateLastSyncTime(t),
   getToken: () => _data.token || '',
- //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
+  //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
   //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTA5IiwiaWF0IjoxNDYxNTUzMTgzLCJzdWIiOiJ3ZWlzZW4zIiwiaXNzIjoiVXNlcklkLTEwOSJ9.SahHndVnBfJo2RforCkAN0XMXAcrL10Gzi3-EMQQsBM',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
@@ -60,7 +60,8 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getCategory: ()=> _getCategory(),
   saveItem: (data) => _saveItem(data),
   getItem: ()=> _getItem(),
-  queryAllPlatFormInfo:()=>_queryAllPlatFormInfo()
+  queryAllPlatFormInfo:()=>_queryAllPlatFormInfo(),
+  getBadge:()=>_getBadge(),
 });
 
 let _queryAllPlatFormInfo = function(){
@@ -150,6 +151,7 @@ let _getLoginUserInfo = () => {
 };
 
 let _saveFilters = function(filters){
+  _data.filters = filters;
   Persister.saveFilters(filters);
 };
 
@@ -203,5 +205,9 @@ let _getCategory = () => {
 
 let _getItem = () => {
   return _data.item;
+};
+
+let _getBadge = () => {
+  let badge = Persister.getSessionBadge();
 };
 module.exports = AppStore;

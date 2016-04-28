@@ -1,6 +1,8 @@
-import React, {Text, View, Animated, Image, StyleSheet} from 'react-native';
+import React, {Text, View, Animated, Image, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import {MSG_CONTENT_TYPE} from '../../constants/dictIm';
-
+import _ from 'lodash';
+import numeral from 'numeral';
+let screenWidth = Dimensions.get('window').width;
 let styles = StyleSheet.create({
   bubble: {
     borderRadius: 5,
@@ -12,13 +14,12 @@ let styles = StyleSheet.create({
   text: {
     color: '#000',
   },
-  textLeft: {
-  },
+  textLeft: {},
   textRight: {
     color: '#fff',
   }
 });
-
+import Share from 'react-native-share';
 export default class Bubble extends React.Component {
 
   constructor(props) {
@@ -41,11 +42,22 @@ export default class Bubble extends React.Component {
     );
   }
 
+  _onLongPress(shareContent) {
+    console.log('onLongPress');
+    Share.open({
+      share_text: shareContent,
+      share_URL: "http://google.cl",
+      title: "Share Link"
+    }, (e) => {
+      console.log(e);
+    });
+  }
+
   _getLength(str) {
     return str.replace(/[^\x00-\xff]/g, '01').length;
   }
 
-  render(){
+  render() {
 
     let customStyle = {};
     if (this.props.position === 'left') {
@@ -77,50 +89,91 @@ export default class Bubble extends React.Component {
       );
     }
 
-    if(this.props.contentType === MSG_CONTENT_TYPE.NAMECARD){
+    if (this.props.contentType === MSG_CONTENT_TYPE.NAMECARD) {
       let data = JSON.parse(this.props.content);
       return (
         <View style={[styles.bubble, customStyle, {width:300}]}>
-           <Text style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]} >{data.realName + '--' + data.orgBeanName}</Text>
+          <Text
+            style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.realName + '--' + data.orgBeanName}</Text>
           <View style={{flexDirection:'row'}}>
-            <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>手机:</Text>
-            <Text style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.mobileNumber}</Text>
+            <Text
+              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>手机:</Text>
+            <Text
+              style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.mobileNumber}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
-            <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>座机:</Text>
-            <Text style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.phoneNumber}</Text>
+            <Text
+              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>座机:</Text>
+            <Text
+              style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.phoneNumber}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
-            <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>微信:</Text>
-            <Text style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.weChatNo}</Text>
+            <Text
+              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>微信:</Text>
+            <Text
+              style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.weChatNo}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
-            <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>邮箱:</Text>
-            <Text style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.email}</Text>
+            <Text
+              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>邮箱:</Text>
+            <Text
+              style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.email}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
-            <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>部门:</Text>
-            <Text style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.department}</Text>
+            <Text
+              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>部门:</Text>
+            <Text
+              style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.department}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
-            <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>职位:</Text>
-            <Text style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.jobTitle}</Text>
+            <Text
+              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>职位:</Text>
+            <Text
+              style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.jobTitle}</Text>
           </View>
         </View>
       )
     }
 
-    if(this.props.contentType === MSG_CONTENT_TYPE.BIZINFO){
+    if (this.props.contentType === MSG_CONTENT_TYPE.BIZINFO) {
+      let data = JSON.parse(this.props.content);
+      let amount = data.amount == '' ? '0元' : data.amount / 10000 + '万';
+      let shareContent = data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' +
+        (data.term == '' ? '0天' : data.term + '天') + '  ' +
+        amount + '  ' + numeral(data.rate * 100).format('0,0.00') + '%';
       return (
-        <View style={[styles.bubble, customStyle]}>
-          <Text>这是业务</Text>
-        </View>
+        <TouchableOpacity onLongPress={() => this._onLongPress(shareContent)} activeOpacity={0.7}>
+          <View style={[styles.bubble, customStyle]}>
+            <Text
+              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight), {paddingBottom: 5}]}>{data.bizCategory}</Text>
+            <View
+              style={{borderTopWidth: 1, borderTopColor: '#cccccc', paddingTop: 15, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+              <Image style={{}}
+                     source={data.bizOrientation == 'IN' ? require('../../image/market/receive.png') : require('../../image/market/issue.png')}/>
+              <View style={{width: screenWidth * 0.6, flex: 1, flexDirection: 'row'}}>
+                <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight),
+                  {flex: 1, textAlign: 'center'}]}>
+                  {data.term == '' ? '0天' : data.term + '天'}
+                </Text>
+                <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight),
+                  {flex: 1, textAlign: 'center'}]}>
+                  {amount}
+                </Text>
+                <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight),
+                  {flex: 1, textAlign: 'center'}]}>
+                  {numeral(data.rate * 100).format('0,0.00') + '%'}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </TouchableOpacity>
       )
     }
+
 
     var flexStyle = {};
     //if ( this.props.text.length > 40 ) {
-    if ( this._getLength(this.props.content) > 40 ) {
+    if (this._getLength(this.props.content) > 40) {
       flexStyle.flex = 1;
     }
 

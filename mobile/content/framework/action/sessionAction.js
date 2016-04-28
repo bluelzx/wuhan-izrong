@@ -31,6 +31,9 @@ let _updateSession = function (type, sessionId, title, content, lastTime, conten
     lastTime: lastTime,
     contentType: contentType
   };
+  if(!notAdd){
+    param.badge = 1;
+  }
   SessiontStore.updateSession(param, notAdd);
 }
 

@@ -63,6 +63,7 @@ let CreateGroup = React.createClass({
   itemRender: function(data) {
       return (
         <CheckBox
+          init={this.state.memberList[data.userId]}
           item={data}
           key={data.userId}
           choice={this.checkBoxChoice}

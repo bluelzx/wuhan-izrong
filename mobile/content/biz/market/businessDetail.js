@@ -40,7 +40,13 @@ let BusinessDetail = React.createClass({
     });
   },
 
-  render: function () {
+  _renderContent: function () {
+    if (!this.state.detailData) {
+      return (
+        <View></View>
+      );
+    }
+
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='业务详情' showBack={true} showBar={true}>
@@ -70,6 +76,17 @@ let BusinessDetail = React.createClass({
       </NavBarView>
     )
   },
+
+  render: function () {
+
+    return (
+      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
+                  contentBackgroundColor='#18304D' title='业务详情' showBack={true} showBar={true}>
+        {this._renderContent()}
+      </NavBarView>
+    )
+  },
+
   returnItem: function (desc, value) {
     return (
       <View style={{flexDirection:'row',alignItems:'center',paddingVertical:8}}>

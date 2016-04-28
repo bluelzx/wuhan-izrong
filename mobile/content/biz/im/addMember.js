@@ -93,7 +93,9 @@ let AddMember = React.createClass({
   //渲染组成员
   itemRender: function(data) {
     return (
-    <CheckBox key={data.userId}
+    <CheckBox
+      init={this.state.memberList[data.userId]}
+      key={data.userId}
               item={data}
               choice={this.checkBoxChoice}
               unChoice={this.unCheckBoxChoice}
