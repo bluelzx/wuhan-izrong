@@ -398,25 +398,28 @@ let GiftedMessenger = React.createClass({
   },
 
   handleBizInfo() {
-    this.props.navigator({
-      comp:Publish,
-      param:{
-        callBack:(bizId)=>{
-          let message = {
-            content: bizId,
-            name: this.props.senderName,
-            image: this.props.senderImage,
-            position: 'right',
-            date: new Date()
-          };
-          if (this.props.onCustomSend) {
-            this.props.onCustomSend(message);
-          } else {
-            let rowID = this.appendMessage(message, true);
-            this.props.handleBizInfo(message, rowID);
-          }
+    let param = Object.assign({
+      callBack:(item)=>{
+        console.log('handleBizInfo callBack');
+        let message = {
+          content: JSON.stringify(item),
+          name: this.props.senderName,
+          image: this.props.senderImage,
+          position: 'right',
+          date: new Date()
+        };
+        if (this.props.onCustomSend) {
+          this.props.onCustomSend(message);
+        } else {
+          let rowID = this.appendMessage(message, true);
+          this.props.handleBizInfo(message, rowID);
         }
-      }
+      }, isFromIM: true,
+    },this.props.chatInfo);
+
+    this.props.navigator.push({
+      comp:Publish,
+      param:param
     });
 
   },
@@ -894,9 +897,7 @@ let GiftedMessenger = React.createClass({
 
           <TouchableOpacity
             style={this.styles.panelItem}
-            onPress= {() => {
-
-            }}
+            onPress= {() => this.handleBizInfo()}
           >
             <Image
               style={this.styles.panelIcon}

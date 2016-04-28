@@ -236,7 +236,7 @@ let Messenger = React.createClass({
         handleEmailPress={this.handleEmailPress}
 
         inverted={true}
-
+        chatInfo={this.props.param}
         sessionId={this.props.param.sessionId}
       />
 
