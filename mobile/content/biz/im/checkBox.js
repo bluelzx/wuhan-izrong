@@ -7,7 +7,7 @@ let Icon = require('react-native-vector-icons/Ionicons');
 let CheckBox = React.createClass({
   getInitialState: function() {
     return {
-      agree: false
+      agree: !!this.props.init
     };
   },
 
