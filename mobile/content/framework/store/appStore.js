@@ -98,8 +98,6 @@ let _login = (data) => {
     // imSocket.init(data.token);
     AppStore.emitChange();
   });
-
-
 };
 
 let _logout = (userId) => {
