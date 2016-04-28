@@ -34,8 +34,9 @@ let PersisterFacade = {
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=>_getOrgList(),
+  getOrgByOrgName: (orgName)=> _getOrgByOrgName(orgName),
   deleteDevice: ()=> _deleteDevice(),
-  updateLastSyncTime:(t)=>_updateLastSyncTime(t),
+  updateLastSyncTime:(t)=>_updateLastSyncTime(t)
 };
 
 
@@ -341,5 +342,15 @@ let _getOrgList = function () {
   return ConvertChineseKey.buildOrgList(orgList);
 };
 
+let _getOrgByOrgName = function(orgName){
+  let orgList = _realm.objects(ORGBEAN);
+  let orgArr = [];
+  orgList.forEach(function(orgBean){
+    if (orgBean.orgValue.includes(orgName)){
+      orgArr.push(orgBean);
+    }
+  });
+  return ConvertChineseKey.buildOrgList(orgArr);
+};
 module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
   require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'), require('./homePagePersisterFacade'));
