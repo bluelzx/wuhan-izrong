@@ -78,12 +78,13 @@ let Publish = React.createClass({
   },
 
   render: function () {
-    let {title}  = this.props;
+    let {title, param}  = this.props;
+    let isFromIM = param ? param.isFromIM : false;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='发布新业务' showBack={false} showBar={true}
-                  actionButton={this.renderToMyBiz}>
-        <View style={{height:screenHeight-113,backgroundColor:'#153757'}}>
+                  contentBackgroundColor='#18304D' title='发布新业务' showBack={isFromIM} showBar={true}
+                  actionButton={isFromIM ? null : this.renderToMyBiz}>
+        <View style={{height:isFromIM ? screenHeight-64 : screenHeight-113,backgroundColor:'#153757'}}>
           <View style={{flex:1}}>
             <ScrollView>
               {this.renderSelectOrg()}
@@ -91,10 +92,10 @@ let Publish = React.createClass({
               {this.renderTimeLimit()}
               {this.renderAmount()}
               {this.renderRate()}
-              {this.renderAddImg()}
-              {this.renderRemarks()}
+              {this.renderAddImg(isFromIM)}
+              {this.renderRemarks(isFromIM)}
             </ScrollView>
-            {this.renderReleaseBtn()}
+            {this.renderReleaseBtn(isFromIM)}
           </View>
         </View>
       </NavBarView>
@@ -211,50 +212,54 @@ let Publish = React.createClass({
       </View>
     )
   },
-  renderAddImg: function () {
-    return (
-      <View style={{flexDirection:'column',marginTop:10}}>
-        <Text style={{marginLeft:10, color:'white'}}>{'添加图片'}</Text>
-        <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-          <ImagePicker
-            type="all"
-            onSelected={(response) => {this.handleSendImage(response)}}
-            onError={(error) => this.handleImageError(error)}
-            title="选择图片"
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
-          >
-            <Image
-              style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-              source={this.state.fileUrlList.length != 0?{uri:this.state.fileUrlList[0]}:require('../../image/market/addImage.png')}
-            />
-          </ImagePicker>
-        </View>
-      </View>
-    )
-  },
-  renderRemarks: function () {
-    return (
-      <View style={{marginTop:10,marginBottom:10}}>
-        <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
-          <View
-            style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: '#102a42'}}>
-            <Text style={{marginLeft:10, fontWeight: 'bold', color:'white'}}>
-              {'备注'}
-            </Text>
-            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-              <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
-                    numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
-              </Text>
-              <Image style={{margin:10,width:16,height:16}}
-                     source={require('../../image/market/next.png')}
+  renderAddImg: function (isFromIM) {
+    if (!isFromIM) {
+      return (
+        <View style={{flexDirection:'column',marginTop:10}}>
+          <Text style={{marginLeft:10, color:'white'}}>{'添加图片'}</Text>
+          <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
+            <ImagePicker
+              type="all"
+              onSelected={(response) => {this.handleSendImage(response)}}
+              onError={(error) => this.handleImageError(error)}
+              title="选择图片"
+              style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+            >
+              <Image
+                style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+                source={this.state.fileUrlList.length != 0?{uri:this.state.fileUrlList[0]}:require('../../image/market/addImage.png')}
               />
-            </View>
+            </ImagePicker>
           </View>
-        </TouchableHighlight>
-      </View>
-    )
+        </View>
+      )
+    }
   },
-  renderReleaseBtn: function () {
+  renderRemarks: function (isFromIM) {
+    if (!isFromIM) {
+      return (
+        <View style={{marginTop:10,marginBottom:10}}>
+          <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
+            <View
+              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: '#102a42'}}>
+              <Text style={{marginLeft:10, fontWeight: 'bold', color:'white'}}>
+                {'备注'}
+              </Text>
+              <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+                <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
+                      numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
+                </Text>
+                <Image style={{margin:10,width:16,height:16}}
+                       source={require('../../image/market/next.png')}
+                />
+              </View>
+            </View>
+          </TouchableHighlight>
+        </View>
+      )
+    }
+  },
+  renderReleaseBtn: function (isFromIM) {
     return (
       <View style={{height:44}}>
         <Button
@@ -263,7 +268,7 @@ let Publish = React.createClass({
           disabled={this.state.disabled}
           onPress={() => this._pressPublish()}
         >
-          发布
+          {isFromIM ? '发送' : '发布'}
         </Button>
       </View>
     )
@@ -412,28 +417,42 @@ let Publish = React.createClass({
 
   addBizOrder: function () {
     dismissKeyboard();
-    this.props.exec(
-      ()=> {
-        return MarketAction.addBizOrder({
-          id: '',
-          term: this.state.term,
-          rate: this.state.rate / 100,
-          remark: this.state.remark,
-          bizOrientation: this.state.bizOrientation,
-          bizCategory: this.state.bizCategory.displayCode,
-          bizItem: this.state.bizItem.displayCode,
-          amount: this.state.amount,
-          fileUrlList: this.state.fileUrlList
-        }).then((response)=> {
-          Alert('发布成功');
-          this.props.navigator.resetTo({comp: 'tabView', tabName: 'market'});
-        }).catch(
-          (errorData) => {
-            throw errorData;
-          }
-        );
-      }
-    );
+    let {title, param}  = this.props;
+    let params = {
+      id: '',
+      term: this.state.term,
+      rate: this.state.rate / 100,
+      remark: this.state.remark,
+      bizOrientation: this.state.bizOrientation,
+      bizCategory: this.state.bizCategory.displayCode,
+      bizItem: this.state.bizItem.displayCode,
+      amount: this.state.amount,
+      fileUrlList: this.state.fileUrlList
+    };
+    if (param ? param.isFromIM : false) {
+      let item = {
+        bizCategory: (this.state.bizCategory == '' && this.state.bizItem == '') ? '资金业务 - 同业存款' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName,
+        bizOrientation: params.bizOrientation,
+        term: params.term,
+        amount: params.amount,
+        rate: params.rate
+      };
+      this.props.navigator.pop();
+      param.callBack(item);
+    } else {
+      this.props.exec(
+        ()=> {
+          return MarketAction.addBizOrder(params).then((response)=> {
+            Alert('发布成功');
+            this.props.navigator.resetTo({comp: 'tabView', tabName: 'market'});
+          }).catch(
+            (errorData) => {
+              throw errorData;
+            }
+          );
+        }
+      );
+    }
   },
 
   handleSendImage(uri) {

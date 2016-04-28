@@ -132,6 +132,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-share')
     compile project(':realm')
     compile project(':react-native-vector-icons')
     compile fileTree(include: ['*.jar'], dir: 'libs')

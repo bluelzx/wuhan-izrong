@@ -60,7 +60,6 @@ var Main = React.createClass({
       // });
     }
     NotificationManager.openNotification();
-
     AppStore.saveNavigator(this.refs['navigator']);
 
   },

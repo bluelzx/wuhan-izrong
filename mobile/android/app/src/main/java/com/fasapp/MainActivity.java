@@ -1,6 +1,7 @@
 package com.fasapp;
 
 import com.facebook.react.ReactActivity;
+import cl.json.RNSharePackage;
 import io.realm.react.RealmReactPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
@@ -44,6 +45,7 @@ public class MainActivity extends ReactActivity {
         return Arrays.<ReactPackage>asList(
             new RNDeviceInfo(),
             new MainReactPackage(),
+            new RNSharePackage(),
             new RealmReactPackage(),
             new VectorIconsPackage(),
             new ZXReactPackage()

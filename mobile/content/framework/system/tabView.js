@@ -58,7 +58,8 @@ var TabView = React.createClass({
     //} else {
       return {
         token: token,
-        initialPage: 0
+        initialPage: 0,
+        badge:AppStore.getBadge()
       }
     //}
   },
@@ -70,26 +71,27 @@ var TabView = React.createClass({
   //     });
   // },
 
-  //componentDidMount() {
-  //  AppStore.addChangeListener(this._onChange);
-  //  if (Platform.OS === 'ios') {
-  //    if (!AppStore.getAPNSToken()) {
-  //      PushNotificationIOS.requestPermissions();
-  //    }
-  //
-  //    PushNotificationIOS.removeEventListener('register', AppAction.notificationRegister);
-  //    PushNotificationIOS.removeEventListener('notification', AppAction.onNotification);
-  //    AppStateIOS.removeEventListener('change', this._handleAppStateChange);
-  //
-  //
-  //    PushNotificationIOS.addEventListener('register', AppAction.notificationRegister);
-  //    PushNotificationIOS.addEventListener('notification', AppAction.onNotification);
-  //
-  //    AppStateIOS.addEventListener('change', this._handleAppStateChange);
-  //  }
-  //},
-  //
-  //componentWillUnmount: function () {
+  componentDidMount() {
+    AppStore.addChangeListener(this._onChange);
+    //if (Platform.OS === 'ios') {
+    //  if (!AppStore.getAPNSToken()) {
+    //    PushNotificationIOS.requestPermissions();
+    //  }
+    //
+    //  PushNotificationIOS.removeEventListener('register', AppAction.notificationRegister);
+    //  PushNotificationIOS.removeEventListener('notification', AppAction.onNotification);
+    //  AppStateIOS.removeEventListener('change', this._handleAppStateChange);
+    //
+    //
+    //  PushNotificationIOS.addEventListener('register', AppAction.notificationRegister);
+    //  PushNotificationIOS.addEventListener('notification', AppAction.onNotification);
+    //
+    //  AppStateIOS.addEventListener('change', this._handleAppStateChange);
+    //}
+  },
+
+  componentWillUnmount: function () {
+    AppStore.removeChangeListener(this._onChange);
     //if (Platform.OS === 'ios') {
     //  AppStore.removeChangeListener(this._onChange);
     //  PushNotificationIOS.removeEventListener('register', AppAction.notificationRegister);
@@ -97,7 +99,7 @@ var TabView = React.createClass({
     //  AppStateIOS.removeEventListener('change', this._handleAppStateChange);
     //  PushNotificationIOS.setApplicationIconBadgeNumber(0);
     //}
-  //},
+  },
 
   _handleAppStateChange: function (currentAppState) {
     switch (currentAppState) {
@@ -156,6 +158,7 @@ var TabView = React.createClass({
 
           <TabBarIOS.Item
             title="IM"
+            badge={this.state.badge}
             icon={require('../../image/tab/IM.png')}
             selected={this.state.selectedTab === 'IM'}
             onPress={() => {this.setState({selectedTab: 'IM'})}}>

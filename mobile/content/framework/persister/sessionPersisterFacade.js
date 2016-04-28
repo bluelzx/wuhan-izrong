@@ -18,6 +18,7 @@ let SessionPersisterFacade = {
   querySessionById: (id, type) => _querySessionById(id, type),
   setBadgeZero: (sessionId) => _setBadgeZero(sessionId),
   updateInViteSession:(sessionId) => _updateInViteSession(sessionId),
+  getSessionBadge:() => _getSessionBadge(),
 }
 
 let _deleteSession = function(sessionId) {
@@ -93,6 +94,19 @@ let _updateInViteSession = function(sessionId) {
   _realm.write(()=>{
     _realm.create(SESSION,{sessionId:sessionId, type:SESSION_TYPE.INVITED}, true);
   })
+}
+
+let _getSessionBadge = function(){
+  let result = _realm.objects(SESSION);
+  let ret = 0;
+  result.forEach((item)=>{
+    if(item && item.badge){
+      if(item.type == SESSION_TYPE.USER ||item.type == SESSION_TYPE.GROUP ){
+        ret += item.badge;
+      }
+    }
+  });
+  return ret;
 }
 
 module.exports = SessionPersisterFacade;
