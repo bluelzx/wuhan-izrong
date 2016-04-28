@@ -190,7 +190,7 @@ let UserInfo = React.createClass({
             </ImagePicker>
             <TouchableOpacity
               style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}
-              onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'publicRealName', true, 'default', 10, true, false)}
+              onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'publicRealName', true, 'default', 20, true, false)}
             >
               <Text style={{color: '#ffffff', fontSize: 18, textAlign: 'right', marginRight: 20}}>
                 {this.state.realName}
