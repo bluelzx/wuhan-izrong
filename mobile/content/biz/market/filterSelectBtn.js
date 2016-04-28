@@ -28,30 +28,28 @@ let FilterSelectBtn = React.createClass({
     return {
       isAll: isAll,
       rowDefault: rowDefault,
+      dataSource: this.props.dataList == null ? [] : this.props.dataList
     }
   },
   setDefaultState: function () {
-    this.setState({
-      isAll: true,
-      rowDefault: 10000,
-    });
-    {this._returnSelectOption(0, this.props.typeTitle , 10000, this.state.isAll)}
+    if (this.props.dataList == null) {
+
+    }else{
+      this.setState({
+        isAll: true,
+        rowDefault: 10000,
+      });
+      {
+        this._returnSelectOption(0, this.props.typeTitle, 10000, this.state.isAll)
+      }
+    }
   },
   render: function () {
     return (
       <View>
         <Text style={{marginTop:10,marginLeft:10,color:'white'}}>{this.props.typeTitle}</Text>
         <View style={{flexDirection:'row'}}>
-          <TouchableHighlight onPress={() => this._pressAll()} underlayColor='rgba(0,0,0,0)'>
-            <View>
-              <View
-                style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:Adjust.width(80), height: 40, backgroundColor: this.state.isAll ? '#817fc9':'#102a42', alignItems: 'center', borderRadius: 5,}}>
-                <Text style={{flex: 1, marginTop: 5, color:'white'}}>
-                  {this.props.dataList[0].displayName}
-                </Text>
-              </View>
-            </View>
-          </TouchableHighlight>
+          {this.returnAllBtn()}
           <ListView
             contentContainerStyle={{justifyContent: 'flex-start',flexDirection: 'row',flexWrap: 'wrap',}}
             dataSource={data.cloneWithRows(this.deleteFirstObj(this.props.dataList))}
@@ -61,6 +59,15 @@ let FilterSelectBtn = React.createClass({
         </View>
       </View>
     )
+  },
+  returnAllBtn: function () {
+    if (this.props.dataList == null){
+      return(
+        this.props.dataList == null
+      );
+    }else{
+      return null;
+    }
   },
   _renderRow: function (rowData, sectionID, rowID) {
     return (
@@ -99,13 +106,16 @@ let FilterSelectBtn = React.createClass({
   _returnSelectOption: function (number, title, rowDefault, isAll) {
     this.props.callBack(this.props.dataList[number], title, rowDefault, isAll);
   },
+
   deleteFirstObj: function (obj) {
     let arr = [];
-    obj.forEach(function (item) {
-      if (item.displayCode != 'ALL') {
-        arr.push(item);
-      }
-    });
+    if (!!obj) {
+      obj.forEach(function (item) {
+        if (item.displayCode != 'ALL') {
+          arr.push(item);
+        }
+      });
+    }
     return arr;
   }
 });

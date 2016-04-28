@@ -15,7 +15,8 @@ let {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  InteractionManager
+  InteractionManager,
+  Platform
   } = React;
 
 let screenWidth = Dimensions.get('window').width;
@@ -23,13 +24,16 @@ let screenHeight = Dimensions.get('window').height;
 
 let NavBarView = require('../../framework/system/navBarView');
 let FilterSelectBtn = require('./filterSelectBtn');
-let MarketList = require('./marketList');
 let SelectOrg = require('../login/selectOrg');
 let Icon = require('react-native-vector-icons/Ionicons');
+let BusinessDetail = require('./businessDetail');
 
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
+
+let {Alert, GiftedListView} = require('mx-artifacts');
+let Adjust = require('../../comp/utils/adjust');
 
 var marketData = {contentList: []};
 
@@ -57,13 +61,13 @@ let Market = React.createClass({
       term: term,
       amount: amount,
       categorySource: categoryArr,
-      itemSource: item[0].itemArr,
+      itemSource: item ? [] : item[0].itemArr,
       termSource: orderItems,
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: myCategory != null ? myCategory.displayName : item[2].displayName,
-      levelTwoText: myItem != null ? myItem.displayName: item[2].itemArr[0].displayName,
+      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[2].displayName,
+      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[2].itemArr[0].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -81,8 +85,8 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: myCategory != null ? myCategory.id : item[2].id,
-      bizItemID: myItem != null ? myItem.id: item[2].itemArr[0].id,
+      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[2].id,
+      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 :item[2].itemArr[0].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -90,16 +94,11 @@ let Market = React.createClass({
     };
   },
 
-  componentWillMount: function () {
-
-  },
-
   componentDidMount() {
     AppStore.addChangeListener(this._onChange);
-
-    InteractionManager.runAfterInteractions(() => {
-      this.bizOrderMarketSearch();
-    });
+    //InteractionManager.runAfterInteractions(() => {
+    //  this.bizOrderMarketSearch();
+    //});
   },
 
   componentWillUnmount: function () {
@@ -107,7 +106,131 @@ let Market = React.createClass({
   },
 
   _onChange () {
-    this.setState(this.bizOrderMarketSearch());
+    //this.setState(this.bizOrderMarketSearch());
+  },
+
+  /**
+   * Will be called when refreshing
+   * Should be replaced by your own logic
+   * @param {number} page Requested page to fetch
+   * @param {function} callback Should pass the rows
+   * @param {object} options Inform if first load
+   */
+  _onFetch(page = 1, callback, options) {
+    MarketAction.bizOrderMarketSearch({
+        orderField: this.state.orderField,
+        orderType: this.state.orderType,
+        pageIndex: page,
+        filterList: [
+          this.state.bizCategoryID,
+          this.state.bizItemID,
+          this.state.bizOrientationID,
+          this.state.termID,
+          this.state.amountID
+        ]
+      }
+    ).then((response)=> {
+      console.log(response);
+      if (response.totalPages === page) {
+        setTimeout(() => {
+          callback(response.contentList, {
+            allLoaded: true, // the end of the list is reached
+          });
+        }, 1000); // simulating network fetching
+      } else {
+        setTimeout(() => {
+          callback(response.contentList, {
+            allLoaded: false, // the end of the list is reached
+          });
+        }, 1000); // simulating network fetching
+      }
+
+    }).catch(
+      (errorData) => {
+        setTimeout(() => {
+          callback([], {
+            allLoaded: true, // the end of the list is reached
+          });
+        }, 1000); // simulating network fetching
+        Alert(errorData.msgContent);
+      }
+    );
+  },
+  toDetail: function (name, rowData) {
+    const { navigator } = this.props;
+    if (navigator) {
+      navigator.push({
+        comp: name,
+        param: {
+          marketInfo: rowData
+        }
+      })
+    }
+  },
+  _renderRow: function (rowData) {
+    if (!rowData) {
+      return null;
+    }
+
+    return (
+      <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
+        <View
+          style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926',}}>
+          <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
+                 source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
+          />
+          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:'white',}}>
+            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天'}
+          </Text>
+          <Text
+            style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
+            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount / 10000 + '万'}
+          </Text>
+          <Text
+            style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
+            numberOfLines={1}>
+            {rowData.orgName}
+          </Text>
+        </View>
+      </TouchableHighlight>
+    )
+  },
+
+  renderMarketList: function () {
+    return (
+      <View style={{width:screenWidth,flex:1,backgroundColor: '#162a40'}}>
+        <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5}}>
+          <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:'#8d8d8d',}}>
+            {'方向'}
+          </Text>
+          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:'#8d8d8d',}}>
+            {'期限'}
+          </Text>
+          <Text style={{position:"absolute",left:Adjust.width(130),top:0,marginLeft:10, color:'#8d8d8d',}}>
+            {'金额'}
+          </Text>
+          <Text style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:'#8d8d8d',}}>
+            {'发布人'}
+          </Text>
+        </View>
+
+        <GiftedListView
+          ref="marketGiftedListView"
+
+          rowView={this._renderRow}
+          onFetch={this._onFetch}
+          firstLoader={true} // display a loader for the first fetching
+          pagination={true} // enable infinite scrolling using touch to load more
+          refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
+          withSections={false} // enable sections
+
+          automaticallyAdjustContentInsets={false}
+
+          style={{flex: 1}}
+        />
+
+      </View>
+    );
   },
 
   render: function () {
@@ -119,9 +242,7 @@ let Market = React.createClass({
           style={{width: screenWidth,alignItems: "center",justifyContent: "flex-start",flexDirection: "row"}}>
           {this.renderFilter(this.pressFilterType, this.pressFilterTime, this.pressFilterOther)}
         </View>
-        <MarketList ref="MARKETLIST" navigator={this.props.navigator} exec={this.props.exec}
-                    orderField={this.state.orderField} orderType={this.state.orderType}
-                    pageIndex={this.state.pageIndex} marketData={this.state.marketData}/>
+        {this.renderMarketList()}
         {this.renderOptionType()}
         {this.renderOptionTime()}
         {this.renderOptionOther()}
@@ -168,7 +289,7 @@ let Market = React.createClass({
       bizItemID: this.state.itemSource[rowId].id
     });
 
-    this.bizOrderMarketSearch();
+    this.refs.marketGiftedListView._refresh();
     AppStore.saveItem(this.state.itemSource[rowId]);
   },
   pressTimeRow(rowId){
@@ -180,7 +301,7 @@ let Market = React.createClass({
       orderType: this.state.termSource[rowId].asc ? 'asc' : 'desc',
     });
 
-    this.bizOrderMarketSearch();
+    this.refs.marketGiftedListView._refresh();
 
   },
   renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
@@ -408,7 +529,7 @@ let Market = React.createClass({
   confirmBtn: function () {
 
       this.pressFilterOther();
-      this.bizOrderMarketSearch();
+    this.refs.marketGiftedListView._refresh();
 
   },
   toPage: function (name) {
@@ -419,71 +540,11 @@ let Market = React.createClass({
   },
 
   bizOrderMarketSearch: function () {
-    this.props.exec(
-      ()=> {
-        return MarketAction.bizOrderMarketSearch({
-            orderField: this.state.orderField,
-            orderType: this.state.orderType,
-            pageIndex: this.state.pageIndex,
-            filterList: [
-              this.state.bizCategoryID,
-              this.state.bizItemID,
-              this.state.bizOrientationID,
-              this.state.termID,
-              this.state.amountID
-            ]
-          //custFilterList: {
-          //  bizCategory: {
-          //    values: [this.state.bizCategoryValues],
-          //    opt: (this.state.bizCategoryValues == 'ALL')?'':'Eq',
-          //    filedName: 'bizCategory',
-          //    valueType: (this.state.bizCategoryValues == 'ALL')?'':'String'
-          //  },
-          //  bizItem: {
-          //    values: [this.state.bizItemValues],
-          //    opt: (this.state.bizItemValues == 'ALL')?'':'Eq',
-          //    filedName: 'bizItem',
-          //    valueType: (this.state.bizItemValues == 'ALL')?'':'String'
-          //  },
-          //  bizOrientation: {
-          //    values: [this.state.bizOrientationValues],
-          //    opt: (this.state.bizOrientationValues == 'ALL')?'':'Eq',
-          //    filedName: 'bizOrientation',
-          //    valueType: (this.state.bizOrientationValues == 'ALL')?'':'String'
-          //  },
-          //  term: {
-          //    values: [this.state.termValues],
-          //    opt: (this.state.termValues == 'ALL')?'':'Eq',
-          //    filedName: 'term',
-          //    valueType: (this.state.termValues == 'ALL')?'':'Double'
-          //  },
-          //  amount: {
-          //    values: [this.state.amountValues],
-          //    opt: (this.state.amountValues == 'ALL')?'':'Eq',
-          //    filedName: 'amount',
-          //    valueType: (this.state.amountValues == 'ALL')?'':'Double'
-          //  },
-          //  org: {
-          //    values: [this.state.orgValues],
-          //    opt: (this.state.orgValues == 'ALL')?'':'Eq',
-          //    filedName: 'amount',
-          //    valueType: (this.state.orgValues == 'ALL')?'':'Double'
-          //  }
-          //}
-          }
-        ).then((response)=> {
-          console.log(response);
-          this.setState({
-            marketData: response
-          });
-          this.refs["MARKETLIST"]._changeData();
-        }).catch(
-          (errorData) => {
-            throw errorData;
-          }
-        );
-      }
-    );
+    //this.props.exec(
+    //  ()=> {
+    //    return
+    //  }, (Platform.OS === 'ios' ? true : false)
+    //);
   },
 
   deleteFirstObj: function (obj) {

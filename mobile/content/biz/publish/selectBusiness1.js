@@ -29,7 +29,7 @@ let SelectBusiness1 = React.createClass({
     let category = MarketStore.getFilterOptions(this.props.param.filterItems, 'bizCategory').options;
     let categoryArr = this.removeDisplayCodeIsAllObj(category);
     return {
-      dataSource: categoryArr,
+      dataSource: categoryArr == null ? [] : categoryArr,
     }
   },
   render: function () {
@@ -64,21 +64,23 @@ let SelectBusiness1 = React.createClass({
       param: {
         bizItem: MarketStore.getFilterOptions(this.props.param.filterItems, 'bizItem').options,
         category: rowData,
-        callBackCategoryAndItem:this.props.param.callBackCategoryAndItem
+        callBackCategoryAndItem: this.props.param.callBackCategoryAndItem
       }
     });
   },
 
   removeDisplayCodeIsAllObj: function (arr) {
     let itemArr = [];
-    arr.forEach(function (item) {
-      if (item.displayCode != 'ALL') {
-        itemArr.push(item);
-      }
-    });
-    return (
-      itemArr
-    )
+    if (!!arr) {
+      arr.forEach(function (item) {
+        if (item.displayCode != 'ALL') {
+          itemArr.push(item);
+        }
+      });
+      return (
+        itemArr
+      );
+    }
   },
 
 

@@ -109,7 +109,7 @@ let Register_valiMobile = React.createClass({
           />
 
           <SMSTimer ref="smsTimer"
-                    func={'sendSmsCodeToRegisterMobile'}
+                    func={LoginAction.sendSmsCodeToRegisterMobile}
                     parameter={this.state.mobileNo}
                     onChanged={this._onChangeText}
                     exec={this.props.exec}
