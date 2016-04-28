@@ -57,13 +57,13 @@ let MyBizDetail = React.createClass({
       lastModifyDate: '',
       //networt
       id: '',
-      term: '',
-      rate: '',
+      term: marketInfo.term,
+      rate: marketInfo.rate,
       remark: '',
       bizOrientation: '',
       bizCategory: '',
       bizItem: '',
-      amount: '',
+      amount: marketInfo.amount,
       fileUrlList: []
     }
   },
@@ -441,7 +441,7 @@ let MyBizDetail = React.createClass({
       termText: response.term == null ? '' : (response.term < 30) ? ((response.term).toString()) : (response.term < 365) ? (response.term / 30).toString() : (response.term / 365).toString(),
       termDefault: (response.term < 30) ? 0 : (response.term < 365) ? 1 : 2,
       amountText: response.amount == null ? '' : (response.amount >= 100000000) ? (response.amount / 100000000).toString() : (response.amount / 10000).toString(),
-      amountDefault: (response.amount >= 100000000) ? 0 : 1,
+      amountDefault: (response.amount <= 100000000) ? 0 : 1,
       rateText: response.rate == null ? '' : (response.rate * 100).toString(),
       remarkText: response.remark,
       lastModifyDate: DateHelper.formatBillDetail(t),
@@ -450,7 +450,16 @@ let MyBizDetail = React.createClass({
     })
   },
 
+  requestParameter: function () {
+    this.setState({
+      term: (this.state.termDefault == 0) ? Number(value) : (this.state.termDefault == 1) ? Number(value) * 30 : Number(value) * 365,
+      amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000,
+      rate: Number(this.state.rateText)/100
+    });
+  },
+
   updateBizOrder: function () {
+    this.requestParameter;
     this.props.exec(
       ()=> {
         return MarketAction.updateBizOrder({
@@ -458,9 +467,9 @@ let MyBizDetail = React.createClass({
             bizCategory: this.state.bizCategory,
             bizItem: this.state.bizItem,
             bizOrientation: this.state.bizOrientation,
-            term: this.state.termText,
-            amount: this.state.amountText,
-            rate: this.state.rateText,
+            term: this.state.term,
+            amount: this.state.amount,
+            rate: this.state.rate,
             fileUrlList: this.state.fileUrlList,
             remark: this.state.remarkText
           }
