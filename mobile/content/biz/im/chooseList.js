@@ -9,7 +9,7 @@ let _ = require('lodash');
 let ChooseList = React.createClass({
 
   getInitialState: function(){
-    let memberView = new Array();
+    let memberView = [];
     let memberList = this.props.memberList;
     for(let userId in memberList){
       if(!!memberList[userId]){

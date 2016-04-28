@@ -9,11 +9,12 @@ let {
   Text,
   View,
   TouchableHighlight
-} = React;
+  } = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let AlphabetListView = require('react-native-alphabetlistview');
+let SearchBar = require('../im/searchBar');
 var that;
 let Register_selectOrg = React.createClass({
   getStateFromStores() {
@@ -55,12 +56,21 @@ let Register_selectOrg = React.createClass({
     console.log(item);
   },
 
+  textChange: function (text) {
+    this.setState({text: text});
+  },
+
 
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='选择机构' showBack={true} showBar={true}
       >
+        <View style={{marginVertical:5}}>
+          <SearchBar
+            textChange={this.textChange}
+          />
+        </View>
         <View style={{flexDirection: 'column', flex: 1}}>
           <AlphabetListView
             data={this.state.data}
@@ -99,13 +109,13 @@ let SectionItem = React.createClass({
 });
 
 let Cell = React.createClass({
-
   render() {
     return (
       <TouchableHighlight style={{backgroundColor: '#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
                           onPress={()=>this.selectOrgItem(this.props.item)}
       >
-        <View style={{height: 40, marginLeft: 20, justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#122335'}}>
+        <View
+          style={{height: 40, marginLeft: 20, justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#122335'}}>
           <Text style={{color: '#FFFFFF', textAlign: 'left'}}>{this.props.item.orgValue}</Text>
         </View>
       </TouchableHighlight>

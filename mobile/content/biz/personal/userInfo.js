@@ -138,11 +138,7 @@ let UserInfo = React.createClass({
             const { navigator } = this.props;
             navigator.resetTo({comp: Login});
           }).catch((errorData) => {
-            if (errorData.toString().startsWith('{')) {
-              Alert(errorData.msgContent);
-            } else {
-              Alert('网络异常');
-            }
+            Alert(errorData.msgContent || errorData.message);
           });
       });
     }, ()=> {
@@ -194,7 +190,7 @@ let UserInfo = React.createClass({
             </ImagePicker>
             <TouchableOpacity
               style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}
-              onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'publicRealName', true, 'default', 10, true, false)}
+              onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'publicRealName', true, 'default', 20, true, false)}
             >
               <Text style={{color: '#ffffff', fontSize: 18, textAlign: 'right', marginRight: 20}}>
                 {this.state.realName}

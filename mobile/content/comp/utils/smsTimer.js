@@ -9,10 +9,8 @@ let {
   Text,
   Dimensions,
   Image
-  } = React;
+} = React;
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let LoginAction = require('../../framework/action/loginAction');
-//let BillAction = require('../../framework/action/billAction');
 let TimerMixin = require('react-timer-mixin');
 let {Alert} = require('mx-artifacts');
 let Validation = require('../../comp/utils/validation');
@@ -28,6 +26,7 @@ let SMSTimer = React.createClass({
       disabled: false
     };
   },
+
   getDefaultProps(){
     return {
       isNeed: false
@@ -52,44 +51,31 @@ let SMSTimer = React.createClass({
     }
   },
 
-  sendSmsCodeToRegisterMobile: function () {
-    if (this.props.parameter.length != 11) {
-      Alert('请输入完整的手机号码');
-    } else {
-      dismissKeyboard();
-      this.props.exec(() => {
-        return LoginAction.sendSmsCodeToRegisterMobile({
-          mobileNo: this.props.parameter
-        }).then((response) => {
-          this.changeVerify();
-        }).catch((errorData) => {
-          throw errorData;
-        });
-      });
-    }
-  },
-
   selectVerifyFunction: function () {
-    if (this.state.disabled == false && this.props.func === 'sendSMSCodeToNewMobile') {
-      this.updateText();
-    } else if (this.state.disabled == false && this.props.func === 'sendSmsCodeToRegisterMobile') {
-      this.sendSmsCodeToRegisterMobile();
-    } else {
-      this.changeVerify();
+    if (!this.state.disabled) {
+      if (this.props.parameter.length != 11) {
+        Alert('请输入完整的手机号码');
+      } else {
+        dismissKeyboard();
+        this.props.exec(() => {
+          return this.props.func({
+            mobileNo: this.props.parameter
+          }).then((response) => {
+            this.changeVerify();
+          }).catch((errorData) => {
+            throw errorData;
+          });
+        });
+      }
     }
   },
 
   updateText: function () {
     let nowTime = new Date().getTime();
     let timeGo = Math.floor((nowTime - this.state.startTime) / 1000);
-
     let t = --this.state.deadline;
     if (t + timeGo > 60) {
-      if (timeGo >= 60) {
-        t = 0;
-      } else {
-        t = 60 - timeGo;
-      }
+      t = timeGo >= 60 ? 0 : 60 - timeGo;
     }
     this.setState({
       deadline: t,
@@ -105,11 +91,6 @@ let SMSTimer = React.createClass({
     }
   },
 
-  textOnchange: function (text, type) {
-    this.setState({[type]: text});
-    this.props.onChanged(type, this.state.verify);
-  },
-
   render() {
     let {height, width} = Dimensions.get('window');
     return (
@@ -119,7 +100,7 @@ let SMSTimer = React.createClass({
                  style={{height: 16, width: 16, marginLeft:9}}
           />
           <TextInput style={[styles.input, {width: width - 170}]} underlineColorAndroid="transparent"
-                     placeholder="短信验证码" onChangeText={(text) => this.textOnchange(text, 'verify')}
+                     placeholder="短信验证码" onChangeText={(text) => this.props.onChanged( 'verify',text)}
                      autoCorrect={false} maxLength={6} keyboardType="number-pad" placeholderTextColor="#386085"
                      clearButtonMode="while-editing"
           />

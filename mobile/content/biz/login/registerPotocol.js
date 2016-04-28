@@ -7,11 +7,12 @@
 let React = require('react-native');
 let {
   StyleSheet,
+  WebView
   } = React;
 let lodash = require('lodash');
 let AppStore = require('../../framework/store/appStore');
 let NavBarView = require('../../framework/system/navBarView');
-
+let AppLinks = require('../../constants/appLinks');
 
 let RegisterPotocol = React.createClass({
 
@@ -36,14 +37,23 @@ let RegisterPotocol = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='用户协议' showBack={true} showBar={true}>
-
+        <WebView
+          style={styles.webView}
+          source={{uri: AppLinks.registerProtocal}}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          decelerationRate="normal"
+          startInLoadingState={true}
+        />
       </NavBarView>
     )
   }
 });
 
 let styles = StyleSheet.create({
-
+  webView:{
+    flex:1
+  }
 
 });
 

@@ -13,13 +13,16 @@ let _info = {
   CHANGE_EVENT: 'change',
   netWorkState: false,
   isLogout: false,
-  isForceLogout: false
+  isForceLogout: false,
+  apnTokens: null
 };
 
 
 let _data = {};
 
 let AppStore = _.assign({}, EventEmitter.prototype, {
+  saveNavigator:(nv)=>{_data.navigator = nv},
+  getNavigator:()=>_data.navigator || {},
   addChangeListener: function (callback, event = _info.CHANGE_EVENT) {
     this.on(event, callback);
   },
@@ -37,7 +40,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getAPNSToken: () => _get_apns_token(),
   updateLastSyncTime:(t)=>_updateLastSyncTime(t),
   getToken: () => _data.token || '',
-  //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
+ //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
   //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTA5IiwiaWF0IjoxNDYxNTUzMTgzLCJzdWIiOiJ3ZWlzZW4zIiwiaXNzIjoiVXNlcklkLTEwOSJ9.SahHndVnBfJo2RforCkAN0XMXAcrL10Gzi3-EMQQsBM',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
@@ -51,8 +54,17 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
   getOrgList: ()=> _getOrgList(),
-  updateUserInfo: (column, value)=> _updateUserInfo(column, value)
+  updateUserInfo: (column, value)=> _updateUserInfo(column, value),
+  saveCategory: (data) => _saveCategory(data),
+  getCategory: ()=> _getCategory(),
+  saveItem: (data) => _saveItem(data),
+  getItem: ()=> _getItem(),
+  queryAllPlatFormInfo:()=>_queryAllPlatFormInfo()
 });
+
+let _queryAllPlatFormInfo = function(){
+  return Persister.queryAllPlatFormInfo();
+}
 
 // Private Functions
 let _handleConnectivityChange = (isConnected) => {
@@ -60,16 +72,17 @@ let _handleConnectivityChange = (isConnected) => {
 };
 
 let _appInit = () => {
-  NetInfo.isConnected.addEventListener(
-    'change',
-    _handleConnectivityChange
-  );
-  NetInfo.isConnected.fetch().done(
-    (isConnected) => {
-      _info.netWorkState = isConnected;
-    }
-  );
+  //NetInfo.isConnected.addEventListener(
+  //  'change',
+  //  _handleConnectivityChange
+  //);
+  //NetInfo.isConnected.fetch().done(
+  //  (isConnected) => {
+  //    _info.netWorkState = isConnected;
+  //  }
+  //);
   _info.initLoadingState = false;
+  _info.apnTokens = Persister.getAPNSToken();
   _.assign(_data, {
     token: _getToken(),
     filters: Persister.getFilters()
@@ -87,12 +100,13 @@ let _register = (data) => {
 };
 
 let _login = (data) => {
-  Persister.saveAppData(data);
-  _.assign(_data, {
-    token: _getToken()
+  return Persister.saveAppData(data).then(()=>{
+    _.assign(_data, {
+      token: _getToken()
+    });
+    // imSocket.init(data.token);
+    AppStore.emitChange();
   });
- // imSocket.init(data.token);
-  AppStore.emitChange();
 };
 
 let _logout = (userId) => {
@@ -111,13 +125,15 @@ let _force_logout = () => {
 };
 
 let _save_apns_token = (apnsToken) => {
+  _info.apnTokens = apnsToken;
   Persister.saveAPNSToken(apnsToken);
   console.log('APNSToken' + apnsToken);
   AppStore.emitChange();
 };
 
 let _get_apns_token = () => {
-  return Persister.getAPNSToken();
+  //return Persister.getAPNSToken();
+  return _info.apnTokens || '';
 };
 
 let _getToken = () => {
@@ -160,5 +176,27 @@ let _updateUserInfo = (column, value)=> {
 
 let _updateLastSyncTime = function(t){
   Persister.updateLastSyncTime(t);
-}
+};
+
+let _saveCategory = (data) => {
+  _.assign(_data, {
+    category: data
+  });
+  AppStore.emitChange();
+};
+
+let _saveItem = (data) => {
+  _.assign(_data, {
+    item: data
+  });
+  AppStore.emitChange();
+};
+
+let _getCategory = () => {
+  return _data.category;
+};
+
+let _getItem = () => {
+  return _data.item;
+};
 module.exports = AppStore;

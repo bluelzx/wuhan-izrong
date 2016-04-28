@@ -5,6 +5,7 @@
 
 let React = require('react-native');
 let {
+  TouchableOpacity,
   StyleSheet,
   Text,
   View,
@@ -139,6 +140,14 @@ let Register_uploadNameCard = React.createClass({
           >
             完成
           </Button>
+        </View>
+        <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column', marginTop: 30}}>
+          <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30}}>
+            <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服: </Text>
+            <TouchableOpacity onPress={()=>{}}>
+              <Text style={{fontSize: 16, color: '#ffffff', textDecorationLine: 'underline'}}>022-28405347</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </NavBarView>
     );

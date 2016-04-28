@@ -14,7 +14,7 @@ let SessionPersisterFacade = {
   queryAllSession: () => _queryAllSession(),
   getGroupIdBySessionId: (sid, cuid) => _getGroupIdBySessionId(sid, cuid),
   getUserIdBySessionId: (sid, cuid) => _getUserIdBySessionId(sid, cuid),
-  updateSession: (param)=>_updateSession(param),
+  updateSession: (param, notAdd)=>_updateSession(param, notAdd),
   querySessionById: (id, type) => _querySessionById(id, type),
   setBadgeZero: (sessionId) => _setBadgeZero(sessionId),
   updateInViteSession:(sessionId) => _updateInViteSession(sessionId),
@@ -58,11 +58,16 @@ let _getUserIdBySessionId = function(sid, cuid) {
   return  tagId ;
 }
 
-let _updateSession = function (param){
+let _updateSession = function (param, notAdd){
   _realm.write(()=>{
     let p = _realm.objects(SESSION).filtered("sessionId = '" + param.sessionId + "'");
     if(p.length > 0){
-      param.badge = p[0].badge + 1;
+      if(param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER){
+        if(!notAdd){
+          param.badge = p[0].badge + 1;
+        }
+      }
+
     }
     _realm.create(SESSION, param, true);
   });

@@ -8,17 +8,19 @@ let {
   StyleSheet,
   Text,
   View,
-  Platform
-  } = React;
+  Platform,
+  TouchableOpacity
+} = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let { Alert, Button } = require('mx-artifacts');
+let {Alert, Button} = require('mx-artifacts');
 let SMSTimer = require('../../comp/utils/smsTimer');
 let TabView = require('../../framework/system/tabView');
 let Validation = require('../../comp/utils/validation');
 let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
+let MarketActions = require('../../framework/action/marketAction');
 
 let ValiSMS = React.createClass({
   getStateFromStores() {
@@ -26,18 +28,19 @@ let ValiSMS = React.createClass({
     if (Platform.OS != 'ios') {
       deviceModel = 'ANDROID';
     }
-    let APNSToken = AppStore.getAPNSToken();
     return {
       disabled: true,
       verify: '',
       deviceModel: deviceModel,
-      APNSToken: APNSToken
+      APNSToken: AppStore.getAPNSToken(),
+      mobileNo: this.props.param.mobileNo
     };
   },
   getInitialState: function () {
     return this.getStateFromStores();
   },
   componentDidMount() {
+    this.refs['smsTimer'].changeVerify();
     AppStore.addChangeListener(this._onChange);
   },
 
@@ -50,23 +53,24 @@ let ValiSMS = React.createClass({
   login: function () {
     if (this.state.verify.length != 6) {
       Alert('请输入完整的短信验证码');
-    }else{
+    } else {
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.login({
           mobileNo: this.props.param.mobileNo,
           inputSmsCode: this.state.verify,
           deviceToken: this.state.APNSToken,
-          deviceModel: this.state.deviceModel
+          deviceModel: this.state.deviceModel,
         }).then((response) => {
-          const { navigator } = this.props;
+          const {navigator} = this.props;
           if (navigator) {
             this.props.navigator.resetTo({
               comp: 'tabView'
             });
           }
+          MarketActions.bizOrderMarketSearchDefaultSearch();
         }).catch((errorData) => {
-          Alert(errorData.msgContent);
+          throw errorData;
         });
       });
     }
@@ -95,9 +99,15 @@ let ValiSMS = React.createClass({
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <View style={{flexDirection: 'row'}}>
             <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>已发送短信验证码至</Text>
-            <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>{PhoneNumber(this.props.param.mobileNo)}</Text>
+            <Text
+              style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>{PhoneNumber(this.props.param.mobileNo)}</Text>
           </View>
-          <SMSTimer ref="smsTimer" onChanged={this._onChangeText} func={'sendSMSCodeToNewMobile'}/>
+          <SMSTimer ref="smsTimer"
+                    onChanged={this._onChangeText}
+                    func={LoginAction.sendSmsCodeToLoginMobile}
+                    parameter={this.state.mobileNo}
+                    exec={this.props.exec}
+          />
           <Button
             containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
@@ -106,6 +116,14 @@ let ValiSMS = React.createClass({
           >
             确定
           </Button>
+        </View>
+        <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
+          <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
+            <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服: </Text>
+            <TouchableOpacity onPress={()=>{}}>
+              <Text style={{fontSize: 16, color: '#ffffff', textDecorationLine: 'underline'}}>022-28405347</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </NavBarView>
     );

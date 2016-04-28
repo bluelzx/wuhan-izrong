@@ -45,7 +45,7 @@ let Contacts = React.createClass({
   },
 
   getInitialState: function(){
-    return Object.assign({ keyWord:''},this.getStateFromStores());
+    return Object.assign({ keyWord:'',userInfo:ContactStore.getUserInfo()},this.getStateFromStores());
   },
 
   renderImg: function(data) {
@@ -166,7 +166,7 @@ let Contacts = React.createClass({
                    arrowColor={'#ffffff'}
                    groupTitleColor={'#1B385E'}
                    titleBorderColor={'#162E50'}
-                   dataSource={contactFilter(this.state.dataSource,'orgMembers','groupName','orgValue','orgMembers','realName',this.state.keyWord)}
+                   dataSource={contactFilter(this.state.dataSource,'orgMembers','groupName','orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId)}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}
                    groupTitleRender={this.titleRender} />

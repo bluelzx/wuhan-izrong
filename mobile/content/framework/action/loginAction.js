@@ -62,7 +62,6 @@ let _login = function (url, p) {
   return new Promise((resolve, reject) => {
     BFetch(url, p).then((response) => {
       resolve(AppStore.login(response));
-      MarketActions.bizOrderMarketSearchDefaultSearch();
     }).catch((errorData) => {
       reject(errorData);
     });
@@ -73,7 +72,6 @@ let _register = function (url, p) {
   return new Promise((resolve, reject) => {
     BFetch(url, p).then((response) => {
       resolve(AppStore.register(response));
-      MarketActions.bizOrderMarketSearchDefaultSearch();
     }).catch((errorData) => {
       reject(errorData);
     });

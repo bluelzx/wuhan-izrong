@@ -48,7 +48,7 @@ let BusinessDetail = React.createClass({
               {this.returnItem('方向:', this.state.detailData.bizOrientationDesc)}
               {this.returnItem('期限:', this.state.detailData.term == null || this.state.detailData.term == 0 ? '--' : this.state.detailData.term + '天')}
               {this.returnItem('金额:', this.state.detailData.amount == null || this.state.detailData.amount == 0? '--' : this.state.detailData.amount / 10000 + '万')}
-              {this.returnItem('利率:', this.state.detailData.rate == 0 || this.state.detailData.rate == 0? '--' :this.state.detailData.rate * 100 + '%')}
+              {this.returnItem('利率:', this.state.detailData.rate == null || this.state.detailData.rate == 0? '--' :this.state.detailData.rate * 100 + '%')}
               {this.returnItem('备注:', this.state.detailData.remark == null || this.state.detailData.remark == 0? '--' : this.state.detailData.remark)}
               {this.returnItem('更新时间:', this.state.lastModifyDate)}
             </View>

@@ -28,12 +28,12 @@ let TextEdit = React.createClass({
       oldPublicValue: this.props.param.publicValue,
       publicName: this.props.param.publicName,
       oldValue: (value === null || value == '' || value == '未填写') ? '' : this.props.param.value.toString(),
-      newValue: this.props.param.value,
+      newValue: '',
       newPublicValue: this.props.param.publicValue,
       type: type,
       tele: this.props.param.name == 'phoneNumber' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[0] ) : '',
       phone: this.props.param.name == 'phoneNumber' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[1]) : '',
-      disabled: true
+      valueDisabled: (value === null || value == '' || value == '未填写') ? false : true
     };
   },
 
@@ -52,15 +52,31 @@ let TextEdit = React.createClass({
       );
   },
 
+  textChange(text){
+     if(text.length > 0) {
+        this.setState({valueDisabled:true});
+     }else {
+         this.setState({valueDisabled:false});
+     }
+  },
+
   validate: function () {
+
     switch (this.props.param.name) {
+      case 'realName':
+        if (this.state.newValue.length <= 20) {
+          this.updateUserInfo();
+        } else {
+          Alert('请输入20个字符内的姓名');
+        }
+        break;
       case 'phoneNumber':
         this.setState({
           newValue: this.state.tele + '-' + this.state.phone
-        });
+        });undefined
         if (Validation.isTelephone(this.state.newValue)) {
           this.updateUserInfo();
-        } else {
+        } else if((this.state.newValue !== '未填写-undefined') && (this.state.tele != '' && this.state.phone != '')){
           Alert('请输入13个字符内的有效的座机号');
         }
         break;
@@ -75,7 +91,7 @@ let TextEdit = React.createClass({
         if (Validation.isWechat(this.state.newValue)) {
           this.updateUserInfo();
         } else {
-          Alert('请输入40个字符内的微信号号码');
+          Alert('请输入40个字符内的正确微信号');
         }
         break;
 
@@ -100,6 +116,11 @@ let TextEdit = React.createClass({
 
   updateUserInfo: function () {
     let data = {};
+
+    if(this.state.newValue.length == 0){
+        return;
+    }
+
     if (this.state.newValue != this.state.oldValue) {
       if (this.state.newPublicValue == this.state.oldPublicValue || this.state.publicName == '') {
         data = [{
@@ -140,15 +161,15 @@ let TextEdit = React.createClass({
             this.props.navigator.pop();
           }
         }).catch((errorData) => {
-          Alert(errorData.msgContent);
+          Alert(errorData.msgContent || errorData.message);
         });
     });
   },
 
   renderUpdate: function () {
     return (
-      <TouchableOpacity style={{width: 150}} onPress={()=>this.validate()}>
-        <Text style={{color: this.state.disabled ? '#ffffff' : '#ffffff'}}>
+      <TouchableOpacity style={{width: 150}} activeOpacity={1} onPress={()=>this.validate()}>
+        <Text style={{color: this.state.valueDisabled ? '#ffffff' : '#a0a0a0'}}>
           完成
         </Text>
       </TouchableOpacity>
@@ -190,7 +211,10 @@ let TextEdit = React.createClass({
                          keyboardType='number-pad'
                          underlineColorAndroid="transparent"
                          maxLength={4}
-                         onChangeText={(text) => this.setState({tele: text})}
+                         onChangeText={(text) => {
+                         this.setState({tele:text});
+                         this.textChange(text);
+                         }}
                          autoFocus={true}
                          autoCapitalize="none"
                          autoCorrect={false}
@@ -201,7 +225,10 @@ let TextEdit = React.createClass({
                          defaultValue={this.state.oldValue.split('-')[1]}
                          keyboardType='number-pad'
                          maxLength={8}
-                         onChangeText={(text) => this.setState({phone: text})}
+                         onChangeText={(text) => {
+                         this.setState({phone:text});
+                         this.textChange(text);
+                         }}
                          autoCapitalize="none"
                          autoCorrect={false}
               />
@@ -224,7 +251,10 @@ let TextEdit = React.createClass({
                          keyboardType={this.props.param.type}
                          underlineColorAndroid="transparent"
                          maxLength={this.props.param.maxLength}
-                         onChangeText={(text) => {this.setState({newValue: text})}}
+                         onChangeText={(text) => {
+                         this.setState({newValue:text});
+                         this.textChange(text);
+                         }}
                          autoFocus={true}
                          autoCapitalize="none"
                          autoCorrect={false}
@@ -247,8 +277,11 @@ let TextEdit = React.createClass({
               <TextInput style={styles.text} defaultValue={this.state.oldValue}
                          keyboardType={this.props.param.type}
                          underlineColorAndroid="transparent"
-                         maxLength={this.props.param.maxLength}
-                         onChangeText={(text) => {this.setState({newValue: text})}}
+                         maxLength={this.props.param.maxLexngth}
+                         onChangeText={(text) => {
+                         this.setState({newValue:text});
+                         this.textChange(text);
+                         }}
                          autoFocus={true}
                          autoCapitalize="none"
                          autoCorrect={false}
@@ -276,6 +309,7 @@ let TextEdit = React.createClass({
     }
   }
 });
+
 let styles = StyleSheet.create({
   view: {
     marginTop: 10,
