@@ -277,7 +277,7 @@ let MyBizDetail = React.createClass({
             >
               <Image
                 style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-                source={{uri:this.state.fileUrlList[0]}}
+                source={this.state.fileUrlList.length != 0?{uri:this.state.fileUrlList[0]}:require('../../image/market/addImage.png')}
               />
             </ImagePicker>
           </View>

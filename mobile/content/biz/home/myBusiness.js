@@ -14,7 +14,8 @@ let {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  InteractionManager
+  InteractionManager,
+  Platform
   }=React;
 
 let screenWidth = Dimensions.get('window').width;
@@ -24,6 +25,7 @@ let NavBarView = require('../../framework/system/navBarView');
 let FilterSelectBtn = require('../market/filterSelectBtn');
 let Icon = require('react-native-vector-icons/Ionicons');
 let MyBizDetail = require('./myBizDetail');
+let numeral = require('numeral');
 
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
@@ -163,7 +165,7 @@ let Market = React.createClass({
           />
           <Text
             style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}>
-            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天'}
+            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term <= 30 ?  rowData.term + '天' : rowData.term <= 365 ? rowData.term/30 + '月' : rowData.term/365 + '年'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'?'rgba(175,134,86,1)':'#386085'}}>
@@ -172,7 +174,7 @@ let Market = React.createClass({
           <Text
             style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}
             numberOfLines={1}>
-            {rowData.rate == null || rowData.rate == 0 ? '--' : rowData.rate*100 + '%'}
+            {rowData.rate == null || rowData.rate == 0 ? '--' : numeral(rowData.rate*100).format('0,0.00') + '%'}
           </Text>
           {this.renderFreshBtn(rowData)}
         </View>
@@ -271,6 +273,7 @@ let Market = React.createClass({
           style={{flex: 1}}
         />
 
+        <View style={{height: (Platform.OS === 'ios') ? 49 : 0}}></View>
       </View>
     );
   },

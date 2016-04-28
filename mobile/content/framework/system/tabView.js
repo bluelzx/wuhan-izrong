@@ -137,7 +137,7 @@ var TabView = React.createClass({
             icon={require('../../image/tab/home.png')}
             selected={this.state.selectedTab === 'home'}
             onPress={() => {this.setState({selectedTab: 'home'});}}>
-            <Home navigator={this.props.navigator} />
+            <Home navigator={this.props.navigator} exec={this.props.exec}/>
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
@@ -170,7 +170,7 @@ var TabView = React.createClass({
             icon={require('../../image/tab/personalcenter.png')}
             selected={this.state.selectedTab === 'personalCenter'}
             onPress={() => {this.setState({selectedTab: 'personalCenter'})}}>
-            <Personal navigator={this.props.navigator} />
+            <Personal navigator={this.props.navigator} exec={this.props.exec}/>
           </TabBarIOS.Item>
 
         </TabBarIOS>
@@ -183,7 +183,9 @@ var TabView = React.createClass({
           <Home navigator={this.props.navigator}
                 tabDesc="首页"
                 icon={require('../../image/tab/home.png')}
-                selectedIcon={require('../../image/tab/home-selected.png')}>
+                selectedIcon={require('../../image/tab/home-selected.png')}
+                exec={this.props.exec}
+          >
           </Home>
 
           <Market navigator={this.props.navigator}
@@ -197,20 +199,26 @@ var TabView = React.createClass({
           <Publish navigator={this.props.navigator}
                    tabDesc="发布"
                    icon={require('../../image/tab/publish.png')}
-                   selectedIcon={require('../../image/tab/publish-selected.png')}>
+                   selectedIcon={require('../../image/tab/publish-selected.png')}
+                   exec={this.props.exec}
+          >
           </Publish>
 
 
           <IM navigator={this.props.navigator}
               tabDesc="IM"
               icon={require('../../image/tab/IM.png')}
-              selectedIcon={require('../../image/tab/IM-selected.png')}>
+              selectedIcon={require('../../image/tab/IM-selected.png')}
+              exec={this.props.exec}
+          >
           </IM>
 
           <Personal navigator={this.props.navigator}
                     tabDesc="个人"
                     icon={require('../../image/tab/personalcenter.png')}
-                    selectedIcon={require('../../image/tab/personalcenter-selected.png')}>
+                    selectedIcon={require('../../image/tab/personalcenter-selected.png')}
+                    exec={this.props.exec}
+          >
           </Personal>
 
         </ScrollableTabView>
