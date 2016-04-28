@@ -11,10 +11,10 @@ let MarketStore = ({
     let bizItem = this.getFilterOptions(filterItems, 'bizItem');
     console.log(bizCategory);
     console.log(bizItem);
-    let totalArr = new Array();
+    let totalArr = [];
     bizCategory.options.forEach(function (category) {
       console.log(category);
-      let itemArr = new Array();
+      let itemArr = [];
       bizItem.options.forEach(function (item) {
         if (item.displayCode.substring(0, 3) == category.displayCode) {
           itemArr.push(item);

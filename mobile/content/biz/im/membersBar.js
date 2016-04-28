@@ -11,7 +11,7 @@ let NameCircular = require('./nameCircular').NameCircular;
 let MembersBar = React.createClass({
 
   renderCircularButton: function () {
-    let btns = new Array();
+    let btns = [];
     btns.push(<CircularButton key="cir1" onPress={this.props.addMember}>
       <Text style={{fontSize:20, color:'#F3AD2C',fontWeight:'bold'}}>+</Text>
     </CircularButton>);
