@@ -201,7 +201,7 @@ let Market = React.createClass({
             allLoaded: true, // the end of the list is reached
           });
         }, 1000); // simulating network fetching
-        Alert(errorData.msgContent);
+        Alert(errorData.msgContent || 'exception');
       }
     );
   },
