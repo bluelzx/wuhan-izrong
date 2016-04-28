@@ -117,8 +117,8 @@ let Login = React.createClass({
           </Button>
 
           <Button
-            containerStyle={{marginTop: 20, backgroundColor: '#ffffff'}}
-            style={{fontSize: 20, color: '#1151B1'}}
+            containerStyle={{marginTop: 20, backgroundColor: '#4fb9fc'}}
+            style={{fontSize: 20, color: '#ffffff'}}
             onPress={()=>this.toOther(Register_valiMobile)}
           >
             新用户注册
