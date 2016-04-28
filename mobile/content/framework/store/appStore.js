@@ -40,7 +40,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getAPNSToken: () => _get_apns_token(),
   updateLastSyncTime:(t)=>_updateLastSyncTime(t),
   getToken: () => _data.token || '',
- //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
+  //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
   //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTA5IiwiaWF0IjoxNDYxNTUzMTgzLCJzdWIiOiJ3ZWlzZW4zIiwiaXNzIjoiVXNlcklkLTEwOSJ9.SahHndVnBfJo2RforCkAN0XMXAcrL10Gzi3-EMQQsBM',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
@@ -50,6 +50,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
+  getOrgByOrgName:(orgName) => _getOrgByOrgName(orgName),
   saveFilters: (filters) => _saveFilters(filters),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
@@ -148,11 +149,8 @@ let _getLoginUserInfo = () => {
   return Persister.getLoginUserInfo();
 };
 
-let _getOrgByOrgId = (orgId)=> {
-  return Persister.getOrgByOrgId(orgId);
-};
-
 let _saveFilters = function(filters){
+  _data.filters = filters;
   Persister.saveFilters(filters);
 };
 
@@ -165,8 +163,16 @@ let _saveOrgList = (orgList)=> {
 };
 
 let _getOrgList = ()=> {
-  let orgBuildList = Persister.getOrgList();
-  return orgBuildList;
+  return Persister.getOrgList();
+};
+
+
+let _getOrgByOrgId = (orgId)=> {
+  return Persister.getOrgByOrgId(orgId);
+};
+
+let _getOrgByOrgName = (orgName)=> {
+  return Persister.getOrgByOrgName(orgName);
 };
 
 let _updateUserInfo = (column, value)=> {

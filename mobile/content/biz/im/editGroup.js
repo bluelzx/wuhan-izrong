@@ -68,10 +68,13 @@ let EditGroup = React.createClass({
     this.props.exec(
       ()=>{
         return  ContactAction.deleteGroup(this.props.param.groupId).then(
-          ()=>{
+          (groupId)=>{
             this.props.navigator.popToTop();
+            return groupId;
           }
-        ).catch((errData)=>{
+        ).then((groupId)=>{
+          ContactAction.storeLeaveGroup(groupId);
+        }).catch((errData)=>{
           Alert(errData.toLocaleString());
         });
       }

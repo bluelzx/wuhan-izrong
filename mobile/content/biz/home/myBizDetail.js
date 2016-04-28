@@ -15,6 +15,7 @@ let {
   Image,
   StyleSheet,
   TouchableOpacity,
+  InteractionManager
   }=React;
 
 let { Alert } = require('mx-artifacts');
@@ -67,10 +68,10 @@ let MyBizDetail = React.createClass({
     }
   },
 
-  componentWillMount: function () {
-    {
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
       this.getBizOrderByCreator(this.state.marketInfo.id);
-    }
+    });
   },
 
   render: function () {

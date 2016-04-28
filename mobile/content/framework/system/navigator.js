@@ -174,7 +174,8 @@ var Main = React.createClass({
     if (this.state.token) {
       initComp = TabView;
       ImSocket.init(this.state.token,()=>{
-        return AppStore.getLoginUserInfo()&&AppStore.getLoginUserInfo().lastSyncTime;
+        let sTime = AppStore.getLoginUserInfo();
+        return sTime && sTime.lastSyncTime;
       });
     }
     return (
@@ -198,7 +199,8 @@ var Main = React.createClass({
         />
 
         <Loading
-          panelColor="white"
+          panelColor="rgba(255, 255, 255, 0.3)"
+          color="white"
           isVisible={this.state.isLoadingVisible}
         />
       </View>

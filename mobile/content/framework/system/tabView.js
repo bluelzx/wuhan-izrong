@@ -22,6 +22,9 @@ var AppStore = require('../store/appStore');
 //var TabBarIOS = require('./tabBarIOS.ios.fas')
 //var Alert = require('../../comp/utils/alert');
 //var Login = require('../../biz/login/login')
+let {Alert} = require('mx-artifacts');
+
+let MarketAction = require('../action/marketAction');
 
 var ScrollableTabView = require('../../comp/tabBar/scrollableTabView');
 var AndroidTabBar = require('../../comp/tabBar/tabBar');
@@ -60,6 +63,13 @@ var TabView = React.createClass({
     //}
   },
 
+  // componentWillMount() {
+  //   MarketAction.bizOrderMarketSearchDefaultSearch()
+  //     .catch((errorData) => {
+  //       Alert(errorData.msgContent || errorData.message);
+  //     });
+  // },
+
   //componentDidMount() {
   //  AppStore.addChangeListener(this._onChange);
   //  if (Platform.OS === 'ios') {
@@ -80,13 +90,13 @@ var TabView = React.createClass({
   //},
   //
   //componentWillUnmount: function () {
-  //  if (Platform.OS === 'ios') {
-  //    AppStore.removeChangeListener(this._onChange);
-  //    PushNotificationIOS.removeEventListener('register', AppAction.notificationRegister);
-  //    PushNotificationIOS.removeEventListener('notification', AppAction.onNotification);
-  //    AppStateIOS.removeEventListener('change', this._handleAppStateChange);
-  //    PushNotificationIOS.setApplicationIconBadgeNumber(0);
-  //  }
+    //if (Platform.OS === 'ios') {
+    //  AppStore.removeChangeListener(this._onChange);
+    //  PushNotificationIOS.removeEventListener('register', AppAction.notificationRegister);
+    //  PushNotificationIOS.removeEventListener('notification', AppAction.onNotification);
+    //  AppStateIOS.removeEventListener('change', this._handleAppStateChange);
+    //  PushNotificationIOS.setApplicationIconBadgeNumber(0);
+    //}
   //},
 
   _handleAppStateChange: function (currentAppState) {
