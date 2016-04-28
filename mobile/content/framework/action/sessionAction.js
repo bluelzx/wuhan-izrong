@@ -25,12 +25,15 @@ let _updateSession = function (type, sessionId, title, content, lastTime, conten
   let param = {
     sessionId:sessionId,
     type: type,
-    badge:groupId||1,
+    badge:groupId||0,
     title: title,
     content:content,
     lastTime: lastTime,
     contentType: contentType
   };
+  if(!notAdd){
+    param.badge = 1;
+  }
   SessiontStore.updateSession(param, notAdd);
 }
 
