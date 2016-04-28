@@ -28,12 +28,11 @@ let ValiSMS = React.createClass({
     if (Platform.OS != 'ios') {
       deviceModel = 'ANDROID';
     }
-    let APNSToken = AppStore.getAPNSToken();
     return {
       disabled: true,
       verify: '',
       deviceModel: deviceModel,
-      APNSToken: APNSToken,
+      APNSToken: AppStore.getAPNSToken(),
       mobileNo: this.props.param.mobileNo
     };
   },

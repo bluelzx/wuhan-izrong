@@ -13,7 +13,8 @@ let _info = {
   CHANGE_EVENT: 'change',
   netWorkState: false,
   isLogout: false,
-  isForceLogout: false
+  isForceLogout: false,
+  apnTokens: null
 };
 
 
@@ -81,6 +82,7 @@ let _appInit = () => {
   //  }
   //);
   _info.initLoadingState = false;
+  _info.apnTokens = Persister.getAPNSToken();
   _.assign(_data, {
     token: _getToken(),
     filters: Persister.getFilters()
@@ -129,7 +131,8 @@ let _save_apns_token = (apnsToken) => {
 };
 
 let _get_apns_token = () => {
-  return Persister.getAPNSToken();
+  //return Persister.getAPNSToken();
+  return _info.apnTokens || '';
 };
 
 let _getToken = () => {
