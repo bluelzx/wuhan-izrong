@@ -168,7 +168,7 @@ let Market = React.createClass({
     }
   },
   _renderRow: function (rowData) {
-    if (rowData) {
+    if (!rowData) {
       return null;
     }
 
