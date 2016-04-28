@@ -20,6 +20,8 @@ let _info = {
 let _data = {};
 
 let AppStore = _.assign({}, EventEmitter.prototype, {
+  saveNavigator:(nv)=>{_data.navigator = nv},
+  getNavigator:()=>_data.navigator || {},
   addChangeListener: function (callback, event = _info.CHANGE_EVENT) {
     this.on(event, callback);
   },
@@ -37,7 +39,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getAPNSToken: () => _get_apns_token(),
   updateLastSyncTime:(t)=>_updateLastSyncTime(t),
   getToken: () => _data.token || '',
-  //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
+ //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
   //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTA5IiwiaWF0IjoxNDYxNTUzMTgzLCJzdWIiOiJ3ZWlzZW4zIiwiaXNzIjoiVXNlcklkLTEwOSJ9.SahHndVnBfJo2RforCkAN0XMXAcrL10Gzi3-EMQQsBM',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
@@ -55,8 +57,13 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   saveCategory: (data) => _saveCategory(data),
   getCategory: ()=> _getCategory(),
   saveItem: (data) => _saveItem(data),
-  getItem: ()=> _getItem()
+  getItem: ()=> _getItem(),
+  queryAllPlatFormInfo:()=>_queryAllPlatFormInfo()
 });
+
+let _queryAllPlatFormInfo = function(){
+  return Persister.queryAllPlatFormInfo();
+}
 
 // Private Functions
 let _handleConnectivityChange = (isConnected) => {
@@ -98,8 +105,6 @@ let _login = (data) => {
     // imSocket.init(data.token);
     AppStore.emitChange();
   });
-
-
 };
 
 let _logout = (userId) => {

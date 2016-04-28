@@ -89,13 +89,10 @@ let Market = React.createClass({
     }
   },
 
-  componentDidMount: function () {
+  componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.bizOrderAdminSearch();
     });
-  },
-
-  componentDidMount() {
     AppStore.addChangeListener(this._onChange);
   },
 
@@ -223,9 +220,7 @@ let Market = React.createClass({
 
   renderOptionType(){
     if (this.state.clickFilterType == 0) {
-      return (
-        <View></View>
-      )
+      return null;
     }
     else {
       return (
@@ -244,14 +239,12 @@ let Market = React.createClass({
             dataSource={data.cloneWithRows(this.state.itemSource)}
             renderRow={this.renderTypeRow2}/>
         </View>
-      )
+      );
     }
   },
   renderOptionTime(){
     if (this.state.clickFilterTime == 0) {
-      return (
-        <View></View>
-      )
+      return null;
     } else {
       return (
         <View style={{position:"absolute",left:0,top:36}}>
@@ -266,15 +259,13 @@ let Market = React.createClass({
             renderRow={this.renderTimeRow}
           />
         </View>
-      )
+      );
     }
 
   },
   renderOptionOther(){
     if (this.state.clickFilterOther == 0) {
-      return (
-        <View></View>
-      )
+      return null;
     } else {
       return (
         <View
@@ -309,7 +300,7 @@ let Market = React.createClass({
             </TouchableHighlight>
           </ScrollView>
         </View>
-      )
+      );
     }
 
   },
@@ -323,7 +314,7 @@ let Market = React.createClass({
           <Text style={{marginLeft:10,color:'white'}}>{rowData.displayName}</Text>
         </View>
       </TouchableOpacity>
-    )
+    );
   },
   renderTypeRow2(rowData, sectionID, rowID){
     return (
@@ -335,7 +326,7 @@ let Market = React.createClass({
           <Text style={{marginLeft:10,color:'white'}}>{rowData.displayName}</Text>
         </View>
       </TouchableOpacity>
-    )
+    );
   },
   renderTimeRow(rowData, sectionID, rowID){
     return (
@@ -347,7 +338,7 @@ let Market = React.createClass({
           <Text style={{marginLeft:10,color:'white'}}>{rowData.fieldDisplayName}</Text>
         </View>
       </TouchableOpacity>
-    )
+    );
   },
   renderPubilshBtn: function () {
     return (
@@ -359,7 +350,7 @@ let Market = React.createClass({
           </Text>
         </View>
       </TouchableHighlight>
-    )
+    );
   },
 
   callBack: function (item, title, rowDefault, isAll) {
@@ -442,7 +433,7 @@ let Market = React.createClass({
   },
 
   deleteFirstObj: function (obj) {
-    let arr = new Array();
+    let arr = [];
     obj.forEach(function (item) {
       if (item.displayCode != 'ALL') {
         arr.push(item);

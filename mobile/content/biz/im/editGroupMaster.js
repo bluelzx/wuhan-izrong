@@ -18,7 +18,7 @@ let MembersBar = require('./membersBar');
 let ContactAction = require('../../framework/action/contactAction');
 let AppStore = require('../../framework/store/appStore');
 
-let EditGroup = React.createClass({
+let EditGroupMaster = React.createClass({
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange);
@@ -49,7 +49,7 @@ let EditGroup = React.createClass({
 
   renderCircularButton: function () {
 
-    let btns = new Array();
+    let btns = [];
     btns.push(<CircularButton key="cir1" onPress={()=>this.props.navigator.push({comp:AddMember})}>
       <Text style={{fontSize:20, color:'#F3AD2C',fontWeight:'bold'}}>+</Text>
     </CircularButton>);
@@ -154,4 +154,4 @@ let EditGroup = React.createClass({
   }
 });
 
-module.exports = EditGroup;
+module.exports = EditGroupMaster;

@@ -70,7 +70,7 @@ let SelectBusiness1 = React.createClass({
   },
 
   removeDisplayCodeIsAllObj: function (arr) {
-    let itemArr = new Array();
+    let itemArr = [];
     arr.forEach(function (item) {
       if (item.displayCode != 'ALL') {
         itemArr.push(item);

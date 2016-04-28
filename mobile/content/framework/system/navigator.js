@@ -37,8 +37,6 @@ let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
 
-let Chat = require('../../biz/im/chat');
-
 var Main = React.createClass({
   _navigator: null,
   _getStateFromStores: function() {
@@ -62,6 +60,9 @@ var Main = React.createClass({
       // });
     }
     NotificationManager.openNotification();
+
+    AppStore.saveNavigator(this.refs['navigator']);
+
   },
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange);

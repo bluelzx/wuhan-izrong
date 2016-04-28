@@ -11,25 +11,27 @@ let MarketStore = ({
     let bizItem = this.getFilterOptions(filterItems, 'bizItem');
     console.log(bizCategory);
     console.log(bizItem);
-    let totalArr = new Array();
-    bizCategory.options.forEach(function (category) {
-      console.log(category);
-      let itemArr = new Array();
-      bizItem.options.forEach(function (item) {
-        if (item.displayCode.substring(0, 3) == category.displayCode) {
-          itemArr.push(item);
-        }
+    let totalArr = [];
+    if (bizCategory.options) {
+      bizCategory.options.forEach(function (category) {
+        console.log(category);
+        let itemArr = [];
+        bizItem.options.forEach(function (item) {
+          if (item.displayCode.substring(0, 3) == category.displayCode) {
+            itemArr.push(item);
+          }
+        });
+        let categoryobj = {
+          itemArr: itemArr,
+          id: category.id,
+          displayName: category.displayName,
+          displayCode: category.displayCode,
+          displaySeq: category.displaySeq,
+          isSelected: category.isSelected
+        };
+        totalArr.push(categoryobj);
       });
-      let categoryobj = {
-        itemArr: itemArr,
-        id: category.id,
-        displayName: category.displayName,
-        displayCode: category.displayCode,
-        displaySeq: category.displaySeq,
-        isSelected: category.isSelected
-      };
-      totalArr.push(categoryobj);
-    });
+    }
     return totalArr;
   },
 

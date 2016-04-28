@@ -61,19 +61,19 @@ let CreateGroup = React.createClass({
 
   //渲染组成员
   itemRender: function(data) {
-    return (
-      <CheckBox
-                item={data}
-                key={data.userId}
-                choice={this.checkBoxChoice}
-                unChoice={this.unCheckBoxChoice}
-                style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
-        <View style={{flexDirection:'row'}}>
-          <NameCircular name={data.realName}/>
-          <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
-        </View>
-      </CheckBox>
-    );
+      return (
+        <CheckBox
+          item={data}
+          key={data.userId}
+          choice={this.checkBoxChoice}
+          unChoice={this.unCheckBoxChoice}
+          style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
+          <View style={{flexDirection:'row'}}>
+            <NameCircular name={data.realName}/>
+            <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
+          </View>
+        </CheckBox>
+      );
   },
   //*********************
 
@@ -142,7 +142,7 @@ let CreateGroup = React.createClass({
   },
 
   getDataSource: function() {
-    let ret =  groupFilter(this.state.userData,'orgValue','orgMembers','realName',this.state.keyWord);
+    let ret =  groupFilter(this.state.userData,'orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
 
     return ret;
   },

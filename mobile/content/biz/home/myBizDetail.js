@@ -297,6 +297,8 @@ let MyBizDetail = React.createClass({
       return (
         <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:'white'}}>{'附件:'}</Text>
       );
+    }else{
+      return null;
     }
   },
   renderImageItem: function () {
@@ -363,6 +365,8 @@ let MyBizDetail = React.createClass({
           </View>
         </TouchableHighlight>
       );
+    }else{
+      return null;
     }
   },
 
@@ -491,7 +495,7 @@ let MyBizDetail = React.createClass({
   handleSendImage(uri) {
     ImAction.uploadImage(uri)
       .then((response) => {
-        let arr = new Array();
+        let arr = [];
         arr.push(response.fileUrl);
         this.setState({
           fileUrlList: arr

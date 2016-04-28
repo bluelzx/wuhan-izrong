@@ -482,15 +482,15 @@ let Market = React.createClass({
   },
 
   deleteFirstObj: function (obj) {
-    let arr = new Array();
-    obj.forEach(function (item) {
-      if (item.displayCode != 'ALL') {
-        arr.push(item);
-      }
-    });
-    return (
-      arr
-    )
+    let arr = [];
+    if (!!obj) {
+      obj.forEach(function (item) {
+        if (item.displayCode != 'ALL') {
+          arr.push(item);
+        }
+      });
+    }
+    return arr;
   }
 
 });
