@@ -5,15 +5,40 @@
  */
 let _ = require('lodash');
 
-let groupFilter = function(data, groupName,groupMembers,groupMembersName, keyWord){
+let groupFilter = function(data, groupName,groupMembers,groupMembersName, keyWord, uid){
+  let ret = [];
   //过滤规则
   // 1. groupName包括keyWord的
   // 2. groupMembers中的成员名字 包含keyWord的
   //字符串比较: 使用!!~indexOf()
   if(!keyWord || keyWord==''){
-    return data;
+    if(!uid)
+      return data;
+    else{
+      data.forEach((group)=>{
+        let gName = group[groupName];
+
+          let mem = [];
+          for(let member of group[groupMembers]){
+            let gMemName = member[groupMembersName];
+
+              if(uid && uid==member.userId);
+              else
+                mem.push(member);
+
+          }
+          if(mem.length > 0){
+            let tagGroup = {
+              [groupName]:gName,
+              [groupMembers]:mem
+            };
+            ret.push(tagGroup);
+          }
+
+      });
+      return ret;
+    }
   }
-  let ret = [];
   data.forEach((group)=>{
     let gName = group[groupName];
     if(!!gName && gName.length && !!~gName.indexOf(keyWord)){
@@ -23,6 +48,8 @@ let groupFilter = function(data, groupName,groupMembers,groupMembersName, keyWor
       for(let member of group[groupMembers]){
         let gMemName = member[groupMembersName];
         if(!!gMemName && gMemName.length && !!~gMemName.indexOf(keyWord)){
+          if(uid && uid==member.userId);
+          else
           mem.push(member);
         }
       }
@@ -58,7 +85,7 @@ let gFilter = function (group ,groupMembers,gName, keyWord) {
 /**
  * data是个引用
  * */
-let contactFilter = function(data, groupM,gN, groupName,groupMembers,groupMembersName, keyWord){
+let contactFilter = function(data, groupM,gN, groupName,groupMembers,groupMembersName, keyWord, uid){
   //return data;
   let ret = [];
   let group = data[0];
@@ -69,7 +96,7 @@ let contactFilter = function(data, groupM,gN, groupName,groupMembers,groupMember
     ret.push([]);
   }
   console.log('k'+k);
-  ret.push(...groupFilter(data.slice(1), groupName,groupMembers,groupMembersName, keyWord));
+  ret.push(...groupFilter(data.slice(1), groupName,groupMembers,groupMembersName, keyWord, uid));
   console.log(ret);
   return ret;
 }

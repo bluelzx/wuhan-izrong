@@ -18,7 +18,7 @@ let MembersBar = require('./membersBar');
 let ContactAction = require('../../framework/action/contactAction');
 let AppStore = require('../../framework/store/appStore');
 
-let EditGroup = React.createClass({
+let EditGroupMaster = React.createClass({
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange);
@@ -154,4 +154,4 @@ let EditGroup = React.createClass({
   }
 });
 
-module.exports = EditGroup;
+module.exports = EditGroupMaster;

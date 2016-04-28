@@ -5,6 +5,7 @@ let { SESSION_TYPE } = require('../../constants/dictIm');
 
 let Persister = require('../persister/persisterFacade');
 let SessionAction = require('../action/sessionAction');
+let AppStore = require('./appStore');
 let ContactStore = require('./contactStore');
 
 let _info = {
@@ -106,18 +107,68 @@ let _sessionInit = (data) => {
 let _saveMsg = (message) => {
 
   console.log(message);
+
   if(message.msgType == SESSION_TYPE.INVITE){
     //TODO  这种情况考虑换个地方处理
-    //let group = ContactStore.getGroupDetailById(message.groupId);
-    SessionAction.updateSession(SESSION_TYPE.INVITE, message.sessionId,message.groupName,'群邀请',message.revTime,message.contentType, message.groupId);
+    SessionAction.updateSession(SESSION_TYPE.INVITE, message.sessionId,message.groupName,'群邀请',message.revTime,message.contentType, {groupId:message.groupId});
     return ;
   }
   if(message.type == SESSION_TYPE.USER){
+
+    let notAdd = false;
+    //let group = ContactStore.getGroupDetailById(message.groupId);
+    let n = AppStore.getNavigator();
+    if(n){
+      let routs = n.getCurrentRoutes();
+      if(routs){
+        let len = routs.length;
+        if(len) {
+          let cur = routs[len - 1];
+          if(cur.comp && cur.param){
+            //当前会话
+            //p2p
+            if(cur.comp.displayName == 'Chat' && cur.param.chatType =='user' && cur.param.userId == (message.toId || message.fromUId)){
+              // 不加1
+              notAdd = true;
+            }else if(cur.comp.displayName == 'ImUserInfo' && cur.param.userId==(message.toId || message.fromUId)){
+              notAdd = true;
+            }
+          }
+        }
+      }
+    }
+
     let user = ContactStore.getUserInfoByUserId(message.toId || message.fromUId);
-    SessionAction.updateSession(message.type, message.sessionId,user.realName,message.content,message.revTime,message.contentType);
+    SessionAction.updateSession(message.type, message.sessionId,user.realName,message.content,message.revTime,message.contentType, {notAdd:notAdd});
   }else if(message.type == SESSION_TYPE.GROUP){
+
+    let notAdd = false;
+    //let group = ContactStore.getGroupDetailById(message.groupId);
+    let n = AppStore.getNavigator();
+    if(n){
+      let routs = n.getCurrentRoutes();
+      if(routs){
+        let len = routs.length;
+        if(len) {
+          let cur = routs[len - 1];
+          if(cur.comp && cur.param){
+            //当前会话
+            //p2g
+            if(cur.comp.displayName == 'Chat' && cur.param.chatType =='group' && cur.param.groupId == message.groupId) {
+              //不加1
+              notAdd = true;
+            }else if(cur.comp.displayName == 'EditGroup' && cur.param.groupId == message.groupId){
+              notAdd = true;
+            }else if(cur.comp.displayName == 'EditGroupMaster' && cur.param.groupId == message.groupId){
+              notAdd = true;
+            }
+          }
+        }
+      }
+    }
+
     let group = ContactStore.getGroupDetailById(message.groupId);
-    SessionAction.updateSession(message.type, message.sessionId,group.groupName,message.content,message.revTime,message.contentType);
+    SessionAction.updateSession(message.type, message.sessionId,group.groupName,message.content,message.revTime,message.contentType, {notAdd:notAdd});
   }
 
   if (message.sessionId === _data.sessionId) {
