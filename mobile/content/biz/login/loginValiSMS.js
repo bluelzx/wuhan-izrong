@@ -10,7 +10,7 @@ let {
   View,
   Platform,
   TouchableOpacity
-  } = React;
+} = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
@@ -40,6 +40,7 @@ let ValiSMS = React.createClass({
     return this.getStateFromStores();
   },
   componentDidMount() {
+    this.refs['smsTimer'].changeVerify();
     AppStore.addChangeListener(this._onChange);
   },
 
@@ -103,7 +104,7 @@ let ValiSMS = React.createClass({
           </View>
           <SMSTimer ref="smsTimer"
                     onChanged={this._onChangeText}
-                    func={'sendSmsCodeToLoginMobile'}
+                    func={LoginAction.sendSmsCodeToLoginMobile}
                     parameter={this.state.mobileNo}
                     exec={this.props.exec}
           />
