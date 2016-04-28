@@ -398,12 +398,13 @@ let GiftedMessenger = React.createClass({
   },
 
   handleBizInfo() {
-    this.props.navigator({
+    this.props.navigator.push({
       comp:Publish,
       param:{
-        callBack:(bizId)=>{
+        callBack:(item)=>{
+          console.log('handleBizInfo callBack');
           let message = {
-            content: bizId,
+            content: JSON.stringify(item),
             name: this.props.senderName,
             image: this.props.senderImage,
             position: 'right',
@@ -415,7 +416,7 @@ let GiftedMessenger = React.createClass({
             let rowID = this.appendMessage(message, true);
             this.props.handleBizInfo(message, rowID);
           }
-        }
+        }, isFromIM: true
       }
     });
 
@@ -894,9 +895,7 @@ let GiftedMessenger = React.createClass({
 
           <TouchableOpacity
             style={this.styles.panelItem}
-            onPress= {() => {
-
-            }}
+            onPress= {() => this.handleBizInfo()}
           >
             <Image
               style={this.styles.panelIcon}
