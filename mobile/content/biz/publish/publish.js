@@ -124,12 +124,12 @@ let Publish = React.createClass({
 
   _onChangeText(key, value){
     this.setState({[key]: value});
-    if(key == 'termText'){
+    if (key == 'termText') {
       this.setState({term: (this.state.termDefault == 0) ? Number(value) : (this.state.termDefault == 1) ? Number(value) * 30 : Number(value) * 365});
-    }else if (key == 'amountText'){
+    } else if (key == 'amountText') {
       this.setState({amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000});
-    }else {
-      this.setState({rate:Number(value)});
+    } else {
+      this.setState({rate: Number(value)});
     }
   },
 
@@ -278,66 +278,84 @@ let Publish = React.createClass({
   },
 
   _pressPublish: function () {
-    if(this.state.termText.length != 0 || this.state.amountText.length != 0 || this.state.rateText.length != 0){
-      if(this.state.termText.length != 0){
-        if(Validation.isTerm(this.state.termText)){
-          if(this.state.amountText.length != 0){
-            if(Validation.isAmount(this.state.amountText)){
-              if(this.state.rateText.length != 0){
-                if(Validation.isRate(this.state.rateText)){
-                  {this.addBizOrder();}
-                }else{
+    if (this.state.termText.length != 0 || this.state.amountText.length != 0 || this.state.rateText.length != 0) {
+      if (this.state.termText.length != 0) {
+        if (Validation.isTerm(this.state.termText)) {
+          if (this.state.amountText.length != 0) {
+            if (Validation.isAmount(this.state.amountText)) {
+              if (this.state.rateText.length != 0) {
+                if (Validation.isRate(this.state.rateText)) {
+                  {
+                    this.addBizOrder();
+                  }
+                } else {
                   Alert('格式不合法：请输入0-99.99之间的小数');
                 }
-              }else{
-                {this.addBizOrder();}
+              } else {
+                {
+                  this.addBizOrder();
+                }
               }
-            }else{
+            } else {
               Alert('格式不合法：请输入整数');
             }
-          }else {
-            if(this.state.rateText.length != 0){
-              if(Validation.isRate(this.state.rateText)){
-                {this.addBizOrder();}
-              }else{
+          } else {
+            if (this.state.rateText.length != 0) {
+              if (Validation.isRate(this.state.rateText)) {
+                {
+                  this.addBizOrder();
+                }
+              } else {
                 Alert('格式不合法：请输入0-99.99之间的小数');
               }
-            }else{
-              {this.addBizOrder();}
+            } else {
+              {
+                this.addBizOrder();
+              }
             }
           }
-        }else{
+        } else {
           Alert('格式不合法：请输入整数');
         }
-      }else{
-        if(this.state.amountText.length != 0){
-          if(Validation.isAmount(this.state.amountText)){
-            if(this.state.rateText.length != 0){
-              if(Validation.isRate(this.state.rateText)){
-                {this.addBizOrder();}
-              }else{
+      } else {
+        if (this.state.amountText.length != 0) {
+          if (Validation.isAmount(this.state.amountText)) {
+            if (this.state.rateText.length != 0) {
+              if (Validation.isRate(this.state.rateText)) {
+                {
+                  this.addBizOrder();
+                }
+              } else {
                 Alert('格式不合法：请输入0-99.99之间的小数');
               }
-            }else{
-              {this.addBizOrder();}
+            } else {
+              {
+                this.addBizOrder();
+              }
             }
-          }else{
+          } else {
             Alert('格式不合法：请输入整数');
           }
-        }else {
-          if(this.state.rateText.length != 0){
-            if(Validation.isRate(this.state.rateText)){
-              {this.addBizOrder();}
-            }else{
+        } else {
+          if (this.state.rateText.length != 0) {
+            if (Validation.isRate(this.state.rateText)) {
+              {
+                this.addBizOrder();
+              }
+            } else {
               Alert('格式不合法：请输入0-99.99之间的小数');
             }
-          }else{
-            {this.addBizOrder();}
+          } else {
+            {
+              this.addBizOrder();
+            }
           }
         }
       }
-    }else {
-      {this.addBizOrder();}
+    } else {
+      {
+        this.addBizOrder();
+      }
     }
   },
 
@@ -358,15 +376,17 @@ let Publish = React.createClass({
   },
 
   toPage: function (name) {
-    const { navigator } = this.props;
-    if (navigator) {
-      navigator.push({
-        comp: name,
-        param: {
-          filterItems: this.state.filterItems,
-          callBackCategoryAndItem: this.callBackCategoryAndItem
-        },
-      })
+    if (this.state.filterItems.length != 0) {
+      const { navigator } = this.props;
+      if (navigator) {
+        navigator.push({
+          comp: name,
+          param: {
+            filterItems: this.state.filterItems,
+            callBackCategoryAndItem: this.callBackCategoryAndItem
+          }
+        })
+      }
     }
   },
 
@@ -392,28 +412,28 @@ let Publish = React.createClass({
 
   addBizOrder: function () {
     dismissKeyboard();
-    //this.props.exec(
-    //  ()=> {
-    return MarketAction.addBizOrder({
-      id: '',
-      term: this.state.term,
-      rate: this.state.rate / 100,
-      remark: this.state.remark,
-      bizOrientation: this.state.bizOrientation,
-      bizCategory: this.state.bizCategory.displayCode,
-      bizItem: this.state.bizItem.displayCode,
-      amount: this.state.amount,
-      fileUrlList: this.state.fileUrlList
-    }).then((response)=> {
-      Alert('发布成功');
-      this.props.navigator.resetTo({comp: 'tabView', tabName: 'market'});
-    }).catch(
-      (errorData) => {
-        throw errorData;
+    this.props.exec(
+      ()=> {
+        return MarketAction.addBizOrder({
+          id: '',
+          term: this.state.term,
+          rate: this.state.rate / 100,
+          remark: this.state.remark,
+          bizOrientation: this.state.bizOrientation,
+          bizCategory: this.state.bizCategory.displayCode,
+          bizItem: this.state.bizItem.displayCode,
+          amount: this.state.amount,
+          fileUrlList: this.state.fileUrlList
+        }).then((response)=> {
+          Alert('发布成功');
+          this.props.navigator.resetTo({comp: 'tabView', tabName: 'market'});
+        }).catch(
+          (errorData) => {
+            throw errorData;
+          }
+        );
       }
     );
-    //  }
-    //);
   },
 
   handleSendImage(uri) {
