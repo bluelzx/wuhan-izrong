@@ -67,8 +67,8 @@ let Publish = React.createClass({
       rate: '',
       remark: '',
       bizOrientation: 'IN',
-      bizCategory: myCategory != null ? myCategory : item[3],
-      bizItem: myItem != null ? myItem : item[3].itemArr[0],
+      bizCategory: myCategory != null ? myCategory : item ? [] : item[3],
+      bizItem: myItem != null ? myItem : item ? [] : item[3].itemArr[0],
       amount: '',
       fileUrlList: []
     }
