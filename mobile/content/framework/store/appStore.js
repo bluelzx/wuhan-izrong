@@ -125,6 +125,7 @@ let _force_logout = () => {
 };
 
 let _save_apns_token = (apnsToken) => {
+  _info.apnTokens = apnsToken;
   Persister.saveAPNSToken(apnsToken);
   console.log('APNSToken' + apnsToken);
   AppStore.emitChange();
