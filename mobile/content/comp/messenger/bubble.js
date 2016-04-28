@@ -1,6 +1,8 @@
-import React, {Text, View, Animated, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {Text, View, Animated, Image, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 import {MSG_CONTENT_TYPE} from '../../constants/dictIm';
 import _ from 'lodash';
+import numeral from 'numeral';
+let screenWidth = Dimensions.get('window').width;
 let styles = StyleSheet.create({
   bubble: {
     borderRadius: 5,
@@ -40,13 +42,13 @@ export default class Bubble extends React.Component {
     );
   }
 
-  _onLongPress() {
+  _onLongPress(shareContent) {
     console.log('onLongPress');
     Share.open({
-      share_text: "Hola mundo",
+      share_text: shareContent,
       share_URL: "http://google.cl",
       title: "Share Link"
-    },(e) => {
+    }, (e) => {
       console.log(e);
     });
   }
@@ -136,19 +138,31 @@ export default class Bubble extends React.Component {
     if (this.props.contentType === MSG_CONTENT_TYPE.BIZINFO) {
       let data = JSON.parse(this.props.content);
       let amount = data.amount == '' ? '0元' : (data.amount < 99999999 ? data.amount / 10000 : data.amount / 100000000) + '万';
+      let shareContent = data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' +
+        (data.term == '' ? '0天' : data.term + '天') + '  ' +
+        amount + '  ' + numeral(data.rate * 100).format('0,0.00') + '%';
       return (
-        <TouchableOpacity onLongPress={this._onLongPress} activeOpacity={0.7}>
+        <TouchableOpacity onLongPress={() => this._onLongPress(shareContent)} activeOpacity={0.7}>
           <View style={[styles.bubble, customStyle]}>
-            <Text style={{paddingBottom: 5}}>{data.bizCategory}</Text>
+            <Text
+              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight), {paddingBottom: 5}]}>{data.bizCategory}</Text>
             <View
               style={{borderTopWidth: 1, borderTopColor: '#cccccc', paddingTop: 15, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-              <Image style={{marginRight: 20}}
+              <Image style={{}}
                      source={data.bizOrientation == 'IN' ? require('../../image/market/receive.png') : require('../../image/market/issue.png')}/>
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <Text
-                  style={{marginRight: 20, flex: 1, textAlign: 'center'}}>{data.term == '' ? '0天' : data.term + '天'}</Text>
-                <Text style={{marginRight: 20, flex: 1}}>{amount}</Text>
-                <Text style={{marginRight: 20, flex: 1}}>{(data.rate * 100) + '%'}</Text>
+              <View style={{width: screenWidth * 0.6, flex: 1, flexDirection: 'row'}}>
+                <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight),
+                  {flex: 1, textAlign: 'center'}]}>
+                  {data.term == '' ? '0天' : data.term + '天'}
+                </Text>
+                <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight),
+                  {flex: 1, textAlign: 'center'}]}>
+                  {amount}
+                </Text>
+                <Text style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight),
+                  {flex: 1, textAlign: 'center'}]}>
+                  {numeral(data.rate * 100).format('0,0.00') + '%'}
+                </Text>
               </View>
             </View>
           </View>
