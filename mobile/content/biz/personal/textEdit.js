@@ -73,7 +73,7 @@ let TextEdit = React.createClass({
       case 'phoneNumber':
         this.setState({
           newValue: this.state.tele + '-' + this.state.phone
-        });undefined
+        });
         if (Validation.isTelephone(this.state.newValue)) {
           this.updateUserInfo();
         } else if((this.state.newValue !== '未填写-undefined') && (this.state.tele != '' && this.state.phone != '')){
@@ -120,8 +120,8 @@ let TextEdit = React.createClass({
     if(this.state.newValue.length == 0){
         return;
     }
-
     if (this.state.newValue != this.state.oldValue) {
+
       if (this.state.newPublicValue == this.state.oldPublicValue || this.state.publicName == '') {
         data = [{
           column: this.props.param.name,

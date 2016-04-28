@@ -23,7 +23,8 @@ let Register_selectOrg = React.createClass({
     that = this;
     let orgBuildList = AppStore.getOrgList();
     return {
-      data: orgBuildList
+      data: orgBuildList,
+      text: ''
     };
   },
 
