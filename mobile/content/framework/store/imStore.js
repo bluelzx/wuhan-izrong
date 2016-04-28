@@ -89,7 +89,7 @@ let _resovleMessages = (bInit = false) => {
   });
 
   if (bInit) {
-    ImStore.emitChange();
+    ImStore.emitChange('IM_SESSION');
   } else {
     return tmpMessages;
   }
@@ -101,7 +101,7 @@ let _sessionInit = (data) => {
   _data.page = 1;
   _data.messages = [];
   _resovleMessages(true);
-  ImStore.emitChange();
+  ImStore.emitChange('IM_SESSION');
 };
 
 let _saveMsg = (message) => {
@@ -200,7 +200,7 @@ let _saveMsg = (message) => {
       });
     }
 
-    ImStore.emitChange();
+    ImStore.emitChange('IM_SESSION');
   }
 
   Persister.saveMessage(message);
@@ -216,7 +216,7 @@ let _ackMsg = (msgId, toUid) => {
       return false;
     });
 
-    ImStore.emitChange();
+    ImStore.emitChange('IM_SESSION');
   }
 
   // TODO. Update realm of the status for message.

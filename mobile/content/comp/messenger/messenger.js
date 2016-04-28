@@ -49,11 +49,11 @@ let Messenger = React.createClass({
   },
 
   componentDidMount() {
-    ImStore.addChangeListener(this._onChange);
+    ImStore.addChangeListener(this._onChange, 'IM_SESSION');
   },
 
   componentWillUnmount() {
-    ImStore.removeChangeListener(this._onChange);
+    ImStore.removeChangeListener(this._onChange, 'IM_SESSION');
   },
 
   _onChange() {

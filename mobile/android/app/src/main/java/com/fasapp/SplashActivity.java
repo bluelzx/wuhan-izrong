@@ -37,9 +37,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     public void initData() {
         AnimationSet set = new AnimationSet(false);
         AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1f);
-//        ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1f, 0, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         set.addAnimation(alphaAnimation);
-//        set.addAnimation(scaleAnimation);
         set.setAnimationListener(this);
         set.setDuration(3000);
         mImageView.setAnimation(set);

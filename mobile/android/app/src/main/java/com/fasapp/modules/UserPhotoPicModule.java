@@ -105,20 +105,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         Activity activity = getCurrentActivity();
         mCallback = callback;
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // 判断存储卡是否可用，存储照片文件
-        if (SDCardUtils.hasSdcard()) {
-            file = new File(Environment.getExternalStorageDirectory(), fileName);
-            uri = Uri.fromFile(file);
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            Log.d("Directory", Environment.getExternalStorageDirectory().toString() + fileName);
-            File file = new File(Environment.getExternalStorageDirectory(), fileName);
-            if (file.exists()) {
-                file.delete();
-            }
-        }
-        if (activity != null) {
-            activity.startActivityForResult(cameraIntent, USER_CAMERA_REQUEST_CODE);
-        }
+        activity.startActivityForResult(cameraIntent, USER_CAMERA_REQUEST_CODE);
     }
 
     @ReactMethod

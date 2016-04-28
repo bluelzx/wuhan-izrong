@@ -14,7 +14,8 @@ const {
   ORGBEAN,
   FILTERITEMS,
   FILTERITEM,
-  ORDERITEM
+  ORDERITEM,
+  SESSION
   } = require('./schemas');
 let {Platform} = React;
 
@@ -25,6 +26,7 @@ let PersisterFacade = {
   getAPNSToken: () => _getAPNSToken(),
   getToken: ()=> _getToken(),
   clearToken: (userId) => _clearToken(userId),
+  logout: (userId) => _logout(userId),
   getLoginUserInfo: ()=> _getLoginUserInfo(),
   getUserId: ()=> _getUserId(),
   getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
@@ -237,6 +239,18 @@ let _clearToken = function (userId) {
       token: ''
     }, true);
   });
+};
+
+let _logout = function (userId) {
+  //clear token
+  _realm.write(() => {
+    _realm.create(LOGINUSERINFO, {
+      userId: userId,
+      token: ''
+    }, true);
+  });
+  //clear session
+  delete (_realm.objects(LOGINUSERINFO));
 };
 
 let _getLoginUserInfo = function () {
