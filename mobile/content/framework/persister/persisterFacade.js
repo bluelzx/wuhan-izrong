@@ -239,7 +239,7 @@ let _clearToken = function (userId) {
       token: ''
     }, true);
   });
-}
+};
 
 let _logout = function (userId) {
   //clear token
