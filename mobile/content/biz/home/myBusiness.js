@@ -39,10 +39,15 @@ let Market = React.createClass({
     let filterItems = AppStore.getFilters().filterItems;
     let orderItems = AppStore.getFilters().orderItems;
     let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
+    let categoryArr = this.deleteFirstObj(category.options);
     let item = MarketStore.getCategoryAndItem(filterItems);
+    item.shift();
     let bizOrientation = MarketStore.getFilterOptions(filterItems, 'bizOrientation').options;
     let term = MarketStore.getFilterOptions(filterItems, 'term').options;
     let amount = MarketStore.getFilterOptions(filterItems, 'amount').options;
+
+    let myCategory = AppStore.getCategory();
+    let myItem = AppStore.getItem();
 
     return {
       item: item,
@@ -50,14 +55,14 @@ let Market = React.createClass({
       bizOrientation: bizOrientation,
       term: term,
       amount: amount,
-      categorySource: category.options,
+      categorySource: categoryArr,
       itemSource: item[0].itemArr,
       termSource: orderItems,
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: '全部',
-      levelTwoText: '全部',
+      levelOneText: myCategory != null ? myCategory.displayName : item[2].displayName,
+      levelTwoText: myItem != null ? myItem.displayName: item[2].itemArr[0].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -75,10 +80,10 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: 221,
-      bizItemID: 227,
-      bizOrientationID: item[0].id,
-      termID: item[0].itemArr[0].id,
+      bizCategoryID: myCategory != null ? myCategory.id : item[2].id,
+      bizItemID: myItem != null ? myItem.id: item[2].itemArr[0].id,
+      bizOrientationID: '',
+      termID: '',
       amountID: '',
       marketData: marketData,
     }
@@ -88,6 +93,18 @@ let Market = React.createClass({
     InteractionManager.runAfterInteractions(() => {
       this.bizOrderAdminSearch();
     });
+  },
+
+  componentDidMount() {
+    AppStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function () {
+    AppStore.removeChangeListener(this._onChange);
+  },
+
+  _onChange () {
+    this.setState(this.bizOrderAdminSearch());
   },
 
   render: function () {
@@ -114,21 +131,21 @@ let Market = React.createClass({
       clickFilterTime: 0,
       clickFilterOther: 0,
       clickFilterType: (this.state.clickFilterType == 0) ? 1 : 0,
-    })
+    });
   },
   pressFilterTime(){
     this.setState({
       clickFilterType: 0,
       clickFilterOther: 0,
       clickFilterTime: (this.state.clickFilterTime == 0) ? 1 : 0,
-    })
+    });
   },
   pressFilterOther(){
     this.setState({
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: (this.state.clickFilterOther == 0) ? 1 : 0,
-    })
+    });
   },
   pressTypeRow1(rowId){
     this.setState({
@@ -138,7 +155,8 @@ let Market = React.createClass({
       itemSource: this.state.item[rowId].itemArr,
       levelTwoText: this.state.item[rowId].itemArr[0].displayName,
       bizCategoryID: this.state.categorySource[rowId].id
-    })
+    });
+    AppStore.saveCategory(this.state.categorySource[rowId]);
   },
   pressTypeRow2(rowId){
     this.setState({
@@ -147,9 +165,8 @@ let Market = React.createClass({
       levelTwoText: this.state.itemSource[rowId].displayName,
       bizItemID: this.state.itemSource[rowId].id
     });
-    {
-      this.bizOrderAdminSearch();
-    }
+    this.bizOrderAdminSearch();
+    AppStore.saveItem(this.state.itemSource[rowId]);
   },
   pressTimeRow(rowId){
     this.setState({
@@ -159,10 +176,10 @@ let Market = React.createClass({
       orderField: this.state.termSource[rowId].fieldName,
       orderType: this.state.termSource[rowId].asc ? 'asc' : 'desc',
     })
-    {
-      this.bizOrderAdminSearch();
-    }
-  }, renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
+    this.bizOrderAdminSearch();
+  },
+
+  renderFilter(pressFilterType, pressFilterTime, pressFilterOther){
     return (
       <View style={{flex:1,flexDirection:'row'}}>
         <TouchableOpacity onPress={pressFilterType} activeOpacity={1}
@@ -263,16 +280,6 @@ let Market = React.createClass({
         <View
           style={{backgroundColor:'#244266',width:screenWidth,height:screenHeight - 144,position:"absolute",left:0,top:36}}>
           <ScrollView>
-            <TouchableOpacity onPress={()=>this.toSelectOrg(SelectOrg)} activeOpacity={0.8} underlayColor="#f0f0f0">
-              <View
-                style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
-                <Text style={{fontSize:16,marginLeft:10,color:'white'}}
-                      numberOfLines={1}>{this.state.orgValue == '' ? '选择发布机构' : this.state.orgValue}</Text>
-                <Image style={{margin:10,width:16,height:16}}
-                       source={require('../../image/market/next.png')}
-                />
-              </View>
-            </TouchableOpacity>
             <View>
               <FilterSelectBtn ref="ORIENTATION" typeTitle={'方向'} dataList={this.state.bizOrientation} section={3}
                                callBack={this.callBack} rowDefault={this.state.orientionDefault}
@@ -288,7 +295,7 @@ let Market = React.createClass({
               <View style={{alignItems: 'center',justifyContent:'center'}}>
                 <View
                   style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:30,borderColor:'#ed135a',borderWidth:1}}>
-                  <Text style={{color:'#ed135a',}}>{'清空'}</Text>
+                  <Text style={{color:'#ed135a'}}>{'清空'}</Text>
                 </View>
               </View>
             </TouchableHighlight>
@@ -386,15 +393,6 @@ let Market = React.createClass({
     });
   },
 
-  toSelectOrg: function (name) {
-    const { navigator } = this.props;
-    if (navigator) {
-      navigator.push({
-        comp: name,
-        callBack: this.callback
-      })
-    }
-  },
   clearOptions: function () {
     this.refs["ORIENTATION"].setDefaultState();
     this.refs["TERM"].setDefaultState();
@@ -404,12 +402,8 @@ let Market = React.createClass({
     this.props.navigator.resetTo({comp: 'tabView', tabName: 'publish'});
   },
   confirmBtn: function () {
-    {
       this.pressFilterOther();
-    }
-    {
       this.bizOrderAdminSearch();
-    }
   },
   toPage: function (name) {
     const { navigator } = this.props;
@@ -445,6 +439,18 @@ let Market = React.createClass({
         );
       }
     );
+  },
+
+  deleteFirstObj: function (obj) {
+    let arr = new Array();
+    obj.forEach(function (item) {
+      if (item.displayCode != 'ALL') {
+        arr.push(item);
+      }
+    });
+    return (
+      arr
+    )
   }
 
 
