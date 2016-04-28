@@ -108,7 +108,7 @@ let SMSTimer = React.createClass({
         <View style={{width: 75, marginLeft: 12}}>
           <TouchableOpacity
             style={[{width: 75, height: 47}, styles.radius, styles.button,
-            {backgroundColor: this.state.disabled ? '#86929e' : '#8bb0d9'}]}
+            {backgroundColor: this.state.disabled ? '#4F94CD' : '#1151B1'}]}
             onPress={this.selectVerifyFunction}
             activeOpacity={this.state.disabled ? 1 : 0.5 }
           >
