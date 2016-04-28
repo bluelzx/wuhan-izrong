@@ -33,7 +33,7 @@ let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
 let ImAction = require('../../framework/action/imAction');
 
-let bizOrientationUnit = ['出', '收'];
+let bizOrientationUnit = ['收', '出'];
 let termUnit = ['日', '月', '年'];
 let amountUnit = ['万', '亿'];
 
@@ -135,12 +135,18 @@ let MyBizDetail = React.createClass({
     }
   },
   renderShutDownBiz: function () {
-    return (
-      <TouchableOpacity style={{width:75}}
-                        onPress={()=>this.shutDownBiz()}>
-        <Text style={{color:'#ffffff'}}>{'下架'}</Text>
-      </TouchableOpacity>
-    );
+    if (this.state.marketInfo.status == 'ACTIVE') {
+      return (
+        <TouchableOpacity style={{width:75}}
+                          onPress={()=>this.shutDownBiz()}>
+          <Text style={{color:'#ffffff'}}>{'下架'}</Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View></View>
+      );
+    }
   },
   renderSelectOrg: function () {
     return (
@@ -154,132 +160,225 @@ let MyBizDetail = React.createClass({
     )
   },
   renderBusinessType: function () {
-    return (
-      <View style={{flexDirection:'column',marginTop:10}}>
-        <View style={{flexDirection:'row'}}>
-          <Text style={{marginLeft:10, color:'white'}}>{'方向'}</Text>
-          <Text style={{color:'red'}}>{'*'}</Text>
+    if (this.state.marketInfo.status == 'ACTIVE') {
+      return (
+        <View style={{flexDirection:'column',marginTop:10}}>
+          <View style={{flexDirection:'row'}}>
+            <Text style={{marginLeft:10, color:'white'}}>{'方向'}</Text>
+            <Text style={{color:'red'}}>{'*'}</Text>
+          </View>
+          <View style={{marginTop:10,flexDirection:'row'}}>
+            <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
+                       change={this._bizOrientationDataChange}/>
+          </View>
         </View>
-        <View style={{marginTop:10,flexDirection:'row'}}>
-          <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
-                     change={this._bizOrientationDataChange}/>
+      );
+    } else {
+      return (
+        <View style={{flexDirection:'column',marginTop:10}}>
+          <View style={{flexDirection:'row'}}>
+            {this.returnItem('方向:',this.state.marketInfo.bizOrientationDesc)}
+          </View>
         </View>
-      </View>
-    )
+      );
+    }
   },
   renderTimeLimit: function () {
-    return (
-      <View style={{flexDirection:'column',marginTop:10}}>
-        <Text style={{marginLeft:10, color:'white'}}>{'期限'}</Text>
-        <View style={{marginTop:10,flexDirection:'row'}}>
-          <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
-                 iconStyle={{}} placeholderTextColor='#325779'
-                 inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
-                 placeholder='天数' maxLength={3} field='termText' inputType="numeric"
-                 onChangeText={this._onChangeText}
-                 value={this.state.termText}
-          />
-          <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._termDataChange}/>
+    if (this.state.marketInfo.status == 'ACTIVE') {
+      return (
+        <View style={{flexDirection:'column',marginTop:10}}>
+          <Text style={{marginLeft:10, color:'white'}}>{'期限'}</Text>
+          <View style={{marginTop:10,flexDirection:'row'}}>
+            <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
+                   iconStyle={{}} placeholderTextColor='#325779'
+                   inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                   placeholder='天数' maxLength={3} field='termText' inputType="numeric"
+                   onChangeText={this._onChangeText}
+                   value={this.state.termText}
+            />
+            <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._termDataChange}/>
 
+          </View>
         </View>
-      </View>
-    )
+      );
+    } else {
+      return (
+        <View style={{flexDirection:'row',marginTop:10}}>
+          {this.returnItem('期限:',this.state.marketInfo.term == null ? '--' : this.state.marketInfo.term)}
+        </View>
+      );
+    }
   },
   renderAmount: function () {
-    return (
-      <View style={{flexDirection:'column',marginTop:10}}>
-        <Text style={{marginLeft:10, color:'white'}}>{'金额'}</Text>
-        <View style={{marginTop:10,flexDirection:'row'}}>
-          <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
-                 iconStyle={{}} placeholderTextColor='#325779'
-                 inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
-                 placeholder='1万-1000亿' maxLength={8} field='amountText' inputType="numeric"
-                 onChangeText={this._onChangeText}
-                 value={this.state.amountText}
-          />
-          <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._amountDataChange}/>
+    if (this.state.marketInfo.status == 'ACTIVE') {
+      return (
+        <View style={{flexDirection:'column',marginTop:10}}>
+          <Text style={{marginLeft:10, color:'white'}}>{'金额'}</Text>
+          <View style={{marginTop:10,flexDirection:'row'}}>
+            <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
+                   iconStyle={{}} placeholderTextColor='#325779'
+                   inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                   placeholder='1万-1000亿' maxLength={8} field='amountText' inputType="numeric"
+                   onChangeText={this._onChangeText}
+                   value={this.state.amountText}
+            />
+            <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._amountDataChange}/>
 
+          </View>
         </View>
-      </View>
-    )
+      );
+    } else {
+      return (
+        <View style={{flexDirection:'row',marginTop:10}}>
+          {this.returnItem('金额:',this.state.marketInfo.amount == null ? '--' : this.state.marketInfo.amount)}
+        </View>
+      );
+    }
   },
   renderRate: function () {
-    return (
-      <View style={{flexDirection:'column',marginTop:10}}>
-        <Text style={{marginLeft:10, color:'white'}}>{'利率'}</Text>
-        <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-          <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
-                 iconStyle={{}} placeholderTextColor='#325779'
-                 inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
-                 placeholder='0-100.00' maxLength={3} field='rateText' inputType="numeric"
-                 onChangeText={this._onChangeText}
-                 value={this.state.rateText}
-          />
-          <Text style={{marginLeft:10,fontWeight: 'bold', color:'white'}}>{'%'}</Text>
+    if (this.state.marketInfo.status == 'ACTIVE') {
+      return (
+        <View style={{flexDirection:'column',marginTop:10}}>
+          <Text style={{marginLeft:10, color:'white'}}>{'利率'}</Text>
+          <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
+            <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
+                   iconStyle={{}} placeholderTextColor='#325779'
+                   inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                   placeholder='0-100.00' maxLength={3} field='rateText' inputType="numeric"
+                   onChangeText={this._onChangeText}
+                   value={this.state.rateText}
+                   editable={false}
+            />
+            <Text style={{marginLeft:10,fontWeight: 'bold', color:'white'}}>{'%'}</Text>
+          </View>
         </View>
-      </View>
-    )
+      );
+    } else {
+      return (
+        <View style={{flexDirection:'row',marginTop:10}}>
+          {this.returnItem('利率:',this.state.marketInfo.rate == null ? '--' : this.state.marketInfo.rate + '%')}
+        </View>
+      );
+    }
   },
   renderAddImg: function () {
-    return (
-      <View style={{flexDirection:'column',marginTop:10}}>
-        <Text style={{marginLeft:10, color:'white'}}>{'添加图片'}</Text>
-        <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-          <ImagePicker
-            type="all"
-            onSelected={(response) => {this.handleSendImage(response)}}
-            onError={(error) => this.handleImageError(error)}
-            title="选择图片"
-            style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
-          >
-            <Image
-              style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-              source={{uri:this.state.fileUrlList[0]}}
-            />
-          </ImagePicker>
+    if (this.state.marketInfo.status == 'ACTIVE') {
+      return (
+        <View style={{flexDirection:'column',marginTop:10}}>
+          <Text style={{marginLeft:10, color:'white'}}>{'添加图片'}</Text>
+          <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
+            <ImagePicker
+              type="all"
+              onSelected={(response) => {this.handleSendImage(response)}}
+              onError={(error) => this.handleImageError(error)}
+              title="选择图片"
+              style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+            >
+              <Image
+                style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+                source={{uri:this.state.fileUrlList[0]}}
+              />
+            </ImagePicker>
+          </View>
         </View>
-      </View>
-    )
+      );
+    } else {
+      return (
+        <View>
+          {this.renderImageTitle()}
+          {this.renderImageItem()}
+        </View>
+      );
+    }
   },
-  renderRemarks: function () {
+
+  renderImageTitle(){
+    if (this.state.fileUrlList.length > 0) {
+      return (
+        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:'white'}}>{'附件:'}</Text>
+      );
+    }else{
+      return null;
+    }
+  },
+  renderImageItem: function () {
     return (
       <View style={{marginTop:10}}>
-        <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
-          <View
-            style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: '#102a42'}}>
-            <Text style={{marginLeft:10, fontWeight: 'bold', color:'white'}}>
-              {'备注'}
-            </Text>
-            <View>
-              <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
-                    numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
-              </Text>
-            </View>
-          </View>
-        </TouchableHighlight>
+        {
+          this.state.fileUrlList.map((item, index) => {
+            return (
+              <Image
+                key={index}
+                style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
+                source={{uri:item, isStatic: true}}
+              />
+            )
+          })
+        }
       </View>
-    )
+    );
+  },
+  renderRemarks: function () {
+    if (this.state.marketInfo.status == 'ACTIVE') {
+      return (
+        <View style={{marginTop:10}}>
+          <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
+            <View
+              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: '#102a42'}}>
+              <Text style={{marginLeft:10, fontWeight: 'bold', color:'white'}}>
+                {'备注'}
+              </Text>
+              <View>
+                <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
+                      numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
+                </Text>
+              </View>
+            </View>
+          </TouchableHighlight>
+        </View>
+      );
+    } else {
+      return (
+        <View style={{flexDirection:'row'}}>
+          {this.returnItem('备注:',this.state.remarkText == null ? '--' : this.state.marketInfo.remarkText)}
+        </View>
+      );
+    }
   },
   renderModifyData: function () {
     return (
       <View style={{flexDirection:'row',alignItems:'center',marginTop:10}}>
-        <Text style={{marginLeft:10,color:'white'}}>{'最近修改时间:'}</Text>
-        <Text style={{marginLeft:10,color:'#ffd547'}}>{this.state.lastModifyDate}</Text>
+        {this.returnItem('最近修改时间:',this.state.lastModifyDate)}
       </View>
+
     )
   },
   renderSaveBtn: function () {
+    if (this.state.marketInfo.status == 'ACTIVE') {
+      return (
+        <TouchableHighlight onPress={() => this._pressSave()} underlayColor='rgba(129,127,201,0)'>
+          <View
+            style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
+            <Text style={{fontWeight: 'bold', color:'white'}}>
+              {'保存'}
+            </Text>
+          </View>
+        </TouchableHighlight>
+      );
+    }else{
+      return null;
+    }
+  },
+
+  returnItem: function (desc, value) {
     return (
-      <TouchableHighlight onPress={() => this._pressSave()} underlayColor='rgba(129,127,201,0)'>
-        <View
-          style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
-          <Text style={{fontWeight: 'bold', color:'white'}}>
-            {'保存'}
-          </Text>
-        </View>
-      </TouchableHighlight>
+      <View style={{marginLeft:10,flexDirection:'row',alignItems:'center',paddingVertical:5}}>
+        <Text style={{fontSize:15,color:'white',flex:1}}>{desc}</Text>
+        <Text style={{marginLeft:10,fontSize:15,color:(desc == '最近修改时间:')?'#ffd547':'white',width:225/375*screenWidth}}>{value}</Text>
+      </View>
     )
   },
+
   _pressSave: function () {
     {
       this.updateBizOrder();
@@ -346,7 +445,7 @@ let MyBizDetail = React.createClass({
       remarkText: response.remark,
       lastModifyDate: DateHelper.formatBillDetail(t),
       bizCategory: response.bizCategory,
-      bizItem: response.bizItem,
+      bizItem: response.bizItem
     })
   },
 
@@ -366,6 +465,7 @@ let MyBizDetail = React.createClass({
           }
         ).then((response)=> {
           Alert('保存成功');
+          this.props.navigator.pop();
         }).catch(
           (errorData) => {
             throw errorData;
@@ -383,6 +483,7 @@ let MyBizDetail = React.createClass({
           }
         ).then((response)=> {
           Alert('下架成功')
+          this.props.navigator.pop();
         }).catch(
           (errorData) => {
             throw errorData;
@@ -391,6 +492,24 @@ let MyBizDetail = React.createClass({
       }
     );
   },
+  handleSendImage(uri) {
+    ImAction.uploadImage(uri)
+      .then((response) => {
+        let arr = new Array();
+        arr.push(response.fileUrl);
+        this.setState({
+          fileUrlList: arr
+        });
+      }).catch((errorData) => {
+      console.log('Image upload error ' + JSON.stringify(errorData));
+    });
+  },
+
+  handleImageError(error) {
+    console.log('Image select error ' + JSON.stringify(error));
+    Alert('图片选择失败');
+  }
+
 
 });
 
