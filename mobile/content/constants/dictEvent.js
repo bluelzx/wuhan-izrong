@@ -1,4 +1,3 @@
-
 const keyMirror = require('keymirror');
 
 const DictEvent = keyMirror({
@@ -26,6 +25,16 @@ const DictEvent = keyMirror({
    * Market events.
    */
   MARKET_CHANGE: null,
+
+  /**
+   * User events.
+   */
+  USER_CHANGE: null,
+
+  /**
+   * Orgnization
+   */
+  ORG_CHANGE: null
 });
 
 module.exports = DictEvent;

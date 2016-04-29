@@ -212,7 +212,7 @@ let GiftedMessenger = React.createClass({
         }
       }
     }
-    return null;
+    return <View></View>;
   },
 
   renderRow(rowData = {}, sectionID = null, rowID = null) {
@@ -519,7 +519,7 @@ let GiftedMessenger = React.createClass({
         }
       }
     }
-    return null;
+    return <View></View>;
   },
 
 
@@ -874,6 +874,8 @@ let GiftedMessenger = React.createClass({
             onSelected={(response) => this.props.handleSendImage(response)}
             onError={(error) => this.props.handleImageError(error)}
             title="选择图片"
+            fileId="selectImage"
+            allowsEditing={true}
             style={this.styles.panelItem}
           >
             <Image
@@ -887,6 +889,8 @@ let GiftedMessenger = React.createClass({
             type="camera"
             onSelected={(response) => { console.log(response)}}
             title="选择图片"
+            fileId="selectCamera"
+            allowsEditing={true}
             style={this.styles.panelItem}
           >
             <Image

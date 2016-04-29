@@ -69,7 +69,7 @@ export default class Message extends React.Component {
         );
       }
     }
-    return null;
+    return <View></View>;
   }
 
   renderImage(rowData, rowID, diffMessage, forceRenderImage, onImagePress){
@@ -135,7 +135,7 @@ export default class Message extends React.Component {
         />
       );
     }
-    return null;
+    return <View></View>;
   }
 
   renderStatus(status){
@@ -148,7 +148,7 @@ export default class Message extends React.Component {
         );
       }
     }
-    return null;
+    return <View></View>;
   }
 
   _renderAngle(rowData) {

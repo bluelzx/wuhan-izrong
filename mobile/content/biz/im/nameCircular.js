@@ -34,7 +34,7 @@ let NameCircular = React.createClass({
         )
       }
     }else{
-      return null;
+      return <View></View>;
     }
   },
 

@@ -272,6 +272,8 @@ let MyBizDetail = React.createClass({
               type="all"
               onSelected={(response) => {this.handleSendImage(response)}}
               onError={(error) => this.handleImageError(error)}
+              fileId="myBiz1"
+              allowsEditing={true}
               title="选择图片"
               style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
             >
@@ -299,7 +301,7 @@ let MyBizDetail = React.createClass({
         <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:'white'}}>{'附件:'}</Text>
       );
     }else{
-      return null;
+      return <View></View>;
     }
   },
   renderImageItem: function () {
@@ -370,7 +372,7 @@ let MyBizDetail = React.createClass({
         </TouchableHighlight>
       );
     }else{
-      return null;
+      return <View></View>;
     }
   },
 
@@ -438,7 +440,7 @@ let MyBizDetail = React.createClass({
       id: response.id,
       detailData: response,
       bizOrderOwnerBean: response.bizOrderOwnerBean,
-      fileUrlList: response.fileIds,
+      fileUrlList: response.fileUrlList,
       bizOrientation: response.bizOrientation,
       bizOrientationDefault: (response.bizOrientation == 'IN') ? 0 : 1,
       termText: response.term == null ? '' : (response.term < 30) ? ((response.term).toString()) : (response.term < 365) ? (response.term / 30).toString() : (response.term / 365).toString(),
@@ -509,7 +511,7 @@ let MyBizDetail = React.createClass({
     ImAction.uploadImage(uri)
       .then((response) => {
         let arr = [];
-        arr.push(response.fileUrl);
+        arr.push(response.fileUrlList);
         this.setState({
           fileUrlList: arr
         });

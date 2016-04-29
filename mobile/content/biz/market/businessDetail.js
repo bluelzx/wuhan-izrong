@@ -33,7 +33,7 @@ let BusinessDetail = React.createClass({
     return {
       detailData: '',
       bizOrderOwnerBean: '',
-      fileIds: [],
+      fileUrlList: [],
       marketInfo: marketInfo,
       lastModifyDate: ''
     }
@@ -72,7 +72,7 @@ let BusinessDetail = React.createClass({
             {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile)}
             {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo)}
             {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo)}
-            {this.returnInfoItem(require('../../image/market/org.png'), this.state.bizOrderOwnerBean.orgName)}
+            {this.returnInfoItem(require('../../image/market/org.png'), this.state.marketInfo.orgName,true)}
           </View>
         </View>
       </ScrollView>
@@ -108,9 +108,9 @@ let BusinessDetail = React.createClass({
     return (
       <View style={{flexDirection:'row',alignItems:'center'}}>
         <View style={{margin:10}}>
-          <NameCircular name={'QQ'}/>
+          <NameCircular name={this.state.marketInfo.userName}/>
         </View>
-        <Text style={{fontSize:16,color:'white'}}>{this.state.bizOrderOwnerBean.userName}</Text>
+        <Text style={{fontSize:16,color:'white'}}>{this.state.marketInfo.userName}</Text>
         <TouchableHighlight onPress={()=>this.gotoIM(Contacts)} underlayColor='#153757' activeOpacity={0.8}>
           <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
         </TouchableHighlight>
@@ -134,7 +134,7 @@ let BusinessDetail = React.createClass({
     }
   },
   renderImageTitle(){
-    if (this.state.fileIds.length > 0) {
+    if (this.state.fileUrlList.length > 0) {
       return (
         <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:'white'}}>{'附件:'}</Text>
       );
@@ -144,7 +144,7 @@ let BusinessDetail = React.createClass({
     return (
       <View style={{flexDirection:'row',marginTop:10}}>
         {
-          this.state.fileIds.map((item, index) => {
+          this.state.fileUrlList.map((item, index) => {
             return (
               <Image
                 key={index}
@@ -182,7 +182,7 @@ let BusinessDetail = React.createClass({
           this.setState({
             detailData: response,
             bizOrderOwnerBean: response.bizOrderOwnerBean,
-            fileIds: response.fileIds,
+            fileUrlList: response.fileUrlList,
             lastModifyDate: DateHelper.formatBillDetail(t)
           });
         }).catch(

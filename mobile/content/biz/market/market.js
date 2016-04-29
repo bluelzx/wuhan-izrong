@@ -69,8 +69,8 @@ let Market = React.createClass({
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[2].displayName,
-      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[2].itemArr[0].displayName,
+      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[0].displayName,
+      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[0].itemArr[1].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -88,8 +88,8 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[2].id,
-      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 :item[2].itemArr[0].id,
+      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[0].id,
+      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 :item[0].itemArr[1].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -221,7 +221,7 @@ let Market = React.createClass({
   },
   _renderRow: function (rowData) {
     if (!rowData) {
-      return null;
+      return <View></View>;
     }
 
     return (
@@ -241,7 +241,7 @@ let Market = React.createClass({
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
             numberOfLines={1}>
-            {rowData.orgName}
+            {rowData.userName != null ? rowData.userName + '-' + rowData.orgName : rowData.orgName}
           </Text>
         </View>
       </TouchableHighlight>
@@ -251,7 +251,7 @@ let Market = React.createClass({
   _emptyView: function () {
     return(
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-        <Text style={{color:'white',fontSize:20}}>没有数据</Text>
+
       </View>
     );
   },
@@ -479,7 +479,7 @@ let Market = React.createClass({
                 style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
                 <Text
                   style={{fontSize:16,marginLeft:10,width: screenWidth-66,color:'white'}}
-                  numberOfLines={1}>{this.state.orgValue == '' ? '选择发布机构' : this.state.orgValue}</Text>
+                  numberOfLines={1}>{this.state.orgValue == '' ? '全部发布机构' : this.state.orgValue}</Text>
                 <Image style={{margin:10,width:16,height:16}}
                        source={require('../../image/market/next.png')}
                 />
@@ -594,6 +594,9 @@ let Market = React.createClass({
     this.refs["ORIENTATION"].setDefaultState();
     this.refs["TERM"].setDefaultState();
     this.refs["AMOUNT"].setDefaultState();
+    this.setState({
+          orgValue:''
+    });
   },
 
   confirmBtn: function () {

@@ -37,7 +37,7 @@ let PersisterFacade = {
   getOrgList: ()=>_getOrgList(),
   getOrgByOrgName: (orgName)=> _getOrgByOrgName(orgName),
   deleteDevice: ()=> _deleteDevice(),
-  updateLastSyncTime:(t)=>_updateLastSyncTime(t)
+  updateLastSyncTime: (t)=>_updateLastSyncTime(t)
 };
 
 
@@ -128,10 +128,10 @@ let _saveAppUserGroupBean = function (appUserGroupBean) {
 };
 
 let _saveImUsers = function (imUserBeanList) {
-   return co(function *() {
+  return co(function *() {
     for (var i = 0; i < imUserBeanList.length; i++) {
       _saveImUser(imUserBeanList[i]);
-        //yield nextFrame();
+      //yield nextFrame();
     }
   });
 };
@@ -172,7 +172,7 @@ let _saveOrgBeanList = function (orgBeanList) {
   return co(function *() {
     for (var i = 0; i < orgBeanList.length; i++) {
       _saveOrgBeanItem(orgBeanList[i]);
-       // yield nextFrame();
+      // yield nextFrame();
     }
   });
 };
@@ -233,14 +233,8 @@ let _logout = function (userId) {
       userId: userId,
       token: ''
     }, true);
-
-    //clear session
-    // _realm.delete(_realm.objects(LOGINUSERINFO));
     _realm.delete(_realm.objects(SESSION));
-
-
   });
-
 };
 
 let _getLoginUserInfo = function () {
@@ -260,14 +254,14 @@ let _getUserId = function () {
   return '';
 };
 
-let _updateLastSyncTime = function(t) {
-  _realm.write(()=>{
+let _updateLastSyncTime = function (t) {
+  _realm.write(()=> {
     let tag = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true]);
-    if(tag && tag.length>0) {
+    if (tag && tag.length > 0) {
       let o = tag[0];
       _realm.create(LOGINUSERINFO, {
         userId: o.userId,
-        lastSyncTime:t
+        lastSyncTime: t
       }, true);
     }
   });
@@ -346,11 +340,11 @@ let _getOrgList = function () {
   return ConvertChineseKey.buildOrgList(orgList);
 };
 
-let _getOrgByOrgName = function(orgName){
+let _getOrgByOrgName = function (orgName) {
   let orgList = _realm.objects(ORGBEAN);
   let orgArr = [];
-  orgList.forEach(function(orgBean){
-    if (orgBean.orgValue.includes(orgName)){
+  orgList.forEach(function (orgBean) {
+    if (orgBean.orgValue.includes(orgName)) {
       orgArr.push(orgBean);
     }
   });

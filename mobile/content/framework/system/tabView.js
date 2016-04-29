@@ -7,7 +7,8 @@ var {
   Platform,
   ScrollView,
   View,
-  TabBarIOS
+  TabBarIOS,
+    Navigator
   } = React;
 var Home = require('../../biz/home/home');
 var Market = require ('../../biz/market/market');
@@ -151,8 +152,13 @@ var TabView = React.createClass({
           <TabBarIOS.Item
             title="发布"
             icon={require('../../image/tab/publish.png')}
-            selected={this.state.selectedTab === 'publish'}
-            onPress={() => {this.setState({selectedTab: 'publish'});}}>
+            //selected={this.state.selectedTab === 'publish'}
+            onPress={() => {
+            this.props.navigator.push({
+                comp: Publish,
+                sceneConfig: Navigator.SceneConfigs.FloatFromBottomAndroid
+            });
+            }}>
             <Publish  navigator={this.props.navigator} exec={this.props.exec}/>
           </TabBarIOS.Item>
 
@@ -196,13 +202,15 @@ var TabView = React.createClass({
           >
           </Market>
 
-          <Publish navigator={this.props.navigator}
-                   tabDesc="发布"
-                   icon={require('../../image/tab/publish.png')}
-                   selectedIcon={require('../../image/tab/publish-selected.png')}
-                   exec={this.props.exec}
+          <View
+            navigator={this.props.navigator}
+            tabDesc="发布"
+            icon={require('../../image/tab/publish.png')}
+            selectedIcon={require('../../image/tab/publish-selected.png')}
+            exec={this.props.exec}
+            onPress={() => {navigator.push({comp: Publish})}}
           >
-          </Publish>
+          </View>
 
 
           <IM navigator={this.props.navigator}
@@ -218,6 +226,8 @@ var TabView = React.createClass({
                     icon={require('../../image/tab/personalcenter.png')}
                     selectedIcon={require('../../image/tab/personalcenter-selected.png')}
                     exec={this.props.exec}
+                    delay={true}
+                    page={4}
           >
           </Personal>
 
