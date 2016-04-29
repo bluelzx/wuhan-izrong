@@ -16,7 +16,7 @@ let { Alert, Communications, Device } = require('mx-artifacts');
 let ImAction = require('../../framework/action/imAction');
 let ImStore = require('../../framework/store/imStore');
 let { MSG_CONTENT_TYPE, COMMAND_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
-
+let { IM_SESSION } = require('../../constants/dictEvent');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 
 let Messenger = React.createClass({
@@ -49,11 +49,11 @@ let Messenger = React.createClass({
   },
 
   componentDidMount() {
-    ImStore.addChangeListener(this._onChange, 'IM_SESSION');
+    ImStore.addChangeListener(this._onChange, IM_SESSION);
   },
 
   componentWillUnmount() {
-    ImStore.removeChangeListener(this._onChange, 'IM_SESSION');
+    ImStore.removeChangeListener(this._onChange, IM_SESSION);
   },
 
   _onChange() {

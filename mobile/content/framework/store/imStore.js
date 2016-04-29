@@ -2,6 +2,7 @@ let _ = require('lodash');
 let EventEmitter = require('events').EventEmitter;
 
 let { SESSION_TYPE } = require('../../constants/dictIm');
+let DictEvent = require('../../constants/dictEvent');
 
 let Persister = require('../persister/persisterFacade');
 let SessionAction = require('../action/sessionAction');
@@ -10,12 +11,10 @@ let ContactStore = require('./contactStore');
 
 let _info = {
   initLoadingState: true,
-  CHANGE_EVENT: 'change',
   netWorkState: false,
   isLogout: false,
   isForceLogout: false
 };
-const {CHANGE_EVENT} = require('../../constants/dictIm');
 
 let _data = {
   toId: '',
@@ -27,13 +26,13 @@ let _data = {
 };
 
 let ImStore = _.assign({}, EventEmitter.prototype, {
-  addChangeListener: function (callback, event = CHANGE_EVENT.CHANGE) {
+  addChangeListener: function (callback, event = DictEvent.IM_CHANGE) {
     this.on(event, callback);
   },
-  removeChangeListener: function (callback, event = CHANGE_EVENT.CHANGE) {
+  removeChangeListener: function (callback, event = DictEvent.IM_CHANGE) {
     this.removeListener(event, callback);
   },
-  emitChange: function (event = CHANGE_EVENT.CHANGE, data = {}) {
+  emitChange: function (event = DictEvent.IM_CHANGE, data = {}) {
     this.emit(event, data);
   },
 
@@ -89,7 +88,7 @@ let _resovleMessages = (bInit = false) => {
   });
 
   if (bInit) {
-    ImStore.emitChange('IM_SESSION');
+    ImStore.emitChange(DictEvent.IM_SESSION);
   } else {
     return tmpMessages;
   }
@@ -101,7 +100,7 @@ let _sessionInit = (data) => {
   _data.page = 1;
   _data.messages = [];
   _resovleMessages(true);
-  ImStore.emitChange('IM_SESSION');
+  ImStore.emitChange(DictEvent.IM_SESSION);
 };
 
 let _saveMsg = (message) => {
@@ -200,7 +199,7 @@ let _saveMsg = (message) => {
       });
     }
 
-    ImStore.emitChange('IM_SESSION');
+    ImStore.emitChange(DictEvent.IM_SESSION);
   }
 
   Persister.saveMessage(message);
@@ -216,7 +215,7 @@ let _ackMsg = (msgId, toUid) => {
       return false;
     });
 
-    ImStore.emitChange('IM_SESSION');
+    ImStore.emitChange(DictEvent.IM_SESSION);
   }
 
   // TODO. Update realm of the status for message.
