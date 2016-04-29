@@ -438,7 +438,7 @@ let MyBizDetail = React.createClass({
       id: response.id,
       detailData: response,
       bizOrderOwnerBean: response.bizOrderOwnerBean,
-      fileUrlList: response.fileIds,
+      fileUrlList: response.fileUrlList,
       bizOrientation: response.bizOrientation,
       bizOrientationDefault: (response.bizOrientation == 'IN') ? 0 : 1,
       termText: response.term == null ? '' : (response.term < 30) ? ((response.term).toString()) : (response.term < 365) ? (response.term / 30).toString() : (response.term / 365).toString(),
@@ -509,7 +509,7 @@ let MyBizDetail = React.createClass({
     ImAction.uploadImage(uri)
       .then((response) => {
         let arr = [];
-        arr.push(response.fileUrl);
+        arr.push(response.fileUrlList);
         this.setState({
           fileUrlList: arr
         });
