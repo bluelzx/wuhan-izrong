@@ -344,7 +344,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row'}}>
-          {this.returnItem('备注:',this.state.remarkText == null ? '--' : this.state.marketInfo.remarkText)}
+          {this.returnItem('备注:',this.state.remarkText == null || this.state.remarkText.length == 0? '--' : this.state.marketInfo.remarkText)}
         </View>
       );
     }
