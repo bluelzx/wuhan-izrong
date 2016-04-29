@@ -105,33 +105,45 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         Activity activity = getCurrentActivity();
         mCallback = callback;
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        activity.startActivityForResult(cameraIntent, USER_CAMERA_REQUEST_CODE);
+        // 判断存储卡是否可用，存储照片文件
+        if (SDCardUtils.hasSdcard()) {
+            file = new File(Environment.getExternalStorageDirectory(), fileName);
+            uri = Uri.fromFile(file);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            Log.d("Directory", Environment.getExternalStorageDirectory().toString() + fileName);
+            File file = new File(Environment.getExternalStorageDirectory(), fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+        if (activity != null) {
+            activity.startActivityForResult(cameraIntent, USER_CAMERA_REQUEST_CODE);
+        }
     }
 
     @ReactMethod
     public void launchImage(Callback callback) {
         mCallback = callback;
         Activity activity = getCurrentActivity();
-        Intent imageIntent ;
-        if (Build.VERSION.SDK_INT < 19){
+        Intent imageIntent;
+        if (Build.VERSION.SDK_INT < 19) {
             imageIntent = new Intent();
             imageIntent.setAction(Intent.ACTION_GET_CONTENT);
             imageIntent.setType("image/*");
-            try{
+            try {
                 activity.startActivityForResult(imageIntent, USER_IMAGE_REQUEST_CODE);
-            }catch (Exception e){
+            } catch (Exception e) {
                 Log.d("Exception", e.toString());
             }
-        }else{
-            imageIntent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        } else {
+            imageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             imageIntent.setType("image/*");
-            try{
+            try {
                 activity.startActivityForResult(imageIntent, USER_IMAGE_REQUEST_CODE);
-            }catch (Exception e){
-                Log.d("Exception",e.toString());
+            } catch (Exception e) {
+                Log.d("Exception", e.toString());
             }
         }
-
     }
 
 
@@ -169,7 +181,6 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                             }
                         } catch (Exception e) {
                             // TODO: handle exception
-
                         }
                         response = Arguments.createMap();
                         response.putString("uri", uri.toString());

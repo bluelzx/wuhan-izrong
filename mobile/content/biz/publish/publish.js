@@ -59,6 +59,7 @@ let Publish = React.createClass({
       amountDefault: 0,
       termText: '',
       amountText: '',
+      amountTextDigit: 8,
       rateText: '',
       remarkText: '',
       disabled: false,
@@ -118,7 +119,8 @@ let Publish = React.createClass({
   _amountDataChange (index) {
     this.setState({
       amountDefault: index,
-      amount: (index == 0) ? Number(this.state.amountText) * 10000 : Number(this.state.amountText) * 100000000
+      amount: (index == 0) ? Number(this.state.amountText) * 10000 : Number(this.state.amountText) * 100000000,
+      amountTextDigit: (index == 0) ? 8 : 4,
     });
 
   },
@@ -187,7 +189,7 @@ let Publish = React.createClass({
           <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor='#325779'
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
-                 placeholder='1万-1000亿' maxLength={8} field='amountText' inputType="numeric"
+                 placeholder='1万-1000亿' maxLength={this.state.amountTextDigit} field='amountText' inputType="numeric"
                  onChangeText={this._onChangeText}
           />
           <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._amountDataChange}/>
@@ -204,7 +206,7 @@ let Publish = React.createClass({
           <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor='#325779'
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
-                 placeholder='0-100.00' maxLength={5} field='rateText' inputType="numeric"
+                 placeholder='0-99.99' maxLength={5} field='rateText' inputType="numeric"
                  onChangeText={this._onChangeText}
           />
           <Text style={{marginLeft:10,fontWeight: 'bold', color:'white'}}>{'%'}</Text>
@@ -283,84 +285,16 @@ let Publish = React.createClass({
   },
 
   _pressPublish: function () {
-    if (this.state.termText.length != 0 || this.state.amountText.length != 0 || this.state.rateText.length != 0) {
-      if (this.state.termText.length != 0) {
-        if (Validation.isTerm(this.state.termText)) {
-          if (this.state.amountText.length != 0) {
-            if (Validation.isAmount(this.state.amountText)) {
-              if (this.state.rateText.length != 0) {
-                if (Validation.isRate(this.state.rateText)) {
-                  {
-                    this.addBizOrder();
-                  }
-                } else {
-                  Alert('格式不合法：请输入0-99.99之间的小数');
-                }
-              } else {
-                {
-                  this.addBizOrder();
-                }
-              }
-            } else {
-              Alert('格式不合法：请输入整数');
-            }
-          } else {
-            if (this.state.rateText.length != 0) {
-              if (Validation.isRate(this.state.rateText)) {
-                {
-                  this.addBizOrder();
-                }
-              } else {
-                Alert('格式不合法：请输入0-99.99之间的小数');
-              }
-            } else {
-              {
-                this.addBizOrder();
-              }
-            }
-          }
-        } else {
-          Alert('格式不合法：请输入整数');
-        }
-      } else {
-        if (this.state.amountText.length != 0) {
-          if (Validation.isAmount(this.state.amountText)) {
-            if (this.state.rateText.length != 0) {
-              if (Validation.isRate(this.state.rateText)) {
-                {
-                  this.addBizOrder();
-                }
-              } else {
-                Alert('格式不合法：请输入0-99.99之间的小数');
-              }
-            } else {
-              {
-                this.addBizOrder();
-              }
-            }
-          } else {
-            Alert('格式不合法：请输入整数');
-          }
-        } else {
-          if (this.state.rateText.length != 0) {
-            if (Validation.isRate(this.state.rateText)) {
-              {
-                this.addBizOrder();
-              }
-            } else {
-              Alert('格式不合法：请输入0-99.99之间的小数');
-            }
-          } else {
-            {
-              this.addBizOrder();
-            }
-          }
-        }
-      }
-    } else {
-      {
-        this.addBizOrder();
-      }
+    if (!Validation.isTerm(this.state.termText)) {
+      Alert('格式不合法：请输入整数');
+    } else if (!Validation.isAmount(this.state.amountText)) {
+      Alert('格式不合法：请输入整数');
+    } else if (!Validation.isRate(this.state.rateText)) {
+      Alert('格式不合法：请输入0-99.99之间的小数');
+    } else if(this.state.amount > 100000000000){
+      Alert('您输入的金额过大');
+    }else {
+      this.addBizOrder();
     }
   },
 
