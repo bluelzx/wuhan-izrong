@@ -92,7 +92,7 @@ export default class Bubble extends React.Component {
     if (this.props.contentType === MSG_CONTENT_TYPE.NAMECARD) {
       let data = JSON.parse(this.props.content);
       return (
-        <View style={[styles.bubble, customStyle, {width:300}]}>
+        <View style={[styles.bubble, customStyle, {flex:1}]}>
           <Text
             style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.realName + '--' + data.orgBeanName}</Text>
           <View style={{flexDirection:'row'}}>
