@@ -185,7 +185,6 @@ let UserInfo = React.createClass({
               onError={(error) => Alert(error)}
               title="选择图片"
               fileId="userPhoto"
-              allowsEditing:{true}
               style={{marginLeft: 20}}
             >
               {this.returnImage()}
