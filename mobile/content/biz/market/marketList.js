@@ -15,7 +15,7 @@ let {
   StyleSheet,
   TouchableOpacity,
   InteractionManager,
-  AppRegistry
+  AppRegistry,
   } = React;
 
 let screenWidth = Dimensions.get('window').width;
@@ -61,7 +61,7 @@ let MarketList = React.createClass({
   },
   _renderRow: function (rowData, sectionID, rowID) {
     return (
-      <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
+      <TouchableHighlight onPress={() => this._pressRow()} underlayColor='#000'>
         <View
           style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926',}}>
           <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
@@ -83,7 +83,7 @@ let MarketList = React.createClass({
       </TouchableHighlight>
     )
   },
-  _pressRow: function (rowID) {
+  _pressRow: function () {
   },
   toDetail: function (name, rowData) {
     const { navigator } = this.props;

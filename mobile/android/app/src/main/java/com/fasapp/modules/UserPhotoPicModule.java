@@ -125,26 +125,25 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
     public void launchImage(Callback callback) {
         mCallback = callback;
         Activity activity = getCurrentActivity();
-        Intent imageIntent ;
-        if (Build.VERSION.SDK_INT < 19){
+        Intent imageIntent;
+        if (Build.VERSION.SDK_INT < 19) {
             imageIntent = new Intent();
             imageIntent.setAction(Intent.ACTION_GET_CONTENT);
             imageIntent.setType("image/*");
-            try{
+            try {
                 activity.startActivityForResult(imageIntent, USER_IMAGE_REQUEST_CODE);
-            }catch (Exception e){
+            } catch (Exception e) {
                 Log.d("Exception", e.toString());
             }
-        }else{
-            imageIntent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        } else {
+            imageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             imageIntent.setType("image/*");
-            try{
+            try {
                 activity.startActivityForResult(imageIntent, USER_IMAGE_REQUEST_CODE);
-            }catch (Exception e){
-                Log.d("Exception",e.toString());
+            } catch (Exception e) {
+                Log.d("Exception", e.toString());
             }
         }
-
     }
 
 
@@ -182,7 +181,6 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                             }
                         } catch (Exception e) {
                             // TODO: handle exception
-
                         }
                         response = Arguments.createMap();
                         response.putString("uri", uri.toString());

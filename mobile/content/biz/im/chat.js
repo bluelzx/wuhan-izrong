@@ -29,11 +29,11 @@ let Chat = React.createClass({
       toId: param.userId,
       sessionId: param.sessionId
     });
-    AppStore.addChangeListener(this._onChange);
+    AppStore.addChangeListener(this._onChange, 'IM_SESSION');
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange);
+    AppStore.removeChangeListener(this._onChange, 'IM_SESSION');
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());

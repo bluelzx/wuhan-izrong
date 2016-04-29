@@ -14,7 +14,8 @@ const {
   ORGBEAN,
   FILTERITEMS,
   FILTERITEM,
-  ORDERITEM
+  ORDERITEM,
+  SESSION
   } = require('./schemas');
 let {Platform} = React;
 
@@ -24,7 +25,7 @@ let PersisterFacade = {
   saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
   getAPNSToken: () => _getAPNSToken(),
   getToken: ()=> _getToken(),
-  clearToken: (userId) => _clearToken(userId),
+  logout: (userId) => _logout(userId),
   getLoginUserInfo: ()=> _getLoginUserInfo(),
   getUserId: ()=> _getUserId(),
   getOrgByOrgId: (orgId)=> _getOrgByOrgId(orgId),
@@ -47,11 +48,6 @@ let _deleteDevice = function () {
     _realm.delete(devices); // Deletes all books
   });
 };
-//1461725152393
-//1461725153730
-
-//1461725788323
-//1461725792041
 
 let _saveAppData = function (data) {
   console.log("start" + new Date().getTime());
@@ -230,13 +226,16 @@ let _getToken = function () {
   return userInfo.token;
 };
 
-let _clearToken = function (userId) {
+let _logout = function (userId) {
+  //clear token
   _realm.write(() => {
     _realm.create(LOGINUSERINFO, {
       userId: userId,
       token: ''
     }, true);
   });
+  //clear session
+  delete (_realm.objects(LOGINUSERINFO));
 };
 
 let _getLoginUserInfo = function () {

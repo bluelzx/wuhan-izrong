@@ -304,7 +304,7 @@ let MyBizDetail = React.createClass({
   },
   renderImageItem: function () {
     return (
-      <View style={{marginTop:10}}>
+      <View style={{flexDirection:'row',marginTop:10}}>
         {
           this.state.fileUrlList.map((item, index) => {
             return (
@@ -329,10 +329,13 @@ let MyBizDetail = React.createClass({
               <Text style={{marginLeft:10, fontWeight: 'bold', color:'white'}}>
                 {'备注'}
               </Text>
-              <View>
+              <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                 <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
                       numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
                 </Text>
+                <Image style={{margin:10,width:16,height:16}}
+                       source={require('../../image/market/next.png')}
+                />
               </View>
             </View>
           </TouchableHighlight>
@@ -341,7 +344,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row'}}>
-          {this.returnItem('备注:',this.state.remarkText == null ? '--' : this.state.marketInfo.remarkText)}
+          {this.returnItem('备注:',this.state.remarkText == null || this.state.remarkText.length == 0? '--' : this.state.marketInfo.remarkText)}
         </View>
       );
     }

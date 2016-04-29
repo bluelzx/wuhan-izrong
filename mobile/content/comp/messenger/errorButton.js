@@ -47,7 +47,7 @@ export default class ErrorButton extends React.Component {
           backgroundColor: 'transparent',
           borderRadius: 0,
         }]}>
-          <Spinner />
+          <Spinner color="white"/>
         </View>
       );
     }

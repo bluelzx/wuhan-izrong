@@ -112,14 +112,14 @@ let _login = (data) => {
 };
 
 let _logout = (userId) => {
-  Persister.clearToken(userId);
+  Persister.logout(userId);
   _info.isLogout = true;
   //TODO:'登出'
   AppStore.emitChange();
 };
 
 let _force_logout = () => {
-  Persister.clearToken();
+  Persister.logout(userId);
   _info.isLogout = true;
   _info.isForceLogout = true;
   //TODO:'登出'
@@ -190,14 +190,14 @@ let _saveCategory = (data) => {
   _.assign(_data, {
     category: data
   });
-  AppStore.emitChange();
+  //AppStore.emitChange();
 };
 
 let _saveItem = (data) => {
   _.assign(_data, {
     item: data
   });
-  AppStore.emitChange();
+  //AppStore.emitChange();
 };
 
 let _getCategory = () => {
