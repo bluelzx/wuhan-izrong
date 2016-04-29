@@ -112,14 +112,14 @@ let _login = (data) => {
 };
 
 let _logout = (userId) => {
-  Persister.clearToken(userId);
+  Persister.logout(userId);
   _info.isLogout = true;
   //TODO:'登出'
   AppStore.emitChange();
 };
 
 let _force_logout = () => {
-  Persister.clearToken();
+  Persister.logout(userId);
   _info.isLogout = true;
   _info.isForceLogout = true;
   //TODO:'登出'

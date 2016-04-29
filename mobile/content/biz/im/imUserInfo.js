@@ -62,7 +62,7 @@ let ImUserInfo = React.createClass({
           <View style={{backgroundColor:'#162a40'}} >
             <View style={styles.layout}>
               <Image style={styles.head} resizeMode="cover" source={require('../../image/user/head.png')}/>
-              <Text style={{color:'#ffffff',fontSize:18, marginRight:20}}>张某某</Text>
+              <Text style={{color:'#ffffff',fontSize:18, marginRight:20}}>{this.state.data.realName}</Text>
             </View>
           </View>
           <Item hiddenArrow={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.data.publicMobile?this.state.data.mobileNumber:privateDesc}/>
