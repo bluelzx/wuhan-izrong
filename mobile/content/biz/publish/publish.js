@@ -69,7 +69,7 @@ let Publish = React.createClass({
       rate: '',
       remark: '',
       bizOrientation: 'IN',
-      bizCategory: myCategory != null ? myCategory : item.length == 0  ? [] : item[0],
+      bizCategory: myCategory != null ? myCategory : item.length == 0 ? [] : item[0],
       bizItem: myItem != null ? myItem : item.length == 0 ? [] : item[0].itemArr[1],
       amount: 0,
       fileUrlList: []
@@ -84,9 +84,9 @@ let Publish = React.createClass({
     let isFromIM = param ? param.isFromIM : false;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='发布新业务' showBack={isFromIM} showBar={true}
+                  contentBackgroundColor='#18304D' title='发布新业务' showBack={true} showBar={true}
                   actionButton={isFromIM ? null : this.renderToMyBiz}>
-        <View style={{height:isFromIM ? screenHeight-64 : screenHeight-113,backgroundColor:'#153757'}}>
+        <View style={{height:isFromIM ? screenHeight-64 : screenHeight-64,backgroundColor:'#153757'}}>
           <View style={{flex:1}}>
             <ScrollView>
               {this.renderSelectOrg()}
@@ -268,8 +268,8 @@ let Publish = React.createClass({
     return (
       <View style={{height:44}}>
         <Button
-          containerStyle={{height:44,borderRadius:0}}
-          style={{fontSize: 15, color: '#ffffff'}}
+          containerStyle={{height:44,borderRadius:0,backgroundColor:"#4fb9fc"}}
+          style={{fontSize: 15, color: '#ffffff',}}
           disabled={this.state.disabled}
           onPress={() => this._pressPublish()}
         >
@@ -294,9 +294,9 @@ let Publish = React.createClass({
       Alert('格式不合法：请输入整数');
     } else if (!Validation.isRate(this.state.rateText)) {
       Alert('格式不合法：请输入0-99.99之间的小数');
-    } else if(this.state.amount > 100000000000){
+    } else if (this.state.amount > 100000000000) {
       Alert('您输入的金额过大');
-    }else {
+    } else {
       this.addBizOrder();
     }
   },
@@ -393,16 +393,20 @@ let Publish = React.createClass({
   },
 
   handleSendImage(uri) {
-    ImAction.uploadImage(uri)
-      .then((response) => {
-        let arr = [];
-        arr.push(response.fileUrl);
-        this.setState({
-          fileUrlList: arr
+    this.props.exec(
+      ()=> {
+        return ImAction.uploadImage(uri)
+          .then((response) => {
+            let arr = [];
+            arr.push(response.fileUrl);
+            this.setState({
+              fileUrlList: arr
+            });
+          }).catch((errorData) => {
+          console.log('Image upload error ' + JSON.stringify(errorData));
         });
-      }).catch((errorData) => {
-      console.log('Image upload error ' + JSON.stringify(errorData));
-    });
+      }
+    )
   },
 
   handleImageError(error) {
