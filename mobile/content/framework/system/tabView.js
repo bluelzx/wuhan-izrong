@@ -7,7 +7,8 @@ var {
   Platform,
   ScrollView,
   View,
-  TabBarIOS
+  TabBarIOS,
+    Navigator
   } = React;
 var Home = require('../../biz/home/home');
 var Market = require ('../../biz/market/market');
@@ -151,8 +152,13 @@ var TabView = React.createClass({
           <TabBarIOS.Item
             title="发布"
             icon={require('../../image/tab/publish.png')}
-            selected={this.state.selectedTab === 'publish'}
-            onPress={() => {this.setState({selectedTab: 'publish'});}}>
+            //selected={this.state.selectedTab === 'publish'}
+            onPress={() => {
+            this.props.navigator.push({
+                comp: Publish,
+                sceneConfig: Navigator.SceneConfigs.FloatFromBottomAndroid
+            });
+            }}>
             <Publish  navigator={this.props.navigator} exec={this.props.exec}/>
           </TabBarIOS.Item>
 
@@ -179,6 +185,14 @@ var TabView = React.createClass({
       return (
         <ScrollableTabView initialPage={this.state.initialPage} locked={true}
                            renderTabBar={() => <AndroidTabBar />}
+                           onChangeTab={(data) => {
+                              if(data.i == 2) {
+                                 this.props.navigator.push({
+                                         comp: Publish,
+                                         sceneConfig: Navigator.SceneConfigs.FloatFromBottomAndroid
+                                   });
+                              }
+                           }}
         >
           <Home navigator={this.props.navigator}
                 tabDesc="首页"

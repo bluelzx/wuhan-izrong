@@ -153,7 +153,7 @@ let Market = React.createClass({
   },
   _renderRow: function (rowData) {
     if (!rowData) {
-      return null;
+      return <View></View>;
     }
 
     return (
@@ -224,7 +224,7 @@ let Market = React.createClass({
             orderId: rowData.id
           }
         ).then((response)=> {
-          Alert('刷新成功');
+          Alert('刷新成功', ()=>this.refs.marketGiftedListView._refresh());
         }).catch((errorData) => {
           throw errorData;
         });
@@ -401,7 +401,7 @@ let Market = React.createClass({
 
   renderOptionType(){
     if (this.state.clickFilterType == 0) {
-      return null;
+      return <View></View>;
     }
     else {
       return (
@@ -425,7 +425,7 @@ let Market = React.createClass({
   },
   renderOptionTime(){
     if (this.state.clickFilterTime == 0) {
-      return null;
+      return <View></View>;
     } else {
       return (
         <View style={{position:"absolute",left:0,top:36}}>
@@ -446,7 +446,7 @@ let Market = React.createClass({
   },
   renderOptionOther(){
     if (this.state.clickFilterOther == 0) {
-      return null;
+      return <View></View>;
     } else {
       return (
         <View
@@ -571,7 +571,7 @@ let Market = React.createClass({
     this.refs["AMOUNT"].setDefaultState();
   },
   _pressPublish: function () {
-    this.props.navigator.resetTo({comp: 'tabView', tabName: 'publish'});
+    this.props.navigator.pop();
   },
   confirmBtn: function () {
       this.pressFilterOther();

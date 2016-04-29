@@ -299,7 +299,7 @@ let MyBizDetail = React.createClass({
         <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:'white'}}>{'附件:'}</Text>
       );
     }else{
-      return null;
+      return <View></View>;
     }
   },
   renderImageItem: function () {
@@ -370,7 +370,7 @@ let MyBizDetail = React.createClass({
         </TouchableHighlight>
       );
     }else{
-      return null;
+      return <View></View>;
     }
   },
 

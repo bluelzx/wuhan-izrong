@@ -35,7 +35,7 @@ let Item = React.createClass({
         <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
       );
     } else {
-      return null;
+      return <View></View>;
     }
   },
 

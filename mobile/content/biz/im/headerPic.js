@@ -18,7 +18,7 @@ let HeaderPic = React.createClass({
         )
       }
     }else{
-      return null;
+      return <View></View>;
     }
   },
 

@@ -92,7 +92,7 @@ var AndroidTabBar = React.createClass({
         </View>
       );
     } else {
-      return null;
+      return <View></View>;
     }
   },
 
