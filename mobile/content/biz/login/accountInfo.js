@@ -75,7 +75,7 @@ let Register_accountInfo = React.createClass({
     this.setState({
       orgValue: item.orgValue,
       orgId: item.id,
-      disabled:true
+      disabled:false
     });
   },
 

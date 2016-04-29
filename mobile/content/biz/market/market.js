@@ -32,6 +32,8 @@ let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
 
+let { MARKET_CHANGE } = require('../../constants/dictEvent');
+
 let {Alert, GiftedListView} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
 let numeral = require('numeral');
@@ -96,11 +98,11 @@ let Market = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange, 'MARKET_CHANGE');
+    AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange, 'MARKET_CHANGE');
+    AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   _onChange () {

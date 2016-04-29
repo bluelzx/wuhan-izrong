@@ -8,9 +8,10 @@ let NavBarView = require('../../framework/system/navBarView');
 let EditGroup = require('./editGroup');
 let EditGroupMaster = require('./editGroupMaster');
 let DictIcon = require('../../constants/dictIcon');
+let { IM_SESSION } = require('../../constants/dictEvent');
 let ImUserInfo = require('./imUserInfo');
 const Messenger = require('./../../comp/messenger/messenger');
-let {  SESSION_TYPE } = require('../../constants/dictIm');
+let { SESSION_TYPE } = require('../../constants/dictIm');
 let AppStore = require('../../framework/store/appStore');
 let ContactStore = require('../../framework/store/contactStore');
 let SessionStore = require('../../framework/store/sessionStore');
@@ -29,11 +30,11 @@ let Chat = React.createClass({
       toId: param.userId,
       sessionId: param.sessionId
     });
-    AppStore.addChangeListener(this._onChange, 'IM_SESSION');
+    AppStore.addChangeListener(this._onChange, IM_SESSION);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange, 'IM_SESSION');
+    AppStore.removeChangeListener(this._onChange, IM_SESSION);
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
