@@ -7,10 +7,10 @@ let EventEmitter = require('events').EventEmitter;
 
 let Persister = require('../persister/persisterFacade');
 //let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
+let { Default_EVENT, MARKET_CHANGE } = require('../../constants/dictEvent');
 
 let _info = {
   initLoadingState: true,
-  CHANGE_EVENT: 'change',
   netWorkState: false,
   isLogout: false,
   isForceLogout: false,
@@ -23,13 +23,13 @@ let _data = {};
 let AppStore = _.assign({}, EventEmitter.prototype, {
   saveNavigator:(nv)=>{_data.navigator = nv},
   getNavigator:()=>_data.navigator || {},
-  addChangeListener: function (callback, event = _info.CHANGE_EVENT) {
+  addChangeListener: function (callback, event = Default_EVENT) {
     this.on(event, callback);
   },
-  removeChangeListener: function (callback, event = _info.CHANGE_EVENT) {
+  removeChangeListener: function (callback, event = Default_EVENT) {
     this.removeListener(event, callback);
   },
-  emitChange: function (event = _info.CHANGE_EVENT) {
+  emitChange: function (event = Default_EVENT) {
     this.emit(event);
   },
   getNetWorkState: () => _info.netWorkState,
@@ -153,7 +153,7 @@ let _getLoginUserInfo = () => {
 let _saveFilters = function(filters){
   _data.filters = filters;
   Persister.saveFilters(filters);
-  AppStore.emitChange('MARKET_CHANGE');
+  AppStore.emitChange(MARKET_CHANGE);
 };
 
 let _getFilters = ()=> {

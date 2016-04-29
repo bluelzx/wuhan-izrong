@@ -20,6 +20,7 @@ let NavBarView = require('../../framework/system/navBarView');
 let imagePicker = require('../../comp/utils/imagePicker');
 let DateHelper = require('../../comp/utils/dateHelper');
 let numeral = require('numeral');
+let NameCircular = require('../im/nameCircular').NameCircular;
 
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Contacts = require('../im/contacts');
@@ -106,10 +107,9 @@ let BusinessDetail = React.createClass({
   renderPromulgator: function () {
     return (
       <View style={{flexDirection:'row',alignItems:'center'}}>
-        <Image style={{width:40,height:40,margin:10,backgroundColor:'#0a1926',borderRadius:5,alignItems:'center'}}
-               source={require('../../image/market/QQ.png')}
-        />
-
+        <View style={{margin:10}}>
+          <NameCircular name={'QQ'}/>
+        </View>
         <Text style={{fontSize:16,color:'white'}}>{this.state.bizOrderOwnerBean.userName}</Text>
         <TouchableHighlight onPress={()=>this.gotoIM(Contacts)} underlayColor='#153757' activeOpacity={0.8}>
           <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
