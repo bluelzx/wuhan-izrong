@@ -47,7 +47,8 @@ let amountUnit = ['万', '亿'];
 let Publish = React.createClass({
   getInitialState(){
     let filterItems = AppStore.getFilters().filterItems;
-    let item = MarketStore.getCategoryAndItem(filterItems);
+    let categaryAndItem = MarketStore.getCategoryAndItem(filterItems);
+    let item = this.removeDisplayCodeIsAllObj(categaryAndItem);
 
     let myCategory = AppStore.getCategory();
     let myItem = AppStore.getItem();
@@ -68,8 +69,8 @@ let Publish = React.createClass({
       rate: '',
       remark: '',
       bizOrientation: 'IN',
-      bizCategory: myCategory != null ? myCategory : item.length == 0  ? [] : item[3],
-      bizItem: myItem != null ? myItem : item.length == 0 ? [] : item[3].itemArr[0],
+      bizCategory: myCategory != null ? myCategory : item.length == 0  ? [] : item[0],
+      bizItem: myItem != null ? myItem : item.length == 0 ? [] : item[0].itemArr[1],
       amount: 0,
       fileUrlList: []
     }
@@ -407,6 +408,20 @@ let Publish = React.createClass({
   handleImageError(error) {
     console.log('Image select error ' + JSON.stringify(error));
     Alert('图片选择失败');
+  },
+
+  removeDisplayCodeIsAllObj: function (arr) {
+    let itemArr = [];
+    if (!!arr) {
+      arr.forEach(function (item) {
+        if (item.displayCode != 'ALL') {
+          itemArr.push(item);
+        }
+      });
+      return (
+        itemArr
+      );
+    }
   }
 
 });

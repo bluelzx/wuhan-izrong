@@ -33,7 +33,7 @@ let BusinessDetail = React.createClass({
     return {
       detailData: '',
       bizOrderOwnerBean: '',
-      fileIds: [],
+      fileUrlList: [],
       marketInfo: marketInfo,
       lastModifyDate: ''
     }
@@ -134,7 +134,7 @@ let BusinessDetail = React.createClass({
     }
   },
   renderImageTitle(){
-    if (this.state.fileIds.length > 0) {
+    if (this.state.fileUrlList.length > 0) {
       return (
         <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:'white'}}>{'附件:'}</Text>
       );
@@ -144,7 +144,7 @@ let BusinessDetail = React.createClass({
     return (
       <View style={{flexDirection:'row',marginTop:10}}>
         {
-          this.state.fileIds.map((item, index) => {
+          this.state.fileUrlList.map((item, index) => {
             return (
               <Image
                 key={index}
@@ -182,7 +182,7 @@ let BusinessDetail = React.createClass({
           this.setState({
             detailData: response,
             bizOrderOwnerBean: response.bizOrderOwnerBean,
-            fileIds: response.fileIds,
+            fileUrlList: response.fileUrlList,
             lastModifyDate: DateHelper.formatBillDetail(t)
           });
         }).catch(
