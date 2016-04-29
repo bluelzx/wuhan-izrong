@@ -81,7 +81,7 @@ let SelectBusiness1 = React.createClass({
         itemArr
       );
     }
-  },
+  }
 
 
 });
