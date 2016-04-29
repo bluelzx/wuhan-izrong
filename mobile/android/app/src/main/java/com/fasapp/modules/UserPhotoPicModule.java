@@ -152,7 +152,6 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        Uri uri = null;
         switch (requestCode) {
             case USER_CAMERA_REQUEST_CODE:
                 if (SDCardUtils.hasSdcard()) {
