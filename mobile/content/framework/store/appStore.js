@@ -210,5 +210,6 @@ let _getItem = () => {
 
 let _getBadge = () => {
   let badge = Persister.getSessionBadge();
+  return badge;
 };
 module.exports = AppStore;

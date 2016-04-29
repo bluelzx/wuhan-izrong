@@ -233,9 +233,14 @@ let _logout = function (userId) {
       userId: userId,
       token: ''
     }, true);
+
+    //clear session
+    // _realm.delete(_realm.objects(LOGINUSERINFO));
+    _realm.delete(_realm.objects(SESSION));
+
+
   });
-  //clear session
-  delete (_realm.objects(LOGINUSERINFO));
+
 };
 
 let _getLoginUserInfo = function () {

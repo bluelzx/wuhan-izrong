@@ -7,7 +7,8 @@ const MSG_CONTENT_TYPE = {
 
 const COMMAND_TYPE = {
   SEND_P2P_MSG: 'sendP2PMsg',
-  SEND_GROUP_MSG: 'sendGroupMsg'
+  SEND_GROUP_MSG: 'sendGroupMsg',
+  SYNC_REQ:'SYNC_REQ'
 };
 
 const MSG_TYPE = {

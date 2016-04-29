@@ -91,45 +91,46 @@ export default class Bubble extends React.Component {
 
     if (this.props.contentType === MSG_CONTENT_TYPE.NAMECARD) {
       let data = JSON.parse(this.props.content);
+      let nameCardStyle = this.props.position === 'left' ? styles.textLeft : styles.textRight;
       return (
         <View style={[styles.bubble, customStyle, {flex:1}]}>
           <Text
-            style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.realName + '--' + data.orgBeanName}</Text>
+            style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.realName + '--' + data.orgBeanName}</Text>
           <View style={{flexDirection:'row'}}>
             <Text
-              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>手机:</Text>
+              style={[styles.text, nameCardStyle]}>手机:</Text>
             <Text
-              style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.mobileNumber}</Text>
+              style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.mobileNumber}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
-              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>座机:</Text>
+              style={[styles.text,nameCardStyle]}>座机:</Text>
             <Text
-              style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.phoneNumber}</Text>
+              style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.phoneNumber}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
-              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>微信:</Text>
+              style={[styles.text, nameCardStyle]}>微信:</Text>
             <Text
-              style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.weChatNo}</Text>
+              style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.weChatNo}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
-              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>邮箱:</Text>
+              style={[styles.text, nameCardStyle]}>邮箱:</Text>
             <Text
-              style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.email}</Text>
+              style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.email}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
-              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>部门:</Text>
+              style={[styles.text, nameCardStyle]}>部门:</Text>
             <Text
-              style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.department}</Text>
+              style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.department}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
-              style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>职位:</Text>
+              style={[styles.text, nameCardStyle]}>职位:</Text>
             <Text
-              style={[{flexWrap:'wrap'},styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight)]}>{data.jobTitle}</Text>
+              style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.jobTitle}</Text>
           </View>
         </View>
       )

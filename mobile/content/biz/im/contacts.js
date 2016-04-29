@@ -23,16 +23,17 @@ let DictIcon = require('../../constants/dictIcon');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Spread = require('./spread');
 let NameCircular = require('./nameCircular').NameCircular;
-let {groupFilter,contactFilter} = require('./searchBarHelper');
+let {contactFilter} = require('./searchBarHelper');
+let { IM_CONTACT } = require('../../constants/dictEvent');
 
 let Contacts = React.createClass({
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange);
+    AppStore.addChangeListener(this._onChange,IM_CONTACT);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange);
+    AppStore.removeChangeListener(this._onChange,IM_CONTACT);
   },
   _onChange: function () {
     //InteractionManager.runAfterInteractions(()=>{

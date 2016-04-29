@@ -17,6 +17,11 @@ const DictEvent = keyMirror({
   IM_ADD: null,
   IM_UPDATE: null,
 
+  IM_SESSION_LIST:null,
+
+  IM_GROUP:null,
+
+  IM_CONTACT:null,
   /**
    * Market events.
    */

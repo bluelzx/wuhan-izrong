@@ -18,7 +18,7 @@ let NavBarView = require('../../framework/system/navBarView');
 let _ = require('lodash');
 let Icon = require('react-native-vector-icons/Ionicons');
 let DateHelper = require('../../comp/utils/dateHelper');
-let { Device } = require('mx-artifacts');
+let { Device,Alert } = require('mx-artifacts');
 let Swipeout= require('react-native-swipeout');
 let Contacts = require('./contacts');
 let Chat = require('./chat');
@@ -34,15 +34,16 @@ let ContactAction = require('../../framework/action/contactAction');
 let { MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 let NameCircular = require('./nameCircular').NameCircular;
 let {sessionFilter} = require('./searchBarHelper');
+let { IM_SESSION_LIST } = require('../../constants/dictEvent');
 
 let WhitePage = React.createClass({
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange);
+    AppStore.addChangeListener(this._onChange, IM_SESSION_LIST);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange);
+    AppStore.removeChangeListener(this._onChange, IM_SESSION_LIST);
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
@@ -126,7 +127,13 @@ let WhitePage = React.createClass({
 
     let {width} = Device;
     return (
-      <TouchableHighlight onPress={()=> this.props.navigator.push({comp: Spread})}>
+      <TouchableHighlight onLongPress={
+        ()=>
+          {
+            Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
+          }
+        }
+                          onPress={()=> this.props.navigator.push({comp: Spread})}>
         <View
           style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
           <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imSpread} />
@@ -148,16 +155,14 @@ let WhitePage = React.createClass({
 
   renderGroup: function(item, index){
     let {width} = Device;
-    let swipeoutBtns = [
-      {
-        text: '删除',
-        backgroundColor: 'red',
-        onPress: ()=>this.deleteSession(item.sessionId)
-      }
-    ];
+
     return (
-      <Swipeout key={item.sessionId} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
-        <TouchableHighlight onPress={()=>this.toOther(item)}>
+        <TouchableHighlight key={item.sessionId} onPress={()=>this.toOther(item)} onLongPress={
+        ()=>
+          {
+            Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
+          }
+        }>
           <View
             style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
             <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup} />
@@ -173,34 +178,33 @@ let WhitePage = React.createClass({
             </View>
           </View>
         </TouchableHighlight>
-      </Swipeout>
     );
   },
 
   showText:(item)=> {
     if (MSG_CONTENT_TYPE.TEXT == item.contentType) {
       return item.content
-    } else if (MSG_CONTENT_TYPE.TEXT == item.contentType) {
+    } else if (MSG_CONTENT_TYPE.IMAGE == item.contentType) {
       return '[图片]'
     } else if(MSG_CONTENT_TYPE.NAMECARD == item.contentType){
       return '[名片]';
-    }else{
+    }else if(MSG_CONTENT_TYPE.BIZINFO){
+      return '[业务信息]';
+    }else {
       return '点击查看详情'
     }
   },
 
   renderUser: function(item, index){
     let {width} = Device;
-    let swipeoutBtns = [
-      {
-        text: '删除',
-        backgroundColor: 'red',
-        onPress: ()=>this.deleteSession(item.sessionId)
-      }
-    ];
+
     return (
-      <Swipeout key={item.sessionId} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
-        <TouchableHighlight onPress={()=>this.toOther(item)}>
+        <TouchableHighlight key={item.sessionId}  onLongPress={
+        ()=>
+          {
+            Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
+          }
+        } onPress={()=>this.toOther(item)}>
           <View
             style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
             <View style={{height: 40,width: 40, marginRight:15}}>
@@ -218,7 +222,7 @@ let WhitePage = React.createClass({
             </View>
           </View>
         </TouchableHighlight>
-      </Swipeout>
+
     );
   },
 

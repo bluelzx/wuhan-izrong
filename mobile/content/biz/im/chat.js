@@ -26,9 +26,13 @@ let Chat = React.createClass({
     param.sessionId = SessionStore.querySessionById(this.props.param.userId || this.props.param.groupId,this.props.param.chatType);
     param.sessionId || (param.sessionId=KeyGenerator.getSessionKey(param.chatType, this.props.param.userId || this.props.param.groupId));
 
+    let user = ContactStore.getUserInfo();
     ImAction.sessionInit({
       toId: param.userId,
-      sessionId: param.sessionId
+      sessionId: param.sessionId,
+      userId:user.userId,
+      myName:user.realName,
+      hisName:param.chatType==SESSION_TYPE.USER?ContactStore.getUserInfoByUserId(param.userId).realName:'',
     });
     AppStore.addChangeListener(this._onChange, IM_SESSION);
   },

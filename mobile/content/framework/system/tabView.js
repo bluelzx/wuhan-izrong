@@ -158,7 +158,7 @@ var TabView = React.createClass({
 
           <TabBarIOS.Item
             title="IM"
-            badge={this.state.badge}
+            badge={this.state.badge || null}
             icon={require('../../image/tab/IM.png')}
             selected={this.state.selectedTab === 'IM'}
             onPress={() => {this.setState({selectedTab: 'IM'})}}>

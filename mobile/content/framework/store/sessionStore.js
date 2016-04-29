@@ -1,15 +1,15 @@
 /**
  * Created by baoyinghai on 4/20/16.
  */
-
 let PersisterFacade = require('../persister/persisterFacade');
 let ContactStore = require('./contactStore');
 let AppStore = require('./appStore');
+let { IM_SESSION_LIST } = require('../../constants/dictEvent');
 
 
 let _deleteSession = function(sessionId) {
   PersisterFacade.deleteSession(sessionId);
-  AppStore.emitChange();
+  AppStore.emitChange(IM_SESSION_LIST);
 }
 
 let _queryAllSession = function() {
@@ -29,7 +29,7 @@ let _getUserInfoBySessionId = function(sessionId, currentUserId) {
 
 let _updateSession = function(param, notAdd){
   PersisterFacade.updateSession(param, notAdd);
-  AppStore.emitChange();
+  AppStore.emitChange(IM_SESSION_LIST);
 }
 
 let _querySessionById = function(id, type){
@@ -38,12 +38,12 @@ let _querySessionById = function(id, type){
 
 let _setBadgeZero = function(sessionId) {
   PersisterFacade.setBadgeZero(sessionId);
-  AppStore.emitChange();
+  AppStore.emitChange(IM_SESSION_LIST);
 }
 
 let _updateInViteSession = function(sessionId) {
   PersisterFacade.updateInViteSession(sessionId);
-  AppStore.emitChange();
+  AppStore.emitChange(IM_SESSION_LIST);
 }
 
 let sessionStore = {
