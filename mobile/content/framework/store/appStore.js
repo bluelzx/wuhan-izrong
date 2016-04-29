@@ -122,7 +122,7 @@ let _force_logout = () => {
   Persister.logout(userId);
   _info.isLogout = true;
   _info.isForceLogout = true;
-  //TODO:'登出'
+  //TODO:'强制登出'
   AppStore.emitChange();
 };
 
@@ -161,6 +161,8 @@ let _getFilters = ()=> {
 };
 
 let _saveOrgList = (orgList)=> {
+  _data.orgList = orgList;
+  AppStore.emitChange();
   Persister.saveOrgList(orgList);
 };
 

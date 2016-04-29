@@ -21,6 +21,11 @@ const DictEvent = keyMirror({
    * Market events.
    */
   MARKET_CHANGE: null,
+
+  /**
+   * User events.
+   */
+  USER_CHANGE: null,
 });
 
 module.exports = DictEvent;
