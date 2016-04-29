@@ -8,6 +8,8 @@ __true__
 
 ## Bug Fixes
 
+-  01:crash when click selecBizTypeBtn in publish page.(#1868)        02:crash when click filterOtherBtn in market page.(#1867)        03:add clear button in market page.(#1876)
+  ([7aed5e33](http://192.168.64.208/tianjin/fas-app/commits/7aed5e330c1fcf80f1c228484f5196d4ae375a2e))
 - **IM:** update event to 'IM_SESSION'.
   ([ec5e7c9b](http://192.168.64.208/tianjin/fas-app/commits/ec5e7c9bef47fbc02506618b414abc80c6a883b0))
 - **system:**
@@ -25,6 +27,15 @@ __true__
   ([e2345a43](http://192.168.64.208/tianjin/fas-app/commits/e2345a437154452f78fa30d7ce4f4dd347c52425))
 - add send business in IM and share business
   ([8d00539a](http://192.168.64.208/tianjin/fas-app/commits/8d00539af23664df397f935939a20c8c60072b13))
+- add myBiz in home 1.add myBiz myBizList and myBizDetail page 2.inteface debugging
+  ([34c03a6d](http://192.168.64.208/tianjin/fas-app/commits/34c03a6dec9e070338c72d193dbcf75dd2c8e86e))
+- publish data processing add select bizType data
+  ([2036c44c](http://192.168.64.208/tianjin/fas-app/commits/2036c44c74a5e79fa9027558abbecd713666d67f))
+- **im:**
+  - load earlier messages, save messages.
+  ([dd4f8d7d](http://192.168.64.208/tianjin/fas-app/commits/dd4f8d7d9d6d9e403863c938e1bdf5a6ed71e019))
+  - add image send support.
+  ([f4340c97](http://192.168.64.208/tianjin/fas-app/commits/f4340c9736f32a916547b970895260e282f02751))
 - **startup:** remove useless image
   ([39f5ab89](http://192.168.64.208/tianjin/fas-app/commits/39f5ab891c50396080d2d183926488f5ff00abd3))
 - **system:**
