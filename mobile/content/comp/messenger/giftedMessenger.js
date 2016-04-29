@@ -212,7 +212,7 @@ let GiftedMessenger = React.createClass({
         }
       }
     }
-    return null;
+    return <View></View>;
   },
 
   renderRow(rowData = {}, sectionID = null, rowID = null) {
@@ -518,7 +518,7 @@ let GiftedMessenger = React.createClass({
         }
       }
     }
-    return null;
+    return <View></View>;
   },
 
 

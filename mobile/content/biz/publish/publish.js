@@ -84,9 +84,9 @@ let Publish = React.createClass({
     let isFromIM = param ? param.isFromIM : false;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='发布新业务' showBack={isFromIM} showBar={true}
+                  contentBackgroundColor='#18304D' title='发布新业务' showBack={true} showBar={true}
                   actionButton={isFromIM ? null : this.renderToMyBiz}>
-        <View style={{height:isFromIM ? screenHeight-64 : screenHeight-113,backgroundColor:'#153757'}}>
+        <View style={{height:isFromIM ? screenHeight-64 : screenHeight-64,backgroundColor:'#153757'}}>
           <View style={{flex:1}}>
             <ScrollView>
               {this.renderSelectOrg()}
@@ -268,8 +268,8 @@ let Publish = React.createClass({
     return (
       <View style={{height:44}}>
         <Button
-          containerStyle={{height:44,borderRadius:0}}
-          style={{fontSize: 15, color: '#ffffff'}}
+          containerStyle={{height:44,borderRadius:0,backgroundColor:"#4fb9fc"}}
+          style={{fontSize: 15, color: '#ffffff',}}
           disabled={this.state.disabled}
           onPress={() => this._pressPublish()}
         >

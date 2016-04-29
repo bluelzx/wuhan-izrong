@@ -92,7 +92,7 @@ var AndroidTabBar = React.createClass({
         </View>
       );
     } else {
-      return null;
+      return <View></View>;
     }
   },
 
@@ -119,11 +119,14 @@ var AndroidTabBar = React.createClass({
   },
 
   _goToPage(tab, page){
-    this.setState({
-      selected: page
-    })
-    this.props.goToPage(page)
-
+    if (page === 2 && tab.onPress) {
+      tab.onPress();
+    } else {
+      this.setState({
+        selected: page
+      })
+      this.props.goToPage(page)
+    }
   },
 
   renderTabOption(tab, page) {

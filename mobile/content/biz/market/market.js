@@ -221,7 +221,7 @@ let Market = React.createClass({
   },
   _renderRow: function (rowData) {
     if (!rowData) {
-      return null;
+      return <View></View>;
     }
 
     return (
@@ -479,7 +479,7 @@ let Market = React.createClass({
                 style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
                 <Text
                   style={{fontSize:16,marginLeft:10,width: screenWidth-66,color:'white'}}
-                  numberOfLines={1}>{this.state.orgValue == '' ? '选择发布机构' : this.state.orgValue}</Text>
+                  numberOfLines={1}>{this.state.orgValue == '' ? '全部发布机构' : this.state.orgValue}</Text>
                 <Image style={{margin:10,width:16,height:16}}
                        source={require('../../image/market/next.png')}
                 />
@@ -594,6 +594,9 @@ let Market = React.createClass({
     this.refs["ORIENTATION"].setDefaultState();
     this.refs["TERM"].setDefaultState();
     this.refs["AMOUNT"].setDefaultState();
+    this.setState({
+          orgValue:''
+    });
   },
 
   confirmBtn: function () {

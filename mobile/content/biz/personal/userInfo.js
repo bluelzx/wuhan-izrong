@@ -153,6 +153,9 @@ let UserInfo = React.createClass({
     } else {
       if (pubValue) {
         showValue = value + '(公开)';
+        if(name == 'email'){
+          showValue = value;
+        }
       } else {
         showValue = value + '(不公开)';
       }
