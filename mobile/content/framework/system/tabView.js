@@ -185,14 +185,6 @@ var TabView = React.createClass({
       return (
         <ScrollableTabView initialPage={this.state.initialPage} locked={true}
                            renderTabBar={() => <AndroidTabBar />}
-                           onChangeTab={(data) => {
-                              if(data.i == 2) {
-                                 this.props.navigator.push({
-                                         comp: Publish,
-                                         sceneConfig: Navigator.SceneConfigs.FloatFromBottomAndroid
-                                   });
-                              }
-                           }}
         >
           <Home navigator={this.props.navigator}
                 tabDesc="首页"
@@ -210,13 +202,15 @@ var TabView = React.createClass({
           >
           </Market>
 
-          <Publish navigator={this.props.navigator}
-                   tabDesc="发布"
-                   icon={require('../../image/tab/publish.png')}
-                   selectedIcon={require('../../image/tab/publish-selected.png')}
-                   exec={this.props.exec}
+          <View
+            navigator={this.props.navigator}
+            tabDesc="发布"
+            icon={require('../../image/tab/publish.png')}
+            selectedIcon={require('../../image/tab/publish-selected.png')}
+            exec={this.props.exec}
+            onPress={() => {navigator.push({comp: Publish})}}
           >
-          </Publish>
+          </View>
 
 
           <IM navigator={this.props.navigator}
@@ -232,6 +226,8 @@ var TabView = React.createClass({
                     icon={require('../../image/tab/personalcenter.png')}
                     selectedIcon={require('../../image/tab/personalcenter-selected.png')}
                     exec={this.props.exec}
+                    delay={true}
+                    page={4}
           >
           </Personal>
 
