@@ -153,6 +153,9 @@ let UserInfo = React.createClass({
     } else {
       if (pubValue) {
         showValue = value + '(公开)';
+        if(name == 'email'){
+          showValue = value;
+        }
       } else {
         showValue = value + '(不公开)';
       }
@@ -184,6 +187,8 @@ let UserInfo = React.createClass({
               onSelected={(response) => this.uploadUserPoto(response)}
               onError={(error) => Alert(error)}
               title="选择图片"
+              fileId="userPhoto"
+              allowsEditing={true}
               style={{marginLeft: 20}}
             >
               {this.returnImage()}
@@ -192,7 +197,9 @@ let UserInfo = React.createClass({
               style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}
               onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'publicRealName', true, 'default', 20, true, false)}
             >
-              <Text style={{color: '#ffffff', fontSize: 18, textAlign: 'right', marginRight: 20}}>
+              <Text style={{color: '#ffffff', fontSize: 18, textAlign: 'right', marginRight: 20,width: 150}}
+                    numberOfLines={1}
+              >
                 {this.state.realName}
               </Text>
               <Icon style={{marginRight: 20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>

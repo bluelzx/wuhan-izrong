@@ -32,6 +32,8 @@ let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
 
+let { MARKET_CHANGE } = require('../../constants/dictEvent');
+
 let {Alert, GiftedListView} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
 let numeral = require('numeral');
@@ -67,8 +69,8 @@ let Market = React.createClass({
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[2].displayName,
-      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[2].itemArr[0].displayName,
+      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[0].displayName,
+      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[0].itemArr[1].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -96,11 +98,11 @@ let Market = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange, 'MARKET_CHANGE');
+    AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange, 'MARKET_CHANGE');
+    AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   _onChange () {
