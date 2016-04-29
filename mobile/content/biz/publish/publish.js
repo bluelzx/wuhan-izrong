@@ -69,7 +69,7 @@ let Publish = React.createClass({
       bizOrientation: 'IN',
       bizCategory: myCategory != null ? myCategory : item.length == 0  ? [] : item[3],
       bizItem: myItem != null ? myItem : item.length == 0 ? [] : item[3].itemArr[0],
-      amount: '',
+      amount: 0,
       fileUrlList: []
     }
   },
