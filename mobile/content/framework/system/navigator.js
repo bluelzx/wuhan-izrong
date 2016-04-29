@@ -132,9 +132,8 @@ var Main = React.createClass({
             });
           }
           console.log(errorData);
-          if(errorData.msgCode == 'SYS_TOKEN_INVALID'){
+          if(errorData.msgCode == 'APP_SYS_TOKEN_INVALID'){
             AppStore.forceLogout();
-            Alert('登陆过期,请重新登陆!')
           }else{
             Alert(errorData.msgContent || errorData.message);
           }

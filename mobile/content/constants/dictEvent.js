@@ -1,4 +1,3 @@
-
 const keyMirror = require('keymirror');
 
 const DictEvent = keyMirror({
@@ -26,6 +25,11 @@ const DictEvent = keyMirror({
    * User events.
    */
   USER_CHANGE: null,
+
+  /**
+   * Orgnization
+   */
+  ORG_CHANGE: null
 });
 
 module.exports = DictEvent;

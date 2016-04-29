@@ -14,6 +14,7 @@ let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let AlphabetListView = require('react-native-alphabetlistview');
+let {ORG_CHANGE} = require('../../constants/dictEvent');
 let SearchBar = require('../im/searchBar');
 var that;
 let Register_selectOrg = React.createClass({
@@ -46,11 +47,11 @@ let Register_selectOrg = React.createClass({
     return this.getStateFromStores();
   },
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange);
+    AppStore.addChangeListener(this._onChange,ORG_CHANGE);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange);
+    AppStore.removeChangeListener(this._onChange,ORG_CHANGE);
   },
   _onChange: function () {
 
