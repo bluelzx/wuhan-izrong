@@ -53,6 +53,7 @@ let FilterSelectBtn = React.createClass({
             dataSource={data.cloneWithRows(this.deleteFirstObj(this.props.dataList))}
             scrollEnabled={false}
             renderRow={this._renderRow}
+            enableEmptySections={true}
           />
         </View>
       </View>
