@@ -36,6 +36,7 @@ let { Alert, Device, Loading } = require('mx-artifacts');
 let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
+let Publish = require ('../../biz/publish/publish');
 
 var Main = React.createClass({
   _navigator: null,
@@ -152,6 +153,11 @@ var Main = React.createClass({
       if(route.tabName) tabName = route.tabName;
       Comp = TabView;
     }
+
+    if(Comp == 'publish'){
+      Comp = Publish;
+    }
+
     navigator.cur = Comp;
     return (
       <Comp param={route.param} navigator={navigator} callback={route.callBack} exec={this._exec} tabName={tabName}/>
