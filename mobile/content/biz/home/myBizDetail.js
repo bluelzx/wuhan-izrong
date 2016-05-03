@@ -428,9 +428,9 @@ let MyBizDetail = React.createClass({
 
   },
   shutDownBiz: function () {
-    {
-      this.downselfBizOrder(this.state.marketInfo.id)
-    }
+      Alert('你确定下架该业务吗?',() => {
+          this.downselfBizOrder(this.state.marketInfo.id)
+      },()=>{});
   },
   callBackRemarks: function (remarkText) {
     this.setState({
