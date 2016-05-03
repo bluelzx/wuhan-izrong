@@ -2,12 +2,13 @@ const MSG_CONTENT_TYPE = {
   TEXT: 'text',
   IMAGE: 'image',
   NAMECARD:'namecard',
-  BIZINFO:'bizInfo',
+  BIZINFO:'bizinfo',
 };
 
 const COMMAND_TYPE = {
   SEND_P2P_MSG: 'sendP2PMsg',
-  SEND_GROUP_MSG: 'sendGroupMsg'
+  SEND_GROUP_MSG: 'sendGroupMsg',
+  SYNC_REQ:'SYNC_REQ'
 };
 
 const MSG_TYPE = {

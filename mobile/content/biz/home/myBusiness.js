@@ -147,10 +147,26 @@ let Market = React.createClass({
             allLoaded: true, // the end of the list is reached
           });
         }, 1000); // simulating network fetching
-        Alert(errorData.msgContent);
+        Alert(errorData.msgContent || 'exception');
       }
     );
   },
+
+  termChangeHelp(term){
+    if(term == null || term == 0){
+      return '--';
+    }else if (term % 365 == 0){
+      return term/365 + '年';
+    }else if (term % 30 == 0){
+      return term/30 + '月';
+    }else if (term == 1){
+      return '隔夜';
+    }
+    else{
+      return term + '天';
+    }
+  },
+
   _renderRow: function (rowData) {
     if (!rowData) {
       return <View></View>;
@@ -165,7 +181,7 @@ let Market = React.createClass({
           />
           <Text
             style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}>
-            {rowData.term == null || rowData.term == 0 ? '--' :  rowData.term + '天'}
+            {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'?'rgba(175,134,86,1)':'#386085'}}>
@@ -174,7 +190,7 @@ let Market = React.createClass({
           <Text
             style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}
             numberOfLines={1}>
-            {rowData.rate == null || rowData.rate == 0 ? '--' : numeral(rowData.rate*100).format('0,0.00') + '%'}
+            {rowData.rate == null || rowData.rate == 0 ? '--' : numeral(rowData.rate * 100).format('0,0.00') + '%'}
           </Text>
           {this.renderFreshBtn(rowData)}
         </View>
@@ -351,8 +367,8 @@ let Market = React.createClass({
       pickTimeRow: rowId,
       optionTwoText: this.state.termSource[rowId].fieldDisplayName,
       orderField: this.state.termSource[rowId].fieldName,
-      orderType: this.state.termSource[rowId].asc ? 'asc' : 'desc',
-    })
+      orderType: this.state.termSource[rowId].fieldName == 'amount' ? 'asc' : 'desc'
+    });
     this.refs.marketGiftedListView._refresh();
   },
 
@@ -569,9 +585,19 @@ let Market = React.createClass({
     this.refs["TERM"].setDefaultState();
     this.refs["AMOUNT"].setDefaultState();
   },
+
   _pressPublish: function () {
-    this.props.navigator.pop();
+      const { navigator } = this.props;
+      if (navigator) {
+          navigator.push({
+            comp: 'publish',
+            param: {
+              isFromMyBusiness:true
+            }
+          })
+      }
   },
+
   confirmBtn: function () {
       this.pressFilterOther();
     this.refs.marketGiftedListView._refresh();

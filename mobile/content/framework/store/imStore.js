@@ -3,7 +3,7 @@ let EventEmitter = require('events').EventEmitter;
 
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let DictEvent = require('../../constants/dictEvent');
-
+let { IM_CONTACT } = require('../../constants/dictEvent');
 let Persister = require('../persister/persisterFacade');
 let SessionAction = require('../action/sessionAction');
 let AppStore = require('./appStore');
@@ -42,11 +42,22 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
   saveMsg: (message) => _saveMsg(message),
   ackMsg: (msgId, toUid) => _ackMsg(msgId, toUid),
   getEarlier: () => _getEarlier(),
-  createHomePageInfo:(seq, url)=>Persister.createHomePageInfo(seq, url),
-  createPlatFormInfo:(infoId, title, content, createDate)=>Persister.createPlatFormInfo(infoId, title, content, createDate),
-  deleteContactInfo:(userIdList)=>Persister.deleteContactInfo(userIdList),
-  updateContactInfo:(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId) =>
-    Persister.updateContactInfo(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId)
+  createHomePageInfo:(seq, url)=>{
+    Persister.createHomePageInfo(seq, url);
+    //TODO:emit home event
+  },
+  createPlatFormInfo:(infoId, title, content, createDate)=>{
+    Persister.createPlatFormInfo(infoId, title, content, createDate);
+   //TODO:emit plat event
+  },
+  deleteContactInfo:(userIdList)=>{
+    Persister.deleteContactInfo(userIdList);
+    AppStore.emitChange(IM_CONTACT);
+  },
+  updateContactInfo:(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId) =>{
+    Persister.updateContactInfo(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId);
+    AppStore.emitChange(IM_CONTACT);
+  }
 
 });
 
@@ -59,13 +70,17 @@ let _resovleMessages = (bInit = false) => {
   let savedMessages = Persister.getMessageBySessionId(_data.sessionId, _data.page);
   let tmpMessages = [];
   let tmpMessage = {};
+  let name = _data.hisName;
+  //if(_data.)
   savedMessages.forEach((object, index, collection) => {
+
     if (object.fromUId) { // Received
+      let name = ContactStore.getUserInfoByUserId(object.fromUId).realName;
       tmpMessage = {
         msgId: object.msgId,
         contentType: object.contentType,
         content: object.content,
-        name: object.fromUId,
+        name: name,
         image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
         position: 'left',
         date: object.revTime
@@ -75,7 +90,8 @@ let _resovleMessages = (bInit = false) => {
         msgId: object.msgId,
         contentType: object.contentType,
         content: object.content,
-        name: _data.userId,
+        //name: _data.userId,
+        name: _data.myName,
         image: _data.userPhotoFileUrl,
         position: 'right',
         date: object.revTime,
@@ -99,6 +115,8 @@ let _sessionInit = (data) => {
   _data.sessionId = data.sessionId;
   _data.page = 1;
   _data.messages = [];
+  _data.userId = data.userId,
+  _data.myName=data.myName,
   _resovleMessages(true);
   ImStore.emitChange(DictEvent.IM_SESSION);
 };
@@ -177,11 +195,12 @@ let _saveMsg = (message) => {
   if (message.sessionId === _data.sessionId) {
     if (message.fromUId) { // Received
       // TODO. Get user info by id.
+      let name = ContactStore.getUserInfoByUserId(message.fromUId).realName;
       _data.messages.push({
         msgId: message.msgId,
         contentType: message.contentType,
         content: message.content,
-        name: message.fromUId,
+        name: name,
         image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
         position: 'left',
         date: message.revTime
@@ -191,7 +210,7 @@ let _saveMsg = (message) => {
         msgId: message.msgId,
         contentType: message.contentType,
         content: message.content,
-        name: _data.userId,
+        name: _data.myName,
         image: _data.userPhotoFileUrl,
         position: 'right',
         date: message.revTime,

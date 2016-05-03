@@ -1,5 +1,11 @@
 package com.fasapp;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.view.Menu;
+import com.facebook.react.bridge.ReactApplicationContext;
+
 import com.facebook.react.ReactActivity;
 import io.realm.react.RealmReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -17,6 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends ReactActivity {
+    public static ReactApplicationContext context;
+
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -34,6 +42,11 @@ public class MainActivity extends ReactActivity {
     @Override
     protected boolean getUseDeveloperSupport() {
         return BuildConfig.DEBUG;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     /**

@@ -1,15 +1,35 @@
 let Manager = require('./manager');
 
-let { ImWebSocket } = require('../../constants/appLinks');
-//let AppStore = require('../store/appStore');
 let Resolver = require('./resolver');
 let {ImHost } = require('../../../config');
+let { COMMAND_TYPE } = require('../../constants/dictIm');
 
 let _socket = null;
 
+let _send = function (message) {
+  return new Promise((resolve, reject) => {
+    _socket && _socket.send(Resolver.solve(message), (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 let ImSocket = {
 
+  disconnect:function(){
+    _socket&&_socket.close();
+  },
+
+  reconnect:function(){
+    _socket&&_socket.open();
+  },
+
   init: function (token,lastSyncTime) {
+   // Alert('socket:' + _socket);
     if (_socket) return;
     // this.uri = ImWebSocket + AppStore.getToken();
     this.uri = 'ws://' + ImHost + '/' + token;
@@ -40,17 +60,12 @@ let ImSocket = {
 
   },
 
-  send: function (message) {
-    return new Promise((resolve, reject) => {
-      _socket && _socket.send(Resolver.solve(message), (error) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve();
-        }
-      });
-    });
-  }
+  sendSyncReq:()=>{
+    let message = {msgType: COMMAND_TYPE.SYNC_REQ}
+    _send(message);
+  },
+
+  send:(message)=>_send(message)
 };
 
 module.exports = ImSocket;

@@ -50,7 +50,7 @@ var TabView = React.createClass({
     //  sum = billSum;
     //  var show = sum >= 99 ? "99+" : sum;
     //  if (Platform.OS == 'ios') {
-    //    PushNotificationIOS.setApplicationIconBadgeNumber(sum);
+        PushNotificationIOS.setApplicationIconBadgeNumber(AppStore.getBadge());
     //  }
     //  return {
     //    billSum: show,
@@ -89,17 +89,19 @@ var TabView = React.createClass({
     //
     //  AppStateIOS.addEventListener('change', this._handleAppStateChange);
     //}
+    AppStore.addChangeListener(this._onChange,'IM_SESSION_LIST');
   },
 
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange);
-    //if (Platform.OS === 'ios') {
+    if (Platform.OS === 'ios') {
     //  AppStore.removeChangeListener(this._onChange);
     //  PushNotificationIOS.removeEventListener('register', AppAction.notificationRegister);
     //  PushNotificationIOS.removeEventListener('notification', AppAction.onNotification);
     //  AppStateIOS.removeEventListener('change', this._handleAppStateChange);
-    //  PushNotificationIOS.setApplicationIconBadgeNumber(0);
-    //}
+      PushNotificationIOS.setApplicationIconBadgeNumber(0);
+    }
+    AppStore.removeChangeListener(this._onChange,'IM_SESSION_LIST')
   },
 
   _handleAppStateChange: function (currentAppState) {
@@ -164,7 +166,7 @@ var TabView = React.createClass({
 
           <TabBarIOS.Item
             title="IM"
-            badge={this.state.badge}
+            badge={this.state.badge || null}
             icon={require('../../image/tab/IM.png')}
             selected={this.state.selectedTab === 'IM'}
             onPress={() => {this.setState({selectedTab: 'IM'})}}>
@@ -208,7 +210,10 @@ var TabView = React.createClass({
             icon={require('../../image/tab/publish.png')}
             selectedIcon={require('../../image/tab/publish-selected.png')}
             exec={this.props.exec}
-            onPress={() => {navigator.push({comp: Publish})}}
+            onPress={() => {navigator.push({
+            comp: Publish,
+            sceneConfig: Navigator.SceneConfigs.FloatFromBottomAndroid
+            })}}
           >
           </View>
 

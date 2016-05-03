@@ -15,15 +15,16 @@ let ContactAction = require('../../framework/action/contactAction');
 let DictIcon = require('../../constants/dictIcon');
 let AppStore = require('../../framework/store/appStore');
 let MembersBar = require('./membersBar');
+let { IM_GROUP } = require('../../constants/dictEvent');
 
 let EditGroup = React.createClass({
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange);
+    AppStore.addChangeListener(this._onChange, IM_GROUP);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange);
+    AppStore.removeChangeListener(this._onChange, IM_GROUP);
   },
   _onChange: function () {
       this.setState(this.getStateFromStores());
