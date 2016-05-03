@@ -367,7 +367,7 @@ let Market = React.createClass({
       pickTimeRow: rowId,
       optionTwoText: this.state.termSource[rowId].fieldDisplayName,
       orderField: this.state.termSource[rowId].fieldName,
-      orderType: this.state.termSource[rowId].asc ? 'asc' : 'desc',
+      orderType: this.state.termSource[rowId].fieldName == 'amount' ? 'asc' : 'desc'
     });
 
     this.refs.marketGiftedListView._refresh();

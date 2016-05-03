@@ -25,6 +25,7 @@ let NavBarView = require('../../framework/system/navBarView');
 let SelectBtn = require('../publish/selectBtn');
 let Remarks = require('../publish/remarks');
 let ImagePicker = require('../../comp/utils/imagePicker');
+let Validation = require('../../comp/utils/validation');
 let DateHelper = require('../../comp/utils/dateHelper');
 let Input = require('../../comp/utils/input');
 let Adjust = require('../../comp/utils/adjust');
@@ -40,38 +41,33 @@ let amountUnit = ['万', '亿'];
 
 let MyBizDetail = React.createClass({
   getInitialState(){
-    let filterItems = AppStore.getFilters().filterItems;
     let marketInfo = this.props.param.marketInfo;
+    let t = new Date(marketInfo.lastModifyDate);
+
     return {
-      detailData: '',
-      bizOrderOwnerBean: '',
       marketInfo: marketInfo,
-      filterItems: filterItems,
-      bizOrientationDefault: 0,
-      termDefault: 0,
-      amountDefault: 0,
-      termText: '',
-      amountText: '',
-      rateText: '',
-      remarkText: '',
-      lastModifyDate: '',
+      bizOrientationDefault: (marketInfo.bizOrientation == 'IN') ? 0 : 1,
+      termDefault: (marketInfo.amount <= 100000000) ? 0 : 1,
+      amountDefault: (marketInfo.term < 30) ? 0 : (marketInfo.term < 365) ? 1 : 2,
+      termText: marketInfo.term == null || marketInfo.term == 0 ? '' : (marketInfo.term < 30) ? marketInfo.term.toString() : (marketInfo.term < 365) ? (marketInfo.term / 30).toString() : (marketInfo.term / 365).toString(),
+      amountText: marketInfo.amount == null || marketInfo.amount == 0 ? '' : (marketInfo.amount <= 100000000) ? (marketInfo.amount / 10000).toString() : (marketInfo.amount / 100000000).toString(),
+      rateText: marketInfo.rate == null || marketInfo.rate == 0 ? '' : marketInfo.rate.toString(),
+      remarkText: marketInfo.remark,
+      lastModifyDate: DateHelper.formatBillDetail(t),
       //networt
-      id: '',
+      id: marketInfo.id,
       term: marketInfo.term,
       rate: marketInfo.rate,
-      remark: '',
-      bizOrientation: '',
-      bizCategory: '',
-      bizItem: '',
+      remark: marketInfo.remark,
+      bizOrientation: marketInfo.bizOrientation,
+      bizCategory: marketInfo.bizCategory,
+      bizItem: marketInfo.bizItem,
       amount: marketInfo.amount,
-      fileUrlList: []
+      fileUrlList: marketInfo.fileUrlList
     }
   },
 
   componentDidMount() {
-    InteractionManager.runAfterInteractions(() => {
-      this.getBizOrderByCreator(this.state.marketInfo.id);
-    });
   },
 
   render: function () {
@@ -155,7 +151,7 @@ let MyBizDetail = React.createClass({
         style={{marginTop:10,height:36,alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
         <Text
           style={{fontSize:16,marginLeft:10,color:'white'}}
-        >{'业务类型: ' + this.state.detailData.bizCategoryDesc + '-' + this.state.detailData.bizItemDesc
+        >{'业务类型: ' + this.state.marketInfo.bizCategoryDesc + '-' + this.state.marketInfo.bizItemDesc
         }</Text>
       </View>
     )
@@ -178,7 +174,7 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
           <View style={{flexDirection:'row'}}>
-            {this.returnItem('方向:',this.state.marketInfo.bizOrientationDesc)}
+            {this.returnItem('方向:', this.state.marketInfo.bizOrientationDesc)}
           </View>
         </View>
       );
@@ -205,7 +201,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('期限:',this.state.marketInfo.term == null ? '--' : this.state.marketInfo.term)}
+          {this.returnItem('期限:', this.state.marketInfo.term == null ? '--' : this.state.marketInfo.term)}
         </View>
       );
     }
@@ -231,7 +227,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('金额:',this.state.marketInfo.amount == null ? '--' : this.state.marketInfo.amount)}
+          {this.returnItem('金额:', this.state.marketInfo.amount == null ? '--' : this.state.marketInfo.amount)}
         </View>
       );
     }
@@ -245,7 +241,7 @@ let MyBizDetail = React.createClass({
             <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
                    iconStyle={{}} placeholderTextColor='#325779'
                    inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
-                   placeholder='0-100.00' maxLength={3} field='rateText' inputType="numeric"
+                   placeholder='0-99.99' maxLength={3} field='rateText' inputType="numeric"
                    onChangeText={this._onChangeText}
                    value={this.state.rateText}
                    editable={false}
@@ -257,7 +253,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('利率:',this.state.marketInfo.rate == null ? '--' : this.state.marketInfo.rate + '%')}
+          {this.returnItem('利率:', this.state.marketInfo.rate == null ? '--' : this.state.marketInfo.rate + '%')}
         </View>
       );
     }
@@ -300,7 +296,7 @@ let MyBizDetail = React.createClass({
       return (
         <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:'white'}}>{'附件:'}</Text>
       );
-    }else{
+    } else {
       return <View></View>;
     }
   },
@@ -346,7 +342,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row'}}>
-          {this.returnItem('备注:',this.state.remarkText == null || this.state.remarkText.length == 0? '--' : this.state.marketInfo.remarkText)}
+          {this.returnItem('备注:', this.state.remarkText == null || this.state.remarkText.length == 0 ? '--' : this.state.marketInfo.remarkText)}
         </View>
       );
     }
@@ -354,7 +350,7 @@ let MyBizDetail = React.createClass({
   renderModifyData: function () {
     return (
       <View style={{flexDirection:'row',alignItems:'center',marginTop:10}}>
-        {this.returnItem('最近修改时间:',this.state.lastModifyDate)}
+        {this.returnItem('最近修改时间:', this.state.lastModifyDate)}
       </View>
 
     )
@@ -371,7 +367,7 @@ let MyBizDetail = React.createClass({
           </View>
         </TouchableHighlight>
       );
-    }else{
+    } else {
       return <View></View>;
     }
   },
@@ -380,15 +376,25 @@ let MyBizDetail = React.createClass({
     return (
       <View style={{marginLeft:10,flexDirection:'row',alignItems:'center',paddingVertical:5}}>
         <Text style={{fontSize:15,color:'white',flex:1}}>{desc}</Text>
-        <Text style={{marginLeft:10,fontSize:15,color:(desc == '最近修改时间:')?'#ffd547':'white',width:225/375*screenWidth}}>{value}</Text>
+        <Text
+          style={{marginLeft:10,fontSize:15,color:(desc == '最近修改时间:')?'#ffd547':'white',width:225/375*screenWidth}}>{value}</Text>
       </View>
     )
   },
 
   _pressSave: function () {
-    {
+    if (!Validation.isTerm(this.state.termText)) {
+      Alert('格式不合法：请输入整数');
+    } else if (!Validation.isAmount(this.state.amountText)) {
+      Alert('格式不合法：请输入整数');
+    } else if (!Validation.isRate(this.state.rateText)) {
+      Alert('格式不合法：请输入0-99.99之间的小数');
+    } else if (this.state.amount > 100000000000) {
+      Alert('您输入的金额过大');
+    } else {
       this.updateBizOrder();
     }
+
   },
   shutDownBiz: function () {
     {
@@ -434,37 +440,15 @@ let MyBizDetail = React.createClass({
     );
   },
 
-  setStsteWithBizDetail: function (response) {
-    let t = new Date(response.lastModifyDate);
-    this.setState({
-      id: response.id,
-      detailData: response,
-      bizOrderOwnerBean: response.bizOrderOwnerBean,
-      fileUrlList: response.fileUrlList,
-      bizOrientation: response.bizOrientation,
-      bizOrientationDefault: (response.bizOrientation == 'IN') ? 0 : 1,
-      termText: response.term == null ? '' : (response.term < 30) ? ((response.term).toString()) : (response.term < 365) ? (response.term / 30).toString() : (response.term / 365).toString(),
-      termDefault: (response.term < 30) ? 0 : (response.term < 365) ? 1 : 2,
-      amountText: response.amount == null ? '' : (response.amount >= 100000000) ? (response.amount / 100000000).toString() : (response.amount / 10000).toString(),
-      amountDefault: (response.amount <= 100000000) ? 0 : 1,
-      rateText: response.rate == null ? '' : (response.rate * 100).toString(),
-      remarkText: response.remark,
-      lastModifyDate: DateHelper.formatBillDetail(t),
-      bizCategory: response.bizCategory,
-      bizItem: response.bizItem
-    })
-  },
-
   requestParameter: function () {
     this.setState({
       term: (this.state.termDefault == 0) ? Number(value) : (this.state.termDefault == 1) ? Number(value) * 30 : Number(value) * 365,
       amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000,
-      rate: Number(this.state.rateText)/100
+      rate: Number(this.state.rateText) / 100
     });
   },
 
   updateBizOrder: function () {
-    this.requestParameter;
     this.props.exec(
       ()=> {
         return MarketAction.updateBizOrder({
@@ -508,16 +492,20 @@ let MyBizDetail = React.createClass({
     );
   },
   handleSendImage(uri) {
-    ImAction.uploadImage(uri)
-      .then((response) => {
-        let arr = [];
-        arr.push(response.fileUrlList);
-        this.setState({
-          fileUrlList: arr
-        });
-      }).catch((errorData) => {
-      console.log('Image upload error ' + JSON.stringify(errorData));
-    });
+    this.props.exec(
+      ()=> {
+        return ImAction.uploadImage(uri)
+          .then((response) => {
+            let arr = [];
+            arr.push(response.fileUrl);
+            this.setState({
+              fileUrlList: arr
+            });
+          }).catch((errorData) => {
+            console.log('Image upload error ' + JSON.stringify(errorData));
+          });
+      }
+    )
   },
 
   handleImageError(error) {
