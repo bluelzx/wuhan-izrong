@@ -219,20 +219,36 @@ let Market = React.createClass({
       })
     }
   },
+
+  termChangeHelp(term){
+    if(term == null || term == 0){
+      return '--';
+    }else if (term % 365 == 0){
+      return term/365 + '年';
+    }else if (term % 30 == 0){
+      return term/30 + '月';
+    }else if (term == 1){
+      return '隔夜';
+    }
+    else{
+      return term + '天';
+    }
+  },
+
   _renderRow: function (rowData) {
     if (!rowData) {
       return <View></View>;
     }
 
     return (
-      <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
+          <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
         <View
           style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926',}}>
           <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
           <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:'white',}}>
-            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天' }
+            {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>

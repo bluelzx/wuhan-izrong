@@ -151,6 +151,22 @@ let Market = React.createClass({
       }
     );
   },
+
+  termChangeHelp(term){
+    if(term == null || term == 0){
+      return '--';
+    }else if (term % 365 == 0){
+      return term/365 + '年';
+    }else if (term % 30 == 0){
+      return term/30 + '月';
+    }else if (term == 1){
+      return '隔夜';
+    }
+    else{
+      return term + '天';
+    }
+  },
+
   _renderRow: function (rowData) {
     if (!rowData) {
       return <View></View>;
@@ -165,7 +181,7 @@ let Market = React.createClass({
           />
           <Text
             style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}>
-            {rowData.term == null || rowData.term == 0 ? '--' :  rowData.term + '天'}
+            {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'?'rgba(175,134,86,1)':'#386085'}}>

@@ -47,9 +47,9 @@ let MyBizDetail = React.createClass({
     return {
       marketInfo: marketInfo,
       bizOrientationDefault: (marketInfo.bizOrientation == 'IN') ? 0 : 1,
-      termDefault: (marketInfo.term < 30) ? 0 : (marketInfo.term < 365) ? 1 : 2,
+      termDefault: marketInfo.term == null || marketInfo.term == 0 ? 0 :(marketInfo.term % 365 == 0) ? 2 : (marketInfo.term % 30 == 0) ? 1 : 0,
       amountDefault: (marketInfo.amount <= 100000000) ? 0 : 1,
-      termText: marketInfo.term == null || marketInfo.term == 0 ? '' : (marketInfo.term < 30) ? marketInfo.term.toString() : (marketInfo.term < 365) ? (marketInfo.term / 30).toString() : (marketInfo.term / 365).toString(),
+      termText: this.termChangeHelp(marketInfo.term).toString(),
       amountText: marketInfo.amount == null || marketInfo.amount == 0 ? '' : (marketInfo.amount <= 100000000) ? (marketInfo.amount / 10000).toString() : (marketInfo.amount / 100000000).toString(),
       rateText: marketInfo.rate == null || marketInfo.rate == 0 ? '' : (marketInfo.rate * 100).toString(),
       remarkText: marketInfo.remark,
@@ -69,6 +69,33 @@ let MyBizDetail = React.createClass({
 
   componentDidMount() {
   },
+
+  termChangeHelp(term){
+    if(term == null || term == 0){
+      return '';
+    }else if (term % 365 == 0){
+      return term/365
+    }else if (term % 30 == 0){
+      return term/30
+    } else{
+      return term
+    }
+  },
+
+    termLimitChangeHelp(term){
+        if(term == null || term == 0){
+            return '--';
+        }else if (term % 365 == 0){
+            return term/365 + '年';
+        }else if (term % 30 == 0){
+            return term/30 + '月';
+        }else if (term == 1){
+            return '隔夜';
+        }
+        else{
+            return term + '天';
+        }
+    },
 
   render: function () {
     let {title}  = this.props;
@@ -201,7 +228,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('期限:', this.state.marketInfo.term == null ? '--' : this.state.marketInfo.term + '天')}
+          {this.returnItem('期限:', this.termLimitChangeHelp(this.state.marketInfo.term))}
         </View>
       );
     }
