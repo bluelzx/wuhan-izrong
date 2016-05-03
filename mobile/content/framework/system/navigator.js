@@ -60,9 +60,10 @@ var Main = React.createClass({
       // DeviceEventEmitter.addListener('Test', function(e: Event) {
       //   console.log(e.test);
       // });
+    } else {
+      AppStateIOS.removeEventListener('change', this._handleAppStateChange);
+      AppStateIOS.addEventListener('change', this._handleAppStateChange);
     }
-    AppStateIOS.removeEventListener('change', this._handleAppStateChange);
-    AppStateIOS.addEventListener('change', this._handleAppStateChange);
     NotificationManager.openNotification();
     AppStore.saveNavigator(this.refs['navigator']);
 
@@ -87,8 +88,9 @@ var Main = React.createClass({
     AppStore.removeChangeListener(this._onChange);
     if (Platform.OS === 'android') {
       BackAndroid.removeEventListener('hardwareBackPress', this._onAndroidBackPressed);
+    } else {
+      AppStateIOS.removeEventListener('change', this._handleAppStateChange);
     }
-    AppStateIOS.removeEventListener('change', this._handleAppStateChange);
     NotificationManager.closeNotification();
   },
 
