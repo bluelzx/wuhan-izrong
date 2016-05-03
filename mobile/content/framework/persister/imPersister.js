@@ -8,14 +8,15 @@ const {
   MESSAGE,
 } = require('./schemas');
 
-let _saveMessage = (message) => {
+let _saveMessage = (message, ownerId) => {
   _realm.write(() => {
+    message.ownerId = ownerId;
     _realm.create(MESSAGE, message, true);
   });
 };
 
-let _getMessageBySessionId = (sessionId, page) => {
-  let msgs = _realm.objects(MESSAGE).filtered('sessionId == $0', sessionId).sorted('revTime', true);
+let _getMessageBySessionId = (sessionId, page, ownerId) => {
+  let msgs = _realm.objects(MESSAGE).filtered('sessionId == $0 && ownerId=' + ownerId, sessionId).sorted('revTime', true);
   // return msgs;
   let start = (page - 1) * 5;
   let end = page * 5;
@@ -32,8 +33,8 @@ let _resetMessageStatus = (msgId) => {
 };
 
 let ImPersister = {
-  saveMessage: (message) => _saveMessage(message),
-  getMessageBySessionId: (sessionId, page) => _getMessageBySessionId(sessionId, page),
+  saveMessage: (message, ownerId) => _saveMessage(message, ownerId),
+  getMessageBySessionId: (sessionId, page, ownerId) => _getMessageBySessionId(sessionId, page, ownerId),
   resetMessageStatus: (msgId) => _resetMessageStatus(msgId)
 };
 

@@ -3,15 +3,14 @@ let ImStore = require('../store/imStore');
 let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE } = require('../../constants/dictIm');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
-
 let _dealMsg = function (message) {
+  let userId = ContactSotre.getUserInfo().userId;
   console.log(message);
   switch (message.msgType) {
     case MSG_TYPE.EXCEPTION:
       console.log('[error] %s', message.errMsg);
       break;
     case MSG_TYPE.REC_P2P_MSG:
-      // ImAction.receive({
       ImStore.saveMsg({
         sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.fromUid),
         // sessionId: 'user:3',
@@ -26,7 +25,7 @@ let _dealMsg = function (message) {
         revTime: new Date(message.sendDate),
         isRead: Boolean(false),
         status: 'Seen'
-      });
+      }, userId);
       break;
     case MSG_TYPE.SERVER_REC_CONFIRM:
       ImStore.ackMsg(message.msgId, message.toUid);
@@ -55,7 +54,7 @@ let _dealMsg = function (message) {
         revTime:new Date(message.sendDate),
         isRead:Boolean(false),
         status:'Sean'
-      });
+      }, userId);
       break;
     case MSG_TYPE.PLATFORM_INFO:
     {

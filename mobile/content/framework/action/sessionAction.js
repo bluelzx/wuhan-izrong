@@ -48,8 +48,8 @@ let _deleteSession = function(sessionId) {
 /**
  * 查询会话
  * */
-let _queryAllSession = function() {
-  return SessiontStore.queryAllSession();
+let _queryAllSession = function(ownerId) {
+  return SessiontStore.queryAllSession(ownerId);
 }
 
 let sessionAction = {

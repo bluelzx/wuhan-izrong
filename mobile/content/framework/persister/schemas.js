@@ -40,7 +40,8 @@ let MessageSchema = {
     msgType: {type: 'string', optional: true},
     revTime: {type: 'date', optional: true},
     isRead: {type: 'bool', option: true},
-    status: {type: 'string', optional: true}//状态: 是否发送成功
+    status: {type: 'string', optional: true},//状态: 是否发送成功
+    ownerId:{type:'int',optional: true}
   }
 };
 

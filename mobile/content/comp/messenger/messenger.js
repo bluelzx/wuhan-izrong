@@ -63,7 +63,7 @@ let Messenger = React.createClass({
   _sendMessage(contentType, content, isReSend = false, msgId = '') {
     let msgToSend = {
       sessionId: this.props.param.sessionId,
-      msgId: isReSend ? msgId : KeyGenerator.getMessageKey(this.props.param.sessionId),
+      msgId: isReSend ? msgId : KeyGenerator.getMessageKey(this.props.param.sessionId, this.props.param.userId),
       fromUId: null,
       contentType: contentType,
       content: content,
@@ -88,7 +88,7 @@ let Messenger = React.createClass({
       });
     }
 
-    ImAction.send(msgToSend, isReSend);
+    ImAction.send(msgToSend, isReSend, this.props.param.userId);
   },
 
   handleSend(message = {}, rowID = null) {

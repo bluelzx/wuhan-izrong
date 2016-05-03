@@ -39,7 +39,7 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
   imInit: () => _imInit(),
   sessionInit: (data) => _sessionInit(data),
   getMessages: () => _data.messages,
-  saveMsg: (message) => _saveMsg(message),
+  saveMsg: (message, userId) => _saveMsg(message, userId),
   ackMsg: (msgId, toUid) => _ackMsg(msgId, toUid),
   getEarlier: () => _getEarlier(),
   createHomePageInfo:(seq, url)=>{
@@ -67,7 +67,7 @@ let _imInit = () => {
 };
 
 let _resovleMessages = (bInit = false) => {
-  let savedMessages = Persister.getMessageBySessionId(_data.sessionId, _data.page);
+  let savedMessages = Persister.getMessageBySessionId(_data.sessionId, _data.page, _data.userId);
   let tmpMessages = [];
   let tmpMessage = {};
   let name = _data.hisName;
@@ -121,7 +121,7 @@ let _sessionInit = (data) => {
   ImStore.emitChange(DictEvent.IM_SESSION);
 };
 
-let _saveMsg = (message) => {
+let _saveMsg = (message, userId) => {
 
   console.log(message);
 
@@ -221,7 +221,7 @@ let _saveMsg = (message) => {
     ImStore.emitChange(DictEvent.IM_SESSION);
   }
 
-  Persister.saveMessage(message);
+  Persister.saveMessage(message, userId);
 };
 
 let _ackMsg = (msgId, toUid) => {

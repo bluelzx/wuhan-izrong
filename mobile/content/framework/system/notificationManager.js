@@ -54,7 +54,7 @@ module.exports = {
         PushNotificationIOS.removeEventListener('register', CommonAction.notificationRegister);
         PushNotificationIOS.removeEventListener('notification', CommonAction.onNotification);
         AppStateIOS.removeEventListener('change', _handleAppStateChange);
-        PushNotificationIOS.setApplicationIconBadgeNumber(0);
+        //PushNotificationIOS.setApplicationIconBadgeNumber(0);
       }
   }
 

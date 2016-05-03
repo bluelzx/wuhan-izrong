@@ -18,6 +18,11 @@ let _send = function (message) {
   });
 }
 
+
+let _getUrl = function(token){
+  return 'ws://' + ImHost + '/' + token;
+}
+
 let ImSocket = {
 
   disconnect:function(){
@@ -30,9 +35,10 @@ let ImSocket = {
 
   init: function (token,lastSyncTime) {
    // Alert('socket:' + _socket);
-    if (_socket) return;
+    let newUrl = _getUrl(token);
+    if ( newUrl==this.uri && _socket) return;
     // this.uri = ImWebSocket + AppStore.getToken();
-    this.uri = 'ws://' + ImHost + '/' + token;
+    this.uri = newUrl;
     //this.uri = 'ws://localhost:3000/t001';
     console.log('###### Connect to %s', this.uri);
     _socket = Manager(this.uri,{lastSyncTime:lastSyncTime});

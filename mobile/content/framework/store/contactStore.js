@@ -23,9 +23,9 @@ let _getUsers = function() {
   return PersisterFacade.getUsersGroupByOrg();
 }
 
-let _getIMNotificationMessage = function() {
+let _getIMNotificationMessage = function(userId) {
 
-  let sessions = PersisterFacade.queryAllSession();
+  let sessions = PersisterFacade.queryAllSession(userId);
   let platformInfo = {};
   //按照msgType 分两组, p2p 和 group, p2p 按照fromUid再分组,取组内最新的一条瓶装数据,并统计未读数量  ,最终结果再按照时间排序
   let msgs = [];

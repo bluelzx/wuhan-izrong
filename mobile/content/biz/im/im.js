@@ -50,7 +50,8 @@ let WhitePage = React.createClass({
   },
 
   getStateFromStores: function() {
-    return {data:ContactStore.getIMNotificationMessage()};
+    let userInfo = ContactStore.getUserInfo();
+    return {data:ContactStore.getIMNotificationMessage(userInfo.userId)};
   },
 
   getInitialState: function(){
@@ -232,6 +233,8 @@ let WhitePage = React.createClass({
         //item.badge == groupId
         return ContactAction.acceptInvitation(item.badge).then(()=>{
           SessionStore.updateInViteSession(item.sessionId);
+        }).catch((err)=>{
+          Alert(err);
         });
       }
     );

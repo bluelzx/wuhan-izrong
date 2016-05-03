@@ -12,8 +12,8 @@ let _deleteSession = function(sessionId) {
   AppStore.emitChange(IM_SESSION_LIST);
 }
 
-let _queryAllSession = function() {
-  return PersisterFacade.queryAllSession();
+let _queryAllSession = function(ownerId) {
+  return PersisterFacade.queryAllSession(ownerId);
 }
 
 let _getGroupInfoBySessionId = function(sessionId, currentUserId) {

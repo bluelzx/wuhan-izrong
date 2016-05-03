@@ -218,6 +218,8 @@ var Main = React.createClass({
     if (this.state.token) {
       initComp = TabView;
      this.initSocket(this.state.token);
+    }else{
+      ImSocket.disconnect();
     }
     return (
       <View style={{ width: Device.width, height: Device.height }}>
