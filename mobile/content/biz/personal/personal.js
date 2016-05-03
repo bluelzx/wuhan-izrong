@@ -22,6 +22,7 @@ let AboutUs = require('./aboutUs');
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let AppStore = require('../../framework/store/appStore');
 let NameCircular = require('../im/nameCircular').NameCircular;
+let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
 
 let Personal = React.createClass({
   getStateFromStores: function () {
@@ -39,10 +40,12 @@ let Personal = React.createClass({
   },
 
   componentDidMount() {
+    AppStore.addChangeListener(this._onChange,USER_CHANGE);
     AppStore.addChangeListener(this._onChange,ORG_CHANGE);
   },
 
   componentWillUnmount: function () {
+    AppStore.removeChangeListener(this._onChange,USER_CHANGE);
     AppStore.removeChangeListener(this._onChange,ORG_CHANGE);
   },
 
