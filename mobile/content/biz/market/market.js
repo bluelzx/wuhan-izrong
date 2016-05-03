@@ -285,6 +285,7 @@ let Market = React.createClass({
           withSections={false} // enable sections
           emptyView={this._emptyView}
 
+          enableEmptySections={true}
           automaticallyAdjustContentInsets={false}
           customStyles={{
             paginationView: {

@@ -261,7 +261,8 @@ let Market = React.createClass({
           refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
           withSections={false} // enable sections
           emptyView={this._emptyView}
-
+          
+          enableEmptySections={true}
           automaticallyAdjustContentInsets={false}
           customStyles={{
             paginationView: {

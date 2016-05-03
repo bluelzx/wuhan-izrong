@@ -1,14 +1,15 @@
 package com.fasapp;
 
 import com.facebook.react.ReactActivity;
-import cl.json.RNSharePackage;
 import io.realm.react.RealmReactPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import cl.json.RNSharePackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 
 import com.fasapp.BuildConfig;
 import com.fasapp.pakage.ZXReactPackage;
 import com.fasapp.view.viewpager.ZXViewPagerManager;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 
@@ -43,12 +44,13 @@ public class MainActivity extends ReactActivity {
     @Override
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
-            new RNDeviceInfo(),
             new MainReactPackage(),
-            new RNSharePackage(),
             new RealmReactPackage(),
             new VectorIconsPackage(),
-            new ZXReactPackage()
+            new RNSharePackage(),
+            new RNDeviceInfo(),
+            new ZXReactPackage(),
+            new ExtraDimensionsPackage(this)
         );
     }
 }

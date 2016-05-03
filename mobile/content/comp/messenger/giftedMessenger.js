@@ -356,7 +356,7 @@ let GiftedMessenger = React.createClass({
 
   onKeyboardDidShow(e) {
     if(Platform.OS === 'android') {
-      //this.onKeyboardWillShow(e);
+      this.onKeyboardWillShow(e);
     }
     this.scrollToBottom();
   },
