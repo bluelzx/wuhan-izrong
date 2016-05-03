@@ -88,8 +88,8 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[2].id,
-      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 :item[2].itemArr[0].id,
+      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[0].id,
+      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 :item[0].itemArr[1].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -241,7 +241,7 @@ let Market = React.createClass({
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
             numberOfLines={1}>
-            {rowData.orgName}
+            {rowData.userName != null ? rowData.userName + '-' + rowData.orgName : rowData.orgName}
           </Text>
         </View>
       </TouchableHighlight>
@@ -251,7 +251,7 @@ let Market = React.createClass({
   _emptyView: function () {
     return(
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-        <Text style={{color:'white',fontSize:20}}>没有数据</Text>
+
       </View>
     );
   },

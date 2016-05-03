@@ -27,7 +27,7 @@ let NameCircular = React.createClass({
     if(showBadge) {
       if (badge > 0) {
         return (
-          <View style={[{marginLeft:22,marginTop:-15,width:18,height:18,borderRadius:9,backgroundColor:'red',
+          <View style={[{position:'absolute',marginLeft:25,top:0,width:18,height:18,borderRadius:9,backgroundColor:'red',
                 flexDirection:'row',justifyContent:'center',alignItems:'center'},badge>=99&&{height:20,width:(Platform.OS === 'ios')?24:22,marginLeft:18}]}>
             <Text style={{color:'white',fontSize:11}}>{badge >= 99 ? "99+" : badge}</Text>
           </View>
@@ -42,13 +42,18 @@ let NameCircular = React.createClass({
     let {name, badge} = this.props;
     let f = !name?'?':name[0];
     return (
-      <View style={{backgroundColor: this.getColor(f), height: 40,width: 40,borderRadius: 20,justifyContent:'center',alignItems:'center'}}>
-        <View style={{backgroundColor: 'white', height: 38,width: 38,borderRadius: 19,justifyContent:'center',alignItems:'center'}}>
-          <View style={{backgroundColor: this.getColor(f), height: 36,width: 36,borderRadius: 18,justifyContent:'center',alignItems:'center'}}>
-            {this.unReadIcon(badge,true)}
-            <Text style={{color:'white',fontWeight:'900',fontSize:20}}>{f}</Text>
+      <View>
+        <View
+          style={{backgroundColor: this.getColor(f), height: 40,width: 40,borderRadius: 20,justifyContent:'center',alignItems:'center'}}>
+          <View
+            style={{backgroundColor: 'white', height: 38,width: 38,borderRadius: 19,justifyContent:'center',alignItems:'center'}}>
+            <View
+              style={{backgroundColor: this.getColor(f), height: 36,width: 36,borderRadius: 18,justifyContent:'center',alignItems:'center'}}>
+              <Text style={{color:'white',fontWeight:'900',fontSize:20}}>{f}</Text>
+            </View>
           </View>
         </View>
+        {this.unReadIcon(badge, true)}
       </View>
     );
   }

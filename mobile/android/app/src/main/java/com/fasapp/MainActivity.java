@@ -1,8 +1,15 @@
 package com.fasapp;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.view.Menu;
+
 import com.facebook.react.ReactActivity;
 import cl.json.RNSharePackage;
 import io.realm.react.RealmReactPackage;
+
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
 import com.fasapp.BuildConfig;
@@ -16,6 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends ReactActivity {
+    public static ReactApplicationContext context;
+
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -35,10 +44,17 @@ public class MainActivity extends ReactActivity {
         return BuildConfig.DEBUG;
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
     /**
      * A list of packages used by the app. If the app uses additional views
      * or modules besides the default ones, add more packages here.
      */
+
+
 
     @Override
     protected List<ReactPackage> getPackages() {

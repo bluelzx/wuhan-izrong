@@ -228,6 +228,7 @@ let GiftedMessenger = React.createClass({
       <View>
         {this.renderDate(rowData, rowID)}
         <Message
+          chatInfo={this.props.chatInfo}
           rowData={rowData}
           rowID={rowID}
           onErrorButtonPress={this.props.onErrorButtonPress}
