@@ -28,12 +28,12 @@ let TextEdit = React.createClass({
       oldPublicValue: this.props.param.publicValue,
       publicName: this.props.param.publicName,
       oldValue: (value === null || value == '' || value == '未填写') ? '' : this.props.param.value.toString(),
-      newValue: '',
+      newValue: this.props.param.value == '未填写' ? ''  :this.props.param.value,
       newPublicValue: this.props.param.publicValue,
       type: type,
       tele: this.props.param.name == 'phoneNumber' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[0] ) : '',
       phone: this.props.param.name == 'phoneNumber' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[1]) : '',
-      valueDisabled: (value === null || value == '' || value == '未填写') ? false : true
+
     };
   },
 
@@ -64,6 +64,10 @@ let TextEdit = React.createClass({
 
     switch (this.props.param.name) {
       case 'realName':
+        if(this.state.newValue.length == 0){
+          Alert('姓名不能为空');
+          break;
+        }
         let reg =new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5]+$");
         if (!reg.test(this.state.newValue)) {
           Alert("请输入正确的姓名");
@@ -81,8 +85,13 @@ let TextEdit = React.createClass({
         });
         if (Validation.isTelephone(this.state.newValue)) {
           this.updateUserInfo();
-        } else if((this.state.newValue !== '未填写-undefined') && (this.state.tele != '' && this.state.phone != '')){
-          Alert('请输入13个字符内的有效的座机号');
+        } else if((this.state.newValue == '未填写-undefined') || (this.state.tele == '' && this.state.phone == '')){
+            const { navigator } = this.props;
+            if (navigator) {
+                navigator.pop();
+            }
+        } else {
+            Alert('请输入13个字符内的有效的座机号');
         }
         break;
       case 'qqNo':
@@ -101,18 +110,18 @@ let TextEdit = React.createClass({
         break;
 
       case 'department':
-        if (Validation.isChineseAndEnglish(this.state.newValue)) {
-          this.updateUserInfo();
-        } else {
-          Alert('请输入20个字符内的部门信息');
-        }
+          if(this.state.newValue.length > 20){
+              Alert('请输入20个字符内的部门信息');
+          }else {
+              this.updateUserInfo();
+          }
         break;
       case 'jobTitle':
-        if (Validation.isChineseAndEnglish(this.state.newValue)) {
-          this.updateUserInfo();
-        } else {
-          Alert('请输入20个字符内的职位信息');
-        }
+          if(this.state.newValue.length > 20){
+              Alert('请输入20个字符内的职位信息');
+          }else {
+              this.updateUserInfo();
+          }
         break;
       default:
         this.updateUserInfo();
@@ -122,9 +131,6 @@ let TextEdit = React.createClass({
   updateUserInfo: function () {
     let data = {};
 
-    if(this.state.newValue.length == 0){
-        return;
-    }
     if (this.state.newValue != this.state.oldValue) {
 
       if (this.state.newPublicValue == this.state.oldPublicValue || this.state.publicName == '') {
@@ -150,6 +156,11 @@ let TextEdit = React.createClass({
         value: this.state.newPublicValue
       }];
       this.update(data);
+    }else {
+      const { navigator } = this.props;
+      if (navigator) {
+        navigator.pop();
+      }
     }
   },
 
@@ -163,7 +174,7 @@ let TextEdit = React.createClass({
           });
           const { navigator } = this.props;
           if (navigator) {
-            this.props.navigator.pop();
+              navigator.pop();
           }
         }).catch((errorData) => {
           Alert(errorData.msgContent || errorData.message);
@@ -173,8 +184,8 @@ let TextEdit = React.createClass({
 
   renderUpdate: function () {
     return (
-      <TouchableOpacity style={{width: 150}} activeOpacity={1} onPress={()=>this.validate()}>
-        <Text style={{color: this.state.valueDisabled ? '#ffffff' : '#a0a0a0'}}>
+      <TouchableOpacity style={{width: 150}} activeOpacity={0.5} onPress={()=>this.validate()}>
+        <Text style={{color: '#ffffff'}}>
           完成
         </Text>
       </TouchableOpacity>

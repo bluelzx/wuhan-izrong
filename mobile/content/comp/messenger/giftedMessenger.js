@@ -212,7 +212,7 @@ let GiftedMessenger = React.createClass({
         }
       }
     }
-    return null;
+    return <View></View>;
   },
 
   renderRow(rowData = {}, sectionID = null, rowID = null) {
@@ -228,6 +228,7 @@ let GiftedMessenger = React.createClass({
       <View>
         {this.renderDate(rowData, rowID)}
         <Message
+          chatInfo={this.props.chatInfo}
           rowData={rowData}
           rowID={rowID}
           onErrorButtonPress={this.props.onErrorButtonPress}
@@ -356,7 +357,7 @@ let GiftedMessenger = React.createClass({
 
   onKeyboardDidShow(e) {
     if(Platform.OS === 'android') {
-      //this.onKeyboardWillShow(e);
+      this.onKeyboardWillShow(e);
     }
     this.scrollToBottom();
   },
@@ -518,7 +519,7 @@ let GiftedMessenger = React.createClass({
         }
       }
     }
-    return null;
+    return <View></View>;
   },
 
 
@@ -675,6 +676,7 @@ let GiftedMessenger = React.createClass({
           }}
 
           style={this.styles.listView}
+          enableEmptySections={true}
 
           keyboardShouldPersistTaps={this.props.keyboardShouldPersistTaps} // @issue keyboardShouldPersistTaps={false} + textInput focused = 2 taps are needed to trigger the ParsedText links
           keyboardDismissMode={this.props.keyboardDismissMode}
@@ -873,6 +875,8 @@ let GiftedMessenger = React.createClass({
             onSelected={(response) => this.props.handleSendImage(response)}
             onError={(error) => this.props.handleImageError(error)}
             title="选择图片"
+            fileId="selectImage"
+            allowsEditing={true}
             style={this.styles.panelItem}
           >
             <Image
@@ -886,6 +890,8 @@ let GiftedMessenger = React.createClass({
             type="camera"
             onSelected={(response) => { console.log(response)}}
             title="选择图片"
+            fileId="selectCamera"
+            allowsEditing={true}
             style={this.styles.panelItem}
           >
             <Image

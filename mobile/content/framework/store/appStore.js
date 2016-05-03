@@ -7,10 +7,10 @@ let EventEmitter = require('events').EventEmitter;
 
 let Persister = require('../persister/persisterFacade');
 //let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
+let { Default_EVENT, MARKET_CHANGE ,ORG_CHANGE ,USER_CHANGE} = require('../../constants/dictEvent');
 
 let _info = {
   initLoadingState: true,
-  CHANGE_EVENT: 'change',
   netWorkState: false,
   isLogout: false,
   isForceLogout: false,
@@ -21,15 +21,17 @@ let _info = {
 let _data = {};
 
 let AppStore = _.assign({}, EventEmitter.prototype, {
-  saveNavigator:(nv)=>{_data.navigator = nv},
-  getNavigator:()=>_data.navigator || {},
-  addChangeListener: function (callback, event = _info.CHANGE_EVENT) {
+  saveNavigator: (nv)=> {
+    _data.navigator = nv
+  },
+  getNavigator: ()=>_data.navigator || {},
+  addChangeListener: function (callback, event = Default_EVENT) {
     this.on(event, callback);
   },
-  removeChangeListener: function (callback, event = _info.CHANGE_EVENT) {
+  removeChangeListener: function (callback, event = Default_EVENT) {
     this.removeListener(event, callback);
   },
-  emitChange: function (event = _info.CHANGE_EVENT) {
+  emitChange: function (event = Default_EVENT) {
     this.emit(event);
   },
   getNetWorkState: () => _info.netWorkState,
@@ -38,7 +40,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   isForceLogout: () => _info.isForceLogout,
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
-  updateLastSyncTime:(t)=>_updateLastSyncTime(t),
+  updateLastSyncTime: (t)=>_updateLastSyncTime(t),
   getToken: () => _data.token || '',
   //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
   //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTA5IiwiaWF0IjoxNDYxNTUzMTgzLCJzdWIiOiJ3ZWlzZW4zIiwiaXNzIjoiVXNlcklkLTEwOSJ9.SahHndVnBfJo2RforCkAN0XMXAcrL10Gzi3-EMQQsBM',
@@ -50,7 +52,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
-  getOrgByOrgName:(orgName) => _getOrgByOrgName(orgName),
+  getOrgByOrgName: (orgName) => _getOrgByOrgName(orgName),
   saveFilters: (filters) => _saveFilters(filters),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
@@ -60,11 +62,11 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getCategory: ()=> _getCategory(),
   saveItem: (data) => _saveItem(data),
   getItem: ()=> _getItem(),
-  queryAllPlatFormInfo:()=>_queryAllPlatFormInfo(),
-  getBadge:()=>_getBadge(),
+  queryAllPlatFormInfo: ()=>_queryAllPlatFormInfo(),
+  getBadge: ()=>_getBadge(),
 });
 
-let _queryAllPlatFormInfo = function(){
+let _queryAllPlatFormInfo = function () {
   return Persister.queryAllPlatFormInfo();
 }
 
@@ -102,7 +104,7 @@ let _register = (data) => {
 };
 
 let _login = (data) => {
-  return Persister.saveAppData(data).then(()=>{
+  return Persister.saveAppData(data).then(()=> {
     _.assign(_data, {
       token: _getToken()
     });
@@ -114,15 +116,14 @@ let _login = (data) => {
 let _logout = (userId) => {
   Persister.logout(userId);
   _info.isLogout = true;
-  //TODO:'登出'
+  _data.token = '';
   AppStore.emitChange();
 };
 
 let _force_logout = () => {
-  Persister.logout(userId);
   _info.isLogout = true;
   _info.isForceLogout = true;
-  //TODO:'登出'
+  //TODO:'强制登出'
   AppStore.emitChange();
 };
 
@@ -150,10 +151,10 @@ let _getLoginUserInfo = () => {
   return Persister.getLoginUserInfo();
 };
 
-let _saveFilters = function(filters){
+let _saveFilters = function (filters) {
   _data.filters = filters;
   Persister.saveFilters(filters);
-  AppStore.emitChange('MARKET_CHANGE');
+  AppStore.emitChange(MARKET_CHANGE);
 };
 
 let _getFilters = ()=> {
@@ -161,6 +162,8 @@ let _getFilters = ()=> {
 };
 
 let _saveOrgList = (orgList)=> {
+  _data.orgList = orgList;
+  AppStore.emitChange(ORG_CHANGE);
   Persister.saveOrgList(orgList);
 };
 
@@ -179,10 +182,10 @@ let _getOrgByOrgName = (orgName)=> {
 
 let _updateUserInfo = (column, value)=> {
   Persister.updateUserInfo(column, value);
-  AppStore.emitChange();
+  AppStore.emitChange(USER_CHANGE);
 };
 
-let _updateLastSyncTime = function(t){
+let _updateLastSyncTime = function (t) {
   Persister.updateLastSyncTime(t);
 };
 
@@ -210,5 +213,6 @@ let _getItem = () => {
 
 let _getBadge = () => {
   let badge = Persister.getSessionBadge();
+  return badge;
 };
 module.exports = AppStore;

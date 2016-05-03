@@ -2,12 +2,13 @@ const MSG_CONTENT_TYPE = {
   TEXT: 'text',
   IMAGE: 'image',
   NAMECARD:'namecard',
-  BIZINFO:'bizInfo',
+  BIZINFO:'bizinfo',
 };
 
 const COMMAND_TYPE = {
   SEND_P2P_MSG: 'sendP2PMsg',
-  SEND_GROUP_MSG: 'sendGroupMsg'
+  SEND_GROUP_MSG: 'sendGroupMsg',
+  SYNC_REQ:'SYNC_REQ'
 };
 
 const MSG_TYPE = {
@@ -34,16 +35,9 @@ const SESSION_TYPE = {
   PLATFORMINFO:'platforminfo',
 };
 
-const CHANGE_EVENT = {
-  CHANGE: 'CHANGE',
-  ADD: 'ADD',
-  UPDATE: 'UPDATE'
-};
-
 module.exports = {
   MSG_CONTENT_TYPE: MSG_CONTENT_TYPE,
   COMMAND_TYPE: COMMAND_TYPE,
   MSG_TYPE: MSG_TYPE,
   SESSION_TYPE: SESSION_TYPE,
-  CHANGE_EVENT: CHANGE_EVENT
 };

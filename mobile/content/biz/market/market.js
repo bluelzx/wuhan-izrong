@@ -32,6 +32,8 @@ let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
 
+let { MARKET_CHANGE } = require('../../constants/dictEvent');
+
 let {Alert, GiftedListView} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
 let numeral = require('numeral');
@@ -67,8 +69,8 @@ let Market = React.createClass({
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[2].displayName,
-      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[2].itemArr[0].displayName,
+      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[0].displayName,
+      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[0].itemArr[1].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -86,8 +88,8 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[2].id,
-      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 :item[2].itemArr[0].id,
+      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[0].id,
+      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 :item[0].itemArr[1].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -96,11 +98,11 @@ let Market = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange, 'MARKET_CHANGE');
+    AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange, 'MARKET_CHANGE');
+    AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   _onChange () {
@@ -217,29 +219,45 @@ let Market = React.createClass({
       })
     }
   },
+
+  termChangeHelp(term){
+    if(term == null || term == 0){
+      return '--';
+    }else if (term % 365 == 0){
+      return term/365 + '年';
+    }else if (term % 30 == 0){
+      return term/30 + '月';
+    }else if (term == 1){
+      return '隔夜';
+    }
+    else{
+      return term + '天';
+    }
+  },
+
   _renderRow: function (rowData) {
     if (!rowData) {
-      return null;
+      return <View></View>;
     }
 
     return (
-      <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
+          <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
         <View
           style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926',}}>
           <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
           <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:'white',}}>
-            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天' }
+            {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount <= 100000000 ? numeral(rowData.amount / 10000).format('0,0') + '万' : numeral(rowData.amount / 100000000).format('0,0') + '亿'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount < 100000000 ? numeral(rowData.amount / 10000).format('0,0') + '万' : numeral(rowData.amount / 100000000).format('0,0') + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
             numberOfLines={1}>
-            {rowData.orgName}
+            {rowData.userName != null ? rowData.userName + '-' + rowData.orgName : rowData.orgName}
           </Text>
         </View>
       </TouchableHighlight>
@@ -249,7 +267,7 @@ let Market = React.createClass({
   _emptyView: function () {
     return(
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-        <Text style={{color:'white',fontSize:20}}>没有数据</Text>
+
       </View>
     );
   },
@@ -283,6 +301,7 @@ let Market = React.createClass({
           withSections={false} // enable sections
           emptyView={this._emptyView}
 
+          enableEmptySections={true}
           automaticallyAdjustContentInsets={false}
           customStyles={{
             paginationView: {
@@ -365,7 +384,7 @@ let Market = React.createClass({
       pickTimeRow: rowId,
       optionTwoText: this.state.termSource[rowId].fieldDisplayName,
       orderField: this.state.termSource[rowId].fieldName,
-      orderType: this.state.termSource[rowId].asc ? 'asc' : 'desc',
+      orderType: this.state.termSource[rowId].fieldName == 'amount' ? 'asc' : 'desc'
     });
 
     this.refs.marketGiftedListView._refresh();
@@ -430,10 +449,12 @@ let Market = React.createClass({
           <ListView
             style={{backgroundColor:'#162a40',height:180,position:"absolute",left:0,top:0,opacity:this.state.clickFilterType}}
             dataSource={data.cloneWithRows(this.state.categorySource)}
+            enableEmptySections={true}
             renderRow={this.renderTypeRow1}/>
           <ListView
             style={{backgroundColor:'#244266',height:180,position:"absolute",left:screenWidth/3,top:0,opacity:this.state.clickFilterType}}
             dataSource={data.cloneWithRows(this.state.itemSource)}
+            enableEmptySections={true}
             renderRow={this.renderTypeRow2}/>
         </View>
       )
@@ -455,6 +476,7 @@ let Market = React.createClass({
           <ListView
             style={{backgroundColor:'#244266',height:108,position:"absolute",left:0,top:0,opacity:this.state.clickFilterTime}}
             dataSource={data.cloneWithRows(this.state.termSource)}
+            enableEmptySections={true}
             renderRow={this.renderTimeRow}
           />
         </View>
@@ -466,7 +488,7 @@ let Market = React.createClass({
     if (this.state.clickFilterOther == 0) {
       return (
         <View></View>
-      )
+      );
     } else {
       return (
         <View
@@ -477,7 +499,7 @@ let Market = React.createClass({
                 style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
                 <Text
                   style={{fontSize:16,marginLeft:10,width: screenWidth-66,color:'white'}}
-                  numberOfLines={1}>{this.state.orgValue == '' ? '选择发布机构' : this.state.orgValue}</Text>
+                  numberOfLines={1}>{this.state.orgValue == '' ? '全部发布机构' : this.state.orgValue}</Text>
                 <Image style={{margin:10,width:16,height:16}}
                        source={require('../../image/market/next.png')}
                 />
@@ -495,19 +517,19 @@ let Market = React.createClass({
               <View style={{alignItems: 'center',justifyContent:'center'}}>
                 <View
                   style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:30,borderColor:'#ed135a',borderWidth:1}}>
-                  <Text style={{color:'#ed135a',}}>{'清空'}</Text>
+                  <Text style={{color:'#ed135a'}}>{'清空'}</Text>
                 </View>
               </View>
             </TouchableHighlight>
             <TouchableHighlight onPress={() => this.confirmBtn()} underlayColor='rgba(129,127,201,0)'>
               <View
                 style={{margin:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
-                <Text style={{fontWeight: 'bold', color:'white',}}>{'确定'}</Text>
+                <Text style={{fontWeight: 'bold', color:'white'}}>{'确定'}</Text>
               </View>
             </TouchableHighlight>
           </ScrollView>
         </View>
-      )
+      );
     }
     this.clearOptions();
   },
@@ -521,7 +543,7 @@ let Market = React.createClass({
           <Text style={{marginLeft:10,color:'white'}}>{rowData.displayName}</Text>
         </View>
       </TouchableOpacity>
-    )
+    );
   },
   renderTypeRow2(rowData, sectionID, rowID){
     return (
@@ -533,7 +555,7 @@ let Market = React.createClass({
           <Text style={{marginLeft:10,color:'white'}}>{rowData.displayName}</Text>
         </View>
       </TouchableOpacity>
-    )
+    );
   },
   renderTimeRow(rowData, sectionID, rowID){
     return (
@@ -545,7 +567,7 @@ let Market = React.createClass({
           <Text style={{marginLeft:10,color:'white'}}>{rowData.fieldDisplayName}</Text>
         </View>
       </TouchableOpacity>
-    )
+    );
   },
   callBack: function (item, title, rowDefault, isAll) {
     if (title == '方向') {
@@ -592,6 +614,9 @@ let Market = React.createClass({
     this.refs["ORIENTATION"].setDefaultState();
     this.refs["TERM"].setDefaultState();
     this.refs["AMOUNT"].setDefaultState();
+    this.setState({
+          orgValue:''
+    });
   },
 
   confirmBtn: function () {

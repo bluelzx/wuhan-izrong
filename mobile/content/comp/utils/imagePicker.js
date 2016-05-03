@@ -49,7 +49,8 @@ let ImagePicker = React.createClass({
       storageOptions: { // if this key is provided, the image will get saved in the documents directory (rather than a temporary directory)
         skipBackup: true, // image will NOT be backed up to icloud
         path: 'images' // will save image at /Documents/images rather than the root
-      }
+      },
+      language:'Chinese'
     };
 
     let onResponse = (response) => {
@@ -84,9 +85,8 @@ let ImagePicker = React.createClass({
   },
 
   _selectAndroid: function () {
-    // PhotoPicker.showImagePic(true,'nameCard',(response)=>console.log('Response = ', response));
-    UserPhotoPicModule.showImagePic(this.props.type,true, this.props.fileId,
-       (response) => {
+    UserPhotoPicModule.showImagePic(this.props.type, this.props.allowsEditing, this.props.fileId,
+      (response) => {
         console.log('Response = ', response.uri);
         this.props.onSelected(response.uri);
       });

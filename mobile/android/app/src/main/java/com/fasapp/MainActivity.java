@@ -1,9 +1,18 @@
 package com.fasapp;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.view.Menu;
+import com.facebook.react.bridge.ReactApplicationContext;
+
 import com.facebook.react.ReactActivity;
 import cl.json.RNSharePackage;
 import io.realm.react.RealmReactPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import cl.json.RNSharePackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 
 import com.fasapp.BuildConfig;
 import com.fasapp.pakage.ZXReactPackage;
@@ -16,6 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends ReactActivity {
+    public static ReactApplicationContext context;
+
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -35,6 +46,11 @@ public class MainActivity extends ReactActivity {
         return BuildConfig.DEBUG;
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
     /**
      * A list of packages used by the app. If the app uses additional views
      * or modules besides the default ones, add more packages here.
@@ -43,12 +59,13 @@ public class MainActivity extends ReactActivity {
     @Override
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
-            new RNDeviceInfo(),
             new MainReactPackage(),
-            new RNSharePackage(),
             new RealmReactPackage(),
             new VectorIconsPackage(),
-            new ZXReactPackage(this)
+            new RNSharePackage(),
+            new RNDeviceInfo(),
+            new ZXReactPackage(this),
+            new ExtraDimensionsPackage(this)
         );
     }
 }

@@ -36,6 +36,7 @@ var ScrollableTabView = React.createClass({
   },
 
   getInitialState() {
+    this.init = {};
     return {
       currentPage: this.props.initialPage,
       scrollValue: new Animated.Value(this.props.initialPage),
@@ -125,12 +126,28 @@ var ScrollableTabView = React.createClass({
             return <View
               key={child.props.tabLabel + '_' + idx}
               style={{width: this.state.container.width}}>
-              {child}
+              {this._renderChild(child)}
             </View>
           })}
         </ViewPagerAndroid>
       );
     }
+  },
+
+  _renderChild(child) {
+    if (this.init[child.type.displayName]) {
+      return child;
+    }
+
+    // if (child.type.displayName === 'Personal' && this.state.currentPage !== 4) {
+    if (child.props.delay && child.props.page !== this.state.currentPage) {
+      return (
+        <View></View>
+      );
+    }
+
+    this.init[child.type.displayName] = true;
+    return child;
   },
 
   _updateSelectedPage(currentPage) {
@@ -168,7 +185,8 @@ var ScrollableTabView = React.createClass({
           label: child.props.tabDesc,
           badgeNum: child.props.badge,
           icon: child.props.icon,
-          selectedIcon: child.props.selectedIcon
+          selectedIcon: child.props.selectedIcon,
+          onPress: child.props.onPress,
         }
       }),
       activeTab: this.state.currentPage,

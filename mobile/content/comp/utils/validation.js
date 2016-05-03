@@ -66,7 +66,7 @@ module.exports = {
   //中文和英文:微信
   isWechat: function (data) {
     if (!_.isEmpty(data)) {
-      let reg = /^[a-zA-Z0-9_]+$/;
+      let reg = /^[a-zA-Z0-9_]*$/;
       if (!reg.test(data)) {
         return false;
       }
@@ -112,7 +112,7 @@ module.exports = {
   },
   isAmount: function (data) {
     if (!_.isEmpty(data)) {
-      let reg = /^([1-9][0-9]{0,6}|10000000)$/;
+      let reg = /^([1-9][0-9]{0,8})$/;
       if (!reg.test(data)) {
         console.log('格式不合法：请输入整数');
         return false;

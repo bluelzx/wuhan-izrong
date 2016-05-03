@@ -7,7 +7,8 @@ var {
   Platform,
   ScrollView,
   View,
-  TabBarIOS
+  TabBarIOS,
+    Navigator
   } = React;
 var Home = require('../../biz/home/home');
 var Market = require ('../../biz/market/market');
@@ -48,9 +49,9 @@ var TabView = React.createClass({
     //  });
     //  sum = billSum;
     //  var show = sum >= 99 ? "99+" : sum;
-    //  if (Platform.OS == 'ios') {
-    //    PushNotificationIOS.setApplicationIconBadgeNumber(sum);
-    //  }
+     if (Platform.OS === 'ios') {
+        PushNotificationIOS.setApplicationIconBadgeNumber(AppStore.getBadge());
+     }
     //  return {
     //    billSum: show,
     //    token: token
@@ -59,7 +60,7 @@ var TabView = React.createClass({
       return {
         token: token,
         initialPage: 0,
-        badge:AppStore.getBadge()
+        badge: AppStore.getBadge()
       }
     //}
   },
@@ -88,17 +89,19 @@ var TabView = React.createClass({
     //
     //  AppStateIOS.addEventListener('change', this._handleAppStateChange);
     //}
+    AppStore.addChangeListener(this._onChange,'IM_SESSION_LIST');
   },
 
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange);
-    //if (Platform.OS === 'ios') {
+    if (Platform.OS === 'ios') {
     //  AppStore.removeChangeListener(this._onChange);
     //  PushNotificationIOS.removeEventListener('register', AppAction.notificationRegister);
     //  PushNotificationIOS.removeEventListener('notification', AppAction.onNotification);
     //  AppStateIOS.removeEventListener('change', this._handleAppStateChange);
-    //  PushNotificationIOS.setApplicationIconBadgeNumber(0);
-    //}
+      PushNotificationIOS.setApplicationIconBadgeNumber(0);
+    }
+    AppStore.removeChangeListener(this._onChange,'IM_SESSION_LIST')
   },
 
   _handleAppStateChange: function (currentAppState) {
@@ -151,14 +154,19 @@ var TabView = React.createClass({
           <TabBarIOS.Item
             title="发布"
             icon={require('../../image/tab/publish.png')}
-            selected={this.state.selectedTab === 'publish'}
-            onPress={() => {this.setState({selectedTab: 'publish'});}}>
+            //selected={this.state.selectedTab === 'publish'}
+            onPress={() => {
+            this.props.navigator.push({
+                comp: Publish,
+                sceneConfig: Navigator.SceneConfigs.FloatFromBottomAndroid
+            });
+            }}>
             <Publish  navigator={this.props.navigator} exec={this.props.exec}/>
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
             title="IM"
-            badge={this.state.badge}
+            badge={this.state.badge || null}
             icon={require('../../image/tab/IM.png')}
             selected={this.state.selectedTab === 'IM'}
             onPress={() => {this.setState({selectedTab: 'IM'})}}>
@@ -196,13 +204,18 @@ var TabView = React.createClass({
           >
           </Market>
 
-          <Publish navigator={this.props.navigator}
-                   tabDesc="发布"
-                   icon={require('../../image/tab/publish.png')}
-                   selectedIcon={require('../../image/tab/publish-selected.png')}
-                   exec={this.props.exec}
+          <View
+            navigator={this.props.navigator}
+            tabDesc="发布"
+            icon={require('../../image/tab/publish.png')}
+            selectedIcon={require('../../image/tab/publish-selected.png')}
+            exec={this.props.exec}
+            onPress={() => {navigator.push({
+            comp: Publish,
+            sceneConfig: Navigator.SceneConfigs.FloatFromBottomAndroid
+            })}}
           >
-          </Publish>
+          </View>
 
 
           <IM navigator={this.props.navigator}
@@ -218,6 +231,8 @@ var TabView = React.createClass({
                     icon={require('../../image/tab/personalcenter.png')}
                     selectedIcon={require('../../image/tab/personalcenter-selected.png')}
                     exec={this.props.exec}
+                    delay={true}
+                    page={4}
           >
           </Personal>
 

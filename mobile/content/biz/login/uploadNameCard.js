@@ -96,6 +96,8 @@ let Register_uploadNameCard = React.createClass({
           type="all"
           onSelected={(response) => this.uploadNameCard(response)}
           onError={(error) => Alert(error)}
+          fileId="nameCard"
+          allowsEditing={true}
           title="选择图片"
           style={[styles.imageArea, styles.nameCard]}
         >
@@ -112,6 +114,8 @@ let Register_uploadNameCard = React.createClass({
         type="all"
         onSelected={(response) => this.uploadNameCard(response)}
         onError={(error) => Alert(error)}
+        fileId="nameCard"
+        allowsEditing={true}
         title="选择图片"
         style={[styles.imageArea, styles.nameCard]}
       >

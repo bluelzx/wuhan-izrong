@@ -8,9 +8,10 @@ let NavBarView = require('../../framework/system/navBarView');
 let EditGroup = require('./editGroup');
 let EditGroupMaster = require('./editGroupMaster');
 let DictIcon = require('../../constants/dictIcon');
+let { IM_SESSION } = require('../../constants/dictEvent');
 let ImUserInfo = require('./imUserInfo');
 const Messenger = require('./../../comp/messenger/messenger');
-let {  SESSION_TYPE } = require('../../constants/dictIm');
+let { SESSION_TYPE } = require('../../constants/dictIm');
 let AppStore = require('../../framework/store/appStore');
 let ContactStore = require('../../framework/store/contactStore');
 let SessionStore = require('../../framework/store/sessionStore');
@@ -25,15 +26,18 @@ let Chat = React.createClass({
     param.sessionId = SessionStore.querySessionById(this.props.param.userId || this.props.param.groupId,this.props.param.chatType);
     param.sessionId || (param.sessionId=KeyGenerator.getSessionKey(param.chatType, this.props.param.userId || this.props.param.groupId));
 
+    let user = ContactStore.getUserInfo();
     ImAction.sessionInit({
       toId: param.userId,
-      sessionId: param.sessionId
+      sessionId: param.sessionId,
+      userId:user.userId,
+      myName:user.realName
     });
-    AppStore.addChangeListener(this._onChange, 'IM_SESSION');
+    AppStore.addChangeListener(this._onChange, IM_SESSION);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange, 'IM_SESSION');
+    AppStore.removeChangeListener(this._onChange, IM_SESSION);
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());

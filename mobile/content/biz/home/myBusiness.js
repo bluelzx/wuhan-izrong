@@ -65,8 +65,8 @@ let Market = React.createClass({
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[2].displayName,
-      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[2].itemArr[0].displayName,
+      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[0].displayName,
+      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[0].itemArr[1].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -84,8 +84,8 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? [] : item[2].id,
-      bizItemID: myItem != null ? myItem.id: item.length == 0 ? [] : item[2].itemArr[0].id,
+      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? [] : item[0].id,
+      bizItemID: myItem != null ? myItem.id: item.length == 0 ? [] : item[0].itemArr[1].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -147,13 +147,29 @@ let Market = React.createClass({
             allLoaded: true, // the end of the list is reached
           });
         }, 1000); // simulating network fetching
-        Alert(errorData.msgContent);
+        Alert(errorData.msgContent || 'exception');
       }
     );
   },
+
+  termChangeHelp(term){
+    if(term == null || term == 0){
+      return '--';
+    }else if (term % 365 == 0){
+      return term/365 + '年';
+    }else if (term % 30 == 0){
+      return term/30 + '月';
+    }else if (term == 1){
+      return '隔夜';
+    }
+    else{
+      return term + '天';
+    }
+  },
+
   _renderRow: function (rowData) {
     if (!rowData) {
-      return null;
+      return <View></View>;
     }
 
     return (
@@ -165,7 +181,7 @@ let Market = React.createClass({
           />
           <Text
             style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}>
-            {rowData.term == null || rowData.term == 0 ? '--' :  rowData.term + '天'}
+            {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'?'rgba(175,134,86,1)':'#386085'}}>
@@ -174,7 +190,7 @@ let Market = React.createClass({
           <Text
             style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}
             numberOfLines={1}>
-            {rowData.rate == null || rowData.rate == 0 ? '--' : numeral(rowData.rate).format('0,0.00') + '%'}
+            {rowData.rate == null || rowData.rate == 0 ? '--' : numeral(rowData.rate * 100).format('0,0.00') + '%'}
           </Text>
           {this.renderFreshBtn(rowData)}
         </View>
@@ -224,7 +240,7 @@ let Market = React.createClass({
             orderId: rowData.id
           }
         ).then((response)=> {
-          Alert('刷新成功');
+          Alert('刷新成功', ()=>this.refs.marketGiftedListView._refresh());
         }).catch((errorData) => {
           throw errorData;
         });
@@ -261,7 +277,8 @@ let Market = React.createClass({
           refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
           withSections={false} // enable sections
           emptyView={this._emptyView}
-
+          
+          enableEmptySections={true}
           automaticallyAdjustContentInsets={false}
           customStyles={{
             paginationView: {
@@ -273,8 +290,6 @@ let Market = React.createClass({
           refreshableTintColor="white"
           style={{flex: 1}}
         />
-
-        <View style={{height: (Platform.OS === 'ios') ? 49 : 0}}></View>
       </View>
     );
   },
@@ -282,7 +297,7 @@ let Market = React.createClass({
   _emptyView: function () {
     return(
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-        <Text style={{color:'white',fontSize:20}}>没有数据</Text>
+
       </View>
     );
   },
@@ -352,8 +367,8 @@ let Market = React.createClass({
       pickTimeRow: rowId,
       optionTwoText: this.state.termSource[rowId].fieldDisplayName,
       orderField: this.state.termSource[rowId].fieldName,
-      orderType: this.state.termSource[rowId].asc ? 'asc' : 'desc',
-    })
+      orderType: this.state.termSource[rowId].fieldName == 'amount' ? 'asc' : 'desc'
+    });
     this.refs.marketGiftedListView._refresh();
   },
 
@@ -401,7 +416,7 @@ let Market = React.createClass({
 
   renderOptionType(){
     if (this.state.clickFilterType == 0) {
-      return null;
+      return <View></View>;
     }
     else {
       return (
@@ -414,10 +429,12 @@ let Market = React.createClass({
           <ListView
             style={{backgroundColor:'#162a40',height:180,position:"absolute",left:0,top:0,opacity:this.state.clickFilterType}}
             dataSource={data.cloneWithRows(this.state.categorySource)}
+            enableEmptySections={true}
             renderRow={this.renderTypeRow1}/>
           <ListView
             style={{backgroundColor:'#244266',height:180,position:"absolute",left:screenWidth/3,top:0,opacity:this.state.clickFilterType}}
             dataSource={data.cloneWithRows(this.state.itemSource)}
+            enableEmptySections={true}
             renderRow={this.renderTypeRow2}/>
         </View>
       );
@@ -425,7 +442,7 @@ let Market = React.createClass({
   },
   renderOptionTime(){
     if (this.state.clickFilterTime == 0) {
-      return null;
+      return <View></View>;
     } else {
       return (
         <View style={{position:"absolute",left:0,top:36}}>
@@ -437,6 +454,7 @@ let Market = React.createClass({
           <ListView
             style={{backgroundColor:'#244266',height:108,position:"absolute",left:0,top:0,opacity:this.state.clickFilterTime}}
             dataSource={data.cloneWithRows(this.state.termSource)}
+            enableEmptySections={true}
             renderRow={this.renderTimeRow}
           />
         </View>
@@ -446,7 +464,7 @@ let Market = React.createClass({
   },
   renderOptionOther(){
     if (this.state.clickFilterOther == 0) {
-      return null;
+      return <View></View>;
     } else {
       return (
         <View
@@ -570,9 +588,19 @@ let Market = React.createClass({
     this.refs["TERM"].setDefaultState();
     this.refs["AMOUNT"].setDefaultState();
   },
+
   _pressPublish: function () {
-    this.props.navigator.resetTo({comp: 'tabView', tabName: 'publish'});
+      const { navigator } = this.props;
+      if (navigator) {
+          navigator.push({
+            comp: 'publish',
+            param: {
+              isFromMyBusiness:true
+            }
+          })
+      }
   },
+
   confirmBtn: function () {
       this.pressFilterOther();
     this.refs.marketGiftedListView._refresh();

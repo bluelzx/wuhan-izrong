@@ -40,6 +40,7 @@ let SelectBusiness1 = React.createClass({
           dataSource={data.cloneWithRows(this.state.dataSource)}
           renderRow={this.renderRow}
           scrollEnabled={false}
+          enableEmptySections={true}
         />
       </NavBarView>
     )
@@ -81,7 +82,7 @@ let SelectBusiness1 = React.createClass({
         itemArr
       );
     }
-  },
+  }
 
 
 });

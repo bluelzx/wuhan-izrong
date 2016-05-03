@@ -33,6 +33,7 @@ let AppActions = {
   notificationRegister: (token) => _notificationRegister(token),
   onNotification: (notification) => _onNotification(notification),
   freshNotification: (notification) => _onNotification(notification),
+  emitActiveApp:()=>{AppStore.emitChange('active_app')},
 };
 
 module.exports = AppActions;

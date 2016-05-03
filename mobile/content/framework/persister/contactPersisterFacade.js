@@ -202,8 +202,14 @@ let _updateContactInfo = function(address, realName, email, nameCardFileUrl, dep
     publicQQ:publicQQ,
     orgId:orgId,
   };
+  let ret = {};
+  for(let k in param){
+    if(param[k]){
+      ret[k] = param[k];
+    }
+  }
   _realm.write(()=>{
-    _realm.create(IMUSERINFO,param, true);
+    _realm.create(IMUSERINFO,ret, true);
   });
 }
 
@@ -247,7 +253,7 @@ let _getUserInfoByUserId = function (id) {
     orgId: users.orgId,
     lastLoginTime:users.lastLoginTime,  //本地增加,用于多用户登陆排序
     token: users.token
-  }
+  };
   if(org.length > 0)
     ret.orgValue = org[0].orgValue;
   return ret;

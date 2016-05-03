@@ -3,7 +3,7 @@
  */
 
 let  React = require('react-native');
-const {View, TextInput, Platform, Text} = React;
+const {View, Text} = React;
 let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
