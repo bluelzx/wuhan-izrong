@@ -243,16 +243,14 @@ let WhitePage = React.createClass({
 
   renderInvite:function(item, index) {
     let {width} = Device;
-    let swipeoutBtns = [
-      {
-        text: '删除',
-        backgroundColor: 'red',
-        onPress: ()=>this.deleteSession(item.sessionId)
-      }
 
-    ];
     return (
-      <Swipeout key={item.sessionId} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
+      <TouchableHighlight key={item.sessionId}  onLongPress={
+        ()=>
+          {
+            Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
+          }
+        } onPress={()=>this.toOther(item)}>
         <View
           style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
           <HeadPic badge={0} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup}/>
@@ -269,7 +267,7 @@ let WhitePage = React.createClass({
             </TouchableHighlight>
           </View>
         </View>
-      </Swipeout>
+      </TouchableHighlight>
     );
   },
 
@@ -280,16 +278,17 @@ let WhitePage = React.createClass({
 
   renderInvited:function(item, index) {
     let {width} = Device;
-    let swipeoutBtns = [
-      {
-        text: '删除',
-        backgroundColor: 'red',
-        onPress: ()=>this.deleteSession(item.sessionId)
-      }
-    ];
+
     return (
-      <Swipeout key={item.sessionId} autoClose={true} backgroundColor='transparent' right={swipeoutBtns}>
-        <TouchableHighlight onPress={()=>{
+        <TouchableHighlight
+          key={item.sessionId}
+          onLongPress={
+        ()=>
+          {
+            Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
+          }
+        }
+          onPress={()=>{
         let groupId = this.getIdFromSessionId(item.sessionId);
          let groupInfo = ContactStore.getGroupDetailById(groupId);
         let param = {};
@@ -316,7 +315,6 @@ let WhitePage = React.createClass({
           </View>
         </View>
       </TouchableHighlight>
-      </Swipeout>
     );
   },
 

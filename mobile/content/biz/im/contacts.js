@@ -134,7 +134,8 @@ let Contacts = React.createClass({
             comp: CreateGroup
       });
       }}>
-        <Image  style={{width:20,height:20}} source={DictIcon.imCreateGroupBtn}/>
+        {/*<Image  style={{width:20,height:20}} source={DictIcon.imCreateGroupBtn}/>*/}
+        <Text style={{color:'#fff',fontSize:15}}>建群</Text>
       </TouchableOpacity>
     );
   },
