@@ -132,7 +132,11 @@ var Main = React.createClass({
             });
           }
           console.log(errorData);
-          Alert(errorData.msgContent || errorData.message);
+          if(errorData.msgCode == 'APP_SYS_TOKEN_INVALID'){
+            AppStore.forceLogout();
+          }else{
+            Alert(errorData.msgContent || errorData.message);
+          }
         });
 
       if (showLoading) {
