@@ -575,7 +575,7 @@ let Market = React.createClass({
           navigator.push({
             comp: 'publish',
             param: {
-              isFromIM:true
+              isFromMyBusiness:true
             }
           })
       }

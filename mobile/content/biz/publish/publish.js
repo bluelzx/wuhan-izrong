@@ -82,10 +82,11 @@ let Publish = React.createClass({
   render: function () {
     let {title, param}  = this.props;
     let isFromIM = param ? param.isFromIM : false;
+    let isFromMyBusiness = param ? param.isFromMyBusiness : false;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='发布新业务' showBack={true} showBar={true}
-                  actionButton={isFromIM ? null : this.renderToMyBiz}>
+                  actionButton={isFromIM || isFromMyBusiness ? null : this.renderToMyBiz}>
         <View style={{height:isFromIM ? screenHeight-64 : screenHeight-64,backgroundColor:'#153757'}}>
           <View style={{flex:1}}>
             <ScrollView>
