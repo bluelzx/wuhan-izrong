@@ -116,7 +116,7 @@ let _login = (data) => {
 let _logout = (userId) => {
   Persister.logout(userId);
   _info.isLogout = true;
-  //TODO:'登出'
+  _data.token = '';
   AppStore.emitChange();
 };
 

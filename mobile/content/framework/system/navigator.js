@@ -126,7 +126,7 @@ var Main = React.createClass({
         );
       } else {
         Promise.resolve().then((resolve) => {
-          this.refs.navigator.resetTo({comp: TabView});
+          this.refs.navigator.resetTo({comp: Login});
         }).catch((e) => {
           Alert('系统异常');
         });
