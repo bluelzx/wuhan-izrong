@@ -41,6 +41,7 @@ let SelectOrg = React.createClass({
         <ListView
           dataSource={this.state.dataSource}
           renderRow={this._renderRow}
+          enableEmptySections={true}
           renderSectionHeader={this._renderSectionHeader}/>
       </NavBarView>
     );

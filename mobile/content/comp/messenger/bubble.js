@@ -1,4 +1,4 @@
-import React, {Text, View, Animated, Image, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
+import React, {Text, View, Animated, Image, StyleSheet, TouchableOpacity, Dimensions, Platform} from 'react-native';
 import {MSG_CONTENT_TYPE} from '../../constants/dictIm';
 import _ from 'lodash';
 import numeral from 'numeral';
@@ -46,7 +46,7 @@ export default class Bubble extends React.Component {
     console.log('onLongPress');
     Share.open({
       share_text: shareContent,
-      share_URL: "http://google.cl",
+      share_URL: Platform.OS === 'android' ? shareContent : "http://google.cl",
       title: "Share Link"
     }, (e) => {
       console.log(e);

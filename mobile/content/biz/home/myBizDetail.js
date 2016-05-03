@@ -284,7 +284,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : this.state.marketInfo.rate + '%')}
+          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : this.state.marketInfo.rate * 100 + '%')}
         </View>
       );
     }
@@ -373,7 +373,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row'}}>
-          {this.returnItem('备注:', this.state.remarkText == null || this.state.remarkText.length == 0 ? '--' : this.state.marketInfo.remarkText)}
+          {this.returnItem('备注:', this.state.remarkText == null || this.state.remarkText.length == 0 ? '--' : this.state.remarkText)}
         </View>
       );
     }
@@ -428,9 +428,9 @@ let MyBizDetail = React.createClass({
 
   },
   shutDownBiz: function () {
-    {
-      this.downselfBizOrder(this.state.marketInfo.id)
-    }
+      Alert('你确定下架该业务吗?',() => {
+          this.downselfBizOrder(this.state.marketInfo.id)
+      },()=>{});
   },
   callBackRemarks: function (remarkText) {
     this.setState({
@@ -444,8 +444,9 @@ let MyBizDetail = React.createClass({
       navigator.push({
         comp: name,
         param: {
-          callBackRemarks: this.callBackRemarks
-        },
+          callBackRemarks: this.callBackRemarks,
+          remarkText: this.state.remarkText
+        }
       })
     }
   },
@@ -494,8 +495,7 @@ let MyBizDetail = React.createClass({
             remark: this.state.remarkText
           }
         ).then((response)=> {
-          Alert('保存成功');
-          this.props.navigator.pop();
+          Alert('保存成功',()=>this.props.navigator.pop());
         }).catch(
           (errorData) => {
             throw errorData;
@@ -512,8 +512,7 @@ let MyBizDetail = React.createClass({
             orderId: id
           }
         ).then((response)=> {
-          Alert('下架成功')
-          this.props.navigator.pop();
+          Alert('下架成功',()=>this.props.navigator.pop());
         }).catch(
           (errorData) => {
             throw errorData;

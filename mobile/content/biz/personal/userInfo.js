@@ -138,8 +138,8 @@ let UserInfo = React.createClass({
       this.props.exec(() => {
         return LoginAction.logout(this.state.userId)
           .then((response) => {
-            const { navigator } = this.props;
-            navigator.resetTo({comp: Login});
+            // const { navigator } = this.props;
+            // navigator.resetTo({comp: Login});
           }).catch((errorData) => {
             throw errorData;
           });

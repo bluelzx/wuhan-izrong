@@ -4,13 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
+import com.facebook.react.bridge.ReactApplicationContext;
 
 import com.facebook.react.ReactActivity;
 import cl.json.RNSharePackage;
 import io.realm.react.RealmReactPackage;
-
-import com.facebook.react.bridge.ReactApplicationContext;
+import com.oblador.vectoricons.VectorIconsPackage;
+import cl.json.RNSharePackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 
 import com.fasapp.BuildConfig;
 import com.fasapp.pakage.ZXReactPackage;
@@ -54,17 +56,16 @@ public class MainActivity extends ReactActivity {
      * or modules besides the default ones, add more packages here.
      */
 
-
-
     @Override
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
-            new RNDeviceInfo(),
             new MainReactPackage(),
-            new RNSharePackage(),
             new RealmReactPackage(),
             new VectorIconsPackage(),
-            new ZXReactPackage()
+            new RNSharePackage(),
+            new RNDeviceInfo(),
+            new ZXReactPackage(this),
+            new ExtraDimensionsPackage(this)
         );
     }
 }

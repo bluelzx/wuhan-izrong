@@ -19,7 +19,7 @@ let {
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
 let NavBarView = require('../../framework/system/navBarView');
-
+let {Alert} = require('mx-artifacts');
 
 let Remarks = React.createClass({
   getInitialState(){
@@ -58,9 +58,13 @@ let Remarks = React.createClass({
     this.setState({remarkText: value});
   },
   finish: function () {
-    this.props.param.callBackRemarks(this.state.remarkText);
-    this.props.navigator.pop();
-  },
+    if(this.state.remarkText.length >20){
+      Alert('字数超过限制(20字以内)')
+    }else {
+      this.props.param.callBackRemarks(this.state.remarkText);
+      this.props.navigator.pop();
+    }
+  }
 });
 
 let styles = StyleSheet.create({});

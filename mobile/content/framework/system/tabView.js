@@ -49,9 +49,9 @@ var TabView = React.createClass({
     //  });
     //  sum = billSum;
     //  var show = sum >= 99 ? "99+" : sum;
-      if (Platform.OS == 'ios') {
+     if (Platform.OS === 'ios') {
         PushNotificationIOS.setApplicationIconBadgeNumber(AppStore.getBadge());
-      }
+     }
     //  return {
     //    billSum: show,
     //    token: token
@@ -60,7 +60,7 @@ var TabView = React.createClass({
       return {
         token: token,
         initialPage: 0,
-        badge:AppStore.getBadge()
+        badge: AppStore.getBadge()
       }
     //}
   },

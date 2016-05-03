@@ -301,6 +301,7 @@ let Market = React.createClass({
           withSections={false} // enable sections
           emptyView={this._emptyView}
 
+          enableEmptySections={true}
           automaticallyAdjustContentInsets={false}
           customStyles={{
             paginationView: {
@@ -383,7 +384,7 @@ let Market = React.createClass({
       pickTimeRow: rowId,
       optionTwoText: this.state.termSource[rowId].fieldDisplayName,
       orderField: this.state.termSource[rowId].fieldName,
-      orderType: this.state.termSource[rowId].fieldName == 'amount' ? 'asc' : 'desc'
+      orderType: this.state.termSource[rowId].fieldName == 'rate' ? 'asc' : 'desc'
     });
 
     this.refs.marketGiftedListView._refresh();
@@ -448,10 +449,12 @@ let Market = React.createClass({
           <ListView
             style={{backgroundColor:'#162a40',height:180,position:"absolute",left:0,top:0,opacity:this.state.clickFilterType}}
             dataSource={data.cloneWithRows(this.state.categorySource)}
+            enableEmptySections={true}
             renderRow={this.renderTypeRow1}/>
           <ListView
             style={{backgroundColor:'#244266',height:180,position:"absolute",left:screenWidth/3,top:0,opacity:this.state.clickFilterType}}
             dataSource={data.cloneWithRows(this.state.itemSource)}
+            enableEmptySections={true}
             renderRow={this.renderTypeRow2}/>
         </View>
       )
@@ -473,6 +476,7 @@ let Market = React.createClass({
           <ListView
             style={{backgroundColor:'#244266',height:108,position:"absolute",left:0,top:0,opacity:this.state.clickFilterTime}}
             dataSource={data.cloneWithRows(this.state.termSource)}
+            enableEmptySections={true}
             renderRow={this.renderTimeRow}
           />
         </View>
