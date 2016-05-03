@@ -51,6 +51,14 @@ let ImUserInfo = React.createClass({
 
   },
 
+  descValue: function(value){
+    if(!value || value.length==0){
+      return '未填写';
+    }else{
+      return value;
+    }
+  },
+
   render: function () {
     let {title}  = this.props;
     let privateDesc = "未公开";
@@ -65,14 +73,14 @@ let ImUserInfo = React.createClass({
               <Text style={{color:'#ffffff',fontSize:18, marginRight:20}}>{this.state.data.realName}</Text>
             </View>
           </View>
-          <Item hiddenArrow={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.data.publicMobile?this.state.data.mobileNumber:privateDesc}/>
-          <Item hiddenArrow={true} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.data.publicPhone?this.state.data.phoneNumber:privateDesc}/>
-          <Item hiddenArrow={true} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.data.publicQQ?this.state.data.qqNo:privateDesc}/>
-          <Item hiddenArrow={true} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.data.publicWeChat?this.state.data.weChatNo:privateDesc}/>
-          <Item hiddenArrow={true} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.data.publicEmail?this.state.data.email:privateDesc}/>
+          <Item hiddenArrow={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.data.publicMobile?this.descValue(this.state.data.mobileNumber):privateDesc}/>
+          <Item hiddenArrow={true} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.data.publicPhone?this.descValue(this.state.data.phoneNumber):privateDesc}/>
+          <Item hiddenArrow={true} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.data.publicQQ?this.descValue(this.state.data.qqNo):privateDesc}/>
+          <Item hiddenArrow={true} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.data.publicWeChat?this.descValue(this.state.data.weChatNo):privateDesc}/>
+          <Item hiddenArrow={true} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.data.publicEmail?this.descValue(this.state.data.email):privateDesc}/>
           <Item hiddenArrow={true} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.data.orgValue}/>
-          <Item hiddenArrow={true} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicDepart?this.state.data.department:privateDesc}/>
-          <Item hiddenArrow={true} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicTitle?this.state.data.jobTitle:privateDesc}/>
+          <Item hiddenArrow={true} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicDepart?this.descValue(this.state.data.department):privateDesc}/>
+          <Item hiddenArrow={true} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicTitle?this.descValue(this.state.data.jobTitle):privateDesc}/>
           <View style={{backgroundColor:'#162a40',height:50,marginTop:20}}>
             <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
               <Text style={{color: '#ffffff',fontSize:18,marginLeft:20}}>屏蔽此人</Text>

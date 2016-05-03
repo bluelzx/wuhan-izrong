@@ -2,7 +2,7 @@ const MSG_CONTENT_TYPE = {
   TEXT: 'text',
   IMAGE: 'image',
   NAMECARD:'namecard',
-  BIZINFO:'bizInfo',
+  BIZINFO:'bizinfo',
 };
 
 const COMMAND_TYPE = {

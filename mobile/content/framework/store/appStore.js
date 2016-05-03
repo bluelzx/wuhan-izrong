@@ -182,7 +182,7 @@ let _getOrgByOrgName = (orgName)=> {
 
 let _updateUserInfo = (column, value)=> {
   Persister.updateUserInfo(column, value);
-  AppStore.emitChange();
+  AppStore.emitChange(USER_CHANGE);
 };
 
 let _updateLastSyncTime = function (t) {

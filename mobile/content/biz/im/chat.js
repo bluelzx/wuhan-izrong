@@ -31,8 +31,7 @@ let Chat = React.createClass({
       toId: param.userId,
       sessionId: param.sessionId,
       userId:user.userId,
-      myName:user.realName,
-      hisName:param.chatType==SESSION_TYPE.USER?ContactStore.getUserInfoByUserId(param.userId).realName:'',
+      myName:user.realName
     });
     AppStore.addChangeListener(this._onChange, IM_SESSION);
   },

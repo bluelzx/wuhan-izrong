@@ -70,14 +70,17 @@ let _resovleMessages = (bInit = false) => {
   let savedMessages = Persister.getMessageBySessionId(_data.sessionId, _data.page);
   let tmpMessages = [];
   let tmpMessage = {};
+  let name = _data.hisName;
+  //if(_data.)
   savedMessages.forEach((object, index, collection) => {
+
     if (object.fromUId) { // Received
+      let name = ContactStore.getUserInfoByUserId(object.fromUId).realName;
       tmpMessage = {
         msgId: object.msgId,
         contentType: object.contentType,
         content: object.content,
-        //name: object.fromUId,
-        name: _data.hisName,
+        name: name,
         image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
         position: 'left',
         date: object.revTime
@@ -114,7 +117,6 @@ let _sessionInit = (data) => {
   _data.messages = [];
   _data.userId = data.userId,
   _data.myName=data.myName,
-  _data.hisName=data.hisName,
   _resovleMessages(true);
   ImStore.emitChange(DictEvent.IM_SESSION);
 };
@@ -193,11 +195,12 @@ let _saveMsg = (message) => {
   if (message.sessionId === _data.sessionId) {
     if (message.fromUId) { // Received
       // TODO. Get user info by id.
+      let name = ContactStore.getUserInfoByUserId(message.fromUId).realName;
       _data.messages.push({
         msgId: message.msgId,
         contentType: message.contentType,
         content: message.content,
-        name: _data.hisName,
+        name: name,
         image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
         position: 'left',
         date: message.revTime

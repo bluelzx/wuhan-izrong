@@ -45,6 +45,21 @@ let BusinessDetail = React.createClass({
     });
   },
 
+  termChangeHelp(term){
+    if(term == null || term == 0){
+      return '--';
+    }else if (term % 365 == 0){
+      return term/365 + '年';
+    }else if (term % 30 == 0){
+      return term/30 + '月';
+    }else if (term == 1){
+      return '隔夜';
+    }
+    else{
+      return term + '天';
+    }
+  },
+
   _renderContent: function () {
     if (!this.state.detailData) {
       return (
@@ -58,7 +73,7 @@ let BusinessDetail = React.createClass({
           <View style={{marginLeft:10}}>
             {this.returnItem('业务类型:', (this.state.detailData.bizCategoryDesc + '-' + this.state.detailData.bizItemDesc))}
             {this.returnItem('方向:', this.state.detailData.bizOrientationDesc)}
-            {this.returnItem('期限:', this.state.detailData.term == null || this.state.detailData.term == 0 ? '--' : this.state.detailData.term + '天')}
+            {this.returnItem('期限:', this.termChangeHelp(this.state.detailData.term))}
             {this.returnItem('金额:', this.state.detailData.amount == null || this.state.detailData.amount == 0 ? '--'
               : this.state.detailData.amount < 100000000 ? numeral(this.state.detailData.amount / 10000).format('0,0') + '万' : numeral(this.state.detailData.amount / 100000000).format('0,0') + '亿')}
             {this.returnItem('利率:', this.state.detailData.rate == null || this.state.detailData.rate == 0 ? '--' : numeral(this.state.detailData.rate * 100).format('0,0.00') + '%')}

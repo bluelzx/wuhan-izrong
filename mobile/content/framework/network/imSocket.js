@@ -20,7 +20,16 @@ let _send = function (message) {
 
 let ImSocket = {
 
+  disconnect:function(){
+    _socket&&_socket.close();
+  },
+
+  reconnect:function(){
+    _socket&&_socket.open();
+  },
+
   init: function (token,lastSyncTime) {
+   // Alert('socket:' + _socket);
     if (_socket) return;
     // this.uri = ImWebSocket + AppStore.getToken();
     this.uri = 'ws://' + ImHost + '/' + token;

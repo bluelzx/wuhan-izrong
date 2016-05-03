@@ -23,7 +23,8 @@ var {
   BackAndroid,
   DeviceEventEmitter,
   Platform,
-  ToastAndroid
+  ToastAndroid,
+  AppStateIOS
   } = React;
 var AppAction = require('../action/appAction');
 //var ImAction = require('../action/imAction');
@@ -60,15 +61,34 @@ var Main = React.createClass({
       //   console.log(e.test);
       // });
     }
+    AppStateIOS.removeEventListener('change', this._handleAppStateChange);
+    AppStateIOS.addEventListener('change', this._handleAppStateChange);
     NotificationManager.openNotification();
     AppStore.saveNavigator(this.refs['navigator']);
 
+    AppStore.addChangeListener(this._activeApp, 'active_app');
   },
+
+  _activeApp:function(){
+    ImSocket.reconnect();
+  },
+
+  _handleAppStateChange:  (currentAppState) => {
+    //let that = this;
+    switch (currentAppState) {
+      case "active":
+        AppAction.emitActiveApp();
+        break;
+      default: ImSocket.disconnect();
+    }
+  },
+
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange);
     if (Platform.OS === 'android') {
       BackAndroid.removeEventListener('hardwareBackPress', this._onAndroidBackPressed);
     }
+    AppStateIOS.removeEventListener('change', this._handleAppStateChange);
     NotificationManager.closeNotification();
   },
 
@@ -167,6 +187,16 @@ var Main = React.createClass({
       <Comp param={route.param} navigator={navigator} callback={route.callBack} exec={this._exec} tabName={tabName}/>
     );
   },
+
+  initSocket:function(token){
+    if(token) {
+      ImSocket.init(token, ()=> {
+        let sTime = AppStore.getLoginUserInfo();
+        return sTime && sTime.lastSyncTime;
+      });
+    }
+  },
+
   render: function () {
     if (this.state.initLoading) {
       return (
@@ -187,10 +217,7 @@ var Main = React.createClass({
     //var initComp = Chat;
     if (this.state.token) {
       initComp = TabView;
-      ImSocket.init(this.state.token,()=>{
-        let sTime = AppStore.getLoginUserInfo();
-        return sTime && sTime.lastSyncTime;
-      });
+     this.initSocket(this.state.token);
     }
     return (
       <View style={{ width: Device.width, height: Device.height }}>

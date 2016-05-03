@@ -40,10 +40,12 @@ let Personal = React.createClass({
   },
 
   componentDidMount() {
+    AppStore.addChangeListener(this._onChange,USER_CHANGE);
     AppStore.addChangeListener(this._onChange,ORG_CHANGE);
   },
 
   componentWillUnmount: function () {
+    AppStore.removeChangeListener(this._onChange,USER_CHANGE);
     AppStore.removeChangeListener(this._onChange,ORG_CHANGE);
   },
 
