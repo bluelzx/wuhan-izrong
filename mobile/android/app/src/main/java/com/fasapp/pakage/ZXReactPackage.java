@@ -5,7 +5,6 @@ import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
-import com.fasapp.modules.SplashModule;
 import com.fasapp.modules.UserPhotoPicModule;
 import com.fasapp.view.viewpager.ZXViewPagerManager;
 
@@ -22,7 +21,6 @@ public class ZXReactPackage implements ReactPackage {
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
         modules.add(new UserPhotoPicModule(reactContext));
-        modules.add(new SplashModule(reactContext));
         return modules;
     }
 

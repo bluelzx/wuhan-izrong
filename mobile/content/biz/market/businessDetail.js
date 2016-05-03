@@ -23,7 +23,7 @@ let numeral = require('numeral');
 let NameCircular = require('../im/nameCircular').NameCircular;
 
 let { SESSION_TYPE } = require('../../constants/dictIm');
-let Chat = require('../im/chat');
+let Contacts = require('../im/chat');
 
 let MarketAction = require('../../framework/action/marketAction');
 
@@ -111,7 +111,7 @@ let BusinessDetail = React.createClass({
           <NameCircular name={this.state.marketInfo.userName}/>
         </View>
         <Text style={{fontSize:16,color:'white'}}>{this.state.marketInfo.userName}</Text>
-        <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#153757' activeOpacity={0.8}>
+        <TouchableHighlight onPress={()=>this.gotoIM(Contacts)} underlayColor='#153757' activeOpacity={0.8}>
           <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
         </TouchableHighlight>
       </View>

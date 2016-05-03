@@ -257,7 +257,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : this.state.marketInfo.rate + '%')}
+          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : this.state.marketInfo.rate * 100 + '%')}
         </View>
       );
     }
@@ -417,8 +417,9 @@ let MyBizDetail = React.createClass({
       navigator.push({
         comp: name,
         param: {
-          callBackRemarks: this.callBackRemarks
-        },
+          callBackRemarks: this.callBackRemarks,
+          remarkText: this.state.remarkText
+        }
       })
     }
   },
