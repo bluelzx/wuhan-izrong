@@ -22,19 +22,24 @@ let DateHelper = require('../../comp/utils/dateHelper');
 let numeral = require('numeral');
 let NameCircular = require('../im/nameCircular').NameCircular;
 
+let AppStore = require('../../framework/store/appStore');
+
 let { SESSION_TYPE } = require('../../constants/dictIm');
-let Contacts = require('../im/chat');
+let Chat = require('../im/chat');
 
 let MarketAction = require('../../framework/action/marketAction');
 
 let BusinessDetail = React.createClass({
   getInitialState(){
     let marketInfo = this.props.param.marketInfo;
+    let userId = AppStore.getUserId();
     return {
+      userId: userId,
       detailData: '',
       bizOrderOwnerBean: '',
       fileUrlList: [],
       marketInfo: marketInfo,
+      orderUserId: marketInfo.userId,
       lastModifyDate: ''
     }
   },
@@ -46,16 +51,16 @@ let BusinessDetail = React.createClass({
   },
 
   termChangeHelp(term){
-    if(term == null || term == 0){
+    if (term == null || term == 0) {
       return '--';
-    }else if (term % 365 == 0){
-      return term/365 + '年';
-    }else if (term % 30 == 0){
-      return term/30 + '月';
-    }else if (term == 1){
+    } else if (term % 365 == 0) {
+      return term / 365 + '年';
+    } else if (term % 30 == 0) {
+      return term / 30 + '月';
+    } else if (term == 1) {
       return '隔夜';
     }
-    else{
+    else {
       return term + '天';
     }
   },
@@ -87,7 +92,7 @@ let BusinessDetail = React.createClass({
             {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile)}
             {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo)}
             {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo)}
-            {this.returnInfoItem(require('../../image/market/org.png'), this.state.marketInfo.orgName,true)}
+            {this.returnInfoItem(require('../../image/market/org.png'), this.state.marketInfo.orgName, true)}
           </View>
         </View>
       </ScrollView>
@@ -120,17 +125,28 @@ let BusinessDetail = React.createClass({
     );
   },
   renderPromulgator: function () {
-    return (
-      <View style={{flexDirection:'row',alignItems:'center'}}>
-        <View style={{margin:10}}>
-          <NameCircular name={this.state.marketInfo.userName}/>
+    if (this.state.userId == this.state.orderUserId) {
+      return (
+        <View style={{flexDirection:'row',alignItems:'center'}}>
+          <View style={{margin:10}}>
+            <NameCircular name={this.state.marketInfo.userName}/>
+          </View>
+          <Text style={{fontSize:16,color:'white'}}>{this.state.marketInfo.userName}</Text>
         </View>
-        <Text style={{fontSize:16,color:'white'}}>{this.state.marketInfo.userName}</Text>
-        <TouchableHighlight onPress={()=>this.gotoIM(Contacts)} underlayColor='#153757' activeOpacity={0.8}>
-          <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
-        </TouchableHighlight>
-      </View>
-    );
+      );
+    } else {
+      return (
+        <View style={{flexDirection:'row',alignItems:'center'}}>
+          <View style={{margin:10}}>
+            <NameCircular name={this.state.marketInfo.userName}/>
+          </View>
+          <Text style={{fontSize:16,color:'white'}}>{this.state.marketInfo.userName}</Text>
+          <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#153757' activeOpacity={0.8}>
+            <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
+          </TouchableHighlight>
+        </View>
+      );
+    }
   },
   returnInfoItem: function (url, value, isPublic) {
     if (isPublic) {

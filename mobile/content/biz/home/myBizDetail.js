@@ -373,7 +373,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row'}}>
-          {this.returnItem('备注:', this.state.remarkText == null || this.state.remarkText.length == 0 ? '--' : this.state.marketInfo.remarkText)}
+          {this.returnItem('备注:', this.state.remarkText == null || this.state.remarkText.length == 0 ? '--' : this.state.remarkText)}
         </View>
       );
     }
@@ -495,8 +495,7 @@ let MyBizDetail = React.createClass({
             remark: this.state.remarkText
           }
         ).then((response)=> {
-          Alert('保存成功');
-          this.props.navigator.pop();
+          Alert('保存成功',()=>this.props.navigator.pop());
         }).catch(
           (errorData) => {
             throw errorData;
@@ -513,8 +512,7 @@ let MyBizDetail = React.createClass({
             orderId: id
           }
         ).then((response)=> {
-          Alert('下架成功')
-          this.props.navigator.pop();
+          Alert('下架成功',()=>this.props.navigator.pop());
         }).catch(
           (errorData) => {
             throw errorData;
