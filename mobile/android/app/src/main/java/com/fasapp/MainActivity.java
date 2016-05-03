@@ -48,7 +48,7 @@ public class MainActivity extends ReactActivity {
             new RNSharePackage(),
             new RealmReactPackage(),
             new VectorIconsPackage(),
-            new ZXReactPackage()
+            new ZXReactPackage(this)
         );
     }
 }

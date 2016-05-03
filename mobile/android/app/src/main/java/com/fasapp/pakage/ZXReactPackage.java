@@ -1,5 +1,7 @@
 package com.fasapp.pakage;
 
+import android.app.Activity;
+
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
@@ -17,6 +19,7 @@ import java.util.List;
  * Created by amarsoft on 16/3/9.
  */
 public class ZXReactPackage implements ReactPackage {
+    Activity activity;
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
@@ -34,5 +37,9 @@ public class ZXReactPackage implements ReactPackage {
         return Arrays.<ViewManager>asList(
                 new ZXViewPagerManager()
         );
+    }
+
+    public ZXReactPackage(Activity activity) {
+        this.activity = activity;
     }
 }

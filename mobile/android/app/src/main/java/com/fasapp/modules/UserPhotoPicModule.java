@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -57,9 +58,36 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void showSaveImgDialog(final Callback callback) {
+        Activity currentActivity = getCurrentActivity();
+        String[] items = {"保存图片", "删除图片"};
+        new AlertDialog.Builder(currentActivity)
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                callback.invoke(0);
+                                break;
+                            case 1:
+                                callback.invoke(1);
+                                break;
+                        }
+                    }
+
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+    }
+
+    @ReactMethod
     public void showImagePic(String type,boolean needCrop ,String name, Callback callback) {
         crop = needCrop;
-        fileName = name;
+        fileName = new Date().getTime() + ".jpg";
         mCallback = callback;
         switch (type) {
             case "all":
@@ -105,7 +133,20 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         Activity activity = getCurrentActivity();
         mCallback = callback;
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        activity.startActivityForResult(cameraIntent, USER_CAMERA_REQUEST_CODE);
+        // 判断存储卡是否可用，存储照片文件
+        if (SDCardUtils.hasSdcard()) {
+            file = new File(Environment.getExternalStorageDirectory(), fileName);
+            uri = Uri.fromFile(file);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            Log.d("Directory", Environment.getExternalStorageDirectory().toString() + fileName);
+            File file = new File(Environment.getExternalStorageDirectory(), fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+        if (activity != null) {
+            activity.startActivityForResult(cameraIntent, USER_CAMERA_REQUEST_CODE);
+        }
     }
 
     @ReactMethod
@@ -140,17 +181,11 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        Uri uri = null;
         switch (requestCode) {
             case USER_CAMERA_REQUEST_CODE:
                 if (SDCardUtils.hasSdcard()) {
-                    File tempFile = new File(
-                            Environment.getExternalStorageDirectory(),
-                            fileName);
-                    Log.d("Directory",Environment.getExternalStorageDirectory().toString() + fileName);
-                    //cropRawPhoto(Uri.fromFile(tempFile));
                     if (crop) {
-                        beginCrop(Uri.fromFile(tempFile));
+                        beginCrop(uri);
                     } else {
                         try {
                             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -178,6 +213,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                 }
                 break;
             case USER_IMAGE_REQUEST_CODE:
+                Uri uri = null;
                 if (data == null) {
                     return;
                 }
@@ -185,23 +221,24 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                 if (crop) {
                     beginCrop(uri);
                 } else {
-                    try {
-                        File file = new File(new URI(uri.toString()));
-                        File tempFile = new File(Environment.getExternalStorageDirectory(), fileName);
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inSampleSize = 2;
-                        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath(), options);
-                        if (bitmap != null) {
-                            // 保存图片
-                            FileOutputStream fos = null;
-                            fos = new FileOutputStream(tempFile);
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 30, fos);
-                            fos.flush();
-                            fos.close();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        boolean b = uri.toString().startsWith("content://");
+//                        File file = new File(new URI(uri.toString().replace("content://", "file:///")));
+//                        File tempFile = new File(Environment.getExternalStorageDirectory(), fileName);
+//                        BitmapFactory.Options options = new BitmapFactory.Options();
+//                        options.inSampleSize = 2;
+//                        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath(), options);
+//                        if (bitmap != null) {
+//                            // 保存图片
+//                            FileOutputStream fos = null;
+//                            fos = new FileOutputStream(tempFile);
+//                            bitmap.compress(Bitmap.CompressFormat.JPEG, 30, fos);
+//                            fos.flush();
+//                            fos.close();
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
                     response = Arguments.createMap();
                     response.putString("uri", uri.toString());
                     mCallback.invoke(response);

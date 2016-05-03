@@ -103,6 +103,7 @@ let ImagePicker = React.createClass({
   render: function () {
     return (
       <TouchableOpacity
+        onLongPress={this.props.longPress}
         style={this.props.style}
         onPress={this._selectPhoto}
       >

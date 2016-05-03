@@ -64,6 +64,11 @@ let TextEdit = React.createClass({
 
     switch (this.props.param.name) {
       case 'realName':
+        let reg =new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5]+$");
+        if (!reg.test(this.state.newValue)) {
+          Alert("请输入正确的姓名");
+          break;
+        }
         if (this.state.newValue.length <= 20) {
           this.updateUserInfo();
         } else {

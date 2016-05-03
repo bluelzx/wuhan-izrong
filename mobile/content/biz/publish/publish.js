@@ -12,12 +12,15 @@ let {
   TextInput,
   View,
   ScrollView,
+  ActionSheetIOS,
   Platform,
   Dimensions,
   Image,
   StyleSheet,
   TouchableOpacity,
-  InteractionManager
+  InteractionManager,
+  CameraRoll,
+  ToastAndroid,
   }=React;
 
 let { Alert ,Button } = require('mx-artifacts');
@@ -39,11 +42,12 @@ let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let ImAction = require('../../framework/action/imAction');
-
+let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 let bizOrientationUnit = ['收', '出'];
 let termUnit = ['日', '月', '年'];
 let amountUnit = ['万', '亿'];
-
+import Share from 'react-native-share';
+let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Publish = React.createClass({
   getInitialState(){
     let filterItems = AppStore.getFilters().filterItems;
@@ -67,10 +71,10 @@ let Publish = React.createClass({
       rate: '',
       remark: '',
       bizOrientation: 'IN',
-      bizCategory: myCategory != null ? myCategory : item.length == 0  ? [] : item[3],
+      bizCategory: myCategory != null ? myCategory : item.length == 0 ? [] : item[3],
       bizItem: myItem != null ? myItem : item.length == 0 ? [] : item[3].itemArr[0],
       amount: '',
-      fileUrlList: []
+      fileUrlList: [],
     }
   },
 
@@ -212,28 +216,57 @@ let Publish = React.createClass({
       </View>
     )
   },
-  renderAddImg: function (isFromIM) {
+  renderAddImg (isFromIM) {
     if (!isFromIM) {
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
           <Text style={{marginLeft:10, color:'white'}}>{'添加图片'}</Text>
           <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-            <ImagePicker
-              type="all"
-              onSelected={(response) => {this.handleSendImage(response)}}
-              onError={(error) => this.handleImageError(error)}
-              title="选择图片"
-              style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
-            >
-              <Image
-                style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-                source={this.state.fileUrlList.length != 0?{uri:this.state.fileUrlList[0]}:require('../../image/market/addImage.png')}
-              />
-            </ImagePicker>
+            <View style={{width:((screenWidth-60)/5 + 10) * this.state.fileUrlList.length}}>
+              <ListView style={{}} scrollEnabled={false} horizontal={true}
+                        dataSource={ds.cloneWithRows(this.state.fileUrlList)} renderRow={this.renderImgItem}/>
+            </View>
+            {this.renderAdd()}
           </View>
         </View>
+
       )
     }
+  },
+  renderAdd (){
+    if (this.state.fileUrlList.length < 5) {
+      return (
+        <ImagePicker
+          type="all"
+          onSelected={(response) => {this.handleSendImage(response, 10)}}
+          onError={(error) => this.handleImageError(error)}
+          title="选择图片"
+          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+        >
+          <Image
+            style={{width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+            source={require('../../image/market/addImage.png')}
+          />
+        </ImagePicker>
+      );
+    }
+  },
+  renderImgItem: function (rowData, sectionID, rowID) {
+    return (
+      <ImagePicker
+        longPress={() => this._longPress(rowID)}
+        type="all"
+        onSelected={(response) => {this.handleSendImage(response, rowID)}}
+        onError={(error) => this.handleImageError(error)}
+        title="选择图片"
+        style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+      >
+        <Image
+          style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+          source={{uri:rowData}}
+        />
+      </ImagePicker>
+    )
   },
   renderRemarks: function (isFromIM) {
     if (!isFromIM) {
@@ -429,21 +462,24 @@ let Publish = React.createClass({
       amount: this.state.amount,
       fileUrlList: this.state.fileUrlList
     };
+    let item = {
+      bizCategory: (this.state.bizCategory == '' && this.state.bizItem == '') ? '资金业务 - 同业存款' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName,
+      bizOrientation: params.bizOrientation,
+      term: params.term,
+      amount: params.amount,
+      rate: params.rate
+    };
     if (param ? param.isFromIM : false) {
-      let item = {
-        bizCategory: (this.state.bizCategory == '' && this.state.bizItem == '') ? '资金业务 - 同业存款' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName,
-        bizOrientation: params.bizOrientation,
-        term: params.term,
-        amount: params.amount,
-        rate: params.rate
-      };
       this.props.navigator.pop();
       param.callBack(item);
     } else {
       this.props.exec(
         ()=> {
           return MarketAction.addBizOrder(params).then((response)=> {
-            Alert('发布成功');
+            Alert('发布成功, 是否分享?', () => {
+              this.shareDialog(item)
+            }, () => {
+            }, '分享', '不分享');
             this.props.navigator.resetTo({comp: 'tabView', tabName: 'market'});
           }).catch(
             (errorData) => {
@@ -454,12 +490,81 @@ let Publish = React.createClass({
       );
     }
   },
+  _longPress (rowId){
+    if (Platform.OS === 'ios') {
+      let options = [
+        '保存图片',
+        '删除图片',
+        '返回'
+      ];
+      ActionSheetIOS.showActionSheetWithOptions({
+          options: options,
+          cancelButtonIndex: 2,
+          destructiveButtonIndex: 1,
+        },
+        (buttonIndex) => {
+          if (buttonIndex == 0) {
+            CameraRoll.saveImageWithTag('file://' + this.state.fileUrlList[rowId]).then(
+              (data) => {console.log('CameraRoll,success' + data)},
+              (err) => {
+                console.log('CameraRoll,err' + err);
+              }
+            );
+          } else if (buttonIndex == 1) {
+            let arr = this.state.fileUrlList;
+            arr[rowId] = 0;
+            this.setState({fileUrlList: _.compact(arr)})
+          }
+        });
+    } else {
+      UserPhotoPicModule.showSaveImgDialog(
+        (index) => {
+          switch(index) {
+            case 0:
+              CameraRoll.saveImageWithTag('file://' + this.state.fileUrlList[rowId]).then(
+                (data) => {
+                  ToastAndroid.show('保存成功', ToastAndroid.SHORT);
+                },
+                (err) => {
+                  ToastAndroid.show('保存失败', ToastAndroid.SHORT);
+                }
+              );
+              break;
+            case 1:
+              let arr = this.state.fileUrlList;
+              arr[rowId] = 0;
+              this.setState({fileUrlList: _.compact(arr)});
+              break;
+            default:
+              break;
+          }
+        }
+      );
+    }
+  },
+  shareDialog (data) {
+    let amount = data.amount == '' ? '0元' : data.amount / 10000 + '万';
+    let shareContent = data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' +
+      (data.term == '' ? '0天' : data.term + '天') + '  ' +
+      amount + '  ' + numeral(data.rate * 100).format('0,0.00') + '%';
+    Share.open({
+      share_text: shareContent,
+      share_URL: Platform.OS === 'android' ? shareContent : "http://google.cl",
+      title: "Share Link"
+    }, (e) => {
+      console.log(e);
+    });
+  },
 
-  handleSendImage(uri) {
+  handleSendImage(uri, index) {
     ImAction.uploadImage(uri)
       .then((response) => {
-        let arr = [];
-        arr.push(response.fileUrl);
+        let arr = this.state.fileUrlList;
+        if (index > 5) {
+          arr.push(uri);
+        } else {
+          arr[index] = uri;
+        }
         this.setState({
           fileUrlList: arr
         });
