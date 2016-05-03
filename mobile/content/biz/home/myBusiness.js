@@ -568,9 +568,19 @@ let Market = React.createClass({
     this.refs["TERM"].setDefaultState();
     this.refs["AMOUNT"].setDefaultState();
   },
+
   _pressPublish: function () {
-    this.props.navigator.pop();
+      const { navigator } = this.props;
+      if (navigator) {
+          navigator.push({
+            comp: 'publish',
+            param: {
+              isFromMyBusiness:true
+            }
+          })
+      }
   },
+
   confirmBtn: function () {
       this.pressFilterOther();
     this.refs.marketGiftedListView._refresh();

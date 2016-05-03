@@ -208,7 +208,10 @@ var TabView = React.createClass({
             icon={require('../../image/tab/publish.png')}
             selectedIcon={require('../../image/tab/publish-selected.png')}
             exec={this.props.exec}
-            onPress={() => {navigator.push({comp: Publish})}}
+            onPress={() => {navigator.push({
+            comp: Publish,
+            sceneConfig: Navigator.SceneConfigs.FloatFromBottomAndroid
+            })}}
           >
           </View>
 
