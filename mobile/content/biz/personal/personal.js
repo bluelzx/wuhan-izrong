@@ -22,6 +22,7 @@ let AboutUs = require('./aboutUs');
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let AppStore = require('../../framework/store/appStore');
 let NameCircular = require('../im/nameCircular').NameCircular;
+let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
 
 let Personal = React.createClass({
   getStateFromStores: function () {

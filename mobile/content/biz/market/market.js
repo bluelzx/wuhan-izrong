@@ -236,7 +236,7 @@ let Market = React.createClass({
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount <= 100000000 ? numeral(rowData.amount / 10000).format('0,0') + '万' : numeral(rowData.amount / 100000000).format('0,0') + '亿'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount < 100000000 ? numeral(rowData.amount / 10000).format('0,0') + '万' : numeral(rowData.amount / 100000000).format('0,0') + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
@@ -468,7 +468,7 @@ let Market = React.createClass({
     if (this.state.clickFilterOther == 0) {
       return (
         <View></View>
-      )
+      );
     } else {
       return (
         <View
@@ -497,19 +497,19 @@ let Market = React.createClass({
               <View style={{alignItems: 'center',justifyContent:'center'}}>
                 <View
                   style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:30,borderColor:'#ed135a',borderWidth:1}}>
-                  <Text style={{color:'#ed135a',}}>{'清空'}</Text>
+                  <Text style={{color:'#ed135a'}}>{'清空'}</Text>
                 </View>
               </View>
             </TouchableHighlight>
             <TouchableHighlight onPress={() => this.confirmBtn()} underlayColor='rgba(129,127,201,0)'>
               <View
                 style={{margin:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
-                <Text style={{fontWeight: 'bold', color:'white',}}>{'确定'}</Text>
+                <Text style={{fontWeight: 'bold', color:'white'}}>{'确定'}</Text>
               </View>
             </TouchableHighlight>
           </ScrollView>
         </View>
-      )
+      );
     }
     this.clearOptions();
   },
@@ -523,7 +523,7 @@ let Market = React.createClass({
           <Text style={{marginLeft:10,color:'white'}}>{rowData.displayName}</Text>
         </View>
       </TouchableOpacity>
-    )
+    );
   },
   renderTypeRow2(rowData, sectionID, rowID){
     return (
@@ -535,7 +535,7 @@ let Market = React.createClass({
           <Text style={{marginLeft:10,color:'white'}}>{rowData.displayName}</Text>
         </View>
       </TouchableOpacity>
-    )
+    );
   },
   renderTimeRow(rowData, sectionID, rowID){
     return (
@@ -547,7 +547,7 @@ let Market = React.createClass({
           <Text style={{marginLeft:10,color:'white'}}>{rowData.fieldDisplayName}</Text>
         </View>
       </TouchableOpacity>
-    )
+    );
   },
   callBack: function (item, title, rowDefault, isAll) {
     if (title == '方向') {

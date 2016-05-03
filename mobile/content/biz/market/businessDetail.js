@@ -23,7 +23,7 @@ let numeral = require('numeral');
 let NameCircular = require('../im/nameCircular').NameCircular;
 
 let { SESSION_TYPE } = require('../../constants/dictIm');
-let Contacts = require('../im/contacts');
+let Chat = require('../im/chat');
 
 let MarketAction = require('../../framework/action/marketAction');
 
@@ -60,7 +60,7 @@ let BusinessDetail = React.createClass({
             {this.returnItem('方向:', this.state.detailData.bizOrientationDesc)}
             {this.returnItem('期限:', this.state.detailData.term == null || this.state.detailData.term == 0 ? '--' : this.state.detailData.term + '天')}
             {this.returnItem('金额:', this.state.detailData.amount == null || this.state.detailData.amount == 0 ? '--'
-              : this.state.detailData.amount <= 100000000 ? numeral(this.state.detailData.amount / 10000).format('0,0') + '万' : numeral(this.state.detailData.amount / 100000000).format('0,0') + '亿')}
+              : this.state.detailData.amount < 100000000 ? numeral(this.state.detailData.amount / 10000).format('0,0') + '万' : numeral(this.state.detailData.amount / 100000000).format('0,0') + '亿')}
             {this.returnItem('利率:', this.state.detailData.rate == null || this.state.detailData.rate == 0 ? '--' : numeral(this.state.detailData.rate * 100).format('0,0.00') + '%')}
             {this.returnItem('备注:', this.state.detailData.remark == null || this.state.detailData.remark == 0 ? '--' : this.state.detailData.remark)}
             {this.returnItem('更新时间:', this.state.lastModifyDate)}
@@ -111,7 +111,7 @@ let BusinessDetail = React.createClass({
           <NameCircular name={this.state.marketInfo.userName}/>
         </View>
         <Text style={{fontSize:16,color:'white'}}>{this.state.marketInfo.userName}</Text>
-        <TouchableHighlight onPress={()=>this.gotoIM(Contacts)} underlayColor='#153757' activeOpacity={0.8}>
+        <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#153757' activeOpacity={0.8}>
           <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
         </TouchableHighlight>
       </View>

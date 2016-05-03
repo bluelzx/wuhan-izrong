@@ -47,17 +47,17 @@ let MyBizDetail = React.createClass({
     return {
       marketInfo: marketInfo,
       bizOrientationDefault: (marketInfo.bizOrientation == 'IN') ? 0 : 1,
-      termDefault: (marketInfo.amount <= 100000000) ? 0 : 1,
-      amountDefault: (marketInfo.term < 30) ? 0 : (marketInfo.term < 365) ? 1 : 2,
+      termDefault: (marketInfo.term < 30) ? 0 : (marketInfo.term < 365) ? 1 : 2,
+      amountDefault: (marketInfo.amount <= 100000000) ? 0 : 1,
       termText: marketInfo.term == null || marketInfo.term == 0 ? '' : (marketInfo.term < 30) ? marketInfo.term.toString() : (marketInfo.term < 365) ? (marketInfo.term / 30).toString() : (marketInfo.term / 365).toString(),
       amountText: marketInfo.amount == null || marketInfo.amount == 0 ? '' : (marketInfo.amount <= 100000000) ? (marketInfo.amount / 10000).toString() : (marketInfo.amount / 100000000).toString(),
-      rateText: marketInfo.rate == null || marketInfo.rate == 0 ? '' : marketInfo.rate.toString(),
+      rateText: marketInfo.rate == null || marketInfo.rate == 0 ? '' : (marketInfo.rate * 100).toString(),
       remarkText: marketInfo.remark,
       lastModifyDate: DateHelper.formatBillDetail(t),
       //networt
       id: marketInfo.id,
       term: marketInfo.term,
-      rate: marketInfo.rate,
+      rate: marketInfo.rate * 100,
       remark: marketInfo.remark,
       bizOrientation: marketInfo.bizOrientation,
       bizCategory: marketInfo.bizCategory,
@@ -201,7 +201,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('期限:', this.state.marketInfo.term == null ? '--' : this.state.marketInfo.term)}
+          {this.returnItem('期限:', this.state.marketInfo.term == null ? '--' : this.state.marketInfo.term + '天')}
         </View>
       );
     }
@@ -227,7 +227,11 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('金额:', this.state.marketInfo.amount == null ? '--' : this.state.marketInfo.amount)}
+          {this.returnItem('金额:',
+            this.state.marketInfo.amount == null || this.state.marketInfo.amount == 0 ? '--' :
+              this.state.marketInfo.amount < 100000000 ? numeral(this.state.marketInfo.amount / 10000).format('0,0') + '万' :
+              numeral(this.state.marketInfo.amount / 100000000).format('0,0') + '亿')
+          }
         </View>
       );
     }
@@ -253,7 +257,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('利率:', this.state.marketInfo.rate == null ? '--' : this.state.marketInfo.rate + '%')}
+          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : this.state.marketInfo.rate + '%')}
         </View>
       );
     }
@@ -384,11 +388,11 @@ let MyBizDetail = React.createClass({
 
   _pressSave: function () {
     if (!Validation.isTerm(this.state.termText)) {
-      Alert('格式不合法：请输入整数');
+      Alert('期限：请输入大于0的整数');
     } else if (!Validation.isAmount(this.state.amountText)) {
-      Alert('格式不合法：请输入整数');
+      Alert('金额：请输入大于0的整数');
     } else if (!Validation.isRate(this.state.rateText)) {
-      Alert('格式不合法：请输入0-99.99之间的小数');
+      Alert('利率：请输入0.99.99之间的小数');
     } else if (this.state.amount > 100000000000) {
       Alert('您输入的金额过大');
     } else {
@@ -458,7 +462,7 @@ let MyBizDetail = React.createClass({
             bizOrientation: this.state.bizOrientation,
             term: this.state.term,
             amount: this.state.amount,
-            rate: this.state.rate,
+            rate: this.state.rate / 100,
             fileUrlList: this.state.fileUrlList,
             remark: this.state.remarkText
           }

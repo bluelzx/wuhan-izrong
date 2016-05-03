@@ -147,7 +147,7 @@ let Market = React.createClass({
             allLoaded: true, // the end of the list is reached
           });
         }, 1000); // simulating network fetching
-        Alert(errorData.msgContent);
+        Alert(errorData.msgContent || 'exception');
       }
     );
   },
@@ -174,7 +174,7 @@ let Market = React.createClass({
           <Text
             style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}
             numberOfLines={1}>
-            {rowData.rate == null || rowData.rate == 0 ? '--' : numeral(rowData.rate).format('0,0.00') + '%'}
+            {rowData.rate == null || rowData.rate == 0 ? '--' : numeral(rowData.rate * 100).format('0,0.00') + '%'}
           </Text>
           {this.renderFreshBtn(rowData)}
         </View>
