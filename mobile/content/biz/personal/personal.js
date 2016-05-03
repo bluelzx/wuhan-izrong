@@ -96,7 +96,7 @@ let Personal = React.createClass({
             <View style={styles.layout}>
               {this.returnImage()}
               <View>
-                <Text style={{fontSize: 18, color: '#ffffff'}}>{this.state.realName}</Text>
+                <Text style={{fontSize: 18, color: '#ffffff'}} numberOfLines={1}>{this.state.realName}</Text>
                 <Text style={{fontSize: 18, color: '#ffffff', marginTop: 10, width: 150}}
                       numberOfLines={1}
                 >

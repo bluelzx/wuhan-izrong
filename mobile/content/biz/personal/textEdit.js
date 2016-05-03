@@ -66,12 +66,19 @@ let TextEdit = React.createClass({
       case 'realName':
         if(this.state.newValue.length == 0){
           Alert('姓名不能为空');
-        }else if(this.state.newValue.length > 20){
-          Alert('请输入20个字符内的姓名');
-        }else {
-          this.updateUserInfo();
-        }
           break;
+        }
+        let reg =new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5]+$");
+        if (!reg.test(this.state.newValue)) {
+          Alert("请输入正确的姓名");
+          break;
+        }
+        if (this.state.newValue.length <= 20) {
+          this.updateUserInfo();
+        } else {
+          Alert('请输入20个字符内的姓名');
+        }
+        break;
       case 'phoneNumber':
         this.setState({
           newValue: this.state.tele + '-' + this.state.phone

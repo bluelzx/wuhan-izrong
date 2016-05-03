@@ -55,6 +55,7 @@ let MarketList = React.createClass({
           dataSource={this.state.dataSource}
           renderRow={this._renderRow}
           automaticallyAdjustContentInsets={false}
+          enableEmptySections={true}
         />
       </View>
     );
