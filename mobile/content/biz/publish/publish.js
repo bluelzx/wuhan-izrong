@@ -20,7 +20,7 @@ let {
   TouchableOpacity,
   InteractionManager,
   CameraRoll,
-  ToastAndroid,
+  ToastAndroid
   }=React;
 
 let { Alert ,Button } = require('mx-artifacts');
@@ -327,7 +327,7 @@ let Publish = React.createClass({
     } else if (!Validation.isAmount(this.state.amountText)) {
       Alert('金额：请输入大于0的整数');
     } else if (!Validation.isRate(this.state.rateText)) {
-      Alert('利率：请输入0.99.99之间的小数');
+      Alert('利率：请输入0-99.99之间的小数');
     } else if (this.state.amount > 100000000000) {
       Alert('您输入的金额过大');
     } else {

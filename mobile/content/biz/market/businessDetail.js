@@ -140,7 +140,8 @@ let BusinessDetail = React.createClass({
           <View style={{margin:10}}>
             <NameCircular name={this.state.marketInfo.userName}/>
           </View>
-          <Text style={{fontSize:16,color:'white'}}>{this.state.marketInfo.userName}</Text>
+          <Text style={{fontSize:16,color:'white'}}
+          numberOfLines={1}>{this.state.marketInfo.userName}</Text>
           <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#153757' activeOpacity={0.8}>
             <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
           </TouchableHighlight>
