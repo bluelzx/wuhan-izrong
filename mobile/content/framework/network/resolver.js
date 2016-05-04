@@ -58,7 +58,7 @@ let _dealMsg = function (message) {
       break;
     case MSG_TYPE.PLATFORM_INFO:
     {
-      ImStore.createPlatFormInfo(message.req, message.url);
+      //ImStore.createPlatFormInfo(message.req, message.url);
       ContactSotre.syncReq(message.createDate);
     }
       break;

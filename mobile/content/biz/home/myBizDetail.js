@@ -272,7 +272,7 @@ let MyBizDetail = React.createClass({
             <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
                    iconStyle={{}} placeholderTextColor='#325779'
                    inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
-                   placeholder='0-99.99' maxLength={3} field='rateText' inputType="numeric"
+                   placeholder='0-99.99' maxLength={5} field='rateText' inputType="numeric"
                    onChangeText={this._onChangeText}
                    value={this.state.rateText}
                    editable={false}
@@ -284,7 +284,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : this.state.marketInfo.rate * 100 + '%')}
+          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : numeral(this.state.marketInfo.rate * 100).format('0,0.00')+ '%')}
         </View>
       );
     }

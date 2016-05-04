@@ -70,13 +70,13 @@ let Register_accountInfo = React.createClass({
             Alert('请选择机构');
         } else {
             this.props.exec(()=> {
-                LoginAction.validateEmail({
-                    email:this.state.userName
-            })
-            }).then((response) => {
-                this.toPage(name, param);
-            }).catch((errorData) => {
-                throw errorData;
+                return LoginAction.validateEmail({
+                    email: this.state.userName
+                }).then((response) => {
+                    this.toPage(name, param);
+                }).catch((errorData) => {
+                    throw errorData;
+                });
             });
         }
     },
