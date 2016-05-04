@@ -23,6 +23,7 @@ let AppLinks = {
   sendSmsCodeToLoginMobile: Host + pub + '/sendSmsCodeToLoginMobile',
   sendSmsCodeToRegisterMobile: Host + pub + '/sendSmsCodeToRegisterMobile',
   validateSmsCode: Host + pub + '/validateSmsCode',
+  validateEmail:Host + pub +'/validateEmail',
   login: Host + pub + '/login',
   logout: Host + api + '/Account/logout',
   registerProtocal: Host + '/protocal.htm',
