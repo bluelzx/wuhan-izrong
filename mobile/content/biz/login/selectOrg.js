@@ -20,27 +20,12 @@ var that;
 let Register_selectOrg = React.createClass({
 
   getStateFromStores() {
-    this.getOrgList();
     that = this;
     let orgBuildList = AppStore.getOrgList();
     return {
       data: orgBuildList,
       text: ''
     };
-  },
-
-
-  getOrgList: function (orgList) {
-    this.props.exec(() => {
-      return LoginAction.getOrgList({})
-        .then((response) => {
-          console.log(response);
-          AppStore.saveOrgList(response);
-          return response;
-        }).catch((errorData) => {
-          throw errorData;
-        });
-    });
   },
 
   getInitialState: function () {
@@ -68,6 +53,22 @@ let Register_selectOrg = React.createClass({
 
   },
 
+  rendSelectAll: function(){
+    if(this.props.param.needAll){
+      return(
+        <TouchableHighlight style={{backgroundColor: '#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
+                            onPress={()=>{
+                              that.props.callback({orgValue: '全部',id: 0});
+                              that.props.navigator.pop();}
+                              }>
+          <View
+            style={{height: 40, marginLeft: 20, justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#122335'}}>
+            <Text style={{color: '#FFFFFF', textAlign: 'left'}}>全部</Text>
+          </View>
+        </TouchableHighlight>
+      );
+    }
+  },
 
   render: function () {
     return (
@@ -80,6 +81,7 @@ let Register_selectOrg = React.createClass({
           />
         </View>
         <View style={{flexDirection: 'column', flex: 1}}>
+          {this.rendSelectAll()}
           <AlphabetListView
             data={this.state.data}
             cell={Cell}

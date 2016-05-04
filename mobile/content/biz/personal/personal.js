@@ -40,13 +40,13 @@ let Personal = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange,USER_CHANGE);
-    AppStore.addChangeListener(this._onChange,ORG_CHANGE);
+    AppStore.addChangeListener(this._onChange, USER_CHANGE);
+    AppStore.addChangeListener(this._onChange, ORG_CHANGE);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange,USER_CHANGE);
-    AppStore.removeChangeListener(this._onChange,ORG_CHANGE);
+    AppStore.removeChangeListener(this._onChange, USER_CHANGE);
+    AppStore.removeChangeListener(this._onChange, ORG_CHANGE);
   },
 
   _onChange: function () {
@@ -76,7 +76,7 @@ let Personal = React.createClass({
       );
     }
     return (
-      <View style = {{marginLeft:20}}>
+      <View style={{marginLeft:20}}>
         <NameCircular name={this.state.realName}/>
       </View>
     );
@@ -96,7 +96,10 @@ let Personal = React.createClass({
             <View style={styles.layout}>
               {this.returnImage()}
               <View>
-                <Text style={{fontSize: 18, color: '#ffffff'}} numberOfLines={1}>{this.state.realName}</Text>
+                <Text style={{fontSize: 18, color: '#ffffff',width: 150}}
+                      numberOfLines={1}>
+                  {this.state.realName}
+                </Text>
                 <Text style={{fontSize: 18, color: '#ffffff', marginTop: 10, width: 150}}
                       numberOfLines={1}
                 >
