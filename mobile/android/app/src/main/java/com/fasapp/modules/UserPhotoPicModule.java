@@ -85,6 +85,30 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
+    public void showImgDialog(final Callback callback) {
+        Activity currentActivity = getCurrentActivity();
+        String[] items = {"保存图片"};
+        new AlertDialog.Builder(currentActivity)
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                callback.invoke();
+                                break;
+                        }
+                    }
+
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+    }
+
+    @ReactMethod
     public void showImagePic(String type,boolean needCrop ,String name, Callback callback) {
         crop = needCrop;
         fileName = new Date().getTime() + ".jpg";

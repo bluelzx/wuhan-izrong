@@ -15,7 +15,12 @@ let {
   Image,
   StyleSheet,
   TouchableOpacity,
-  InteractionManager
+  InteractionManager,
+  ListView,
+  ActionSheetIOS,
+  Platform,
+  CameraRoll,
+  ToastAndroid
   }=React;
 
 let { Alert } = require('mx-artifacts');
@@ -38,6 +43,8 @@ let ImAction = require('../../framework/action/imAction');
 let bizOrientationUnit = ['收', '出'];
 let termUnit = ['日', '月', '年'];
 let amountUnit = ['万', '亿'];
+
+let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 let MyBizDetail = React.createClass({
   getInitialState(){
@@ -295,29 +302,42 @@ let MyBizDetail = React.createClass({
         <View style={{flexDirection:'column',marginTop:10}}>
           <Text style={{marginLeft:10, color:'white'}}>{'添加图片'}</Text>
           <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-            <ImagePicker
-              type="all"
-              onSelected={(response) => {this.handleSendImage(response)}}
-              onError={(error) => this.handleImageError(error)}
-              fileId="myBiz1"
-              allowsEditing={true}
-              title="选择图片"
-              style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
-            >
-              <Image
-                style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-                source={this.state.fileUrlList.length != 0?{uri:this.state.fileUrlList[0]}:require('../../image/market/addImage.png')}
-              />
-            </ImagePicker>
+            <View style={{width:((screenWidth-60)/5 + 10) * this.state.fileUrlList.length}}>
+              <ListView style={{}} scrollEnabled={false} horizontal={true}
+                        dataSource={ds.cloneWithRows(this.state.fileUrlList)} renderRow={this.renderImgItem}/>
+            </View>
+            {this.renderAdd()}
           </View>
         </View>
-      );
+
+      )
     } else {
       return (
         <View>
           {this.renderImageTitle()}
           {this.renderImageItem()}
         </View>
+      );
+    }
+  },
+
+  renderAdd (){
+    if (this.state.fileUrlList.length < 5) {
+      return (
+        <ImagePicker
+          type="all"
+          onSelected={(response) => {this.handleSendImage(response, 10)}}
+          onError={(error) => this.handleImageError(error)}
+          title="选择图片"
+          fileId="publish1"
+          allowsEditing={true}
+          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+        >
+          <Image
+            style={{width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+            source={require('../../image/market/addImage.png')}
+          />
+        </ImagePicker>
       );
     }
   },
@@ -331,22 +351,22 @@ let MyBizDetail = React.createClass({
       return <View></View>;
     }
   },
-  renderImageItem: function () {
+  renderImgItem: function (rowData, sectionID, rowID) {
     return (
-      <View style={{flexDirection:'row',marginTop:10}}>
-        {
-          this.state.fileUrlList.map((item, index) => {
-            return (
-              <Image
-                key={index}
-                style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
-                source={{uri:item, isStatic: true}}
-              />
-            )
-          })
-        }
-      </View>
-    );
+      <ImagePicker
+        longPress={() => this._longPress(rowID)}
+        type="all"
+        onSelected={(response) => {this.handleSendImage(response, rowID)}}
+        onError={(error) => this.handleImageError(error)}
+        title="选择图片"
+        style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+      >
+        <Image
+          style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+          source={{uri:rowData}}
+        />
+      </ImagePicker>
+    )
   },
   renderRemarks: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
@@ -413,6 +433,59 @@ let MyBizDetail = React.createClass({
     )
   },
 
+  _longPress (rowId){
+    if (Platform.OS === 'ios') {
+      let options = [
+        '保存图片',
+        '删除图片',
+        '返回'
+      ];
+      ActionSheetIOS.showActionSheetWithOptions({
+          options: options,
+          cancelButtonIndex: 2,
+          destructiveButtonIndex: 1,
+        },
+        (buttonIndex) => {
+          if (buttonIndex == 0) {
+            CameraRoll.saveImageWithTag('file://' + this.state.fileUrlList[rowId]).then(
+              (data) => {Alert('保存成功')},
+              (err) => {
+                console.log('CameraRoll,err' + err);
+              }
+            );
+          } else if (buttonIndex == 1) {
+            let arr = this.state.fileUrlList;
+            arr[rowId] = 0;
+            this.setState({fileUrlList: _.compact(arr)})
+          }
+        });
+    } else {
+      UserPhotoPicModule.showSaveImgDialog(
+        (index) => {
+          switch(index) {
+            case 0:
+              CameraRoll.saveImageWithTag('file://' + this.state.fileUrlList[rowId]).then(
+                (data) => {
+                  ToastAndroid.show('保存成功', ToastAndroid.SHORT);
+                },
+                (err) => {
+                  ToastAndroid.show('保存失败', ToastAndroid.SHORT);
+                }
+              );
+              break;
+            case 1:
+              let arr = this.state.fileUrlList;
+              arr[rowId] = 0;
+              this.setState({fileUrlList: _.compact(arr)});
+              break;
+            default:
+              break;
+          }
+        }
+      );
+    }
+  },
+
   _pressSave: function () {
     if (!Validation.isTerm(this.state.termText)) {
       Alert('期限：请输入大于0的整数');
@@ -427,6 +500,7 @@ let MyBizDetail = React.createClass({
     }
 
   },
+
   shutDownBiz: function () {
       Alert('你确定下架该业务吗?',() => {
           this.downselfBizOrder(this.state.marketInfo.id)
@@ -459,10 +533,6 @@ let MyBizDetail = React.createClass({
           }
         ).then((response)=> {
           let detail = (JSON.stringify(response));
-          console.log(detail);
-          {
-            this.setStsteWithBizDetail(response);
-          }
         }).catch(
           (errorData) => {
             throw errorData;
@@ -470,14 +540,6 @@ let MyBizDetail = React.createClass({
         );
       }
     );
-  },
-
-  requestParameter: function () {
-    this.setState({
-      term: (this.state.termDefault == 0) ? Number(value) : (this.state.termDefault == 1) ? Number(value) * 30 : Number(value) * 365,
-      amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000,
-      rate: Number(this.state.rateText) / 100
-    });
   },
 
   updateBizOrder: function () {
@@ -521,13 +583,17 @@ let MyBizDetail = React.createClass({
       }
     );
   },
-  handleSendImage(uri) {
+  handleSendImage(uri,index) {
     this.props.exec(
       ()=> {
         return ImAction.uploadImage(uri)
           .then((response) => {
-            let arr = [];
-            arr.push(response.fileUrl);
+            let arr = this.state.fileUrlList;
+            if (index > 5) {
+              arr.push(uri);
+            } else {
+              arr[index] = uri;
+            }
             this.setState({
               fileUrlList: arr
             });
