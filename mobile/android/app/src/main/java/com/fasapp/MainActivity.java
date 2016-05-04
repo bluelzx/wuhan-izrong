@@ -4,13 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
-import com.facebook.react.bridge.ReactApplicationContext;
 
 import com.facebook.react.ReactActivity;
 import cl.json.RNSharePackage;
 import io.realm.react.RealmReactPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import cl.json.RNSharePackage;
+
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 
@@ -55,6 +54,8 @@ public class MainActivity extends ReactActivity {
      * A list of packages used by the app. If the app uses additional views
      * or modules besides the default ones, add more packages here.
      */
+
+
 
     @Override
     protected List<ReactPackage> getPackages() {

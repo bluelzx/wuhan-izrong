@@ -26,6 +26,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
     @Override
     public void onAnimationEnd(Animation animation) {
+        finish();
         startActivity(new Intent(SplashActivity.this, MainActivity.class));
     }
 
