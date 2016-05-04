@@ -252,7 +252,7 @@ let Market = React.createClass({
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount < 100000000 ? numeral(rowData.amount / 10000).format('0,0') + '万' : numeral(rowData.amount / 100000000).format('0,0') + '亿'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount < 100000000 ? (rowData.amount / 10000)+ '万' : rowData.amount / 100000000 + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}

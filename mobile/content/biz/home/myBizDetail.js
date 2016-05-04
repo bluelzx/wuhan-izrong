@@ -58,7 +58,7 @@ let MyBizDetail = React.createClass({
       amountDefault: (marketInfo.amount <= 100000000) ? 0 : 1,
       termText: this.termChangeHelp(marketInfo.term).toString(),
       amountText: marketInfo.amount == null || marketInfo.amount == 0 ? '' : (marketInfo.amount <= 100000000) ? (marketInfo.amount / 10000).toString() : (marketInfo.amount / 100000000).toString(),
-      rateText: marketInfo.rate == null || marketInfo.rate == 0 ? '' : (numeral(marketInfo.rate * 100).format('0,0.00')).toString(),
+      rateText: marketInfo.rate == null || marketInfo.rate == 0 ? '' : (marketInfo.rate * 100).toString(),
       remarkText: marketInfo.remark,
       lastModifyDate: DateHelper.formatBillDetail(t),
       //networt
@@ -263,8 +263,8 @@ let MyBizDetail = React.createClass({
         <View style={{flexDirection:'row',marginTop:10}}>
           {this.returnItem('金额:',
             this.state.marketInfo.amount == null || this.state.marketInfo.amount == 0 ? '--' :
-              this.state.marketInfo.amount < 100000000 ? numeral(this.state.marketInfo.amount / 10000).format('0,0') + '万' :
-              numeral(this.state.marketInfo.amount / 100000000).format('0,0.00') + '亿')
+              this.state.marketInfo.amount < 100000000 ? this.state.marketInfo.amount / 10000 + '万' :
+              (this.state.marketInfo.amount / 100000000) + '亿')
           }
         </View>
       );
@@ -509,7 +509,7 @@ let MyBizDetail = React.createClass({
     if (!Validation.isTerm(this.state.termText)) {
       Alert('期限：请输入大于0的整数');
     } else if (!Validation.isAmount(this.state.amountText)) {
-      Alert('金额：请输入大于0的整数');
+      Alert('金额：请输入正确的浮点数');
     } else if (!Validation.isRate(this.state.rateText)) {
       Alert('利率：请输入0-99.99之间的小数');
     } else if (this.state.amount > 100000000000) {

@@ -325,7 +325,7 @@ let Publish = React.createClass({
     if (!Validation.isTerm(this.state.termText)) {
       Alert('期限：请输入大于0的整数');
     } else if (!Validation.isAmount(this.state.amountText)) {
-      Alert('金额：请输入大于0的整数');
+      Alert('金额：请输入正确的浮点数');
     } else if (!Validation.isRate(this.state.rateText)) {
       Alert('利率：请输入0-99.99之间的小数');
     } else if (this.state.amount > 100000000000) {
