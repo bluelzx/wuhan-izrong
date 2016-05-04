@@ -576,6 +576,7 @@ let MyBizDetail = React.createClass({
             remark: this.state.remarkText
           }
         ).then((response)=> {
+          this.props.param.callbackRefresh();
           Alert('保存成功',()=>this.props.navigator.pop());
         }).catch(
           (errorData) => {
@@ -593,6 +594,7 @@ let MyBizDetail = React.createClass({
             orderId: id
           }
         ).then((response)=> {
+          this.props.param.callbackRefresh();
           Alert('下架成功',()=>this.props.navigator.pop());
         }).catch(
           (errorData) => {

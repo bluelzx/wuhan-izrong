@@ -23,11 +23,12 @@ let numeral = require('numeral');
 let NameCircular = require('../im/nameCircular').NameCircular;
 
 let AppStore = require('../../framework/store/appStore');
-
+let { Alert } = require('mx-artifacts');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Chat = require('../im/chat');
 
 let MarketAction = require('../../framework/action/marketAction');
+let { MARKET_CHANGE } = require('../../constants/dictEvent');
 
 let BusinessDetail = React.createClass({
   getInitialState(){
@@ -49,6 +50,10 @@ let BusinessDetail = React.createClass({
       this.getBizOrderInMarket(this.state.marketInfo.id);
     });
   },
+
+  componentWillUnmount: function () {
+  },
+
 
   termChangeHelp(term){
     if (term == null || term == 0) {
@@ -88,10 +93,10 @@ let BusinessDetail = React.createClass({
           {this.renderAdjunct()}
           <View style={{backgroundColor:'#153757',borderRadius:2,margin:10}}>
             {this.renderPromulgator()}
-            {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone)}
-            {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile)}
-            {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo)}
-            {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo)}
+            {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber == null ? '未填写' : this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone)}
+            {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber == null ? '未填写' : this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile)}
+            {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo == null ? '未填写' : this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo)}
+            {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo == null ? '未填写' : this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo)}
             {this.returnInfoItem(require('../../image/market/org.png'), this.state.marketInfo.orgName, true)}
           </View>
         </View>
@@ -120,6 +125,7 @@ let BusinessDetail = React.createClass({
     return (
       <View>
         {this.renderImageTitle()}
+        {this.renderImageItem()}
       </View>
     );
   },
@@ -140,7 +146,7 @@ let BusinessDetail = React.createClass({
             <NameCircular name={this.state.marketInfo.userName}/>
           </View>
           <Text style={{fontSize:16,color:'white'}}
-          numberOfLines={1}>{this.state.marketInfo.userName}</Text>
+                numberOfLines={1}>{this.state.marketInfo.userName}</Text>
           <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#153757' activeOpacity={0.8}>
             <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
           </TouchableHighlight>
@@ -188,7 +194,6 @@ let BusinessDetail = React.createClass({
       </View>
     );
   },
-
   gotoIM: function (name) {
     const { navigator } = this.props;
     if (navigator) {
