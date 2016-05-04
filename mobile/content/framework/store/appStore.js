@@ -1,6 +1,8 @@
-let { NetInfo } = require('react-native');
+let { NetInfo, Platform } = require('react-native');
 let _ = require('lodash');
 let EventEmitter = require('events').EventEmitter;
+let ServiceModule = require('NativeModules').ServiceModule;
+let { ImHost } = require('../../../config');
 //let ImSocket = require('../network/imSocket');
 
 //let { MsgTypes } = require('../../constants/notification');
@@ -64,6 +66,8 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getItem: ()=> _getItem(),
   queryAllPlatFormInfo: ()=>_queryAllPlatFormInfo(),
   getBadge: ()=>_getBadge(),
+  startJavaServer:() => ServiceModule.startAppService(_data.token, 0, ImHost),
+  //stopJavaServer:() => ServiceModule.stopMyAppService()
 });
 
 let _queryAllPlatFormInfo = function () {
@@ -92,6 +96,10 @@ let _appInit = () => {
     filters: Persister.getFilters()
   });
   //ImSocket.init(_data.token);
+  //if (Platform.OS === 'android' && _data.token) {
+  //  //ServiceModule.setIsLoginToSP(true);
+  //  ServiceModule.startAppService(_data.token, 0, ImHost);
+  //}
   AppStore.emitChange();
 };
 
@@ -111,12 +119,21 @@ let _login = (data) => {
     // imSocket.init(data.token);
     AppStore.emitChange();
   });
+  //.then(()=>{
+  //  if (Platform.OS === 'android' && _data.token) {
+  //    //ServiceModule.setIsLoginToSP(true);
+  //    ServiceModule.startAppService(_data.token, 0, ImHost);
+  //  }
+  //});
 };
 
 let _logout = (userId) => {
   Persister.logout(userId);
   _info.isLogout = true;
   _data.token = '';
+  //if (Platform.OS === 'android' ) {
+  //  ServiceModule.stopAppService();
+  //}
   AppStore.emitChange();
 };
 

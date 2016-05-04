@@ -7,7 +7,8 @@ const {
   PLATFORMINFO,
   SESSION
   } = require('./schemas');
-let { SESSION_TYPE } = require('../../constants/dictIm');
+let { SESSION_TYPE, MSG_CONTENT_TYPE } = require('../../constants/dictIm');
+
 
 let PlatFormInfoPersisterFacade = {
   createPlatFormInfo:(infoId, title, content, createDate)=>_createPlatFormInfo(infoId, title, content, createDate),
@@ -46,7 +47,7 @@ let _queryAll = function() {
       content:item.content,
       createDate:item.createDate
     }
-    ret.push(ret);
+    ret.push(p);
   });
   return ret;
 }
