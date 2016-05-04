@@ -33,7 +33,6 @@ let AppStore = require('../../framework/store/appStore');
 
 let {Alert, GiftedListView, Button} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
-let { MARKET_CHANGE } = require('../../constants/dictEvent');
 
 let marketData = {contentList: []};
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -94,13 +93,15 @@ let Market = React.createClass({
   },
 
   componentDidMount() {
+    AppStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function () {
+    AppStore.removeChangeListener(this._onChange);
   },
 
   _onChange () {
-    //this.refs.marketGiftedListView._refresh()
+    //this.setState(this.bizOrderAdminSearch());
   },
 
   /**
@@ -151,16 +152,16 @@ let Market = React.createClass({
   },
 
   termChangeHelp(term){
-    if (term == null || term == 0) {
+    if(term == null || term == 0){
       return '--';
-    } else if (term % 365 == 0) {
-      return term / 365 + '年';
-    } else if (term % 30 == 0) {
-      return term / 30 + '月';
-    } else if (term == 1) {
+    }else if (term % 365 == 0){
+      return term/365 + '年';
+    }else if (term % 30 == 0){
+      return term/30 + '月';
+    }else if (term == 1){
       return '隔夜';
     }
-    else {
+    else{
       return term + '天';
     }
   },
@@ -183,7 +184,7 @@ let Market = React.createClass({
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'?'rgba(175,134,86,1)':'#386085'}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount <= 100000000 ? numeral(rowData.amount / 10000).format('0,0') + '万' : numeral(rowData.amount / 100000000).format('0,0') + '亿'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount <= 100000000 ? numeral(rowData.amount / 10000) + '万' : numeral(rowData.amount / 100000000) + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}
@@ -225,8 +226,7 @@ let Market = React.createClass({
       navigator.push({
         comp: name,
         param: {
-          marketInfo: rowData,
-          callbackRefresh: this.callbackRefresh
+          marketInfo: rowData
         }
       })
     }
@@ -294,7 +294,7 @@ let Market = React.createClass({
   },
 
   _emptyView: function () {
-    return (
+    return(
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
 
       </View>
@@ -582,10 +582,6 @@ let Market = React.createClass({
     });
   },
 
-  callbackRefresh: function () {
-    this.refs.marketGiftedListView._refresh();
-  },
-
   clearOptions: function () {
     this.refs["ORIENTATION"].setDefaultState();
     this.refs["TERM"].setDefaultState();
@@ -593,19 +589,19 @@ let Market = React.createClass({
   },
 
   _pressPublish: function () {
-    const { navigator } = this.props;
-    if (navigator) {
-      navigator.push({
-        comp: 'publish',
-        param: {
-          isFromMyBusiness: true
-        }
-      })
-    }
+      const { navigator } = this.props;
+      if (navigator) {
+          navigator.push({
+            comp: 'publish',
+            param: {
+              isFromMyBusiness:true
+            }
+          })
+      }
   },
 
   confirmBtn: function () {
-    this.pressFilterOther();
+      this.pressFilterOther();
     this.refs.marketGiftedListView._refresh();
   },
   toPage: function (name) {

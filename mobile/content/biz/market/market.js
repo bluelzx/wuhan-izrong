@@ -160,6 +160,7 @@ let Market = React.createClass({
   },
 
 
+
   /**
    * Will be called when refreshing
    * Should be replaced by your own logic
@@ -228,16 +229,16 @@ let Market = React.createClass({
   },
 
   termChangeHelp(term){
-    if (term == null || term == 0) {
+    if(term == null || term == 0){
       return '--';
-    } else if (term % 365 == 0) {
-      return term / 365 + '年';
-    } else if (term % 30 == 0) {
-      return term / 30 + '月';
-    } else if (term == 1) {
+    }else if (term % 365 == 0){
+      return term/365 + '年';
+    }else if (term % 30 == 0){
+      return term/30 + '月';
+    }else if (term == 1){
       return '隔夜';
     }
-    else {
+    else{
       return term + '天';
     }
   },
@@ -259,7 +260,7 @@ let Market = React.createClass({
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount < 100000000 ? numeral(rowData.amount / 10000).format('0,0') + '万' : numeral(rowData.amount / 100000000).format('0,0') + '亿'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount < 100000000 ? (rowData.amount / 10000)+ '万' : rowData.amount / 100000000 + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
@@ -514,14 +515,11 @@ let Market = React.createClass({
             </TouchableOpacity>
             <View>
               <FilterSelectBtn ref="ORIENTATION" typeTitle={'方向'} dataList={this.state.bizOrientation} section={3}
-                               callBack={this.callBack} rowDefault={this.state.orientionDefault}
-                               isAll={this.state.orientionIsAll}/>
+                               callBack={this.callBack} rowDefault={this.state.orientionDefault} isAll={this.state.orientionIsAll}/>
               <FilterSelectBtn ref="TERM" typeTitle={'期限'} dataList={this.state.term} section={3}
-                               callBack={this.callBack} rowDefault={this.state.termDefault}
-                               isAll={this.state.termIsAll}/>
+                               callBack={this.callBack} rowDefault={this.state.termDefault} isAll={this.state.termIsAll}/>
               <FilterSelectBtn ref="AMOUNT" typeTitle={'金额'} dataList={this.state.amount} section={2}
-                               callBack={this.callBack} rowDefault={this.state.amountDefault}
-                               isAll={this.state.amountIsAll}/>
+                               callBack={this.callBack} rowDefault={this.state.amountDefault} isAll={this.state.amountIsAll}/>
             </View>
             <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
               <View style={{alignItems: 'center',justifyContent:'center'}}>
@@ -625,7 +623,7 @@ let Market = React.createClass({
     this.refs["TERM"].setDefaultState();
     this.refs["AMOUNT"].setDefaultState();
     this.setState({
-      orgValue: ''
+          orgValue:''
     });
   },
 
