@@ -117,7 +117,7 @@ let _getOrgList = function (url) {
   });
 };
 
-let _bizOrderMarketSearchDefaultSearch = function (url) {
+let _bizOrderMarketSearchDefaultSearch = function (url,p) {
   return new Promise((resolve, reject) => {
     BFetch(url).then((response) => {
       resolve(response);
@@ -129,8 +129,8 @@ let _bizOrderMarketSearchDefaultSearch = function (url) {
 
 let _validateEmail = function (url, p) {
   return new Promise((resolve, reject) => {
-    BFetch(url, p).then((response) => {
-      resolve(AppStore.register(response));
+    PFetch(url, p).then((response) => {
+      resolve(response);
     }).catch((errorData) => {
       reject(errorData);
     });

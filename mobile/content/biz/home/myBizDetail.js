@@ -291,7 +291,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : this.state.marketInfo.rate * 100 + '%')}
+          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : numeral(this.state.marketInfo.rate * 100).format('0,0.00')+ '%')}
         </View>
       );
     }
