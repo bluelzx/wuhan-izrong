@@ -210,14 +210,13 @@ let _saveCategory = (data) => {
   _.assign(_data, {
     category: data
   });
-  //AppStore.emitChange();
 };
 
 let _saveItem = (data) => {
   _.assign(_data, {
     item: data
   });
-  //AppStore.emitChange();
+  AppStore.emitChange(MARKET_CHANGE);
 };
 
 let _getCategory = () => {

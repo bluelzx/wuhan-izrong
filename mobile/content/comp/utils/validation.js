@@ -112,7 +112,7 @@ module.exports = {
   },
   isAmount: function (data) {
     if (!_.isEmpty(data)) {
-      let reg = /^([1-9][0-9]{0,8})$/;
+      let reg = /^[0-9]+(\.[0-9]+)?$/;
       if (!reg.test(data)) {
         console.log('格式不合法：请输入整数');
         return false;

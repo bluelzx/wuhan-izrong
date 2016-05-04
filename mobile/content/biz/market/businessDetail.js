@@ -23,11 +23,12 @@ let numeral = require('numeral');
 let NameCircular = require('../im/nameCircular').NameCircular;
 
 let AppStore = require('../../framework/store/appStore');
-
+let { Alert } = require('mx-artifacts');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Chat = require('../im/chat');
 
 let MarketAction = require('../../framework/action/marketAction');
+let { MARKET_CHANGE } = require('../../constants/dictEvent');
 
 let BusinessDetail = React.createClass({
   getInitialState(){
@@ -49,6 +50,10 @@ let BusinessDetail = React.createClass({
       this.getBizOrderInMarket(this.state.marketInfo.id);
     });
   },
+
+  componentWillUnmount: function () {
+  },
+
 
   termChangeHelp(term){
     if (term == null || term == 0) {
@@ -80,7 +85,7 @@ let BusinessDetail = React.createClass({
             {this.returnItem('方向:', this.state.detailData.bizOrientationDesc)}
             {this.returnItem('期限:', this.termChangeHelp(this.state.detailData.term))}
             {this.returnItem('金额:', this.state.detailData.amount == null || this.state.detailData.amount == 0 ? '--'
-              : this.state.detailData.amount < 100000000 ? numeral(this.state.detailData.amount / 10000).format('0,0') + '万' : numeral(this.state.detailData.amount / 100000000).format('0,0') + '亿')}
+              : this.state.detailData.amount < 100000000 ? (this.state.detailData.amount / 10000) + '万' : (this.state.detailData.amount / 100000000) + '亿')}
             {this.returnItem('利率:', this.state.detailData.rate == null || this.state.detailData.rate == 0 ? '--' : numeral(this.state.detailData.rate * 100).format('0,0.00') + '%')}
             {this.returnItem('备注:', this.state.detailData.remark == null || this.state.detailData.remark == 0 ? '--' : this.state.detailData.remark)}
             {this.returnItem('更新时间:', this.state.lastModifyDate)}
@@ -88,10 +93,10 @@ let BusinessDetail = React.createClass({
           {this.renderAdjunct()}
           <View style={{backgroundColor:'#153757',borderRadius:2,margin:10}}>
             {this.renderPromulgator()}
-            {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone)}
-            {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile)}
-            {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo)}
-            {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo)}
+            {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber == null ? '未填写' : this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone)}
+            {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber == null ? '未填写' : this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile)}
+            {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo == null ? '未填写' : this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo)}
+            {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo == null ? '未填写' : this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo)}
             {this.returnInfoItem(require('../../image/market/org.png'), this.state.marketInfo.orgName, true)}
           </View>
         </View>
@@ -140,7 +145,8 @@ let BusinessDetail = React.createClass({
           <View style={{margin:10}}>
             <NameCircular name={this.state.marketInfo.userName}/>
           </View>
-          <Text style={{fontSize:16,color:'white'}}>{this.state.marketInfo.userName}</Text>
+          <Text style={{fontSize:16,color:'white'}}
+                numberOfLines={1}>{this.state.marketInfo.userName}</Text>
           <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#153757' activeOpacity={0.8}>
             <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
           </TouchableHighlight>
@@ -188,7 +194,6 @@ let BusinessDetail = React.createClass({
       </View>
     );
   },
-
   gotoIM: function (name) {
     const { navigator } = this.props;
     if (navigator) {

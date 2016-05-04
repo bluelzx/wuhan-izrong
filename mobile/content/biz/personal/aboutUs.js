@@ -42,12 +42,16 @@ var AboutUs = React.createClass({
             <Item desc="网站邮箱:" img={false} icon={false} hiddenArrow={true} value={this.state.email}/>
             <Item desc="版本号:" img={false} icon={false} hiddenArrow={true} value={this.state.versionNo}/>
           </View>
+
+
+        </ScrollView>
+        <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
           <View style={{paddingTop:32, alignItems: 'center'}}>
             <Text style={styles.font}>隐私政策</Text>
             <Text style={styles.font}>© 2015,all rights reserved.</Text>
           </View>
           <View style={[styles.borderBottom, {marginTop:6, marginHorizontal:12}]}/>
-        </ScrollView>
+        </View>
       </NavBarView>
     );
   }
@@ -70,6 +74,7 @@ var styles = StyleSheet.create({
     marginTop: 18
   },
   content: {
+    marginTop: 10,
     fontSize: 13,
     color: '#ffffff',
     lineHeight: 23,

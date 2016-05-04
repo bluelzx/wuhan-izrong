@@ -82,10 +82,10 @@ let _dealMsg = function (message) {
       ContactSotre.leaveGroup(message.groupId);
       break;
     case MSG_TYPE.SYNC_REQ:
-      //message.msgArray.forEach((item)=>{
-      //  console.log(JSON.parse(item));
-      //  _dealMsg(JSON.parse(item));
-      //});
+      message.msgArray.forEach((item)=>{
+        console.log(JSON.parse(item));
+        _dealMsg(JSON.parse(item));
+      });
       break;
     default:
       console.log('None message type matched! [%s]', message.msgType);

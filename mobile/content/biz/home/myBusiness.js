@@ -34,8 +34,7 @@ let AppStore = require('../../framework/store/appStore');
 let {Alert, GiftedListView, Button} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
 
-var marketData = {contentList: []};
-
+let marketData = {contentList: []};
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Market = React.createClass({
 
@@ -66,7 +65,7 @@ let Market = React.createClass({
       clickFilterTime: 0,
       clickFilterOther: 0,
       levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[0].displayName,
-      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[0].itemArr[1].displayName,
+      levelTwoText: myItem != null ? myItem.displayName : item.length == 0 ? '' : item[0].itemArr[1].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -85,7 +84,7 @@ let Market = React.createClass({
       orderType: 'desc',
       pageIndex: 1,
       bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? [] : item[0].id,
-      bizItemID: myItem != null ? myItem.id: item.length == 0 ? [] : item[0].itemArr[1].id,
+      bizItemID: myItem != null ? myItem.id : item.length == 0 ? [] : item[0].itemArr[1].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -116,7 +115,7 @@ let Market = React.createClass({
     return MarketAction.bizOrderAdminSearch({
         orderField: this.state.orderField,
         orderType: this.state.orderType,
-        pageIndex: this.state.pageIndex,
+        pageIndex: page,
         filterList: [
           this.state.bizCategoryID,
           this.state.bizItemID,
@@ -185,7 +184,7 @@ let Market = React.createClass({
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'?'rgba(175,134,86,1)':'#386085'}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount <= 100000000 ? numeral(rowData.amount / 10000).format('0,0') + '万' : numeral(rowData.amount / 100000000).format('0,0') + '亿'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount <= 100000000 ? numeral(rowData.amount / 10000) + '万' : numeral(rowData.amount / 100000000) + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?'white':'#386085'}}
@@ -277,7 +276,7 @@ let Market = React.createClass({
           refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
           withSections={false} // enable sections
           emptyView={this._emptyView}
-          
+
           enableEmptySections={true}
           automaticallyAdjustContentInsets={false}
           customStyles={{

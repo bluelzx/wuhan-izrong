@@ -23,7 +23,12 @@ let LoginActions = {
   validateSmsCode: (p) => _validateSmsCode(AppLinks.validateSmsCode, p),
   uploadFile: (uri, fileFieldName) => _uploadFile(AppLinks.uploadFile,uri, fileFieldName),
   getOrgList: () => _getOrgList(AppLinks.getOrgList),
-  bizOrderMarketSearchDefaultSearch: (url) => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch)
+  bizOrderMarketSearchDefaultSearch: (url) => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch),
+
+  //用户模块中，app用户注册时，在输入邮箱时，单独增加接口做邮箱校验。
+  //URL：/app/pub/validateEmail
+  //parameter：String email
+  validateEmail:(p) => _validateEmail(AppLinks.validateEmail,p)
 
 };
 
@@ -112,7 +117,7 @@ let _getOrgList = function (url) {
   });
 };
 
-let _bizOrderMarketSearchDefaultSearch = function (url) {
+let _bizOrderMarketSearchDefaultSearch = function (url,p) {
   return new Promise((resolve, reject) => {
     BFetch(url).then((response) => {
       resolve(response);
@@ -122,5 +127,14 @@ let _bizOrderMarketSearchDefaultSearch = function (url) {
   });
 };
 
+let _validateEmail = function (url, p) {
+  return new Promise((resolve, reject) => {
+    PFetch(url, p).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
 
 module.exports = LoginActions;
