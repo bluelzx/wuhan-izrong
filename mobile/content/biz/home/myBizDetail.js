@@ -368,6 +368,25 @@ let MyBizDetail = React.createClass({
       </ImagePicker>
     )
   },
+
+  renderImageItem: function () {
+    return (
+      <View style={{flexDirection:'row',marginTop:10}}>
+        {
+          this.state.fileUrlList.map((item, index) => {
+            return (
+              <Image
+                key={index}
+                style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
+                source={{uri:item, isStatic: true}}
+              />
+            )
+          })
+        }
+      </View>
+    );
+  },
+
   renderRemarks: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
@@ -590,7 +609,7 @@ let MyBizDetail = React.createClass({
           .then((response) => {
             let arr = this.state.fileUrlList;
             if (index > 5) {
-              arr.push(uri);
+              arr.push(response.fileUrl);
             } else {
               arr[index] = uri;
             }

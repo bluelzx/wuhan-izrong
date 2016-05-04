@@ -120,7 +120,6 @@ let BusinessDetail = React.createClass({
     return (
       <View>
         {this.renderImageTitle()}
-        {this.renderImageItem()}
       </View>
     );
   },
