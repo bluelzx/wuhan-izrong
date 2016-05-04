@@ -18,6 +18,7 @@ let ViewPager = require('react-native-viewpager');
 let MarketList = require('../market/marketList');
 let myBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
+let {MARKET_CHANGE} = require('../../constants/dictEvent');
 
 
 var PAGES = [
@@ -55,11 +56,11 @@ let Home = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange);
+    AppStore.addChangeListener(this._onChange,MARKET_CHANGE);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange);
+    AppStore.removeChangeListener(this._onChange,MARKET_CHANGE);
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
