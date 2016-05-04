@@ -21,7 +21,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
     @Override
     public void onAnimationStart(Animation animation) {
-
     }
 
     @Override

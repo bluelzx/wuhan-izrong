@@ -34,8 +34,7 @@ let AppStore = require('../../framework/store/appStore');
 let {Alert, GiftedListView, Button} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
 
-var marketData = {contentList: []};
-
+let marketData = {contentList: []};
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Market = React.createClass({
 
@@ -66,7 +65,7 @@ let Market = React.createClass({
       clickFilterTime: 0,
       clickFilterOther: 0,
       levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[0].displayName,
-      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[0].itemArr[1].displayName,
+      levelTwoText: myItem != null ? myItem.displayName : item.length == 0 ? '' : item[0].itemArr[1].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -85,7 +84,7 @@ let Market = React.createClass({
       orderType: 'desc',
       pageIndex: 1,
       bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? [] : item[0].id,
-      bizItemID: myItem != null ? myItem.id: item.length == 0 ? [] : item[0].itemArr[1].id,
+      bizItemID: myItem != null ? myItem.id : item.length == 0 ? [] : item[0].itemArr[1].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',

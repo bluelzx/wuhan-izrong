@@ -64,13 +64,13 @@ let Market = React.createClass({
       term: term,
       amount: amount,
       categorySource: categoryArr,
-      itemSource: item ? [] : item[0].itemArr,
+      itemSource: item.length == 0 ? [] : item[0].itemArr,
       termSource: orderItems,
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
       levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[0].displayName,
-      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[0].itemArr[1].displayName,
+      levelTwoText: myItem != null ? myItem.displayName : item.length == 0 ? '' : item[0].itemArr[1].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -89,7 +89,7 @@ let Market = React.createClass({
       orderType: 'desc',
       pageIndex: 1,
       bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[0].id,
-      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 :item[0].itemArr[1].id,
+      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 : item[0].itemArr[1].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -125,13 +125,13 @@ let Market = React.createClass({
       term: term,
       amount: amount,
       categorySource: categoryArr,
-      itemSource: item ? [] : item[0].itemArr,
+      itemSource: item.length == 0 ? [] : item[0].itemArr,
       termSource: orderItems,
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
       levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[2].displayName,
-      levelTwoText: myItem != null ? myItem.displayName: item.length == 0 ? '' : item[2].itemArr[0].displayName,
+      levelTwoText: myItem != null ? myItem.displayName : item.length == 0 ? '' : item[2].itemArr[0].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -150,7 +150,7 @@ let Market = React.createClass({
       orderType: 'desc',
       pageIndex: 1,
       bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[2].id,
-      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 :item[2].itemArr[0].id,
+      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 : item[2].itemArr[0].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -178,7 +178,15 @@ let Market = React.createClass({
           this.state.bizOrientationID,
           this.state.termID,
           this.state.amountID
-        ]
+        ],
+        //custFilterList: {
+        //  orgId: {
+        //    values: ['5'],
+        //    opt:'Eq',
+        //    filedName: 'orgId',
+        //    valueType: 'long'
+        //  }
+        //}
       }
     ).then((response)=> {
       console.log(response);
@@ -240,7 +248,7 @@ let Market = React.createClass({
     }
 
     return (
-          <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
+      <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
         <View
           style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926',}}>
           <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
@@ -264,7 +272,7 @@ let Market = React.createClass({
   },
 
   _emptyView: function () {
-    return(
+    return (
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
 
       </View>
@@ -621,7 +629,7 @@ let Market = React.createClass({
 
   confirmBtn: function () {
 
-      this.pressFilterOther();
+    this.pressFilterOther();
     this.refs.marketGiftedListView._refresh();
 
   },
