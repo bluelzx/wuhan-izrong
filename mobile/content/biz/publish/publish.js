@@ -443,7 +443,7 @@ let Publish = React.createClass({
         (buttonIndex) => {
           if (buttonIndex == 0) {
             CameraRoll.saveImageWithTag('file://' + this.state.fileUrlList[rowId]).then(
-              (data) => {console.log('CameraRoll,success' + data)},
+              (data) => {Alert('保存成功')},
               (err) => {
                 console.log('CameraRoll,err' + err);
               }
