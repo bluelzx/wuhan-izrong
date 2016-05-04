@@ -114,6 +114,7 @@ let Home = React.createClass({
         renderPage={this._renderPage}
         isLoop={true}
         autoPlay={true}
+
       />
     );
   },
@@ -138,7 +139,8 @@ let Home = React.createClass({
             </View>
           </View>
           <View style={styles.listHead}>
-            <Text style={{marginLeft: 20, fontSize: 15, color: '#ffffff'}}>{this.state.category + '--' + this.state.item}</Text>
+            <Text
+              style={{marginLeft: 20, fontSize: 15, color: '#ffffff'}}>{this.state.category + '--' + this.state.item}</Text>
           </View>
           <MarketList navigator={this.props.navigator} marketData={marketData}/>
         </ScrollView>

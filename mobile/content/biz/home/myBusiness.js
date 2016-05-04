@@ -116,7 +116,7 @@ let Market = React.createClass({
     return MarketAction.bizOrderAdminSearch({
         orderField: this.state.orderField,
         orderType: this.state.orderType,
-        pageIndex: this.state.pageIndex,
+        pageIndex: page,
         filterList: [
           this.state.bizCategoryID,
           this.state.bizItemID,
@@ -277,7 +277,7 @@ let Market = React.createClass({
           refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
           withSections={false} // enable sections
           emptyView={this._emptyView}
-          
+
           enableEmptySections={true}
           automaticallyAdjustContentInsets={false}
           customStyles={{
