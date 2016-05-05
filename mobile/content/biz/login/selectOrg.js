@@ -70,6 +70,20 @@ let Register_selectOrg = React.createClass({
     }
   },
 
+  renderList: function(){
+    return(
+      <AlphabetListView
+        data={this.state.data}
+        cell={Cell}
+        cellHeight={30}
+        sectionListItem={SectionItem}
+        sectionHeader={SectionHeader}
+        sectionHeaderHeight={22.5}
+        updateScrollState={true}
+      />
+    )
+  },
+
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
@@ -82,15 +96,7 @@ let Register_selectOrg = React.createClass({
         </View>
         <View style={{flexDirection: 'column', flex: 1}}>
           {this.rendSelectAll()}
-          <AlphabetListView
-            data={this.state.data}
-            cell={Cell}
-            cellHeight={30}
-            sectionListItem={SectionItem}
-            sectionHeader={SectionHeader}
-            sectionHeaderHeight={22.5}
-            updateScrollState={true}
-          />
+          {this.renderList()}
         </View>
       </NavBarView>
     );
