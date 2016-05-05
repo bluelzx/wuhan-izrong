@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
-import com.facebook.react.bridge.ReactApplicationContext;
 
 import com.facebook.react.ReactActivity;
 import cl.json.RNSharePackage;
 import io.realm.react.RealmReactPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import cl.json.RNSharePackage;
+
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 
@@ -23,6 +26,8 @@ import com.facebook.react.shell.MainReactPackage;
 
 import java.util.Arrays;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 public class MainActivity extends ReactActivity {
     public static ReactApplicationContext context;
@@ -50,6 +55,7 @@ public class MainActivity extends ReactActivity {
     protected void onStart() {
         super.onStart();
     }
+
 
     /**
      * A list of packages used by the app. If the app uses additional views

@@ -128,7 +128,7 @@ let WhitePage = React.createClass({
 
     let {width} = Device;
     return (
-      <TouchableHighlight onLongPress={
+      <TouchableHighlight key={item.sessionId} onLongPress={
         ()=>
           {
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
@@ -330,6 +330,8 @@ let WhitePage = React.createClass({
       return this.renderInvite(item, index);
     }else if(item.type == SESSION_TYPE.INVITED){
       return this.renderInvited(item, index);
+    }else if(item.type == SESSION_TYPE.PLATFORMINFO){
+      return this.renderSpread(item);
     }else{
       throw 'IM 会话类型不存在';
     }

@@ -3,12 +3,12 @@
  */
 
 let React = require('react-native');
-const {Text, TouchableHighlight, TouchableOpacity,View} = React;
+const {Text, ScrollView,View} = React;
 let NavBarView = require('../../framework/system/navBarView');
-let EditGroup = require('./editGroup');
 let Icon = require('react-native-vector-icons/Ionicons');
 let AppStore = require('../../framework/store/appStore');
 let DateHelper = require('../../comp/utils/dateHelper');
+
 
 let Spread = React.createClass({
 
@@ -32,7 +32,6 @@ let Spread = React.createClass({
   },
 
   renderItem: function(item){
-
     return (
       <View key={item.infoId} style={{flexDirection:'column',backgroundColor:'#FEFEFE',paddingHorizontal:10,margin:10,paddingVertical:10,borderRadius:10}}>
         <Text numberOfLines={1} style={{color:'#8694A0',fontWeight:'bold',fontSize:16}}>{item.title}</Text>
@@ -48,6 +47,15 @@ let Spread = React.createClass({
     );
   },
 
+  renderBody : function(){
+    let ret = [];
+
+    this.state.data.forEach((item)=>{
+      ret.push(this.renderItem(item));
+    })
+    return ret;
+  },
+
   render: function () {
     return (
       <NavBarView
@@ -55,7 +63,9 @@ let Spread = React.createClass({
         contentBackgroundColor='#15263A' title='环渤海银银合作平台'
         showBar={true}
       >
-        {this.state.data.forEach(this.renderItem)}
+        <ScrollView style={{flexDirection: 'column'}}>
+        {this.renderBody()}
+        </ScrollView>
       </NavBarView>
     );
   }

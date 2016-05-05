@@ -3,7 +3,6 @@
 var React = require('react-native');
 var {
   PushNotificationIOS,
-  AppStateIOS,
   Platform,
   ScrollView,
   View,

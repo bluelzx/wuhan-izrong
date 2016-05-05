@@ -223,7 +223,7 @@ let PlatFormInfo = {
   name:"platFormInfo",
   primaryKey:'infoId',
   properties: {
-    infoId:{type:'string', optional:true},
+    infoId:{type:'int', optional:true},
     title:{type:'string', optional:true},
     content:{type:'string', optional:true},
     createDate:{type: 'date', optional: true},

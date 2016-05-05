@@ -60,6 +60,16 @@ var Main = React.createClass({
       // DeviceEventEmitter.addListener('Test', function(e: Event) {
       //   console.log(e.test);
       // });
+      DeviceEventEmitter.addListener('onPause',function(e:Event){
+        ImSocket.disconnect();
+        AppStore.startJavaServer();
+      });
+
+      DeviceEventEmitter.addListener('onResume',function(e:Event){
+        //AppStore.stopJavaServer();
+        AppAction.emitActiveApp();
+      });
+
     } else {
       AppStateIOS.removeEventListener('change', this._handleAppStateChange);
       AppStateIOS.addEventListener('change', this._handleAppStateChange);
@@ -80,7 +90,10 @@ var Main = React.createClass({
       case "active":
         AppAction.emitActiveApp();
         break;
-      default: ImSocket.disconnect();
+      default: {
+        ImSocket.disconnect();
+
+      };
     }
   },
 

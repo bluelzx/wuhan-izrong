@@ -69,7 +69,7 @@ let TextEdit = React.createClass({
         }else if (this.state.newValue.length <= 20) {
           this.updateUserInfo();
         } else {
-          Alert('请输入20个字符内的姓名');
+          Alert('请输入20个字符内的中文或英文');
         }
         break;
       case 'phoneNumber':

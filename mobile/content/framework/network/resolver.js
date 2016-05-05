@@ -5,7 +5,7 @@ let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
 let _dealMsg = function (message) {
   let userId = ContactSotre.getUserInfo().userId;
-  console.log(message);
+  //console.log(message);
   switch (message.msgType) {
     case MSG_TYPE.EXCEPTION:
       console.log('[error] %s', message.errMsg);
@@ -58,12 +58,12 @@ let _dealMsg = function (message) {
       break;
     case MSG_TYPE.PLATFORM_INFO:
     {
-      //ImStore.createPlatFormInfo(message.req, message.url);
-      ContactSotre.syncReq(message.createDate);
+      ImStore.createPlatFormInfo(message.infoId, message.title, message.content, new Date(message.createDate));
+      ContactSotre.syncReq(new Date(message.createDate));
     }
       break;
     case MSG_TYPE.HOME_PAGE:
-      ImStore.createHomePageInfo(message.info, message.title, message.content, message.createDate);
+      ImStore.createHomePageInfo(message.req, message.url);
       break;
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
       ImStore.updateContactInfo(message.address,

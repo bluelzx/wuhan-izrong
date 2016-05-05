@@ -1,8 +1,9 @@
 let Manager = require('./manager');
-
+let { Alert, Device, Loading } = require('mx-artifacts');
 let Resolver = require('./resolver');
 let {ImHost } = require('../../../config');
 let { COMMAND_TYPE } = require('../../constants/dictIm');
+let {Platform} = require('react-native');
 
 let _socket = null;
 
@@ -26,10 +27,12 @@ let _getUrl = function(token){
 let ImSocket = {
 
   disconnect:function(){
+    Alert('close');
     _socket&&_socket.close();
   },
 
   reconnect:function(){
+    Alert('reconnect');
     _socket&&_socket.open();
   },
 
@@ -41,7 +44,11 @@ let ImSocket = {
     this.uri = newUrl;
     //this.uri = 'ws://localhost:3000/t001';
     console.log('###### Connect to %s', this.uri);
-    _socket = Manager(this.uri,{lastSyncTime:lastSyncTime});
+    let AIBG = -1;
+    if (Platform.OS === 'android') {
+      AIBG = 1;
+    }
+    _socket = Manager(this.uri,{lastSyncTime:lastSyncTime,AIBG:AIBG});
 
     _socket.on('open', function () {
       console.log('###### open');
