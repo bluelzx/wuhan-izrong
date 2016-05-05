@@ -62,7 +62,7 @@ let Item = React.createClass({
               </View>
               <View
                 style={{flexDirection:'row',alignItems:'center',flex:1,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
-                <Text style={[{fontSize: 15,color: '#ffffff',width:140}]} numberOfLines={1}>{showValue}</Text>
+                <Text style={[{fontSize: 15,color: '#ffffff',width:160}]} numberOfLines={1}>{showValue}</Text>
                 {this.renderArrow(this.props.showArrow)}
               </View>
             </View>
