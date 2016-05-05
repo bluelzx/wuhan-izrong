@@ -222,7 +222,7 @@ let UserInfo = React.createClass({
           {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'publicWeChat',
             this.state.publicWeChat, 'default', 40, true, true, false)}
 
-          <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
+          <TouchableHighlight style={{marginRight:20}} activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
             <View>
               <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
                 <View style={{flexDirection:'row',backgroundColor:'#162a40',flex:1}}>
@@ -239,7 +239,7 @@ let UserInfo = React.createClass({
           </TouchableHighlight>
 
           <View style={{marginTop: 5}}>
-            <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
+            <TouchableHighlight style={{marginRight:20}} activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
               <View>
                 <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
                   <View style={{flexDirection:'row',backgroundColor:'#162a40',flex:1}}>

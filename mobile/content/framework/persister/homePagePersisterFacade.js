@@ -10,14 +10,14 @@ let {SESSION_TYPE } = require('../../constants/dictIm');
 
 let HomePagePersisterFacade = {
   createHomePageInfo:(seq, url)=>_createHomePageInfo(seq, url),
-  queryAllHomePageInfo: () => _queryAll(),
-}
+  queryAllHomePageInfo: () => _queryAll()
+};
 
 let _createHomePageInfo = function(seq, url) {
   _realm.write(() => {
     _realm.create(HOMEPAGE, {seq:seq,url:url}, true);
   });
-}
+};
 
 let _queryAll = function() {
   let pages = _realm.objects(HOMEPAGE);
@@ -26,10 +26,10 @@ let _queryAll = function() {
     let p = {
       req:item.req,
       url:item.url
-    }
+    };
     ret.push(p);
   });
   return ret;
-}
+};
 
 module.exports = HomePagePersisterFacade;

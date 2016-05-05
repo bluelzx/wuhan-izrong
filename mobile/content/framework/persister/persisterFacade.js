@@ -349,7 +349,11 @@ let _getOrgByOrgName = function (orgName) {
       orgArr.push(orgBean);
     }
   });
-  return ConvertChineseKey.buildOrgList(orgArr);
+  if(orgArr.length == 0){
+    return '';
+  }else{
+    return ConvertChineseKey.buildOrgList(orgArr);
+  }
 };
 module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
   require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'), require('./homePagePersisterFacade'));
