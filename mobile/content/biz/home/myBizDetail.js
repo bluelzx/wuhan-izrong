@@ -521,9 +521,10 @@ let MyBizDetail = React.createClass({
   },
 
   shutDownBiz: function () {
-      Alert('你确定下架该业务吗?',() => {
-          this.downselfBizOrder(this.state.marketInfo.id)
-      },()=>{});
+    Alert('你确定下架该业务吗?', () => {
+      this.downselfBizOrder(this.state.marketInfo.id)
+    }, () => {
+    }, '确定', '取消');
   },
   callBackRemarks: function (remarkText) {
     this.setState({
@@ -576,9 +577,8 @@ let MyBizDetail = React.createClass({
             remark: this.state.remarkText
           }
         ).then((response)=> {
-          this.props.param.callbackRefresh();
-          this.props.param.callbackRefresh();
           Alert('保存成功',()=>this.props.navigator.pop());
+          this.props.param.callbackRefresh();
         }).catch(
           (errorData) => {
             throw errorData;
@@ -595,8 +595,8 @@ let MyBizDetail = React.createClass({
             orderId: id
           }
         ).then((response)=> {
-          this.props.param.callbackRefresh();
           Alert('下架成功',()=>this.props.navigator.pop());
+          this.props.param.callbackRefresh();
         }).catch(
           (errorData) => {
             throw errorData;

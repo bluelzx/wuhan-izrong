@@ -514,10 +514,10 @@ let Publish = React.createClass({
         }
     },
     shareDialog (data) {
-        let amount = data.amount == '' ? '0元' : data.amount / 10000 + '万';
-        let shareContent = data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' +
-            (data.term == '' ? '0天' : data.term + '天') + '  ' +
-            amount + '  ' + numeral(data.rate * 100).format('0,0.00') + '%';
+        let amount = data.amount == '' ? '--' : data.amount / 10000 + '万';
+        let shareContent = '我利用[渤海银通]分享了一个业务信息给您：' + data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' +
+            (data.term == '' ? '--' : data.term + '天') + '  ' +
+            amount + '  ' + data.rate == 0 ? '--' : numeral(data.rate * 100).format('0,0.00') + '%';
         Share.open({
             share_text: shareContent,
             share_URL: Platform.OS === 'android' ? shareContent : "http://google.cl",

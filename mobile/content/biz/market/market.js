@@ -130,8 +130,8 @@ let Market = React.createClass({
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[2].displayName,
-      levelTwoText: myItem != null ? myItem.displayName : item.length == 0 ? '' : item[2].itemArr[0].displayName,
+      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[0].displayName,
+      levelTwoText: myItem != null ? myItem.displayName : item.length == 0 ? '' : item[0].itemArr[1].displayName,
       optionTwoText: '最新发布',
       pickTypeRow1: 0,
       pickTypeRow2: 0,
@@ -149,8 +149,8 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[2].id,
-      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 : item[2].itemArr[0].id,
+      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[0].id,
+      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 : item[0].itemArr[1].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -630,7 +630,8 @@ let Market = React.createClass({
     this.refs["TERM"].setDefaultState();
     this.refs["AMOUNT"].setDefaultState();
     this.setState({
-      orgValue: ''
+      orgValue: '',
+      orgId: 0
     });
   },
 

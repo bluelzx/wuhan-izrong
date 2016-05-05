@@ -23,6 +23,7 @@ let numeral = require('numeral');
 let NameCircular = require('../im/nameCircular').NameCircular;
 
 let AppStore = require('../../framework/store/appStore');
+let MarketStore = require('../../framework/store/marketStore');
 let { Alert } = require('mx-artifacts');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Chat = require('../im/chat');
@@ -34,6 +35,8 @@ let BusinessDetail = React.createClass({
   getInitialState(){
     let marketInfo = this.props.param.marketInfo;
     let userId = AppStore.getUserId();
+    let userInfo = MarketStore.getUserInfoByUserId(marketInfo.userId);
+
     return {
       userId: userId,
       detailData: '',
@@ -41,7 +44,8 @@ let BusinessDetail = React.createClass({
       fileUrlList: [],
       marketInfo: marketInfo,
       orderUserId: marketInfo.userId,
-      lastModifyDate: ''
+      lastModifyDate: '',
+      userInfo: userInfo
     }
   },
 
@@ -91,14 +95,7 @@ let BusinessDetail = React.createClass({
             {this.returnItem('更新时间:', this.state.lastModifyDate)}
           </View>
           {this.renderAdjunct()}
-          <View style={{backgroundColor:'#153757',borderRadius:2,margin:10}}>
-            {this.renderPromulgator()}
-            {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber == null ? '未填写' : this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone)}
-            {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber == null ? '未填写' : this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile)}
-            {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo == null ? '未填写' : this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo)}
-            {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo == null ? '未填写' : this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo)}
-            {this.returnInfoItem(require('../../image/market/org.png'), this.state.marketInfo.orgName, true)}
-          </View>
+          {this.renderUserInfo(this.state.userInfo)}
         </View>
       </ScrollView>
     );
@@ -129,27 +126,58 @@ let BusinessDetail = React.createClass({
       </View>
     );
   },
+  renderUserInfo: function (userInfo) {
+    if (userInfo == null) {
+      return (
+        <View></View>
+      );
+    }
+    return (
+      <View style={{backgroundColor:'#153757',borderRadius:2,margin:10}}>
+        {this.renderPromulgator(userInfo)}
+        {this.returnInfoItem(require('../../image/market/tel.png'), userInfo.phoneNumber == null ? '未填写' : userInfo.phoneNumber, userInfo.publicPhone)}
+        {this.returnInfoItem(require('../../image/market/mobile.png'), userInfo.mobileNumber == null ? '未填写' : userInfo.mobileNumber, userInfo.publicMobile)}
+        {this.returnInfoItem(require('../../image/market/QQ.png'), userInfo.qqNo == null ? '未填写' : userInfo.qqNo, userInfo.publicQQ)}
+        {this.returnInfoItem(require('../../image/market/weChat.png'), userInfo.weChatNo == null ? '未填写' : userInfo.weChatNo, userInfo.publicWeChat)}
+        {this.returnInfoItem(require('../../image/market/org.png'), this.state.marketInfo.orgName, true)}
+      </View>
+    );
+  },
   renderPromulgator: function () {
     if (this.state.userId == this.state.orderUserId) {
       return (
         <View style={{flexDirection:'row',alignItems:'center'}}>
-          <View style={{margin:10}}>
-            <NameCircular name={this.state.marketInfo.userName}/>
-          </View>
+          {this.renderUserPhoto(this.state.userInfo)}
           <Text style={{fontSize:16,color:'white'}}>{this.state.marketInfo.userName}</Text>
         </View>
       );
     } else {
       return (
         <View style={{flexDirection:'row',alignItems:'center'}}>
-          <View style={{margin:10}}>
-            <NameCircular name={this.state.marketInfo.userName}/>
-          </View>
+          {this.renderUserPhoto(this.state.userInfo)}
           <Text style={{fontSize:16,color:'white'}}
                 numberOfLines={1}>{this.state.marketInfo.userName}</Text>
           <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#153757' activeOpacity={0.8}>
             <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
           </TouchableHighlight>
+        </View>
+      );
+    }
+  },
+  renderUserPhoto: function (userInfo) {
+    if (userInfo.photoFileUrl == null) {
+      return (
+        <View style={{margin:10}}>
+          <NameCircular name={this.state.marketInfo.userName}/>
+        </View>
+      );
+    }else{
+      return (
+        <View style={{margin:10}}>
+          <Image
+            style={{height:36,width:36}}
+            source={{uri:userInfo.photoFileUrl}}
+          />
         </View>
       );
     }

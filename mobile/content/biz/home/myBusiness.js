@@ -127,17 +127,13 @@ let Market = React.createClass({
     ).then((response)=> {
       console.log(response);
       if (response.totalPages === page) {
-        setTimeout(() => {
           callback(response.contentList, {
             allLoaded: true, // the end of the list is reached
           });
-        }, 1000); // simulating network fetching
       } else {
-        setTimeout(() => {
           callback(response.contentList, {
-            allLoaded: false, // the end of the list is reached
+            allLoaded: false
           });
-        }, 1000); // simulating network fetching
       }
     }).catch(
       (errorData) => {
