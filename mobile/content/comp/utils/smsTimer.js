@@ -53,8 +53,8 @@ let SMSTimer = React.createClass({
 
   selectVerifyFunction: function () {
     if (!this.state.disabled) {
-      if (this.props.parameter.length != 11) {
-        Alert('请输入完整的手机号码');
+      if (!Validation.isMobile(this.props.parameter)) {
+        Alert('请输入11位数字的手机号码');
       } else {
         dismissKeyboard();
         this.props.exec(() => {
