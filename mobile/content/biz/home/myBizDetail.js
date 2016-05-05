@@ -34,7 +34,7 @@ let Validation = require('../../comp/utils/validation');
 let DateHelper = require('../../comp/utils/dateHelper');
 let Input = require('../../comp/utils/input');
 let Adjust = require('../../comp/utils/adjust');
-
+let numeral = require('numeral');
 
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
@@ -58,7 +58,7 @@ let MyBizDetail = React.createClass({
       amountDefault: (marketInfo.amount <= 100000000) ? 0 : 1,
       termText: this.termChangeHelp(marketInfo.term).toString(),
       amountText: marketInfo.amount == null || marketInfo.amount == 0 ? '' : (marketInfo.amount <= 100000000) ? (marketInfo.amount / 10000).toString() : (marketInfo.amount / 100000000).toString(),
-      rateText: marketInfo.rate == null || marketInfo.rate == 0 ? '' : (marketInfo.rate * 100).toString(),
+      rateText: marketInfo.rate == null || marketInfo.rate == 0 ? '' : numeral((marketInfo.rate * 100)).format('0,0.00'),
       remarkText: marketInfo.remark,
       lastModifyDate: DateHelper.formatBillDetail(t),
       //networt
@@ -576,6 +576,7 @@ let MyBizDetail = React.createClass({
             remark: this.state.remarkText
           }
         ).then((response)=> {
+          this.props.param.callbackRefresh();
           this.props.param.callbackRefresh();
           Alert('保存成功',()=>this.props.navigator.pop());
         }).catch(

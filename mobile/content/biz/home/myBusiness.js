@@ -226,7 +226,8 @@ let Market = React.createClass({
       navigator.push({
         comp: name,
         param: {
-          marketInfo: rowData
+          marketInfo: rowData,
+          callbackRefresh: this.callbackRefresh
         }
       })
     }
@@ -582,6 +583,10 @@ let Market = React.createClass({
     });
   },
 
+  callbackRefresh: function () {
+    this.refs.marketGiftedListView._refresh();
+  },
+
   clearOptions: function () {
     this.refs["ORIENTATION"].setDefaultState();
     this.refs["TERM"].setDefaultState();
@@ -601,7 +606,7 @@ let Market = React.createClass({
   },
 
   confirmBtn: function () {
-      this.pressFilterOther();
+    this.pressFilterOther();
     this.refs.marketGiftedListView._refresh();
   },
   toPage: function (name) {
