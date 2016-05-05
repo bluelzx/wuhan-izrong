@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
-import com.facebook.react.bridge.ReactApplicationContext;
 
 import com.facebook.react.ReactActivity;
 import cl.json.RNSharePackage;
@@ -13,8 +12,8 @@ import io.realm.react.RealmReactPackage;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.oblador.vectoricons.VectorIconsPackage;
-import cl.json.RNSharePackage;
+
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 

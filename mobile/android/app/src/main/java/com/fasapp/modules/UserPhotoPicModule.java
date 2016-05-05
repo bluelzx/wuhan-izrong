@@ -290,7 +290,6 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         }
-
     }
 
     //剪切后回调的方法,返回裁剪后的uri
