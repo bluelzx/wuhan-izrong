@@ -33,7 +33,7 @@ let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
 
 let { MARKET_CHANGE } = require('../../constants/dictEvent');
-
+let _ = require('lodash');
 let {Alert, GiftedListView} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
 let numeral = require('numeral');
@@ -83,7 +83,7 @@ let Market = React.createClass({
       amountDefault: 10000,
       amountIsAll: true,
       orgValue: '',
-      orgId: '',
+      orgId: 0,
       //network
       orderField: 'lastModifyDate',
       orderType: 'desc',
@@ -144,7 +144,7 @@ let Market = React.createClass({
       amountDefault: 10000,
       amountIsAll: true,
       orgValue: '',
-      orgId: '',
+      orgId: 0,
       //network
       orderField: 'lastModifyDate',
       orderType: 'desc',
@@ -158,8 +158,6 @@ let Market = React.createClass({
     });
   },
 
-
-
   /**
    * Will be called when refreshing
    * Should be replaced by your own logic
@@ -168,26 +166,32 @@ let Market = React.createClass({
    * @param {object} options Inform if first load
    */
   _onFetch(page = 1, callback, options) {
-    MarketAction.bizOrderMarketSearch({
-        orderField: this.state.orderField,
-        orderType: this.state.orderType,
-        pageIndex: page,
-        filterList: [
-          this.state.bizCategoryID,
-          this.state.bizItemID,
-          this.state.bizOrientationID,
-          this.state.termID,
-          this.state.amountID
-        ],
-        //custFilterList: {
-        //  orgId: {
-        //    values: ['5'],
-        //    opt:'Eq',
-        //    filedName: 'orgId',
-        //    valueType: 'long'
-        //  }
-        //}
-      }
+    let requestBody = {
+      orderField: this.state.orderField,
+      orderType: this.state.orderType,
+      pageIndex: page,
+      filterList: [
+        this.state.bizCategoryID,
+        this.state.bizItemID,
+        this.state.bizOrientationID,
+        this.state.termID,
+        this.state.amountID
+      ]
+    };
+    if (this.state.orgId != 0) {
+      _.assign(requestBody,
+        {
+          custFilterList: {
+            orgId: {
+              values: [this.state.orgId],
+              opt: 'Eq',
+              filedName: 'orgId',
+              valueType: 'String'
+            }
+          }
+        })
+    }
+    MarketAction.bizOrderMarketSearch(requestBody
     ).then((response)=> {
       console.log(response);
       if (response.totalPages === page) {
@@ -228,16 +232,16 @@ let Market = React.createClass({
   },
 
   termChangeHelp(term){
-    if(term == null || term == 0){
+    if (term == null || term == 0) {
       return '--';
-    }else if (term % 365 == 0){
-      return term/365 + '年';
-    }else if (term % 30 == 0){
-      return term/30 + '月';
-    }else if (term == 1){
+    } else if (term % 365 == 0) {
+      return term / 365 + '年';
+    } else if (term % 30 == 0) {
+      return term / 30 + '月';
+    } else if (term == 1) {
       return '隔夜';
     }
-    else{
+    else {
       return term + '天';
     }
   },
@@ -258,8 +262,8 @@ let Market = React.createClass({
             {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount < 100000000 ? (rowData.amount / 10000)+ '万' : rowData.amount / 100000000 + '亿'}
+            style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
+            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount < 100000000 ? (rowData.amount / 10000) + '万' : rowData.amount / 100000000 + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
@@ -289,7 +293,7 @@ let Market = React.createClass({
           <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:'#8d8d8d',}}>
             {'期限'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(130),top:0,marginLeft:10, color:'#8d8d8d',}}>
+          <Text style={{position:"absolute",left:Adjust.width(120),top:0,marginLeft:10, color:'#8d8d8d',}}>
             {'金额'}
           </Text>
           <Text style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:'#8d8d8d',}}>
@@ -514,11 +518,14 @@ let Market = React.createClass({
             </TouchableOpacity>
             <View>
               <FilterSelectBtn ref="ORIENTATION" typeTitle={'方向'} dataList={this.state.bizOrientation} section={3}
-                               callBack={this.callBack} rowDefault={this.state.orientionDefault} isAll={this.state.orientionIsAll}/>
+                               callBack={this.callBack} rowDefault={this.state.orientionDefault}
+                               isAll={this.state.orientionIsAll}/>
               <FilterSelectBtn ref="TERM" typeTitle={'期限'} dataList={this.state.term} section={3}
-                               callBack={this.callBack} rowDefault={this.state.termDefault} isAll={this.state.termIsAll}/>
+                               callBack={this.callBack} rowDefault={this.state.termDefault}
+                               isAll={this.state.termIsAll}/>
               <FilterSelectBtn ref="AMOUNT" typeTitle={'金额'} dataList={this.state.amount} section={2}
-                               callBack={this.callBack} rowDefault={this.state.amountDefault} isAll={this.state.amountIsAll}/>
+                               callBack={this.callBack} rowDefault={this.state.amountDefault}
+                               isAll={this.state.amountIsAll}/>
             </View>
             <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
               <View style={{alignItems: 'center',justifyContent:'center'}}>
@@ -613,7 +620,7 @@ let Market = React.createClass({
       navigator.push({
         comp: name,
         callBack: this.callback,
-        param:{needAll:true}
+        param: {needAll: true}
       })
     }
   },
@@ -623,7 +630,7 @@ let Market = React.createClass({
     this.refs["TERM"].setDefaultState();
     this.refs["AMOUNT"].setDefaultState();
     this.setState({
-          orgValue:''
+      orgValue: ''
     });
   },
 

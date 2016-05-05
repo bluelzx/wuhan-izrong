@@ -6,7 +6,7 @@ let { MSG_TYPE } = require('../../constants/dictIm');
 let PersisterFacade = require('../persister/persisterFacade');
 let AppStore = require('./appStore');
 //let SessionStore = require('./sessionStore');
-let { IM_CONTACT, IM_GROUP } = require('../../constants/dictEvent');
+let { IM_CONTACT, IM_GROUP, IM_SESSION, IM_SESSION_LIST } = require('../../constants/dictEvent');
 
 let _getContact = function(){
   //我的群  第一个元素必须为群组
@@ -89,6 +89,8 @@ let _getGroupInfoBySessionId = function(id, currentUserId) {
 let _createGroup = function(groupId, groupName,groupMasterUid,members,mute){
   PersisterFacade.createGroup(groupId, groupName,groupMasterUid,members.length,members,mute);
   AppStore.emitChange(IM_CONTACT);
+  AppStore.emitChange(IM_GROUP);
+  AppStore.emitChange(IM_SESSION);
 }
 
 let _kickOutMember = function(groupId, members) {
@@ -106,6 +108,7 @@ let _dismissGroup = function(groupId) {
   PersisterFacade.dismissGroup(groupId);
   AppStore.emitChange(IM_CONTACT);
   AppStore.emitChange(IM_GROUP);
+  AppStore.emitChange(IM_SESSION_LIST);
 }
 let _setContactMute = function(userId, value) {
   PersisterFacade.setContactMute(userId, value);
@@ -119,6 +122,7 @@ let _leaveGroup = function(groupId){
   PersisterFacade.leaveGroup(groupId);
   AppStore.emitChange(IM_CONTACT);
   AppStore.emitChange(IM_GROUP);
+  AppStore.emitChange(IM_SESSION_LIST);
 }
 
 let _syncReq = function(data){

@@ -19,7 +19,8 @@ let Input = React.createClass({
     placeholderTextColor: React.PropTypes.string,
     maxLength: React.PropTypes.number,
     value: React.PropTypes.string,
-    field: React.PropTypes.string.isRequired
+    field: React.PropTypes.string.isRequired,
+    onFocus: React.PropTypes.func
   },
 
   getDefaultProps(){
@@ -71,6 +72,7 @@ let Input = React.createClass({
           placeholderTextColor={this.props.placeholderTextColor}
           clearButtonMode="while-editing"
           keyboardType={this.props.inputType}
+          onFocus={this.props.onFocus}
         />
       </View>
     );
