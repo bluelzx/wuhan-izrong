@@ -88,7 +88,7 @@ let Messenger = React.createClass({
       });
     }
 
-    ImAction.send(msgToSend, isReSend, this.props.param.userId);
+    ImAction.send(msgToSend, isReSend, this.props.param.myId);
   },
 
   handleSend(message = {}, rowID = null) {

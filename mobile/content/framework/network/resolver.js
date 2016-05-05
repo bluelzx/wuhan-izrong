@@ -38,7 +38,7 @@ let _dealMsg = function (message) {
         groupOwnerId:message.groupOwnerId,
         msgType:SESSION_TYPE.INVITE,
         revTime:new Date()
-      });
+      },userId);
       break;
     case MSG_TYPE.REC_GROUP_MSG:
       ImStore.saveMsg({
