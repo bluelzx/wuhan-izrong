@@ -1,37 +1,22 @@
 package com.fasapp;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.view.Menu;
-
 import com.facebook.react.ReactActivity;
-import cl.json.RNSharePackage;
-import io.realm.react.RealmReactPackage;
-
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
-
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
-
-import com.fasapp.BuildConfig;
-import com.fasapp.pakage.ZXReactPackage;
-import com.fasapp.view.viewpager.ZXViewPagerManager;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.shell.MainReactPackage;
+import com.fasapp.pakage.ZXReactPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.oblador.vectoricons.VectorIconsPackage;
 
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Nullable;
+import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
+import cl.json.RNSharePackage;
+import io.realm.react.RealmReactPackage;
 
 public class MainActivity extends ReactActivity {
     public static ReactApplicationContext context;
-
 
     /**
      * Returns the name of the main component registered from JavaScript.

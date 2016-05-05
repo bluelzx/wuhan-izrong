@@ -43,8 +43,8 @@ let Login = React.createClass({
   },
 
   sendSmsCodeToLoginMobile: function () {
-    if (Validation.isMobile(this.state.mobileNo)) {
-      Alert('请输入已注册的手机号码');
+    if (!Validation.isMobile(this.state.mobileNo)) {
+      Alert('请输入11位数字的手机号码');
     } else {
       dismissKeyboard();
       this.props.exec(() => {

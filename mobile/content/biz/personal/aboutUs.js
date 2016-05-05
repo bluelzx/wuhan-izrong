@@ -78,7 +78,7 @@ var styles = StyleSheet.create({
     fontSize: 13,
     color: '#ffffff',
     lineHeight: 23,
-    paddingHorizontal: 16
+    marginHorizontal:16
   },
   logo: {
     marginTop: 20,
