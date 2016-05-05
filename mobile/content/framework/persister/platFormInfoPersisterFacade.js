@@ -17,12 +17,14 @@ let PlatFormInfoPersisterFacade = {
 
 let _createPlatFormInfo = function(infoId, title, content, createDate) {
   _realm.write(() => {
-    let platInfo = _realm.objects(SESSION).filtered("type = '" + SESSION_TYPE.PLATFORMINFO + "'");
-    if(platInfo.length > 0){
-      platInfo.badge  = platInfo.badge + 1;
-      platInfo.title = title;
-      platInfo.lastTime = createDate;
-      platInfo.content = content;
+    let platInfo = _realm.objects(SESSION).filtered("type = '" + 'platinfo:global' + "'");
+    if(platInfo.length > 0 ){
+      if(platInfo.lastTime < createDate) {
+        platInfo.badge = platInfo.badge + 1;
+        platInfo.title = title;
+        platInfo.lastTime = createDate;
+        platInfo.content = content;
+      }
     }else{
       _realm.create(SESSION,{
         sessionId: 'platinfo:global',
@@ -38,7 +40,7 @@ let _createPlatFormInfo = function(infoId, title, content, createDate) {
 }
 
 let _queryAll = function() {
-  let platFormInfo = _realm.objects(PLATFORMINFO);
+  let platFormInfo = _realm.objects(PLATFORMINFO).sorted('createDate',true);
   let ret = [];
   platFormInfo.forEach((item) => {
     let p = {

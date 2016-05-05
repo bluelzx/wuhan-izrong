@@ -27,6 +27,7 @@ let Chat = React.createClass({
     param.sessionId || (param.sessionId=KeyGenerator.getSessionKey(param.chatType, this.props.param.userId || this.props.param.groupId));
 
     let user = ContactStore.getUserInfo();
+    param.myId = user.userId;
     ImAction.sessionInit({
       toId: param.userId,
       sessionId: param.sessionId,
