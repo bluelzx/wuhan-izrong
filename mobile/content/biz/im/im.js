@@ -361,7 +361,6 @@ let WhitePage = React.createClass({
                   actionButton={this.renderContact}>
        <SearchBar textChange={this.textChange}/>
         <ScrollView style={{flexDirection: 'column'}}>
-          {this.renderSpread(this.state.data.platformInfo)}
           {this.renderMessage()}
           {this.renderNull()}
         </ScrollView>

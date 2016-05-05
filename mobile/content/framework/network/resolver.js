@@ -83,7 +83,7 @@ let _dealMsg = function (message) {
       break;
     case MSG_TYPE.SYNC_REQ:
       message.msgArray.forEach((item)=>{
-        console.log(JSON.parse(item));
+       // console.log(JSON.parse(item));
         _dealMsg(JSON.parse(item));
       });
       break;
