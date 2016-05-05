@@ -115,7 +115,6 @@ let Market = React.createClass({
     let term = MarketStore.getFilterOptions(filterItems, 'term').options;
     let amount = MarketStore.getFilterOptions(filterItems, 'amount').options;
     let orderItems = AppStore.getFilters().orderItems;
-
     let myCategory = AppStore.getCategory();
     let myItem = AppStore.getItem();
 
@@ -613,7 +612,8 @@ let Market = React.createClass({
     if (navigator) {
       navigator.push({
         comp: name,
-        callBack: this.callback
+        callBack: this.callback,
+        param:{needAll:true}
       })
     }
   },

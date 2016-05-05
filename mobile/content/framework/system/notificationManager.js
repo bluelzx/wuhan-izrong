@@ -6,7 +6,6 @@ var React = require('react-native');
 var {
   PushNotificationIOS,
   Platform,
-  AppStateIOS,
   DeviceEventEmitter
   } = React;
 var CommonAction = require('../action/commonAction');
@@ -32,13 +31,13 @@ module.exports = {
         }
         PushNotificationIOS.removeEventListener('register', CommonAction.notificationRegister);
         PushNotificationIOS.removeEventListener('notification', CommonAction.onNotification);
-        AppStateIOS.removeEventListener('change', _handleAppStateChange);
+        //AppStateIOS.removeEventListener('change', _handleAppStateChange);
 
 
         PushNotificationIOS.addEventListener('register', CommonAction.notificationRegister);
         PushNotificationIOS.addEventListener('notification', CommonAction.onNotification);
 
-        AppStateIOS.addEventListener('change', _handleAppStateChange);
+       // AppState.addEventListener('change', _handleAppStateChange);
 
       } else {
         DeviceEventEmitter.addListener('Msg', (e:Event)=>CommonAction.onNotification());
@@ -53,7 +52,7 @@ module.exports = {
       if (Platform.OS === 'ios') {
         PushNotificationIOS.removeEventListener('register', CommonAction.notificationRegister);
         PushNotificationIOS.removeEventListener('notification', CommonAction.onNotification);
-        AppStateIOS.removeEventListener('change', _handleAppStateChange);
+        //AppStateIOS.removeEventListener('change', _handleAppStateChange);
         //PushNotificationIOS.setApplicationIconBadgeNumber(0);
       }
   }

@@ -123,6 +123,7 @@ let _leaveGroup = function(groupId){
 
 let _syncReq = function(data){
   //TODO:....
+  AppStore.updateLastSyncTime(data);
 }
 
 let ContactStore = {

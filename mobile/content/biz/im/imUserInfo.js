@@ -19,6 +19,7 @@ let Item = require('../../comp/utils/item');
 let Icon = require('react-native-vector-icons/Ionicons');
 let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
+let NameCircular = require('./nameCircular').NameCircular;
 
 let ImUserInfo = React.createClass({
 
@@ -69,7 +70,9 @@ let ImUserInfo = React.createClass({
 
           <View style={{backgroundColor:'#162a40'}} >
             <View style={styles.layout}>
-              <Image style={styles.head} resizeMode="cover" source={require('../../image/user/head.png')}/>
+              <View style={{marginLeft:20}}>
+                <NameCircular style={styles.head} name={this.state.data.realName}/>
+              </View>
               <Text style={{color:'#ffffff',fontSize:18, marginRight:20}}>{this.state.data.realName}</Text>
             </View>
           </View>
@@ -117,7 +120,6 @@ let styles = StyleSheet.create({
   head: {
     width: 60,
     height: 60,
-    borderRadius: 30,
     borderColor: '#cccccc',
     borderWidth: 1,
     marginLeft: 20

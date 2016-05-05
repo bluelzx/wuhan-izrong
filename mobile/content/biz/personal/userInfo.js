@@ -30,7 +30,6 @@ let NameCircular = require('../im/nameCircular').NameCircular;
 let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
 
 let UserInfo = React.createClass({
-
   getStateFromStores: function () {
     let userInfo = UserInfoAction.getLoginUserInfo();
     let orgBean = UserInfoAction.getOrgById(userInfo.orgId);

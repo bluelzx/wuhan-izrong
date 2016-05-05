@@ -9,7 +9,8 @@ let {
   Dimensions,
   Image,
   TouchableHighlight,
-  Platform
+  Platform,
+  Animated
   } = React;
 
 let NavBarView = require('../../framework/system/navBarView');
@@ -56,11 +57,11 @@ let Home = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange,MARKET_CHANGE);
+    AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange,MARKET_CHANGE);
+    AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
@@ -114,8 +115,15 @@ let Home = React.createClass({
         renderPage={this._renderPage}
         isLoop={true}
         autoPlay={true}
-
-      />
+        animation={(animatedValue, toValue, gestureState) => {
+            var duration = 1000;
+            return Animated.timing(animatedValue,
+            {
+              toValue: toValue,
+              duration: duration
+            });
+          }
+        }/>
     );
   },
 
