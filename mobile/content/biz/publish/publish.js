@@ -265,6 +265,8 @@ let Publish = React.createClass({
         onSelected={(response) => {this.handleSendImage(response, rowID)}}
         onError={(error) => this.handleImageError(error)}
         title="选择图片"
+        fileId="publish1"
+        allowsEditing={true}
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
       >
         <Image
