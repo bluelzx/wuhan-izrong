@@ -14,4 +14,4 @@ let Config = {
 };
 
 module.exports = Config;
-[]
+

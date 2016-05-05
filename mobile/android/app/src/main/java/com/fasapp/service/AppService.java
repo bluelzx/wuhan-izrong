@@ -111,8 +111,6 @@ public class AppService extends Service {
                 LogUtils.d("Error " , e.getMessage());
             }
         };
-
-
         Log.d("true", "AppService");
     }
 
@@ -132,6 +130,7 @@ public class AppService extends Service {
         LogUtils.d("AppService:onDestroy");
 
     }
+
 
     @Override
     public IBinder onBind(Intent intent) {
