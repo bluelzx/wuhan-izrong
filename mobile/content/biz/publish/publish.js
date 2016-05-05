@@ -205,6 +205,7 @@ let Publish = React.createClass({
                            inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
                            placeholder='天数' maxLength={3} field='termText' inputType="numeric"
                            onChangeText={this._onChangeText}
+                           onFocus={() => this.refs['scroll'].scrollTo({y:60})}
                     />
                     <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._termDataChange}/>
 
