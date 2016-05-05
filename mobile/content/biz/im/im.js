@@ -345,6 +345,14 @@ let WhitePage = React.createClass({
     return msg;
   },
 
+  renderNull: function(){
+    if(_.isEmpty(this.state.data.platformInfo) && (_.isEmpty(this.state.data.msg) || this.state.data.msg.length == 0)){
+      return (
+        <Text style={{flex:1,color:'#fff',textAlign:'center'}}>没有记录</Text>
+      );
+    }
+  },
+
   render: function() {
     let {title}  = this.props;
     return (
@@ -355,6 +363,7 @@ let WhitePage = React.createClass({
         <ScrollView style={{flexDirection: 'column'}}>
           {this.renderSpread(this.state.data.platformInfo)}
           {this.renderMessage()}
+          {this.renderNull()}
         </ScrollView>
       </NavBarView>
     );

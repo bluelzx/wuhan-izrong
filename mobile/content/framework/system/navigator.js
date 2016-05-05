@@ -56,10 +56,7 @@ var Main = React.createClass({
     AppStore.addChangeListener(this._onChange);
     if (Platform.OS === 'android') {
       BackAndroid.addEventListener('hardwareBackPress', this._onAndroidBackPressed);
-      // Codes to test notifications.
-      // DeviceEventEmitter.addListener('Test', function(e: Event) {
-      //   console.log(e.test);
-      // });
+
       DeviceEventEmitter.addListener('onPause',function(e:Event){
         ImSocket.disconnect();
         AppStore.startJavaServer();

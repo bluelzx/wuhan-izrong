@@ -40,7 +40,7 @@ public class ActivityListenerModule extends ReactContextBaseJavaModule implement
     @Override
     public void onHostResume() {
         // Actvity `onResume`
-        //sendEvent(getReactApplicationContext(),"onResume",null);
+        sendEvent(getReactApplicationContext(),"onResume",null);
         getReactApplicationContext().stopService(new Intent(getReactApplicationContext(), AppService.class));
     }
 

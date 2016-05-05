@@ -40,7 +40,7 @@ public class AppService extends Service {
         super.onCreate();
 
         URI uri;
-        final String url_str = "ws://"+ ServiceModule.getHOST() +"/"+ ServiceModule.getToken() + "?lastSyncTime=" + ServiceModule.getLastSyncTime() + "&AiBG=0";
+        final String url_str = "ws://"+ ServiceModule.getHOST() +"/"+ ServiceModule.getToken() + "?lastSyncTime=" + ServiceModule.getLastSyncTime() + "&AIBG=0";
         LogUtils.d("url_str",url_str);
         try {
             uri = new URI(url_str);
@@ -69,13 +69,14 @@ public class AppService extends Service {
                                 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                         Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+                       // CharSequence appName = R.string.app_name;
                         mBuilder = new NotificationCompat.Builder(AppService.this)
                                 .setLargeIcon(mBitmap)
                                 .setSmallIcon(R.mipmap.ic_launcher)
                                 .setContentTitle("消息通知")
                                 .setContentText(content)
                                 .setWhen(System.currentTimeMillis())
-                                .setTicker("Ticker")
+                                .setTicker("环渤银通")
                                 .setAutoCancel(true)
                                 .setContentIntent(mPendingIntent);
                         manager.notify(121, mBuilder.build());

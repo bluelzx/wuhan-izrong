@@ -26,6 +26,7 @@ let ImUserInfo = React.createClass({
 
   getStateFromStores: function() {
     let userInfo = ContactStore.getUserInfoByUserId(this.props.param.userId);
+    console.log(userInfo.mute);
     return{
       data:userInfo,
       mute:userInfo.mute
