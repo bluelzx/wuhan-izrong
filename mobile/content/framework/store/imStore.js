@@ -127,7 +127,7 @@ let _saveMsg = (message, userId) => {
 
   if(message.msgType == SESSION_TYPE.INVITE){
     //TODO  这种情况考虑换个地方处理
-    SessionAction.updateSession(SESSION_TYPE.INVITE, message.sessionId,message.groupName,'群邀请',message.revTime,message.contentType, {groupId:message.groupId});
+    SessionAction.updateSession(SESSION_TYPE.INVITE, message.sessionId,message.groupName,'群邀请',message.revTime,message.contentType, {groupId:message.groupId, notAdd:true});
     return ;
   }
   if(message.type == SESSION_TYPE.USER){

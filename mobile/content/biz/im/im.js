@@ -134,7 +134,7 @@ let WhitePage = React.createClass({
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
           }
         }
-                          onPress={()=> this.props.navigator.push({comp: Spread})}>
+                          onPress={()=>{SessionStore.setBadgeZero(item.sessionId); this.props.navigator.push({comp: Spread})}}>
         <View
           style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
           <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imSpread} />
@@ -345,6 +345,14 @@ let WhitePage = React.createClass({
     return msg;
   },
 
+  renderNull: function(){
+    if(_.isEmpty(this.state.data.platformInfo) && (_.isEmpty(this.state.data.msg) || this.state.data.msg.length == 0)){
+      return (
+        <Text style={{flex:1,color:'#fff',textAlign:'center'}}>没有记录</Text>
+      );
+    }
+  },
+
   render: function() {
     let {title}  = this.props;
     return (
@@ -353,8 +361,8 @@ let WhitePage = React.createClass({
                   actionButton={this.renderContact}>
        <SearchBar textChange={this.textChange}/>
         <ScrollView style={{flexDirection: 'column'}}>
-          {this.renderSpread(this.state.data.platformInfo)}
           {this.renderMessage()}
+          {this.renderNull()}
         </ScrollView>
       </NavBarView>
     );

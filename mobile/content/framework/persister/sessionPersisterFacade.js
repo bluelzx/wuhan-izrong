@@ -62,6 +62,9 @@ let _getUserIdBySessionId = function(sid, cuid) {
 let _updateSession = function (param, notAdd){
   _realm.write(()=>{
     let p = _realm.objects(SESSION).filtered("sessionId = '" + param.sessionId + "'");
+    if(p.lastTime > param.lastTime){
+      return;
+    }
     if(p.length > 0){
       if(param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER){
         if(!notAdd){
@@ -101,7 +104,7 @@ let _getSessionBadge = function(){
   let ret = 0;
   result.forEach((item)=>{
     if(item && item.badge){
-      if(item.type == SESSION_TYPE.USER ||item.type == SESSION_TYPE.GROUP ){
+      if(item.type == SESSION_TYPE.USER ||item.type == SESSION_TYPE.GROUP || item.type == SESSION_TYPE.PLATFORMINFO){
         ret += item.badge;
       }
     }

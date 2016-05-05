@@ -31,9 +31,16 @@ let EditGroup = React.createClass({
   },
 
   getStateFromStores: function() {
-    let groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
-    if(!groupInfo){
+    let groupInfo = null;
+    try {
+      groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
+    } catch (err) {
       this.props.navigator.popToTop();
+      return {}
+    };
+    if (!groupInfo) {
+      this.props.navigator.popToTop();
+      return {}
     }
     return {
       falseSwitchIsOn:groupInfo.mute,

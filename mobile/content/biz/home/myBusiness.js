@@ -127,17 +127,13 @@ let Market = React.createClass({
     ).then((response)=> {
       console.log(response);
       if (response.totalPages === page) {
-        setTimeout(() => {
           callback(response.contentList, {
             allLoaded: true, // the end of the list is reached
           });
-        }, 1000); // simulating network fetching
       } else {
-        setTimeout(() => {
           callback(response.contentList, {
-            allLoaded: false, // the end of the list is reached
+            allLoaded: false
           });
-        }, 1000); // simulating network fetching
       }
     }).catch(
       (errorData) => {
@@ -226,7 +222,8 @@ let Market = React.createClass({
       navigator.push({
         comp: name,
         param: {
-          marketInfo: rowData
+          marketInfo: rowData,
+          callbackRefresh: this.callbackRefresh
         }
       })
     }
@@ -582,6 +579,10 @@ let Market = React.createClass({
     });
   },
 
+  callbackRefresh: function () {
+    this.refs.marketGiftedListView._refresh();
+  },
+
   clearOptions: function () {
     this.refs["ORIENTATION"].setDefaultState();
     this.refs["TERM"].setDefaultState();
@@ -601,7 +602,7 @@ let Market = React.createClass({
   },
 
   confirmBtn: function () {
-      this.pressFilterOther();
+    this.pressFilterOther();
     this.refs.marketGiftedListView._refresh();
   },
   toPage: function (name) {

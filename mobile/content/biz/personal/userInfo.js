@@ -10,7 +10,9 @@ let {
   Text,
   ScrollView,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableHighlight,
+  Dimensions
   } = React;
 
 let _ = require('lodash');
@@ -220,12 +222,38 @@ let UserInfo = React.createClass({
           {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'publicWeChat',
             this.state.publicWeChat, 'default', 40, true, true, false)}
 
-          {this.renderRow('邮箱', require('../../image/user/email.png'), 'email', this.state.email, 'publicEmail',
-            this.state.publicEmail, 'email-address', 60, false, false, true)}
+          <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
+            <View>
+              <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
+                <View style={{flexDirection:'row',backgroundColor:'#162a40',flex:1}}>
+                  <Image style={styles.circle} source={require('../../image/user/email.png')}/>
+                  <Text style={styles.title}>邮箱</Text>
+                </View>
+                <View
+                  style={{flexDirection:'row',alignItems:'center',flex:1,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
+                  <Text style={[{fontSize: 15,color: '#ffffff',width:180}]} numberOfLines={2}>{ this.state.email}</Text>
+                </View>
+              </View>
+              <View style={styles.bottomStyle}/>
+            </View>
+          </TouchableHighlight>
 
           <View style={{marginTop: 5}}>
-            {this.renderRow('机构', require('../../image/user/comp.png'), 'organization', this.state.orgBeanName, '',
-              'ascii-capable', 'default', 20, false, false, true)}
+            <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
+              <View>
+                <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
+                  <View style={{flexDirection:'row',backgroundColor:'#162a40',flex:1}}>
+                    <Image style={styles.circle} source={require('../../image/user/comp.png')}/>
+                    <Text style={styles.title}>机构</Text>
+                  </View>
+                  <View
+                    style={{flexDirection:'row',alignItems:'center',flex:1,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
+                    <Text style={[{fontSize: 15,color: '#ffffff',width:180}]} numberOfLines={2}>{this.state.orgBeanName}</Text>
+                  </View>
+                </View>
+                <View style={styles.bottomStyle}/>
+              </View>
+            </TouchableHighlight>
 
             {this.renderRow('部门', require('../../image/user/department.png'), 'department', this.state.department, 'publicDepart',
               this.state.publicDepart, 'default', 20, true, true, false)}
@@ -280,6 +308,35 @@ let styles = StyleSheet.create({
     textAlignVertical: 'center',
     textAlign: 'center',
     fontWeight: 'bold'
+  },
+
+  borderTop: {
+    borderTopWidth: 1
+  },
+  listLayout: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: 51,
+    paddingLeft: 16,
+    backgroundColor: '#162a40'
+  },
+  circle: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    marginTop: 1,
+    marginRight: 16
+  },
+  title: {
+    fontSize: 18,
+    color: '#ffffff',
+    width: Dimensions.get('window').width - 20
+  },
+  bottomStyle: {
+    height: 0.5,
+    backgroundColor: '#0a1926',
+    marginLeft: 20
   }
 });
 

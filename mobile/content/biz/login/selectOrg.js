@@ -60,13 +60,35 @@ let Register_selectOrg = React.createClass({
                             onPress={()=>{
                               that.props.callback({orgValue: '全部',id: 0});
                               that.props.navigator.pop();}
-                              }>
+                             }>
           <View
             style={{height: 40, marginLeft: 20, justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#122335'}}>
             <Text style={{color: '#FFFFFF', textAlign: 'left'}}>全部</Text>
           </View>
         </TouchableHighlight>
       );
+    }
+  },
+
+  renderList: function(){
+    if(this.state.data == ''){
+      return(
+        <View>
+          <Text style={{color:'#ffffff'}}>您的机构不再平台的机构列表中。如有问题，请联系客服</Text>
+        </View>
+      )
+    }else{
+      return(
+        <AlphabetListView
+          data={this.state.data}
+          cell={Cell}
+          cellHeight={30}
+          sectionListItem={SectionItem}
+          sectionHeader={SectionHeader}
+          sectionHeaderHeight={22.5}
+          updateScrollState={true}
+        />
+      )
     }
   },
 
@@ -82,15 +104,7 @@ let Register_selectOrg = React.createClass({
         </View>
         <View style={{flexDirection: 'column', flex: 1}}>
           {this.rendSelectAll()}
-          <AlphabetListView
-            data={this.state.data}
-            cell={Cell}
-            cellHeight={30}
-            sectionListItem={SectionItem}
-            sectionHeader={SectionHeader}
-            sectionHeaderHeight={22.5}
-            updateScrollState={true}
-          />
+          {this.renderList()}
         </View>
       </NavBarView>
     );
