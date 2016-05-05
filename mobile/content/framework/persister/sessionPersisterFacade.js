@@ -101,7 +101,7 @@ let _getSessionBadge = function(){
   let ret = 0;
   result.forEach((item)=>{
     if(item && item.badge){
-      if(item.type == SESSION_TYPE.USER ||item.type == SESSION_TYPE.GROUP ){
+      if(item.type == SESSION_TYPE.USER ||item.type == SESSION_TYPE.GROUP || item.type == SESSION_TYPE.PLATFORMINFO){
         ret += item.badge;
       }
     }

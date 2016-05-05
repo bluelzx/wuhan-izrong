@@ -27,12 +27,12 @@ let _getUrl = function(token){
 let ImSocket = {
 
   disconnect:function(){
-    Alert('close');
+   // Alert('close');
     _socket&&_socket.close();
   },
 
   reconnect:function(){
-    Alert('reconnect');
+   // Alert('reconnect');
     _socket&&_socket.open();
   },
 

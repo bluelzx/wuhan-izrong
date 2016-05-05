@@ -55,10 +55,22 @@ let Chat = React.createClass({
       }
       title = userInfo.realName + '-' +userInfo.orgValue;
     }else{
-      let groupInfo = ContactStore.getGroupDetailById(item.groupId);
-      if(!groupInfo || !groupInfo.groupId){
+      let groupInfo = null;
+      try {
+        groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
+      } catch (err) {
         this.props.navigator.popToTop();
+        return {}
+      };
+      if (!groupInfo) {
+        this.props.navigator.popToTop();
+        return {}
       }
+      //
+      //let groupInfo = ContactStore.getGroupDetailById(item.groupId);
+      //if(!groupInfo || !groupInfo.groupId){
+      //  this.props.navigator.popToTop();
+      //}
       title = groupInfo?groupInfo.groupName:'未命名';
     }
 

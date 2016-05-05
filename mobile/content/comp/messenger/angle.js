@@ -33,7 +33,8 @@ export default class Angle extends React.Component {
             //flex: 4,
             borderColor: 'transparent',
             borderWidth: this.props.width,
-            marginTop: 10
+            marginTop: 10,
+            height:0
           }]}
       />
     );

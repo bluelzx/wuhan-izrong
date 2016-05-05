@@ -68,8 +68,7 @@ let _getAllGroups = function () {
 let _getGroupInfoByGroupId = function (groupId) {
   let result = _realm.objects(GROUP).filtered('groupId = ' + groupId);
   if (result.length == 0){
-    console.log(`查询群组ID:${groupId}的结果为空`);
-    return {};
+    throw `查询群组ID:${groupId}的结果为空`;
   }
   else{
     let members = [];
