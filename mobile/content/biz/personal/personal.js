@@ -19,6 +19,7 @@ let NavBarView = require('../../framework/system/navBarView');
 let Item = require('../../comp/utils/item');
 let UserInfo = require('../../biz/personal/userInfo');
 let AboutUs = require('./aboutUs');
+let UserGuide = require('./userGuide');
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let AppStore = require('../../framework/store/appStore');
 let NameCircular = require('../im/nameCircular').NameCircular;
@@ -110,7 +111,7 @@ let Personal = React.createClass({
             </View>
           </TouchableHighlight>
           <View style={{backgroundColor: '#18304b', height: 10}}/>
-          <Item desc="用户指导" img={false} func={() => this.toPage(AboutUs)}/>
+          <Item desc="用户指导" img={false} func={() => this.toPage(UserGuide)}/>
           <Item desc="关于我们" img={false} func={() => this.toPage(AboutUs)}/>
         </ScrollView>
       </NavBarView>

@@ -3,12 +3,12 @@
  */
 
 let React = require('react-native');
-const {Text, ScrollView,View} = React;
+const {Text, ScrollView, View, TouchableOpacity} = React;
 let NavBarView = require('../../framework/system/navBarView');
 let Icon = require('react-native-vector-icons/Ionicons');
 let AppStore = require('../../framework/store/appStore');
 let DateHelper = require('../../comp/utils/dateHelper');
-
+let SpreadDetail = require('./spreadDetail');
 
 let Spread = React.createClass({
 
@@ -33,17 +33,26 @@ let Spread = React.createClass({
 
   renderItem: function(item){
     return (
-      <View key={item.infoId} style={{flexDirection:'column',backgroundColor:'#FEFEFE',paddingHorizontal:10,margin:10,paddingVertical:10,borderRadius:10}}>
-        <Text numberOfLines={1} style={{color:'#8694A0',fontWeight:'bold',fontSize:16}}>{item.title}</Text>
-        <Text numberOfLines={3} style={{color:'#8694A0', marginTop:15}}>{item.content}</Text>
-        <View style={{flexDirection:'row', justifyContent:'space-between',marginTop:10,borderTopWidth:0.5,borderTopColor:'#8694A0',paddingTop:10}}>
-          <Text style={{color:'#8694A0'}}>查看详情</Text>
-          <View style={{flexDirection:'row', justifyContent:'flex-end',alignItems:'center'}}>
-            <Text style={{color:'#8694A0'}}>{DateHelper.descDate(item.createDate)}</Text>
-            <Icon name={'ios-arrow-right'} size={18} color={'#8694A0'}/>
+      <TouchableOpacity key={item.infoId} onPress={()=>{this.props.navigator.push({
+      comp:SpreadDetail,
+      param:{
+      item:item
+      }
+      })}}>
+        <View
+              style={{flexDirection:'column',backgroundColor:'#FEFEFE',paddingHorizontal:10,margin:10,paddingVertical:10,borderRadius:10}}>
+          <Text numberOfLines={1} style={{color:'#8694A0',fontWeight:'bold',fontSize:16}}>{item.title}</Text>
+          <Text numberOfLines={3} style={{color:'#8694A0', marginTop:15}}>{item.content}</Text>
+          <View
+            style={{flexDirection:'row', justifyContent:'space-between',marginTop:10,borderTopWidth:0.5,borderTopColor:'#8694A0',paddingTop:10}}>
+            <Text style={{color:'#8694A0'}}>查看详情</Text>
+            <View style={{flexDirection:'row', justifyContent:'flex-end',alignItems:'center'}}>
+              <Text style={{color:'#8694A0'}}>{DateHelper.descDate(item.createDate)}</Text>
+              <Icon name={'ios-arrow-right'} size={18} color={'#8694A0'}/>
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   },
 

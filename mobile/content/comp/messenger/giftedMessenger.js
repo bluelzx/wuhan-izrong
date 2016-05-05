@@ -888,7 +888,7 @@ let GiftedMessenger = React.createClass({
 
           <ImagePicker
             type="camera"
-            onSelected={(response) => { console.log(response)}}
+            onSelected={(response) => { this.props.handleSendImage(response)}}
             title="选择图片"
             fileId="selectCamera"
             allowsEditing={true}

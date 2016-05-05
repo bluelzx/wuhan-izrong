@@ -68,8 +68,7 @@ let _getAllGroups = function () {
 let _getGroupInfoByGroupId = function (groupId) {
   let result = _realm.objects(GROUP).filtered('groupId = ' + groupId);
   if (result.length == 0){
-    console.log(`查询群组ID:${groupId}的结果为空`);
-    return {};
+    throw `查询群组ID:${groupId}的结果为空`;
   }
   else{
     let members = [];
@@ -208,8 +207,15 @@ let _updateContactInfo = function(address, realName, email, nameCardFileUrl, dep
       ret[k] = param[k];
     }
   }
+
   _realm.write(()=>{
-    _realm.create(IMUSERINFO,ret, true);
+    try {
+      //更新
+      _realm.create(IMUSERINFO, ret, true);
+    }catch(err){
+      //创建
+      _realm.create(IMUSERINFO, param, true);
+    }
   });
 }
 
@@ -252,7 +258,8 @@ let _getUserInfoByUserId = function (id) {
     publicQQ: users.publicQQ,
     orgId: users.orgId,
     lastLoginTime:users.lastLoginTime,  //本地增加,用于多用户登陆排序
-    token: users.token
+    token: users.token,
+    mute: users.mute
   };
   if(org.length > 0)
     ret.orgValue = org[0].orgValue;
