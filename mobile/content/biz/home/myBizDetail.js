@@ -257,7 +257,7 @@ let MyBizDetail = React.createClass({
             <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
                    iconStyle={{}} placeholderTextColor='#325779'
                    inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
-                   placeholder='1万-1000亿' maxLength={8} field='amountText' inputType="numeric"
+                   placeholder='0-1000亿' maxLength={8} field='amountText' inputType="numeric"
                    onChangeText={this._onChangeText}
                    value={this.state.amountText}
             />
