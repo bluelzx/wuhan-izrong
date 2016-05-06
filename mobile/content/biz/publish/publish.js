@@ -265,84 +265,86 @@ let Publish = React.createClass({
                     </View>
                 </View>
 
-            )
-        }
-    },
-    renderAdd (){
-        if (this.state.fileUrlList.length < 5) {
-            return (
-                <ImagePicker
-                    type="all"
-                    onSelected={(response) => {this.handleSendImage(response, 10)}}
-                    onError={(error) => this.handleImageError(error)}
-                    title="选择图片"
-                    fileId="publish1"
-                    allowsEditing={true}
-                    style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
-                >
-                    <Image
-                        style={{width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-                        source={require('../../image/market/addImage.png')}
-                    />
-                </ImagePicker>
-            );
-        }
-    },
-    renderImgItem: function (rowData, sectionID, rowID) {
-        return (
-            <ImagePicker
-                longPress={() => this._longPress(rowID)}
-                type="all"
-                onSelected={(response) => {this.handleSendImage(response, rowID)}}
-                onError={(error) => this.handleImageError(error)}
-                title="选择图片"
-                style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
-            >
-                <Image
-                    style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-                    source={{uri:rowData}}
+      )
+    }
+  },
+  renderAdd (){
+    if (this.state.fileUrlList.length < 5) {
+      return (
+        <ImagePicker
+          type="all"
+          onSelected={(response) => {this.handleSendImage(response, 10)}}
+          onError={(error) => this.handleImageError(error)}
+          title="选择图片"
+          fileId="publish1"
+          allowsEditing={true}
+          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+        >
+          <Image
+            style={{width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+            source={require('../../image/market/addImage.png')}
+          />
+        </ImagePicker>
+      );
+    }
+  },
+  renderImgItem: function (rowData, sectionID, rowID) {
+    return (
+      <ImagePicker
+        longPress={() => this._longPress(rowID)}
+        type="all"
+        onSelected={(response) => {this.handleSendImage(response, rowID)}}
+        onError={(error) => this.handleImageError(error)}
+        title="选择图片"
+        fileId="publish1"
+        allowsEditing={true}
+        style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+      >
+        <Image
+          style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+          source={{uri:rowData}}
+        />
+      </ImagePicker>
+    )
+  },
+  renderRemarks: function (isFromIM) {
+    if (!isFromIM) {
+      return (
+        <View style={{marginTop:10,marginBottom:10}}>
+          <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
+            <View
+              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: '#102a42'}}>
+              <Text style={{marginLeft:10, fontWeight: 'bold', color:'white'}}>
+                {'备注'}
+              </Text>
+              <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+                <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
+                      numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
+                </Text>
+                <Image style={{margin:10,width:16,height:16}}
+                       source={require('../../image/market/next.png')}
                 />
-            </ImagePicker>
-        )
-    },
-    renderRemarks: function (isFromIM) {
-        if (!isFromIM) {
-            return (
-                <View style={{marginTop:10,marginBottom:10}}>
-                    <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
-                        <View
-                            style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: '#102a42'}}>
-                            <Text style={{marginLeft:10, fontWeight: 'bold', color:'white'}}>
-                                {'备注'}
-                            </Text>
-                            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                                <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
-                                      numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
-                                </Text>
-                                <Image style={{margin:10,width:16,height:16}}
-                                       source={require('../../image/market/next.png')}
-                                />
-                            </View>
-                        </View>
-                    </TouchableHighlight>
-                </View>
-            )
-        }
-    },
-    renderReleaseBtn: function (isFromIM) {
-        return (
-            <View style={{height:44}}>
-                <Button
-                    containerStyle={{height:44,borderRadius:0,backgroundColor:"#4fb9fc"}}
-                    style={{fontSize: 15, color: '#ffffff',}}
-                    disabled={this.state.disabled}
-                    onPress={() => this._pressPublish()}
-                >
-                    {isFromIM ? '发送' : '发布'}
-                </Button>
+              </View>
             </View>
-        )
-    },
+          </TouchableHighlight>
+        </View>
+      )
+    }
+  },
+  renderReleaseBtn: function (isFromIM) {
+    return (
+      <View style={{height:44}}>
+        <Button
+          containerStyle={{height:44,borderRadius:0,backgroundColor:"#4fb9fc"}}
+          style={{fontSize: 15, color: '#ffffff',}}
+          disabled={this.state.disabled}
+          onPress={() => this._pressPublish()}
+        >
+          {isFromIM ? '发送' : '发布'}
+        </Button>
+      </View>
+    )
+  },
 
     renderToMyBiz: function () {
         return (

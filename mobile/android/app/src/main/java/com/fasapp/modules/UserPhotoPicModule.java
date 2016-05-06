@@ -27,7 +27,9 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.fasapp.utils.SDCardUtils;
 import com.soundcloud.android.crop.Crop;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,6 +48,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
     private WritableMap response;
     private File file;
     private Uri uri;
+    private int size;
 
     public UserPhotoPicModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -108,8 +111,15 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                 }).show();
     }
 
+
     @ReactMethod
     public void showImagePic(String type,boolean needCrop ,String name, Callback callback) {
+        showImagePicBySize(type, needCrop, name, callback, 100);
+    }
+
+    @ReactMethod
+    public void showImagePicBySize(String type,boolean needCrop ,String name, Callback callback, int size) {
+        this.size = size;
         crop = needCrop;
         fileName = new Date().getTime() + ".jpg";
         mCallback = callback;
@@ -210,26 +220,11 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                     if (crop) {
                         beginCrop(uri);
                     } else {
-                        try {
-                            BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inSampleSize = 2;
-                            Bitmap bitmap = BitmapFactory.decodeFile(file.getPath(), options);
-                            if (bitmap != null) {
-                                if (file.exists()) {
-                                    file.delete();
-                                }
-                                // 保存图片
-                                FileOutputStream fos = null;
-                                fos = new FileOutputStream(file);
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
-                                fos.flush();
-                                fos.close();
-                            }
-                        } catch (Exception e) {
-                            // TODO: handle exception
-                        }
+                        Uri uri1 = compressImage(file, file.getPath());
                         response = Arguments.createMap();
-                        response.putString("uri", uri.toString());
+                        if (uri1 != null) {
+                            response.putString("uri", uri1.toString());
+                        }
                         mCallback.invoke(response);
                     }
                 }
@@ -243,32 +238,81 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                 if (crop) {
                     beginCrop(uri);
                 } else {
-//                    try {
-//                        boolean b = uri.toString().startsWith("content://");
-//                        File file = new File(new URI(uri.toString().replace("content://", "file:///")));
-//                        File tempFile = new File(Environment.getExternalStorageDirectory(), fileName);
-//                        BitmapFactory.Options options = new BitmapFactory.Options();
-//                        options.inSampleSize = 2;
-//                        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath(), options);
-//                        if (bitmap != null) {
-//                            // 保存图片
-//                            FileOutputStream fos = null;
-//                            fos = new FileOutputStream(tempFile);
-//                            bitmap.compress(Bitmap.CompressFormat.JPEG, 30, fos);
-//                            fos.flush();
-//                            fos.close();
-//                        }
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
+                    File tempFile = new File(Environment.getExternalStorageDirectory(), fileName);
+                    String[] proj ={MediaStore.Images.Media.DATA};
+                    @SuppressWarnings("deprecation")
+                    Cursor cursor = getCurrentActivity().managedQuery(data.getData(), proj, null, null, null);
+                    int photocolumn =  cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    cursor.moveToFirst();
+                    String path = cursor.getString(photocolumn);
+                    Uri uri1 = compressImage(tempFile, path);
                     response = Arguments.createMap();
-                    response.putString("uri", uri.toString());
+                    if (uri1 != null) {
+                        response.putString("uri", uri1.toString());
+                    }
                     mCallback.invoke(response);
                 }
                 break;
             case Crop.REQUEST_CROP:
                 handleCrop(resultCode, data);
                 break;
+        }
+    }
+
+    private Uri compressImage(File file, String path) {
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
+            Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+            if (bitmap != null) {
+                if (file.exists()) {
+                    file.delete();
+                }
+                // 保存图片
+                FileOutputStream fos = null;
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                System.out.println("aaaabbbb" + baos.toByteArray().length / 1024);
+                int per = 100;
+                while (baos.toByteArray().length / 1024 > size) {
+                    System.out.println("bbbb " + baos.toByteArray().length / 1024);
+                    baos.reset();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, per, baos);
+                    per -= 10;
+                    System.out.println("aaaabbbb " + baos.toByteArray().length / 1024 + " 9999 " + per);
+                }
+                System.out.println("aaaabbbb" + per);
+                fos = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, per, fos);
+                fos.flush();
+                fos.close();
+            }
+            if(bitmap != null && !bitmap.isRecycled()){
+                bitmap.recycle();
+                bitmap = null;
+                System.gc();
+            }
+            testFileSize(file);
+            return Uri.fromFile(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void testFileSize(File file) {
+        try {
+            FileInputStream is = new FileInputStream(file.getPath());
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 1;
+            Bitmap image = BitmapFactory.decodeStream(is,null,options);
+            is.close();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            int i = baos.toByteArray().length / 1024;
+            System.out.println("aaaabbbb" + i);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
