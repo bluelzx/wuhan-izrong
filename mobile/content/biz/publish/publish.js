@@ -440,7 +440,7 @@ let Publish = React.createClass({
             amount: params.amount,
             rate: params.rate
         };
-        if (param ? param.isFromIM : false) {
+        if (param && param.isFromIM) {
             this.props.navigator.pop();
             param.callBack(item);
         } else {
