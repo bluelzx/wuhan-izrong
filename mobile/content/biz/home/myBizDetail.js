@@ -40,6 +40,8 @@ let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
 let ImAction = require('../../framework/action/imAction');
 
+let {MYBIZ_CHANGE} = require('../../constants/dictEvent');
+
 let bizOrientationUnit = ['收', '出'];
 let termUnit = ['日', '月', '年'];
 let amountUnit = ['万', '亿'];
@@ -76,6 +78,12 @@ let MyBizDetail = React.createClass({
 
   componentDidMount() {
   },
+
+  componentWillUnmount() {
+  },
+
+
+
 
   termChangeHelp(term){
     if(term == null || term == 0){
@@ -577,8 +585,10 @@ let MyBizDetail = React.createClass({
             remark: this.state.remarkText
           }
         ).then((response)=> {
-          Alert('保存成功',()=>this.props.navigator.pop());
-          this.props.param.callbackRefresh();
+          Alert('保存成功',()=>{
+            this.props.navigator.pop();
+            AppStore.emitChange(MYBIZ_CHANGE);
+          });
         }).catch(
           (errorData) => {
             throw errorData;
@@ -595,8 +605,10 @@ let MyBizDetail = React.createClass({
             orderId: id
           }
         ).then((response)=> {
-          Alert('下架成功',()=>this.props.navigator.pop());
-          this.props.param.callbackRefresh();
+          Alert('下架成功',()=>{
+            this.props.navigator.pop();
+            AppStore.emitChange(MYBIZ_CHANGE);
+          });
         }).catch(
           (errorData) => {
             throw errorData;

@@ -25,7 +25,7 @@ const DictEvent = keyMirror({
    * Market events.
    */
   MARKET_CHANGE: null,
-
+  MYBIZ_CHANGE: null,
   /**
    * User events.
    */

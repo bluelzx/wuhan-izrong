@@ -1,4 +1,3 @@
-let Config = require('../../config');
 let { Host, ImHost } = require('../../config');
 let imSocket = 'ws://' + ImHost + '/';
 let imHttp = 'http://' + ImHost + '/';

@@ -32,6 +32,7 @@ let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
 
 let {Alert, GiftedListView, Button} = require('mx-artifacts');
+let {MYBIZ_CHANGE} = require('../../constants/dictEvent');
 let Adjust = require('../../comp/utils/adjust');
 
 let marketData = {contentList: []};
@@ -93,15 +94,15 @@ let Market = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange);
+    AppStore.addChangeListener(this._onChange,MYBIZ_CHANGE);
   },
 
-  componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange);
+  componentWillUnmount () {
+    AppStore.removeChangeListener(this._onChange,MYBIZ_CHANGE);
   },
 
   _onChange () {
-    //this.setState(this.bizOrderAdminSearch());
+    this.refs.marketGiftedListView._refreshWithoutSpinner();
   },
 
   /**
@@ -222,8 +223,7 @@ let Market = React.createClass({
       navigator.push({
         comp: name,
         param: {
-          marketInfo: rowData,
-          callbackRefresh: this.callbackRefresh
+          marketInfo: rowData
         }
       })
     }
@@ -577,10 +577,6 @@ let Market = React.createClass({
       orgValue: item.orgValue,
       orgId: item.id
     });
-  },
-
-  callbackRefresh: function () {
-    this.refs.marketGiftedListView._refresh();
   },
 
   clearOptions: function () {
