@@ -225,13 +225,16 @@ let UserInfo = React.createClass({
           <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
             <View>
               <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
-                <View style={{flexDirection:'row',backgroundColor:'#162a40',flex:1}}>
+                <View style={{flexDirection:'row',backgroundColor:'#162a40',width:Dimensions.get('window').width/5}}>
                   <Image style={styles.circle} source={require('../../image/user/email.png')}/>
                   <Text style={styles.title}>邮箱</Text>
                 </View>
                 <View
-                  style={{flexDirection:'row',alignItems:'center',flex:1,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
-                  <Text style={[{fontSize: 15,color: '#ffffff',width:180}]} numberOfLines={2}>{ this.state.email}</Text>
+                  style={{flexDirection:'row',alignItems:'center',marginRight:20,width:Dimensions.get('window').width/5*3,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
+                  <Text style={[{fontSize: 15,color: '#ffffff',textAlign: 'right',flex:1}]}
+                        numberOfLines={2}>
+                    {this.state.email}
+                  </Text>
                 </View>
               </View>
               <View style={styles.bottomStyle}/>
@@ -242,13 +245,16 @@ let UserInfo = React.createClass({
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
               <View>
                 <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
-                  <View style={{flexDirection:'row',backgroundColor:'#162a40',flex:1}}>
+                  <View style={{flexDirection:'row',backgroundColor:'#162a40',width:Dimensions.get('window').width/5}}>
                     <Image style={styles.circle} source={require('../../image/user/comp.png')}/>
                     <Text style={styles.title}>机构</Text>
                   </View>
                   <View
-                    style={{flexDirection:'row',alignItems:'center',flex:1,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
-                    <Text style={[{fontSize: 15,color: '#ffffff',width:180}]} numberOfLines={2}>{this.state.orgBeanName}</Text>
+                    style={{flexDirection:'row',alignItems:'center',marginRight:20,width:Dimensions.get('window').width/5*3,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
+                    <Text style={[{fontSize: 15,color: '#ffffff',textAlign: 'right',flex:1}]}
+                          numberOfLines={2}>
+                      {this.state.orgBeanName}
+                    </Text>
                   </View>
                 </View>
                 <View style={styles.bottomStyle}/>
@@ -331,7 +337,6 @@ let styles = StyleSheet.create({
   title: {
     fontSize: 18,
     color: '#ffffff',
-    width: Dimensions.get('window').width - 20
   },
   bottomStyle: {
     height: 0.5,
