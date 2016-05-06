@@ -108,7 +108,7 @@ let Publish = React.createClass({
 
     render: function () {
         let {title, param}  = this.props;
-        let isFromIM = param ? param.isFromIM : false;
+        let isFromIM = param && param.isFromIM;
         let isFromMyBusiness = param ? param.isFromMyBusiness : false;
         return (
             <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
@@ -340,7 +340,7 @@ let Publish = React.createClass({
           disabled={this.state.disabled}
           onPress={() => this._pressPublish()}
         >
-          {isFromIM ? '发送' : '发布'}
+          {isFromIM ? '发送' : '+发布新业务'}
         </Button>
       </View>
     )
@@ -415,7 +415,7 @@ let Publish = React.createClass({
     toMyBiz: function () {
         const { navigator } = this.props;
         if (navigator) {
-            navigator.push({comp: MyBusiness, param: {fromPublish: true}});
+            navigator.push({comp: MyBusiness, param: {fromPublish: true , isFromPublish : true}});
         }
     },
 
