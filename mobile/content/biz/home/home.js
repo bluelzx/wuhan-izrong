@@ -17,17 +17,11 @@ let NavBarView = require('../../framework/system/navBarView');
 let {height, width} = Dimensions.get('window');
 let ViewPager = require('react-native-viewpager');
 let MarketList = require('../market/marketList');
-let myBusiness = require('./myBusiness');
+let MyBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
 let {MARKET_CHANGE} = require('../../constants/dictEvent');
-
-
-var PAGES = [
-  'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024',
-  'https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?h=1024',
-  'https://images.unsplash.com/photo-1441448770220-76743f9e6af6?h=1024',
-  'https://images.unsplash.com/photo-1441260038675-7329ab4cc264?h=1024'
-];
+let MarketStore = require('../../framework/store/marketStore');
+let Market = require('../market/market');
 
 var marketData = {
   contentList: [
@@ -39,14 +33,28 @@ var marketData = {
 };
 let Home = React.createClass({
   getStateFromStores: function () {
+    let filterItems = AppStore.getFilters().filterItems;
+    let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
+    let categoryArr = this.deleteFirstObj(category.options);
+    let item = MarketStore.getCategoryAndItem(filterItems);
+    item.shift();
+
     let dataSource = new ViewPager.DataSource({
       pageHasChanged: (p1, p2) => p1 !== p2
     });
-
     let myCategory = AppStore.getCategory();
     let myItem = AppStore.getItem();
-
+    let PAGES = AppStore.queryAllHomePageInfo();
+    if (PAGES.length == 0) {
+      PAGES = [
+        '敬请期待',
+        '敬请期待',
+        '敬请期待'
+      ];
+    }
     return {
+      categoryArr: categoryArr,
+      categoryItem: item,
       dataSource: dataSource.cloneWithPages(PAGES),
       category: myCategory != null ? myCategory.displayName : '资金业务',
       item: myItem != null ? myItem.displayName : '同业存款'
@@ -68,27 +76,52 @@ let Home = React.createClass({
     this.setState(this.getStateFromStores());
   },
 
-  toPage: function (name) {
+  toPage: function (name, data) {
     const { navigator } = this.props;
     if (navigator) {
-      navigator.push({comp: name});
+      if (name == MyBusiness) {
+        navigator.push({comp: name, data: data});
+      } else {
+        navigator.resetTo({comp: 'tabView', tabName: 'market', data: data});
+      }
     }
   },
 
-  _renderPage: function (data:Object) {
-    return (
-      <Image
-        style={styles.page}
-        source={{uri: data}}
-      />
-    );
+  deleteFirstObj: function (obj) {
+    let arr = [];
+    if (!!obj) {
+      obj.forEach(function (item) {
+        if (item.displayCode != 'ALL') {
+          arr.push(item);
+        }
+      });
+    }
+    return arr;
   },
 
-  returnItem: function (border, url, text, toPage) {
+
+  _renderPage: function (data:Object) {
+    if (data == '敬请期待') {
+      return (
+        <View style={[styles.page,{flex:1,alignItems:'center',justifyContent:'center'}]}>
+          <Text style={{color:'#ffffff'}}>敬请期待</Text>
+        </View>
+      )
+    } else {
+      return (
+        <Image
+          style={styles.page}
+          source={{uri: data}}
+        />
+      );
+    }
+  },
+
+  returnItem: function (border, url, text, toPage, data) {
     if (border) {
       return (
         <TouchableHighlight style={styles.borderTableItem} activeOpacity={0.8}
-                            underlayColor='#18304b' onPress={()=>this.toPage(toPage)}
+                            underlayColor='#18304b' onPress={()=>this.toPage(toPage,data)}
         >
           <View style={styles.menuItem}>
             <Image style={styles.menuImage} resizeMode='cover' source={url}/>
@@ -99,7 +132,7 @@ let Home = React.createClass({
     }
     return (
       <TouchableHighlight style={{flex: 1, flexDirection: 'column'}} activeOpacity={0.8}
-                          underlayColor='#18304b' onPress={()=>this.toPage(toPage)}
+                          underlayColor='#18304b' onPress={()=>this.toPage(toPage,data)}
       >
         <View style={styles.menuItem}>
           <Image style={styles.menuImage} resizeMode='cover' source={url}/>
@@ -110,13 +143,14 @@ let Home = React.createClass({
   },
   rendViewPager: function () {
     return (
-      <ViewPager
-        style={this.props.style}
-        dataSource={this.state.dataSource}
-        renderPage={this._renderPage}
-        isLoop={true}
-        autoPlay={true}
-        animation={(animatedValue, toValue, gestureState) => {
+      <View style={styles.page}>
+        <ViewPager
+          style={this.props.style}
+          dataSource={this.state.dataSource}
+          renderPage={this._renderPage}
+          isLoop={true}
+          autoPlay={true}
+          animation={(animatedValue, toValue, gestureState) => {
             var duration = 1000;
             return Animated.timing(animatedValue,
             {
@@ -125,6 +159,7 @@ let Home = React.createClass({
             });
           }
         }/>
+      </View>
     );
   },
 
@@ -137,14 +172,29 @@ let Home = React.createClass({
           {this.rendViewPager()}
           <View style={{height: width/3*2,flexDirection:"column",backgroundColor: "#162a40",justifyContent: "center"}}>
             <View style={{flex: 1, flexDirection:"row",borderBottomColor:"#000000",borderBottomWidth:1}}>
-              {this.returnItem(false, require('../../image/home/assetTransaction.png'), '资产交易', myBusiness)}
-              {this.returnItem(true, require('../../image/home/billTransaction.png'), '票据交易', myBusiness)}
-              {this.returnItem(false, require('../../image/home/capitalBusiness.png'), '资金业务', myBusiness)}
+              {this.returnItem(false, require('../../image/home/assetTransaction.png'), '资产交易', Market, {
+                category: this.state.categoryArr[2],
+                item: this.state.categoryItem[2].itemArr[0]
+              })}
+              {this.returnItem(true, require('../../image/home/billTransaction.png'), '票据交易', Market, {
+                category: this.state.categoryArr[1],
+                item: this.state.categoryItem[1].itemArr[0]
+              })}
+              {this.returnItem(false, require('../../image/home/capitalBusiness.png'), '资金业务', Market, {
+                category: this.state.categoryArr[0],
+                item: this.state.categoryItem[0].itemArr[0]
+              })}
             </View>
             <View style={{flex:1,flexDirection:"row"}}>
-              {this.returnItem(false, require('../../image/home/companyBank.png'), '公司投行', myBusiness)}
-              {this.returnItem(true, require('../../image/home/interbankAgent.png'), '同业代理', myBusiness)}
-              {this.returnItem(false, require('../../image/home/myBusiness.png'), '我的业务', myBusiness)}
+              {this.returnItem(false, require('../../image/home/companyBank.png'), '公司投行', Market, {
+                category: this.state.categoryArr[4],
+                item: this.state.categoryItem[4].itemArr[0]
+              })}
+              {this.returnItem(true, require('../../image/home/interbankAgent.png'), '同业代理', Market, {
+                category: this.state.categoryArr[3],
+                item: this.state.categoryItem[3].itemArr[0]
+              })}
+              {this.returnItem(false, require('../../image/home/myBusiness.png'), '我的业务', MyBusiness, {})}
             </View>
           </View>
           <View style={styles.listHead}>
