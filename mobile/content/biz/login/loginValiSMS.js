@@ -60,7 +60,9 @@ let ValiSMS = React.createClass({
           mobileNo: this.props.param.mobileNo,
           inputSmsCode: this.state.verify,
           deviceToken: this.state.APNSToken,
-          deviceModel: this.state.deviceModel,
+          deviceModel: this.state.deviceModel
+        }).then((response) => {
+          MarketAction.bizOrderMarketSearchDefaultSearch();
         }).then((response) => {
           const {navigator} = this.props;
           if (navigator) {
@@ -68,8 +70,6 @@ let ValiSMS = React.createClass({
               comp: 'tabView'
             });
           }
-        }).then((response) => {
-          MarketAction.bizOrderMarketSearchDefaultSearch();
         }).catch((errorData) => {
           throw errorData;
         });
