@@ -348,7 +348,7 @@ let WhitePage = React.createClass({
   },
 
   renderNull: function(){
-    if(_.isEmpty(this.state.data.platformInfo) && (_.isEmpty(this.state.data.msg) || this.state.data.msg.length == 0)){
+    if(_.isEmpty(this.state.data.msg) || this.state.data.msg.length == 0){
       return (
         <Text style={{flex:1,color:'#fff',textAlign:'center'}}>没有记录</Text>
       );
