@@ -9,7 +9,8 @@ let {
   Text,
   View,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  Navigator
 } = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
@@ -62,14 +63,16 @@ let ValiSMS = React.createClass({
           deviceToken: this.state.APNSToken,
           deviceModel: this.state.deviceModel
         }).then((response) => {
-          MarketAction.bizOrderMarketSearchDefaultSearch();
-        }).then((response) => {
-          const {navigator} = this.props;
-          if (navigator) {
-            this.props.navigator.resetTo({
-              comp: 'tabView'
+          MarketAction.bizOrderMarketSearchDefaultSearch()
+            .then((response) => {
+              const {navigator} = this.props;
+              if (navigator) {
+                this.props.navigator.resetTo({
+                  comp: 'tabView',
+                  sceneConfig: Navigator.SceneConfigs.FadeAndroid
+                });
+              }
             });
-          }
         }).catch((errorData) => {
           throw errorData;
         });
