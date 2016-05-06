@@ -82,7 +82,7 @@ let Home = React.createClass({
       if (name == MyBusiness) {
         navigator.push({comp: name, data: data});
       } else {
-        navigator.resetTo({comp: 'tabView', tabName: 'market', data: data});
+        navigator.resetTo({comp: 'tabView', tabName: 'market', param: data});
       }
     }
   },

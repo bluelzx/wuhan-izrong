@@ -116,36 +116,26 @@ android {
     }
     buildTypes {
         release {
-            // 移除无用的resource文件
+        // 移除无用的resource文件
             shrinkResources true
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
-            applicationVariants.all { variant ->
-                            variant.outputs.each { output ->
-                                def outputFile = output.outputFile
-                                def fileName = "myapp_v${defaultConfig.versionName}_${releaseTime()}.apk"
-                                output.outputFile = new File(outputFile.parent, fileName)
-
-                            }
-                        }
         }
     }
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            // For each separate APK per architecture, set a unique version code as described here:
-            // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-            def versionCodes = ["armeabi-v7a":1, "x86":2]
-            def abi = output.getFilter(OutputFile.ABI)
-            if (abi != null) {  // null for the universal-debug, universal-release variants
-                output.versionCodeOverride =
-                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
-            }
+            def outputFile = output.outputFile
+                                def fileName = "tj_fas_app_v${defaultConfig.versionName}_${releaseTime()}.apk"
+                                output.outputFile = new File(outputFile.parent, fileName)
         }
     }
-
 }
+
+ def releaseTime() {
+        return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+    }
 
 dependencies {
     compile project(':react-native-share')
