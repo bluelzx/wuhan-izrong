@@ -8,6 +8,7 @@ let { ImHost } = require('../../../config');
 //let { MsgTypes } = require('../../constants/notification');
 
 let Persister = require('../persister/persisterFacade');
+
 //let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 let { Default_EVENT, MARKET_CHANGE ,ORG_CHANGE ,USER_CHANGE} = require('../../constants/dictEvent');
 
@@ -64,9 +65,10 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getCategory: ()=> _getCategory(),
   saveItem: (data) => _saveItem(data),
   getItem: ()=> _getItem(),
+  queryAllHomePageInfo: ()=>_queryAllHomePageInfo(),
   queryAllPlatFormInfo: ()=>_queryAllPlatFormInfo(),
   getBadge: ()=>_getBadge(),
-  startJavaServer:() => ServiceModule.startAppService(_data.token, 0, ImHost),
+  startJavaServer: () => ServiceModule.startAppService(_data.token, 0, ImHost),
   //stopJavaServer:() => ServiceModule.stopMyAppService()
 });
 
@@ -230,5 +232,9 @@ let _getItem = () => {
 let _getBadge = () => {
   let badge = Persister.getSessionBadge();
   return badge;
+};
+
+let _queryAllHomePageInfo = ()=> {
+  return Persister.queryAllHomePageInfo()
 };
 module.exports = AppStore;

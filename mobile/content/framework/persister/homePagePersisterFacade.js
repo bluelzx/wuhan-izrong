@@ -29,6 +29,9 @@ let _queryAll = function() {
     };
     ret.push(p);
   });
+  if(ret.length == 0){
+    return [];
+  }
   return ret;
 };
 
