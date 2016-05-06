@@ -74,7 +74,7 @@ let Register_selectOrg = React.createClass({
     if(this.state.data == ''){
       return(
         <View>
-          <Text style={{color:'#ffffff'}}>您的机构不再平台的机构列表中。如有问题，请联系客服</Text>
+          <Text style={{color:'#ffffff',marginTop:20,flex:1,alignItems:'center'}}>您的机构不再平台的机构列表中。如有问题，请联系客服</Text>
         </View>
       )
     }else{
