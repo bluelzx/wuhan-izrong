@@ -17,7 +17,7 @@ let NavBarView = require('../../framework/system/navBarView');
 let {height, width} = Dimensions.get('window');
 let ViewPager = require('react-native-viewpager');
 let MarketList = require('../market/marketList');
-let myBusiness = require('./myBusiness');
+let MyBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
 let {MARKET_CHANGE} = require('../../constants/dictEvent');
 
@@ -137,14 +137,14 @@ let Home = React.createClass({
           {this.rendViewPager()}
           <View style={{height: width/3*2,flexDirection:"column",backgroundColor: "#162a40",justifyContent: "center"}}>
             <View style={{flex: 1, flexDirection:"row",borderBottomColor:"#000000",borderBottomWidth:1}}>
-              {this.returnItem(false, require('../../image/home/assetTransaction.png'), '资产交易', myBusiness)}
-              {this.returnItem(true, require('../../image/home/billTransaction.png'), '票据交易', myBusiness)}
-              {this.returnItem(false, require('../../image/home/capitalBusiness.png'), '资金业务', myBusiness)}
+              {this.returnItem(false, require('../../image/home/assetTransaction.png'), '资产交易', MyBusiness)}
+              {this.returnItem(true, require('../../image/home/billTransaction.png'), '票据交易', MyBusiness)}
+              {this.returnItem(false, require('../../image/home/capitalBusiness.png'), '资金业务', MyBusiness)}
             </View>
             <View style={{flex:1,flexDirection:"row"}}>
-              {this.returnItem(false, require('../../image/home/companyBank.png'), '公司投行', myBusiness)}
-              {this.returnItem(true, require('../../image/home/interbankAgent.png'), '同业代理', myBusiness)}
-              {this.returnItem(false, require('../../image/home/myBusiness.png'), '我的业务', myBusiness)}
+              {this.returnItem(false, require('../../image/home/companyBank.png'), '公司投行', MyBusiness)}
+              {this.returnItem(true, require('../../image/home/interbankAgent.png'), '同业代理', MyBusiness)}
+              {this.returnItem(false, require('../../image/home/myBusiness.png'), '我的业务', MyBusiness)}
             </View>
           </View>
           <View style={styles.listHead}>
