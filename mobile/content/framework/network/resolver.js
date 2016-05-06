@@ -89,6 +89,7 @@ let _dealMsg = function (message) {
       break;
     default:
       console.log('None message type matched! [%s]', message.msgType);
+      console.log(message);
   }
 };
 
