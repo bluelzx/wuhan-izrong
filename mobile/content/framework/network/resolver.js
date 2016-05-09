@@ -84,8 +84,7 @@ let _dealMsg = function (message, socket) {
       ImStore.deleteContactInfo(message.userIdList);
       break;
     case MSG_TYPE.GROUP_INFO_UPDATE:
-
-      //ContactSotre.createGroup(message.groupId, message.groupName,message.groupOwnerId,message.members,false);
+      ContactSotre.createGroup(message.groupId, message.groupName,message.groupOwnerId,message.members,false);
       break;
     case MSG_TYPE.GROUP_INFO_DELETE:
       ContactSotre.leaveGroup(message.groupId);
