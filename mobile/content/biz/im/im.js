@@ -341,18 +341,21 @@ let WhitePage = React.createClass({
 
   renderMessage: function() {
     let msg = [];
-    sessionFilter(this.state.data.msg,'title','content',this.state.keyWord).map((item, index)=>{
-      msg.push(this.renderItem(item, index));
-    });
-    return msg;
+    let listData = sessionFilter(this.state.data.msg, 'title', 'content', this.state.keyWord);
+    if(_.isEmpty(listData) || listData.length == 0){
+      return this.renderNull();
+    }else {
+      listData.map((item, index)=> {
+        msg.push(this.renderItem(item, index));
+      });
+      return msg;
+    }
   },
 
   renderNull: function(){
-    if(_.isEmpty(this.state.data.msg) || this.state.data.msg.length == 0){
-      return (
-        <Text style={{flex:1,color:'#fff',textAlign:'center'}}>没有记录</Text>
-      );
-    }
+    return (
+      <Text style={{flex:1,color:'#fff',textAlign:'center'}}>没有记录</Text>
+    );
   },
 
   render: function() {
@@ -364,7 +367,6 @@ let WhitePage = React.createClass({
        <SearchBar textChange={this.textChange}/>
         <ScrollView style={{flexDirection: 'column'}}>
           {this.renderMessage()}
-          {this.renderNull()}
         </ScrollView>
       </NavBarView>
     );
