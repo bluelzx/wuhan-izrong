@@ -113,20 +113,6 @@ let _saveAppUserGroupBeanList = function (appUserGroupBeanList) {
 
 };
 
-let _saveAppUserGroupBean = function (appUserGroupBean) {
-  _realm.write(() => {
-    _realm.create(GROUP, {
-      groupId: appUserGroupBean.groupId,
-      groupImageUrl: appUserGroupBean.groupImageUrl,
-      groupName: appUserGroupBean.groupName,
-      groupMasterUid: appUserGroupBean.groupMasterUid,
-      memberNum: appUserGroupBean.members.length,
-      members: JSON.stringify(appUserGroupBean.members),
-      mute: appUserGroupBean.mute
-    }, true);
-  });
-};
-
 let _saveImUsers = function (imUserBeanList) {
    _realm.write(() => {
       for (var i = 0; i < imUserBeanList.length; i++) {

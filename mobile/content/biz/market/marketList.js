@@ -29,7 +29,7 @@ let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let MarketList = React.createClass({
   getInitialState: function () {
     return {
-      dataSource: data.cloneWithRows(this.props.marketData.contentList),
+      dataSource: data.cloneWithRows(this.props.marketData),
     };
   },
   componentWillMount: function () {
@@ -85,24 +85,8 @@ let MarketList = React.createClass({
     )
   },
   _pressRow: function () {
-  },
-  toDetail: function (name, rowData) {
-    const { navigator } = this.props;
-    if (navigator) {
-      navigator.push({
-        comp: name,
-        param: {
-          marketInfo: rowData
-        }
-      })
-    }
-  },
-
-  _changeData: function () {
-    this.setState({
-      dataSource: data.cloneWithRows(this.props.marketData.contentList),
-    })
   }
+
 })
 
 let styles = StyleSheet.create({
