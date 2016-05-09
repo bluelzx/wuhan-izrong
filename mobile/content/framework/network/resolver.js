@@ -90,11 +90,11 @@ let _dealMsg = function (message, socket) {
       ContactSotre.leaveGroup(message.groupId);
       break;
     case MSG_TYPE.SYNC_REQ:
-      message.msgArray.forEach((item)=>{
-        // console.log(JSON.parse(item));
-        _dealMsg(JSON.parse(item), socket);
-      });
-      //socket.send({msgType: COMMAND_TYPE.SYNC_REQ,lastSyncTime:lastSyncTime});
+      //message.msgArray.forEach((item)=>{
+      //  // console.log(JSON.parse(item));
+      //  _dealMsg(JSON.parse(item), socket);
+      //});
+      socket.send({msgType: COMMAND_TYPE.SYNC_REQ,lastSyncTime:lastSyncTime});
       break;
     case MSG_TYPE.FORCE_LOGOUT:
       //强制登出

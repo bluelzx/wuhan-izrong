@@ -103,9 +103,38 @@ let _getUsersGroupByOrg = function () {
   orgs.forEach((org) => {
     let tmp = {
       orgValue:org.orgValue,
-      orgMembers:null
+      orgMembers:[]
     }
     let users = _realm.objects(IMUSERINFO).filtered('orgId = ' + org.id);
+    //users&&users.forEach((item)=>{
+    //  let u = {
+    //    userId: item.userId,
+    //    address: item.address,
+    //    realName: item.realName,
+    //    weChatNo: item.weChatNo,
+    //    email: item.email,
+    //    nameCardFileUrl: item.nameCardFileUrl,
+    //    qqNo: item.qqNo,
+    //    department: item.department,
+    //    mobileNumber: item.mobileNumber,
+    //    jobTitle: item.jobTitle,
+    //    phoneNumber: item.phoneNumber,
+    //    photoFileUrl: item.photoFileUrl,
+    //    publicTitle: item.publicTitle,
+    //    publicMobile: item.publicMobile,
+    //    publicDepart: item.publicDepart,
+    //    publicPhone: item.publicPhone,
+    //    publicEmail: item.publicEmail,
+    //    publicAddress: item.publicAddress,
+    //    publicWeChat: item.publicWeChat,
+    //    publicQQ: item.publicQQ,
+    //    orgId: item.orgId,
+    //    mute: item.mute
+    //  };
+    //
+    //  u.orgValue = org.orgValue;
+    //  tmp.orgMembers.push(u);
+    //});
     tmp.orgMembers = users;
     result.push(tmp);
   });

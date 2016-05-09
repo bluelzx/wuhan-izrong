@@ -208,13 +208,13 @@ let WhitePage = React.createClass({
         } onPress={()=>this.toOther(item)}>
           <View
             style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
-            <View style={{height: 40,width: 40, marginRight:15}}>
+            <View style={{ height:40,width: 40, marginRight:15}}>
               <NameCircular badge={item.badge} name={item.title}/>
             </View>
             <View
-              style={{ height:40, width:width-70,paddingHorizontal:10, justifyContent:'center'}}>
+              style={{ height:40,width:width-70,paddingHorizontal:10, justifyContent:'center'}}>
               <View
-                style={{flexDirection:'row', justifyContent:'space-between'}}>
+                style={{flexDirection:'row', justifyContent:'space-between',flex:1}}>
                 <Text style={{color:'#ffffff'}}>{item.title}</Text>
                 <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>

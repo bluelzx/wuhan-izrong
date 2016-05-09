@@ -159,7 +159,7 @@ let _saveMsg = (message, userId) => {
     }
 
     let user = ContactStore.getUserInfoByUserId(message.toId || message.fromUId);
-    SessionAction.updateSession(message.type, message.sessionId,user.realName,message.content,message.revTime,message.contentType, {notAdd:notAdd});
+    SessionAction.updateSession(message.type, message.sessionId,user.realName ,message.content,message.revTime,message.contentType, {notAdd:notAdd});
   }else if(message.type == SESSION_TYPE.GROUP){
 
     let notAdd = false;
