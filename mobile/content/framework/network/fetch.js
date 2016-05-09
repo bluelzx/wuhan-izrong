@@ -63,7 +63,7 @@ var rawFetch = function (url, param, callback, failure, option) {
   console.log('以下打印一次传出去的param:');
   console.log(param);
   console.log('请求地址:'+url);
-
+  //Alert(param);
   if (!option) option = {};
   //var _promise = Promise.race([fetch(url, param), new Promise(function (resolve, reject) {
   //  setTimeout(() => reject(new Error('链接超时')), 2000000);
@@ -101,6 +101,7 @@ var process = function (_promise, option) {
 
             console.log('以下打印一次获取到的json:');
             console.log(response);
+
           }
         })
         .catch((errorData) => {

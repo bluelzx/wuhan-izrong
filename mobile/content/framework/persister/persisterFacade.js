@@ -5,6 +5,7 @@ let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 let _realm = require('./realmManager');
 let co = require('co');
 let nextFrame = require('next-frame');
+var { Alert } = require('mx-artifacts');
 const {
   DEVICE,
   GROUP,
@@ -108,6 +109,7 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
 let _saveAppUserGroupBeanList = function (appUserGroupBeanList) {
   appUserGroupBeanList.forEach(function (n) {
     console.log(n);
+    n.groupMasterUid = n.groupOwnerId;
     _saveAppUserGroupBean(n);
   });
 
