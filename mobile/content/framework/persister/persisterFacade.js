@@ -103,7 +103,7 @@ let _saveAppUserGroupBeanList = function (appUserGroupBeanList) {
           groupId: appUserGroupBeanList[i].groupId,
           groupImageUrl: appUserGroupBeanList[i].groupImageUrl,
           groupName: appUserGroupBeanList[i].groupName,
-          groupMasterUid: appUserGroupBeanList[i].groupMasterUid,
+          groupMasterUid: appUserGroupBeanList[i].groupOwnerId,
           memberNum: appUserGroupBeanList[i].members.length,
           members: JSON.stringify(appUserGroupBeanList[i].members),
           mute: appUserGroupBeanList[i].mute

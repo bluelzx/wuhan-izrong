@@ -124,7 +124,17 @@ let _createGroup = function(groupId, groupName,groupMasterUid,number,members,mut
       members:JSON.stringify(members),
       mute:mute
     }
-    _realm.create(GROUP, group, true);
+    let ret = {};
+    for(let k in group){
+      if(group[k]){
+        ret[k] = group[k];
+      }
+    }
+    try {
+      _realm.create(GROUP, ret, true);
+    }catch(err){
+      _realm.create(GROUP, group, true);
+    }
   });
 };
 // *** 查询某个群的群成员, 并且按照机构分组
