@@ -55,17 +55,19 @@ let EditGroup = React.createClass({
   },
 
   renderMember: function() {
-    let initData = {
-      navigator: this.props.navigator,
-      members: this.state.groupInfo.members,
-      showDelete: false,
-      imgSource: DictIcon.imSpread,
-      addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId,existMembers:this.state.groupInfo.memberNum}}),
-    };
 
-    return (
-      <MembersBar {...initData}/>
-    );
+      let initData = {
+        navigator: this.props.navigator,
+        members: this.state.groupInfo.members,
+        showDelete: false,
+        imgSource: DictIcon.imSpread,
+        addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId,existMembers:this.state.groupInfo.memberNum}}),
+      };
+
+      return (
+        <MembersBar {...initData}/>
+      );
+
   },
 
   setMute: function(value){
@@ -93,6 +95,9 @@ let EditGroup = React.createClass({
   },
 
   render: function() {
+    //if(!this.props.groupInfo){
+    //  //return <View></View>;
+    //}
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='群设置'
