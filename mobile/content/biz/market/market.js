@@ -278,7 +278,7 @@ let Market = React.createClass({
   _emptyView: function () {
     return (
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-
+        <Text style={{fontSize:15, color:'#355d81'}}>暂无业务</Text>
       </View>
     );
   },
