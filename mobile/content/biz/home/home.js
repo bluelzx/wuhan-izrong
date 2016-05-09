@@ -21,16 +21,8 @@ let MyBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
 let {MARKET_CHANGE} = require('../../constants/dictEvent');
 let MarketStore = require('../../framework/store/marketStore');
+let MarketAction = require('../../framework/action/marketAction');
 let Market = require('../market/market');
-
-var marketData = {
-  contentList: [
-    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
-    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
-    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
-    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
-    {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'}]
-};
 
 let Home = React.createClass({
   getStateFromStores: function () {
@@ -39,7 +31,6 @@ let Home = React.createClass({
     let categoryArr = this.deleteFirstObj(category.options);
     let item = MarketStore.getCategoryAndItem(filterItems);
     item.shift();
-
     let dataSource = new ViewPager.DataSource({
       pageHasChanged: (p1, p2) => p1 !== p2
     });
@@ -58,7 +49,8 @@ let Home = React.createClass({
       categoryItem: item,
       dataSource: dataSource.cloneWithPages(PAGES),
       category: myCategory != null ? myCategory.displayName : '资金业务',
-      item: myItem != null ? myItem.displayName : '同业存款'
+      item: myItem != null ? myItem.displayName : '同业存款',
+      contentList:[]
     };
   },
 
@@ -204,7 +196,7 @@ let Home = React.createClass({
             <Text
               style={{marginLeft: 20, fontSize: 15, color: '#ffffff'}}>{this.state.category + '--' + this.state.item}</Text>
           </View>
-          <MarketList navigator={this.props.navigator} marketData={marketData}/>
+          <MarketList navigator={this.props.navigator} marketData={this.state.contentList}/>
         </ScrollView>
         <View style={{height:(Platform.OS == 'ios') ? 49 : 0}}></View>
       </NavBarView>
