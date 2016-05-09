@@ -31,6 +31,7 @@ var marketData = {
     {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'},
     {bizOrientationDesc: '收', term: '365', amount: '10000000', orgName: '上海安硕信息股份有限公司'}]
 };
+
 let Home = React.createClass({
   getStateFromStores: function () {
     let filterItems = AppStore.getFilters().filterItems;
