@@ -143,7 +143,10 @@ let _addGroupMembers = function(groupId, members) {
   return new Promise((resolve, reject) => {
     BFetch(AppLinks.inviteMember,param).then((response) => {
       resolve();//等被邀请人接受之后,在更改本地数据
-    },reject);
+    },(response)=>{
+      console.log(response);
+      reject(response)}
+    );
   });
 }
 

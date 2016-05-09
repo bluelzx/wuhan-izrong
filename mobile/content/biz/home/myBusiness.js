@@ -293,13 +293,14 @@ let Market = React.createClass({
   _emptyView: function () {
     return(
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-
+        <Text style={{fontSize:15, color:'#355d81'}}>暂无业务</Text>
       </View>
     );
   },
 
   render: function () {
-    let {title}  = this.props;
+    let {title, param}  = this.props;
+    let isFromPublish = param && param.isFromPublish;
     return (
       <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor='#18304D' title='我的业务' showBack={true} showBar={true}>
@@ -311,7 +312,7 @@ let Market = React.createClass({
         {this.renderOptionType()}
         {this.renderOptionTime()}
         {this.renderOptionOther()}
-        {this.renderPubilshBtn()}
+        {this.renderPubilshBtn(isFromPublish)}
       </NavBarView>
     );
   },
@@ -535,17 +536,19 @@ let Market = React.createClass({
       </TouchableOpacity>
     );
   },
-  renderPubilshBtn: function () {
-    return (
-      <TouchableHighlight onPress={() => this._pressPublish()} underlayColor='rgba(129,127,201,0)'>
-        <View
-          style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
-          <Text style={{fontWeight: 'bold', color:'white'}}>
-            {'+发布新业务'}
-          </Text>
-        </View>
-      </TouchableHighlight>
-    );
+  renderPubilshBtn: function (isFromPublish) {
+    if (!isFromPublish) {
+      return (
+        <TouchableHighlight onPress={() => this._pressPublish()} underlayColor='rgba(129,127,201,0)'>
+          <View
+            style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
+            <Text style={{fontWeight: 'bold', color:'white'}}>
+              {'+发布新业务'}
+            </Text>
+          </View>
+        </TouchableHighlight>
+      );
+    }
   },
 
   callBack: function (item, title, rowDefault, isAll) {

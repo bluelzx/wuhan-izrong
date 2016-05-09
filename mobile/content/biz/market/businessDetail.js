@@ -175,7 +175,7 @@ let BusinessDetail = React.createClass({
       return (
         <View style={{margin:10}}>
           <Image
-            style={{height:36,width:36}}
+            style={{height:36,width:36,borderRadius:18}}
             source={{uri:userInfo.photoFileUrl}}
           />
         </View>

@@ -34,6 +34,8 @@ let EditGroup = React.createClass({
     let groupInfo = null;
     try {
       groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
+      //Alert(groupInfo.groupMasterUid)
+      groupInfo.masterName = ContactStore.getUserInfoByUserId(groupInfo.groupMasterUid).realName;
     } catch (err) {
       this.props.navigator.popToTop();
       return {}
@@ -54,6 +56,7 @@ let EditGroup = React.createClass({
 
   renderMember: function() {
     let initData = {
+      navigator: this.props.navigator,
       members: this.state.groupInfo.members,
       showDelete: false,
       imgSource: DictIcon.imSpread,
@@ -112,8 +115,8 @@ let EditGroup = React.createClass({
               <View
                 style={{height:50,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center'}}>
                 <Text style={{color:'#ffffff'}}>群名称</Text>
-                <View style={{flexDirection:'row',alignItems:'center'}}>
-                  <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.groupName}</Text>
+                <View style={{flexDirection:'row', alignItems:'center', flex:1}}>
+                  <Text style={{textAlign:'right', color:'#6B849C', flex:1, marginRight:5, flexWrap:'wrap'}}>{ this.state.groupInfo.groupName }</Text>
                 </View>
               </View>
             </View>
@@ -121,7 +124,7 @@ let EditGroup = React.createClass({
             <View
               style={{borderTopColor:'#132132',borderTopWidth:0.5,height:50,backgroundColor: '#15263A',flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
               <Text style={{color:'#ffffff'}}>群主</Text>
-              <Text style={{color:'#6B849C',marginRight:5}}>吴缪缪</Text>
+              <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.masterName}</Text>
             </View>
 
             <View

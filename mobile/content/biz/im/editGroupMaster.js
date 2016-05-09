@@ -36,6 +36,7 @@ let EditGroupMaster = React.createClass({
     let groupInfo = null;
     try {
       groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
+      groupInfo.masterName = ContactStore.getUserInfoByUserId(groupInfo.groupMasterUid).realName;
     } catch (err) {
       this.props.navigator.popToTop();
       return {}
@@ -70,6 +71,7 @@ let EditGroupMaster = React.createClass({
 
   renderMember: function() {
     let initData = {
+      navigator: this.props.navigator,
       members: this.state.groupInfo.members,
       showDelete: true,
       imgSource: DictIcon.imSpread,
@@ -129,9 +131,9 @@ let EditGroupMaster = React.createClass({
               <View
                 style={{height:50,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center'}}>
                 <Text style={{color:'#ffffff'}}>群名称</Text>
-                <View style={{flexDirection:'row',alignItems:'center'}}>
-                  <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.groupName}</Text>
-                  <Icon name="ios-arrow-right" size={20} color='#ffffff'/>
+                <View style={{flexDirection:'row', alignItems:'center', flex:1,justifyContent:'flex-end'}}>
+                  <Text style={{textAlign:'right', color:'#6B849C', flex:25, marginRight:5, flexWrap:'wrap'}}>{ this.state.groupInfo.groupName }</Text>
+                  <Icon style={{flex:1}} name="ios-arrow-right" size={20} color='#ffffff'/>
                 </View>
               </View>
             </TouchableOpacity>
@@ -139,7 +141,7 @@ let EditGroupMaster = React.createClass({
             <View
               style={{borderTopColor:'#132132',borderTopWidth:0.5,height:50,backgroundColor: '#15263A',flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
               <Text style={{color:'#ffffff'}}>群主</Text>
-              <Text style={{color:'#6B849C',marginRight:5}}>吴缪缪</Text>
+              <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.masterName}</Text>
             </View>
 
             <View

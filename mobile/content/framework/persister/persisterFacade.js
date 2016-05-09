@@ -5,6 +5,7 @@ let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 let _realm = require('./realmManager');
 let co = require('co');
 let nextFrame = require('next-frame');
+var { Alert } = require('mx-artifacts');
 const {
   DEVICE,
   GROUP,
@@ -109,6 +110,7 @@ let _saveAppUserGroupBeanList = function (appUserGroupBeanList) {
         }, true);
     }
   });
+
 };
 
 let _saveAppUserGroupBean = function (appUserGroupBean) {

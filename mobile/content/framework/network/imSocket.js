@@ -4,6 +4,7 @@ let Resolver = require('./resolver');
 let {ImHost } = require('../../../config');
 let { COMMAND_TYPE } = require('../../constants/dictIm');
 let {Platform} = require('react-native');
+let ContactSotre = require('../store/contactStore');
 
 let _socket = null;
 
@@ -59,7 +60,7 @@ let ImSocket = {
       //
       //}
       console.log('###### message %s', JSON.stringify(data));
-      Resolver.deal(data);
+      Resolver.deal(data, _socket);
     });
 
     _socket.on('close', function (reason) {
@@ -74,7 +75,9 @@ let ImSocket = {
   },
 
   sendSyncReq:()=>{
-    let message = {msgType: COMMAND_TYPE.SYNC_REQ}
+    let userInfo = ContactSotre.getUserInfo();
+    let lastSyncTime = userInfo.lastSyncTime;
+    let message = {msgType: COMMAND_TYPE.SYNC_REQ,lastSyncTime:lastSyncTime};
     _send(message);
   },
 

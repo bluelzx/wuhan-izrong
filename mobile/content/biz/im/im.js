@@ -230,8 +230,8 @@ let WhitePage = React.createClass({
   acceptInvite: function(item) {
     this.props.exec(
       ()=>{
-        //item.badge == groupId
-        return ContactAction.acceptInvitation(item.badge).then(()=>{
+        let groupId = this.getIdFromSessionId(item.sessionId);
+        return ContactAction.acceptInvitation(groupId).then(()=>{
           SessionStore.updateInViteSession(item.sessionId);
         }).catch((err)=>{
           Alert(err);
@@ -246,14 +246,14 @@ let WhitePage = React.createClass({
 
   renderInvite:function(item, index) {
     let {width} = Device;
-
+    console.log(item);
     return (
       <TouchableHighlight key={item.sessionId}  onLongPress={
         ()=>
           {
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
           }
-        } onPress={()=>this.toOther(item)}>
+        } >
         <View
           style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
           <HeadPic badge={0} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup}/>
@@ -265,8 +265,10 @@ let WhitePage = React.createClass({
                     style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT == item.contentType ? item.content : '点击查看详情'}</Text>
             </View>
             <TouchableHighlight style={{marginRight:10}} onPress={()=>this.acceptInvite(item)}>
-              <Text
-                style={{borderRadius:5,color:'#ffffff', paddingHorizontal:20,paddingVertical:5,backgroundColor:'#3EC3A4'}}>{'接受'}</Text>
+              <View style={{borderRadius: 5, backgroundColor: '#3EC3A4',paddingHorizontal:20,paddingVertical:5}}>
+                <Text
+                  style={{color: '#ffffff', textAlign:'center'}}>{'接受'}</Text>
+              </View>
             </TouchableHighlight>
           </View>
         </View>
@@ -339,18 +341,21 @@ let WhitePage = React.createClass({
 
   renderMessage: function() {
     let msg = [];
-    sessionFilter(this.state.data.msg,'title','content',this.state.keyWord).map((item, index)=>{
-      msg.push(this.renderItem(item, index));
-    });
-    return msg;
+    let listData = sessionFilter(this.state.data.msg, 'title', 'content', this.state.keyWord);
+    if(_.isEmpty(listData) || listData.length == 0){
+      return this.renderNull();
+    }else {
+      listData.map((item, index)=> {
+        msg.push(this.renderItem(item, index));
+      });
+      return msg;
+    }
   },
 
   renderNull: function(){
-    if(_.isEmpty(this.state.data.platformInfo) && (_.isEmpty(this.state.data.msg) || this.state.data.msg.length == 0)){
-      return (
-        <Text style={{flex:1,color:'#fff',textAlign:'center'}}>没有记录</Text>
-      );
-    }
+    return (
+      <Text style={{flex:1,color:'#fff',textAlign:'center'}}>没有记录</Text>
+    );
   },
 
   render: function() {
@@ -362,7 +367,6 @@ let WhitePage = React.createClass({
        <SearchBar textChange={this.textChange}/>
         <ScrollView style={{flexDirection: 'column'}}>
           {this.renderMessage()}
-          {this.renderNull()}
         </ScrollView>
       </NavBarView>
     );

@@ -2,7 +2,6 @@
  * Created by baoyinghai on 4/19/16.
  */
 let _realm = require('./realmManager');
-let MockData = require('./createMockData');
 const DEFAULT_GROUP_IMAGE = "";
 const _ = require('lodash');
 const {

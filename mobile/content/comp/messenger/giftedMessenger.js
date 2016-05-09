@@ -24,7 +24,7 @@ let Icon = require('react-native-vector-icons/Ionicons');
 let TimerMixin = require('react-timer-mixin');
 let Publish = require('../../biz/publish/publish');
 
-let { Spinner, Button } = require('mx-artifacts');
+let { Spinner, Button, Alert } = require('mx-artifacts');
 
 let AutoExpandingTextInput = require('./autoExpandingTextInput');
 //let Message = require('./Message');
@@ -294,6 +294,11 @@ let GiftedMessenger = React.createClass({
         DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardWillHide)
       ];
     }
+
+    this.setTimeout(() => {
+      // inspired by http://stackoverflow.com/a/34838513/1385109
+      this.scrollToBottom();
+    }, (Platform.OS === 'android' ? 500 : 400));
   },
 
   componentWillUnmount() {
@@ -422,6 +427,7 @@ let GiftedMessenger = React.createClass({
       comp:Publish,
       param:param
     });
+    this._hidePanel();
 
   },
 
@@ -429,7 +435,8 @@ let GiftedMessenger = React.createClass({
   handleNameCard() {
     let userInfo = UserInfoAction.getLoginUserInfo();
     let orgBean = UserInfoAction.getOrgById(userInfo.orgId);
-    let p  = {photoFileUrl: userInfo.photoFileUrl,
+    let p  = {
+      photoFileUrl: userInfo.photoFileUrl,
       realName: userInfo.realName,
       userId: userInfo.userId,
       mobileNumber: userInfo.mobileNumber,
@@ -458,6 +465,7 @@ let GiftedMessenger = React.createClass({
       position: 'right',
       date: new Date()
     };
+
     if (this.props.onCustomSend) {
       this.props.onCustomSend(message);
     } else {
@@ -466,7 +474,8 @@ let GiftedMessenger = React.createClass({
      // this.onChangeText('');
     }
 
-   // this._resetTextInput();
+    //this._resetTextInput();
+    this._hidePanel();
   },
 
   postLoadEarlierMessages(messages = [], allLoaded = false) {
@@ -872,7 +881,7 @@ let GiftedMessenger = React.createClass({
 
           <ImagePicker
             type="library"
-            onSelected={(response) => this.props.handleSendImage(response)}
+            onSelected={(response) => {this.props.handleSendImage(response);this._hidePanel();}}
             onError={(error) => this.props.handleImageError(error)}
             title="选择图片"
             fileId="selectImage"
@@ -888,7 +897,7 @@ let GiftedMessenger = React.createClass({
 
           <ImagePicker
             type="camera"
-            onSelected={(response) => { this.props.handleSendImage(response)}}
+            onSelected={(response) => { this.props.handleSendImage(response);this._hidePanel();}}
             title="选择图片"
             fileId="selectCamera"
             allowsEditing={true}

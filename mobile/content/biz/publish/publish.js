@@ -108,7 +108,7 @@ let Publish = React.createClass({
 
     render: function () {
         let {title, param}  = this.props;
-        let isFromIM = param ? param.isFromIM : false;
+        let isFromIM = param && param.isFromIM;
         let isFromMyBusiness = param ? param.isFromMyBusiness : false;
         return (
             <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
@@ -340,7 +340,7 @@ let Publish = React.createClass({
           disabled={this.state.disabled}
           onPress={() => this._pressPublish()}
         >
-          {isFromIM ? '发送' : '发布'}
+          {isFromIM ? '发送' : '+发布新业务'}
         </Button>
       </View>
     )
@@ -415,7 +415,7 @@ let Publish = React.createClass({
     toMyBiz: function () {
         const { navigator } = this.props;
         if (navigator) {
-            navigator.push({comp: MyBusiness, param: {fromPublish: true}});
+            navigator.push({comp: MyBusiness, param: {fromPublish: true , isFromPublish : true}});
         }
     },
 
@@ -440,7 +440,7 @@ let Publish = React.createClass({
             amount: params.amount,
             rate: params.rate
         };
-        if (param ? param.isFromIM : false) {
+        if (param && param.isFromIM) {
             this.props.navigator.pop();
             param.callBack(item);
         } else {
@@ -516,10 +516,19 @@ let Publish = React.createClass({
         }
     },
     shareDialog (data) {
-        let amount = data.amount == '' ? '--' : data.amount / 10000 + '万';
-        let shareContent = '我利用[渤海银通]分享了一个业务信息给您：' + data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' +
-            (data.term == '' ? '--' : data.term + '天') + '  ' +
-            amount + '  ' + data.rate == 0 ? '--' : numeral(data.rate * 100).format('0,0.00') + '%';
+      let amount = data.amount == '' ? '--' : (data.amount > 99999999 ? data.amount / 100000000 + '亿' : data.amount / 10000 + '万');
+      let dayNum;
+      if (data.term == '') {
+        dayNum = '--'
+      } else if (data.term % 365 == 0) {
+        dayNum = parseInt(data.term / 365) + '年';
+      } else if (data.term % 30 == 0) {
+        dayNum = parseInt(data.term / 30) + '月';
+      }else {
+        dayNum = data.term + '日';
+      }
+      let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
+      let shareContent = '我利用[渤海银通]分享了一个业务信息给您：' + data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate;
         Share.open({
             share_text: shareContent,
             share_URL: Platform.OS === 'android' ? shareContent : "http://google.cl",
