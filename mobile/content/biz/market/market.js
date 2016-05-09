@@ -97,6 +97,34 @@ let Market = React.createClass({
   },
   getInitialState(){
     return this.getStateFromStores();
+    this.bizOrderMarketSearch();
+  },
+
+  bizOrderMarketSearch: function () {
+    let requestBody = {
+      orderField: 'lastModifyDate',
+      orderType: 'desc',
+      pageIndex: 1,
+      filterList: [
+        this.state.bizCategoryID,
+        this.state.bizItemID
+      ]
+    };
+    this.props.exec(
+      ()=> {
+        return MarketAction.bizOrderMarketSearch(requestBody
+        ).then((response)=> {
+          console.log(response);
+          this.setState({
+            contentList: response.contentList
+          });
+        }).catch(
+          (errorData) => {
+            throw errorData;
+          }
+        );
+      }
+    );
   },
 
   componentDidMount() {
@@ -123,6 +151,7 @@ let Market = React.createClass({
       orderField: this.state.orderField,
       orderType: this.state.orderType,
       pageIndex: page,
+      itemsPerPage: 5,
       filterList: [
         this.state.bizCategoryID,
         this.state.bizItemID,
@@ -150,13 +179,13 @@ let Market = React.createClass({
       if (response.totalPages === page) {
         setTimeout(() => {
           callback(response.contentList, {
-            allLoaded: true, // the end of the list is reached
+            allLoaded: true // the end of the list is reached
           });
         }, 1000); // simulating network fetching
       } else {
         setTimeout(() => {
           callback(response.contentList, {
-            allLoaded: false, // the end of the list is reached
+            allLoaded: false // the end of the list is reached
           });
         }, 1000); // simulating network fetching
       }
@@ -165,7 +194,7 @@ let Market = React.createClass({
       (errorData) => {
         setTimeout(() => {
           callback([], {
-            allLoaded: true, // the end of the list is reached
+            allLoaded: true // the end of the list is reached
           });
         }, 1000); // simulating network fetching
         Alert(errorData.msgContent || 'exception');
@@ -278,7 +307,8 @@ let Market = React.createClass({
           style={{flex: 1}}
         />
 
-        <View style={{height: (Platform.OS === 'ios') ? 49 : 0}}></View>
+        <View style={{height: (Platform.OS === 'ios') ? 49 : 0}}>
+        </View>
       </View>
     );
   },
@@ -599,14 +629,6 @@ let Market = React.createClass({
     if (navigator) {
       navigator.push({comp: name})
     }
-  },
-
-  bizOrderMarketSearch: function () {
-    //this.props.exec(
-    //  ()=> {
-    //    return
-    //  }, (Platform.OS === 'ios' ? true : false)
-    //);
   },
 
   deleteFirstObj: function (obj) {
