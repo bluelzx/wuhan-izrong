@@ -78,6 +78,8 @@ let Home = React.createClass({
   },
 
   toPage: function (name, data) {
+    AppStore.saveCategory(data.category);
+    AppStore.saveItem(data.item);
     const { navigator } = this.props;
     if (navigator) {
       if (name == MyBusiness) {

@@ -42,8 +42,7 @@ var marketData = {contentList: []};
 
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Market = React.createClass({
-
-  getInitialState(){
+  getStateFromStores: function () {
     let filterItems = AppStore.getFilters().filterItems;
     let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
     let categoryArr = this.deleteFirstObj(category.options);
@@ -96,6 +95,9 @@ let Market = React.createClass({
       marketData: marketData
     };
   },
+  getInitialState(){
+    return this.getStateFromStores();
+  },
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
@@ -106,56 +108,7 @@ let Market = React.createClass({
   },
 
   _onChange () {
-    let filterItems = AppStore.getFilters().filterItems;
-    let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
-    let categoryArr = this.deleteFirstObj(category.options);
-    let item = MarketStore.getCategoryAndItem(filterItems);
-    item.shift();
-    let bizOrientation = MarketStore.getFilterOptions(filterItems, 'bizOrientation').options;
-    let term = MarketStore.getFilterOptions(filterItems, 'term').options;
-    let amount = MarketStore.getFilterOptions(filterItems, 'amount').options;
-    let orderItems = AppStore.getFilters().orderItems;
-    let myCategory = AppStore.getCategory();
-    let myItem = AppStore.getItem();
-
-    this.setState({
-      item: item,
-      filterItems: filterItems,
-      bizOrientation: bizOrientation,
-      term: term,
-      amount: amount,
-      categorySource: categoryArr,
-      itemSource: item.length == 0 ? [] : item[0].itemArr,
-      termSource: orderItems,
-      clickFilterType: 0,
-      clickFilterTime: 0,
-      clickFilterOther: 0,
-      levelOneText: myCategory != null ? myCategory.displayName : item.length == 0 ? '' : item[0].displayName,
-      levelTwoText: myItem != null ? myItem.displayName : item.length == 0 ? '' : item[0].itemArr[1].displayName,
-      optionTwoText: '最新发布',
-      pickTypeRow1: 0,
-      pickTypeRow2: 0,
-      pickTimeRow: 0,
-      pickRowColor: '#244266',
-      orientionDefault: 10000,
-      orientionIsAll: true,
-      termDefault: 10000,
-      termIsAll: true,
-      amountDefault: 10000,
-      amountIsAll: true,
-      orgValue: '',
-      orgId: 0,
-      //network
-      orderField: 'lastModifyDate',
-      orderType: 'desc',
-      pageIndex: 1,
-      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 221 : item[0].id,
-      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 227 : item[0].itemArr[1].id,
-      bizOrientationID: '',
-      termID: '',
-      amountID: '',
-      marketData: marketData
-    });
+    this.setState(this.getStateFromStores());
   },
 
   /**
@@ -262,11 +215,11 @@ let Market = React.createClass({
             {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
+            style={{position:'absolute',left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
             {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount < 100000000 ? (rowData.amount / 10000) + '万' : rowData.amount / 100000000 + '亿'}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
+            style={{position:'absolute',left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
             numberOfLines={1}>
             {rowData.userName != null ? rowData.userName + '-' + rowData.orgName : rowData.orgName}
           </Text>
