@@ -39,7 +39,7 @@ let Item = React.createClass({
   },
 
   render(){
-    let {hiddenArrow = false} = this.props;
+    let {hiddenArrow = false, wrap=false} = this.props;
     return (
       <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={this.props.func}>
         <View>
@@ -51,8 +51,8 @@ let Item = React.createClass({
             <View
               style={{flexDirection: 'row', alignItems: 'center', flex: 3, backgroundColor: '#162a40', justifyContent: 'flex-end'}}
             >
-              <Text style={[{fontSize: 15, color: '#ffffff', width: 150, textAlign: 'right', marginRight: 20}]}
-                    numberOfLines={1}
+              <Text style={[{fontSize: 15, color: '#ffffff', width: 150, textAlign: 'right', marginRight: 20},wrap && {flexWrap:'wrap'}]}
+                    numberOfLines={ wrap ? 0 : 1 }
               >
                 {this.props.value}
               </Text>
