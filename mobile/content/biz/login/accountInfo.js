@@ -22,6 +22,7 @@ let Register_uploadNameCard = require('./uploadNameCard');
 let Icon = require('react-native-vector-icons/Ionicons');
 let Validation = require('../../comp/utils/validation');
 let LoginAction = require('../../framework/action/loginAction');
+let DictStyle = require('../../constants/dictStyle');
 
 let Register_accountInfo = React.createClass({
   getStateFromStores() {
@@ -125,10 +126,10 @@ let Register_accountInfo = React.createClass({
       <NavBarView navigator={this.props.navigator} title='输入账号信息'>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <Input placeholder='真实姓名' maxLength={20} field='realName'
-                 onChangeText={this._onChangeText} icon='user' inputType='default'
+                 onChangeText={this._onChangeText} icon='realName' inputType='default'
           />
           <Input placeholder='用户名(邮箱)' maxLength={60} field='userName'
-                 onChangeText={this._onChangeText} icon='user' inputType='email-address'
+                 onChangeText={this._onChangeText} icon='email' inputType='email-address'
           />
           <TouchableHighlight activeOpacity={0.8} underlayColor='#4fb9fc'
                               onPress={()=>this.toPage(Register_selectOrg,{needAll:false},this.callback)}
@@ -172,13 +173,13 @@ let Register_accountInfo = React.createClass({
         </View>
         <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
           <View style={{flexDirection: 'row', justifyContent: 'center',marginBottom:10}}>
-            <Text style={{fontSize: 15, color: '#ffffff'}}>如未找到您所在的机构</Text>
+            <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>如未找到您所在的机构</Text>
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30}}>
-            <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服: </Text>
+            <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
             <TouchableOpacity onPress={()=>{}}>
               <Text
-                style={{fontSize: 16, color: '#ffffff', textDecorationLine: 'underline'}}>022-28405347</Text>
+                style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
             </TouchableOpacity>
           </View>
         </View>

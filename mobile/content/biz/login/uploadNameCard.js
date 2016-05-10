@@ -20,6 +20,7 @@ let { Alert, Button } = require('mx-artifacts');
 let TabView = require('../../framework/system/tabView');
 let ImagePicker = require('../../comp/utils/imagePicker');
 let MarketAction = require('../../framework/action/marketAction');
+let DictStyle = require('../../constants/dictStyle');
 
 let Register_uploadNameCard = React.createClass({
 
@@ -105,7 +106,7 @@ let Register_uploadNameCard = React.createClass({
             resizeMode='cover'
             source={require('../../image/login/nameCard.png')}
           />
-          <Text style={{color: '#ffffff'}}>点击上传名片</Text>
+          <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>点击上传名片</Text>
         </ImagePicker>
       );
     }
@@ -134,7 +135,7 @@ let Register_uploadNameCard = React.createClass({
       <NavBarView navigator={this.props.navigator} title='上传名片'>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.returnImage()}
-          <Text style={{marginTop: 20, color: '#ffffff'}} >
+          <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop: 20}]} >
             注: 名片信息将辅助我们验证您的身份
           </Text>
           <Button
@@ -148,9 +149,9 @@ let Register_uploadNameCard = React.createClass({
         </View>
         <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column', marginTop: 30}}>
           <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30}}>
-            <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服: </Text>
+            <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
             <TouchableOpacity onPress={()=>{}}>
-              <Text style={{fontSize: 16, color: '#ffffff', textDecorationLine: 'underline'}}>022-28405347</Text>
+              <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -165,7 +166,7 @@ let styles = StyleSheet.create({
   },
   nameCard: {
     borderWidth: 1,
-    borderColor: '#1151B1',
+    borderColor: '#d4d6e0',
     height: 200,
     marginTop: 20,
     borderRadius: 6

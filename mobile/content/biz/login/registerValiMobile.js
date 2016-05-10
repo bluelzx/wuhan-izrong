@@ -21,6 +21,7 @@ let SMSTimer = require('../../comp/utils/smsTimer');
 let CheckBox = require('../../comp/utils/checkboxUtil');
 let Register_AccountInfo = require('./accountInfo');
 let RegisterPotocol = require('./registerPotocol');
+let DictStyle = require('../../constants/dictStyle');
 
 let Register_valiMobile = React.createClass({
   getStateFromStores() {
@@ -102,7 +103,7 @@ let Register_valiMobile = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} title='短信验证'>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
-          <Input containerStyle={styles.inputStyle} placeholder='手机号' maxLength={11} field='mobileNo'
+          <Input placeholder='手机号' maxLength={11} field='mobileNo'
                  onChangeText={this._onChangeText} icon='phone' inputType='number-pad'
           />
 
@@ -122,7 +123,7 @@ let Register_valiMobile = React.createClass({
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
                                 onPress={()=>this.toPage(RegisterPotocol)}
             >
-              <Text style={{alignItems: 'center', marginTop: 20, color: '#ffffff', fontSize: 16, lineHeight: 20}}>
+              <Text style={{ marginLeft: -5,marginTop: 20, color: 'grey', fontSize: 16, lineHeight: 20}}>
                 《用户协议》
               </Text>
             </TouchableHighlight>
@@ -139,9 +140,9 @@ let Register_valiMobile = React.createClass({
         </View>
         <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
           <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
-            <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服:</Text>
+            <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服:</Text>
             <TouchableOpacity onPress={()=>{}}>
-              <Text style={{fontSize: 16, color: '#ffffff', textDecorationLine: 'underline'}}>022-28405347</Text>
+              <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
             </TouchableOpacity>
           </View>
         </View>

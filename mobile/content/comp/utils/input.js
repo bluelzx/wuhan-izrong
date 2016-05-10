@@ -8,6 +8,8 @@ let {
   Dimensions
   } = React;
 let DictIcon = require('../../constants/dictIcon');
+let PlainStyle = require('../../constants/dictStyle');
+let DictStyle = require('../../constants/dictStyle');
 let Input = React.createClass({
 
   propTypes: {
@@ -27,10 +29,10 @@ let Input = React.createClass({
     return {
       containerStyle: {
         height: 47,
-        borderColor: '#0a1926',
-        borderWidth: 0.5,
+        borderColor: PlainStyle.colorSet.inputBorderColor,
+        borderWidth: 1,
         marginTop: 12,
-        backgroundColor: '#0a1926',
+        backgroundColor: PlainStyle.colorSet.inputBackgroundColor,
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 6
@@ -40,14 +42,9 @@ let Input = React.createClass({
         height: 16,
         marginLeft: 9
       },
-      inputStyle: {
-        fontSize: 18,
-        color: '#ffffff',
-        marginLeft: 9,
-        width: Dimensions.get('window').width * (375 - 80) / 375
-      },
+      inputStyle: DictStyle.textInput,
       placeholder: '',
-      placeholderTextColor: '#386085',
+      placeholderTextColor: PlainStyle.colorSet.inputPlaceholderTextColor,
       focusColor: '#ff0000',
       //value: ''
       inputType: 'default'
