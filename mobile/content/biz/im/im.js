@@ -344,7 +344,7 @@ let WhitePage = React.createClass({
     let listData = sessionFilter(this.state.data.msg, 'title', 'content', this.state.keyWord);
     if(_.isEmpty(listData) || listData.length == 0){
       return this.renderNull();
-    }else {
+    } else {
       listData.map((item, index)=> {
         msg.push(this.renderItem(item, index));
       });
@@ -354,17 +354,15 @@ let WhitePage = React.createClass({
 
   renderNull: function(){
     return (
-      <Text style={{flex:1,color:'#fff',textAlign:'center'}}>没有记录</Text>
+      <Text style={{flex:1, color:'#fff', textAlign:'center'}}>没有记录</Text>
     );
   },
 
   render: function() {
     let {title}  = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1' contentBackgroundColor='#15263A' title='IM' showBack={false}
-                  showBar={true}
-                  actionButton={this.renderContact}>
-       <SearchBar textChange={this.textChange}/>
+      <NavBarView navigator={this.props.navigator} title='IM' showBack={false} actionButton={this.renderContact}>
+        <SearchBar textChange={this.textChange}/>
         <ScrollView style={{flexDirection: 'column'}}>
           {this.renderMessage()}
         </ScrollView>

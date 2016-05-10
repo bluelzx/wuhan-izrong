@@ -115,9 +115,8 @@ let AddMember = React.createClass({
 
   render: function() {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1' contentBackgroundColor='#15263A' title='添加群成员'
-                  showBar={true}
-                  actionButton={this.renderState}>
+
+      <NavBarView navigator={this.props.navigator} title='添加群成员' actionButton={this.renderState}>
         <ChooseList  memberList={this.state.memberList}/>
 
         <SearchBar textChange={this.textChange}/>

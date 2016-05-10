@@ -24,9 +24,7 @@ var AboutUs = React.createClass({
 
   render(){
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='关于我们' showBack={true} showBar={true}
-      >
+      <NavBarView navigator={this.props.navigator} title='关于我们' showBack={true}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false} backgroundColor='#18304b'>
           <View style={{paddingBottom: 24, backgroundColor: '#162a40'}}>
             <View style={{marginTop: 20, flexDirection: 'column', alignItems: 'center', paddingHorizontal: 16}}>

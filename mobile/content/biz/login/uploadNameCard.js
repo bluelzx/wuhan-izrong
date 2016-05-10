@@ -131,9 +131,7 @@ let Register_uploadNameCard = React.createClass({
 
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  title='上传名片' showBack={true} showBar={true}
-      >
+      <NavBarView navigator={this.props.navigator} title='上传名片'>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.returnImage()}
           <Text style={{marginTop: 20, color: '#ffffff'}} >

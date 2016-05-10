@@ -150,9 +150,7 @@ let CreateGroup = React.createClass({
   render: function() {
 
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1' contentBackgroundColor='#15263A' title='创建群组'
-                  showBar={true}
-                  actionButton={this.renderLabel}>
+      <NavBarView navigator={this.props.navigator} title='创建群组' actionButton={this.renderLabel}>
         <View style={{backgroundColor:'#18304D', paddingTop:10}}>
           <TextInput
             placeholder="创建群名称"

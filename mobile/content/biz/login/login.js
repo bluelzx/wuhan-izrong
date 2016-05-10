@@ -98,9 +98,7 @@ let Login = React.createClass({
 
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='登录' showBack={false} showBar={true}
-      >
+      <NavBarView navigator={this.props.navigator} title='登录' showBack={false}>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.renderLogo()}
           <Input containerStyle={styles.inputStyle} type="default" placeholder='手机号' maxLength={11}

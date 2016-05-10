@@ -81,8 +81,7 @@ let ImUserInfo = React.createClass({
     let {title}  = this.props;
     let privateDesc = "未公开";
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='详细资料' showBack={true} showBar={true}>
+      <NavBarView navigator={this.props.navigator} title='详细资料'>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false} backgroundColor='#18304b'>
 
           <View style={{backgroundColor:'#162a40'}} >

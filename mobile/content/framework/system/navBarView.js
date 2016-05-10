@@ -11,7 +11,10 @@ let Icon = require('react-native-vector-icons/Ionicons');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let { Device } = require('mx-artifacts');
 
-let NavBarView = React.createClass({
+const DictStyle = require('../../constants/dictStyle');
+
+let NavBarView =
+  React.createClass({
   PropTypes: {
     showBar: React.PropTypes.bool,
     showBack: React.PropTypes.bool,
@@ -27,9 +30,9 @@ let NavBarView = React.createClass({
       showBar: true,
       showBack: true,
       title: '',
-      backgroundColor: '#1151B1',
-      fontColor: '#ffffff',
-      contentBackgroundColor: '#15263A',
+      backgroundColor: DictStyle.colorSet.navBar,
+      fontColor: DictStyle.colorSet.navBarFont,
+      contentBackgroundColor: DictStyle.colorSet.content,
       actionButton: null,
       navBarBottomWidth: 1
     };
@@ -55,17 +58,10 @@ let NavBarView = React.createClass({
     if (this.props.showBar) {
       return (
         <View
-          style={{
-            flexDirection: 'row',
+          style={[DictStyle.navBar, {
             backgroundColor: this.props.backgroundColor,
             borderBottomWidth: this.props.navBarBottomWidth,
-            borderColor: '#A47441',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            // paddingHorizontal: 6
-            height: Device.navBarHeight,
-            paddingTop: Device.innerStatusBarSize,
-          }}
+          }]}
         >
           <View style={{width: 44,flex:1}}>
             {this._renderLeft()}

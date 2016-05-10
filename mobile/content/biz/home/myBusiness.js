@@ -302,8 +302,7 @@ let Market = React.createClass({
     let {title, param}  = this.props;
     let isFromPublish = param && param.isFromPublish;
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='我的业务' showBack={true} showBar={true}>
+      <NavBarView navigator={this.props.navigator} title='我的业务'>
         <View
           style={{width: screenWidth,alignItems: "center",justifyContent: "flex-start",flexDirection: "row"}}>
           {this.renderFilter(this.pressFilterType, this.pressFilterTime, this.pressFilterOther)}

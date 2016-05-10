@@ -208,10 +208,7 @@ let TextEdit = React.createClass({
   render: function () {
     if (this.props.param.name == 'phoneNumber') {
       return (
-        <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
-                    actionButton={this.renderUpdate}
-        >
+        <NavBarView navigator={this.props.navigator}title={this.props.param.title} actionButton={this.renderUpdate}>
           <View
             style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
           >
@@ -248,10 +245,7 @@ let TextEdit = React.createClass({
       );
     } else if (this.props.param.needPublic && this.props.param.needEdit) {
       return (
-        <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
-                    actionButton={this.renderUpdate}
-        >
+        <NavBarView navigator={this.props.navigator} title={this.props.param.title} actionButton={this.renderUpdate}>
           <View
             style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
           >
@@ -275,10 +269,7 @@ let TextEdit = React.createClass({
       );
     } else if (!this.props.param.needPublic && this.props.param.needEdit) {
       return (
-        <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
-                    actionButton={this.renderUpdate}
-        >
+        <NavBarView navigator={this.props.navigator} title={this.props.param.title} actionButton={this.renderUpdate}>
           <View
             style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
           >
@@ -301,10 +292,7 @@ let TextEdit = React.createClass({
       );
     } else if (this.props.param.needPublic && !this.props.param.needEdit) {
       return (
-        <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                    contentBackgroundColor='#18304D' title={this.props.param.title} showBack={true} showBar={true}
-                    actionButton={this.renderUpdate}
-        >
+        <NavBarView navigator={this.props.navigator} title={this.props.param.title} actionButton={this.renderUpdate}>
           <View
             style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
           >

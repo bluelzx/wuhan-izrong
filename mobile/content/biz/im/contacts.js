@@ -157,9 +157,7 @@ let Contacts = React.createClass({
   render: function() {
     let {title}  = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1' contentBackgroundColor='#15263A' title='通讯录'
-                  showBar={true}
-                  actionButton={this.renderAdd}>
+      <NavBarView navigator={this.props.navigator} title='通讯录' actionButton={this.renderAdd}>
         <SearchBar textChange={this.textChange}/>
         {this.renderGlobal()}
         <ExtenList itemHeight={51}

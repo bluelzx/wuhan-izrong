@@ -128,9 +128,8 @@ let Chat = React.createClass({
     let title = item.title;
     return (
       <NavBarView
-        navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-        contentBackgroundColor='#15263A' title={this.state.title}
-        showBar={true}
+        navigator={this.props.navigator}
+        title={this.state.title}
         actionButton={this.renderEdit}
       >
         <Messenger param={item} navigator={this.props.navigator}></Messenger>

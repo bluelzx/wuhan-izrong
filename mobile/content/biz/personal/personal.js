@@ -86,9 +86,7 @@ let Personal = React.createClass({
   render: function () {
     let {title} = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='个人中心' showBack={false} showBar={true}
-      >
+      <NavBarView navigator={this.props.navigator} title='个人中心' showBack={false}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
           <View style={{backgroundColor: '#18304b', height: 10}}/>
           <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b' style={{backgroundColor: '#162a40'}}

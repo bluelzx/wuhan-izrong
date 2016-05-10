@@ -46,9 +46,7 @@ let ModifyGroupName = React.createClass({
 
   render: function() {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1' contentBackgroundColor='#18304D' title='群名称'
-                  showBar={true}
-                  actionButton={this.renderRight}>
+      <NavBarView navigator={this.props.navigator} title='群名称' actionButton={this.renderRight}>
         <View style={{backgroundColor:'#18304D', paddingTop:10}}>
           <TextInput
             clearButtonMode="always"

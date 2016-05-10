@@ -94,9 +94,7 @@ let Register_selectOrg = React.createClass({
 
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='选择机构' showBack={true} showBar={true}
-      >
+      <NavBarView navigator={this.props.navigator} title='选择机构'>
         <View style={{marginVertical:5}}>
           <SearchBar
             textChange={this.textChange}

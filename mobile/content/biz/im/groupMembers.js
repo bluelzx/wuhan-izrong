@@ -54,8 +54,7 @@ let GroupMembers = React.createClass({
 
   render: function() {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1' contentBackgroundColor='#15263A' title='全部成员'
-                  showBar={true}>
+      <NavBarView navigator={this.props.navigator} title='全部成员'>
 
         <SearchBar textChange={this.textChange}/>
 

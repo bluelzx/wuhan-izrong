@@ -28,10 +28,7 @@ let Spread = React.createClass({
   render: function () {
     return (
       <NavBarView
-        navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-        contentBackgroundColor='#15263A' title='详细内容'
-        showBar={true}
-      >
+        navigator={this.props.navigator} title='详细内容'>
         <ScrollView style={{flexDirection: 'column'}}>
           {this.renderItem(this.props.param.item)}
         </ScrollView>

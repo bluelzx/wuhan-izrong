@@ -29,9 +29,7 @@ let Remarks = React.createClass({
   },
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='备注' showBack={true} showBar={true}
-                  actionButton={this.renderFinish}>
+      <NavBarView navigator={this.props.navigator} title='备注' actionButton={this.renderFinish}>
         <View style={{backgroundColor:'#1e3754',marginTop:10}}>
           <TextInput
             value={this.state.remarkText}

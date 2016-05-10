@@ -297,7 +297,7 @@ let Market = React.createClass({
           automaticallyAdjustContentInsets={false}
           customStyles={{
             paginationView: {
-              backgroundColor: 'white'
+              backgroundColor: 'rgba(0, 0, 0, 0)'
             },
             spinnerColor: '#7ac4e7'
           }}
@@ -315,8 +315,7 @@ let Market = React.createClass({
   render: function () {
     let {title}  = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#4b76df'
-                  contentBackgroundColor='#18304D' title='市场信息' showBack={false} showBar={true}>
+      <NavBarView navigator={this.props.navigator} title='市场信息' showBack={false}>
         <View
           style={{width: screenWidth,alignItems: "center",justifyContent: "flex-start",flexDirection: "row"}}>
           {this.renderFilter(this.pressFilterType, this.pressFilterTime, this.pressFilterOther)}

@@ -197,9 +197,7 @@ let Home = React.createClass({
 
   render() {
     return (
-      <NavBarView navigator={this.props.navigator} title='首页' fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' showBack={false} showBar={true}
-      >
+      <NavBarView navigator={this.props.navigator} title='首页' showBack={false}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
           {this.rendViewPager()}
           <View style={{height: width/3*2,flexDirection:"column",backgroundColor: "#162a40",justifyContent: "center"}}>
