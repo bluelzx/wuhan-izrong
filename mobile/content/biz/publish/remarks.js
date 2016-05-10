@@ -3,21 +3,14 @@
  */
 let React = require('react-native');
 let {
-  ListView,
-  TouchableHighlight,
   Text,
   TextInput,
   View,
-  Platform,
-  Dimensions,
-  Image,
   StyleSheet,
   TouchableOpacity,
-  InteractionManager
   } = React;
 
-let screenWidth = Dimensions.get('window').width;
-let screenHeight = Dimensions.get('window').height;
+let DictStyle = require('../../constants/dictStyle');
 let NavBarView = require('../../framework/system/navBarView');
 let {Alert} = require('mx-artifacts');
 
@@ -30,25 +23,25 @@ let Remarks = React.createClass({
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} title='备注' actionButton={this.renderFinish}>
-        <View style={{backgroundColor:'#1e3754',marginTop:10}}>
+        <View style={{backgroundColor:'white',marginTop:10}}>
           <TextInput
             value={this.state.remarkText}
-            placeholder={'20字以内'}
-            placeholderTextColor='#325779'
+            placeholder={'50字以内'}
+            placeholderTextColor='#d3d5df'
             returnKeyType="search"
-            maxLength={20}
+            maxLength={50}
             onChangeText={(value) => this.onChangeText(value)}
             underlineColorAndroid={'transparent'}
-            style={{width:screenWidth,height:40,marginLeft:10,color:'white',}}/>
+            clearButtonMode="while-editing"
+            style={{width:DictStyle.fullScreen.width - 20,height:40,marginLeft:10,marginRight:10,color:'#495154'}}/>
         </View>
       </NavBarView>
     )
   },
   renderFinish: function () {
     return (
-      <TouchableOpacity style={{width:75}}
-                        onPress={()=>this.finish()}>
-        <Text style={{color:'#ffffff'}}>{'完成'}</Text>
+      <TouchableOpacity onPress={()=>this.finish()}>
+        <Text style={{color:'white'}}>{'完成'}</Text>
       </TouchableOpacity>
     );
   },
@@ -56,8 +49,8 @@ let Remarks = React.createClass({
     this.setState({remarkText: value});
   },
   finish: function () {
-    if(this.state.remarkText.length >20){
-      Alert('字数超过限制(20字以内)')
+    if(this.state.remarkText.length >50){
+      Alert('字数超过限制(50字以内)')
     }else {
       this.props.param.callBackRemarks(this.state.remarkText);
       this.props.navigator.pop();

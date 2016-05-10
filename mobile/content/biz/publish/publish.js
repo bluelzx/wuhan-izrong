@@ -37,8 +37,7 @@ let Adjust = require('../../comp/utils/adjust');
 let Validation = require('../../comp/utils/validation');
 let MyBusiness = require('../home/myBusiness');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-
-
+let DictStyle = require('../../constants/dictStyle');
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
@@ -113,7 +112,7 @@ let Publish = React.createClass({
         return (
             <NavBarView navigator={this.props.navigator} title='发布新业务'
                         actionButton={isFromIM || isFromMyBusiness ? null : this.renderToMyBiz}>
-                <View style={{height:isFromIM ? screenHeight-64 : screenHeight-64,backgroundColor:'#153757'}}>
+                <View style={{height:isFromIM ? screenHeight-64 : screenHeight-64,backgroundColor:DictStyle.colorSet.content}}>
                     <View style={{flex:1}}>
                         <ScrollView ref="scroll"
                                     keyboardShouldPersistTaps={true}
@@ -170,7 +169,7 @@ let Publish = React.createClass({
         return (
             <TouchableOpacity onPress={()=>this.toPage(SelectBusiness1)} activeOpacity={0.8} underlayColor="#f0f0f0">
                 <View
-                    style={{width: screenWidth-20,marginLeft:10,marginTop:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
+                    style={{width: screenWidth-20,marginLeft:10,marginTop:10,borderRadius:5,height:36,backgroundColor:'#4b76df',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
                     <Text
                         style={{fontSize:16,marginLeft:10,color:'white'}}>{(this.state.bizCategory == '' && this.state.bizItem == '') ? '资金业务 - 同业存款' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName}</Text>
                     <Image style={{margin:10,width:16,height:16}}
@@ -184,8 +183,8 @@ let Publish = React.createClass({
         return (
             <View style={{flexDirection:'column',marginTop:10}}>
                 <View style={{flexDirection:'row'}}>
-                    <Text style={{marginLeft:10, color:'white'}}>{'方向'}</Text>
-                    <Text style={{color:'red'}}>{'*'}</Text>
+                    <Text style={{marginLeft:10, color:'#495154'}}>{'方向'}</Text>
+                    <Text style={{color:'#dd656c'}}>{'*'}</Text>
                 </View>
                 <View style={{marginTop:10,flexDirection:'row'}}>
                     <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
@@ -197,11 +196,11 @@ let Publish = React.createClass({
     renderTimeLimit: function () {
         return (
             <View style={{flexDirection:'column',marginTop:10}}>
-                <Text style={{marginLeft:10, color:'white'}}>{'期限'}</Text>
+                <Text style={{marginLeft:10, color:'#495154'}}>{'期限'}</Text>
                 <View style={{marginTop:10,flexDirection:'row'}}>
-                    <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
-                           iconStyle={{}} placeholderTextColor='#325779'
-                           inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                    <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
+                           iconStyle={{}} placeholderTextColor='#d3d5df'
+                           inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                            placeholder='天数' maxLength={3} field='termText' inputType="numeric"
                            onChangeText={this._onChangeText}
                            onFocus={() => this.refs['scroll'].scrollTo({y:60})}
@@ -215,11 +214,11 @@ let Publish = React.createClass({
     renderAmount: function () {
         return (
             <View style={{flexDirection:'column',marginTop:10}}>
-                <Text style={{marginLeft:10, color:'white'}}>{'金额'}</Text>
+                <Text style={{marginLeft:10, color:'#495154'}}>{'金额'}</Text>
                 <View style={{marginTop:10,flexDirection:'row'}}>
-                    <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
-                           iconStyle={{}} placeholderTextColor='#325779'
-                           inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                    <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
+                           iconStyle={{}} placeholderTextColor='#d3d5df'
+                           inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                            placeholder='0-1000亿' maxLength={this.state.amountTextDigit} field='amountText'
                            inputType="numeric"
                            onChangeText={this._onChangeText} ref="amountInput"
@@ -235,16 +234,16 @@ let Publish = React.createClass({
     renderRate: function () {
         return (
             <View style={{flexDirection:'column',marginTop:10}}>
-                <Text style={{marginLeft:10, color:'white'}}>{'利率'}</Text>
+                <Text style={{marginLeft:10, color:'#495154'}}>{'利率'}</Text>
                 <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-                    <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
-                           iconStyle={{}} placeholderTextColor='#325779'
-                           inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+                    <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
+                           iconStyle={{}} placeholderTextColor='#d3d5df'
+                           inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                            placeholder='0-99.99' maxLength={5} field='rateText' inputType="numeric"
                            onChangeText={this._onChangeText} ref="rateInput"
                            onFocus={() => this.refs['scroll'].scrollTo({y:160})}
                     />
-                    <Text style={{marginLeft:10,fontWeight: 'bold', color:'white'}}>{'%'}</Text>
+                    <Text style={{marginLeft:10,fontWeight: 'bold', color:'#495154'}}>{'%'}</Text>
                 </View>
             </View>
         )
@@ -253,7 +252,7 @@ let Publish = React.createClass({
         if (!isFromIM) {
             return (
                 <View style={{flexDirection:'column',marginTop:10}}>
-                    <Text style={{marginLeft:10, color:'white'}}>{'添加图片'}</Text>
+                    <Text style={{marginLeft:10, color:'#495154'}}>{'添加图片'}</Text>
                     <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
                         <View style={{width:((screenWidth-60)/5 + 10) * this.state.fileUrlList.length}}>
                             <ListView style={{}} scrollEnabled={false} horizontal={true}
@@ -277,7 +276,7 @@ let Publish = React.createClass({
           title="选择图片"
           fileId="publish1"
           allowsEditing={true}
-          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
         >
           <Image
             style={{width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
@@ -312,13 +311,13 @@ let Publish = React.createClass({
         <View style={{marginTop:10,marginBottom:10}}>
           <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
             <View
-              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: '#102a42'}}>
-              <Text style={{marginLeft:10, fontWeight: 'bold', color:'white'}}>
+              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: 'white'}}>
+              <Text style={{marginLeft:10,color:'#495154'}}>
                 {'备注'}
               </Text>
               <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
-                      numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
+                <Text style={{marginRight:10,color:(this.state.remarkText == '') ? '#d3d5df' : '#495154'}}
+                      numberOfLines={1}>{(this.state.remarkText == '') ? '50字以内' : this.state.remarkText}
                 </Text>
                 <Image style={{margin:10,width:16,height:16}}
                        source={require('../../image/market/next.png')}
@@ -334,7 +333,7 @@ let Publish = React.createClass({
     return (
       <View style={{height:44}}>
         <Button
-          containerStyle={{height:44,borderRadius:0,backgroundColor:"#4fb9fc"}}
+          containerStyle={{height:44,borderRadius:0,backgroundColor:"#4b76df"}}
           style={{fontSize: 15, color: '#ffffff',}}
           disabled={this.state.disabled}
           onPress={() => this._pressPublish()}

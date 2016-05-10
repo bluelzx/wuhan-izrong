@@ -82,8 +82,10 @@ let BusinessDetail = React.createClass({
     }
 
     return (
-      <ScrollView style={{backgroundColor:'#194269'}}>
-        <View style={{backgroundColor:'#194269'}}>
+      <ScrollView style={{backgroundColor:'white'}}>
+        <View style={{backgroundColor:'white'}}>
+          <View style={{backgroundColor:'#f7f7f7',height:10}}>
+          </View>
           <View style={{marginLeft:10}}>
             {this.returnItem('业务类型:', (this.state.detailData.bizCategoryDesc + '-' + this.state.detailData.bizItemDesc))}
             {this.returnItem('方向:', this.state.detailData.bizOrientationDesc)}
@@ -112,8 +114,8 @@ let BusinessDetail = React.createClass({
   returnItem: function (desc, value) {
     return (
       <View style={{flexDirection:'row',alignItems:'center',paddingVertical:8}}>
-        <Text style={{fontSize:16,color:'white',flex:1}}>{desc}</Text>
-        <Text style={{fontSize:16,color:(desc == '更新时间:')?'#ffd547':'white',width:235/375*screenWidth}}>{value}</Text>
+        <Text style={{fontSize:16,color:'#3b4549',flex:1}}>{desc}</Text>
+        <Text style={{fontSize:16,color:(desc == '更新时间:')?'#f33b1e':'#3b4549',width:235/375*screenWidth}}>{value}</Text>
       </View>
     );
   },
@@ -132,7 +134,7 @@ let BusinessDetail = React.createClass({
       );
     }
     return (
-      <View style={{backgroundColor:'#153757',borderRadius:2,margin:10}}>
+      <View style={{backgroundColor:'#f0f0f0',borderRadius:2,margin:10}}>
         {this.renderPromulgator(userInfo)}
         {this.returnInfoItem(require('../../image/market/tel.png'), userInfo.phoneNumber == null ? '未填写' : userInfo.phoneNumber, userInfo.publicPhone)}
         {this.returnInfoItem(require('../../image/market/mobile.png'), userInfo.mobileNumber == null ? '未填写' : userInfo.mobileNumber, userInfo.publicMobile)}
@@ -147,17 +149,17 @@ let BusinessDetail = React.createClass({
       return (
         <View style={{flexDirection:'row',alignItems:'center'}}>
           {this.renderUserPhoto(this.state.userInfo)}
-          <Text style={{fontSize:16,color:'white'}}>{this.state.marketInfo.userName}</Text>
+          <Text style={{fontSize:16,color:'#3b4549'}}>{this.state.marketInfo.userName}</Text>
         </View>
       );
     } else {
       return (
         <View style={{flexDirection:'row',alignItems:'center'}}>
           {this.renderUserPhoto(this.state.userInfo)}
-          <Text style={{fontSize:16,color:'white'}}
+          <Text style={{fontSize:16,color:'#3b4549'}}
                 numberOfLines={1}>{this.state.marketInfo.userName}</Text>
-          <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#153757' activeOpacity={0.8}>
-            <Text style={{fontSize:12,color:'#68bbaa'}}>{'(点击洽谈)'}</Text>
+          <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#f0f0f0' activeOpacity={0.8}>
+            <Text style={{fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
           </TouchableHighlight>
         </View>
       );
@@ -188,7 +190,7 @@ let BusinessDetail = React.createClass({
           <Image style={{width:16,height:16}}
                  source={url}
           />
-          <Text style={{marginLeft:10,fontSize:16,color:'white',width:screenWidth - 60}}>{value}</Text>
+          <Text style={{marginLeft:10,fontSize:16,color:'#3b4549',width:screenWidth - 60}}>{value}</Text>
         </View>
       );
     } else {
@@ -200,7 +202,7 @@ let BusinessDetail = React.createClass({
   renderImageTitle(){
     if (this.state.fileUrlList.length > 0) {
       return (
-        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:'white'}}>{'附件:'}</Text>
+        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:'#3b4549'}}>{'附件:'}</Text>
       );
     }
   },

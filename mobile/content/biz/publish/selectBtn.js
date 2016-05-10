@@ -32,8 +32,8 @@ let SelectBtn = React.createClass({
                         <TouchableHighlight key={i} onPress={(this.props.defaultData == i )? null : () => this.props.change(i)}
                                             underlayColor='rgba(21,55,87,0)'>
                             <View
-                                style={{alignItems:'center',justifyContent:'center',marginLeft:10,width:Adjust.width(70),height: 40,borderRadius:5, backgroundColor:(this.props.defaultData == i )? '#817fc9' : '#102a42'}}>
-                                <Text style={{ fontWeight: 'bold', color:'white'}}>
+                                style={{alignItems:'center',justifyContent:'center',marginLeft:10,width:Adjust.width(70),height: 40,borderRadius:5, backgroundColor:(this.props.defaultData == i )? '#817fc9' : '#e1e3e6'}}>
+                                <Text style={{ fontWeight: 'bold', color:(this.props.defaultData == i )? 'white' : '#495154'}}>
                                     {item}
                                 </Text>
                             </View>
