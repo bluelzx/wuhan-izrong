@@ -76,7 +76,7 @@ let NavBarView = React.createClass({
             </Text>
 
 
-          <View style={{width:Platform.OS==='ios'? 44:114,flex:1,alignItems:'flex-end',marginRight:5}}>
+          <View style={{width:Platform.OS==='ios'? 44:114,flex:1,alignItems:'flex-end',marginRight:10}}>
             {this._renderRight()}
           </View>
         </View>

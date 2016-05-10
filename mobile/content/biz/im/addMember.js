@@ -2,7 +2,7 @@
  * Created by baoyinghai on 16/4/6.
  */
 let React = require('react-native');
-const {View, TouchableOpacity, Text} = React;
+const {View, TouchableOpacity,Platform, Text} = React;
 let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList, Device, Alert } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
@@ -61,7 +61,7 @@ let AddMember = React.createClass({
     }
     return (
       <TouchableOpacity onPress={() => this.addUser(this.props.param.groupId, memberList)}>
-        <Text style={{ marginLeft:-40,color:count==0?'#6B849C':'white'}}>{'完成(' + count + '/'+ (Setting.groupMemberUpperLimit - this.state.existMembers)+')'}</Text>
+        <Text style={{ marginLeft:Platform.OS==='ios'?-40:0,color:count==0?'#6B849C':'white'}}>{'完成(' + count + '/'+ (Setting.groupMemberUpperLimit - this.state.existMembers)+')'}</Text>
       </TouchableOpacity>
     );
   },

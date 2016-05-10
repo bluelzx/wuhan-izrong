@@ -274,7 +274,7 @@ let UserInfo = React.createClass({
 
   renderLogout: function () {
     return (
-      <TouchableOpacity style={{width: 150, marginLeft: -20}} onPress={()=>this.logout()}>
+      <TouchableOpacity style={{marginLeft: -20}} onPress={()=>this.logout()}>
         <Text style={{color: '#ffffff'}}>退出登录</Text>
       </TouchableOpacity>
     );

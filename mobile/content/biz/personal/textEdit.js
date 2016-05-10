@@ -177,7 +177,7 @@ let TextEdit = React.createClass({
 
   renderUpdate: function () {
     return (
-      <TouchableOpacity style={{width: 150}} activeOpacity={0.5} onPress={()=>this.validate()}>
+      <TouchableOpacity activeOpacity={0.5} onPress={()=>this.validate()}>
         <Text style={{color: '#ffffff'}}>
           完成
         </Text>

@@ -348,7 +348,7 @@ let Publish = React.createClass({
 
     renderToMyBiz: function () {
         return (
-            <TouchableOpacity style={{width: 150 ,marginLeft: -20}} onPress={()=>this.toMyBiz()}>
+            <TouchableOpacity style={{marginLeft: -20}} onPress={()=>this.toMyBiz()}>
                 <Text style={{color: '#ffffff'}}>我的业务</Text>
             </TouchableOpacity>
         );
