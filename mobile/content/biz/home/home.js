@@ -10,7 +10,8 @@ let {
   Image,
   TouchableHighlight,
   Platform,
-  Animated
+  Animated,
+  ListView
   } = React;
 
 let NavBarView = require('../../framework/system/navBarView');
@@ -23,6 +24,10 @@ let {MARKET_CHANGE} = require('../../constants/dictEvent');
 let MarketStore = require('../../framework/store/marketStore');
 let MarketAction = require('../../framework/action/marketAction');
 let Market = require('../market/market');
+let Adjust = require('../../comp/utils/adjust');
+let _ = require('lodash');
+
+let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 let Home = React.createClass({
   getStateFromStores: function () {
@@ -50,7 +55,9 @@ let Home = React.createClass({
       dataSource: dataSource.cloneWithPages(PAGES),
       category: myCategory != null ? myCategory.displayName : '资金业务',
       item: myItem != null ? myItem.displayName : '同业存款',
-      contentList:[]
+      contentList: [],
+      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 0 : item[0].id,
+      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 0 : item[0].itemArr[1].id,
     };
   },
 
@@ -60,6 +67,7 @@ let Home = React.createClass({
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
+    this.bizOrderMarketSearch();
   },
 
   componentWillUnmount: function () {
@@ -68,6 +76,35 @@ let Home = React.createClass({
   _onChange: function () {
     this.setState(this.getStateFromStores());
   },
+
+  bizOrderMarketSearch: function () {
+    let requestBody = {
+      orderField: 'lastModifyDate',
+      orderType: 'desc',
+      pageIndex: 1,
+      filterList: [
+        this.state.bizCategoryID,
+        this.state.bizItemID
+      ]
+    };
+    this.props.exec(
+      ()=> {
+        return MarketAction.bizOrderMarketSearch(requestBody
+        ).then((response)=> {
+          console.log(response);
+          let contentList = _.slice(response.contentList, 0, 5);
+          this.setState({
+            contentList: contentList
+          });
+        }).catch(
+          (errorData) => {
+            throw errorData;
+          }
+        );
+      }
+    );
+  },
+
 
   toPage: function (name, data) {
     AppStore.saveCategory(data.category);
@@ -196,11 +233,64 @@ let Home = React.createClass({
             <Text
               style={{marginLeft: 20, fontSize: 15, color: '#ffffff'}}>{this.state.category + '--' + this.state.item}</Text>
           </View>
-          <MarketList navigator={this.props.navigator} marketData={this.state.contentList}/>
+          {this.renderMarketList()}
         </ScrollView>
-        <View style={{height:(Platform.OS == 'ios') ? 49 : 0}}></View>
+        <View style={{height:(Platform.OS == 'ios') ? 49 : 0}}>
+        </View>
       </NavBarView>
     );
+  },
+  renderMarketList() {
+    return (
+      <View style={{width:width,flex:1,backgroundColor: '#162a40'}}>
+        <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5}}>
+          <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:'#8d8d8d'}}>
+            {'方向'}
+          </Text>
+          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:'#8d8d8d'}}>
+            {'期限'}
+          </Text>
+          <Text style={{position:"absolute",left:Adjust.width(130),top:0,marginLeft:10, color:'#8d8d8d'}}>
+            {'金额'}
+          </Text>
+          <Text style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:'#8d8d8d'}}>
+            {'发布人'}
+          </Text>
+        </View>
+        <ListView
+          dataSource={data.cloneWithRows(this.state.contentList)}
+          renderRow={this._renderRow}
+          automaticallyAdjustContentInsets={false}
+          enableEmptySections={true}
+        />
+      </View>
+    );
+  },
+  _renderRow: function (rowData, sectionID, rowID) {
+    return (
+      <TouchableHighlight onPress={() => this._pressRow()} underlayColor='#000'>
+        <View
+          style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926'}}>
+          <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
+                 source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
+          />
+          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:'white'}}>
+            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天'}
+          </Text>
+          <Text
+            style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)'}}>
+            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount / 10000 + '万'}
+          </Text>
+          <Text
+            style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
+            numberOfLines={1}>
+            {rowData.orgName}
+          </Text>
+        </View>
+      </TouchableHighlight>
+    )
+  },
+  _pressRow: function () {
   }
 });
 
