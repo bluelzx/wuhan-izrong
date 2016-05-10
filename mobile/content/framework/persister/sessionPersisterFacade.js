@@ -71,7 +71,6 @@ let _updateSession = function (param, notAdd){
           param.badge = p[0].badge + 1;
         }
       }
-
     }
     _realm.create(SESSION, param, true);
   });

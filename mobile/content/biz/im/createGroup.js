@@ -122,7 +122,7 @@ let CreateGroup = React.createClass({
     }
     return (
       <TouchableOpacity onPress={() => count > 0 && this.createGroup(memberList)}>
-        <Text style={{ marginLeft:-40,color:(this.getMemberList(memberList) > Setting.groupMemberUpperLimit||this.state.groupName.length > Setting.groupNameLengt || count==0)?'#6B849C':'white'}}>{'创建(' + count + '/' + Setting.groupMemberUpperLimit + ')'}</Text>
+        <Text style={{ marginLeft:Platform.OS==='ios'?-40:0,color:(this.getMemberList(memberList) > Setting.groupMemberUpperLimit||this.state.groupName.length > Setting.groupNameLengt || count==0)?'#6B849C':'white'}}>{'创建(' + count + '/' + Setting.groupMemberUpperLimit + ')'}</Text>
       </TouchableOpacity>
     );
   },

@@ -4,7 +4,8 @@ let React = require('react-native');
 let {
   View,
   TouchableOpacity,
-  Text
+  Text,
+  Platform
 } = React;
 let Icon = require('react-native-vector-icons/Ionicons');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
@@ -70,12 +71,12 @@ let NavBarView = React.createClass({
             {this._renderLeft()}
           </View>
 
-            <Text numberOfLines={1} style={{flex:5,textAlign:'center',fontSize: 18, color: this.props.fontColor}}>
+            <Text numberOfLines={1} style={{flex:Platform.OS==='ios'?5:2,textAlign:'center',fontSize: 18, color: this.props.fontColor}}>
               {this.props.title}
             </Text>
 
 
-          <View style={{width: 44,flex:1}}>
+          <View style={{width:Platform.OS==='ios'? 44:114,flex:1,alignItems:'flex-end',marginRight:5}}>
             {this._renderRight()}
           </View>
         </View>
