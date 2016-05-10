@@ -34,6 +34,8 @@ let SelectBusiness2 = React.createClass({
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} title={this.state.category.displayName}>
+        <View style={{backgroundColor:'#f7f7f7',height:10}}>
+        </View>
         <ListView
           dataSource={data.cloneWithRows(this.state.dataSource)}
           renderRow={this.renderRow}
@@ -46,10 +48,10 @@ let SelectBusiness2 = React.createClass({
   renderRow(rowData, sectionID, rowID){
     return (
       <TouchableHighlight
-        onPress={()=>this.pressRow(rowData)} underlayColor='#2b4f79'>
+        onPress={()=>this.pressRow(rowData)} underlayColor='#f4f7fc'>
         <View
-          style={{width:screenWidth,height:50,flexDirection:'row',alignItems: "center",justifyContent: "space-between",backgroundColor:'#244266',borderBottomColor:"#0a1926",borderBottomWidth:0.7}}>
-          <Text style={{marginLeft:10,fontSize:16,color:'white'}}>{rowData.displayName}</Text>
+          style={{width:screenWidth,height:50,flexDirection:'row',alignItems: "center",justifyContent: "space-between",backgroundColor:'white',borderBottomColor:"#edeef4",borderBottomWidth:0.5}}>
+          <Text style={{marginLeft:10,fontSize:16,color:'#495154'}}>{rowData.displayName}</Text>
         </View>
       </TouchableHighlight>
     )

@@ -35,7 +35,7 @@ let FilterSelectBtn = React.createClass({
     }else{
       this.setState({
         isAll: true,
-        rowDefault: 10000,
+        rowDefault: 10000
       });
       {
         this._returnSelectOption(0, this.props.typeTitle, 10000, this.state.isAll)
@@ -64,11 +64,11 @@ let FilterSelectBtn = React.createClass({
       return <View></View>;
     }else{
       return (
-        <TouchableHighlight onPress={() => this._pressAll()} underlayColor='rgb(0,0,0,0)'>
+        <TouchableHighlight onPress={() => this._pressAll()} underlayColor='transparent'>
           <View>
             <View
               style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:Adjust.width(80), height: 40, backgroundColor: this.state.isAll ? '#817fc9':'#e1e3e6', alignItems: 'center', borderRadius: 5 }}>
-              <Text style={{flex: 1, marginTop: 5, color:'white'}}>
+              <Text style={{flex: 1, marginTop: 5, color:this.state.isAll ?'white' : '#495154'}}>
                 {this.props.dataList[0].displayName}
               </Text>
             </View>
@@ -80,12 +80,12 @@ let FilterSelectBtn = React.createClass({
   _renderRow: function (rowData, sectionID, rowID) {
     return (
       <TouchableHighlight onPress={this.state.rowDefault == rowID ? null : () => this._pressRow(rowID)}
-                          underlayColor='rgb(0,0,0,0)'>
+                          underlayColor='transparent'>
         <View>
           <View
             style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:(this.props.section == 3)?Adjust.width(80):Adjust.width(125.5), height: 40, backgroundColor: this.state.isAll ? '#e1e3e6' : (this.state.rowDefault == rowID ? '#817fc9':'#e1e3e6'), alignItems: 'center', borderRadius: 5 }}>
             <Text
-              style={{flex: 1, marginTop: 8, fontSize:12, color:'#495154'}}
+              style={{flex: 1, marginTop: 8, fontSize:12, color:(this.state.rowDefault == rowID)? 'white' : '#495154'}}
               numberOfLines={1}>
               {rowData.displayName}
             </Text>
@@ -106,6 +106,7 @@ let FilterSelectBtn = React.createClass({
   _pressAll: function () {
     this.setState({
       isAll: true,
+      rowDefault: 10000
     });
     {
       this._returnSelectOption(0, this.props.typeTitle , 10000, this.state.isAll)

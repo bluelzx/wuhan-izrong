@@ -27,11 +27,9 @@ let FilterSelectBtn = require('./filterSelectBtn');
 let SelectOrg = require('../login/selectOrg');
 let Icon = require('react-native-vector-icons/Ionicons');
 let BusinessDetail = require('./businessDetail');
-
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
-
 let { MARKET_CHANGE } = require('../../constants/dictEvent');
 let _ = require('lodash');
 let {Alert, GiftedListView} = require('mx-artifacts');
@@ -511,8 +509,8 @@ let Market = React.createClass({
             <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
               <View style={{alignItems: 'center',justifyContent:'center'}}>
                 <View
-                  style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:30,borderColor:'#ed135a',borderWidth:1}}>
-                  <Text style={{color:'#ed135a'}}>{'清空'}</Text>
+                  style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:30,borderColor:'#dd656c',borderWidth:1}}>
+                  <Text style={{color:'#dd656c'}}>{'清空'}</Text>
                 </View>
               </View>
             </TouchableHighlight>
