@@ -1,9 +1,13 @@
 module.exports = {
-  user: require('../image/utils/picCode.png'),
-  password: require('../image/utils/password.png'),
-  phone: require('../image/utils/phone.png'),
+  //login && Register
+  phone:require('../image/login/mobileNo.png'),
+  realName:require('../image/login/realName.png'),
+  email:require('../image/login/email.png'),
+  //user: require('../image/utils/picCode.png'),
+  //password: require('../image/utils/password.png'),
+  //phone: require('../image/utils/phone.png'),
   //email: require('../image/'),
-  idCard: require('../image/user/personId.png'),
+  //idCard: require('../image/user/personId.png'),
 
   // IM
   imMore: require('../image/im/more.png'),

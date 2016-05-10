@@ -33,16 +33,17 @@ let SearchBar = React.createClass({
           onFocus={() => this.setState({editAble:true}) }
           onChangeText={(text) => this.textChange(text)}
           returnKeyType={'search'}
-          style={{color: '#ffffff',height:(Platform.OS === 'ios')?30:60,backgroundColor:'#15263A',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}></TextInput>
+          style={{color: '#4fc1e9',height:(Platform.OS === 'ios')?30:60,backgroundColor:'#ffffff',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}>
+        </TextInput>
       );
     } else {
       return (
         <TouchableOpacity onPress={() => {this.setState({editAble:true})}}
-          style={{height:(Platform.OS === 'ios')?30:60,justifyContent:'center', alignItems:'center',backgroundColor:'#15263A',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}
+          style={{height:(Platform.OS === 'ios')?30:60,justifyContent:'center', alignItems:'center',backgroundColor:'#ffffff',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}
         >
           <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-            <Icon name="ios-search-strong" size={20} color='#ffffff' />
-            <Text style={{color:'#ffffff', marginLeft:5, fontSize:18}}>搜索</Text>
+            <Icon name="ios-search-strong" size={20} color='#b4b4b4' />
+            <Text style={{color:'#b4b4b4', marginLeft:5, fontSize:18}}>搜索</Text>
           </View>
         </TouchableOpacity>
       );
@@ -51,9 +52,9 @@ let SearchBar = React.createClass({
 
   render: function() {
     return (
-      <View style={{backgroundColor:'#18304D',paddingBottom:5}}>
+      <View style={{backgroundColor:'#f0f0f0',paddingBottom:5,borderBottomColor:'#d3d5e0',borderBottomWidth:1}}>
         <View
-          style={{height:30,backgroundColor:'#15263A',marginTop:5,marginLeft:10,marginRight:10,borderRadius:4}}>
+          style={{height:30,backgroundColor:'#ffffff',marginTop:5,marginLeft:10,marginRight:10,borderRadius:6}}>
           {this.renderBar()}
         </View>
       </View>

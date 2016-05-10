@@ -14,6 +14,7 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let TimerMixin = require('react-timer-mixin');
 let {Alert} = require('mx-artifacts');
 let Validation = require('../../comp/utils/validation');
+let PlainStyle = require('../../constants/dictStyle');
 
 let SMSTimer = React.createClass({
   mixins: [TimerMixin],
@@ -96,13 +97,13 @@ let SMSTimer = React.createClass({
     return (
       <View style={{flexDirection: 'row', flex: 1, marginTop: 20}}>
         <View style={[styles.view, styles.radius]}>
-          <Image source={require('../../image/utils/phone.png')}
+          <Image source={require('../../image/login/mobileNo.png')}
                  style={{height: 16, width: 16, marginLeft:9}}
           />
           <TextInput style={[styles.input, {width: width - 170}]} underlineColorAndroid="transparent"
                      placeholder="短信验证码" onChangeText={(text) => this.props.onChanged( 'verify',text)}
-                     autoCorrect={false} maxLength={6} keyboardType="number-pad" placeholderTextColor="#386085"
-                     clearButtonMode="while-editing"
+                     autoCorrect={false} maxLength={6} keyboardType="number-pad"  clearButtonMode="while-editing"
+                     placeholderTextColor= {PlainStyle.colorSet.inputPlaceholderTextColor}
           />
         </View>
         <View style={{width: 75, marginLeft: 12}}>
@@ -123,19 +124,19 @@ let SMSTimer = React.createClass({
 let styles = StyleSheet.create({
   view: {
     height: 47,
-    borderColor: '#0a1926',
-    borderWidth: 0.5,
-    backgroundColor: '#0a1926',
+    borderColor: PlainStyle.colorSet.inputBorderColor,
+    borderWidth: 1,
+    backgroundColor: PlainStyle.colorSet.inputBackgroundColor,
     flexDirection: 'row',
     alignItems: 'center', flex: 1
   },
   input: {
     fontSize: 18,
-    color: '#ffffff',
+    color: PlainStyle.colorSet.inputTextColor,
     marginLeft: 9
   },
   radius: {
-    borderRadius: 4
+    borderRadius: 6
   },
   button: {
     height: 47,

@@ -19,6 +19,7 @@ let {Alert, Button, Communications} = require('mx-artifacts');
 let Register_valiMobile = require('./registerValiMobile');
 let Login_ValiSMS = require('./loginValiSMS');
 let Validation = require('../../comp/utils/validation');
+let DictStyle = require('../../constants/dictStyle');
 
 let Login = React.createClass({
   getStateFromStores() {
@@ -91,7 +92,7 @@ let Login = React.createClass({
                resizeMode='cover'
                source={require('../../image/login/logo.png')}
         />
-        <Text style={{color: '#ffffff', marginTop: 18, fontSize: 15}}>环渤海银银合作平台</Text>
+        <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop: 18}]}>资融网同业平台</Text>
       </View>
     );
   },
@@ -101,7 +102,7 @@ let Login = React.createClass({
       <NavBarView navigator={this.props.navigator} title='登录' showBack={false}>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.renderLogo()}
-          <Input containerStyle={styles.inputStyle} type="default" placeholder='手机号' maxLength={11}
+          <Input  type="default" placeholder='手机号' maxLength={11}
                  field='mobileNo' onChangeText={this._onChangeText} icon='phone' inputType="number-pad"
           />
 
@@ -124,9 +125,9 @@ let Login = React.createClass({
         </View>
         <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
           <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
-            <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服: </Text>
+            <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
             <TouchableOpacity onPress={()=>{}}>
-              <Text style={{fontSize: 16, color: '#ffffff', textDecorationLine: 'underline'}}>022-28405347</Text>
+              <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
             </TouchableOpacity>
           </View>
         </View>

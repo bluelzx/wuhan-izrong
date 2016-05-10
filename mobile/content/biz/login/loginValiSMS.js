@@ -11,17 +11,16 @@ let {
   Platform,
   TouchableOpacity,
   Navigator
-} = React;
+  } = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let {Alert, Button} = require('mx-artifacts');
 let SMSTimer = require('../../comp/utils/smsTimer');
-let TabView = require('../../framework/system/tabView');
-let Validation = require('../../comp/utils/validation');
 let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
 let MarketAction = require('../../framework/action/marketAction');
+let DictStyle = require('../../constants/dictStyle');
 
 let ValiSMS = React.createClass({
   getStateFromStores() {
@@ -100,9 +99,9 @@ let ValiSMS = React.createClass({
       <NavBarView navigator={this.props.navigator} title='短信验证'>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <View style={{flexDirection: 'row'}}>
-            <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>已发送短信验证码至</Text>
+            <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop: 20}]}>已发送短信验证码至</Text>
             <Text
-              style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>{PhoneNumber(this.props.param.mobileNo)}</Text>
+              style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop: 20}]}>{PhoneNumber(this.props.param.mobileNo)}</Text>
           </View>
           <SMSTimer ref="smsTimer"
                     onChanged={this._onChangeText}
@@ -121,9 +120,9 @@ let ValiSMS = React.createClass({
         </View>
         <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
           <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
-            <Text style={{fontSize: 16, color: '#ffffff'}}>联系客服: </Text>
+            <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
             <TouchableOpacity onPress={()=>{}}>
-              <Text style={{fontSize: 16, color: '#ffffff', textDecorationLine: 'underline'}}>022-28405347</Text>
+              <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
             </TouchableOpacity>
           </View>
         </View>

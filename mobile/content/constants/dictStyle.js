@@ -16,6 +16,11 @@ const PlainStyle = {
     content: '#f7f7f7',
     btnEnable: '#4074e6',
     btnDisable: '#b3c7f5',
+    inputBorderColor: '#b7c7dc',
+    inputBackgroundColor: '#ffffff',
+    inputTextColor: '#000000',
+    inputPlaceholderTextColor:'#c7d2da',
+    commonTextColor:'#000000'
   },
 
   heightSet: {
@@ -23,7 +28,7 @@ const PlainStyle = {
     navBar: Device.navBarHeight,
     content: Device.height - Device.navBarHeight,
     tabBar: TABBAR_HEIGHT,
-    tabContent: Device.height - Device.navBarHeight - TABBAR_HEIGHT,
+    tabContent: Device.height - Device.navBarHeight - TABBAR_HEIGHT
   },
 
   tabBar: {
@@ -59,7 +64,7 @@ const DictStyle = StyleSheet.create({
   },
 
   fontColor: {
-    color: 'grey'
+    color: '#000000'
   },
 
   fontSize: {
@@ -80,8 +85,15 @@ const DictStyle = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: PlainStyle.heightSet.navBar,
-    paddingTop: PlainStyle.heightSet.statusBar,
+    paddingTop: PlainStyle.heightSet.statusBar
   },
+
+  textInput:{
+    fontSize: 18,
+    color: PlainStyle.colorSet.inputTextColor,
+    marginLeft: 9,
+    width: Device.width  * (375 - 80) / 375
+  }
 });
 
 module.exports = Object.assign(PlainStyle, DictStyle);

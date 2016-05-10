@@ -11,12 +11,13 @@ let {
   TouchableHighlight
   } = React;
 let AppStore = require('../../framework/store/appStore');
-let LoginAction = require('../../framework/action/loginAction');
 let NavBarView = require('../../framework/system/navBarView');
 let AlphabetListView = require('react-native-alphabetlistview');
 let {ORG_CHANGE} = require('../../constants/dictEvent');
 let SearchBar = require('../im/searchBar');
 var that;
+let DictStyle = require('../../constants/dictStyle');
+
 let Register_selectOrg = React.createClass({
 
   getStateFromStores() {
@@ -32,11 +33,11 @@ let Register_selectOrg = React.createClass({
     return this.getStateFromStores();
   },
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange,ORG_CHANGE);
+    AppStore.addChangeListener(this._onChange, ORG_CHANGE);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange,ORG_CHANGE);
+    AppStore.removeChangeListener(this._onChange, ORG_CHANGE);
   },
   _onChange: function () {
 
@@ -53,9 +54,9 @@ let Register_selectOrg = React.createClass({
 
   },
 
-  rendSelectAll: function(){
-    if(this.props.param.needAll){
-      return(
+  rendSelectAll: function () {
+    if (this.props.param.needAll) {
+      return (
         <TouchableHighlight style={{backgroundColor: '#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
                             onPress={()=>{
                               that.props.callback({orgValue: '全部',id: 0});
@@ -70,15 +71,17 @@ let Register_selectOrg = React.createClass({
     }
   },
 
-  renderList: function(){
-    if(this.state.data == ''){
-      return(
+  renderList: function () {
+    if (this.state.data == '') {
+      return (
         <View>
-          <Text style={{color:'#ffffff',marginTop:20,flex:1,alignItems:'center'}}>您的机构不再平台的机构列表中。如有问题，请联系客服</Text>
+          <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop:20,marginHorizontal:16,alignItems:'center'}]}>
+            您的机构不再平台的机构列表中。如有问题，请联系客服
+          </Text>
         </View>
       )
-    }else{
-      return(
+    } else {
+      return (
         <AlphabetListView
           data={this.state.data}
           cell={Cell}
@@ -95,11 +98,9 @@ let Register_selectOrg = React.createClass({
   render: function () {
     return (
       <NavBarView navigator={this.props.navigator} title='选择机构'>
-        <View style={{marginVertical:5}}>
-          <SearchBar
-            textChange={this.textChange}
-          />
-        </View>
+        <SearchBar
+          textChange={this.textChange}
+        />
         <View style={{flexDirection: 'column', flex: 1}}>
           {this.rendSelectAll()}
           {this.renderList()}
@@ -130,12 +131,12 @@ let SectionItem = React.createClass({
 let Cell = React.createClass({
   render() {
     return (
-      <TouchableHighlight style={{backgroundColor: '#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
+      <TouchableHighlight style={{backgroundColor: '#f7f7f7'}} activeOpacity={0.8} underlayColor='#f4f7fd'
                           onPress={()=>this.selectOrgItem(this.props.item)}
       >
         <View
-          style={{height: 40, marginLeft: 20, justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#122335'}}>
-          <Text style={{color: '#FFFFFF', textAlign: 'left'}}>{this.props.item.orgValue}</Text>
+          style={{height: 40, marginLeft: 20, justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#ebeef7'}}>
+          <Text style={{color: '#3b4549', textAlign: 'left'}}>{this.props.item.orgValue}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -158,15 +159,17 @@ let styles = StyleSheet.create({
   textStyle: {
     textAlign: 'left',
     marginLeft: 20,
-    color: '#fff',
+    color: '#3b4549',
     fontWeight: '700',
     fontSize: 16
   },
   viewStyle: {
-    backgroundColor: '#244266',
+    backgroundColor: '#f0f0f0',
     marginTop: -1,
     height: 30,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderBottomColor: '#d8dae3',
+    borderBottomWidth: 1
   }
 });
 
