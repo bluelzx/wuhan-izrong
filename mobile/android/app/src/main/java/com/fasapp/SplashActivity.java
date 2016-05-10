@@ -1,6 +1,7 @@
 package com.fasapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,11 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.widget.ImageView;
+
+import com.facebook.stetho.common.LogUtil;
+import com.fasapp.utils.LogUtils;
+
+import java.io.File;
 
 public class SplashActivity extends Activity implements Animation.AnimationListener{
     private ImageView mImageView;
@@ -28,6 +34,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         finish();
         startActivity(new Intent(SplashActivity.this, MainActivity.class));
     }
+
 
     @Override
     public void onAnimationRepeat(Animation animation) {

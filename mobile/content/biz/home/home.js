@@ -25,6 +25,7 @@ let MarketStore = require('../../framework/store/marketStore');
 let MarketAction = require('../../framework/action/marketAction');
 let Market = require('../market/market');
 let Adjust = require('../../comp/utils/adjust');
+let _ = require('lodash');
 
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -91,8 +92,9 @@ let Home = React.createClass({
         return MarketAction.bizOrderMarketSearch(requestBody
         ).then((response)=> {
           console.log(response);
+          let contentList = _.slice(response.contentList, 0, 5);
           this.setState({
-            contentList: response.contentList
+            contentList: contentList
           });
         }).catch(
           (errorData) => {
@@ -331,8 +333,6 @@ var styles = StyleSheet.create({
     borderBottomColor: '#000000',
     justifyContent: 'center'
   }
-
 });
-
 
 module.exports = Home;

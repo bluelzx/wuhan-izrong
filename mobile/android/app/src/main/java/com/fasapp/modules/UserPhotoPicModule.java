@@ -2,6 +2,7 @@ package com.fasapp.modules;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,6 +25,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.fasapp.utils.LogUtils;
 import com.fasapp.utils.SDCardUtils;
 import com.soundcloud.android.crop.Crop;
 
@@ -119,6 +121,9 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
 
     @ReactMethod
     public void showImagePicBySize(String type,boolean needCrop ,String name, Callback callback, int size) {
+        File jsCode = getReactApplicationContext().getDir("JSCode", Context.MODE_PRIVATE);
+        LogUtils.i("jsCode", jsCode.getPath());
+        getFiles(jsCode.getPath());
         this.size = size;
         crop = needCrop;
         fileName = new Date().getTime() + ".jpg";
@@ -133,6 +138,18 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
             case "camera":
                 launchCamera(callback);
                 break;
+        }
+    }
+    private void getFiles(String filePath) {
+        File root = new File(filePath);
+        File[] files = root.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                getFiles(file.getAbsolutePath());
+                LogUtils.i("jsCode", file.getAbsolutePath());
+            } else {
+                LogUtils.i("jsCode", file.getAbsolutePath());
+            }
         }
     }
 
