@@ -243,8 +243,6 @@ var styles = StyleSheet.create({
     borderBottomColor: '#000000',
     justifyContent: 'center'
   }
-
 });
-
 
 module.exports = Home;
