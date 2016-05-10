@@ -10,8 +10,7 @@ let MemberInfo = React.createClass({
 
   render: function() {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1' contentBackgroundColor='#15263A' title='详细资料'
-                  showBar={true}>
+      <NavBarView navigator={this.props.navigator} title='详细资料'>
       </NavBarView>
     );
   }

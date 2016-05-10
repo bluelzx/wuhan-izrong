@@ -21,7 +21,7 @@ var WhitePage = React.createClass({
   render: function() {
     let {title}  = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1' contentBackgroundColor='#18304D' title={title} showBack={false} showBar={true}>
+      <NavBarView navigator={this.props.navigator} title={title} showBack={false}>
       </NavBarView>
     );
   }

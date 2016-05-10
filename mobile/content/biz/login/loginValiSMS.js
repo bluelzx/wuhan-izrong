@@ -97,9 +97,7 @@ let ValiSMS = React.createClass({
 
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='短信验证' showBack={true} showBar={true}
-      >
+      <NavBarView navigator={this.props.navigator} title='短信验证'>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <View style={{flexDirection: 'row'}}>
             <Text style={{fontSize: 16, color: '#ffffff', marginTop: 20}}>已发送短信验证码至</Text>

@@ -316,8 +316,7 @@ let Market = React.createClass({
   render: function () {
     let {title}  = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='市场信息' showBack={false} showBar={true}>
+      <NavBarView navigator={this.props.navigator} title='市场信息' showBack={false}>
         <View
           style={{width: screenWidth,alignItems: "center",justifyContent: "flex-start",flexDirection: "row"}}>
           {this.renderFilter(this.pressFilterType, this.pressFilterTime, this.pressFilterOther)}

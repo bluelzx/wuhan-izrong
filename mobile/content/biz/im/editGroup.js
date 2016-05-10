@@ -99,10 +99,7 @@ let EditGroup = React.createClass({
     //  //return <View></View>;
     //}
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='群设置'
-                  showBar={true}
-      >
+      <NavBarView navigator={this.props.navigator} title='群设置'>
         <View style={{flexDirection:'column'}}>
           <View style={{flexDirection:'column'}}>
             {this.renderMember()}

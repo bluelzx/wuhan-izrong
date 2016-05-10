@@ -102,9 +102,7 @@ let DeleteMember = React.createClass({
 
   render: function() {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1' contentBackgroundColor='#15263A' title='删除群成员'
-                  showBar={true}
-                  actionButton={this.renderState}>
+      <NavBarView navigator={this.props.navigator} title='删除群成员' actionButton={this.renderState}>
         <SearchBar textChange={this.textChange}/>
         <ExtenList itemHeight={51}
                    groundColor={'#15263A'}

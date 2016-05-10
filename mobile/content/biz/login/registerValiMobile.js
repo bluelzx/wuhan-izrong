@@ -100,9 +100,7 @@ let Register_valiMobile = React.createClass({
 
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='短信验证' showBack={true} showBar={true}
-      >
+      <NavBarView navigator={this.props.navigator} title='短信验证'>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <Input containerStyle={styles.inputStyle} placeholder='手机号' maxLength={11} field='mobileNo'
                  onChangeText={this._onChangeText} icon='phone' inputType='number-pad'

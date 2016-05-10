@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "&#x73af;&#x6e24;&#x94f6;&#x901a;.app"
+               BuildableName = "&#x7231;&#x8d44;&#x878d;.app"
                BlueprintName = "FasApp"
                ReferencedContainer = "container:FasApp.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "&#x73af;&#x6e24;&#x94f6;&#x901a;.app"
+            BuildableName = "&#x7231;&#x8d44;&#x878d;.app"
             BlueprintName = "FasApp"
             ReferencedContainer = "container:FasApp.xcodeproj">
          </BuildableReference>
@@ -56,7 +56,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "&#x73af;&#x6e24;&#x94f6;&#x901a;.app"
+            BuildableName = "&#x7231;&#x8d44;&#x878d;.app"
             BlueprintName = "FasApp"
             ReferencedContainer = "container:FasApp.xcodeproj">
          </BuildableReference>
@@ -75,7 +75,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "&#x73af;&#x6e24;&#x94f6;&#x901a;.app"
+            BuildableName = "&#x7231;&#x8d44;&#x878d;.app"
             BlueprintName = "FasApp"
             ReferencedContainer = "container:FasApp.xcodeproj">
          </BuildableReference>

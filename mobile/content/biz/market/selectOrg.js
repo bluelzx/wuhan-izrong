@@ -36,8 +36,7 @@ let SelectOrg = React.createClass({
   },
   render() {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='选择发布机构' showBack={true} showBar={true}>
+      <NavBarView navigator={this.props.navigator} title='选择发布机构'>
         <ListView
           dataSource={this.state.dataSource}
           renderRow={this._renderRow}

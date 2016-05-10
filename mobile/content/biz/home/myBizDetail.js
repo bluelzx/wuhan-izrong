@@ -118,9 +118,7 @@ let MyBizDetail = React.createClass({
   render: function () {
     let {title}  = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='业务详情' showBack={true} showBar={true}
-                  actionButton={this.renderShutDownBiz}>
+      <NavBarView navigator={this.props.navigator} title='业务详情' actionButton={this.renderShutDownBiz}>
         <View style={{height:screenHeight-64,backgroundColor:'#153757'}}>
           <View style={{flex:1}}>
             <ScrollView>

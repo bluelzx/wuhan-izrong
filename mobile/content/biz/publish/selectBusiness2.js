@@ -33,8 +33,7 @@ let SelectBusiness2 = React.createClass({
   },
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title={this.state.category.displayName} showBack={true} showBar={true}>
+      <NavBarView navigator={this.props.navigator} title={this.state.category.displayName}>
         <ListView
           dataSource={data.cloneWithRows(this.state.dataSource)}
           renderRow={this.renderRow}

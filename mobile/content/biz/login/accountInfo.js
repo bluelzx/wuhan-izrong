@@ -122,9 +122,7 @@ let Register_accountInfo = React.createClass({
 
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='输入账号信息' showBack={true} showBar={true}
-      >
+      <NavBarView navigator={this.props.navigator} title='输入账号信息'>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <Input placeholder='真实姓名' maxLength={20} field='realName'
                  onChangeText={this._onChangeText} icon='user' inputType='default'

@@ -24,6 +24,8 @@ var AppStore = require('../store/appStore');
 //var Login = require('../../biz/login/login')
 let {Alert} = require('mx-artifacts');
 
+const DictStyle = require('../../constants/dictStyle');
+
 let MarketAction = require('../action/marketAction');
 
 var ScrollableTabView = require('../../comp/tabBar/scrollableTabView');
@@ -131,9 +133,13 @@ var TabView = React.createClass({
     var navigator = this.props.navigator;
     if (Platform.OS === 'ios') {
       return (
-        <TabBarIOS selectedTab={this.state.selectedTab}
-                   translucent={true}
-                   tintColor={'#ffffff'} barTintColor={'#1156C0'}>
+        <TabBarIOS
+          selectedTab={this.state.selectedTab}
+          translucent={false}
+          // tintColor={'#ffffff'}
+          // barTintColor={'#2b3849'}
+          {...DictStyle.tabBar}
+        >
           <TabBarIOS.Item
             title="首页"
             icon={require('../../image/tab/home.png')}

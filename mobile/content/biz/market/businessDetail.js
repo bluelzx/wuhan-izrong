@@ -103,8 +103,7 @@ let BusinessDetail = React.createClass({
 
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='业务详情' showBack={true} showBar={true}>
+      <NavBarView navigator={this.props.navigator} title='业务详情'>
         {this._renderContent()}
       </NavBarView>
     );
