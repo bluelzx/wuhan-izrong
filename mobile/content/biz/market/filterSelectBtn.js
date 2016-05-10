@@ -45,7 +45,7 @@ let FilterSelectBtn = React.createClass({
   render: function () {
     return (
       <View>
-        <Text style={{marginTop:10,marginLeft:10,color:'white'}}>{this.props.typeTitle}</Text>
+        <Text style={{marginTop:10,marginLeft:10,color:'#495154'}}>{this.props.typeTitle}</Text>
         <View style={{flexDirection:'row'}}>
           {this.returnAllBtn()}
           <ListView
@@ -64,10 +64,10 @@ let FilterSelectBtn = React.createClass({
       return <View></View>;
     }else{
       return (
-        <TouchableHighlight onPress={() => this._pressAll()} underlayColor='rgba(0,0,0,0)'>
+        <TouchableHighlight onPress={() => this._pressAll()} underlayColor='rgb(0,0,0,0)'>
           <View>
             <View
-              style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:Adjust.width(80), height: 40, backgroundColor: this.state.isAll ? '#817fc9':'#102a42', alignItems: 'center', borderRadius: 5,}}>
+              style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:Adjust.width(80), height: 40, backgroundColor: this.state.isAll ? '#817fc9':'#e1e3e6', alignItems: 'center', borderRadius: 5 }}>
               <Text style={{flex: 1, marginTop: 5, color:'white'}}>
                 {this.props.dataList[0].displayName}
               </Text>
@@ -80,12 +80,12 @@ let FilterSelectBtn = React.createClass({
   _renderRow: function (rowData, sectionID, rowID) {
     return (
       <TouchableHighlight onPress={this.state.rowDefault == rowID ? null : () => this._pressRow(rowID)}
-                          underlayColor='rgba(0,0,0,0)'>
+                          underlayColor='rgb(0,0,0,0)'>
         <View>
           <View
-            style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:(this.props.section == 3)?Adjust.width(80):Adjust.width(125.5), height: 40, backgroundColor: this.state.isAll ? '#102a42' : (this.state.rowDefault == rowID ? '#817fc9':'#102a42'), alignItems: 'center', borderRadius: 5, }}>
+            style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:(this.props.section == 3)?Adjust.width(80):Adjust.width(125.5), height: 40, backgroundColor: this.state.isAll ? '#e1e3e6' : (this.state.rowDefault == rowID ? '#817fc9':'#e1e3e6'), alignItems: 'center', borderRadius: 5 }}>
             <Text
-              style={{flex: 1, marginTop: 8, fontSize:12, color:'white'}}
+              style={{flex: 1, marginTop: 8, fontSize:12, color:'#495154'}}
               numberOfLines={1}>
               {rowData.displayName}
             </Text>

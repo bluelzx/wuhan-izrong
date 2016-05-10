@@ -74,7 +74,6 @@ let Market = React.createClass({
       pickTypeRow1: 0,
       pickTypeRow2: 0,
       pickTimeRow: 0,
-      pickRowColor: '#244266',
       orientionDefault: 10000,
       orientionIsAll: true,
       termDefault: 10000,
@@ -236,19 +235,19 @@ let Market = React.createClass({
     return (
       <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
         <View
-          style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926',}}>
+          style={{flexDirection:'row',height: 50, backgroundColor: 'white',alignItems:'center',borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}>
           <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
-          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:'white',}}>
+          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:'#495154'}}>
             {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
-            style={{position:'absolute',left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)',}}>
+            style={{position:'absolute',left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.amount == null || rowData.amount == 0 ? '#495154' :'#5880e1'}}>
             {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount < 100000000 ? (rowData.amount / 10000) + '万' : rowData.amount / 100000000 + '亿'}
           </Text>
           <Text
-            style={{position:'absolute',left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
+            style={{position:'absolute',left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'#495154',width:Adjust.width(135)}}
             numberOfLines={1}>
             {rowData.userName != null ? rowData.userName + '-' + rowData.orgName : rowData.orgName}
           </Text>
@@ -260,25 +259,25 @@ let Market = React.createClass({
   _emptyView: function () {
     return (
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-        <Text style={{fontSize:15, color:'#355d81'}}>暂无业务</Text>
+        <Text style={{fontSize:15, color:'#cad2d1'}}>暂无业务</Text>
       </View>
     );
   },
 
   renderMarketList: function () {
     return (
-      <View style={{width:screenWidth,flex:1,backgroundColor: '#162a40'}}>
+      <View style={{width:screenWidth,flex:1,backgroundColor: '#f7f7f7'}}>
         <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5}}>
-          <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:'#8d8d8d',}}>
+          <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:'#495154',}}>
             {'方向'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:'#8d8d8d',}}>
+          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:'#495154',}}>
             {'期限'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(120),top:0,marginLeft:10, color:'#8d8d8d',}}>
+          <Text style={{position:"absolute",left:Adjust.width(120),top:0,marginLeft:10, color:'#495154',}}>
             {'金额'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:'#8d8d8d',}}>
+          <Text style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:'#495154',}}>
             {'发布人'}
           </Text>
         </View>
@@ -298,12 +297,12 @@ let Market = React.createClass({
           automaticallyAdjustContentInsets={false}
           customStyles={{
             paginationView: {
-              backgroundColor: 'rgba(0, 0, 0, 0)'
+              backgroundColor: 'white'
             },
-            spinnerColor: 'white'
+            spinnerColor: '#7ac4e7'
           }}
 
-          refreshableTintColor="white"
+          refreshableTintColor="#7ac4e7"
           style={{flex: 1}}
         />
 
@@ -316,7 +315,7 @@ let Market = React.createClass({
   render: function () {
     let {title}  = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#1151B1'
+      <NavBarView navigator={this.props.navigator} fontColor='#ffffff' backgroundColor='#4b76df'
                   contentBackgroundColor='#18304D' title='市场信息' showBack={false} showBar={true}>
         <View
           style={{width: screenWidth,alignItems: "center",justifyContent: "flex-start",flexDirection: "row"}}>
@@ -390,35 +389,35 @@ let Market = React.createClass({
         <TouchableOpacity onPress={pressFilterType} activeOpacity={1}
                           underlayColor="#f0f0f0">
           <View
-            style={{width: screenWidth / 2,height:36,backgroundColor:(this.state.clickFilterType == 1)?this.state.pickRowColor:'#1e3754',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderRightColor:'#000',borderRightWidth:1}}>
+            style={{width: screenWidth / 2,height:36,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderRightColor:'#edeef4',borderRightWidth:1,borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}>
             <Text
-              style={{width:screenWidth/2 - 40,color:(this.state.clickFilterType == 1)?'#419cd6':'white'}}
+              style={{width:screenWidth/2 - 40,color:(this.state.clickFilterType == 1)?'#7ac4e7':'#495154'}}
               numberOfLines={1}>{this.state.levelOneText + ' - ' + this.state.levelTwoText}</Text>
             <Icon name={(this.state.clickFilterType == 1)?"arrow-up-b":"arrow-down-b"} size={20}
-                  color={(this.state.clickFilterType == 1)?'#419cd6':'white'}/>
+                  color={(this.state.clickFilterType == 1)?'#7ac4e7':'#495154'}/>
 
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={pressFilterTime} activeOpacity={1}
                           underlayColor="#f0f0f0">
           <View
-            style={{width: screenWidth / 3,height:36,backgroundColor:(this.state.clickFilterTime == 1)?this.state.pickRowColor:'#1e3754',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderRightColor:'#000',borderRightWidth:1}}>
+            style={{width: screenWidth / 3,height:36,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderRightColor:'#edeef4',borderRightWidth:1,borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}>
             <Text
-              style={{width:screenWidth/3 - 30,color:(this.state.clickFilterTime == 1)?'#419cd6':'white'}}
+              style={{width:screenWidth/3 - 30,color:(this.state.clickFilterTime == 1)?'#7ac4e7':'#495154'}}
               numberOfLines={1}>{this.state.optionTwoText}</Text>
             <Icon name={(this.state.clickFilterTime == 1)?"arrow-up-b":"arrow-down-b"} size={20}
-                  color={(this.state.clickFilterTime == 1)?'#419cd6':'white'}/>
+                  color={(this.state.clickFilterTime == 1)?'#7ac4e7':'#495154'}/>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={pressFilterOther} activeOpacity={1}
                           underlayColor="#f0f0f0">
           <View
-            style={{width: screenWidth / 6,height:36,backgroundColor:(this.state.clickFilterOther == 1)?this.state.pickRowColor:'#1e3754',alignItems: 'center',justifyContent: 'center',flexDirection: 'row'}}>
+            style={{width: screenWidth / 6,height:36,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}>
             <Text
-              style={{width:screenWidth/6 - 30,color:(this.state.clickFilterOther == 1)?'#419cd6':'white'}}
+              style={{width:screenWidth/6 - 30,color:(this.state.clickFilterOther == 1)?'#7ac4e7':'#495154'}}
               numberOfLines={1}>{'筛选'}</Text>
             <Icon name={(this.state.clickFilterOther == 1)?"arrow-up-b":"arrow-down-b"} size={20}
-                  color={(this.state.clickFilterOther == 1)?'#419cd6':'white'}/>
+                  color={(this.state.clickFilterOther == 1)?'#7ac4e7':'#495154'}/>
           </View>
         </TouchableOpacity>
 
@@ -441,12 +440,12 @@ let Market = React.createClass({
             </View>
           </TouchableOpacity>
           <ListView
-            style={{backgroundColor:'#162a40',height:180,position:"absolute",left:0,top:0,opacity:this.state.clickFilterType}}
+            style={{backgroundColor:'white',height:180,position:"absolute",left:0,top:0,opacity:this.state.clickFilterType}}
             dataSource={data.cloneWithRows(this.state.categorySource)}
             enableEmptySections={true}
             renderRow={this.renderTypeRow1}/>
           <ListView
-            style={{backgroundColor:'#244266',height:180,position:"absolute",left:screenWidth/3,top:0,opacity:this.state.clickFilterType}}
+            style={{backgroundColor:'white',height:180,position:"absolute",left:screenWidth/3,top:0,opacity:this.state.clickFilterType}}
             dataSource={data.cloneWithRows(this.state.itemSource)}
             enableEmptySections={true}
             renderRow={this.renderTypeRow2}/>
@@ -468,7 +467,7 @@ let Market = React.createClass({
             </View>
           </TouchableOpacity>
           <ListView
-            style={{backgroundColor:'#244266',height:108,position:"absolute",left:0,top:0,opacity:this.state.clickFilterTime}}
+            style={{backgroundColor:'white',height:108,position:"absolute",left:0,top:0,opacity:this.state.clickFilterTime}}
             dataSource={data.cloneWithRows(this.state.termSource)}
             enableEmptySections={true}
             renderRow={this.renderTimeRow}
@@ -486,11 +485,11 @@ let Market = React.createClass({
     } else {
       return (
         <View
-          style={{backgroundColor:'#244266',width:screenWidth,height:screenHeight - 149,position:"absolute",left:0,top:36}}>
+          style={{backgroundColor:'white',width:screenWidth,height:screenHeight - 149,position:"absolute",left:0,top:36}}>
           <ScrollView>
             <TouchableOpacity onPress={()=>this.toSelectOrg(SelectOrg)} activeOpacity={0.8} underlayColor="#f0f0f0">
               <View
-                style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4fb9fc',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
+                style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4b76df',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
                 <Text
                   style={{fontSize:16,marginLeft:10,width: screenWidth-66,color:'white'}}
                   numberOfLines={1}>{this.state.orgValue == '' ? '全部发布机构' : this.state.orgValue}</Text>
@@ -520,7 +519,7 @@ let Market = React.createClass({
             </TouchableHighlight>
             <TouchableHighlight onPress={() => this.confirmBtn()} underlayColor='rgba(129,127,201,0)'>
               <View
-                style={{margin:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
+                style={{margin:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4b76df'}}>
                 <Text style={{fontWeight: 'bold', color:'white'}}>{'确定'}</Text>
               </View>
             </TouchableHighlight>
@@ -533,11 +532,11 @@ let Market = React.createClass({
   renderTypeRow1(rowData, sectionID, rowID){
     return (
       <TouchableOpacity
-        style={{height:36,backgroundColor:(this.state.pickTypeRow1 == rowID)?this.state.pickRowColor:'#162a40',alignItems: "center",justifyContent: "center",}}
+        style={{height:36,backgroundColor:(this.state.pickTypeRow1 == rowID)?'#f4fdfc':'white',alignItems: "center",justifyContent: "center",borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}
         onPress={()=>this.pressTypeRow1(rowID)} activeOpacity={1}
         underlayColor="#f0f0f0">
         <View style={{width:screenWidth/3}}>
-          <Text style={{marginLeft:10,color:'white'}}>{rowData.displayName}</Text>
+          <Text style={{marginLeft:10,color:'#495154'}}>{rowData.displayName}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -545,11 +544,11 @@ let Market = React.createClass({
   renderTypeRow2(rowData, sectionID, rowID){
     return (
       <TouchableOpacity
-        style={{height:36,backgroundColor:(this.state.pickTypeRow2 == rowID)?'#2b4f79':'#244266',alignItems: "center",justifyContent: "center"}}
+        style={{height:36,backgroundColor:(this.state.pickTypeRow2 == rowID)?'#f4fdfc':'white',alignItems: "center",justifyContent: "center",borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}
         onPress={()=>this.pressTypeRow2(rowID)} activeOpacity={1}
         underlayColor="#f0f0f0">
         <View style={{width:screenWidth/3*2}}>
-          <Text style={{marginLeft:10,color:'white'}}>{rowData.displayName}</Text>
+          <Text style={{marginLeft:10,color:'#495154'}}>{rowData.displayName}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -557,11 +556,11 @@ let Market = React.createClass({
   renderTimeRow(rowData, sectionID, rowID){
     return (
       <TouchableOpacity
-        style={{height:36,backgroundColor:(this.state.pickTimeRow == rowID)?'#2b4f79':'#244266',alignItems: "center",justifyContent: "center",}}
+        style={{height:36,backgroundColor:(this.state.pickTimeRow == rowID)?'#f4fdfc':'white',alignItems: "center",justifyContent: "center",borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}
         onPress={()=>this.pressTimeRow(rowID)} activeOpacity={1}
         underlayColor="#f0f0f0">
         <View style={{width:screenWidth}}>
-          <Text style={{marginLeft:10,color:'white'}}>{rowData.fieldDisplayName}</Text>
+          <Text style={{marginLeft:10,color:'#495154'}}>{rowData.fieldDisplayName}</Text>
         </View>
       </TouchableOpacity>
     );
