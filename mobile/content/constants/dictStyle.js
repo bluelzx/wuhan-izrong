@@ -36,6 +36,14 @@ const PlainStyle = {
     barTintColor: '#2b3849'
   },
 
+  //market
+  marketSet: {
+    fontColor: '#3b4549',
+    filterSelectColor: '#4fc1e9',
+    amountColor: '#4074e6',
+    modifyDateColor: '#f33b1e',
+  },
+
 };
 
 

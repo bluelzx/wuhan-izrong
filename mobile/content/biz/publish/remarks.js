@@ -33,7 +33,7 @@ let Remarks = React.createClass({
             onChangeText={(value) => this.onChangeText(value)}
             underlineColorAndroid={'transparent'}
             clearButtonMode="while-editing"
-            style={{width:DictStyle.fullScreen.width - 20,height:40,marginLeft:10,marginRight:10,color:'#495154'}}/>
+            style={{width:DictStyle.fullScreen.width - 20,height:40,marginLeft:10,marginRight:10,color:DictStyle.marketSet.fontColor}}/>
         </View>
       </NavBarView>
     )

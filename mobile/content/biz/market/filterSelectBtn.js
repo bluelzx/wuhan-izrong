@@ -16,6 +16,7 @@ let {
   } = React;
 
 let Adjust = require('../../comp/utils/adjust');
+let DictStyle = require('../../constants/dictStyle');
 
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -45,7 +46,7 @@ let FilterSelectBtn = React.createClass({
   render: function () {
     return (
       <View>
-        <Text style={{marginTop:10,marginLeft:10,color:'#495154'}}>{this.props.typeTitle}</Text>
+        <Text style={{marginTop:10,marginLeft:10,color:'#3b4549'}}>{this.props.typeTitle}</Text>
         <View style={{flexDirection:'row'}}>
           {this.returnAllBtn()}
           <ListView
@@ -68,7 +69,7 @@ let FilterSelectBtn = React.createClass({
           <View>
             <View
               style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:Adjust.width(80), height: 40, backgroundColor: this.state.isAll ? '#817fc9':'#e1e3e6', alignItems: 'center', borderRadius: 5 }}>
-              <Text style={{flex: 1, marginTop: 5, color:this.state.isAll ?'white' : '#495154'}}>
+              <Text style={{flex: 1, marginTop: 5, color:this.state.isAll ?'white' : DictStyle.marketSet.fontColor}}>
                 {this.props.dataList[0].displayName}
               </Text>
             </View>
@@ -85,7 +86,7 @@ let FilterSelectBtn = React.createClass({
           <View
             style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:(this.props.section == 3)?Adjust.width(80):Adjust.width(125.5), height: 40, backgroundColor: this.state.isAll ? '#e1e3e6' : (this.state.rowDefault == rowID ? '#817fc9':'#e1e3e6'), alignItems: 'center', borderRadius: 5 }}>
             <Text
-              style={{flex: 1, marginTop: 8, fontSize:12, color:(this.state.rowDefault == rowID)? 'white' : '#495154'}}
+              style={{flex: 1, marginTop: 8, fontSize:12, color:(this.state.rowDefault == rowID)? 'white' : DictStyle.marketSet.fontColor}}
               numberOfLines={1}>
               {rowData.displayName}
             </Text>
