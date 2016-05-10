@@ -14,7 +14,8 @@ let styles = StyleSheet.create({
   text: {
     color: '#000',
   },
-  textLeft: {},
+  textLeft: {
+  },
   textRight: {
     color: '#fff',
   }
@@ -92,45 +93,53 @@ export default class Bubble extends React.Component {
     if (this.props.contentType === MSG_CONTENT_TYPE.NAMECARD) {
       let data = JSON.parse(this.props.content);
       let nameCardStyle = this.props.position === 'left' ? styles.textLeft : styles.textRight;
+
       return (
         <View style={[styles.bubble, customStyle, {flex:1}]}>
           <Text
             style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.realName + '--' + data.orgBeanName}</Text>
+          <View style={[{height:0,flex:1,borderWidth:0.5,borderColor:'#fff',marginVertical:4},this.props.position === 'left' && {borderColor:'#000'}]}></View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>手机:</Text>
             <Text
-              style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.mobileNumber}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.mobileNumber?data.mobileNumber:'未填写'}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text,nameCardStyle]}>座机:</Text>
             <Text
-              style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.phoneNumber}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.phoneNumber?data.phoneNumber:'未填写'}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>微信:</Text>
             <Text
-              style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.weChatNo}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.weChatNo?data.weChatNo:'未填写'}</Text>
+          </View>
+          <View style={{flexDirection:'row'}}>
+            <Text
+              style={[styles.text, nameCardStyle]}>QQ:</Text>
+            <Text
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.qqNo?data.qqNo:'未填写'}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>邮箱:</Text>
             <Text
-              style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.email}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.email?data.email:'未填写'}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>部门:</Text>
             <Text
-              style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.department}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.department?data.department:'未填写'}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>职位:</Text>
             <Text
-              style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.jobTitle}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.jobTitle?data.jobTitle:'未填写'}</Text>
           </View>
         </View>
       )
@@ -150,7 +159,7 @@ export default class Bubble extends React.Component {
         dayNum = data.term + '日';
       }
       let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
-      let shareContent = data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate;
+      let shareContent = '我利用[渤海银通]分享了一个业务信息给您：' + data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate;
       return (
         <TouchableOpacity onLongPress={() => this._onLongPress(shareContent)} activeOpacity={0.7}>
           <View style={[styles.bubble, customStyle]}>

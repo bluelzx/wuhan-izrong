@@ -2,7 +2,6 @@
  * Created by baoyinghai on 4/19/16.
  */
 let _realm = require('./realmManager');
-let MockData = require('./createMockData');
 const DEFAULT_GROUP_IMAGE = "";
 const _ = require('lodash');
 const {
@@ -104,9 +103,38 @@ let _getUsersGroupByOrg = function () {
   orgs.forEach((org) => {
     let tmp = {
       orgValue:org.orgValue,
-      orgMembers:null
+      orgMembers:[]
     }
     let users = _realm.objects(IMUSERINFO).filtered('orgId = ' + org.id);
+    //users&&users.forEach((item)=>{
+    //  let u = {
+    //    userId: item.userId,
+    //    address: item.address,
+    //    realName: item.realName,
+    //    weChatNo: item.weChatNo,
+    //    email: item.email,
+    //    nameCardFileUrl: item.nameCardFileUrl,
+    //    qqNo: item.qqNo,
+    //    department: item.department,
+    //    mobileNumber: item.mobileNumber,
+    //    jobTitle: item.jobTitle,
+    //    phoneNumber: item.phoneNumber,
+    //    photoFileUrl: item.photoFileUrl,
+    //    publicTitle: item.publicTitle,
+    //    publicMobile: item.publicMobile,
+    //    publicDepart: item.publicDepart,
+    //    publicPhone: item.publicPhone,
+    //    publicEmail: item.publicEmail,
+    //    publicAddress: item.publicAddress,
+    //    publicWeChat: item.publicWeChat,
+    //    publicQQ: item.publicQQ,
+    //    orgId: item.orgId,
+    //    mute: item.mute
+    //  };
+    //
+    //  u.orgValue = org.orgValue;
+    //  tmp.orgMembers.push(u);
+    //});
     tmp.orgMembers = users;
     result.push(tmp);
   });
@@ -125,7 +153,17 @@ let _createGroup = function(groupId, groupName,groupMasterUid,number,members,mut
       members:JSON.stringify(members),
       mute:mute
     }
-    _realm.create(GROUP, group, true);
+    let ret = {};
+    for(let k in group){
+      if(group[k]){
+        ret[k] = group[k];
+      }
+    }
+    try {
+      _realm.create(GROUP, ret, true);
+    }catch(err){
+      _realm.create(GROUP, group, true);
+    }
   });
 };
 // *** 查询某个群的群成员, 并且按照机构分组

@@ -3,8 +3,11 @@ let ImStore = require('../store/imStore');
 let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE } = require('../../constants/dictIm');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
-let _dealMsg = function (message) {
-  let userId = ContactSotre.getUserInfo().userId;
+//let {Alert} = require('mx-artifacts');
+let _dealMsg = function (message, socket) {
+  let userInfo = ContactSotre.getUserInfo();
+  let userId = userInfo.userId;
+  let lastSyncTime = userInfo.lastSyncTime?userInfo.lastSyncTime.getTime():new Date().getTime();
   //console.log(message);
   switch (message.msgType) {
     case MSG_TYPE.EXCEPTION:
@@ -58,12 +61,17 @@ let _dealMsg = function (message) {
       break;
     case MSG_TYPE.PLATFORM_INFO:
     {
-      ImStore.createPlatFormInfo(message.infoId, message.title, message.content, new Date(message.createDate));
-      ContactSotre.syncReq(new Date(message.createDate));
-    }
-      break;
+      if(lastSyncTime < message.createDate) {
+
+        ImStore.createPlatFormInfo(message.infoId, message.title, message.content, new Date(message.createDate));
+        ContactSotre.syncReq(new Date(message.createDate));
+        lastSyncTime = message.createDate;
+      }
+    };break;
     case MSG_TYPE.HOME_PAGE:
-      ImStore.createHomePageInfo(message.req, message.url);
+      message.homePageList && message.homePageList.forEach((msg) => {
+        ImStore.createHomePageInfo(msg.req, msg.url);
+      });
       break;
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
       ImStore.updateContactInfo(message.address,
@@ -82,23 +90,35 @@ let _dealMsg = function (message) {
       ContactSotre.leaveGroup(message.groupId);
       break;
     case MSG_TYPE.SYNC_REQ:
+      //message.msgArray.forEach((item)=>{
+      //  // console.log(JSON.parse(item));
+      //  _dealMsg(JSON.parse(item), socket);
+      //});
+      socket.send({msgType: COMMAND_TYPE.SYNC_REQ,lastSyncTime:lastSyncTime});
+      break;
+    case MSG_TYPE.FORCE_LOGOUT:
+      //强制登出
+      ImStore.forceLogOut();
+      break;
+    case MSG_TYPE.SYNC_RES:
       message.msgArray.forEach((item)=>{
-       // console.log(JSON.parse(item));
-        _dealMsg(JSON.parse(item));
+        // console.log(JSON.parse(item));
+        _dealMsg(JSON.parse(item), socket);
       });
       break;
     default:
       console.log('None message type matched! [%s]', message.msgType);
+      console.log(message);
   }
 };
 
 
 let Resolver = {
 
-  deal: function (message) {
+  deal: function (message, socket) {
     switch (message.type) {
       case 'message':
-        this._dealMessage(JSON.parse(message.data));
+        this._dealMessage(JSON.parse(message.data), socket);
     }
   },
   _dealMessage: _dealMsg,

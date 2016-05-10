@@ -120,6 +120,7 @@ let _setGroupMute = function(groupId, value){
 let _leaveGroup = function(groupId){
   PersisterFacade.leaveGroup(groupId);
   AppStore.emitChange(IM_CONTACT);
+  AppStore.emitChange(IM_SESSION);
   AppStore.emitChange(IM_GROUP);
   AppStore.emitChange(IM_SESSION_LIST);
 }

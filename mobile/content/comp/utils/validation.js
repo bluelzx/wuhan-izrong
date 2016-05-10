@@ -42,7 +42,7 @@ module.exports = {
   //4位以上数字
   isQQ: function (data) {
     if (!_.isEmpty(data)) {
-      let reg = /^[1-9][0-9]{4,}$/;
+      let reg = /^[1-9][0-9]{1,20}$/;
       if (!reg.test(data)) {
         console.log("您输入的QQ号有误，请重新输入");
         return false;
@@ -66,7 +66,7 @@ module.exports = {
   //中文和英文:微信
   isWechat: function (data) {
     if (!_.isEmpty(data)) {
-      let reg = /^[a-zA-Z0-9_]*$/;
+      let reg = /^[a-zA-Z0-9_]{1,40}$/;
       if (!reg.test(data)) {
         return false;
       }
@@ -89,7 +89,7 @@ module.exports = {
 
   isRealName: function (data) {
     if (!_.isEmpty(data)) {
-      let reg = /^[\u4e00-\u9fa5_a-zA-Z]+$/;
+      let reg = /^[\u4e00-\u9fa5_a-zA-Z]{1,10}$/;
       if (!reg.test(data)) {
         console.log("您输入的真实姓名号有误，请重新输入");
         return false;

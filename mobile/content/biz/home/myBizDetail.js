@@ -20,7 +20,8 @@ let {
   ActionSheetIOS,
   Platform,
   CameraRoll,
-  ToastAndroid
+  ToastAndroid,
+  DeviceEventEmitter
   }=React;
 
 let { Alert } = require('mx-artifacts');
@@ -35,10 +36,12 @@ let DateHelper = require('../../comp/utils/dateHelper');
 let Input = require('../../comp/utils/input');
 let Adjust = require('../../comp/utils/adjust');
 let numeral = require('numeral');
+let dismissKeyboard = require('react-native-dismiss-keyboard');
 
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
 let ImAction = require('../../framework/action/imAction');
+import Share from 'react-native-share';
 
 let {MYBIZ_CHANGE} = require('../../constants/dictEvent');
 
@@ -571,24 +574,35 @@ let MyBizDetail = React.createClass({
   },
 
   updateBizOrder: function () {
+    dismissKeyboard();
+    let {title, param}  = this.props;
+    let params = {
+      id: this.state.id,
+      bizCategory: this.state.bizCategory,
+      bizItem: this.state.bizItem,
+      bizOrientation: this.state.bizOrientation,
+      term: this.state.term,
+      amount: this.state.amount,
+      rate: this.state.rate / 100,
+      fileUrlList: this.state.fileUrlList,
+      remark: this.state.remarkText
+    };
+    let item = {
+      bizCategory: (this.state.bizCategory == '' && this.state.bizItem == '') ? '资金业务 - 同业存款' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName,
+      bizOrientation: params.bizOrientation,
+      term: params.term,
+      amount: params.amount,
+      rate: params.rate
+    };
     this.props.exec(
       ()=> {
-        return MarketAction.updateBizOrder({
-            id: this.state.id,
-            bizCategory: this.state.bizCategory,
-            bizItem: this.state.bizItem,
-            bizOrientation: this.state.bizOrientation,
-            term: this.state.term,
-            amount: this.state.amount,
-            rate: this.state.rate / 100,
-            fileUrlList: this.state.fileUrlList,
-            remark: this.state.remarkText
-          }
-        ).then((response)=> {
-          Alert('保存成功',()=>{
-            this.props.navigator.pop();
-            AppStore.emitChange(MYBIZ_CHANGE);
-          });
+        return MarketAction.updateBizOrder(params).then((response)=> {
+          Alert('保存成功, 是否分享?', () => {
+            this.shareDialog(item);
+          }, () => {
+          }, '分享', '不分享');
+          AppStore.emitChange(MYBIZ_CHANGE);
+          this.props.navigator.pop();
         }).catch(
           (errorData) => {
             throw errorData;
@@ -596,6 +610,28 @@ let MyBizDetail = React.createClass({
         );
       }
     );
+  },
+  shareDialog (data) {
+    let amount = data.amount == '' ? '--' : (data.amount > 99999999 ? data.amount / 100000000 + '亿' : data.amount / 10000 + '万');
+    let dayNum;
+    if (data.term == '') {
+      dayNum = '--'
+    } else if (data.term % 365 == 0) {
+      dayNum = parseInt(data.term / 365) + '年';
+    } else if (data.term % 30 == 0) {
+      dayNum = parseInt(data.term / 30) + '月';
+    }else {
+      dayNum = data.term + '日';
+    }
+    let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
+    let shareContent = '我利用[渤海银通]分享了一个业务信息给您：' + data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate;
+    Share.open({
+      share_text: shareContent,
+      share_URL: Platform.OS === 'android' ? shareContent : "http://google.cl",
+      title: "Share Link"
+    }, (e) => {
+      console.log(e);
+    });
   },
 
   downselfBizOrder: function (id) {

@@ -61,6 +61,22 @@ let ImUserInfo = React.createClass({
     }
   },
 
+  renderMute: function() {
+    if(ContactStore.getUserInfo().userId == this.props.param.userId)
+      return null;
+    else
+      return (
+      <View style={{backgroundColor:'#162a40',height:50,marginTop:20}}>
+        <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+          <Text style={{color: '#ffffff',fontSize:18,marginLeft:20}}>屏蔽此人</Text>
+          <Switch style={{margin:20}}
+                  value={this.state.mute}
+                  onValueChange={this.switchControl}/>
+        </View>
+      </View>
+    );
+  },
+
   render: function () {
     let {title}  = this.props;
     let privateDesc = "未公开";
@@ -82,17 +98,10 @@ let ImUserInfo = React.createClass({
           <Item hiddenArrow={true} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.data.publicQQ?this.descValue(this.state.data.qqNo):privateDesc}/>
           <Item hiddenArrow={true} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.data.publicWeChat?this.descValue(this.state.data.weChatNo):privateDesc}/>
           <Item hiddenArrow={true} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.data.publicEmail?this.descValue(this.state.data.email):privateDesc}/>
-          <Item hiddenArrow={true} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.data.orgValue}/>
+          <Item hiddenArrow={true} wrap={true} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.data.orgValue}/>
           <Item hiddenArrow={true} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicDepart?this.descValue(this.state.data.department):privateDesc}/>
           <Item hiddenArrow={true} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicTitle?this.descValue(this.state.data.jobTitle):privateDesc}/>
-          <View style={{backgroundColor:'#162a40',height:50,marginTop:20}}>
-            <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-              <Text style={{color: '#ffffff',fontSize:18,marginLeft:20}}>屏蔽此人</Text>
-              <Switch style={{margin:20}}
-                      value={this.state.mute}
-                      onValueChange={this.switchControl}/>
-            </View>
-          </View>
+          {this.renderMute()}
 
         </ScrollView>
       </NavBarView>

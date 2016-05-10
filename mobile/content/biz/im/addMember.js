@@ -35,6 +35,8 @@ let AddMember = React.createClass({
     if(Object.keys(members).length + this.state.existMembers > Setting.groupMemberUpperLimit){
       Alert('群组成员人数不能超过' + Setting.groupMemberUpperLimit);
       return;
+    }else{
+
     }
     this.props.exec(
       ()=>{

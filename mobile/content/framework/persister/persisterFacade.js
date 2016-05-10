@@ -5,6 +5,7 @@ let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 let _realm = require('./realmManager');
 let co = require('co');
 let nextFrame = require('next-frame');
+var { Alert } = require('mx-artifacts');
 const {
   DEVICE,
   GROUP,
@@ -51,15 +52,6 @@ let _deleteDevice = function () {
 
 let _saveAppData = function (data) {
   console.log("start" + new Date().getTime());
-  //let loginUserInfo = data.appUserInfoOutBean;
-  //let token = data.appToken;
-  //let orgBeanList = data.orgBeanList;
-  //let appUserGroupBeanList = data.appUserGroupBeanList;
-  //let imUserBeanList = data.imUserBeanList;
-  //_saveLoginUserInfo(loginUserInfo, token);
-  //_saveImUsers(imUserBeanList);
-  //_saveOrgBeanList(orgBeanList);
-  //_saveAppUserGroupBeanList(appUserGroupBeanList);
   let loginUserInfo = data.appUserInfoOutBean;
   let token = data.appToken;
   let orgBeanList = data.orgBeanList;
@@ -71,7 +63,6 @@ let _saveAppData = function (data) {
     .then(_saveImUsers(imUserBeanList))
     .then(_saveOrgBeanList(orgBeanList))
     .then(_saveAppUserGroupBeanList(appUserGroupBeanList));
-  //console.log("over"+new Date().getTime());
 };
 
 let _saveLoginUserInfo = function (loginUserInfo, token) {
@@ -106,73 +97,75 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
 };
 
 let _saveAppUserGroupBeanList = function (appUserGroupBeanList) {
-  appUserGroupBeanList.forEach(function (n) {
-    console.log(n);
-    _saveAppUserGroupBean(n);
-  });
-
-};
-
-let _saveAppUserGroupBean = function (appUserGroupBean) {
   _realm.write(() => {
-    _realm.create(GROUP, {
-      groupId: appUserGroupBean.groupId,
-      groupImageUrl: appUserGroupBean.groupImageUrl,
-      groupName: appUserGroupBean.groupName,
-      groupMasterUid: appUserGroupBean.groupMasterUid,
-      memberNum: appUserGroupBean.members.length,
-      members: JSON.stringify(appUserGroupBean.members),
-      mute: appUserGroupBean.mute
-    }, true);
+    for (var i = 0; i < appUserGroupBeanList.length; i++) {
+        _realm.create(GROUP, {
+          groupId: appUserGroupBeanList[i].groupId,
+          groupImageUrl: appUserGroupBeanList[i].groupImageUrl,
+          groupName: appUserGroupBeanList[i].groupName,
+          groupMasterUid: appUserGroupBeanList[i].groupOwnerId,
+          memberNum: appUserGroupBeanList[i].members.length,
+          members: JSON.stringify(appUserGroupBeanList[i].members),
+          mute: appUserGroupBeanList[i].mute
+        }, true);
+    }
   });
+
 };
 
 let _saveImUsers = function (imUserBeanList) {
-  return co(function *() {
-    for (var i = 0; i < imUserBeanList.length; i++) {
-      _saveImUser(imUserBeanList[i]);
-      //yield nextFrame();
-    }
-  });
-};
-
-let _saveImUser = function (imUserBean) {
-  //wrap promise
-  return new Promise((resolve)=> {
-    resolve(_realm.write(() => {
-      _realm.create(IMUSERINFO, {
-        userId: imUserBean.userId,
-        address: imUserBean.address,
-        realName: imUserBean.realName,
-        nameCardFileUrl: imUserBean.nameCardFileUrl,
-        department: imUserBean.department,
-        jobTitle: imUserBean.jobTitle,
-        qqNo: imUserBean.qqNo,
-        email: imUserBean.email,
-        weChatNo: imUserBean.weChatNo,
-        mute: imUserBean.mute,
-        mobileNumber: imUserBean.mobileNumber,
-        photoFileUrl: imUserBean.photoFileUrl,
-        orgId: imUserBean.orgId,
-        phoneNumber: imUserBean.phoneNumber,
-        publicTitle: !!(imUserBean.publicTitle == true || imUserBean.publicTitle === null),
-        publicMobile: !!(imUserBean.publicMobile == true || imUserBean.publicMobile === null),
-        publicDepart: !!(imUserBean.publicDepart == true || imUserBean.publicDepart === null),
-        publicPhone: !!(imUserBean.publicPhone == true || imUserBean.publicPhone === null),
-        publicEmail: !!(imUserBean.publicEmail == true || imUserBean.publicEmail === null),
-        publicAddress: !!(imUserBean.publicAddress == true || imUserBean.publicAddress === null),
-        publicWeChat: !!(imUserBean.publicWeChat == true || imUserBean.publicWeChat === null),
-        publicQQ: !!(imUserBean.publicQQ == true || imUserBean.publicQQ === null)
-      }, true);
-    }));
-  });
+   _realm.write(() => {
+      for (var i = 0; i < imUserBeanList.length; i++) {
+        _realm.create(IMUSERINFO, {
+          userId: imUserBeanList[i].userId,
+          address: imUserBeanList[i].address,
+          realName: imUserBeanList[i].realName,
+          nameCardFileUrl: imUserBeanList[i].nameCardFileUrl,
+          department: imUserBeanList[i].department,
+          jobTitle: imUserBeanList[i].jobTitle,
+          qqNo: imUserBeanList[i].qqNo,
+          email: imUserBeanList[i].email,
+          weChatNo: imUserBeanList[i].weChatNo,
+          mute: imUserBeanList[i].mute,
+          mobileNumber: imUserBeanList[i].mobileNumber,
+          photoFileUrl: imUserBeanList[i].photoFileUrl,
+          orgId: imUserBeanList[i].orgId,
+          phoneNumber: imUserBeanList[i].phoneNumber,
+          publicTitle: !!(imUserBeanList[i].publicTitle == true || imUserBeanList[i].publicTitle === null),
+          publicMobile: !!(imUserBeanList[i].publicMobile == true || imUserBeanList[i].publicMobile === null),
+          publicDepart: !!(imUserBeanList[i].publicDepart == true || imUserBeanList[i].publicDepart === null),
+          publicPhone: !!(imUserBeanList[i].publicPhone == true || imUserBeanList[i].publicPhone === null),
+          publicEmail: !!(imUserBeanList[i].publicEmail == true || imUserBeanList[i].publicEmail === null),
+          publicAddress: !!(imUserBeanList[i].publicAddress == true || imUserBeanList[i].publicAddress === null),
+          publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
+          publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null)
+        }, true);
+      }
+    });
 };
 
 let _saveOrgBeanList = function (orgBeanList) {
-  return co(function *() {
+  _realm.write(() => {
     for (var i = 0; i < orgBeanList.length; i++) {
-      _saveOrgBeanItem(orgBeanList[i]);
-      // yield nextFrame();
+      _realm.create(ORGBEAN, {
+        id: orgBeanList[i].id,
+        orgCategory: orgBeanList[i].orgCategory,
+        orgCode: orgBeanList[i].orgCode,
+        orgValue: orgBeanList[i].orgValue,
+        corporationType: orgBeanList[i].corporationType,
+        orgValueAlias: orgBeanList[i].orgValueAlias,
+        isDisabled: orgBeanList[i].isDisabled,
+        creator: orgBeanList[i].creator,
+        creatorDate: orgBeanList[i].creatorDate,
+        lastUpdateBy: orgBeanList[i].lastUpdateBy,
+        lastUpdateDate: orgBeanList[i].lastUpdateDate,
+        isNeedAudit: orgBeanList[i].isNeedAudit,
+        totalQuota: orgBeanList[i].totalQuota,
+        occupiedQuota: orgBeanList[i].occupiedQuota,
+        isDeleted: orgBeanList[i].isDeleted,
+        isApply: orgBeanList[i].isApply,
+        remark: orgBeanList[i].remark
+      }, true);
     }
   });
 };
