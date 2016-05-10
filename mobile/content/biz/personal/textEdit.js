@@ -19,6 +19,8 @@ let { Alert, Button} = require('mx-artifacts');
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let AppStore = require('../../framework/store/appStore');
 let Validation = require('../../comp/utils/validation');
+let PlainStyle = require('../../constants/dictStyle');
+let DictStyle = require('../../constants/dictStyle');
 
 let TextEdit = React.createClass({
   getInitialState: function () {
@@ -192,9 +194,9 @@ let TextEdit = React.createClass({
   renderSwitch: function () {
     if (this.state.publicName != '') {
       return (
-        <View style={{backgroundColor: '#162a40', height: 50}}>
+        <View style={{backgroundColor:PlainStyle.colorSet.textEditBackground, height: 50}}>
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-            <Text style={{color: '#ffffff', fontSize: 18, marginLeft: 20}}>公开此信息</Text>
+            <Text style={{color: PlainStyle.colorSet.textEditTextColor, fontSize: 18, marginLeft: 20}}>公开此信息</Text>
             <Switch style={{margin: 20}}
                     value={this.state.newPublicValue}
                     onValueChange={this.switchControl}
@@ -210,7 +212,7 @@ let TextEdit = React.createClass({
       return (
         <NavBarView navigator={this.props.navigator}title={this.props.param.title} actionButton={this.renderUpdate}>
           <View
-            style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
+            style={[DictStyle.textEditItem,{marginTop: 20}]}
           >
             <View style={[styles.view, {flexDirection: 'row'}]}>
               <TextInput style={[styles.text, {width: 60}]} defaultValue={this.state.oldValue.split('-')[0]}
@@ -247,7 +249,7 @@ let TextEdit = React.createClass({
       return (
         <NavBarView navigator={this.props.navigator} title={this.props.param.title} actionButton={this.renderUpdate}>
           <View
-            style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
+            style={[DictStyle.textEditItem,{marginTop: 20}]}
           >
             <View style={styles.view}>
               <TextInput style={styles.text} defaultValue={this.state.oldValue}
@@ -271,7 +273,7 @@ let TextEdit = React.createClass({
       return (
         <NavBarView navigator={this.props.navigator} title={this.props.param.title} actionButton={this.renderUpdate}>
           <View
-            style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
+            style={[DictStyle.textEditItem,{marginTop: 20}]}
           >
             <View style={styles.view}>
               <TextInput style={styles.text} defaultValue={this.state.oldValue}
@@ -294,7 +296,7 @@ let TextEdit = React.createClass({
       return (
         <NavBarView navigator={this.props.navigator} title={this.props.param.title} actionButton={this.renderUpdate}>
           <View
-            style={{backgroundColor: '#162a40', marginTop: 20, borderBottomWidth: 0.5, borderBottomColor: '#0a1926'}}
+            style={[DictStyle.textEditItem,{marginTop: 20}]}
           >
             <View style={styles.view}>
               <Text style={styles.text}>{this.state.oldValue}</Text>
@@ -310,14 +312,14 @@ let TextEdit = React.createClass({
 let styles = StyleSheet.create({
   view: {
     marginTop: 10,
-    marginHorizontal: 20,
+    marginLeft: 20,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#0a1926'
+    borderBottomColor: PlainStyle.colorSet.textEditBorderColor
   },
   text: {
     fontSize: 18,
     height: 40,
-    color: '#ffffff',
+    color: PlainStyle.colorSet.textEditTextColor,
     paddingBottom: 10
   }
 });

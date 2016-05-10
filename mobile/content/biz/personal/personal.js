@@ -24,6 +24,8 @@ let UserInfoAction = require('../../framework/action/userInfoAction');
 let AppStore = require('../../framework/store/appStore');
 let NameCircular = require('../im/nameCircular').NameCircular;
 let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
+let PlainStyle = require('../../constants/dictStyle');
+let DictStyle = require('../../constants/dictStyle');
 
 let Personal = React.createClass({
   getStateFromStores: function () {
@@ -88,27 +90,27 @@ let Personal = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} title='个人中心' showBack={false}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
-          <View style={{backgroundColor: '#18304b', height: 10}}/>
-          <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b' style={{backgroundColor: '#162a40'}}
+          <View style={{backgroundColor:PlainStyle.colorSet.content , height: 10}}/>
+          <TouchableHighlight activeOpacity={0.8} underlayColor= {PlainStyle.colorSet.personalItemColor}
                               onPress={()=>this.toPage(UserInfo)}
           >
             <View style={styles.layout}>
               {this.returnImage()}
               <View>
-                <Text style={{fontSize: 18, color: '#ffffff',width: 150}}
+                <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalRealName,width: 150}}
                       numberOfLines={1}>
                   {this.state.realName}
                 </Text>
-                <Text style={{fontSize: 18, color: '#ffffff', marginTop: 10, width: 150}}
+                <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalOrgName, marginTop: 10, width: 150}}
                       numberOfLines={1}
                 >
                   {this.state.orgName}
                 </Text>
               </View>
-              <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+              <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={PlainStyle.colorSet.arrowColor}/>
             </View>
           </TouchableHighlight>
-          <View style={{backgroundColor: '#18304b', height: 10}}/>
+          <View style={{backgroundColor: PlainStyle.colorSet.content, height: 10}}/>
           <Item desc="用户指导" img={false} func={() => this.toPage(UserGuide)}/>
           <Item desc="关于我们" img={false} func={() => this.toPage(AboutUs)}/>
         </ScrollView>
@@ -123,7 +125,8 @@ let styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
-    height: 84
+    height: 84,
+    backgroundColor:PlainStyle.colorSet.personalItemColor
   },
   head: {
     width: 60,
