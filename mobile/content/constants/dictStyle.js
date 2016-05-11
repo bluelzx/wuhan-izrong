@@ -10,10 +10,11 @@ const TABBAR_HEIGHT = 50;
 const PlainStyle = {
 
   colorSet: {
+    // loading: '';
     arrowColor: '#a8afb3',
     navBar: '#4074e6',
     navBarFont: '#ffffff',
-    content: '#f7f7f7',
+    content: '#f4f4f4',
     btnEnable: '#4074e6',
     btnDisable: '#b3c7f5',
     inputBorderColor: '#b7c7dc',
@@ -30,11 +31,18 @@ const PlainStyle = {
     personalOrgName: '#8a9499',
     userInfoBorderColor:'#d3d5e0',
     userInfoTextColor: '#979fa2',
-    textEditBackground: '#ffffff',
+    textEditBackground: '#fefefe',
     textEditTextColor: '#000000',
     textEditBorderColor: '#d7d8d9',
-    aboutUsTextColor:'#3b4549'
-
+    aboutUsTextColor:'#3b4549',
+    imTitleTextColor:'#3B4549',
+    imTimeTextColor:'#BAC5CC',
+    searchBarColor:'#BAC5CC',
+    demarcationColor:'#DFE1ED',
+    extenListGroundCol:'#FEFEFE',
+    extenListArrowColor:'#A3AAAE',
+    extenListGroupTitleColor:'#F4F4F4',
+    sessionDetailColor:'#687886'
   },
 
   heightSet: {
@@ -57,6 +65,28 @@ const PlainStyle = {
     amountColor: '#4074e6',
     modifyDateColor: '#f33b1e',
   },
+
+  imChat:{
+    leftBackgroundColor:'#FEFEFE',
+    rightBackgroundColor: '#44B5E6',
+    textInputBorderColor:'#DFE0E7',
+    textInputBackGroundColor:'#F4F4F4',
+    autoExpandingTextInputBackGroundColor:'#ffffff',
+    textInputFontColor:'#3B4549',
+    iconBorderColor:'#585F6B',
+    iconTextColor:'#585F6B',
+    panelContainerColor:'#F4F4F4',
+    panelTextColor:'#585F6B',
+    chatTipsTextColor:'#959DA2',
+
+  },
+
+  groupManage:{
+    memberNameColor:'#3B4549',
+    memberListBackgroundColor:'#FEFEFE',
+    buttonArrowColor:'#A3AAAE',
+  }
+
 
 };
 

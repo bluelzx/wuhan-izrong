@@ -34,7 +34,9 @@ const DictEvent = keyMirror({
   /**
    * Orgnization
    */
-  ORG_CHANGE: null
+  ORG_CHANGE: null,
+
+  SHOW_VIEW: null,
 });
 
 module.exports = DictEvent;

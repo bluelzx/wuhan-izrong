@@ -25,6 +25,7 @@ let Spread = require('./spread');
 let NameCircular = require('./nameCircular').NameCircular;
 let {contactFilter} = require('./searchBarHelper');
 let { IM_CONTACT } = require('../../constants/dictEvent');
+let DictStyle = require('../../constants/dictStyle');
 
 let Contacts = React.createClass({
 
@@ -67,7 +68,7 @@ let Contacts = React.createClass({
     return (
       <Text
         style={
-          {color: '#ffffff'}}>
+          {color: DictStyle.colorSet.imTitleTextColor}}>
         {title}
       </Text>
     );
@@ -96,26 +97,26 @@ let Contacts = React.createClass({
   itemRender: function(data, index) {
     if(index == 0){
       return (
-        <TouchableHighlight key={data.groupId}
+        <TouchableOpacity key={data.groupId}
                             onPress={() => this.toGroup(data)}
-                            style={{borderTopWidth:0.5,  borderTopColor: '#132232'}}>
-          <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
+                            style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
+          <View style={{flexDirection:'row', paddingVertical:5}}>
             <Image style={{height: 40,width: 40,borderRadius: 20}} source={DictIcon.imMyGroup} />
-            <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.groupName}</Text>
+            <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{data.groupName}</Text>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
       );
     }else {
       return (
-        <TouchableHighlight key={data.userId}
+        <TouchableOpacity key={data.userId}
                             onPress={() => this.toUser(data)}
-                            style={{borderTopWidth:0.5,  borderTopColor: '#132232'}}>
-          <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
+                            style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
+          <View style={{flexDirection:'row', paddingVertical:5}}>
             <NameCircular name={data.realName}/>
-            <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
+            <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{data.realName}</Text>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
       );
     }
@@ -142,14 +143,14 @@ let Contacts = React.createClass({
 
   renderGlobal: function() {
     return (
-      <TouchableHighlight
+      <TouchableOpacity
         onPress={() => this.props.navigator.push({comp:Spread})}
-            style={{borderTopWidth:0.5, borderTopColor: '#132232'}}>
+            style={{borderTopWidth:0.5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
         <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
           <Image style={{height: 40,width: 40,borderRadius: 20}} source={DictIcon.imSpread} />
-          <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{'环渤海银银合作平台'}</Text>
+          <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{'环渤海银银合作平台'}</Text>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   },
 
@@ -161,11 +162,11 @@ let Contacts = React.createClass({
         <SearchBar textChange={this.textChange}/>
         {this.renderGlobal()}
         <ExtenList itemHeight={51}
-                   groundColor={'#15263A'}
-                   groupBorderColor={"#132232"}
-                   arrowColor={'#ffffff'}
-                   groupTitleColor={'#1B385E'}
-                   titleBorderColor={'#162E50'}
+                   groundColor={DictStyle.colorSet.extenListGroundCol}
+                   groupBorderColor={DictStyle.colorSet.demarcationColor}
+                   arrowColor={DictStyle.colorSet.extenListArrowColor}
+                   groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
+                   titleBorderColor={DictStyle.colorSet.demarcationColor}
                    dataSource={contactFilter(this.state.dataSource,'orgMembers','groupName','orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId)}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}

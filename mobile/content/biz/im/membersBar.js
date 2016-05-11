@@ -6,6 +6,7 @@ let React = require('react-native');
 const {Text, View, TouchableOpacity} = React;
 let CircularButton = require('./circularButton');
 let ImUserInfo = require('./imUserInfo');
+let DictStyle = require('../../constants/dictStyle');
 
 let NameCircular = require('./nameCircular').NameCircular;
 
@@ -36,12 +37,12 @@ let MembersBar = React.createClass({
           <View style={{marginTop:5,height: 40,width: 40}}>
             <NameCircular name={members[i].realName}/>
           </View>
-          <Text numberOfLines={1} style={{color:'#ffffff',marginTop:4, width:40}}>{members[i].realName}</Text>
+          <Text numberOfLines={1} style={{color:DictStyle.groupManage.memberNameColor,marginTop:4, width:40}}>{members[i].realName}</Text>
         </TouchableOpacity>
       );
     }
     return (
-      <View style={{flexDirection:'row', flexWrap:'wrap', backgroundColor:'#15263A'}}>
+      <View style={{flexDirection:'row', flexWrap:'wrap', backgroundColor:DictStyle.groupManage.memberListBackgroundColor}}>
         {m}
         {this.renderCircularButton()}
       </View>

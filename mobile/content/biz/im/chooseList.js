@@ -96,8 +96,8 @@ let ChooseList = React.createClass({
   render: function(){
 
     return (
-      <View style={{backgroundColor:'#1B385E',padding:5, borderBottomWidth:5, borderBottomColor:'#15263A',overflow:'hidden'}}>
-        <ScrollView horizontal={true} style={{flexDirection:'row', backgroundColor:'#15263A',overflow:'hidden'}}>
+      <View style={{backgroundColor:'#F4F4F4',padding:5, borderBottomWidth:5, borderBottomColor:'#F4F4F4',overflow:'hidden'}}>
+        <ScrollView horizontal={true} style={{flexDirection:'row', backgroundColor:'#FEFEFE',overflow:'hidden'}}>
           {this.renderMemberView(this.state.memberView)}
         </ScrollView>
       </View>

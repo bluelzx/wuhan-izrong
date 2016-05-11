@@ -35,6 +35,7 @@ let DictIcon = require('../../constants/dictIcon');
 let ImagePicker = require('../utils/imagePicker');
 
 let UserInfoAction = require('../../framework/action/userInfoAction');
+let DictStyle = require('../../constants/dictStyle');
 //let BizAction  = require('');
 
 let GiftedMessenger = React.createClass({
@@ -759,7 +760,7 @@ let GiftedMessenger = React.createClass({
           containerStyle={{
             justifyContent: 'center',
             borderRadius: 6,
-            backgroundColor: '#0f60b1',
+            backgroundColor: '#375EE4',
             paddingHorizontal: 10,
             height: this.props.defaultTextInputHeight - 20,
           }}
@@ -787,11 +788,11 @@ let GiftedMessenger = React.createClass({
               flex: 1,
               borderTopWidth: 3 / PixelRatio.get(),
               borderBottomWidth: 3 / PixelRatio.get(),
-              borderColor: '#0f263d',
+              borderColor: DictStyle.imChat.textInputBorderColor,
               flexDirection: 'row',
               alignItems: 'flex-start',
               paddingTop: 8,
-              backgroundColor: '#153757',
+              backgroundColor: DictStyle.imChat.textInputBackGroundColor,
             }}
           >
             <AutoExpandingTextInput
@@ -808,8 +809,8 @@ let GiftedMessenger = React.createClass({
                 marginRight: 0,
                 //marginVertical: 10,
                 borderRadius: 6,
-                backgroundColor: '#0a1926',
-                color: 'white',
+                backgroundColor: DictStyle.imChat.autoExpandingTextInputBackGroundColor,
+                color: DictStyle.imChat.textInputFontColor,
               }}
               placeholder={this.props.placeholder}
               ref='autoExpandingTextInput'
@@ -983,12 +984,13 @@ let GiftedMessenger = React.createClass({
       },
       loadEarlierMessagesButton: {
         fontSize: 14,
+        color:DictStyle.imChat.chatTipsTextColor,
       },
       panelContainer: {
         alignItems: 'center',
         justifyContent: 'space-around',
         flexDirection: 'row',
-        backgroundColor: '#153757',
+        backgroundColor: DictStyle.imChat.panelContainerColor,
         paddingTop: 5,
         flex: 1
       },
@@ -1009,7 +1011,7 @@ let GiftedMessenger = React.createClass({
       },
       panelText: {
         fontSize: 14,
-        color: '#0f60b1'
+        color: DictStyle.imChat.panelTextColor
       }
     };
 

@@ -70,6 +70,8 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getBadge: ()=>_getBadge(),
   startJavaServer: () => ServiceModule.startAppService(_data.token, 0, ImHost),
   //stopJavaServer:() => ServiceModule.stopMyAppService()
+  savePicUrl: (picUrl) => _data.picUrl = picUrl,
+  getPicUrl:()=>_data.picUrl
 });
 
 let _queryAllPlatFormInfo = function () {

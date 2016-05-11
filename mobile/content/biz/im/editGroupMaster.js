@@ -18,6 +18,7 @@ let MembersBar = require('./membersBar');
 let ContactAction = require('../../framework/action/contactAction');
 let AppStore = require('../../framework/store/appStore');
 let { IM_GROUP } = require('../../constants/dictEvent');
+let DictStyle = require('../../constants/dictStyle');
 
 let EditGroupMaster = React.createClass({
 
@@ -115,35 +116,35 @@ let EditGroupMaster = React.createClass({
           <View style={{flexDirection:'column'}}>
             {this.renderMember()}
             <TouchableOpacity onPress={() => this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}})}
-              style={{backgroundColor: '#15263A', paddingVertical:10,borderTopColor:'#132132',borderTopWidth:0.5}}>
+              style={{backgroundColor: DictStyle.groupManage.memberListBackgroundColor, paddingHorizontal:10}}>
               <View
-                style={{flexDirection:'row', justifyContent:'space-between', marginTop:5,alignItems:'center',paddingHorizontal:10}}>
-                <Text style={{color:'#ffffff'}}>{'全部群成员(' + this.state.groupInfo.memberNum + ')'}</Text>
-                <Icon name="ios-arrow-right" size={20} color='#ffffff'/>
+                style={{paddingVertical:10,borderTopColor:DictStyle.groupManage.buttonArrowColor,borderTopWidth:0.5,flexDirection:'row', justifyContent:'space-between', marginTop:5,alignItems:'center'}}>
+                <Text style={{color:DictStyle.groupManage.memberNameColor}}>{'全部群成员(' + this.state.groupInfo.memberNum + ')'}</Text>
+                <Icon name="ios-arrow-right" size={20} color={DictStyle.groupManage.buttonArrowColor}/>
               </View>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => this.props.navigator.push({comp:ModifyGroupName,param:{groupId:this.props.param.groupId,groupName:this.state.groupInfo.groupName}})}
-              style={{borderTopColor:'#132132',borderTopWidth:0.5,height:50,marginTop: 10,backgroundColor: '#15263A'}}>
+              style={{height:50,marginTop: 10,backgroundColor: DictStyle.groupManage.memberListBackgroundColor}}>
               <View
                 style={{height:50,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center'}}>
-                <Text style={{color:'#ffffff'}}>群名称</Text>
+                <Text style={{color:DictStyle.groupManage.memberNameColor}}>群名称</Text>
                 <View style={{flexDirection:'row', alignItems:'center', flex:1,justifyContent:'flex-end'}}>
                   <Text style={{textAlign:'right', color:'#6B849C', flex:25, marginRight:5, flexWrap:'wrap'}}>{ this.state.groupInfo.groupName }</Text>
-                  <Icon style={{flex:1}} name="ios-arrow-right" size={20} color='#ffffff'/>
+                  <Icon style={{flex:1}} name="ios-arrow-right" size={20} color={DictStyle.groupManage.buttonArrowColor}/>
                 </View>
               </View>
             </TouchableOpacity>
 
             <View
-              style={{borderTopColor:'#132132',borderTopWidth:0.5,height:50,backgroundColor: '#15263A',flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
-              <Text style={{color:'#ffffff'}}>群主</Text>
+              style={{height:50,backgroundColor: DictStyle.groupManage.memberListBackgroundColor,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
+              <Text style={{color:DictStyle.groupManage.memberNameColor}}>群主</Text>
               <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.masterName}</Text>
             </View>
 
             <View
-              style={{borderTopColor:'#132132',borderTopWidth:0.5,height:50,backgroundColor: '#15263A',flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
-              <Text style={{color:'#ffffff'}}>屏蔽群消息提醒</Text>
+              style={{height:50,backgroundColor: DictStyle.groupManage.memberListBackgroundColor,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
+              <Text style={{color:DictStyle.groupManage.memberNameColor}}>屏蔽群消息提醒</Text>
               <Switch
                 onValueChange={(value) => this.setMute(value)}
                 style={{height:30}}

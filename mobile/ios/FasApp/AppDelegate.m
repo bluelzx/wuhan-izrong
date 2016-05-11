@@ -14,7 +14,7 @@
 #import "RCTPushNotificationManager.h"
 #import "ReactNativeAutoUpdater.h"
 
-#define JS_CODE_METADATA_URL @"http://192.168.64.205:9101/pub/rnupdate/meta?type=IOS_PATCH"
+#define JS_CODE_METADATA_URL @"http://192.168.64.205:9101/fas/pub/rnupdate/meta?type=IOS_PATCH"
 
 @interface AppDelegate() <ReactNativeAutoUpdaterDelegate>
 
@@ -54,7 +54,7 @@ typedef enum{
 
     latestJSCodeLocation = [updater latestJSCodeLocation];
   }else if(startType==Debug){
-    latestJSCodeLocation=[NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios"];
+    latestJSCodeLocation=[NSURL URLWithString:@"http://192.168.64.201:8081/index.ios.bundle?platform=ios"];
   }else{
     latestJSCodeLocation=[[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   }
@@ -86,27 +86,21 @@ typedef enum{
 - (void)ReactNativeAutoUpdater_updateDownloadedToURL:(NSURL *)url {
   UIAlertController *alertController = [UIAlertController
                                         alertControllerWithTitle:NSLocalizedString(@"版本升级", nil)
-                                        message:NSLocalizedString(@"程序有新的版本更新，立即安装？", nil)
+                                        message:NSLocalizedString(@"程序有新的版本更新，重新启动后生效", nil)
                                         preferredStyle:UIAlertControllerStyleAlert];
 
-  UIAlertAction *cancelAction = [UIAlertAction
-                                 actionWithTitle:NSLocalizedString(@"取消", @"Cancel action")
-                                 style:UIAlertActionStyleCancel
-                                 handler:^(UIAlertAction *action)
-                                 {
-                                   NSLog(@"Cancel action");
-                                 }];
+
 
   UIAlertAction *okAction = [UIAlertAction
                              actionWithTitle:NSLocalizedString(@"确定", @"OK action")
                              style:UIAlertActionStyleDefault
                              handler:^(UIAlertAction *action)
                              {
-                               // [self createReactRootViewFromURL: url];
-                               [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.apple.com"]];
+                               NSLog(@"Cancel action");
+
                              }];
 
-  [alertController addAction:cancelAction];
+
   [alertController addAction:okAction];
 
   // make sure this runs on main thread. Apple doesn't like if you change UI from background thread.

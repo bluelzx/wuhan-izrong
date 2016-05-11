@@ -32,10 +32,9 @@ let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Home = React.createClass({
   getStateFromStores: function () {
     let filterItems = AppStore.getFilters().filterItems;
-    let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
+    let category = MarketStore.getFilterOptions(filterItems,'bizCategory');
     let categoryArr = this.deleteFirstObj(category.options);
-    let item = MarketStore.getCategoryAndItem(filterItems);
-    item.shift();
+
     let dataSource = new ViewPager.DataSource({
       pageHasChanged: (p1, p2) => p1 !== p2
     });
@@ -50,13 +49,10 @@ let Home = React.createClass({
     ];
     return {
       categoryArr: categoryArr,
-      categoryItem: item,
       dataSource: dataSource.cloneWithPages(DEFAULTPAGES),
       category: myCategory != null ? myCategory.displayName : '资金业务',
-      item: myItem != null ? myItem.displayName : '同业存款',
       contentList: [],
-      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 0 : item[0].id,
-      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 0 : item[0].itemArr[1].id,
+      bizCategoryID: myCategory != null ? myCategory.id : categoryArr.length == 0 ? 0 : categoryArr[0].id,
     };
   },
 
@@ -185,7 +181,7 @@ let Home = React.createClass({
           </View>
           <View style={styles.listHead}>
             <Text
-              style={{marginLeft: 20, fontSize: 15, color: PlainStyle.colorSet.commonTextColor}}>{this.state.category + '--' + this.state.item}</Text>
+              style={{marginLeft: 20, fontSize: 15, color: PlainStyle.colorSet.commonTextColor}}>{this.state.category}</Text>
           </View>
           {this.renderMarketList()}
         </ScrollView>
@@ -224,7 +220,7 @@ let Home = React.createClass({
     return (
       <TouchableHighlight onPress={() => this._pressRow()} underlayColor='#000'>
         <View
-          style={{flexDirection:'row',height: 50, backgroundColor: PlainStyle.colorSet.homeListItemColor,alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926'}}>
+          style={{flexDirection:'row',height: 50, backgroundColor: PlainStyle.colorSet.homeListItemColor,alignItems:'center',borderBottomWidth:0.5,borderBottomColor:'#0a1926'}}>
           <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />

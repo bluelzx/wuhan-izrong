@@ -225,6 +225,7 @@ var TabView = React.createClass({
 
           <IM navigator={this.props.navigator}
               tabDesc="IM"
+              badge={this.state.badge || null}
               icon={require('../../image/tab/IM.png')}
               selectedIcon={require('../../image/tab/IM-selected.png')}
               exec={this.props.exec}

@@ -8,7 +8,7 @@ let nameColor = {};
 
 let index = 0;
 
-const COLOR_LIST = ['#F3AD2C','#44ABFD','#4A99BC','#1156C0','#A47441','#3EC3A4','#E8004D'];
+const COLOR_LIST = ['#44B5E6','#A07CEB','#4076D8','#5089EA','#95D158','#FEC840','#E94255'];
 
 let NameCircular = React.createClass({
 
