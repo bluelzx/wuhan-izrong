@@ -95,8 +95,8 @@ let styles = StyleSheet.create({
     width: Dimensions.get('window').width - 20
   },
   bottomStyle: {
-    height: 0.5,
-    backgroundColor: '#0a1926',
+    height: 1,
+    backgroundColor: PlainStyle.colorSet.userInfoBorderColor,
     marginLeft: 20
   }
 });

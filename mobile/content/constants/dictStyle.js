@@ -28,10 +28,12 @@ const PlainStyle = {
     personalItemColor: '#ffffff',
     personalRealName: '#3b4549',
     personalOrgName: '#8a9499',
+    userInfoBorderColor:'#d3d5e0',
     userInfoTextColor: '#979fa2',
     textEditBackground: '#ffffff',
     textEditTextColor: '#000000',
-    textEditBorderColor: '#d7d8d9'
+    textEditBorderColor: '#d7d8d9',
+    aboutUsTextColor:'#3b4549'
 
   },
 
@@ -119,6 +121,15 @@ const DictStyle = StyleSheet.create({
     borderBottomColor: PlainStyle.colorSet.textEditBorderColor,
     borderTopColor: PlainStyle.colorSet.textEditBorderColor,
     borderTopWidth: 0.5
+  },
+
+  userInfoBorderBottom:{
+    borderBottomColor:PlainStyle.colorSet.userInfoBorderColor,
+    borderBottomWidth:1
+  },
+  userInfoBorderTop:{
+    borderTopColor:PlainStyle.colorSet.userInfoBorderColor,
+    borderTopWidth:1
   }
 
 });

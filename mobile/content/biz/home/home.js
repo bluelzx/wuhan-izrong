@@ -105,10 +105,21 @@ let Home = React.createClass({
     );
   },
 
+  renderMenuItem(url, text, toPage){
+    return(
+      <TouchableHighlight style={{flex: 1, flexDirection: 'column',borderLeftColor:'#e6e7ee',borderLeftWidth:0.5}} activeOpacity={0.8}
+                          underlayColor={PlainStyle.colorSet.content} onPress={()=>this.toPage(toPage)}
+      >
+        <View style={styles.menuItem}>
+          <Image style={styles.menuImage} resizeMode='cover' source={url}/>
+          <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop:20}]}>{text}</Text>
+        </View>
+      </TouchableHighlight>
+      )
+  },
+
 
   toPage: function (name, data) {
-    AppStore.saveCategory(data.category);
-    AppStore.saveItem(data.item);
     const { navigator } = this.props;
     if (navigator) {
       if (name == MyBusiness) {
@@ -176,23 +187,10 @@ let Home = React.createClass({
       <NavBarView navigator={this.props.navigator} title='首页' showBack={false}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
           {this.rendViewPager()}
+
           <View style={{backgroundColor:PlainStyle.colorSet.homeMenuColor,height: width/3,flexDirection:"row"}}>
-            <TouchableHighlight style={{flex: 1, flexDirection: 'column',borderRightColor:'#e6e7ee',borderRightWidth:0.5}} activeOpacity={0.8}
-                                underlayColor='#18304b' onPress={()=>this.toPage(MyBusiness,{})}
-            >
-              <View style={styles.menuItem}>
-                <Image style={styles.menuImage} resizeMode='cover' source={require('../../image/home/myBusiness.png')}/>
-                <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop:20}]}>我的业务</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight style={{flex: 1, flexDirection: 'column',borderLeftColor:'#e6e7ee',borderLeftWidth:0.5}} activeOpacity={0.8}
-                                underlayColor='#18304b' onPress={()=>this.toPage(MyBusiness,{})}
-            >
-              <View style={styles.menuItem}>
-                <Image style={styles.menuImage} resizeMode='cover' source={require('../../image/home/myBusiness.png')}/>
-                <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop:20}]}>我的业务</Text>
-              </View>
-            </TouchableHighlight>
+            {this.renderMenuItem(require('../../image/home/myBusiness.png'), '我的业务', MyBusiness)}
+            {this.renderMenuItem(require('../../image/home/myBusiness.png'), '我的业务', MyBusiness)}
           </View>
           <View style={styles.listHead}>
             <Text

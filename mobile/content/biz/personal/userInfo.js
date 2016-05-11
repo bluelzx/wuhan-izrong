@@ -43,18 +43,18 @@ let UserInfo = React.createClass({
       userId: userInfo.userId,
       mobileNumber: userInfo.mobileNumber,
       publicMobile: userInfo.publicMobile,
-      phoneNumber: userInfo.phoneNumber == '' || !userInfo.phoneNumber ? '未填写':userInfo.phoneNumber,
+      phoneNumber: userInfo.phoneNumber == '' || !userInfo.phoneNumber ? '未填写' : userInfo.phoneNumber,
       publicPhone: userInfo.publicPhone,
-      qqNo: userInfo.qqNo == '' || !userInfo.qqNo ? '未填写':userInfo.qqNo,
+      qqNo: userInfo.qqNo == '' || !userInfo.qqNo ? '未填写' : userInfo.qqNo,
       publicQQ: userInfo.publicQQ,
-      weChatNo: userInfo.weChatNo == '' || !userInfo.weChatNo ? '未填写':userInfo.weChatNo,
+      weChatNo: userInfo.weChatNo == '' || !userInfo.weChatNo ? '未填写' : userInfo.weChatNo,
       publicWeChat: userInfo.publicWeChat,
       email: userInfo.email,
       publicEmail: userInfo.publicEmail,
       orgBeanName: orgBean.orgValue,
-      department: userInfo.department == '' || !userInfo.department ? '未填写':userInfo.department,
+      department: userInfo.department == '' || !userInfo.department ? '未填写' : userInfo.department,
       publicDepart: userInfo.publicDepart,
-      jobTitle: userInfo.jobTitle == '' || !userInfo.jobTitle ? '未填写': userInfo.jobTitle,
+      jobTitle: userInfo.jobTitle == '' || !userInfo.jobTitle ? '未填写' : userInfo.jobTitle,
       publicTitle: userInfo.publicTitle,
       address: userInfo.address,
       publicAddress: userInfo.publicAddress,
@@ -67,13 +67,13 @@ let UserInfo = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange,USER_CHANGE);
-    AppStore.addChangeListener(this._onChange,ORG_CHANGE);
+    AppStore.addChangeListener(this._onChange, USER_CHANGE);
+    AppStore.addChangeListener(this._onChange, ORG_CHANGE);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange,USER_CHANGE);
-    AppStore.removeChangeListener(this._onChange,ORG_CHANGE);
+    AppStore.removeChangeListener(this._onChange, USER_CHANGE);
+    AppStore.removeChangeListener(this._onChange, ORG_CHANGE);
   },
 
   _onChange: function () {
@@ -159,7 +159,7 @@ let UserInfo = React.createClass({
     } else {
       if (pubValue) {
         showValue = value + '(公开)';
-        if(name == 'email'){
+        if (name == 'email') {
           showValue = value;
         }
       } else {
@@ -185,8 +185,9 @@ let UserInfo = React.createClass({
       <NavBarView navigator={this.props.navigator} foolor='#ffffff' backgroundColor='#1151B1'
                   contentBackgroundColor={PlainStyle.colorSet.content} title='个人信息' showBack={true} showBar={true}
                   actionButton={this.renderLogout}>
-        <ScrollView automaticallyAdjustContentInsets={false} horizontal={false} backgroundColor={PlainStyle.colorSet.content}>
-          <View style={styles.layout}>
+        <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}
+                    backgroundColor={PlainStyle.colorSet.content}>
+          <View style={[styles.layout,DictStyle.userInfoBorderTop,DictStyle.userInfoBorderBottom]}>
             <ImagePicker
               type="all"
               onSelected={(response) => this.uploadUserPoto(response)}
@@ -224,30 +225,29 @@ let UserInfo = React.createClass({
             this.state.publicWeChat, 'default', 40, true, true, false)}
 
           <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
-            <View>
-              <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
-                <View style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
-                  <Image style={styles.circle} source={require('../../image/user/email.png')}/>
-                  <Text style={styles.title}>邮箱</Text>
-                </View>
-                <View
-                  style={{flexDirection:'row',alignItems:'center',marginRight:20,width:Dimensions.get('window').width/5*3,
-                  backgroundColor:PlainStyle.colorSet.personalItemColor,justifyContent: 'space-between'}}>
-                  <Text style={[DictStyle.userInfoValueItem,{flex:1}]}
-                        numberOfLines={2}>
-                    {this.state.email}
-                  </Text>
-                </View>
+            <View style={[styles.listLayout,this.props.top && styles.borderTop,DictStyle.userInfoBorderBottom]}>
+              <View
+                style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
+                <Image style={styles.circle} source={require('../../image/user/email.png')}/>
+                <Text style={styles.title}>邮箱</Text>
               </View>
-              <View style={styles.bottomStyle}/>
+              <View
+                style={{flexDirection:'row',alignItems:'center',marginRight:20,width:Dimensions.get('window').width/5*3,
+                  backgroundColor:PlainStyle.colorSet.personalItemColor,justifyContent: 'space-between'}}>
+                <Text style={[DictStyle.userInfoValueItem,{flex:1}]}
+                      numberOfLines={2}>
+                  {this.state.email}
+                </Text>
+              </View>
             </View>
           </TouchableHighlight>
 
-          <View style={{marginTop: 5}}>
+          <View style={[{marginTop: 5},DictStyle.userInfoBorderBottom]}>
             <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
               <View>
-                <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
-                  <View style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
+                <View style={[styles.listLayout,this.props.top && styles.borderTop,DictStyle.userInfoBorderTop]}>
+                  <View
+                    style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
                     <Image style={styles.circle} source={require('../../image/user/comp.png')}/>
                     <Text style={styles.title}>机构</Text>
                   </View>
@@ -341,8 +341,8 @@ let styles = StyleSheet.create({
     fontSize: 18
   },
   bottomStyle: {
-    height: 0.5,
-    backgroundColor: '#0a1926',
+    height: 1,
+    backgroundColor: PlainStyle.colorSet.userInfoBorderColor,
     marginLeft: 20
   }
 });

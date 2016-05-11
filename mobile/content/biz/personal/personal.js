@@ -63,15 +63,6 @@ let Personal = React.createClass({
     }
   },
 
-  /* returnImg: function(){
-   let url = require('../../image/user/head.png');
-   if (!_.isEmpty(this.state.photoFileUrl)) {
-   url = {uri: this.state.photoFileUrl};
-   return url;
-   }
-   return url;
-   },*/
-
   returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
       return (
@@ -91,10 +82,10 @@ let Personal = React.createClass({
       <NavBarView navigator={this.props.navigator} title='个人中心' showBack={false}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
           <View style={{backgroundColor:PlainStyle.colorSet.content , height: 10}}/>
-          <TouchableHighlight activeOpacity={0.8} underlayColor= {PlainStyle.colorSet.personalItemColor}
+          <TouchableHighlight activeOpacity={0.8} underlayColor= {PlainStyle.colorSet.content}
                               onPress={()=>this.toPage(UserInfo)}
           >
-            <View style={styles.layout}>
+            <View style={[styles.layout,DictStyle.userInfoBorderBottom,DictStyle.userInfoBorderTop]}>
               {this.returnImage()}
               <View>
                 <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalRealName,width: 150}}
@@ -111,8 +102,10 @@ let Personal = React.createClass({
             </View>
           </TouchableHighlight>
           <View style={{backgroundColor: PlainStyle.colorSet.content, height: 10}}/>
-          <Item desc="用户指导" img={false} func={() => this.toPage(UserGuide)}/>
-          <Item desc="关于我们" img={false} func={() => this.toPage(AboutUs)}/>
+          <View style={[DictStyle.userInfoBorderBottom,DictStyle.userInfoBorderTop]}>
+            <Item desc="用户指导" img={false} func={() => this.toPage(UserGuide)}/>
+            <Item desc="关于我们" img={false} func={() => this.toPage(AboutUs)}/>
+          </View>
         </ScrollView>
       </NavBarView>
     );
