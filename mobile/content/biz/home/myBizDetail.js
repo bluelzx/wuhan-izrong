@@ -74,7 +74,6 @@ let MyBizDetail = React.createClass({
       remark: marketInfo.remark,
       bizOrientation: marketInfo.bizOrientation,
       bizCategory: marketInfo.bizCategory,
-      bizItem: marketInfo.bizItem,
       amount: marketInfo.amount,
       fileUrlList: marketInfo.fileUrlList
     }
@@ -195,7 +194,7 @@ let MyBizDetail = React.createClass({
         style={{marginTop:10,height:36,alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
         <Text
           style={{fontSize:16,marginLeft:10,color:DictStyle.marketSet.fontColor}}
-        >{'业务类型: ' + this.state.marketInfo.bizCategoryDesc + '-' + this.state.marketInfo.bizItemDesc
+        >{'业务类型: ' + this.state.marketInfo.bizCategoryDesc
         }</Text>
       </View>
     )
@@ -579,7 +578,6 @@ let MyBizDetail = React.createClass({
     let params = {
       id: this.state.id,
       bizCategory: this.state.bizCategory,
-      bizItem: this.state.bizItem,
       bizOrientation: this.state.bizOrientation,
       term: this.state.term,
       amount: this.state.amount,
@@ -588,7 +586,7 @@ let MyBizDetail = React.createClass({
       remark: this.state.remarkText
     };
     let item = {
-      bizCategory: (this.state.bizCategory == '' && this.state.bizItem == '') ? '资金业务 - 同业存款' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName,
+      bizCategory: (this.state.bizCategory == '') ? '资金业务' : this.state.bizCategory.displayName,
       bizOrientation: params.bizOrientation,
       term: params.term,
       amount: params.amount,

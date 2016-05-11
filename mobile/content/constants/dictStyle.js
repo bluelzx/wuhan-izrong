@@ -23,6 +23,7 @@ const PlainStyle = {
     inputPlaceholderTextColor: '#c7d2da',
     commonTextColor: '#000000',
     homeMenuColor: '#ffffff',
+    homeBorderColor:'#e9eaef',
     homeListHeaderColor: '#f3f4f5',
     homeListItemColor: '#f7f7f7',
     homeListTextColor: '#394448',
