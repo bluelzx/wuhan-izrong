@@ -224,8 +224,8 @@ let UserInfo = React.createClass({
           {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'publicWeChat',
             this.state.publicWeChat, 'default', 40, true, true, false)}
 
-          <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
-            <View style={[styles.listLayout,this.props.top && styles.borderTop,DictStyle.userInfoBorderBottom]}>
+          <TouchableHighlight activeOpacity={0.8} underlayColor= {PlainStyle.colorSet.content} onPress={()=>{}}>
+            <View style={[styles.listLayout,DictStyle.userInfoBorderBottom]}>
               <View
                 style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
                 <Image style={styles.circle} source={require('../../image/user/email.png')}/>
@@ -242,10 +242,10 @@ let UserInfo = React.createClass({
             </View>
           </TouchableHighlight>
 
-          <View style={[{marginTop: 5},DictStyle.userInfoBorderBottom]}>
-            <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
+          <View style={[{marginTop: 5},DictStyle.userInfoBorderTop,DictStyle.userInfoBorderBottom]}>
+            <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
               <View>
-                <View style={[styles.listLayout,this.props.top && styles.borderTop,DictStyle.userInfoBorderTop]}>
+                <View style={styles.listLayout}>
                   <View
                     style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
                     <Image style={styles.circle} source={require('../../image/user/comp.png')}/>
