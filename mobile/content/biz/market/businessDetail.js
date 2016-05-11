@@ -87,7 +87,7 @@ let BusinessDetail = React.createClass({
           <View style={{backgroundColor:'#f7f7f7',height:10}}>
           </View>
           <View style={{marginLeft:10}}>
-            {this.returnItem('业务类型:', (this.state.detailData.bizCategoryDesc + '-' + this.state.detailData.bizItemDesc))}
+            {this.returnItem('业务类型:', (this.state.detailData.bizCategoryDesc))}
             {this.returnItem('方向:', this.state.detailData.bizOrientationDesc)}
             {this.returnItem('期限:', this.termChangeHelp(this.state.detailData.term))}
             {this.returnItem('金额:', this.state.detailData.amount == null || this.state.detailData.amount == 0 ? '--'

@@ -377,13 +377,11 @@ let Publish = React.createClass({
     }
   },
 
-  callBackCategoryAndItem: function (category, item) {
+  callBackCategory: function (category) {
     this.setState({
       bizCategory: category,
-      bizItem: item
     });
     AppStore.saveCategory(category);
-    AppStore.saveItem(item);
   },
 
   callBackRemarks: function (remarkText) {
@@ -401,7 +399,7 @@ let Publish = React.createClass({
           comp: name,
           param: {
             filterItems: this.state.filterItems,
-            callBackCategoryAndItem: this.callBackCategoryAndItem
+            callBackCategory: this.callBackCategory
           }
         })
       }
@@ -438,12 +436,11 @@ let Publish = React.createClass({
       remark: this.state.remark,
       bizOrientation: this.state.bizOrientation,
       bizCategory: this.state.bizCategory.displayCode,
-      bizItem: this.state.bizItem.displayCode,
       amount: this.state.amount,
       fileUrlList: this.state.fileUrlList
     };
     let item = {
-      bizCategory: (this.state.bizCategory == '' && this.state.bizItem == '') ? '资金业务 - 同业存款' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName,
+      bizCategory: (this.state.bizCategory == '') ? '资金业务' : this.state.bizCategory.displayName,
       bizOrientation: params.bizOrientation,
       term: params.term,
       amount: params.amount,
@@ -567,20 +564,6 @@ let Publish = React.createClass({
   handleImageError(error) {
     console.log('Image select error ' + JSON.stringify(error));
     Alert('图片选择失败');
-  },
-
-  removeDisplayCodeIsAllObj: function (arr) {
-    let itemArr = [];
-    if (!!arr) {
-      arr.forEach(function (item) {
-        if (item.displayCode != 'ALL') {
-          itemArr.push(item);
-        }
-      });
-      return (
-        itemArr
-      );
-    }
   }
 
 });
