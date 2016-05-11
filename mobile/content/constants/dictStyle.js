@@ -1,4 +1,3 @@
-
 const React = require('react-native');
 const {
   StyleSheet,
@@ -11,6 +10,7 @@ const TABBAR_HEIGHT = 50;
 const PlainStyle = {
 
   colorSet: {
+    arrowColor: '#a8afb3',
     navBar: '#4074e6',
     navBarFont: '#ffffff',
     content: '#f7f7f7',
@@ -19,8 +19,22 @@ const PlainStyle = {
     inputBorderColor: '#b7c7dc',
     inputBackgroundColor: '#ffffff',
     inputTextColor: '#000000',
-    inputPlaceholderTextColor:'#c7d2da',
-    commonTextColor:'#000000'
+    inputPlaceholderTextColor: '#c7d2da',
+    commonTextColor: '#000000',
+    homeMenuColor: '#ffffff',
+    homeListHeaderColor: '#f3f4f5',
+    homeListItemColor: '#f7f7f7',
+    homeListTextColor: '#394448',
+    personalItemColor: '#ffffff',
+    personalRealName: '#3b4549',
+    personalOrgName: '#8a9499',
+    userInfoBorderColor:'#d3d5e0',
+    userInfoTextColor: '#979fa2',
+    textEditBackground: '#ffffff',
+    textEditTextColor: '#000000',
+    textEditBorderColor: '#d7d8d9',
+    aboutUsTextColor:'#3b4549'
+
   },
 
   heightSet: {
@@ -96,12 +110,36 @@ const DictStyle = StyleSheet.create({
     paddingTop: PlainStyle.heightSet.statusBar
   },
 
-  textInput:{
+  textInput: {
     fontSize: 18,
     color: PlainStyle.colorSet.inputTextColor,
     marginLeft: 9,
-    width: Device.width  * (375 - 80) / 375
+    width: Device.width * (375 - 80) / 375
+  },
+
+  userInfoValueItem: {
+    fontSize: 15,
+    color: PlainStyle.colorSet.userInfoTextColor,
+    textAlign: 'right'
+  },
+
+  textEditItem: {
+    backgroundColor: PlainStyle.colorSet.textEditBackground,
+    borderBottomWidth: 0.5,
+    borderBottomColor: PlainStyle.colorSet.textEditBorderColor,
+    borderTopColor: PlainStyle.colorSet.textEditBorderColor,
+    borderTopWidth: 0.5
+  },
+
+  userInfoBorderBottom:{
+    borderBottomColor:PlainStyle.colorSet.userInfoBorderColor,
+    borderBottomWidth:1
+  },
+  userInfoBorderTop:{
+    borderTopColor:PlainStyle.colorSet.userInfoBorderColor,
+    borderTopWidth:1
   }
+
 });
 
 module.exports = Object.assign(PlainStyle, DictStyle);

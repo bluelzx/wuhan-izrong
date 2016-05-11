@@ -17,15 +17,15 @@ let {
 let NavBarView = require('../../framework/system/navBarView');
 let {height, width} = Dimensions.get('window');
 let ViewPager = require('react-native-viewpager');
-let MarketList = require('../market/marketList');
 let MyBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
 let {MARKET_CHANGE} = require('../../constants/dictEvent');
 let MarketStore = require('../../framework/store/marketStore');
 let MarketAction = require('../../framework/action/marketAction');
-let Market = require('../market/market');
 let Adjust = require('../../comp/utils/adjust');
 let _ = require('lodash');
+let PlainStyle = require('../../constants/dictStyle');
+let DictStyle = require('../../constants/dictStyle');
 
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -42,17 +42,16 @@ let Home = React.createClass({
     let myCategory = AppStore.getCategory();
     let myItem = AppStore.getItem();
     let PAGES = AppStore.queryAllHomePageInfo();
-    if (PAGES.length == 0) {
-      PAGES = [
-        '敬请期待',
-        '敬请期待',
-        '敬请期待'
-      ];
-    }
+    let DEFAULTPAGES = [
+      'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024',
+      'https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?h=1024',
+      'https://images.unsplash.com/photo-1441448770220-76743f9e6af6?h=1024',
+      'https://images.unsplash.com/photo-1441260038675-7329ab4cc264?h=1024'
+    ];
     return {
       categoryArr: categoryArr,
       categoryItem: item,
-      dataSource: dataSource.cloneWithPages(PAGES),
+      dataSource: dataSource.cloneWithPages(DEFAULTPAGES),
       category: myCategory != null ? myCategory.displayName : '资金业务',
       item: myItem != null ? myItem.displayName : '同业存款',
       contentList: [],
@@ -105,10 +104,21 @@ let Home = React.createClass({
     );
   },
 
+  renderMenuItem(url, text, toPage){
+    return(
+      <TouchableHighlight style={{flex: 1, flexDirection: 'column',borderLeftColor:'#e6e7ee',borderLeftWidth:0.5}} activeOpacity={0.8}
+                          underlayColor={PlainStyle.colorSet.content} onPress={()=>this.toPage(toPage)}
+      >
+        <View style={styles.menuItem}>
+          <Image style={styles.menuImage} resizeMode='cover' source={url}/>
+          <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop:20}]}>{text}</Text>
+        </View>
+      </TouchableHighlight>
+      )
+  },
+
 
   toPage: function (name, data) {
-    AppStore.saveCategory(data.category);
-    AppStore.saveItem(data.item);
     const { navigator } = this.props;
     if (navigator) {
       if (name == MyBusiness) {
@@ -133,46 +143,14 @@ let Home = React.createClass({
 
 
   _renderPage: function (data:Object) {
-    if (data == '敬请期待') {
-      return (
-        <View style={[styles.page,{flex:1,alignItems:'center',justifyContent:'center'}]}>
-          <Text style={{color:'#ffffff'}}>敬请期待</Text>
-        </View>
-      )
-    } else {
       return (
         <Image
           style={styles.page}
           source={{uri: data}}
         />
       );
-    }
   },
 
-  returnItem: function (border, url, text, toPage, data) {
-    if (border) {
-      return (
-        <TouchableHighlight style={styles.borderTableItem} activeOpacity={0.8}
-                            underlayColor='#18304b' onPress={()=>this.toPage(toPage,data)}
-        >
-          <View style={styles.menuItem}>
-            <Image style={styles.menuImage} resizeMode='cover' source={url}/>
-            <Text style={styles.menuText}>{text}</Text>
-          </View>
-        </TouchableHighlight>
-      );
-    }
-    return (
-      <TouchableHighlight style={{flex: 1, flexDirection: 'column'}} activeOpacity={0.8}
-                          underlayColor='#18304b' onPress={()=>this.toPage(toPage,data)}
-      >
-        <View style={styles.menuItem}>
-          <Image style={styles.menuImage} resizeMode='cover' source={url}/>
-          <Text style={styles.menuText}>{text}</Text>
-        </View>
-      </TouchableHighlight>
-    );
-  },
   rendViewPager: function () {
     return (
       <View style={styles.page}>
@@ -200,36 +178,14 @@ let Home = React.createClass({
       <NavBarView navigator={this.props.navigator} title='首页' showBack={false}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
           {this.rendViewPager()}
-          <View style={{height: width/3*2,flexDirection:"column",backgroundColor: "#162a40",justifyContent: "center"}}>
-            <View style={{flex: 1, flexDirection:"row",borderBottomColor:"#000000",borderBottomWidth:1}}>
-              {this.returnItem(false, require('../../image/home/assetTransaction.png'), '资产交易', Market, {
-                category: this.state.categoryArr[2],
-                item: this.state.categoryItem[2].itemArr[0]
-              })}
-              {this.returnItem(true, require('../../image/home/billTransaction.png'), '票据交易', Market, {
-                category: this.state.categoryArr[1],
-                item: this.state.categoryItem[1].itemArr[0]
-              })}
-              {this.returnItem(false, require('../../image/home/capitalBusiness.png'), '资金业务', Market, {
-                category: this.state.categoryArr[0],
-                item: this.state.categoryItem[0].itemArr[0]
-              })}
-            </View>
-            <View style={{flex:1,flexDirection:"row"}}>
-              {this.returnItem(false, require('../../image/home/companyBank.png'), '公司投行', Market, {
-                category: this.state.categoryArr[4],
-                item: this.state.categoryItem[4].itemArr[0]
-              })}
-              {this.returnItem(true, require('../../image/home/interbankAgent.png'), '同业代理', Market, {
-                category: this.state.categoryArr[3],
-                item: this.state.categoryItem[3].itemArr[0]
-              })}
-              {this.returnItem(false, require('../../image/home/myBusiness.png'), '我的业务', MyBusiness, {})}
-            </View>
+
+          <View style={{backgroundColor:PlainStyle.colorSet.homeMenuColor,height: width/3,flexDirection:"row"}}>
+            {this.renderMenuItem(require('../../image/home/myBusiness.png'), '我的业务', MyBusiness)}
+            {this.renderMenuItem(require('../../image/home/myBusiness.png'), '我的业务', MyBusiness)}
           </View>
           <View style={styles.listHead}>
             <Text
-              style={{marginLeft: 20, fontSize: 15, color: '#ffffff'}}>{this.state.category + '--' + this.state.item}</Text>
+              style={{marginLeft: 20, fontSize: 15, color: PlainStyle.colorSet.commonTextColor}}>{this.state.category + '--' + this.state.item}</Text>
           </View>
           {this.renderMarketList()}
         </ScrollView>
@@ -240,18 +196,18 @@ let Home = React.createClass({
   },
   renderMarketList() {
     return (
-      <View style={{width:width,flex:1,backgroundColor: '#162a40'}}>
+      <View style={{width:width,flex:1,backgroundColor: PlainStyle.colorSet.homeListHeaderColor}}>
         <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5}}>
-          <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:'#8d8d8d'}}>
+          <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
             {'方向'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:'#8d8d8d'}}>
+          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
             {'期限'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(130),top:0,marginLeft:10, color:'#8d8d8d'}}>
+          <Text style={{position:"absolute",left:Adjust.width(130),top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
             {'金额'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:'#8d8d8d'}}>
+          <Text style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
             {'发布人'}
           </Text>
         </View>
@@ -268,19 +224,19 @@ let Home = React.createClass({
     return (
       <TouchableHighlight onPress={() => this._pressRow()} underlayColor='#000'>
         <View
-          style={{flexDirection:'row',height: 50, backgroundColor: '#1e3754',alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926'}}>
+          style={{flexDirection:'row',height: 50, backgroundColor: PlainStyle.colorSet.homeListItemColor,alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926'}}>
           <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
-          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:'white'}}>
+          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor}}>
             {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天'}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:'rgba(175,134,86,1)'}}>
+            style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:PlainStyle.colorSet.homeListTextColor}}>
             {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount / 10000 + '万'}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:'white',width:Adjust.width(135)}}
+            style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor,width:Adjust.width(135)}}
             numberOfLines={1}>
             {rowData.orgName}
           </Text>
@@ -301,22 +257,10 @@ var styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center'
   },
-  borderTableItem: {
-    flex: 1,
-    flexDirection: 'column',
-    borderRightColor: '#000000',
-    borderLeftColor: '#000000',
-    borderLeftWidth: 1,
-    borderRightWidth: 1
-  },
+
   menuImage: {
     height: 50,
     width: 50
-  },
-  menuText: {
-    color: '#ffffff',
-    marginTop: 20,
-    fontSize: 15
   },
   menuItem: {
     flexDirection: 'column',
@@ -326,7 +270,7 @@ var styles = StyleSheet.create({
   },
   listHead: {
     height: 50,
-    backgroundColor: '#18304D',
+    backgroundColor: PlainStyle.colorSet.content,
     borderBottomWidth: 0.5,
     borderBottomColor: '#000000',
     justifyContent: 'center'

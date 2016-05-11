@@ -24,6 +24,8 @@ let UserInfoAction = require('../../framework/action/userInfoAction');
 let AppStore = require('../../framework/store/appStore');
 let NameCircular = require('../im/nameCircular').NameCircular;
 let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
+let PlainStyle = require('../../constants/dictStyle');
+let DictStyle = require('../../constants/dictStyle');
 
 let Personal = React.createClass({
   getStateFromStores: function () {
@@ -32,7 +34,8 @@ let Personal = React.createClass({
     return {
       realName: userInfo.realName,
       orgName: orgBean.orgValue,
-      photoFileUrl: userInfo.photoFileUrl
+      photoFileUrl: userInfo.photoFileUrl,
+      certified: true
     };
   },
 
@@ -61,26 +64,36 @@ let Personal = React.createClass({
     }
   },
 
-  /* returnImg: function(){
-   let url = require('../../image/user/head.png');
-   if (!_.isEmpty(this.state.photoFileUrl)) {
-   url = {uri: this.state.photoFileUrl};
-   return url;
-   }
-   return url;
-   },*/
-
   returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
+      if (this.state.certified) {
+        return (
+          <View>
+            <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+            <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
+                   resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+          </View>
+        );
+      }
       return (
         <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
       );
+    } else {
+      if (this.state.certified) {
+        return (
+          <View style={{marginLeft:20}}>
+            <NameCircular name={this.state.realName}/>
+            <Image style={[styles.certified,{position: 'absolute',bottom:1,left:10}]}
+                   resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+          </View>
+        );
+      }
+      return (
+        <View style={{marginLeft:20}}>
+          <NameCircular name={this.state.realName}/>
+        </View>
+      );
     }
-    return (
-      <View style={{marginLeft:20}}>
-        <NameCircular name={this.state.realName}/>
-      </View>
-    );
   },
 
   render: function () {
@@ -88,29 +101,31 @@ let Personal = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} title='个人中心' showBack={false}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
-          <View style={{backgroundColor: '#18304b', height: 10}}/>
-          <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b' style={{backgroundColor: '#162a40'}}
+          <View style={{backgroundColor:PlainStyle.colorSet.content , height: 10}}/>
+          <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content}
                               onPress={()=>this.toPage(UserInfo)}
           >
-            <View style={styles.layout}>
+            <View style={[styles.layout,DictStyle.userInfoBorderBottom,DictStyle.userInfoBorderTop]}>
               {this.returnImage()}
               <View>
-                <Text style={{fontSize: 18, color: '#ffffff',width: 150}}
+                <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalRealName,width: 150}}
                       numberOfLines={1}>
                   {this.state.realName}
                 </Text>
-                <Text style={{fontSize: 18, color: '#ffffff', marginTop: 10, width: 150}}
+                <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalOrgName, marginTop: 10, width: 150}}
                       numberOfLines={1}
                 >
                   {this.state.orgName}
                 </Text>
               </View>
-              <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+              <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={PlainStyle.colorSet.arrowColor}/>
             </View>
           </TouchableHighlight>
-          <View style={{backgroundColor: '#18304b', height: 10}}/>
-          <Item desc="用户指导" img={false} func={() => this.toPage(UserGuide)}/>
-          <Item desc="关于我们" img={false} func={() => this.toPage(AboutUs)}/>
+          <View style={{backgroundColor: PlainStyle.colorSet.content, height: 10}}/>
+          <View style={[DictStyle.userInfoBorderBottom,DictStyle.userInfoBorderTop]}>
+            <Item desc="用户指导" img={false} func={() => this.toPage(UserGuide)}/>
+            <Item desc="关于我们" img={false} func={() => this.toPage(AboutUs)}/>
+          </View>
         </ScrollView>
       </NavBarView>
     );
@@ -123,7 +138,8 @@ let styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
-    height: 84
+    height: 84,
+    backgroundColor: PlainStyle.colorSet.personalItemColor
   },
   head: {
     width: 60,
@@ -140,6 +156,11 @@ let styles = StyleSheet.create({
     textAlignVertical: 'center',
     textAlign: 'center',
     fontWeight: 'bold'
+  },
+  certified:{
+    width: 15,
+    height: 15,
+    marginLeft:20
   }
 });
 

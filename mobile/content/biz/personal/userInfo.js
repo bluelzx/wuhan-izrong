@@ -30,6 +30,8 @@ let AppStore = require('../../framework/store/appStore');
 let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
 let NameCircular = require('../im/nameCircular').NameCircular;
 let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
+let PlainStyle = require('../../constants/dictStyle');
+let DictStyle = require('../../constants/dictStyle');
 
 let UserInfo = React.createClass({
   getStateFromStores: function () {
@@ -41,22 +43,23 @@ let UserInfo = React.createClass({
       userId: userInfo.userId,
       mobileNumber: userInfo.mobileNumber,
       publicMobile: userInfo.publicMobile,
-      phoneNumber: userInfo.phoneNumber == '' || !userInfo.phoneNumber ? '未填写':userInfo.phoneNumber,
+      phoneNumber: userInfo.phoneNumber == '' || !userInfo.phoneNumber ? '未填写' : userInfo.phoneNumber,
       publicPhone: userInfo.publicPhone,
-      qqNo: userInfo.qqNo == '' || !userInfo.qqNo ? '未填写':userInfo.qqNo,
+      qqNo: userInfo.qqNo == '' || !userInfo.qqNo ? '未填写' : userInfo.qqNo,
       publicQQ: userInfo.publicQQ,
-      weChatNo: userInfo.weChatNo == '' || !userInfo.weChatNo ? '未填写':userInfo.weChatNo,
+      weChatNo: userInfo.weChatNo == '' || !userInfo.weChatNo ? '未填写' : userInfo.weChatNo,
       publicWeChat: userInfo.publicWeChat,
       email: userInfo.email,
       publicEmail: userInfo.publicEmail,
       orgBeanName: orgBean.orgValue,
-      department: userInfo.department == '' || !userInfo.department ? '未填写':userInfo.department,
+      department: userInfo.department == '' || !userInfo.department ? '未填写' : userInfo.department,
       publicDepart: userInfo.publicDepart,
-      jobTitle: userInfo.jobTitle == '' || !userInfo.jobTitle ? '未填写': userInfo.jobTitle,
+      jobTitle: userInfo.jobTitle == '' || !userInfo.jobTitle ? '未填写' : userInfo.jobTitle,
       publicTitle: userInfo.publicTitle,
       address: userInfo.address,
       publicAddress: userInfo.publicAddress,
-      nameCardFileUrl: userInfo.nameCardFileUrl
+      nameCardFileUrl: userInfo.nameCardFileUrl,
+      certified:true
     };
   },
 
@@ -65,13 +68,13 @@ let UserInfo = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange,USER_CHANGE);
-    AppStore.addChangeListener(this._onChange,ORG_CHANGE);
+    AppStore.addChangeListener(this._onChange, USER_CHANGE);
+    AppStore.addChangeListener(this._onChange, ORG_CHANGE);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange,USER_CHANGE);
-    AppStore.removeChangeListener(this._onChange,ORG_CHANGE);
+    AppStore.removeChangeListener(this._onChange, USER_CHANGE);
+    AppStore.removeChangeListener(this._onChange, ORG_CHANGE);
   },
 
   _onChange: function () {
@@ -102,13 +105,32 @@ let UserInfo = React.createClass({
 
   returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
+      if(this.state.certified){
+        return (
+          <View>
+            <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+            <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
+                   resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+          </View>
+        );
+      }
       return (
-        <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+          <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+      );
+    }else {
+      if(this.state.certified){
+        return (
+          <View>
+            <NameCircular name={this.state.realName}/>
+            <Image style={[styles.certified,{position: 'absolute',bottom:1,left:30}]}
+                   resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+          </View>
+        );
+      }
+      return (
+        <NameCircular name={this.state.realName}/>
       );
     }
-    return (
-      <NameCircular name={this.state.realName}/>
-    );
   },
 
   toEdit: function (title, name, value, publicName, publicValue, type, maxLength, needEdit, needPublic) {
@@ -157,7 +179,7 @@ let UserInfo = React.createClass({
     } else {
       if (pubValue) {
         showValue = value + '(公开)';
-        if(name == 'email'){
+        if (name == 'email') {
           showValue = value;
         }
       } else {
@@ -181,11 +203,11 @@ let UserInfo = React.createClass({
     let {title} = this.props;
     return (
       <NavBarView navigator={this.props.navigator} foolor='#ffffff' backgroundColor='#1151B1'
-                  contentBackgroundColor='#18304D' title='个人信息' showBack={true} showBar={true}
-                  actionButton={this.renderLogout}
-      >
-        <ScrollView automaticallyAdjustContentInsets={false} horizontal={false} backgroundColor='#18304b'>
-          <View style={styles.layout}>
+                  contentBackgroundColor={PlainStyle.colorSet.content} title='个人信息' showBack={true} showBar={true}
+                  actionButton={this.renderLogout}>
+        <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}
+                    backgroundColor={PlainStyle.colorSet.content}>
+          <View style={[styles.layout,DictStyle.userInfoBorderTop,DictStyle.userInfoBorderBottom]}>
             <ImagePicker
               type="all"
               onSelected={(response) => this.uploadUserPoto(response)}
@@ -201,12 +223,12 @@ let UserInfo = React.createClass({
               style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}
               onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'publicRealName', true, 'default', 20, true, false)}
             >
-              <Text style={{color: '#ffffff', fontSize: 18, textAlign: 'right', marginRight: 20,width: 150}}
+              <Text style={[DictStyle.userInfoValueItem,{ marginRight: 20,width: 150}]}
                     numberOfLines={1}
               >
                 {this.state.realName}
               </Text>
-              <Icon style={{marginRight: 20}} name="ios-arrow-right" size={30} color={'#ffffff'}/>
+              <Icon style={{marginRight: 20}} name="ios-arrow-right" size={30} color={PlainStyle.colorSet.arrowColor}/>
             </TouchableOpacity>
           </View>
 
@@ -222,36 +244,37 @@ let UserInfo = React.createClass({
           {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'publicWeChat',
             this.state.publicWeChat, 'default', 40, true, true, false)}
 
-          <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
-            <View>
-              <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
-                <View style={{flexDirection:'row',backgroundColor:'#162a40',width:Dimensions.get('window').width/5}}>
-                  <Image style={styles.circle} source={require('../../image/user/email.png')}/>
-                  <Text style={styles.title}>邮箱</Text>
-                </View>
-                <View
-                  style={{flexDirection:'row',alignItems:'center',marginRight:20,width:Dimensions.get('window').width/5*3,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
-                  <Text style={[{fontSize: 15,color: '#ffffff',textAlign: 'right',flex:1}]}
-                        numberOfLines={2}>
-                    {this.state.email}
-                  </Text>
-                </View>
+          <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
+            <View style={[styles.listLayout,DictStyle.userInfoBorderBottom]}>
+              <View
+                style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
+                <Image style={styles.circle} source={require('../../image/user/email.png')}/>
+                <Text style={styles.title}>邮箱</Text>
               </View>
-              <View style={styles.bottomStyle}/>
+              <View
+                style={{flexDirection:'row',alignItems:'center',marginRight:20,width:Dimensions.get('window').width/5*3,
+                  backgroundColor:PlainStyle.colorSet.personalItemColor,justifyContent: 'space-between'}}>
+                <Text style={[DictStyle.userInfoValueItem,{flex:1}]}
+                      numberOfLines={2}>
+                  {this.state.email}
+                </Text>
+              </View>
             </View>
           </TouchableHighlight>
 
-          <View style={{marginTop: 5}}>
-            <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
+          <View style={[{marginTop: 5},DictStyle.userInfoBorderTop,DictStyle.userInfoBorderBottom]}>
+            <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
               <View>
-                <View style={[styles.listLayout,this.props.top && styles.borderTop]}>
-                  <View style={{flexDirection:'row',backgroundColor:'#162a40',width:Dimensions.get('window').width/5}}>
+                <View style={styles.listLayout}>
+                  <View
+                    style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
                     <Image style={styles.circle} source={require('../../image/user/comp.png')}/>
                     <Text style={styles.title}>机构</Text>
                   </View>
                   <View
-                    style={{flexDirection:'row',alignItems:'center',marginRight:20,width:Dimensions.get('window').width/5*3,backgroundColor:'#162a40',justifyContent: 'space-between'}}>
-                    <Text style={[{fontSize: 15,color: '#ffffff',textAlign: 'right',flex:1}]}
+                    style={{flexDirection:'row',alignItems:'center',marginRight:20,width:Dimensions.get('window').width/5*3,
+                    backgroundColor:PlainStyle.colorSet.personalItemColor,justifyContent: 'space-between'}}>
+                    <Text style={[DictStyle.userInfoValueItem,{flex:1}]}
                           numberOfLines={2}>
                       {this.state.orgBeanName}
                     </Text>
@@ -290,7 +313,7 @@ let styles = StyleSheet.create({
     height: 84,
     borderBottomWidth: 0.5,
     borderBottomColor: '#0a1926',
-    backgroundColor: '#162a40'
+    backgroundColor: PlainStyle.colorSet.personalItemColor
   },
   img: {
     width: 63,
@@ -306,6 +329,10 @@ let styles = StyleSheet.create({
     borderRadius: 30,
     borderColor: '#cccccc',
     borderWidth: 1
+  },
+  certified:{
+    width: 15,
+    height: 15
   },
   headText: {
     color: '#FF0000',
@@ -325,7 +352,7 @@ let styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: 51,
     paddingLeft: 16,
-    backgroundColor: '#162a40'
+    backgroundColor: PlainStyle.colorSet.personalItemColor
   },
   circle: {
     width: 16,
@@ -335,12 +362,11 @@ let styles = StyleSheet.create({
     marginRight: 16
   },
   title: {
-    fontSize: 18,
-    color: '#ffffff',
+    fontSize: 18
   },
   bottomStyle: {
-    height: 0.5,
-    backgroundColor: '#0a1926',
+    height: 1,
+    backgroundColor: PlainStyle.colorSet.userInfoBorderColor,
     marginLeft: 20
   }
 });

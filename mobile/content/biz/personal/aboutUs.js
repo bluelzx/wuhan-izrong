@@ -11,6 +11,8 @@ var {
   } = React;
 var Item = require('../../comp/utils/item');
 var NavBarView = require('../../framework/system/navBarView');
+let PlainStyle = require('../../constants/dictStyle');
+let DictStyle = require('../../constants/dictStyle');
 
 var AboutUs = React.createClass({
   getInitialState(){
@@ -25,11 +27,11 @@ var AboutUs = React.createClass({
   render(){
     return (
       <NavBarView navigator={this.props.navigator} title='关于我们' showBack={true}>
-        <ScrollView automaticallyAdjustContentInsets={false} horizontal={false} backgroundColor='#18304b'>
-          <View style={{paddingBottom: 24, backgroundColor: '#162a40'}}>
+        <ScrollView automaticallyAdjustContentInsets={false} horizontal={false} backgroundColor={PlainStyle.colorSet.content}>
+          <View style={{paddingBottom: 24, backgroundColor: PlainStyle.colorSet.content}}>
             <View style={{marginTop: 20, flexDirection: 'column', alignItems: 'center', paddingHorizontal: 16}}>
               <Image style={styles.logo} source={require('../../image/login/logo.png')}/>
-              <Text style={styles.title}>环渤海银银合作平台</Text>
+              <Text style={styles.title}>资融网同业平台</Text>
             </View>
             <Text style={styles.content}>
               {this.state.content}
@@ -63,18 +65,18 @@ var styles = StyleSheet.create({
     borderColor: '#c8c7cc'
   },
   font: {
-    color: '#ffffff',
+    color: PlainStyle.colorSet.aboutUsTextColor,
     fontSize: 12
   },
   title: {
     fontSize: 14,
-    color: '#ffffff',
+    color:  PlainStyle.colorSet.aboutUsTextColor,
     marginTop: 18
   },
   content: {
     marginTop: 10,
     fontSize: 13,
-    color: '#ffffff',
+    color: PlainStyle.colorSet.aboutUsTextColor,
     lineHeight: 23,
     marginHorizontal:16
   },
