@@ -105,16 +105,32 @@ let DeleteMember = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} title='删除群成员' actionButton={this.renderState}>
         <SearchBar textChange={this.textChange}/>
-        <ExtenList itemHeight={51}
-                   groundColor={DictStyle.colorSet.extenListGroundCol}
-                   groupBorderColor={DictStyle.colorSet.demarcationColor}
-                   arrowColor={DictStyle.colorSet.extenListArrowColor}
-                   groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
-                   titleBorderColor={DictStyle.colorSet.demarcationColor}
-                   dataSource={groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId)}
-                   groupDataName={'orgMembers'}
-                   groupItemRender={this.itemRender}
-                   groupTitleRender={this.titleRender} />
+
+        {(()=>{
+
+          let dataSource = groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
+          if(dataSource && dataSource.length > 0) {
+            return (
+              <ExtenList itemHeight={51}
+                         groundColor={DictStyle.colorSet.extenListGroundCol}
+                         groupBorderColor={DictStyle.colorSet.demarcationColor}
+                         arrowColor={DictStyle.colorSet.extenListArrowColor}
+                         groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
+                         titleBorderColor={DictStyle.colorSet.demarcationColor}
+                         dataSource={dataSource}
+                         groupDataName={'orgMembers'}
+                         groupItemRender={this.itemRender}
+                         groupTitleRender={this.titleRender} />
+            );
+          }else{
+            return (
+              <View style={{backgroundColor:'transparent', alignItems:'center'}}>
+                <Text>{'无符合条件的用户'}</Text>
+              </View>
+            );
+          }
+        })()}
+
       </NavBarView>
     );
   }

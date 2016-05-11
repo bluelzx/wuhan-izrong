@@ -7,6 +7,7 @@ let NavBarView = require('../../framework/system/navBarView');
 let { Device, Alert } = require('mx-artifacts');
 let ContactAction = require('../../framework/action/contactAction');
 let Setting = require('../../constants/setting');
+let DictStyle = require('../../constants/dictStyle');
 
 let ModifyGroupName = React.createClass({
 
@@ -20,6 +21,9 @@ let ModifyGroupName = React.createClass({
     if(this.state.groupName.length > Setting.groupNameLengt){
       Alert('群名称不能超过20个字符');
       return ;
+    }else if(this.state.groupName.trim().length == 0){
+      Alert('群名称不能为空');
+      return;
     }
     this.props.exec(()=>{
       return ContactAction.modifyGroupName(this.props.param.groupId, this.state.groupName).then((response)=>{
@@ -34,7 +38,7 @@ let ModifyGroupName = React.createClass({
       <TouchableOpacity onPress={()=>{
       this.modifyGroupName();
       }}>
-        <Text style={{color:this.state.groupName.length > Setting.groupNameLengt ?'#6B849C':'white'}}>完成</Text>
+        <Text style={{color:(this.state.groupName.length == 0 || this.state.groupName.length > Setting.groupNameLengt) ?'#9FB3F3':'white'}}>完成</Text>
       </TouchableOpacity>
 
     );
@@ -47,14 +51,13 @@ let ModifyGroupName = React.createClass({
   render: function() {
     return (
       <NavBarView navigator={this.props.navigator} title='群名称' actionButton={this.renderRight}>
-        <View style={{backgroundColor:'#18304D', paddingTop:10}}>
+        <View style={{backgroundColor:DictStyle.colorSet.content, paddingTop:10}}>
           <TextInput
-            clearButtonMode="always"
             placeholder="创建群名称"
-            placeholderTextColor="white"
+            placeholderTextColor="44B5E6"
             value={this.state.groupName}
             onChangeText={(text) => this.changeTextValue(text)}
-            style={{color: '#ffffff',height:50, width: Device.width,backgroundColor:'#15263A', paddingHorizontal:20}}></TextInput>
+            style={{color: '#44B5E6',height:50, width: Device.width,backgroundColor:DictStyle.colorSet.textEditBackground, paddingHorizontal:20}}></TextInput>
         </View>
       </NavBarView>
     );

@@ -2,7 +2,7 @@
  * Created by baoyinghai on 4/20/16.
  */
 let React= require('react-native');
-const {View, Text} = React;
+const {View, Text, Image} = React;
 
 let nameColor = {};
 
@@ -31,15 +31,26 @@ let NameCircular = React.createClass({
                 flexDirection:'row',justifyContent:'center',alignItems:'center'},badge>=99&&{height:20,width:(Platform.OS === 'ios')?24:22,marginLeft:18}]}>
             <Text style={{color:'white',fontSize:11}}>{badge >= 99 ? "99+" : badge}</Text>
           </View>
-        )
+        );
       }
     }else{
       return <View></View>;
     }
   },
 
+  renderV: function(isV) {
+    if(isV){
+      return (
+        <Image style={[{ width: 15, height: 15}, {position: 'absolute',bottom:0,marginLeft:25}]}
+             resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+      );
+    }else{
+      return null;
+    }
+  },
+
   render: function() {
-    let {name, badge} = this.props;
+    let {name, badge, isV = true} = this.props;
     let f = !name?'?':name[0];
     return (
       <View>
@@ -54,6 +65,7 @@ let NameCircular = React.createClass({
           </View>
         </View>
         {this.unReadIcon(badge, true)}
+        {this.renderV(isV)}
       </View>
     );
   }
