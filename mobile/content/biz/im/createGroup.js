@@ -18,6 +18,8 @@ let { SESSION_TYPE } = require('../../constants/dictIm');
 let NameCircular = require('./nameCircular').NameCircular;
 let Setting = require('../../constants/setting');
 let {groupFilter} = require('./searchBarHelper');
+let DEFAULT_GROUP_NAME='创建的群+';
+let DictStyle = require('../../constants/dictStyle');
 
 let CreateGroup = React.createClass({
 
@@ -31,7 +33,7 @@ let CreateGroup = React.createClass({
     return (
       <Text
         style={
-          {color: '#ffffff'}}>
+          {color: DictStyle.colorSet.imTitleTextColor}}>
         {data.orgValue}
       </Text>
     );
@@ -68,10 +70,10 @@ let CreateGroup = React.createClass({
           key={data.userId}
           choice={this.checkBoxChoice}
           unChoice={this.unCheckBoxChoice}
-          style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
+          style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row'}}>
             <NameCircular name={data.realName}/>
-            <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
+            <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{data.realName}</Text>
           </View>
         </CheckBox>
       );
@@ -83,6 +85,9 @@ let CreateGroup = React.createClass({
     if(this.state.groupName.length > Setting.groupNameLengt){
       Alert('群名称不能超过20个字符');
       return ;
+    }
+    if(this.state.groupName.trim() == ''){
+      this.state.groupName = this.state.userInfo.realName + DEFAULT_GROUP_NAME + this.getMemberList(members);
     }
     if(this.getMemberList(members) > Setting.groupMemberUpperLimit){
       Alert('群组成员人数不能超过' + Setting.groupMemberUpperLimit);
@@ -122,7 +127,7 @@ let CreateGroup = React.createClass({
     }
     return (
       <TouchableOpacity onPress={() => count > 0 && this.createGroup(memberList)}>
-        <Text style={{ marginLeft:Platform.OS==='ios'?-40:0,color:(this.getMemberList(memberList) > Setting.groupMemberUpperLimit||this.state.groupName.length > Setting.groupNameLengt || count==0)?'#6B849C':'white'}}>{'创建(' + count + '/' + Setting.groupMemberUpperLimit + ')'}</Text>
+        <Text style={{ marginLeft:Platform.OS==='ios'?-40:0,color:(this.getMemberList(memberList) > Setting.groupMemberUpperLimit||this.state.groupName.length > Setting.groupNameLengt || count==0)?'#9FB3F3':'white'}}>{'创建(' + count + '/' + Setting.groupMemberUpperLimit + ')'}</Text>
       </TouchableOpacity>
     );
   },
@@ -132,7 +137,7 @@ let CreateGroup = React.createClass({
       searchBarWidth:Device.width - 15,
       memberList:{},
       userData: ContactStore.getUsers(),
-      groupName:'我新建的群',
+      groupName:'',
       userInfo:ContactStore.getUserInfo(), // 用户信息
       keyWord:'',
     };
@@ -151,12 +156,12 @@ let CreateGroup = React.createClass({
 
     return (
       <NavBarView navigator={this.props.navigator} title='创建群组' actionButton={this.renderLabel}>
-        <View style={{backgroundColor:'#18304D', paddingTop:10}}>
+        <View style={{backgroundColor:DictStyle.colorSet.content, paddingTop:10}}>
           <TextInput
             placeholder="创建群名称"
-            placeholderTextColor="white"
+            placeholderTextColor="#44B5E6"
             onChangeText={(text) => this.setGroupName(text)}
-            style={{color: '#ffffff',height:50, width: Device.width,backgroundColor:'#15263A', paddingHorizontal:20}}></TextInput>
+            style={{color: '#44B5E6',height:50, width: Device.width,backgroundColor:DictStyle.colorSet.textEditBackground, paddingHorizontal:20}}></TextInput>
         </View>
 
         <ChooseList  memberList={this.state.memberList}/>
@@ -164,11 +169,11 @@ let CreateGroup = React.createClass({
         <SearchBar textChange={this.textChange}/>
 
         <ExtenList itemHeight={51}
-                   groundColor={'#15263A'}
-                   groupBorderColor={"#132232"}
-                   arrowColor={'#ffffff'}
-                   groupTitleColor={'#1B385E'}
-                   titleBorderColor={'#162E50'}
+                   groundColor={DictStyle.colorSet.extenListGroundCol}
+                   groupBorderColor={DictStyle.colorSet.demarcationColor}
+                   arrowColor={DictStyle.colorSet.extenListArrowColor}
+                   groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
+                   titleBorderColor={DictStyle.colorSet.demarcationColor}
                    dataSource={this.getDataSource()}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}

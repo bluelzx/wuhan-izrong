@@ -3,6 +3,7 @@ let React, {
 } = require('react-native');
 
 let AppStore = require('../store/appStore');
+let { SHOW_VIEW } = require('../../constants/dictEvent');
 let MarketActions = require('./marketAction');
 let {
   BFetch,
@@ -28,12 +29,18 @@ let _onNotification = function(notification) {
   // });
 };
 
+let _showPic = function(src){
+  AppStore.savePicUrl(src);
+  AppStore.emitChange(SHOW_VIEW);
+}
+
 let AppActions = {
   appInit: () => _appInit(),
   notificationRegister: (token) => _notificationRegister(token),
   onNotification: (notification) => _onNotification(notification),
   freshNotification: (notification) => _onNotification(notification),
   emitActiveApp:()=>{AppStore.emitChange('active_app')},
+  showPic:(src) => _showPic(src)
 };
 
 module.exports = AppActions;

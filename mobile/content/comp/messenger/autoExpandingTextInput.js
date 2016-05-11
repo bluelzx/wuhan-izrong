@@ -8,6 +8,7 @@ let {
   } = React;
 
 var PureRenderMixin = React.addons.PureRenderMixin;
+let DictStyle = require('../../constants/dictStyle');
 
 let AutoExpandingTextInput = React.createClass({
 

@@ -5,6 +5,7 @@
 let React = require('react-native');
 let Icon = require('react-native-vector-icons/Ionicons');
 const {View, TextInput, Platform,TouchableOpacity, Text} = React;
+let DictStyle = require('../../constants/dictStyle');
 
 let SearchBar = React.createClass({
 
@@ -33,7 +34,8 @@ let SearchBar = React.createClass({
           onFocus={() => this.setState({editAble:true}) }
           onChangeText={(text) => this.textChange(text)}
           returnKeyType={'search'}
-          style={{color: '#4fc1e9',height:(Platform.OS === 'ios')?30:60,backgroundColor:'#ffffff',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}>
+          selectionColor={DictStyle.colorSet.searchBarColor}
+          style={{color: DictStyle.colorSet.searchBarColor, height:(Platform.OS === 'ios')?30:60,backgroundColor:'#ffffff',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}>
         </TextInput>
       );
     } else {
@@ -42,8 +44,8 @@ let SearchBar = React.createClass({
           style={{height:(Platform.OS === 'ios')?30:60,justifyContent:'center', alignItems:'center',backgroundColor:'#ffffff',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}
         >
           <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-            <Icon name="ios-search-strong" size={20} color='#b4b4b4' />
-            <Text style={{color:'#b4b4b4', marginLeft:5, fontSize:18}}>搜索</Text>
+            <Icon name="ios-search-strong" size={18} color={DictStyle.colorSet.searchBarColor} />
+            <Text style={{color:DictStyle.colorSet.searchBarColor, marginLeft:5, fontSize:16, fontWeight:'normal'}}>搜索</Text>
           </View>
         </TouchableOpacity>
       );

@@ -3,6 +3,7 @@ import Bubble from './bubble';
 import ErrorButton from './errorButton';
 import Angle from './angle';
 import {NameCircular} from '../../biz/im/nameCircular';
+let DictStyle = require('../../constants/dictStyle');
 
 var styles = StyleSheet.create({
   rowContainer: {
@@ -238,8 +239,8 @@ Message.propTypes = {
 
 
 Message.defaultProps = {
-  leftBackgroundColor: '#e6e6eb',
-  rightBackgroundColor: '#007aff',
+  leftBackgroundColor: DictStyle.imChat.leftBackgroundColor,
+  rightBackgroundColor:  DictStyle.imChat.rightBackgroundColor,
   errorBackgroundColor: '#e01717'
 };
 

@@ -24,7 +24,11 @@ var {
   DeviceEventEmitter,
   Platform,
   ToastAndroid,
-  AppStateIOS
+  AppStateIOS,
+  styles,
+  Modal,
+  TouchableHighlight,
+  Image
   } = React;
 var AppAction = require('../action/appAction');
 //var ImAction = require('../action/imAction');
@@ -38,6 +42,7 @@ let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
 let Publish = require ('../../biz/publish/publish');
+let { SHOW_VIEW } = require('../../constants/dictEvent');
 
 const DictStyle = require('../../constants/dictStyle');
 
@@ -46,12 +51,13 @@ var Main = React.createClass({
   _getStateFromStores: function() {
     return {
       initLoading: AppStore.getInitLoadingState(),
-      token: AppStore.getToken()
+      token: AppStore.getToken(),
+      showView:false
     };
   },
   getInitialState: function() {
     return _.assign(this._getStateFromStores(), {
-      isLoadingVisible: false
+      isLoadingVisible: false,
     });
   },
   componentDidMount: function() {
@@ -77,6 +83,7 @@ var Main = React.createClass({
     AppStore.saveNavigator(this.refs['navigator']);
 
     AppStore.addChangeListener(this._activeApp, 'active_app');
+    AppStore.addChangeListener( this._onViewChanged, SHOW_VIEW);
   },
 
   _activeApp:function(){
@@ -104,6 +111,7 @@ var Main = React.createClass({
       AppStateIOS.removeEventListener('change', this._handleAppStateChange);
     }
     NotificationManager.closeNotification();
+    AppStore.removeChangeListener(this._onViewChanged, SHOW_VIEW);
   },
 
   _onAndroidBackPressed: function () {
@@ -211,6 +219,10 @@ var Main = React.createClass({
     }
   },
 
+  _onViewChanged: function(){
+    this.setState({showView:true});
+  },
+
   render: function () {
     if (this.state.initLoading) {
       return (
@@ -235,8 +247,35 @@ var Main = React.createClass({
     }else{
       ImSocket.disconnect();
     }
+
+
+    var modalBackgroundStyle = {
+      backgroundColor: '#000000',
+    };
+    var innerContainerTransparentStyle = null;
+    var activeButtonStyle = {
+      backgroundColor: '#ddd'
+    };
+    var colorStyle = {
+      color: '#000',
+    };
+
+
     return (
       <View style={{ width: Device.width, height: Device.height }}>
+
+        <Modal
+          animationType={'fade'}
+          transparent={false}
+          visible={this.state.showView}
+        >
+          <TouchableHighlight style={[styles.container, modalBackgroundStyle]} onPress={() => {this.setState({showView:false})}}>
+            <Image style={{resizeMode:'contain',flex:1}} source={{uri:AppStore.getPicUrl()}}>
+            </Image>
+          </TouchableHighlight>
+        </Modal>
+
+
         <StatusBar
           backgroundColor={DictStyle.colorSet.navBar}
           barStyle="light-content"
@@ -266,3 +305,42 @@ var Main = React.createClass({
 });
 
 module.exports = Main;
+
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  innerContainer: {
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  row: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  rowTitle: {
+    flex: 1,
+    fontWeight: 'bold',
+  },
+  button: {
+    borderRadius: 5,
+    flex: 1,
+    height: 44,
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  buttonText: {
+    fontSize: 18,
+    margin: 5,
+    textAlign: 'center',
+  },
+  modalButton: {
+    marginTop: 10,
+  },
+});
+
