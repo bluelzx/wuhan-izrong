@@ -39,6 +39,8 @@ let co = require('co');
 let NotificationManager = require('./notificationManager');
 let Publish = require ('../../biz/publish/publish');
 
+const DictStyle = require('../../constants/dictStyle');
+
 var Main = React.createClass({
   _navigator: null,
   _getStateFromStores: function() {
@@ -236,7 +238,7 @@ var Main = React.createClass({
     return (
       <View style={{ width: Device.width, height: Device.height }}>
         <StatusBar
-          backgroundColor="#1151B1"
+          backgroundColor={DictStyle.colorSet.navBar}
           barStyle="light-content"
           hidden={false}
         />
@@ -254,8 +256,8 @@ var Main = React.createClass({
         />
 
         <Loading
-          panelColor="rgba(255, 255, 255, 0.3)"
-          color="white"
+          // panelColor="rgba(255, 255, 255, 0.3)"
+          // color="white"
           isVisible={this.state.isLoadingVisible}
         />
       </View>
