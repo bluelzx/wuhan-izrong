@@ -25,21 +25,32 @@ let MembersBar = React.createClass({
     return btns;
   },
 
+  renderMember: function(member) {
+    return (
+      <TouchableOpacity onPress={()=>this.props.navigator.push({
+        comp:ImUserInfo,
+        param:member
+        })} key={member.userId} style={{alignItems:'center',padding:5}}>
+        <View style={{marginTop:5,height: 40,width: 40}}>
+          <NameCircular name={member.realName}/>
+        </View>
+        <Text numberOfLines={1} style={{color:DictStyle.groupManage.memberNameColor,marginTop:4, width:40}}>{member.realName}</Text>
+      </TouchableOpacity>
+    );
+  },
+
   render: function() {
-    let {members, imgSource} = this.props;
+    let {members, imgSource, groupMasterUid} = this.props;
     let m = [];
     for(let i = 0 ; !!members && i < members.length; i++){
-      m.push(
-        <TouchableOpacity onPress={()=>this.props.navigator.push({
-        comp:ImUserInfo,
-        param:members[i]
-        })} key={members[i].userId} style={{alignItems:'center',padding:5}}>
-          <View style={{marginTop:5,height: 40,width: 40}}>
-            <NameCircular name={members[i].realName}/>
-          </View>
-          <Text numberOfLines={1} style={{color:DictStyle.groupManage.memberNameColor,marginTop:4, width:40}}>{members[i].realName}</Text>
-        </TouchableOpacity>
-      );
+      let member = members[i];
+      if(member.userId == groupMasterUid){
+        m.unshift(this.renderMember(member));
+      }else {
+        m.push(
+          this.renderMember(member)
+        );
+      }
     }
     return (
       <View style={{flexDirection:'row', flexWrap:'wrap', backgroundColor:DictStyle.groupManage.memberListBackgroundColor}}>

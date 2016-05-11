@@ -168,16 +168,31 @@ let CreateGroup = React.createClass({
 
         <SearchBar textChange={this.textChange}/>
 
-        <ExtenList itemHeight={51}
-                   groundColor={DictStyle.colorSet.extenListGroundCol}
-                   groupBorderColor={DictStyle.colorSet.demarcationColor}
-                   arrowColor={DictStyle.colorSet.extenListArrowColor}
-                   groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
-                   titleBorderColor={DictStyle.colorSet.demarcationColor}
-                   dataSource={this.getDataSource()}
-                   groupDataName={'orgMembers'}
-                   groupItemRender={this.itemRender}
-                   groupTitleRender={this.titleRender} />
+        {(()=>{
+
+          let dataSource = this.getDataSource();
+          if(dataSource && dataSource.length > 0) {
+            return (
+              <ExtenList itemHeight={51}
+                         groundColor={DictStyle.colorSet.extenListGroundCol}
+                         groupBorderColor={DictStyle.colorSet.demarcationColor}
+                         arrowColor={DictStyle.colorSet.extenListArrowColor}
+                         groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
+                         titleBorderColor={DictStyle.colorSet.demarcationColor}
+                         dataSource={dataSource}
+                         groupDataName={'orgMembers'}
+                         groupItemRender={this.itemRender}
+                         groupTitleRender={this.titleRender}/>
+
+            );
+          }else{
+            return (
+              <View style={{backgroundColor:'transparent', alignItems:'center'}}>
+                <Text>{'无符合条件的用户'}</Text>
+              </View>
+            );
+          }
+        })()}
 
       </NavBarView>
     );
