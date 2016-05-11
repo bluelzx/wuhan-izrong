@@ -46,9 +46,9 @@ let Item = React.createClass({
   render(){
     let {hiddenArrow = false, wrap=false, itemStyle={}, top=false} = this.props;
     return (
-      <TouchableHighlight activeOpacity={0.8}  onPress={this.props.func}>
+      <TouchableHighlight activeOpacity={0.8} underlayColor= {PlainStyle.colorSet.content} onPress={this.props.func}>
         <View>
-          <View style={[styles.listLayout, top && styles.borderTop,itemStyle]}>
+          <View style={[styles.listLayout, top && DictStyle.userInfoBorderTop,this.props.bottom && DictStyle.userInfoBorderBottom]}>
             <View style={{flexDirection: 'row', backgroundColor: 'transparent', flex: 2}}>
               {this.returnImg()}
               <Text style={styles.title}>{this.props.desc}</Text>
@@ -71,9 +71,7 @@ let Item = React.createClass({
   }
 });
 let styles = StyleSheet.create({
-  borderTop: {
-    borderTopWidth: 1
-  },
+
   listLayout: {
     flexDirection: 'row',
     alignItems: 'center',

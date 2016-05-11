@@ -136,7 +136,7 @@ let BusinessDetail = React.createClass({
     return (
       <View style={{backgroundColor:'#f0f0f0',borderRadius:2,margin:10}}>
         {this.renderPromulgator(userInfo)}
-        {this.returnInfoItem(require('../../image/market/email.png'), this.state.marketInfo.orgName, true)}
+        {this.returnInfoItem(require('../../image/market/email.png'), userInfo.email, true)}
         {this.returnInfoItem(require('../../image/market/tel.png'), userInfo.phoneNumber == null ? '未填写' : userInfo.phoneNumber, userInfo.publicPhone)}
         {this.returnInfoItem(require('../../image/market/mobile.png'), userInfo.mobileNumber == null ? '未填写' : userInfo.mobileNumber, userInfo.publicMobile)}
         {this.returnInfoItem(require('../../image/market/QQ.png'), userInfo.qqNo == null ? '未填写' : userInfo.qqNo, userInfo.publicQQ)}

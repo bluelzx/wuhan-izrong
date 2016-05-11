@@ -58,7 +58,8 @@ let UserInfo = React.createClass({
       publicTitle: userInfo.publicTitle,
       address: userInfo.address,
       publicAddress: userInfo.publicAddress,
-      nameCardFileUrl: userInfo.nameCardFileUrl
+      nameCardFileUrl: userInfo.nameCardFileUrl,
+      certified:true
     };
   },
 
@@ -104,13 +105,32 @@ let UserInfo = React.createClass({
 
   returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
+      if(this.state.certified){
+        return (
+          <View>
+            <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+            <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
+                   resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+          </View>
+        );
+      }
       return (
-        <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+          <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+      );
+    }else {
+      if(this.state.certified){
+        return (
+          <View>
+            <NameCircular name={this.state.realName}/>
+            <Image style={[styles.certified,{position: 'absolute',bottom:1,left:30}]}
+                   resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+          </View>
+        );
+      }
+      return (
+        <NameCircular name={this.state.realName}/>
       );
     }
-    return (
-      <NameCircular name={this.state.realName}/>
-    );
   },
 
   toEdit: function (title, name, value, publicName, publicValue, type, maxLength, needEdit, needPublic) {
@@ -224,8 +244,8 @@ let UserInfo = React.createClass({
           {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'publicWeChat',
             this.state.publicWeChat, 'default', 40, true, true, false)}
 
-          <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
-            <View style={[styles.listLayout,this.props.top && styles.borderTop,DictStyle.userInfoBorderBottom]}>
+          <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
+            <View style={[styles.listLayout,DictStyle.userInfoBorderBottom]}>
               <View
                 style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
                 <Image style={styles.circle} source={require('../../image/user/email.png')}/>
@@ -242,10 +262,10 @@ let UserInfo = React.createClass({
             </View>
           </TouchableHighlight>
 
-          <View style={[{marginTop: 5},DictStyle.userInfoBorderBottom]}>
-            <TouchableHighlight activeOpacity={0.8} underlayColor='#18304D' onPress={()=>{}}>
+          <View style={[{marginTop: 5},DictStyle.userInfoBorderTop,DictStyle.userInfoBorderBottom]}>
+            <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
               <View>
-                <View style={[styles.listLayout,this.props.top && styles.borderTop,DictStyle.userInfoBorderTop]}>
+                <View style={styles.listLayout}>
                   <View
                     style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
                     <Image style={styles.circle} source={require('../../image/user/comp.png')}/>
@@ -309,6 +329,10 @@ let styles = StyleSheet.create({
     borderRadius: 30,
     borderColor: '#cccccc',
     borderWidth: 1
+  },
+  certified:{
+    width: 15,
+    height: 15
   },
   headText: {
     color: '#FF0000',

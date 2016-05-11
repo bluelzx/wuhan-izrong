@@ -32,32 +32,27 @@ let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Home = React.createClass({
   getStateFromStores: function () {
     let filterItems = AppStore.getFilters().filterItems;
-    let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
+    let category = MarketStore.getFilterOptions(filterItems,'bizCategory');
     let categoryArr = this.deleteFirstObj(category.options);
-    let item = MarketStore.getCategoryAndItem(filterItems);
-    item.shift();
+
     let dataSource = new ViewPager.DataSource({
       pageHasChanged: (p1, p2) => p1 !== p2
     });
     let myCategory = AppStore.getCategory();
     let myItem = AppStore.getItem();
     let PAGES = AppStore.queryAllHomePageInfo();
-    if (PAGES.length == 0) {
-      PAGES = [
-        '敬请期待',
-        '敬请期待',
-        '敬请期待'
-      ];
-    }
+    let DEFAULTPAGES = [
+      'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024',
+      'https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?h=1024',
+      'https://images.unsplash.com/photo-1441448770220-76743f9e6af6?h=1024',
+      'https://images.unsplash.com/photo-1441260038675-7329ab4cc264?h=1024'
+    ];
     return {
       categoryArr: categoryArr,
-      categoryItem: item,
-      dataSource: dataSource.cloneWithPages(PAGES),
+      dataSource: dataSource.cloneWithPages(DEFAULTPAGES),
       category: myCategory != null ? myCategory.displayName : '资金业务',
-      item: myItem != null ? myItem.displayName : '同业存款',
       contentList: [],
-      bizCategoryID: myCategory != null ? myCategory.id : item.length == 0 ? 0 : item[0].id,
-      bizItemID: myItem != null ? myItem.id : item.length == 0 ? 0 : item[0].itemArr[1].id,
+      bizCategoryID: myCategory != null ? myCategory.id : categoryArr.length == 0 ? 0 : categoryArr[0].id,
     };
   },
 
@@ -144,20 +139,12 @@ let Home = React.createClass({
 
 
   _renderPage: function (data:Object) {
-    if (data == '敬请期待') {
-      return (
-        <View style={[styles.page,{flex:1,alignItems:'center',justifyContent:'center'}]}>
-          <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>敬请期待</Text>
-        </View>
-      )
-    } else {
       return (
         <Image
           style={styles.page}
           source={{uri: data}}
         />
       );
-    }
   },
 
   rendViewPager: function () {
@@ -194,7 +181,7 @@ let Home = React.createClass({
           </View>
           <View style={styles.listHead}>
             <Text
-              style={{marginLeft: 20, fontSize: 15, color: PlainStyle.colorSet.commonTextColor}}>{this.state.category + '--' + this.state.item}</Text>
+              style={{marginLeft: 20, fontSize: 15, color: PlainStyle.colorSet.commonTextColor}}>{this.state.category}</Text>
           </View>
           {this.renderMarketList()}
         </ScrollView>
@@ -233,7 +220,7 @@ let Home = React.createClass({
     return (
       <TouchableHighlight onPress={() => this._pressRow()} underlayColor='#000'>
         <View
-          style={{flexDirection:'row',height: 50, backgroundColor: PlainStyle.colorSet.homeListItemColor,alignItems:'center',borderBottomWidth:0.7,borderBottomColor:'#0a1926'}}>
+          style={{flexDirection:'row',height: 50, backgroundColor: PlainStyle.colorSet.homeListItemColor,alignItems:'center',borderBottomWidth:0.5,borderBottomColor:'#0a1926'}}>
           <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />

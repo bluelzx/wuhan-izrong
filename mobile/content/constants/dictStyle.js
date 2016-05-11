@@ -10,6 +10,7 @@ const TABBAR_HEIGHT = 50;
 const PlainStyle = {
 
   colorSet: {
+    // loading: '';
     arrowColor: '#a8afb3',
     navBar: '#4074e6',
     navBarFont: '#ffffff',
