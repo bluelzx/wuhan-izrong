@@ -37,6 +37,7 @@ let Input = require('../../comp/utils/input');
 let Adjust = require('../../comp/utils/adjust');
 let numeral = require('numeral');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
+let DictStyle = require('../../constants/dictStyle');
 
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
@@ -119,7 +120,7 @@ let MyBizDetail = React.createClass({
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} title='业务详情' actionButton={this.renderShutDownBiz}>
-        <View style={{height:screenHeight-64,backgroundColor:'#153757'}}>
+        <View style={{height:screenHeight-64,backgroundColor:'#f7f7f7'}}>
           <View style={{flex:1}}>
             <ScrollView>
               {this.renderSelectOrg()}
@@ -193,7 +194,7 @@ let MyBizDetail = React.createClass({
       <View
         style={{marginTop:10,height:36,alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
         <Text
-          style={{fontSize:16,marginLeft:10,color:'white'}}
+          style={{fontSize:16,marginLeft:10,color:DictStyle.marketSet.fontColor}}
         >{'业务类型: ' + this.state.marketInfo.bizCategoryDesc + '-' + this.state.marketInfo.bizItemDesc
         }</Text>
       </View>
@@ -204,8 +205,8 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
           <View style={{flexDirection:'row'}}>
-            <Text style={{marginLeft:10, color:'white'}}>{'方向'}</Text>
-            <Text style={{color:'red'}}>{'*'}</Text>
+            <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'方向'}</Text>
+            <Text style={{color:'#dd656c'}}>{'*'}</Text>
           </View>
           <View style={{marginTop:10,flexDirection:'row'}}>
             <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
@@ -227,11 +228,11 @@ let MyBizDetail = React.createClass({
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
-          <Text style={{marginLeft:10, color:'white'}}>{'期限'}</Text>
+          <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'期限'}</Text>
           <View style={{marginTop:10,flexDirection:'row'}}>
-            <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
-                   iconStyle={{}} placeholderTextColor='#325779'
-                   inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+            <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
+                   iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
+                   inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                    placeholder='天数' maxLength={3} field='termText' inputType="numeric"
                    onChangeText={this._onChangeText}
                    value={this.state.termText}
@@ -253,11 +254,11 @@ let MyBizDetail = React.createClass({
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
-          <Text style={{marginLeft:10, color:'white'}}>{'金额'}</Text>
+          <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'金额'}</Text>
           <View style={{marginTop:10,flexDirection:'row'}}>
-            <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
-                   iconStyle={{}} placeholderTextColor='#325779'
-                   inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+            <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
+                   iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
+                   inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                    placeholder='0-1000亿' maxLength={8} field='amountText' inputType="numeric"
                    onChangeText={this._onChangeText}
                    value={this.state.amountText}
@@ -283,17 +284,17 @@ let MyBizDetail = React.createClass({
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
-          <Text style={{marginLeft:10, color:'white'}}>{'利率'}</Text>
+          <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'利率'}</Text>
           <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
-            <Input containerStyle={{backgroundColor:'#0a1926',borderRadius:5,marginLeft:10,height:40}}
-                   iconStyle={{}} placeholderTextColor='#325779'
-                   inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#ffd547'}}
+            <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
+                   iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
+                   inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                    placeholder='0-99.99' maxLength={5} field='rateText' inputType="numeric"
                    onChangeText={this._onChangeText}
                    value={this.state.rateText}
                    editable={false}
             />
-            <Text style={{marginLeft:10,fontWeight: 'bold', color:'white'}}>{'%'}</Text>
+            <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'%'}</Text>
           </View>
         </View>
       );
@@ -309,7 +310,7 @@ let MyBizDetail = React.createClass({
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
-          <Text style={{marginLeft:10, color:'white'}}>{'添加图片'}</Text>
+          <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'添加图片'}</Text>
           <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
             <View style={{width:((screenWidth-60)/5 + 10) * this.state.fileUrlList.length}}>
               <ListView style={{}} scrollEnabled={false} horizontal={true}
@@ -340,7 +341,7 @@ let MyBizDetail = React.createClass({
           title="选择图片"
           fileId="publish1"
           allowsEditing={true}
-          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
         >
           <Image
             style={{width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
@@ -354,10 +355,11 @@ let MyBizDetail = React.createClass({
   renderImageTitle(){
     if (this.state.fileUrlList.length > 0) {
       return (
-        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:'white'}}>{'附件:'}</Text>
+        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:DictStyle.marketSet.fontColor}}>{'附件:'}</Text>
       );
     } else {
-      return <View></View>;
+      return <View>
+      </View>;
     }
   },
   renderImgItem: function (rowData, sectionID, rowID) {
@@ -368,7 +370,7 @@ let MyBizDetail = React.createClass({
         onSelected={(response) => {this.handleSendImage(response, rowID)}}
         onError={(error) => this.handleImageError(error)}
         title="选择图片"
-        style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+        style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
       >
         <Image
           style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
@@ -402,13 +404,13 @@ let MyBizDetail = React.createClass({
         <View style={{marginTop:10}}>
           <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
             <View
-              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: '#102a42'}}>
-              <Text style={{marginLeft:10, fontWeight: 'bold', color:'white'}}>
+              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: 'white'}}>
+              <Text style={{marginLeft:10,color:DictStyle.marketSet.fontColor}}>
                 {'备注'}
               </Text>
               <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                <Text style={{marginRight:10, fontWeight: 'bold', color:'#325779'}}
-                      numberOfLines={1}>{(this.state.remarkText == '') ? '20字以内' : this.state.remarkText}
+                <Text style={{marginRight:10,color:'#d3d5df'}}
+                      numberOfLines={1}>{(this.state.remarkText == '' || this.state.remarkText == null) ? '50字以内' : this.state.remarkText}
                 </Text>
                 <Image style={{margin:10,width:16,height:16}}
                        source={require('../../image/market/next.png')}
@@ -439,8 +441,8 @@ let MyBizDetail = React.createClass({
       return (
         <TouchableHighlight onPress={() => this._pressSave()} underlayColor='rgba(129,127,201,0)'>
           <View
-            style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4fb9fc'}}>
-            <Text style={{fontWeight: 'bold', color:'white'}}>
+            style={{flexDirection:'row',justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4b76df'}}>
+            <Text style={{color:'white'}}>
               {'保存'}
             </Text>
           </View>
@@ -454,9 +456,9 @@ let MyBizDetail = React.createClass({
   returnItem: function (desc, value) {
     return (
       <View style={{marginLeft:10,flexDirection:'row',alignItems:'center',paddingVertical:5}}>
-        <Text style={{fontSize:15,color:'white',flex:1}}>{desc}</Text>
+        <Text style={{fontSize:15,color:DictStyle.marketSet.fontColor,flex:1}}>{desc}</Text>
         <Text
-          style={{marginLeft:10,fontSize:15,color:(desc == '最近修改时间:')?'#ffd547':'white',width:225/375*screenWidth}}>{value}</Text>
+          style={{marginLeft:10,fontSize:15,color:(desc == '最近修改时间:')?DictStyle.marketSet.modifyDateColor:DictStyle.marketSet.fontColor,width:225/375*screenWidth}}>{value}</Text>
       </View>
     )
   },

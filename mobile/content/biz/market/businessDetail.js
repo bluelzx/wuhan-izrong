@@ -21,7 +21,7 @@ let imagePicker = require('../../comp/utils/imagePicker');
 let DateHelper = require('../../comp/utils/dateHelper');
 let numeral = require('numeral');
 let NameCircular = require('../im/nameCircular').NameCircular;
-
+let DictStyle = require('../../constants/dictStyle');
 let AppStore = require('../../framework/store/appStore');
 let MarketStore = require('../../framework/store/marketStore');
 let { Alert } = require('mx-artifacts');
@@ -114,8 +114,8 @@ let BusinessDetail = React.createClass({
   returnItem: function (desc, value) {
     return (
       <View style={{flexDirection:'row',alignItems:'center',paddingVertical:8}}>
-        <Text style={{fontSize:16,color:'#3b4549',flex:1}}>{desc}</Text>
-        <Text style={{fontSize:16,color:(desc == '更新时间:')?'#f33b1e':'#3b4549',width:235/375*screenWidth}}>{value}</Text>
+        <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor,flex:1}}>{desc}</Text>
+        <Text style={{fontSize:16,color:(desc == '更新时间:')?DictStyle.marketSet.modifyDateColor:DictStyle.marketSet.fontColor,width:235/375*screenWidth}}>{value}</Text>
       </View>
     );
   },
@@ -136,11 +136,11 @@ let BusinessDetail = React.createClass({
     return (
       <View style={{backgroundColor:'#f0f0f0',borderRadius:2,margin:10}}>
         {this.renderPromulgator(userInfo)}
+        {this.returnInfoItem(require('../../image/market/email.png'), this.state.marketInfo.orgName, true)}
         {this.returnInfoItem(require('../../image/market/tel.png'), userInfo.phoneNumber == null ? '未填写' : userInfo.phoneNumber, userInfo.publicPhone)}
         {this.returnInfoItem(require('../../image/market/mobile.png'), userInfo.mobileNumber == null ? '未填写' : userInfo.mobileNumber, userInfo.publicMobile)}
         {this.returnInfoItem(require('../../image/market/QQ.png'), userInfo.qqNo == null ? '未填写' : userInfo.qqNo, userInfo.publicQQ)}
         {this.returnInfoItem(require('../../image/market/weChat.png'), userInfo.weChatNo == null ? '未填写' : userInfo.weChatNo, userInfo.publicWeChat)}
-        {this.returnInfoItem(require('../../image/market/org.png'), this.state.marketInfo.orgName, true)}
       </View>
     );
   },
@@ -149,14 +149,14 @@ let BusinessDetail = React.createClass({
       return (
         <View style={{flexDirection:'row',alignItems:'center'}}>
           {this.renderUserPhoto(this.state.userInfo)}
-          <Text style={{fontSize:16,color:'#3b4549'}}>{this.state.marketInfo.userName}</Text>
+          <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}>{this.state.marketInfo.userName}</Text>
         </View>
       );
     } else {
       return (
         <View style={{flexDirection:'row',alignItems:'center'}}>
           {this.renderUserPhoto(this.state.userInfo)}
-          <Text style={{fontSize:16,color:'#3b4549'}}
+          <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
                 numberOfLines={1}>{this.state.marketInfo.userName}</Text>
           <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#f0f0f0' activeOpacity={0.8}>
             <Text style={{fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
@@ -190,7 +190,7 @@ let BusinessDetail = React.createClass({
           <Image style={{width:16,height:16}}
                  source={url}
           />
-          <Text style={{marginLeft:10,fontSize:16,color:'#3b4549',width:screenWidth - 60}}>{value}</Text>
+          <Text style={{marginLeft:10,fontSize:16,color:DictStyle.marketSet.fontColor,width:screenWidth - 60}}>{value}</Text>
         </View>
       );
     } else {
@@ -202,7 +202,7 @@ let BusinessDetail = React.createClass({
   renderImageTitle(){
     if (this.state.fileUrlList.length > 0) {
       return (
-        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:'#3b4549'}}>{'附件:'}</Text>
+        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:DictStyle.marketSet.fontColor}}>{'附件:'}</Text>
       );
     }
   },

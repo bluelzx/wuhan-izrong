@@ -183,7 +183,7 @@ let Publish = React.createClass({
         return (
             <View style={{flexDirection:'column',marginTop:10}}>
                 <View style={{flexDirection:'row'}}>
-                    <Text style={{marginLeft:10, color:'#495154'}}>{'方向'}</Text>
+                    <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'方向'}</Text>
                     <Text style={{color:'#dd656c'}}>{'*'}</Text>
                 </View>
                 <View style={{marginTop:10,flexDirection:'row'}}>
@@ -196,10 +196,10 @@ let Publish = React.createClass({
     renderTimeLimit: function () {
         return (
             <View style={{flexDirection:'column',marginTop:10}}>
-                <Text style={{marginLeft:10, color:'#495154'}}>{'期限'}</Text>
+                <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'期限'}</Text>
                 <View style={{marginTop:10,flexDirection:'row'}}>
                     <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
-                           iconStyle={{}} placeholderTextColor='#d3d5df'
+                           iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                            inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                            placeholder='天数' maxLength={3} field='termText' inputType="numeric"
                            onChangeText={this._onChangeText}
@@ -214,10 +214,10 @@ let Publish = React.createClass({
     renderAmount: function () {
         return (
             <View style={{flexDirection:'column',marginTop:10}}>
-                <Text style={{marginLeft:10, color:'#495154'}}>{'金额'}</Text>
+                <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'金额'}</Text>
                 <View style={{marginTop:10,flexDirection:'row'}}>
                     <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
-                           iconStyle={{}} placeholderTextColor='#d3d5df'
+                           iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                            inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                            placeholder='0-1000亿' maxLength={this.state.amountTextDigit} field='amountText'
                            inputType="numeric"
@@ -234,16 +234,16 @@ let Publish = React.createClass({
     renderRate: function () {
         return (
             <View style={{flexDirection:'column',marginTop:10}}>
-                <Text style={{marginLeft:10, color:'#495154'}}>{'利率'}</Text>
+                <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'利率'}</Text>
                 <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
                     <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
-                           iconStyle={{}} placeholderTextColor='#d3d5df'
+                           iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                            inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                            placeholder='0-99.99' maxLength={5} field='rateText' inputType="numeric"
                            onChangeText={this._onChangeText} ref="rateInput"
                            onFocus={() => this.refs['scroll'].scrollTo({y:160})}
                     />
-                    <Text style={{marginLeft:10,fontWeight: 'bold', color:'#495154'}}>{'%'}</Text>
+                    <Text style={{marginLeft:10,fontWeight: 'bold', color:DictStyle.marketSet.fontColor}}>{'%'}</Text>
                 </View>
             </View>
         )
@@ -252,7 +252,7 @@ let Publish = React.createClass({
         if (!isFromIM) {
             return (
                 <View style={{flexDirection:'column',marginTop:10}}>
-                    <Text style={{marginLeft:10, color:'#495154'}}>{'添加图片'}</Text>
+                    <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'添加图片'}</Text>
                     <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
                         <View style={{width:((screenWidth-60)/5 + 10) * this.state.fileUrlList.length}}>
                             <ListView style={{}} scrollEnabled={false} horizontal={true}
@@ -312,11 +312,11 @@ let Publish = React.createClass({
           <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
             <View
               style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: 'white'}}>
-              <Text style={{marginLeft:10,color:'#495154'}}>
+              <Text style={{marginLeft:10,color:DictStyle.marketSet.fontColor}}>
                 {'备注'}
               </Text>
               <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                <Text style={{marginRight:10,color:(this.state.remarkText == '') ? '#d3d5df' : '#495154'}}
+                <Text style={{marginRight:10,color:(this.state.remarkText == '') ? '#d3d5df' : DictStyle.marketSet.fontColor}}
                       numberOfLines={1}>{(this.state.remarkText == '') ? '50字以内' : this.state.remarkText}
                 </Text>
                 <Image style={{margin:10,width:16,height:16}}
