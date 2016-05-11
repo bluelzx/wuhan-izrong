@@ -193,7 +193,8 @@ let Home = React.createClass({
   renderMarketList() {
     return (
       <View style={{width:width,flex:1,backgroundColor: PlainStyle.colorSet.homeListHeaderColor}}>
-        <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5}}>
+        <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5, borderBottomWidth: 1,
+             borderBottomColor: PlainStyle.colorSet.homeBorderColor}}>
           <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
             {'方向'}
           </Text>
@@ -220,7 +221,8 @@ let Home = React.createClass({
     return (
       <TouchableHighlight onPress={() => this._pressRow()} underlayColor='#000'>
         <View
-          style={{flexDirection:'row',height: 50, backgroundColor: PlainStyle.colorSet.homeListItemColor,alignItems:'center',borderBottomWidth:0.5,borderBottomColor:'#0a1926'}}>
+          style={{flexDirection:'row',height: 50, backgroundColor: PlainStyle.colorSet.homeListItemColor,alignItems:'center',
+              borderBottomWidth:1,borderBottomColor:PlainStyle.colorSet.homeBorderColor}}>
           <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
@@ -267,8 +269,10 @@ var styles = StyleSheet.create({
   listHead: {
     height: 50,
     backgroundColor: PlainStyle.colorSet.content,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#000000',
+    borderBottomWidth: 1,
+    borderTopWidth:1,
+    borderBottomColor: PlainStyle.colorSet.homeBorderColor,
+    borderTopColor: PlainStyle.colorSet.homeBorderColor,
     justifyContent: 'center'
   }
 });
