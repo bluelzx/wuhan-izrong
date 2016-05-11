@@ -2,7 +2,7 @@
  * Created by baoyinghai on 16/4/6.
  */
 let React = require('react-native');
-const {TouchableHighlight, Image, View} = React;
+const {TouchableOpacity, View} = React;
 let Icon = require('react-native-vector-icons/Ionicons');
 let CheckBox = React.createClass({
   getInitialState: function() {
@@ -34,7 +34,7 @@ let CheckBox = React.createClass({
   render: function() {
     let {style} = this.props;
     return (
-      <TouchableHighlight style={style} onPress={this.changeAgree}>
+      <TouchableOpacity style={style} onPress={this.changeAgree}>
         <View style={{flexDirection:'row', alignItems:'center'}}>
           <Icon name={this.state.agree?'ios-checkmark':'ios-circle-outline'} size={24} color='#44ABFD' />
 
@@ -45,7 +45,7 @@ let CheckBox = React.createClass({
           <View style={{padding:5}}></View>
           {this.props.children}
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 });

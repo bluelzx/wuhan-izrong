@@ -44,24 +44,24 @@ let Item = React.createClass({
   },
 
   render(){
-    let {hiddenArrow = false, wrap=false} = this.props;
+    let {hiddenArrow = false, wrap=false, itemStyle={}, top=false} = this.props;
     return (
       <TouchableHighlight activeOpacity={0.8}  onPress={this.props.func}>
         <View>
-          <View style={[styles.listLayout, this.props.top && styles.borderTop]}>
-            <View style={{flexDirection: 'row', backgroundColor: PlainStyle.colorSet.personalItemColor, flex: 2}}>
+          <View style={[styles.listLayout, top && styles.borderTop,itemStyle]}>
+            <View style={{flexDirection: 'row', backgroundColor: 'transparent', flex: 2}}>
               {this.returnImg()}
               <Text style={styles.title}>{this.props.desc}</Text>
             </View>
             <View
-              style={{flexDirection: 'row', alignItems: 'center', flex: 3, backgroundColor:PlainStyle.colorSet.personalItemColor , justifyContent: 'flex-end'}}
+              style={{flexDirection: 'row', alignItems: 'center', flex: 3, backgroundColor:'transparent' , justifyContent: 'flex-end'}}
             >
               <Text style={[DictStyle.userInfoValueItem,{width: 150, marginRight: 20},wrap && {flexWrap:'wrap'}]}
-                    numberOfLines={ wrap ? 0 : 1 }
+                    numberOfLines={ wrap ? 3 : 1 }
               >
                 {this.props.value}
               </Text>
-              {this.renderArrow(this.props.hiddenArrow)}
+              {this.renderArrow(hiddenArrow)}
             </View>
           </View>
           <View style={styles.bottomStyle}/>
@@ -97,7 +97,6 @@ let styles = StyleSheet.create({
   bottomStyle: {
     height: 1,
     backgroundColor: PlainStyle.colorSet.userInfoBorderColor,
-    marginLeft: 20
   }
 });
 module.exports = Item;

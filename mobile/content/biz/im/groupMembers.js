@@ -10,6 +10,7 @@ let SearchBar = require('./searchBar');
 let ContactStore = require('../../framework/store/contactStore');
 let NameCircular = require('./nameCircular').NameCircular;
 let {groupFilter} = require('./searchBarHelper');
+let DictStyle = require('../../constants/dictStyle');
 
 let GroupMembers = React.createClass({
 
@@ -31,7 +32,7 @@ let GroupMembers = React.createClass({
     return (
       <Text
         style={
-          {color: '#ffffff'}}>
+          {color:  DictStyle.colorSet.imTitleTextColor}}>
         {data.orgValue}
       </Text>
     );
@@ -42,9 +43,9 @@ let GroupMembers = React.createClass({
   itemRender: function(data) {
     return (
       <View key={data.userId}
-            style={{borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: '#132232'}}>
+            style={{borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
         <NameCircular name={data.realName}/>
-        <Text style={{color:'#ffffff', marginLeft: 10, marginTop:15}}>{data.realName}</Text>
+        <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{data.realName}</Text>
       </View>
 
     );
@@ -59,11 +60,11 @@ let GroupMembers = React.createClass({
         <SearchBar textChange={this.textChange}/>
 
         <ExtenList itemHeight={51}
-                   groundColor={'#15263A'}
-                   groupBorderColor={"#132232"}
-                   arrowColor={'#ffffff'}
-                   groupTitleColor={'#1B385E'}
-                   titleBorderColor={'#162E50'}
+                   groundColor={DictStyle.colorSet.extenListGroundCol}
+                   groupBorderColor={DictStyle.colorSet.demarcationColor}
+                   arrowColor={DictStyle.colorSet.extenListArrowColor}
+                   groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
+                   titleBorderColor={DictStyle.colorSet.demarcationColor}
                    dataSource={groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord)}
                    groupDataName={'orgMembers'}
                    groupItemRender={this.itemRender}

@@ -9,7 +9,6 @@ let {
   View,
   Text,
   TouchableOpacity,
-  TouchableHighlight,
   Platform,
   Image,
   ScrollView
@@ -35,6 +34,7 @@ let { MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 let NameCircular = require('./nameCircular').NameCircular;
 let {sessionFilter} = require('./searchBarHelper');
 let { IM_SESSION_LIST } = require('../../constants/dictEvent');
+let DictStyle = require('../../constants/dictStyle');
 
 let WhitePage = React.createClass({
 
@@ -128,7 +128,7 @@ let WhitePage = React.createClass({
 
     let {width} = Device;
     return (
-      <TouchableHighlight key={item.sessionId} onLongPress={
+      <TouchableOpacity key={item.sessionId} onLongPress={
         ()=>
           {
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
@@ -146,10 +146,10 @@ let WhitePage = React.createClass({
               <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
             </View>
             <Text numberOfLines={1}
-                  style={{marginTop:5,color:'#687886'}}>{item.content}</Text>
+                  style={{marginTop:5,color:DictStyle.colorSet.sessionDetailColor}}>{item.content}</Text>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   },
 
@@ -158,27 +158,27 @@ let WhitePage = React.createClass({
     let {width} = Device;
 
     return (
-        <TouchableHighlight key={item.sessionId} onPress={()=>this.toOther(item)} onLongPress={
+        <TouchableOpacity key={item.sessionId} onPress={()=>this.toOther(item)} onLongPress={
         ()=>
           {
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
           }
         }>
           <View
-            style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
+            style={{borderBottomColor: DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
             <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup} />
             <View
               style={{ height:40, width:width-70, paddingHorizontal:10,justifyContent:'center'}}>
               <View
                 style={{flexDirection:'row', justifyContent:'space-between'}}>
-                <Text style={{color:'#ffffff'}}>{item.title}</Text>
-                <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
+                <Text style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
+                <Text style={{color:DictStyle.colorSet.imTimeTextColor}}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
               <Text numberOfLines={1}
-                    style={{marginTop:5,color:'#687886'}}>{this.showText(item)}</Text>
+                    style={{marginTop:5,color:DictStyle.colorSet.sessionDetailColor}}>{this.showText(item)}</Text>
             </View>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
     );
   },
 
@@ -200,14 +200,14 @@ let WhitePage = React.createClass({
     let {width} = Device;
 
     return (
-        <TouchableHighlight key={item.sessionId}  onLongPress={
+        <TouchableOpacity key={item.sessionId}  onLongPress={
         ()=>
           {
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
           }
         } onPress={()=>this.toOther(item)}>
           <View
-            style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
+            style={{borderBottomColor: DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
             <View style={{ height:40,width: 40, marginRight:15}}>
               <NameCircular badge={item.badge} name={item.title}/>
             </View>
@@ -215,14 +215,14 @@ let WhitePage = React.createClass({
               style={{ height:40,width:width-70,paddingHorizontal:10, justifyContent:'center'}}>
               <View
                 style={{flexDirection:'row', justifyContent:'space-between',flex:1}}>
-                <Text style={{color:'#ffffff'}}>{item.title}</Text>
-                <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
+                <Text style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
+                <Text style={{color:DictStyle.colorSet.imTimeTextColor}}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
               <Text numberOfLines={1}
-                    style={{marginTop:5,color:'#687886'}}>{this.showText(item)}</Text>
+                    style={{marginTop:5,color:'#8A9499'}}>{this.showText(item)}</Text>
             </View>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
     );
   },
@@ -248,19 +248,19 @@ let WhitePage = React.createClass({
     let {width} = Device;
     console.log(item);
     return (
-      <TouchableHighlight key={item.sessionId}  onLongPress={
+      <TouchableOpacity key={item.sessionId}  onLongPress={
         ()=>
           {
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
           }
         } >
         <View
-          style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
+          style={{borderBottomColor: DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
           <HeadPic badge={0} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup}/>
           <View
             style={{ flexDirection:'row',paddingHorizontal:10, height:40, width:width-70, justifyContent:'space-between', alignItems:'center'}}>
             <View>
-              <Text style={{color:'#ffffff'}}>{item.title}</Text>
+              <Text style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
               <Text numberOfLines={1}
                     style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT == item.contentType ? item.content : '点击查看详情'}</Text>
             </View>
@@ -272,7 +272,7 @@ let WhitePage = React.createClass({
             </TouchableHighlight>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   },
 
@@ -285,7 +285,7 @@ let WhitePage = React.createClass({
     let {width} = Device;
 
     return (
-        <TouchableHighlight
+        <TouchableOpacity
           key={item.sessionId}
           onLongPress={
         ()=>
@@ -304,12 +304,12 @@ let WhitePage = React.createClass({
           this.props.navigator.push({comp:Chat, param:param});
         }}>
         <View
-          style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
+          style={{borderBottomColor: DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
           <HeadPic badge={0} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup}/>
           <View
             style={{ flexDirection:'row',paddingHorizontal:10, height:40, width:width-70, justifyContent:'space-between', alignItems:'center'}}>
             <View>
-              <Text style={{color:'#ffffff'}}>{item.title}</Text>
+              <Text style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
               <Text numberOfLines={1}
                     style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT == item.contentType ? item.content : '点击查看详情'}</Text>
             </View>
@@ -319,7 +319,7 @@ let WhitePage = React.createClass({
 
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   },
 
@@ -363,7 +363,7 @@ let WhitePage = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} title='IM' showBack={false} actionButton={this.renderContact}>
         <SearchBar textChange={this.textChange}/>
-        <ScrollView style={{flexDirection: 'column'}}>
+        <ScrollView style={{flexDirection: 'column',backgroundColor:'#FEFEFE'}}>
           {this.renderMessage()}
         </ScrollView>
       </NavBarView>

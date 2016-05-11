@@ -2,6 +2,8 @@ import React, {Text, View, Animated, Image, StyleSheet, TouchableOpacity, Dimens
 import {MSG_CONTENT_TYPE} from '../../constants/dictIm';
 import _ from 'lodash';
 import numeral from 'numeral';
+
+let PicViewer = require('../utils/picViewer');
 let screenWidth = Dimensions.get('window').width;
 let styles = StyleSheet.create({
   bubble: {
@@ -78,14 +80,7 @@ export default class Bubble extends React.Component {
     if (this.props.contentType === MSG_CONTENT_TYPE.IMAGE) {
       return (
         <View style={[styles.bubble, customStyle]}>
-          <Image
-            style={{
-              flex: 1,
-              width: 100,
-              height: 100,
-            }}
-            source={{uri: this.props.content}}
-          ></Image>
+          <PicViewer source={this.props.content} />
         </View>
       );
     }
@@ -218,7 +213,7 @@ Bubble.propTypes = {
 };
 
 Bubble.defaultProps = {
-  leftBackgroundColor: '#e6e6eb',
-  rightBackgroundColor: '#007aff',
+  leftBackgroundColor: '#FEFEFE',
+  rightBackgroundColor: '#44B5E6',
   errorBackgroundColor: '#e01717'
 };
