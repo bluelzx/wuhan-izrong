@@ -42,17 +42,16 @@ let Home = React.createClass({
     let myCategory = AppStore.getCategory();
     let myItem = AppStore.getItem();
     let PAGES = AppStore.queryAllHomePageInfo();
-    if (PAGES.length == 0) {
-      PAGES = [
-        '敬请期待',
-        '敬请期待',
-        '敬请期待'
-      ];
-    }
+    let DEFAULTPAGES = [
+      'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024',
+      'https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?h=1024',
+      'https://images.unsplash.com/photo-1441448770220-76743f9e6af6?h=1024',
+      'https://images.unsplash.com/photo-1441260038675-7329ab4cc264?h=1024'
+    ];
     return {
       categoryArr: categoryArr,
       categoryItem: item,
-      dataSource: dataSource.cloneWithPages(PAGES),
+      dataSource: dataSource.cloneWithPages(DEFAULTPAGES),
       category: myCategory != null ? myCategory.displayName : '资金业务',
       item: myItem != null ? myItem.displayName : '同业存款',
       contentList: [],
@@ -144,20 +143,12 @@ let Home = React.createClass({
 
 
   _renderPage: function (data:Object) {
-    if (data == '敬请期待') {
-      return (
-        <View style={[styles.page,{flex:1,alignItems:'center',justifyContent:'center'}]}>
-          <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>敬请期待</Text>
-        </View>
-      )
-    } else {
       return (
         <Image
           style={styles.page}
           source={{uri: data}}
         />
       );
-    }
   },
 
   rendViewPager: function () {

@@ -34,7 +34,8 @@ let Personal = React.createClass({
     return {
       realName: userInfo.realName,
       orgName: orgBean.orgValue,
-      photoFileUrl: userInfo.photoFileUrl
+      photoFileUrl: userInfo.photoFileUrl,
+      certified: true
     };
   },
 
@@ -65,15 +66,34 @@ let Personal = React.createClass({
 
   returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
+      if (this.state.certified) {
+        return (
+          <View>
+            <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+            <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
+                   resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+          </View>
+        );
+      }
       return (
         <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
       );
+    } else {
+      if (this.state.certified) {
+        return (
+          <View style={{marginLeft:20}}>
+            <NameCircular name={this.state.realName}/>
+            <Image style={[styles.certified,{position: 'absolute',bottom:1,left:10}]}
+                   resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+          </View>
+        );
+      }
+      return (
+        <View style={{marginLeft:20}}>
+          <NameCircular name={this.state.realName}/>
+        </View>
+      );
     }
-    return (
-      <View style={{marginLeft:20}}>
-        <NameCircular name={this.state.realName}/>
-      </View>
-    );
   },
 
   render: function () {
@@ -82,7 +102,7 @@ let Personal = React.createClass({
       <NavBarView navigator={this.props.navigator} title='个人中心' showBack={false}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
           <View style={{backgroundColor:PlainStyle.colorSet.content , height: 10}}/>
-          <TouchableHighlight activeOpacity={0.8} underlayColor= {PlainStyle.colorSet.content}
+          <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content}
                               onPress={()=>this.toPage(UserInfo)}
           >
             <View style={[styles.layout,DictStyle.userInfoBorderBottom,DictStyle.userInfoBorderTop]}>
@@ -119,7 +139,7 @@ let styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     height: 84,
-    backgroundColor:PlainStyle.colorSet.personalItemColor
+    backgroundColor: PlainStyle.colorSet.personalItemColor
   },
   head: {
     width: 60,
@@ -136,6 +156,11 @@ let styles = StyleSheet.create({
     textAlignVertical: 'center',
     textAlign: 'center',
     fontWeight: 'bold'
+  },
+  certified:{
+    width: 15,
+    height: 15,
+    marginLeft:20
   }
 });
 
