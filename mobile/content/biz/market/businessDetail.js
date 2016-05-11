@@ -41,6 +41,7 @@ let BusinessDetail = React.createClass({
       userInfo = loginUserInfo;
     }
 
+    let t = new Date(marketInfo.lastModifyDate);
 
     return {
       userId: loginUserInfo.userId,
@@ -49,7 +50,7 @@ let BusinessDetail = React.createClass({
       fileUrlList: [],
       marketInfo: marketInfo,
       orderUserId: marketInfo.userId,
-      lastModifyDate: marketInfo.lastModifyDate,
+      lastModifyDate: DateHelper.formatBillDetail(t),
       userInfo: userInfo
     }
   },
@@ -77,9 +78,10 @@ let BusinessDetail = React.createClass({
   },
 
   _renderContent: function () {
-    if (!this.state.detailData) {
+    if (!this.state.marketInfo) {
       return (
-        <View></View>
+        <View>
+        </View>
       );
     }
 
@@ -96,7 +98,7 @@ let BusinessDetail = React.createClass({
               : this.state.marketInfo.amount < 100000000 ? (this.state.marketInfo.amount / 10000) + '万' : (this.state.marketInfo.amount / 100000000) + '亿')}
             {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : numeral(this.state.marketInfo.rate * 100).format('0,0.00') + '%')}
             {this.returnItem('备注:', this.state.marketInfo.remark == null || this.state.marketInfo.remark == 0 ? '--' : this.state.marketInfo.remark)}
-            {this.returnItem('更新时间:', this.state.marketInfo.lastModifyDate)}
+            {this.returnItem('更新时间:', this.state.lastModifyDate)}
           </View>
           {this.renderAdjunct()}
           {this.renderUserInfo()}
@@ -129,15 +131,16 @@ let BusinessDetail = React.createClass({
       </View>
     );
   },
-  renderUserInfo: function (userInfo) {
-    if (userInfo == null) {
+  renderUserInfo: function () {
+    if (this.state.userInfo == null) {
       return (
-        <View></View>
+        <View>
+        </View>
       );
     }
     return (
       <View style={{backgroundColor:'#f0f0f0',borderRadius:2,margin:10}}>
-        {this.renderPromulgator(userInfo)}
+        {this.renderPromulgator()}
         {this.returnInfoItem(require('../../image/market/email.png'), this.state.userInfo.email, true)}
         {this.returnInfoItem(require('../../image/market/tel.png'), this.state.userInfo.phoneNumber == null ? '未填写' : this.state.userInfo.phoneNumber, this.state.userInfo.publicPhone)}
         {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.userInfo.mobileNumber == null ? '未填写' : this.state.userInfo.mobileNumber, this.state.userInfo.publicMobile)}
@@ -168,7 +171,7 @@ let BusinessDetail = React.createClass({
     }
   },
   renderUserPhoto: function () {
-    if (userInfo.photoFileUrl == null) {
+    if (this.state.userInfo.photoStoredFileUrl == null) {
       return (
         <View style={{margin:10}}>
           <NameCircular name={this.state.marketInfo.userName}/>
@@ -179,7 +182,7 @@ let BusinessDetail = React.createClass({
         <View style={{margin:10}}>
           <Image
             style={{height:36,width:36,borderRadius:18}}
-            source={{uri:this.state.userInfo.photoFileUrl}}
+            source={{uri:this.state.userInfo.photoStoredFileUrl}}
           />
         </View>
       );
@@ -232,7 +235,7 @@ let BusinessDetail = React.createClass({
         comp: name,
         param: {
           chatType: SESSION_TYPE.USER,
-          userId: this.state.bizOrderOwnerBean.userId
+          userId: this.state.orderUserId
         }
       })
     }
