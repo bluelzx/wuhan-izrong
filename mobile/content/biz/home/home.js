@@ -17,6 +17,7 @@ let {
 const { Device } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
 let ViewPager = require('react-native-viewpager');
+let BusinessDetail = require('../market/businessDetail');
 let MyBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
 let {MARKET_CHANGE} = require('../../constants/dictEvent');
@@ -213,11 +214,11 @@ let Home = React.createClass({
   },
   _renderRow: function (rowData, sectionID, rowID) {
     return (
-      <TouchableHighlight onPress={() => this._pressRow()} underlayColor='#000'>
+      <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
         <View
           style={{flexDirection:'row',height: 50, backgroundColor: PlainStyle.colorSet.homeListItemColor,alignItems:'center',
               borderBottomWidth:1,borderBottomColor:PlainStyle.colorSet.homeBorderColor}}>
-          <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
+          <Image style={{width:30,height:30,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
           <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor}}>
@@ -225,7 +226,7 @@ let Home = React.createClass({
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:PlainStyle.colorSet.homeListTextColor}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount / 10000 + '万'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount < 100000000 ? (rowData.amount / 10000) + '万' : rowData.amount / 100000000 + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor,width:Adjust.width(135)}}
@@ -236,8 +237,18 @@ let Home = React.createClass({
       </TouchableHighlight>
     )
   },
-  _pressRow: function () {
-  }
+
+  toDetail: function (name, rowData) {
+    const { navigator } = this.props;
+    if (navigator) {
+      navigator.push({
+        comp: name,
+        param: {
+          marketInfo: rowData
+        }
+      })
+    }
+  },
 });
 
 var styles = StyleSheet.create({
