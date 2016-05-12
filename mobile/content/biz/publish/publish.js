@@ -49,6 +49,7 @@ let amountUnit = ['万', '亿'];
 import Share from 'react-native-share';
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Lightbox = require('../../comp/lightBox/Lightbox');
+let Icon = require('react-native-vector-icons/Ionicons');
 
 let Publish = React.createClass({
   getInitialState(){
@@ -331,18 +332,16 @@ let Publish = React.createClass({
         <View style={{marginTop:10,marginBottom:10}}>
           <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
             <View
-              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: 'white'}}>
+                style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 50, backgroundColor: 'white'}}>
               <Text style={{marginLeft:10,color:DictStyle.marketSet.fontColor}}>
                 {'备注'}
               </Text>
               <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                 <Text
-                  style={{marginRight:10,color:(this.state.remarkText == '') ? '#d3d5df' : DictStyle.marketSet.fontColor}}
-                  numberOfLines={1}>{(this.state.remarkText == '') ? '50字以内' : this.state.remarkText}
+                    style={{marginRight:10,color:(this.state.remarkText == '') ? '#d3d5df' : DictStyle.marketSet.fontColor,flex:1,width:screenWidth-120}}
+                >{(this.state.remarkText == '') ? '50字以内' : this.state.remarkText}
                 </Text>
-                <Image style={{margin:10,width:16,height:16}}
-                       source={require('../../image/market/next.png')}
-                />
+                <Icon style={{marginRight: 10}} name="ios-arrow-right" size={30} color='#a8afb3'/>
               </View>
             </View>
           </TouchableHighlight>
@@ -374,6 +373,7 @@ let Publish = React.createClass({
   },
 
   _pressPublish: function () {
+
     if (!Validation.isTerm(this.state.termText)) {
       Alert('期限：请输入大于0的整数');
     } else if (!Validation.isAmount(this.state.amountText)) {
@@ -437,7 +437,15 @@ let Publish = React.createClass({
   },
 
   addBizOrder: function () {
+
     dismissKeyboard();
+
+    if (this.state.term % 360 == 0) {
+      this.setState({
+        term: this.state.term + (this.state.term / 360) * 5
+      });
+    }
+
     let {title, param}  = this.props;
     let params = {
       id: '',

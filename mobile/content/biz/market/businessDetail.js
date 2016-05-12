@@ -217,9 +217,8 @@ let BusinessDetail = React.createClass({
         {
           this.state.fileUrlList.map((item, index) => {
             return (
-                <Lightbox imageSource={{uri:item, isStatic: true}}>
+                <Lightbox key={index} imageSource={{uri:item, isStatic: true}}>
                   <Image
-                      key={index}
                       style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
                       source={{uri:item, isStatic: true}}
                   />
