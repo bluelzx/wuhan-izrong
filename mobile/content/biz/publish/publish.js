@@ -542,7 +542,7 @@ let Publish = React.createClass({
   shareDialog (data) {
     let amount = data.amount == '' ? '--' : (data.amount > 99999999 ? data.amount / 100000000 + '亿' : data.amount / 10000 + '万');
     let dayNum;
-    if (data.term == '') {
+    if (data.term == '' || data.term == 0) {
       dayNum = '--'
     } else if (data.term % 365 == 0) {
       dayNum = parseInt(data.term / 365) + '年';
@@ -552,7 +552,8 @@ let Publish = React.createClass({
       dayNum = data.term + '日';
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
-    let shareContent = data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate + '\n' + '--来自爱资融APP';
+    let shareContent = data.bizCategory + '\n' + '业务方向:  ' +(data.bizOrientation == 'IN' ? '收' : '出') + '  '
+                        + '金额:' + amount + '  ' + '期限:'+ dayNum + '  ' + '利率:'+ rate + '\n' + '--来自爱资融APP';
     Share.open({
       share_text: shareContent,
       share_URL: Platform.OS === 'android' ? shareContent : "http://google.cl",
