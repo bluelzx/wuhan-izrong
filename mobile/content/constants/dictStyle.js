@@ -55,8 +55,8 @@ const PlainStyle = {
   },
 
   tabBar: {
-    tintColor: '#ffffff',
-    barTintColor: '#2b3849'
+    //tintColor: '#ffffff',
+    //barTintColor: '#2b3849'
   },
 
   //market
