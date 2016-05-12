@@ -49,6 +49,7 @@ let amountUnit = ['万', '亿'];
 import Share from 'react-native-share';
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Lightbox = require('../../comp/lightBox/Lightbox');
+let Icon = require('react-native-vector-icons/Ionicons');
 
 let Publish = React.createClass({
   getInitialState(){
@@ -311,6 +312,7 @@ let Publish = React.createClass({
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
       >
         <Lightbox imageSource={{uri:rowData}}
+                  navigator={this.props.navigator}
                   deleteHeader={()=>{
                     let arr = this.state.fileUrlList;
                     arr[rowID] = 0;
@@ -331,18 +333,16 @@ let Publish = React.createClass({
         <View style={{marginTop:10,marginBottom:10}}>
           <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
             <View
-              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: 'white'}}>
+                style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 50, backgroundColor: 'white'}}>
               <Text style={{marginLeft:10,color:DictStyle.marketSet.fontColor}}>
                 {'备注'}
               </Text>
               <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                 <Text
-                  style={{marginRight:10,color:(this.state.remarkText == '') ? '#d3d5df' : DictStyle.marketSet.fontColor}}
-                  numberOfLines={1}>{(this.state.remarkText == '') ? '50字以内' : this.state.remarkText}
+                    style={{marginRight:10,color:(this.state.remarkText == '') ? '#d3d5df' : DictStyle.marketSet.fontColor,flex:1,width:screenWidth-120}}
+                >{(this.state.remarkText == '') ? '50字以内' : this.state.remarkText}
                 </Text>
-                <Image style={{margin:10,width:16,height:16}}
-                       source={require('../../image/market/next.png')}
-                />
+                <Icon style={{marginRight: 10}} name="ios-arrow-right" size={30} color='#a8afb3'/>
               </View>
             </View>
           </TouchableHighlight>
@@ -374,6 +374,7 @@ let Publish = React.createClass({
   },
 
   _pressPublish: function () {
+
     if (!Validation.isTerm(this.state.termText)) {
       Alert('期限：请输入大于0的整数');
     } else if (!Validation.isAmount(this.state.amountText)) {
@@ -437,7 +438,15 @@ let Publish = React.createClass({
   },
 
   addBizOrder: function () {
+
     dismissKeyboard();
+
+    if (this.state.term % 360 == 0) {
+      this.setState({
+        term: this.state.term + (this.state.term / 360) * 5
+      });
+    }
+
     let {title, param}  = this.props;
     let params = {
       id: '',
@@ -534,7 +543,7 @@ let Publish = React.createClass({
   shareDialog (data) {
     let amount = data.amount == '' ? '--' : (data.amount > 99999999 ? data.amount / 100000000 + '亿' : data.amount / 10000 + '万');
     let dayNum;
-    if (data.term == '') {
+    if (data.term == '' || data.term == 0) {
       dayNum = '--'
     } else if (data.term % 365 == 0) {
       dayNum = parseInt(data.term / 365) + '年';
@@ -544,7 +553,8 @@ let Publish = React.createClass({
       dayNum = data.term + '日';
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
-    let shareContent = data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate + '\n' + '--来自爱资融APP';
+    let shareContent = data.bizCategory + '\n' + '业务方向:  ' +(data.bizOrientation == 'IN' ? '收' : '出') + '  '
+                        + '金额:' + amount + '  ' + '期限:'+ dayNum + '  ' + '利率:'+ rate + '\n' + '--来自爱资融APP';
     Share.open({
       share_text: shareContent,
       share_URL: Platform.OS === 'android' ? shareContent : "http://google.cl",

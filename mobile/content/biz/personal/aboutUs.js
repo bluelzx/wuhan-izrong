@@ -82,8 +82,8 @@ var styles = StyleSheet.create({
   },
   logo: {
     marginTop: 20,
-    height: 60,
-    width: 120
+    height: 70,
+    width: 60
   }
 });
 module.exports = AboutUs;

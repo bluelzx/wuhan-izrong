@@ -39,6 +39,7 @@ let numeral = require('numeral');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let DictStyle = require('../../constants/dictStyle');
 let Lightbox = require('../../comp/lightBox/Lightbox');
+let Icon = require('react-native-vector-icons/Ionicons');
 
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
@@ -373,6 +374,7 @@ let MyBizDetail = React.createClass({
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
       >
         <Lightbox imageSource={{uri:rowData}}
+                  navigator={this.props.navigator}
                   deleteHeader={()=>{
                     let arr = this.state.fileUrlList;
                     arr[rowID] = 0;
@@ -412,17 +414,15 @@ let MyBizDetail = React.createClass({
         <View style={{marginTop:10}}>
           <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
             <View
-              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: 'white'}}>
+                style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height:50, backgroundColor: 'white'}}>
               <Text style={{marginLeft:10,color:DictStyle.marketSet.fontColor}}>
                 {'备注'}
               </Text>
               <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                <Text style={{marginRight:10,color:'#d3d5df'}}
-                      numberOfLines={1}>{(this.state.remarkText == '' || this.state.remarkText == null) ? '50字以内' : this.state.remarkText}
+                <Text style={{marginRight:10,color:'#d3d5df',flex:1,width:screenWidth-120}}
+                >{(this.state.remarkText == '' || this.state.remarkText == null) ? '50字以内' : this.state.remarkText}
                 </Text>
-                <Image style={{margin:10,width:16,height:16}}
-                       source={require('../../image/market/next.png')}
-                />
+                <Icon style={{marginRight: 10}} name="ios-arrow-right" size={30} color='#a8afb3'/>
               </View>
             </View>
           </TouchableHighlight>
@@ -582,7 +582,15 @@ let MyBizDetail = React.createClass({
   },
 
   updateBizOrder: function () {
+
     dismissKeyboard();
+
+    if (this.state.term % 360 == 0) {
+      this.setState({
+        term: this.state.term + (this.state.term / 360) * 5
+      });
+    }
+
     let {title, param}  = this.props;
     let params = {
       id: this.state.id,
@@ -621,7 +629,7 @@ let MyBizDetail = React.createClass({
   shareDialog (data) {
     let amount = data.amount == '' ? '--' : (data.amount > 99999999 ? data.amount / 100000000 + '亿' : data.amount / 10000 + '万');
     let dayNum;
-    if (data.term == '') {
+    if (data.term == '' || data.term == 0) {
       dayNum = '--'
     } else if (data.term % 365 == 0) {
       dayNum = parseInt(data.term / 365) + '年';
@@ -631,7 +639,8 @@ let MyBizDetail = React.createClass({
       dayNum = data.term + '日';
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
-    let shareContent = '我利用[渤海银通]分享了一个业务信息给您：' + data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate;
+    let shareContent = this.state.marketInfo.bizCategoryDesc + '\n' + '业务方向:  ' +(data.bizOrientation == 'IN' ? '收' : '出') + '  '
+                       + '金额:' + amount + '  ' + '期限:'+ dayNum + '  ' + '利率:'+ rate + '\n' + '--来自爱资融APP';
     Share.open({
       share_text: shareContent,
       share_URL: Platform.OS === 'android' ? shareContent : "http://google.cl",

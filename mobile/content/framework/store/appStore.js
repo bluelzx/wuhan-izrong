@@ -45,14 +45,11 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getAPNSToken: () => _get_apns_token(),
   updateLastSyncTime: (t)=>_updateLastSyncTime(t),
   getToken: () => _data.token || '',
-  //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
-  //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTA5IiwiaWF0IjoxNDYxNTUzMTgzLCJzdWIiOiJ3ZWlzZW4zIiwiaXNzIjoiVXNlcklkLTEwOSJ9.SahHndVnBfJo2RforCkAN0XMXAcrL10Gzi3-EMQQsBM',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),
   logout: (userId) => _logout(userId),
   forceLogout: () => _force_logout(),
-  setForceLogout:(isForceLogout) => _setForceLogout(isForceLogout),
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
@@ -77,7 +74,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
 
 let _queryAllPlatFormInfo = function () {
   return Persister.queryAllPlatFormInfo();
-}
+};
 
 // Private Functions
 let _handleConnectivityChange = (isConnected) => {
@@ -147,12 +144,6 @@ let _force_logout = () => {
   _info.isForceLogout = true;
   //TODO:'强制登出'
   AppStore.emitChange();
-};
-
-//TODO:'强制登出后设置为未登出'
-let _setForceLogout = (isForceLogout)=>{
-  _info.isLogout = isForceLogout;
-  _info.isForceLogout = isForceLogout;
 };
 
 let _save_apns_token = (apnsToken) => {

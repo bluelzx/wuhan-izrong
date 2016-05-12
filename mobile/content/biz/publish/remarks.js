@@ -12,6 +12,7 @@ let {
 
 let DictStyle = require('../../constants/dictStyle');
 let NavBarView = require('../../framework/system/navBarView');
+let CountedTextInput = require('../../comp/utils/CountedTextInput');
 let {Alert} = require('mx-artifacts');
 
 let Remarks = React.createClass({
@@ -24,16 +25,13 @@ let Remarks = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} title='备注' actionButton={this.renderFinish}>
         <View style={{backgroundColor:'white',marginTop:10}}>
-          <TextInput
-            value={this.state.remarkText}
-            placeholder={'50字以内'}
-            placeholderTextColor='#d3d5df'
-            returnKeyType="search"
-            maxLength={50}
-            onChangeText={(value) => this.onChangeText(value)}
-            underlineColorAndroid={'transparent'}
-            clearButtonMode="while-editing"
-            style={{width:DictStyle.fullScreen.width - 20,height:40,marginLeft:10,marginRight:10,color:DictStyle.marketSet.fontColor}}/>
+          <CountedTextInput
+              placeholder="请输入备注(限50字)"
+              maxLength={50}
+              callback={(text) => this.setState({remarkText: text})}
+              stateCallback={(bOut) => this.setState({bOpinionOut: bOut})}
+              value={this.state.remarkText}
+          />
         </View>
       </NavBarView>
     )

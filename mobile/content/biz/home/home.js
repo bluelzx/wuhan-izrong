@@ -14,9 +14,10 @@ let {
   ListView
   } = React;
 
+const { Device } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
-let {height, width} = Dimensions.get('window');
 let ViewPager = require('react-native-viewpager');
+let BusinessDetail = require('../market/businessDetail');
 let MyBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
 let {MARKET_CHANGE} = require('../../constants/dictEvent');
@@ -102,10 +103,8 @@ let Home = React.createClass({
 
   renderMenuItem(url, text, toPage){
     return(
-      <TouchableHighlight style={{flex: 1, flexDirection: 'column',borderLeftColor:'#e6e7ee',borderLeftWidth:0.5}} activeOpacity={0.8}
-                          underlayColor={PlainStyle.colorSet.content} onPress={()=>this.toPage(toPage)}
-      >
-        <View style={styles.menuItem}>
+      <TouchableHighlight  activeOpacity={0.8} underlayColor={PlainStyle.colorSet.homeBorderColor} onPress={()=>this.toPage(toPage)}>
+        <View style={[styles.menuItem,{width:Device.width/2, flexDirection: 'column',borderLeftColor:'#e6e7ee',borderLeftWidth:0.5}]}>
           <Image style={styles.menuImage} resizeMode='cover' source={url}/>
           <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop:20}]}>{text}</Text>
         </View>
@@ -119,8 +118,6 @@ let Home = React.createClass({
     if (navigator) {
       if (name == MyBusiness) {
         navigator.push({comp: name, data: data});
-      } else {
-        navigator.resetTo({comp: 'tabView', tabName: 'market', param: data});
       }
     }
   },
@@ -174,10 +171,9 @@ let Home = React.createClass({
       <NavBarView navigator={this.props.navigator} title='首页' showBack={false}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
           {this.rendViewPager()}
-
-          <View style={{backgroundColor:PlainStyle.colorSet.homeMenuColor,height: width/3,flexDirection:"row"}}>
-            {this.renderMenuItem(require('../../image/home/myBusiness.png'), '我的业务', MyBusiness)}
-            {this.renderMenuItem(require('../../image/home/myBusiness.png'), '我的业务', MyBusiness)}
+          <View style={{height: Device.width/3,width:Device.width,flexDirection:"row"}}>
+            {this.renderMenuItem(require('../../image/home/myBiz.png'), '我的业务', MyBusiness)}
+            {this.renderMenuItem(require('../../image/home/newBiz.png'), '敬请期待', '')}
           </View>
           <View style={styles.listHead}>
             <Text
@@ -192,7 +188,7 @@ let Home = React.createClass({
   },
   renderMarketList() {
     return (
-      <View style={{width:width,flex:1,backgroundColor: PlainStyle.colorSet.homeListHeaderColor}}>
+      <View style={{width:Device.width,flex:1,backgroundColor: PlainStyle.colorSet.homeListHeaderColor}}>
         <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5, borderBottomWidth: 1,
              borderBottomColor: PlainStyle.colorSet.homeBorderColor}}>
           <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
@@ -219,11 +215,11 @@ let Home = React.createClass({
   },
   _renderRow: function (rowData, sectionID, rowID) {
     return (
-      <TouchableHighlight onPress={() => this._pressRow()} underlayColor='#000'>
+      <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
         <View
           style={{flexDirection:'row',height: 50, backgroundColor: PlainStyle.colorSet.homeListItemColor,alignItems:'center',
               borderBottomWidth:1,borderBottomColor:PlainStyle.colorSet.homeBorderColor}}>
-          <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
+          <Image style={{width:30,height:30,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
           <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor}}>
@@ -231,7 +227,7 @@ let Home = React.createClass({
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:PlainStyle.colorSet.homeListTextColor}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount / 10000 + '万'}
+            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount < 100000000 ? (rowData.amount / 10000) + '万' : rowData.amount / 100000000 + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor,width:Adjust.width(135)}}
@@ -242,13 +238,23 @@ let Home = React.createClass({
       </TouchableHighlight>
     )
   },
-  _pressRow: function () {
-  }
+
+  toDetail: function (name, rowData) {
+    const { navigator } = this.props;
+    if (navigator) {
+      navigator.push({
+        comp: name,
+        param: {
+          marketInfo: rowData
+        }
+      })
+    }
+  },
 });
 
 var styles = StyleSheet.create({
   page: {
-    width: width,
+    width: Device.width,
     height: 180
   },
   text: {
@@ -264,6 +270,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     flex: 1,
+    width:Device.width/2,
     justifyContent: 'center'
   },
   listHead: {
