@@ -92,7 +92,7 @@ let Login = React.createClass({
                resizeMode='cover'
                source={require('../../image/login/logo.png')}
         />
-        <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop: 18}]}>资融网同业平台</Text>
+        <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop: 10}]}>资融网同业平台</Text>
       </View>
     );
   },
@@ -177,8 +177,8 @@ let styles = StyleSheet.create({
   },
   logo: {
     marginTop: 30,
-    height: 60,
-    width: 120
+    height: 70,
+    width: 60
   },
   inputStyle: {
     height: 47,
