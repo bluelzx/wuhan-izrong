@@ -215,7 +215,7 @@ let TextEdit = React.createClass({
             style={[DictStyle.textEditItem,{marginTop: 20}]}
           >
             <View style={[styles.view, {flexDirection: 'row'}]}>
-              <TextInput style={[styles.text, {width: 60}]} defaultValue={this.state.oldValue.split('-')[0]}
+              <TextInput style={[styles.text, {width: 80}]} defaultValue={this.state.oldValue.split('-')[0]}
                          keyboardType='number-pad'
                          underlineColorAndroid="transparent"
                          maxLength={4}
