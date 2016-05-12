@@ -48,6 +48,8 @@ let termUnit = ['日', '月', '年'];
 let amountUnit = ['万', '亿'];
 import Share from 'react-native-share';
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+let Lightbox = require('../../comp/lightBox/Lightbox');
+
 let Publish = React.createClass({
   getInitialState(){
     let filterItems = AppStore.getFilters().filterItems;
@@ -308,10 +310,18 @@ let Publish = React.createClass({
         allowsEditing={true}
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
       >
-        <Image
-          style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-          source={{uri:rowData}}
-        />
+        <Lightbox imageSource={{uri:rowData}}
+                  deleteHeader={()=>{
+                    let arr = this.state.fileUrlList;
+                    arr[rowID] = 0;
+                    this.setState({fileUrlList: _.compact(arr)})
+                    }}
+        >
+          <Image
+              style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+              source={{uri:rowData}}
+          />
+        </Lightbox>
       </ImagePicker>
     )
   },
@@ -377,13 +387,11 @@ let Publish = React.createClass({
     }
   },
 
-  callBackCategoryAndItem: function (category, item) {
+  callBackCategory: function (category) {
     this.setState({
       bizCategory: category,
-      bizItem: item
     });
     AppStore.saveCategory(category);
-    AppStore.saveItem(item);
   },
 
   callBackRemarks: function (remarkText) {
@@ -401,7 +409,7 @@ let Publish = React.createClass({
           comp: name,
           param: {
             filterItems: this.state.filterItems,
-            callBackCategoryAndItem: this.callBackCategoryAndItem
+            callBackCategory: this.callBackCategory
           }
         })
       }
@@ -438,12 +446,11 @@ let Publish = React.createClass({
       remark: this.state.remark,
       bizOrientation: this.state.bizOrientation,
       bizCategory: this.state.bizCategory.displayCode,
-      bizItem: this.state.bizItem.displayCode,
       amount: this.state.amount,
       fileUrlList: this.state.fileUrlList
     };
     let item = {
-      bizCategory: (this.state.bizCategory == '' && this.state.bizItem == '') ? '资金业务 - 同业存款' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName,
+      bizCategory: (this.state.bizCategory == '') ? '资金业务' : this.state.bizCategory.displayName,
       bizOrientation: params.bizOrientation,
       term: params.term,
       amount: params.amount,
@@ -567,20 +574,6 @@ let Publish = React.createClass({
   handleImageError(error) {
     console.log('Image select error ' + JSON.stringify(error));
     Alert('图片选择失败');
-  },
-
-  removeDisplayCodeIsAllObj: function (arr) {
-    let itemArr = [];
-    if (!!arr) {
-      arr.forEach(function (item) {
-        if (item.displayCode != 'ALL') {
-          itemArr.push(item);
-        }
-      });
-      return (
-        itemArr
-      );
-    }
   }
 
 });

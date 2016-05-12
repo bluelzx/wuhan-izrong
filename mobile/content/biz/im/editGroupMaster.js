@@ -76,6 +76,7 @@ let EditGroupMaster = React.createClass({
       members: this.state.groupInfo.members,
       showDelete: true,
       imgSource: DictIcon.imSpread,
+      groupMasterUid:this.state.groupInfo.groupMasterUid,
       addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId,existMembers:this.state.groupInfo.memberNum}}),
       deleteMember: ()=>this.props.navigator.push({comp: DeleteMember, param:{groupId:this.props.param.groupId}})
     };

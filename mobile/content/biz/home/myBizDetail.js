@@ -38,6 +38,7 @@ let Adjust = require('../../comp/utils/adjust');
 let numeral = require('numeral');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let DictStyle = require('../../constants/dictStyle');
+let Lightbox = require('../../comp/lightBox/Lightbox');
 
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
@@ -74,7 +75,6 @@ let MyBizDetail = React.createClass({
       remark: marketInfo.remark,
       bizOrientation: marketInfo.bizOrientation,
       bizCategory: marketInfo.bizCategory,
-      bizItem: marketInfo.bizItem,
       amount: marketInfo.amount,
       fileUrlList: marketInfo.fileUrlList
     }
@@ -195,7 +195,7 @@ let MyBizDetail = React.createClass({
         style={{marginTop:10,height:36,alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
         <Text
           style={{fontSize:16,marginLeft:10,color:DictStyle.marketSet.fontColor}}
-        >{'业务类型: ' + this.state.marketInfo.bizCategoryDesc + '-' + this.state.marketInfo.bizItemDesc
+        >{'业务类型: ' + this.state.marketInfo.bizCategoryDesc
         }</Text>
       </View>
     )
@@ -372,10 +372,18 @@ let MyBizDetail = React.createClass({
         title="选择图片"
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
       >
-        <Image
-          style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-          source={{uri:rowData}}
-        />
+        <Lightbox imageSource={{uri:rowData}}
+                  deleteHeader={()=>{
+                    let arr = this.state.fileUrlList;
+                    arr[rowID] = 0;
+                    this.setState({fileUrlList: _.compact(arr)})
+                    }}
+        >
+          <Image
+              style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+              source={{uri:rowData}}
+          />
+        </Lightbox>
       </ImagePicker>
     )
   },
@@ -579,7 +587,6 @@ let MyBizDetail = React.createClass({
     let params = {
       id: this.state.id,
       bizCategory: this.state.bizCategory,
-      bizItem: this.state.bizItem,
       bizOrientation: this.state.bizOrientation,
       term: this.state.term,
       amount: this.state.amount,
@@ -588,7 +595,7 @@ let MyBizDetail = React.createClass({
       remark: this.state.remarkText
     };
     let item = {
-      bizCategory: (this.state.bizCategory == '' && this.state.bizItem == '') ? '资金业务 - 同业存款' : this.state.bizCategory.displayName + '-' + this.state.bizItem.displayName,
+      bizCategory: (this.state.bizCategory == '') ? '资金业务' : this.state.bizCategory.displayName,
       bizOrientation: params.bizOrientation,
       term: params.term,
       amount: params.amount,

@@ -50,8 +50,9 @@ var TabView = React.createClass({
     //  });
     //  sum = billSum;
     //  var show = sum >= 99 ? "99+" : sum;
+    let badge = AppStore.getBadge();
      if (Platform.OS === 'ios') {
-        PushNotificationIOS.setApplicationIconBadgeNumber(AppStore.getBadge());
+        PushNotificationIOS.setApplicationIconBadgeNumber(badge);
      }
     //  return {
     //    billSum: show,
@@ -61,7 +62,7 @@ var TabView = React.createClass({
       return {
         token: token,
         initialPage: 0,
-        badge: AppStore.getBadge()
+        badge: badge
       }
     //}
   },
@@ -171,7 +172,7 @@ var TabView = React.createClass({
 
           <TabBarIOS.Item
             title="IM"
-            badge={this.state.badge || null}
+            badge={(this.state.badge || null) > 99 ? '99+':(this.state.badge || null)}
             icon={require('../../image/tab/IM.png')}
             selected={this.state.selectedTab === 'IM'}
             onPress={() => {this.setState({selectedTab: 'IM'})}}>
@@ -225,7 +226,7 @@ var TabView = React.createClass({
 
           <IM navigator={this.props.navigator}
               tabDesc="IM"
-              badge={this.state.badge || null}
+              badge={(this.state.badge || null) > 99 ? '99+':(this.state.badge || null)}
               icon={require('../../image/tab/IM.png')}
               selectedIcon={require('../../image/tab/IM-selected.png')}
               exec={this.props.exec}

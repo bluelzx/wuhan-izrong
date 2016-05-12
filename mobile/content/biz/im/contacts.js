@@ -161,16 +161,40 @@ let Contacts = React.createClass({
       <NavBarView navigator={this.props.navigator} title='通讯录' actionButton={this.renderAdd}>
         <SearchBar textChange={this.textChange}/>
         {this.renderGlobal()}
-        <ExtenList itemHeight={51}
-                   groundColor={DictStyle.colorSet.extenListGroundCol}
-                   groupBorderColor={DictStyle.colorSet.demarcationColor}
-                   arrowColor={DictStyle.colorSet.extenListArrowColor}
-                   groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
-                   titleBorderColor={DictStyle.colorSet.demarcationColor}
-                   dataSource={contactFilter(this.state.dataSource,'orgMembers','groupName','orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId)}
-                   groupDataName={'orgMembers'}
-                   groupItemRender={this.itemRender}
-                   groupTitleRender={this.titleRender} />
+
+        {(()=>{
+
+          let  dataSource = contactFilter(this.state.dataSource,'orgMembers','groupName','orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
+          if(dataSource && dataSource.length > 0){
+            if(dataSource.length == 1 && dataSource[0].length == 0){
+              return (
+                <View style={{backgroundColor:'transparent', alignItems:'center'}}>
+                  <Text>{'无符合条件的用户'}</Text>
+                </View>
+              );
+            }else
+            return (
+              <ExtenList itemHeight={51}
+                         groundColor={DictStyle.colorSet.extenListGroundCol}
+                         groupBorderColor={DictStyle.colorSet.demarcationColor}
+                         arrowColor={DictStyle.colorSet.extenListArrowColor}
+                         groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
+                         titleBorderColor={DictStyle.colorSet.demarcationColor}
+                         dataSource={dataSource}
+                         groupDataName={'orgMembers'}
+                         groupItemRender={this.itemRender}
+                         groupTitleRender={this.titleRender} />
+            );
+          }else{
+            return (
+              <View style={{backgroundColor:'transparent', alignItems:'center'}}>
+                <Text>{'无符合条件的用户'}</Text>
+              </View>
+            );
+          }
+
+        })()}
+
       </NavBarView>
     );
   }

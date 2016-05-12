@@ -61,14 +61,8 @@ let SelectBusiness1 = React.createClass({
     )
   },
   pressRow: function (rowData) {
-    this.props.navigator.push({
-      comp: SelectBusiness2,
-      param: {
-        bizItem: MarketStore.getFilterOptions(this.props.param.filterItems, 'bizItem').options,
-        category: rowData,
-        callBackCategoryAndItem: this.props.param.callBackCategoryAndItem
-      }
-    });
+    this.props.param.callBackCategory(rowData);
+    this.props.navigator._popN(1);
   },
 
   removeDisplayCodeIsAllObj: function (arr) {

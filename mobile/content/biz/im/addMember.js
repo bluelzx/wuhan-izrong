@@ -121,16 +121,32 @@ let AddMember = React.createClass({
         <ChooseList  memberList={this.state.memberList}/>
 
         <SearchBar textChange={this.textChange}/>
-        <ExtenList itemHeight={51}
-                   groundColor={DictStyle.colorSet.extenListGroundCol}
-                   groupBorderColor={DictStyle.colorSet.demarcationColor}
-                   arrowColor={DictStyle.colorSet.extenListArrowColor}
-                   groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
-                   titleBorderColor={DictStyle.colorSet.demarcationColor}
-                   dataSource={groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord)}
-                   groupDataName={'orgMembers'}
-                   groupItemRender={this.itemRender}
-                   groupTitleRender={this.titleRender} />
+
+        {(()=>{
+
+          let dataSource = groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord);
+          if(dataSource && dataSource.length > 0) {
+            return (
+              <ExtenList itemHeight={51}
+                         groundColor={DictStyle.colorSet.extenListGroundCol}
+                         groupBorderColor={DictStyle.colorSet.demarcationColor}
+                         arrowColor={DictStyle.colorSet.extenListArrowColor}
+                         groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
+                         titleBorderColor={DictStyle.colorSet.demarcationColor}
+                         dataSource={dataSource}
+                         groupDataName={'orgMembers'}
+                         groupItemRender={this.itemRender}
+                         groupTitleRender={this.titleRender} />
+            );
+          }else{
+            return (
+              <View style={{backgroundColor:'transparent', alignItems:'center'}}>
+                <Text>{'无符合条件的用户'}</Text>
+              </View>
+            );
+          }
+        })()}
+
       </NavBarView>
     );
   }
