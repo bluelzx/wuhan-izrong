@@ -39,6 +39,7 @@ let numeral = require('numeral');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let DictStyle = require('../../constants/dictStyle');
 let Lightbox = require('../../comp/lightBox/Lightbox');
+let Icon = require('react-native-vector-icons/Ionicons');
 
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
@@ -412,17 +413,15 @@ let MyBizDetail = React.createClass({
         <View style={{marginTop:10}}>
           <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
             <View
-              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: 'white'}}>
+                style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height:50, backgroundColor: 'white'}}>
               <Text style={{marginLeft:10,color:DictStyle.marketSet.fontColor}}>
                 {'备注'}
               </Text>
               <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                <Text style={{marginRight:10,color:'#d3d5df'}}
-                      numberOfLines={1}>{(this.state.remarkText == '' || this.state.remarkText == null) ? '50字以内' : this.state.remarkText}
+                <Text style={{marginRight:10,color:'#d3d5df',flex:1,width:screenWidth-120}}
+                >{(this.state.remarkText == '' || this.state.remarkText == null) ? '50字以内' : this.state.remarkText}
                 </Text>
-                <Image style={{margin:10,width:16,height:16}}
-                       source={require('../../image/market/next.png')}
-                />
+                <Icon style={{marginRight: 10}} name="ios-arrow-right" size={30} color='#a8afb3'/>
               </View>
             </View>
           </TouchableHighlight>
@@ -582,7 +581,15 @@ let MyBizDetail = React.createClass({
   },
 
   updateBizOrder: function () {
+
     dismissKeyboard();
+
+    if (this.state.term % 360 == 0) {
+      this.setState({
+        term: this.state.term + (this.state.term / 360) * 5
+      });
+    }
+
     let {title, param}  = this.props;
     let params = {
       id: this.state.id,
