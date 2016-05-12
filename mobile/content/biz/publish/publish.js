@@ -76,7 +76,7 @@ let Publish = React.createClass({
       amount: 0,
       fileUrlList: [],
 
-      keyboardSpace: 0,
+      keyboardSpace: 0
     }
   },
 
@@ -549,9 +549,9 @@ let Publish = React.createClass({
       .then((response) => {
         let arr = this.state.fileUrlList;
         if (index > 5) {
-          arr.push(uri);
+          arr.push(response.fileUrl);
         } else {
-          arr[index] = uri;
+          arr[index] = response.fileUrl;
         }
         this.setState({
           fileUrlList: arr

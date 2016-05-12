@@ -660,7 +660,7 @@ let MyBizDetail = React.createClass({
             if (index > 5) {
               arr.push(response.fileUrl);
             } else {
-              arr[index] = uri;
+              arr[index] = response.fileUrl;
             }
             this.setState({
               fileUrlList: arr
