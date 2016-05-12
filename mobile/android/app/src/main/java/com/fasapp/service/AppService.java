@@ -82,22 +82,22 @@ public class AppService extends Service {
                         manager.notify(121, mBuilder.build());
                     }
                 }else{
-                    String content = errMsg;
-                    Intent mIntent = new Intent(AppService.this, MainActivity.class);
-                    PendingIntent mPendingIntent = PendingIntent.getActivity(AppService.this,
-                            0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                    manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                    Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-                    mBuilder = new NotificationCompat.Builder(AppService.this)
-                            .setLargeIcon(mBitmap)
-                            .setSmallIcon(R.mipmap.ic_launcher)
-                            .setContentTitle("消息通知")
-                            .setContentText(content)
-                            .setWhen(System.currentTimeMillis())
-                            .setTicker("Ticker")
-                            .setAutoCancel(true)
-                            .setContentIntent(mPendingIntent);
-                    manager.notify(121, mBuilder.build());
+//                    String content = errMsg;
+//                    Intent mIntent = new Intent(AppService.this, MainActivity.class);
+//                    PendingIntent mPendingIntent = PendingIntent.getActivity(AppService.this,
+//                            0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//                    manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//                    Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+//                    mBuilder = new NotificationCompat.Builder(AppService.this)
+//                            .setLargeIcon(mBitmap)
+//                            .setSmallIcon(R.mipmap.ic_launcher)
+//                            .setContentTitle("消息通知")
+//                            .setContentText(content)
+//                            .setWhen(System.currentTimeMillis())
+//                            .setTicker("Ticker")
+//                            .setAutoCancel(true)
+//                            .setContentIntent(mPendingIntent);
+//                    manager.notify(121, mBuilder.build());
                 }
                 LogUtils.d("errMsg", mJSONObject.getString("errMsg"));
             }

@@ -14,8 +14,8 @@ let {
   ListView
   } = React;
 
+const { Device } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
-let {height, width} = Dimensions.get('window');
 let ViewPager = require('react-native-viewpager');
 let MyBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
@@ -102,7 +102,7 @@ let Home = React.createClass({
 
   renderMenuItem(url, text, toPage){
     return(
-      <TouchableHighlight style={{flex: 1, flexDirection: 'column',borderLeftColor:'#e6e7ee',borderLeftWidth:0.5}} activeOpacity={0.8}
+      <TouchableHighlight style={{width:Device.width/2, flexDirection: 'column',borderLeftColor:'#e6e7ee',borderLeftWidth:0.5}} activeOpacity={0.8}
                           underlayColor={PlainStyle.colorSet.content} onPress={()=>this.toPage(toPage)}
       >
         <View style={styles.menuItem}>
@@ -175,7 +175,7 @@ let Home = React.createClass({
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
           {this.rendViewPager()}
 
-          <View style={{backgroundColor:PlainStyle.colorSet.homeMenuColor,height: width/3,flexDirection:"row"}}>
+          <View style={{height: Device.width/3,flexDirection:"row"}}>
             {this.renderMenuItem(require('../../image/home/myBusiness.png'), '我的业务', MyBusiness)}
             {this.renderMenuItem(require('../../image/home/myBusiness.png'), '我的业务', MyBusiness)}
           </View>
@@ -192,7 +192,7 @@ let Home = React.createClass({
   },
   renderMarketList() {
     return (
-      <View style={{width:width,flex:1,backgroundColor: PlainStyle.colorSet.homeListHeaderColor}}>
+      <View style={{width:Device.width,flex:1,backgroundColor: PlainStyle.colorSet.homeListHeaderColor}}>
         <View style={{height:26,flexDirection:'row',marginTop:10,marginLeft:5, borderBottomWidth: 1,
              borderBottomColor: PlainStyle.colorSet.homeBorderColor}}>
           <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
@@ -248,7 +248,7 @@ let Home = React.createClass({
 
 var styles = StyleSheet.create({
   page: {
-    width: width,
+    width: Device.width,
     height: 180
   },
   text: {
