@@ -48,6 +48,8 @@ let termUnit = ['日', '月', '年'];
 let amountUnit = ['万', '亿'];
 import Share from 'react-native-share';
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+let Lightbox = require('../../comp/lightBox/Lightbox');
+
 let Publish = React.createClass({
   getInitialState(){
     let filterItems = AppStore.getFilters().filterItems;
@@ -308,10 +310,18 @@ let Publish = React.createClass({
         allowsEditing={true}
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
       >
-        <Image
-          style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-          source={{uri:rowData}}
-        />
+        <Lightbox imageSource={{uri:rowData}}
+                  deleteHeader={()=>{
+                    let arr = this.state.fileUrlList;
+                    arr[rowID] = 0;
+                    this.setState({fileUrlList: _.compact(arr)})
+                    }}
+        >
+          <Image
+              style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+              source={{uri:rowData}}
+          />
+        </Lightbox>
       </ImagePicker>
     )
   },

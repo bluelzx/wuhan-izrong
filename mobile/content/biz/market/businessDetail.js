@@ -27,6 +27,7 @@ let MarketStore = require('../../framework/store/marketStore');
 let { Alert } = require('mx-artifacts');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Chat = require('../im/chat');
+let Lightbox = require('../../comp/lightBox/Lightbox');
 
 let MarketAction = require('../../framework/action/marketAction');
 let { MARKET_CHANGE } = require('../../constants/dictEvent');
@@ -217,11 +218,13 @@ let BusinessDetail = React.createClass({
         {
           this.state.fileUrlList.map((item, index) => {
             return (
-              <Image
-                key={index}
-                style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
-                source={{uri:item, isStatic: true}}
-              />
+                <Lightbox imageSource={{uri:item, isStatic: true}}>
+                  <Image
+                      key={index}
+                      style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
+                      source={{uri:item, isStatic: true}}
+                  />
+                </Lightbox>
             )
           })
         }

@@ -17,10 +17,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import ca.jaysoo.extradimensions.ExtraDimensionsModule;
-
 /**
- * Created by amarsoft on 16/3/9.
+ * Created by amarsoft ./on 16/3/9.
  */
 public class ZXReactPackage implements ReactPackage {
     Activity activity;
@@ -30,7 +28,6 @@ public class ZXReactPackage implements ReactPackage {
         modules.add(new UserPhotoPicModule(reactContext));
         modules.add(new ServiceModule(reactContext));
         modules.add(new ActivityListenerModule(reactContext));
-        modules.add(new ExtraDimensionsModule(reactContext));
         return modules;
     }
 

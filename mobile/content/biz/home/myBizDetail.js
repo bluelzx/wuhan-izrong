@@ -38,6 +38,7 @@ let Adjust = require('../../comp/utils/adjust');
 let numeral = require('numeral');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let DictStyle = require('../../constants/dictStyle');
+let Lightbox = require('../../comp/lightBox/Lightbox');
 
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
@@ -371,10 +372,18 @@ let MyBizDetail = React.createClass({
         title="选择图片"
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
       >
-        <Image
-          style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-          source={{uri:rowData}}
-        />
+        <Lightbox imageSource={{uri:rowData}}
+                  deleteHeader={()=>{
+                    let arr = this.state.fileUrlList;
+                    arr[rowID] = 0;
+                    this.setState({fileUrlList: _.compact(arr)})
+                    }}
+        >
+          <Image
+              style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+              source={{uri:rowData}}
+          />
+        </Lightbox>
       </ImagePicker>
     )
   },
