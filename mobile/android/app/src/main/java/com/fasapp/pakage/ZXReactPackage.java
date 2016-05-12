@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by amarsoft on 16/3/9.
+ * Created by amarsoft ./on 16/3/9.
  */
 public class ZXReactPackage implements ReactPackage {
     Activity activity;
