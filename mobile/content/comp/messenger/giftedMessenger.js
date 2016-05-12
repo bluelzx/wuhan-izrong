@@ -882,7 +882,9 @@ let GiftedMessenger = React.createClass({
 
           <ImagePicker
             type="library"
-            onSelected={(response) => {this.props.handleSendImage(response);this._hidePanel();}}
+            onSelected={(response) => {
+            this.props.handleSendImage(response);
+            this._hidePanel();}}
             onError={(error) => this.props.handleImageError(error)}
             title="选择图片"
             fileId="selectImage"
