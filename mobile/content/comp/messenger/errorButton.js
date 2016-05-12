@@ -1,15 +1,17 @@
-import React, {View, Text, TouchableHighlight, StyleSheet} from 'react-native';
+import React, {View, Text, TouchableHighlight, StyleSheet, Image} from 'react-native';
 import { Spinner } from 'mx-artifacts';
 
 let styles = StyleSheet.create({
   errorButtonContainer: {
-    marginLeft: 8,
+    position:'absolute',
+    right:50,
+    bottom:0,
     alignSelf: 'center',
     justifyContent: 'center',
     backgroundColor: '#e6e6eb',
     borderRadius: 15,
-    width: 30,
-    height: 30,
+    width: 5,
+    height: 5,
   },
   errorButton: {
     fontSize: 22,
@@ -47,7 +49,7 @@ export default class ErrorButton extends React.Component {
           backgroundColor: 'transparent',
           borderRadius: 0,
         }]}>
-          <Spinner color="white"/>
+          <Spinner color="#ECECEC"/>
         </View>
       );
     }
@@ -57,7 +59,7 @@ export default class ErrorButton extends React.Component {
           underlayColor='transparent'
           onPress={this.onPress.bind(this)}
         >
-          <Text style={styles.errorButton}>↻</Text>
+          <Image  source={require('../../image/im/sendFail.png')}/>
         </TouchableHighlight>
       </View>
     );

@@ -15,7 +15,8 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let Chat = require('./chat');
 let ChooseList = require('./chooseList');
 let { SESSION_TYPE } = require('../../constants/dictIm');
-let NameCircular = require('./nameCircular').NameCircular;
+//let NameCircular = require('./nameCircular').NameCircular;
+let HeaderPic = require('./headerPic');
 let Setting = require('../../constants/setting');
 let {groupFilter} = require('./searchBarHelper');
 let DEFAULT_GROUP_NAME='创建的群+';
@@ -72,7 +73,7 @@ let CreateGroup = React.createClass({
           unChoice={this.unCheckBoxChoice}
           style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row'}}>
-            <NameCircular name={data.realName}/>
+            <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
             <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{data.realName}</Text>
           </View>
         </CheckBox>

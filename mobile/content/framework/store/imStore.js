@@ -76,13 +76,14 @@ let _resovleMessages = (bInit = false) => {
   savedMessages.forEach((object, index, collection) => {
 
     if (object.fromUId) { // Received
-      let name = ContactStore.getUserInfoByUserId(object.fromUId).realName;
+      let userInfo = ContactStore.getUserInfoByUserId(object.fromUId);
+      let name = userInfo.realName;
       tmpMessage = {
         msgId: object.msgId,
         contentType: object.contentType,
         content: object.content,
         name: name,
-        image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
+        image: userInfo.photoFileUrl,
         position: 'left',
         date: object.revTime
       };
@@ -118,6 +119,8 @@ let _sessionInit = (data) => {
   _data.messages = [];
   _data.userId = data.userId,
   _data.myName=data.myName,
+    _data.certified = data.certified,
+  _data.userPhotoFileUrl = data.photoFileUrl;
   _resovleMessages(true);
   ImStore.emitChange(DictEvent.IM_SESSION);
 };
@@ -196,15 +199,17 @@ let _saveMsg = (message, userId) => {
   if (message.sessionId === _data.sessionId) {
     if (message.fromUId) { // Received
       // TODO. Get user info by id.
-      let name = ContactStore.getUserInfoByUserId(message.fromUId).realName;
+      let userInfo = ContactStore.getUserInfoByUserId(object.fromUId);
+      let name = userInfo.realName;
       _data.messages.push({
         msgId: message.msgId,
         contentType: message.contentType,
         content: message.content,
         name: name,
-        image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
+        image: userInfo.photoFileUrl,
         position: 'left',
-        date: message.revTime
+        date: message.revTime,
+        certified:userInfo.certified,
       });
     } else { // Send
       _data.messages.push({
@@ -215,7 +220,8 @@ let _saveMsg = (message, userId) => {
         image: _data.userPhotoFileUrl,
         position: 'right',
         date: message.revTime,
-        status: message.status
+        status: message.status,
+        certified:_data.certified,
       });
     }
 

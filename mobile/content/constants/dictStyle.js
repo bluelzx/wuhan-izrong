@@ -86,8 +86,11 @@ const PlainStyle = {
     memberNameColor:'#3B4549',
     memberListBackgroundColor:'#FEFEFE',
     buttonArrowColor:'#A3AAAE',
-  }
+  },
 
+  searchFriend:{
+    textInputColor:'#64C3EA',
+  }
 
 };
 

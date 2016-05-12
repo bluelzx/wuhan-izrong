@@ -8,9 +8,10 @@ let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let ContactStore = require('../../framework/store/contactStore');
-let NameCircular = require('./nameCircular').NameCircular;
+//let NameCircular = require('./nameCircular').NameCircular;
 let {groupFilter} = require('./searchBarHelper');
 let DictStyle = require('../../constants/dictStyle');
+let HeaderPic = require('./headerPic');
 
 let GroupMembers = React.createClass({
 
@@ -44,7 +45,7 @@ let GroupMembers = React.createClass({
     return (
       <View key={data.userId}
             style={{borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
-        <NameCircular name={data.realName}/>
+        <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
         <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{data.realName}</Text>
       </View>
 

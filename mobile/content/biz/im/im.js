@@ -264,12 +264,12 @@ let WhitePage = React.createClass({
               <Text numberOfLines={1}
                     style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT == item.contentType ? item.content : '点击查看详情'}</Text>
             </View>
-            <TouchableHighlight style={{marginRight:10}} onPress={()=>this.acceptInvite(item)}>
+            <TouchableOpacity style={{marginRight:10}} onPress={()=>this.acceptInvite(item)}>
               <View style={{borderRadius: 5, backgroundColor: '#3EC3A4',paddingHorizontal:20,paddingVertical:5}}>
                 <Text
                   style={{color: '#ffffff', textAlign:'center'}}>{'接受'}</Text>
               </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
       </TouchableOpacity>
