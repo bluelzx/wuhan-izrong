@@ -36,7 +36,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     top: 4,
-    right: 24,
+    right: 14,
     position: 'absolute',
     width: 10,
     height: 10,

@@ -1,6 +1,7 @@
 package com.fasapp.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,9 +13,11 @@ import java.util.zip.ZipFile;
  * Created by amarsoft on 16/5/9.
  */
 public class ZipUtils {
-    public static void unzip (String zipFileName, String outputDirectory) {
+    public static String unzip (String zipFileName, String outputDirectory) {
         ZipFile zipFile = null;
         try {
+            FileInputStream fis = new FileInputStream(zipFileName);
+            int available = fis.available();
             zipFile = new ZipFile(zipFileName);
             Enumeration e = zipFile.entries();
             ZipEntry zipEntry = null;
@@ -59,7 +62,8 @@ public class ZipUtils {
                     }
                 } catch (IOException ex) {
                     ex.printStackTrace();
-                    throw new IOException("解压失败：" + ex.toString());
+//                    throw new IOException("解压失败：" + ex.toString());
+                    return "解压失败：" + ex.toString();
                 } finally {
                     if (in != null) {
                         try {
@@ -77,18 +81,20 @@ public class ZipUtils {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
-            try {
-                throw new IOException("解压失败：" + ex.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                throw new IOException("解压失败：" + ex.toString());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+            return "解压失败：" + ex.toString();
         } finally {
             if (zipFile != null) {
                 try {
                     zipFile.close();
-                } catch (IOException ex) {
+                } catch (IOException ignored) {
                 }
             }
         }
+        return null;
     }
 }
