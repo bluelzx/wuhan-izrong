@@ -31,7 +31,7 @@ var AboutUs = React.createClass({
           <View style={{paddingBottom: 24, backgroundColor: PlainStyle.colorSet.content}}>
             <View style={{marginTop: 20, flexDirection: 'column', alignItems: 'center', paddingHorizontal: 16}}>
               <Image style={styles.logo} source={require('../../image/login/logo.png')}/>
-              <Text style={styles.title}>资融网同业平台</Text>
+              <Text style={styles.title}>爱资融同业平台</Text>
             </View>
             <Text style={styles.content}>
               {this.state.content}
@@ -69,9 +69,8 @@ var styles = StyleSheet.create({
     fontSize: 12
   },
   title: {
-    fontSize: 14,
+    fontSize: 20,
     color:  PlainStyle.colorSet.aboutUsTextColor,
-    marginTop: 18
   },
   content: {
     marginTop: 10,
@@ -81,9 +80,9 @@ var styles = StyleSheet.create({
     marginHorizontal:16
   },
   logo: {
-    marginTop: 20,
-    height: 70,
-    width: 60
+    marginTop: 10,
+    height: 110,
+    width: 100
   }
 });
 module.exports = AboutUs;

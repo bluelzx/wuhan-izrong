@@ -25,7 +25,6 @@ let MarketActions = {
   downselfBizOrder: (p) => _pfetchWithUrlAndP(AppLinks.downselfBizOrder, p),
   updateBizOrder: (p) => _bfetchWithUrlAndP(AppLinks.updateBizOrder, p),
   getBizOrderCategoryAndItem: () => _pfetch1WithUrl(AppLinks.getBizOrderCategoryAndItem)
-
 };
 
 let _bizOrderMarketSearchDefaultSearch = function(url){

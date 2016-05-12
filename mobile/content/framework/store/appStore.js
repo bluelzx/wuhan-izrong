@@ -114,6 +114,7 @@ let _register = (data) => {
 };
 
 let _login = (data) => {
+  _data.filters = data.appOrderSearchResult;
   return Persister.saveAppData(data).then(()=> {
     _.assign(_data, {
       token: _getToken()

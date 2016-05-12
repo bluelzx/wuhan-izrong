@@ -42,14 +42,13 @@ let Home = React.createClass({
     let myItem = AppStore.getItem();
     let PAGES = AppStore.queryAllHomePageInfo();
     let DEFAULTPAGES = [
-      'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024',
-      'https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?h=1024',
-      'https://images.unsplash.com/photo-1441448770220-76743f9e6af6?h=1024',
-      'https://images.unsplash.com/photo-1441260038675-7329ab4cc264?h=1024'
+      require('../../image/home/launch-01.png'),
+      require('../../image/home/launch-02.png'),
+      require('../../image/home/launch-03.png')
     ];
     return {
       categoryArr: categoryArr,
-      dataSource: dataSource.cloneWithPages(DEFAULTPAGES),
+      dataSource: PAGES.length?dataSource.cloneWithPages(PAGES):dataSource.cloneWithPages(DEFAULTPAGES),
       category: myCategory != null ? myCategory.displayName : '资金业务',
       contentList: [],
       bizCategoryID: myCategory != null ? myCategory.id : categoryArr.length == 0 ? 0 : categoryArr[0].id,
@@ -138,7 +137,7 @@ let Home = React.createClass({
       return (
         <Image
           style={styles.page}
-          source={{uri: data}}
+          source={data}
         />
       );
   },
