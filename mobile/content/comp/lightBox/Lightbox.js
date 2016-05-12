@@ -80,7 +80,7 @@ var Lightbox = React.createClass({
             renderHeader: this.props.renderHeader,
             swipeToDismiss: this.props.swipeToDismiss,
             springConfig: this.props.springConfig,
-            backgroundColor: this.props.backgroundColor,
+          backgroundColor: this.props.backgroundColor ? this.props.backgroundColor : 'black',
             imageSource: this.props.imageSource,
             children: this.getContent(),
             onClose: this.onClose,
@@ -105,8 +105,8 @@ var Lightbox = React.createClass({
             }, () => {
                 if (this.props.navigator) {
                     var route = {
-                        component: LightboxOverlay,
-                        passProps: this.getOverlayProps(),
+                      comp: LightboxOverlay,
+                      param: this.getOverlayProps(),
                     };
                     var routes = this.props.navigator.getCurrentRoutes();
                     routes.push(route);
@@ -143,9 +143,9 @@ var Lightbox = React.createClass({
         // measure will not return anything useful if we dont attach a onLayout handler on android
         return (
             <View
-                ref={component => this._root = component}
-                style={this.props.style}
-                onLayout={() => {}}
+              ref={comp => this._root = comp}
+              style={this.props.style}
+              onLayout={() => {}}
             >
                 <Animated.View style={{opacity: this.state.layoutOpacity}}>
                     <TouchableHighlight

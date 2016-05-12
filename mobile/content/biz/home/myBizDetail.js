@@ -374,6 +374,7 @@ let MyBizDetail = React.createClass({
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
       >
         <Lightbox imageSource={{uri:rowData}}
+                  navigator={this.props.navigator}
                   deleteHeader={()=>{
                     let arr = this.state.fileUrlList;
                     arr[rowID] = 0;
