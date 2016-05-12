@@ -52,6 +52,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   login: (data) => _login(data),
   logout: (userId) => _logout(userId),
   forceLogout: () => _force_logout(),
+  setForceLogout:(isForceLogout) => _setForceLogout(isForceLogout),
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
@@ -146,6 +147,12 @@ let _force_logout = () => {
   _info.isForceLogout = true;
   //TODO:'强制登出'
   AppStore.emitChange();
+};
+
+//TODO:'强制登出后设置为未登出'
+let _setForceLogout = (isForceLogout)=>{
+  _info.isLogout = isForceLogout;
+  _info.isForceLogout = isForceLogout;
 };
 
 let _save_apns_token = (apnsToken) => {
