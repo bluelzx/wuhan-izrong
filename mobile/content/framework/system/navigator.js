@@ -142,6 +142,7 @@ var Main = React.createClass({
     this.setState(this._getStateFromStores());
     if (AppStore.isLogout()) {
       if (AppStore.isForceLogout()) {
+        AppStore.logout(AppStore.getUserId());
         Alert(
           '账号已在别处登陆,系统将切换到登陆界面',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
@@ -149,7 +150,6 @@ var Main = React.createClass({
       } else {
         Promise.resolve().then((resolve) => {
           this.refs.navigator.resetTo({comp: Login});
-          AppStore.setForceLogout(false);
         }).catch((e) => {
           Alert('系统异常');
         });

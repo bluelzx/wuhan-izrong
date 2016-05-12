@@ -7,7 +7,7 @@ let ContactSotre = require('../store/contactStore');
 let _dealMsg = function (message, socket) {
   let userInfo = ContactSotre.getUserInfo();
   let userId = userInfo.userId;
-  let lastSyncTime = userInfo.lastSyncTime?userInfo.lastSyncTime.getTime():new Date().getTime();
+  let lastSyncTime = userInfo.lastSyncTime ? userInfo.lastSyncTime.getTime() : new Date().getTime();
   //console.log(message);
   switch (message.msgType) {
     case MSG_TYPE.EXCEPTION:
@@ -35,39 +35,41 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.GROUP_JOIN_INVITE:
       ImStore.saveMsg({
-        sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId),
-        groupId:message.groupId,
-        groupName:message.groupName,
-        groupOwnerId:message.groupOwnerId,
-        msgType:SESSION_TYPE.INVITE,
-        revTime:new Date()
-      },userId);
+        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId),
+        groupId: message.groupId,
+        groupName: message.groupName,
+        groupOwnerId: message.groupOwnerId,
+        msgType: SESSION_TYPE.INVITE,
+        revTime: new Date()
+      }, userId);
       break;
     case MSG_TYPE.REC_GROUP_MSG:
       ImStore.saveMsg({
-        sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.GROUP, message.gid),
-        msgId:message.msgId,
-        fromUId:message.fromUid,
-        groupId:message.gid,
-        toId:null,
-        type:SESSION_TYPE.GROUP,
-        content:message.content,
-        contentType:message.contentType,
-        msgType:message.msgType,
-        revTime:new Date(message.sendDate),
-        isRead:Boolean(false),
-        status:'Sean'
+        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.GROUP, message.gid),
+        msgId: message.msgId,
+        fromUId: message.fromUid,
+        groupId: message.gid,
+        toId: null,
+        type: SESSION_TYPE.GROUP,
+        content: message.content,
+        contentType: message.contentType,
+        msgType: message.msgType,
+        revTime: new Date(message.sendDate),
+        isRead: Boolean(false),
+        status: 'Sean'
       }, userId);
       break;
     case MSG_TYPE.PLATFORM_INFO:
     {
-      if(lastSyncTime < message.createDate) {
+      if (lastSyncTime < message.createDate) {
 
         ImStore.createPlatFormInfo(message.infoId, message.title, message.content, new Date(message.createDate));
         ContactSotre.syncReq(new Date(message.createDate));
         lastSyncTime = message.createDate;
       }
-    };break;
+    }
+      ;
+      break;
     case MSG_TYPE.HOME_PAGE:
       message.homePageList && message.homePageList.forEach((msg) => {
         ImStore.createHomePageInfo(msg.req, msg.url);
@@ -84,7 +86,7 @@ let _dealMsg = function (message, socket) {
       ImStore.deleteContactInfo(message.userIdList);
       break;
     case MSG_TYPE.GROUP_INFO_UPDATE:
-      ContactSotre.createGroup(message.groupId, message.groupName,message.groupOwnerId,message.members,false);
+      ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
       break;
     case MSG_TYPE.GROUP_INFO_DELETE:
       ContactSotre.leaveGroup(message.groupId);
@@ -94,17 +96,26 @@ let _dealMsg = function (message, socket) {
       //  // console.log(JSON.parse(item));
       //  _dealMsg(JSON.parse(item), socket);
       //});
-      socket.send({msgType: COMMAND_TYPE.SYNC_REQ,lastSyncTime:lastSyncTime});
+      socket.send({msgType: COMMAND_TYPE.SYNC_REQ, lastSyncTime: lastSyncTime});
       break;
     case MSG_TYPE.FORCE_LOGOUT:
       //强制登出
       ImStore.forceLogOut();
       break;
     case MSG_TYPE.SYNC_RES:
-      message.msgArray.forEach((item)=>{
+      message.msgArray.forEach((item)=> {
         // console.log(JSON.parse(item));
         _dealMsg(JSON.parse(item), socket);
       });
+      break;
+    case MSG_TYPE.CERTIFICATION:
+
+      break;
+    case MSG_TYPE.USER_FROZEN:
+
+      break;
+    case MSG_TYPE.USER_DELETE:
+
       break;
     default:
       console.log('None message type matched! [%s]', message.msgType);
@@ -123,7 +134,7 @@ let Resolver = {
   },
   _dealMessage: _dealMsg,
 
-  solve: function(message) {
+  solve: function (message) {
     let msgToSend = {};
     switch (message.msgType) {
       case COMMAND_TYPE.SEND_P2P_MSG:

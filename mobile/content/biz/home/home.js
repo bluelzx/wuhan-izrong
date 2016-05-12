@@ -102,10 +102,8 @@ let Home = React.createClass({
 
   renderMenuItem(url, text, toPage){
     return(
-      <TouchableHighlight style={{width:Device.width/2, flexDirection: 'column',borderLeftColor:'#e6e7ee',borderLeftWidth:0.5}} activeOpacity={0.8}
-                          underlayColor={PlainStyle.colorSet.content} onPress={()=>this.toPage(toPage)}
-      >
-        <View style={styles.menuItem}>
+      <TouchableHighlight  activeOpacity={0.8} underlayColor={PlainStyle.colorSet.homeBorderColor} onPress={()=>this.toPage(toPage)}>
+        <View style={[styles.menuItem,{width:Device.width/2, flexDirection: 'column',borderLeftColor:'#e6e7ee',borderLeftWidth:0.5}]}>
           <Image style={styles.menuImage} resizeMode='cover' source={url}/>
           <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop:20}]}>{text}</Text>
         </View>
@@ -119,8 +117,6 @@ let Home = React.createClass({
     if (navigator) {
       if (name == MyBusiness) {
         navigator.push({comp: name, data: data});
-      } else {
-        navigator.resetTo({comp: 'tabView', tabName: 'market', param: data});
       }
     }
   },
@@ -174,10 +170,9 @@ let Home = React.createClass({
       <NavBarView navigator={this.props.navigator} title='首页' showBack={false}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}>
           {this.rendViewPager()}
-
-          <View style={{height: Device.width/3,flexDirection:"row"}}>
-            {this.renderMenuItem(require('../../image/home/myBusiness.png'), '我的业务', MyBusiness)}
-            {this.renderMenuItem(require('../../image/home/myBusiness.png'), '我的业务', MyBusiness)}
+          <View style={{height: Device.width/3,width:Device.width,flexDirection:"row"}}>
+            {this.renderMenuItem(require('../../image/home/myBiz.png'), '我的业务', MyBusiness)}
+            {this.renderMenuItem(require('../../image/home/newBiz.png'), '敬请期待', '')}
           </View>
           <View style={styles.listHead}>
             <Text
@@ -264,6 +259,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     flex: 1,
+    width:Device.width/2,
     justifyContent: 'center'
   },
   listHead: {
