@@ -83,8 +83,6 @@ let Personal = React.createClass({
         return (
           <View style={{marginLeft:20}}>
             <NameCircular name={this.state.realName}/>
-            <Image style={[styles.certified,{position: 'absolute',bottom:1,left:10}]}
-                   resizeMode="cover" source={require('../../image/user/certificated.png')}/>
           </View>
         );
       }

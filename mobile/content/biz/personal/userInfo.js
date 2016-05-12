@@ -122,8 +122,6 @@ let UserInfo = React.createClass({
         return (
           <View>
             <NameCircular name={this.state.realName}/>
-            <Image style={[styles.certified,{position: 'absolute',bottom:1,left:30}]}
-                   resizeMode="cover" source={require('../../image/user/certificated.png')}/>
           </View>
         );
       }
