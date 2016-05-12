@@ -368,7 +368,7 @@ let Market = React.createClass({
         <TouchableOpacity onPress={pressFilterTime} activeOpacity={1}
                           underlayColor="#f0f0f0">
           <View
-            style={{width: screenWidth / 3,height:DictStyle.heightSet.filter,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderRightColor:DictStyle.marketSet.filterBorder,borderRightWidth:1,borderBottomWidth:0.5,borderBottomColor:DictStyle.marketSet.filterBorder}}>
+            style={{width: screenWidth / 3,height:DictStyle.heightSet.filter,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderRightColor:DictStyle.marketSet.filterBorder,borderRightWidth:0.5,borderBottomWidth:0.5,borderBottomColor:DictStyle.marketSet.filterBorder}}>
             <Text
               style={{width:screenWidth/3 - 30,textAlign:'center',fontSize:DictStyle.marketSet.filterFontSize,color:(this.state.clickFilterTime == 1)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}}
               numberOfLines={1}>{this.state.optionTwoText}</Text>
