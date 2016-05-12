@@ -47,8 +47,7 @@ let BusinessDetail = React.createClass({
     return {
       userId: loginUserInfo.userId,
       detailData: '',
-      bizOrderOwnerBean: '',
-      fileUrlList: [],
+      fileUrlList: marketInfo.fileUrlList,
       marketInfo: marketInfo,
       orderUserId: marketInfo.userId,
       lastModifyDate: DateHelper.formatBillDetail(t),
