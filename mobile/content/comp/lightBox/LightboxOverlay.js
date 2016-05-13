@@ -198,9 +198,8 @@ var LightboxOverlay = React.createClass({
                         this.saveImg();
                     } else if (buttonIndex == 1) {
                       if (this.props.param.deleteHeader) {
-
-                        this.props.param.deleteHeader();
-                        this.close();
+                          this.close();
+                          this.props.param.deleteHeader();
                         }
                     }
                 });
@@ -214,8 +213,8 @@ var LightboxOverlay = React.createClass({
                     break;
                   case 1:
                     if (this.props.param.deleteHeader) {
-                      this.props.param.deleteHeader();
-                      this.close();
+                        this.close();
+                        this.props.param.deleteHeader();
                     }
                     break;
                   default:

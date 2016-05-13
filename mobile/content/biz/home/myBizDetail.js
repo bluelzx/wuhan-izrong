@@ -377,8 +377,8 @@ let MyBizDetail = React.createClass({
                   navigator={this.props.navigator}
                   deleteHeader={()=>{
                     let arr = this.state.fileUrlList;
-                    arr[rowID] = 0;
-                    this.setState({fileUrlList: _.compact(arr)})
+                    _.pullAt(arr,rowID);
+                    this.setState({fileUrlList: arr});
                     }}
         >
           <Image
