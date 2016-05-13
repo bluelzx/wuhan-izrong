@@ -21,6 +21,7 @@ let TabView = require('../../framework/system/tabView');
 let ImagePicker = require('../../comp/utils/imagePicker');
 let MarketAction = require('../../framework/action/marketAction');
 let DictStyle = require('../../constants/dictStyle');
+let CallPhone = require('../../comp/utils/callPhone');
 
 let Register_uploadNameCard = React.createClass({
 
@@ -150,7 +151,7 @@ let Register_uploadNameCard = React.createClass({
         <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column', marginTop: 30}}>
           <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30}}>
             <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
-            <TouchableOpacity onPress={()=>{}}>
+            <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
               <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
             </TouchableOpacity>
           </View>

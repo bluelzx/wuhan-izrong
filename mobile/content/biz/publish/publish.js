@@ -359,7 +359,7 @@ let Publish = React.createClass({
           disabled={this.state.disabled}
           onPress={() => this._pressPublish()}
         >
-          {isFromIM ? '发送' : '+发布新业务'}
+          {isFromIM ? '发送' : '发布'}
         </Button>
       </View>
     )

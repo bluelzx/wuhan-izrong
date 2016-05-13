@@ -67,12 +67,11 @@ let _dealMsg = function (message, socket) {
         ContactSotre.syncReq(new Date(message.createDate));
         lastSyncTime = message.createDate;
       }
-    }
-      ;
+    };
       break;
     case MSG_TYPE.HOME_PAGE:
       message.homePageList && message.homePageList.forEach((msg) => {
-        ImStore.createHomePageInfo(msg.req, msg.url);
+        ImStore.createHomePageInfo(msg.seq, msg.url);
       });
       break;
     case MSG_TYPE.CONTANCT_INFO_UPDATE:

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">环渤银通</string>
+    <string name="app_name">爱资融</string>
 
     <string name="auto_updater_downloaded_title">Update Downloaded</string>
     <string name="auto_updater_downloaded_message">An update was downloaded. Do you want to apply it now?</string>
