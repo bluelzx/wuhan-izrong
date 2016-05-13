@@ -17,17 +17,14 @@ let {
 
 let _ = require('lodash');
 let NavBarView = require('../../framework/system/navBarView');
-let Validation = require('../../comp/utils/validation');
 let Item = require('../../comp/utils/item');
 let Icon = require('react-native-vector-icons/Ionicons');
 let TextEdit = require('./textEdit');
 let { Alert } = require('mx-artifacts');
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let LoginAction = require('../../framework/action/loginAction');
-let Login = require('../../biz/login/login');
 let ImagePicker = require('../../comp/utils/imagePicker');
 let AppStore = require('../../framework/store/appStore');
-let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
 let NameCircular = require('../im/nameCircular').NameCircular;
 let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
 let PlainStyle = require('../../constants/dictStyle');

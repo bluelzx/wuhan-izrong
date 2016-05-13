@@ -74,10 +74,11 @@ let Register_selectOrg = React.createClass({
   renderList: function () {
     if (this.state.data == '') {
       return (
-        <View>
-          <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop:20,marginHorizontal:16,alignItems:'center'}]}>
-            您的机构不再平台的机构列表中。如有问题，请联系客服
+        <View style={{marginTop:20,marginHorizontal:16,alignItems:'center',flex:1,justifyContent:'center',flexDirection:'column'}}>
+          <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>
+            您的机构不在平台的机构列表中
           </Text>
+          <Text> 如有问题，请联系客服</Text>
         </View>
       )
     } else {

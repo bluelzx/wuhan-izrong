@@ -23,6 +23,7 @@ let Icon = require('react-native-vector-icons/Ionicons');
 let Validation = require('../../comp/utils/validation');
 let LoginAction = require('../../framework/action/loginAction');
 let DictStyle = require('../../constants/dictStyle');
+let CallPhone = require('../../comp/utils/callPhone');
 
 let Register_accountInfo = React.createClass({
   getStateFromStores() {
@@ -177,7 +178,7 @@ let Register_accountInfo = React.createClass({
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30}}>
             <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
-            <TouchableOpacity onPress={()=>{}}>
+            <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
               <Text
                 style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
             </TouchableOpacity>
