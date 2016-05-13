@@ -9,13 +9,22 @@ const {
 let {SESSION_TYPE } = require('../../constants/dictIm');
 
 let HomePagePersisterFacade = {
-  createHomePageInfo:(seq, url)=>_createHomePageInfo(seq, url),
+  createHomePageInfo:(msgList)=>_createHomePageInfo(msgList),
   queryAllHomePageInfo: () => _queryAll()
 };
 
-let _createHomePageInfo = function(seq, url) {
+let _createHomePageInfo = function(msgList) {
   _realm.write(() => {
-    _realm.create(HOMEPAGE, {seq:seq,url:url}, true);
+    msgList.forEach((msg,index)=>{
+      _realm.create(
+        HOMEPAGE,
+        {
+          id:index+1,
+          seq:msg.seq,
+          url:msg.url
+        }, true);
+    })
+
   });
 };
 

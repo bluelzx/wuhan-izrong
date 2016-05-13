@@ -42,8 +42,8 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
   saveMsg: (message, userId) => _saveMsg(message, userId),
   ackMsg: (msgId, toUid) => _ackMsg(msgId, toUid),
   getEarlier: () => _getEarlier(),
-  createHomePageInfo:(seq, url)=>{
-    Persister.createHomePageInfo(seq, url);
+  createHomePageInfo:(msgList)=>{
+    Persister.createHomePageInfo(msgList);
     //TODO:emit home event
   },
   createPlatFormInfo:(infoId, title, content, createDate)=>{

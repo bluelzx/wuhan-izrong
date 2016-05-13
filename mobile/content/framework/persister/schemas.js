@@ -95,6 +95,7 @@ let LoginUserInfoSchema = {
   primaryKey: 'userId',
   properties: {
     userId: {type: 'int', optional: true},
+    certificated:{type: 'bool', optional:true},
     address: {type: 'string', optional: true},
     realName: {type: 'string', optional: true},
     weChatNo: {type: 'string', optional: true},
@@ -213,8 +214,9 @@ let HomePageSchema = {
   name:"homePage",
   primaryKey:'seq',
   properties: {
+    id:{type:'int',optional:true},
     seq:{type:'string', optional:true},
-    url:{type:'string', optional:true},
+    url:{type:'string', optional:true}
   }
 };
 

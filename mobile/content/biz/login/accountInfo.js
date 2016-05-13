@@ -10,7 +10,8 @@ let {
   TouchableOpacity,
   Text,
   View,
-  Image
+  Image,
+  InteractionManager
   } = React;
 let AppStore = require('../../framework/store/appStore');
 let NavBarView = require('../../framework/system/navBarView');
@@ -27,7 +28,6 @@ let CallPhone = require('../../comp/utils/callPhone');
 
 let Register_accountInfo = React.createClass({
   getStateFromStores() {
-    this.getOrgList();
     return {
       disabled: true,
       realName: '',
@@ -37,7 +37,7 @@ let Register_accountInfo = React.createClass({
     };
   },
 
-  getOrgList: function (orgList) {
+  getOrgList: function () {
     this.props.exec(() => {
       return LoginAction.getOrgList({})
         .then((response) => {
@@ -55,6 +55,9 @@ let Register_accountInfo = React.createClass({
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange);
+    InteractionManager.runAfterInteractions(() => {
+      this.getOrgList();
+    });
   },
 
   componentWillUnmount: function () {
