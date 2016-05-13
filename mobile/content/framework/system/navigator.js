@@ -150,7 +150,6 @@ var Main = React.createClass({
       } else {
         Promise.resolve().then((resolve) => {
           this.refs.navigator.resetTo({comp: Login});
-          AppStore.setForceLogout(false);
         }).catch((e) => {
           Alert('系统异常');
         });
