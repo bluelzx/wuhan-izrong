@@ -554,10 +554,10 @@ let Publish = React.createClass({
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
     let shareContent = data.bizCategory + '\n' + '业务方向:  ' +(data.bizOrientation == 'IN' ? '收' : '出') + '  '
-                        + '金额:' + amount + '  ' + '期限:'+ dayNum + '  ' + '利率:'+ rate + '\n' + '--来自爱资融APP';
+      + '金额:' + amount + '  ' + '期限:'+ dayNum + '  ' + '利率:'+ rate + '\n' + '--来自爱资融APP' + '\n' + 'http://www.baidu.com';
     Share.open({
       share_text: shareContent,
-      share_URL: Platform.OS === 'android' ? shareContent : "http://google.cl",
+      share_URL: Platform.OS === 'android' ? shareContent : '',
       title: "Share Link"
     }, (e) => {
       console.log(e);
