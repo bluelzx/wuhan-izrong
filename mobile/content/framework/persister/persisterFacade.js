@@ -52,6 +52,7 @@ let _deleteDevice = function () {
 
 let _saveAppData = function (data) {
   console.log("start" + new Date().getTime());
+  let appOrderSearchResult = data.appOrderSearchResult;
   let loginUserInfo = data.appUserInfoOutBean;
   let token = data.appToken;
   let orgBeanList = data.orgBeanList;
@@ -68,7 +69,9 @@ let _saveAppData = function (data) {
       _saveLoginUserInfo(loginUserInfo, token);
       _saveImUsers(imUserBeanList);
       _saveOrgBeanList(orgBeanList);
+      _saveFilters(appOrderSearchResult);
       _saveAppUserGroupBeanList(appUserGroupBeanList,resolve);
+
     });
   })
 };
@@ -280,7 +283,6 @@ let _saveFilters = function (filters) {
   let filterItems = filters.filterItems;
   let orderItems = filters.orderItems;
   orderItems.forEach(function (orderItem, index) {
-    _realm.write(() => {
       _realm.create(ORDERITEM, {
         id: index + 1,
         fieldName: orderItem.fieldName,
@@ -291,10 +293,8 @@ let _saveFilters = function (filters) {
         selected: orderItem.selected,
         asc: orderItem.asc
       }, true);
-    });
   });
   filterItems.forEach(function (filterItem, index) {
-    _realm.write(() => {
       _realm.create(FILTERITEMS, {
         id: index + 1,
         descrCode: filterItem.descrCode,
@@ -302,7 +302,6 @@ let _saveFilters = function (filters) {
         displaySeq: filterItem.displaySeq,
         options: filterItem.options
       }, true);
-    });
   });
 };
 

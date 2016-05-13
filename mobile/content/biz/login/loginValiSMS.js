@@ -62,16 +62,13 @@ let ValiSMS = React.createClass({
           deviceToken: this.state.APNSToken,
           deviceModel: this.state.deviceModel
         }).then((response) => {
-          MarketAction.bizOrderMarketSearchDefaultSearch()
-            .then((response) => {
-              const {navigator} = this.props;
-              if (navigator) {
-                this.props.navigator.resetTo({
-                  comp: 'tabView',
-                  sceneConfig: Navigator.SceneConfigs.FadeAndroid
-                });
-              }
+          const {navigator} = this.props;
+          if (navigator) {
+            this.props.navigator.resetTo({
+              comp: 'tabView',
+              sceneConfig: Navigator.SceneConfigs.FadeAndroid
             });
+          }
         }).catch((errorData) => {
           throw errorData;
         });
@@ -122,7 +119,8 @@ let ValiSMS = React.createClass({
           <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
             <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
             <TouchableOpacity onPress={()=>{}}>
-              <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
+              <Text
+                style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
             </TouchableOpacity>
           </View>
         </View>
