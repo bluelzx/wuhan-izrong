@@ -1,6 +1,6 @@
 
 var developConfig = {
-  Dev: true, // Switch for log. true means print.
+  Dev: false, // Switch for log. true means print.
   //Host: 'http://192.168.64.248:9081/fas',
   //Host: 'http://192.168.64.205:9102/fas',   //dev
   Host: 'http://192.168.64.205:9101/fas',     //qa

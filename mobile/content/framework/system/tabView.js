@@ -145,6 +145,7 @@ var TabView = React.createClass({
             title="首页"
             icon={require('../../image/tab/home.png')}
             selected={this.state.selectedTab === 'home'}
+            selectedIcon={require('../../image/tab/home-selected2.png')}
             onPress={() => {this.setState({selectedTab: 'home'});}}>
             <Home navigator={this.props.navigator} exec={this.props.exec}/>
           </TabBarIOS.Item>
@@ -153,6 +154,7 @@ var TabView = React.createClass({
             title="市场"
             icon={require('../../image/tab/market.png')}
             selected={this.state.selectedTab === 'market'}
+            selectedIcon={require('../../image/tab/market-selected2.png')}
             onPress={() => {this.setState({selectedTab: 'market'})}}>
             <Market navigator={this.props.navigator} exec={this.props.exec}/>
           </TabBarIOS.Item>
@@ -161,6 +163,7 @@ var TabView = React.createClass({
             title="发布"
             icon={require('../../image/tab/publish.png')}
             //selected={this.state.selectedTab === 'publish'}
+            selectedIcon={require('../../image/tab/publish-selected2.png')}
             onPress={() => {
             this.props.navigator.push({
                 comp: Publish,
@@ -174,6 +177,7 @@ var TabView = React.createClass({
             title="IM"
             badge={(this.state.badge || null) > 99 ? '99+':(this.state.badge || null)}
             icon={require('../../image/tab/IM.png')}
+            selectedIcon={require('../../image/tab/IM-selected2.png')}
             selected={this.state.selectedTab === 'IM'}
             onPress={() => {this.setState({selectedTab: 'IM'})}}>
             <IM navigator={this.props.navigator} exec={this.props.exec}/>
@@ -183,6 +187,7 @@ var TabView = React.createClass({
             title="个人"
             icon={require('../../image/tab/personalcenter.png')}
             selected={this.state.selectedTab === 'personalCenter'}
+            selectedIcon={require('../../image/tab/personalcenter-selected2.png')}
             onPress={() => {this.setState({selectedTab: 'personalCenter'})}}>
             <Personal navigator={this.props.navigator} exec={this.props.exec}/>
           </TabBarIOS.Item>
@@ -197,7 +202,7 @@ var TabView = React.createClass({
           <Home navigator={this.props.navigator}
                 tabDesc="首页"
                 icon={require('../../image/tab/home.png')}
-                selectedIcon={require('../../image/tab/home-selected.png')}
+                selectedIcon={require('../../image/tab/home-selected2.png')}
                 exec={this.props.exec}
           >
           </Home>
@@ -205,7 +210,7 @@ var TabView = React.createClass({
           <Market navigator={this.props.navigator}
                   tabDesc="市场"
                   icon={require('../../image/tab/market.png')}
-                  selectedIcon={require('../../image/tab/market-selected.png')}
+                  selectedIcon={require('../../image/tab/market-selected2.png')}
                   exec={this.props.exec}
           >
           </Market>
@@ -214,7 +219,7 @@ var TabView = React.createClass({
             navigator={this.props.navigator}
             tabDesc="发布"
             icon={require('../../image/tab/publish.png')}
-            selectedIcon={require('../../image/tab/publish-selected.png')}
+            selectedIcon={require('../../image/tab/publish-selected2.png')}
             exec={this.props.exec}
             onPress={() => {navigator.push({
             comp: Publish,
@@ -228,7 +233,7 @@ var TabView = React.createClass({
               tabDesc="IM"
               badge={(this.state.badge || null) > 99 ? '99+':(this.state.badge || null)}
               icon={require('../../image/tab/IM.png')}
-              selectedIcon={require('../../image/tab/IM-selected.png')}
+              selectedIcon={require('../../image/tab/IM-selected2.png')}
               exec={this.props.exec}
           >
           </IM>
@@ -236,7 +241,7 @@ var TabView = React.createClass({
           <Personal navigator={this.props.navigator}
                     tabDesc="个人"
                     icon={require('../../image/tab/personalcenter.png')}
-                    selectedIcon={require('../../image/tab/personalcenter-selected.png')}
+                    selectedIcon={require('../../image/tab/personalcenter-selected2.png')}
                     exec={this.props.exec}
                     delay={true}
                     page={4}
