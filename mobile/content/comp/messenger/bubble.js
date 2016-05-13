@@ -82,19 +82,30 @@ export default class Bubble extends React.Component {
     if (this.props.contentType === MSG_CONTENT_TYPE.IMAGE) {
       return (
 
-          <Lightbox underlayColor='#44B5E6'
-                    imageSource={{uri:this.props.content}}>
-              <View style={[styles.bubble, customStyle]}>
-                  <Image
-                      style={{
+      <View style={[styles.bubble, customStyle]}>
+        <Image
+          style={{
                 flex: 1,
                 width: 100,
                 height: 100,
                 }}
-                      source={{uri: this.props.content}}
-                  ></Image>
-              </View>
-          </Lightbox>
+          source={{uri: this.props.content}}
+        ></Image>
+      </View>
+
+          //<Lightbox underlayColor='#44B5E6'
+          //          imageSource={{uri:this.props.content}}>
+          //    <View style={[styles.bubble, customStyle]}>
+          //        <Image
+          //            style={{
+          //      flex: 1,
+          //      width: 100,
+          //      height: 100,
+          //      }}
+          //            source={{uri: this.props.content}}
+          //        ></Image>
+          //    </View>
+          //</Lightbox>
 
 
       );
