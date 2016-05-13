@@ -11,9 +11,10 @@ let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let DictIcon = require('../../constants/dictIcon');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let NameCircular = require('./nameCircular').NameCircular;
+//let NameCircular = require('./nameCircular').NameCircular;
 let {groupFilter} = require('./searchBarHelper');
 let DictStyle = require('../../constants/dictStyle');
+let HeaderPic = require('./headerPic');
 
 let DeleteMember = React.createClass({
 
@@ -92,7 +93,7 @@ let DeleteMember = React.createClass({
                   style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row'}}>
             <View style={{height: 40,width: 40}}>
-              <NameCircular name={data.realName}/>
+              <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
             </View>
             <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{data.realName}</Text>
           </View>

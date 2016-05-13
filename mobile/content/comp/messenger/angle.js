@@ -25,6 +25,13 @@ export default class Angle extends React.Component {
           borderLeftColor: this.props.color
         };
         break;
+      case 'up':
+        customStyle = {
+          borderTopWidth: 0,
+          borderBottomColor: this.props.color,
+          width:0,
+        };
+        break;
     }
 
     return (

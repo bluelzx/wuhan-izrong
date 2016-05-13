@@ -69,7 +69,8 @@ let Messenger = React.createClass({
       content: content,
       revTime: new Date(),
       isRead: true,
-      status: 'ErrorButton'
+      status: 'ErrorButton',
+
     };
     if (this.props.param.chatType === SESSION_TYPE.USER) {
       _.assign(msgToSend, {
