@@ -142,7 +142,7 @@ let WhitePage = React.createClass({
             style={{ height:40, width:width-70}}>
             <View
               style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
-              <Text style={{color:'#ffffff'}}>{'环渤海银银合作平台'}</Text>
+              <Text style={{color:'#ffffff'}}>{'爱资融同业平台'}</Text>
               <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
             </View>
             <Text numberOfLines={1}
