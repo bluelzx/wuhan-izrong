@@ -30,7 +30,8 @@ let Register_valiMobile = React.createClass({
       mobileNo: '',
       verify: '',
       checkbox: true,
-      disabled: true
+      disabled: true,
+      smsDisabled: true
     };
   },
   getInitialState: function () {
@@ -89,6 +90,11 @@ let Register_valiMobile = React.createClass({
     } else {
       this.setState({disabled: false});
     }
+    if(this.state.mobileNo.length == 0){
+      this.setState({smsDisabled: true});
+    }else{
+      this.setState({smsDisabled: false});
+    }
   },
 
   selectChange(select){
@@ -112,6 +118,7 @@ let Register_valiMobile = React.createClass({
                     func={LoginAction.sendSmsCodeToRegisterMobile}
                     parameter={this.state.mobileNo}
                     onChanged={this._onChangeText}
+                    disabled={this.state.smsDisabled}
                     exec={this.props.exec}
           />
           <View style={{flexDirection: 'row'}}>
