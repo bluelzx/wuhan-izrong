@@ -117,6 +117,8 @@ let _dealMsg = function (message, socket) {
     case MSG_TYPE.USER_DELETE:
 
       break;
+    case MSG_TYPE.ORG_INFO_UPDATE:
+      break;
     default:
       console.log('None message type matched! [%s]', message.msgType);
       console.log(message);

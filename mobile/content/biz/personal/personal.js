@@ -81,7 +81,7 @@ let Personal = React.createClass({
     } else {
 
       return (
-        <View>
+        <View style={{marginLeft:20}}>
           <NameCircular name={this.state.realName} isV={this.state.certificated}/>
         </View>
       );

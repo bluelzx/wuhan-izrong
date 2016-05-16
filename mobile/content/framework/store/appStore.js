@@ -50,6 +50,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   login: (data) => _login(data),
   logout: (userId) => _logout(userId),
   forceLogout: () => _force_logout(),
+  setForceLogout: () => _setForceLogout(),
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
@@ -69,7 +70,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   startJavaServer: () => ServiceModule.startAppService(_data.token, 0, ImHost),
   //stopJavaServer:() => ServiceModule.stopMyAppService()
   savePicUrl: (picUrl) => _data.picUrl = picUrl,
-  getPicUrl:()=>_data.picUrl
+  getPicUrl: ()=>_data.picUrl
 });
 
 let _queryAllPlatFormInfo = function () {
@@ -107,6 +108,7 @@ let _appInit = () => {
 
 let _register = (data) => {
   Persister.saveAppData(data);
+  _saveFilters(data.appOrderSearchResult);
   _.assign(_data, {
     token: _getToken()
   });
@@ -120,6 +122,7 @@ let _login = (data) => {
       token: _getToken()
     });
     // imSocket.init(data.token);
+    _saveFilters(data.appOrderSearchResult);
     AppStore.emitChange();
   });
   //.then(()=>{
@@ -141,10 +144,16 @@ let _logout = (userId) => {
 };
 
 let _force_logout = () => {
-  _info.isLogout = true;
-  _info.isForceLogout = true;
   //TODO:'强制登出'
+  _info.isForceLogout = true;
+  //清空token
+  _logout(_getUserId());
   AppStore.emitChange();
+};
+
+let _setForceLogout = () => {
+  _info.isLogout = false;
+  _info.isForceLogout = false;
 };
 
 let _save_apns_token = (apnsToken) => {
@@ -173,8 +182,8 @@ let _getLoginUserInfo = () => {
 
 let _saveFilters = function (filters) {
   _data.filters = filters;
-  Persister.saveFilters(filters);
   AppStore.emitChange(MARKET_CHANGE);
+  AppStore.emitChange();
 };
 
 let _getFilters = ()=> {
@@ -213,6 +222,7 @@ let _saveCategory = (data) => {
   _.assign(_data, {
     category: data
   });
+  AppStore.emitChange(MARKET_CHANGE);
 };
 
 let _saveItem = (data) => {

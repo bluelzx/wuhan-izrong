@@ -133,11 +133,11 @@ var Main = React.createClass({
     this.setState(this._getStateFromStores());
     if (AppStore.isLogout()) {
       if (AppStore.isForceLogout()) {
-        AppStore.logout(AppStore.getUserId());
         Alert(
-          '您的账号已经在其他设备上登录了，您将被强制登出，请确认您的账号密码没有被泄露',
+          '    您的账号已经在其他设备上登录了，您将被强制登出，请确认您的账号密码没有被泄露',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
         );
+        AppStore.setForceLogout();
       } else {
         Promise.resolve().then((resolve) => {
           this.refs.navigator.resetTo({comp: Login});
@@ -175,7 +175,6 @@ var Main = React.createClass({
             Alert('网络异常');
           }
         });
-
       if (showLoading) {
         self.setState({
           isLoadingVisible: false

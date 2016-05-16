@@ -23,7 +23,6 @@ let LoginActions = {
   validateSmsCode: (p) => _validateSmsCode(AppLinks.validateSmsCode, p),
   uploadFile: (uri, fileFieldName) => _uploadFile(AppLinks.uploadFile,uri, fileFieldName),
   getOrgList: () => _getOrgList(AppLinks.getOrgList),
-  bizOrderMarketSearchDefaultSearch: (url) => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch),
 
   //用户模块中，app用户注册时，在输入邮箱时，单独增加接口做邮箱校验。
   //URL：/app/pub/validateEmail
@@ -108,16 +107,6 @@ let _uploadFile = function (url, uri, fileFieldName) {
 };
 
 let _getOrgList = function (url) {
-  return new Promise((resolve, reject) => {
-    BFetch(url).then((response) => {
-      resolve(response);
-    }).catch((errorData) => {
-      reject(errorData);
-    });
-  });
-};
-
-let _bizOrderMarketSearchDefaultSearch = function (url,p) {
   return new Promise((resolve, reject) => {
     BFetch(url).then((response) => {
       resolve(response);
