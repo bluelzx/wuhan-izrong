@@ -19,7 +19,7 @@ var productConfig = {
 
 var Config = qaConfig;
 
-module.exports = developConfig;
+module.exports = qaConfig;
 //module.exports = function () {
 //  //switch(process.env.NODE_ENV){
 //  //  case 'develop':
