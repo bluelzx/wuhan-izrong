@@ -24,7 +24,7 @@ let SMSTimer = React.createClass({
       time: '点击获取',
       active: '',
       click: false,
-      disabled: false
+      disabled: this.props.disabled
     };
   },
 
@@ -32,6 +32,10 @@ let SMSTimer = React.createClass({
     return {
       isNeed: false
     };
+  },
+
+  componentWillReceiveProps:function(nextProps){
+    this.setState({disabled: nextProps.disabled});
   },
 
   changeVerify: function () {
@@ -80,7 +84,8 @@ let SMSTimer = React.createClass({
     }
     this.setState({
       deadline: t,
-      time: t + '秒'
+      time: t + '秒',
+      disabled: true
     });
     if (t == 0) {
       this.setState({

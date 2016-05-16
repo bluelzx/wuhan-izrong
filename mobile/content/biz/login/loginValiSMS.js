@@ -106,6 +106,7 @@ let ValiSMS = React.createClass({
                     func={LoginAction.sendSmsCodeToLoginMobile}
                     parameter={this.state.mobileNo}
                     exec={this.props.exec}
+                    disabled={true}
           />
           <Button
             containerStyle={{marginTop: 20}}

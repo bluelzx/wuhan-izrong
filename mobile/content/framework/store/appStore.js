@@ -82,15 +82,15 @@ let _handleConnectivityChange = (isConnected) => {
 };
 
 let _appInit = () => {
-  //NetInfo.isConnected.addEventListener(
-  //  'change',
-  //  _handleConnectivityChange
-  //);
-  //NetInfo.isConnected.fetch().done(
-  //  (isConnected) => {
-  //    _info.netWorkState = isConnected;
-  //  }
-  //);
+  NetInfo.isConnected.addEventListener(
+    'change',
+    _handleConnectivityChange
+  );
+  NetInfo.isConnected.fetch().done(
+    (isConnected) => {
+      _info.netWorkState = isConnected;
+    }
+  );
   _info.initLoadingState = false;
   _info.apnTokens = Persister.getAPNSToken();
   _.assign(_data, {

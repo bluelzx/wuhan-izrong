@@ -216,7 +216,7 @@ let UserInfo = React.createClass({
             </ImagePicker>
             <TouchableOpacity
               style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}
-              onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'publicRealName', true, 'default', 20, true, false)}
+              onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'isPublicRealName', true, 'default', 20, true, false)}
             >
               <Text style={[DictStyle.userInfoValueItem,{ marginRight: 20,width: 150}]}
                     numberOfLines={1}
@@ -228,15 +228,15 @@ let UserInfo = React.createClass({
           </View>
 
           {this.renderRow('手机号', require('../../image/user/mobileNo.png'), 'mobileNumber', this.state.mobileNumber,
-            'publicMobile', this.state.publicMobile, 'number-pad', 11, false, true, false)}
+            'isPublicMobile', this.state.publicMobile, 'number-pad', 11, false, true, false)}
 
-          {this.renderRow('座机号', require('../../image/user/telephoneNo.png'), 'phoneNumber', this.state.phoneNumber, 'publicPhone',
+          {this.renderRow('座机号', require('../../image/user/telephoneNo.png'), 'phoneNumber', this.state.phoneNumber, 'isPublicPhone',
             this.state.publicPhone, 'number-pad', 11, true, true, false)}
 
-          {this.renderRow('QQ', require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'publicQq',
+          {this.renderRow('QQ', require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'isPublicQq',
             this.state.publicQQ, 'number-pad', 20, true, true, false)}
 
-          {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'publicWeChat',
+          {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'isPublicWeChat',
             this.state.publicWeChat, 'default', 40, true, true, false)}
 
           <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
@@ -279,10 +279,10 @@ let UserInfo = React.createClass({
               </View>
             </TouchableHighlight>
 
-            {this.renderRow('部门', require('../../image/user/department.png'), 'department', this.state.department, 'publicDepart',
+            {this.renderRow('部门', require('../../image/user/department.png'), 'department', this.state.department, 'isPublicDepart',
               this.state.publicDepart, 'default', 20, true, true, false)}
 
-            {this.renderRow('职位', require('../../image/user/jobTitle.png'), 'jobTitle', this.state.jobTitle, 'publicTitle',
+            {this.renderRow('职位', require('../../image/user/jobTitle.png'), 'jobTitle', this.state.jobTitle, 'isPublicTitle',
               this.state.publicTitle, 'default', 20, true, true, false)}
           </View>
         </ScrollView>

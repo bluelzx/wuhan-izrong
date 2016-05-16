@@ -75,7 +75,7 @@ var rawFetch = function (url, param, callback, failure, option) {
 
 var process = function (_promise, option) {
   return new Promise((resolve, reject) => {
-    //if (AppStore.getNetWorkState()) {
+    if (AppStore.getNetWorkState()) {
       _promise.then((response) => response.text())
         .then((response) => {
           if (response == '') {
@@ -98,7 +98,6 @@ var process = function (_promise, option) {
             } else {
               resolve(json);
             }
-
             console.log('以下打印一次获取到的json:');
             console.log(response);
 
@@ -108,12 +107,12 @@ var process = function (_promise, option) {
           console.log(errorData);
           reject(errorData);
         });
-    //} else {
-    //  reject({
-    //    msgContent: '网络异常'
-    //  });
-    //  console.log('网络异常');
-    //}
+    } else {
+      reject({
+        msgContent: '网络异常'
+      });
+      console.log('网络异常');
+    }
   });
 
 };
