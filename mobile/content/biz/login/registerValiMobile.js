@@ -22,6 +22,7 @@ let CheckBox = require('../../comp/utils/checkboxUtil');
 let Register_AccountInfo = require('./accountInfo');
 let RegisterPotocol = require('./registerPotocol');
 let DictStyle = require('../../constants/dictStyle');
+let PlainStyle = require('../../constants/dictStyle');
 let CallPhone = require('../../comp/utils/callPhone');
 
 let Register_valiMobile = React.createClass({
@@ -128,7 +129,7 @@ let Register_valiMobile = React.createClass({
                       unCheckedUrl={require('../../image/utils/radioUncheck.png')}
                       checked={this.state.checkbox}
             />
-            <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
+            <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content}
                                 onPress={()=>this.toPage(RegisterPotocol)}
             >
               <Text style={{ marginLeft: -5,marginTop: 20, color: 'grey', fontSize: 16, lineHeight: 20}}>

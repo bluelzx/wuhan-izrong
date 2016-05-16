@@ -56,7 +56,8 @@ let UserInfo = React.createClass({
       address: userInfo.address,
       publicAddress: userInfo.publicAddress,
       nameCardFileUrl: userInfo.nameCardFileUrl,
-      certificated:userInfo.certificated
+      certificated: userInfo.certificated,
+      certificatedValue: userInfo.certificated ? '(已认证)' : '(未认证)'
     };
   },
 
@@ -102,7 +103,7 @@ let UserInfo = React.createClass({
 
   returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
-      if(this.state.certificated){
+      if (this.state.certificated) {
         return (
           <View>
             <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
@@ -112,18 +113,13 @@ let UserInfo = React.createClass({
         );
       }
       return (
-          <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+        <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
       );
-    }else {
-      if(this.state.certificated){
-        return (
-          <View>
-            <NameCircular name={this.state.realName}/>
-          </View>
-        );
-      }
+    } else {
       return (
-        <NameCircular name={this.state.realName}/>
+        <View>
+          <NameCircular name={this.state.realName} isV={this.state.certificated}/>
+        </View>
       );
     }
   },
@@ -271,7 +267,7 @@ let UserInfo = React.createClass({
                     backgroundColor:PlainStyle.colorSet.personalItemColor,justifyContent: 'space-between'}}>
                     <Text style={[DictStyle.userInfoValueItem,{flex:1}]}
                           numberOfLines={2}>
-                      {this.state.orgBeanName + "(已认证)"}
+                      {this.state.orgBeanName + this.state.certificatedValue}
                     </Text>
                   </View>
                 </View>
@@ -325,7 +321,7 @@ let styles = StyleSheet.create({
     borderColor: '#cccccc',
     borderWidth: 1
   },
-  certified:{
+  certified: {
     width: 15,
     height: 15
   },

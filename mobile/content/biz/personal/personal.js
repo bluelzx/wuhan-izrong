@@ -79,18 +79,13 @@ let Personal = React.createClass({
         <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
       );
     } else {
-      if (this.state.certificated) {
-        return (
-          <View style={{marginLeft:20}}>
-            <NameCircular name={this.state.realName}/>
-          </View>
-        );
-      }
+
       return (
-        <View style={{marginLeft:20}}>
-          <NameCircular name={this.state.realName}/>
+        <View>
+          <NameCircular name={this.state.realName} isV={this.state.certificated}/>
         </View>
       );
+
     }
   },
 
@@ -155,10 +150,10 @@ let styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold'
   },
-  certified:{
+  certified: {
     width: 15,
     height: 15,
-    marginLeft:20
+    marginLeft: 20
   }
 });
 
