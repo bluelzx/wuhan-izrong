@@ -38,7 +38,7 @@ let BusinessDetail = React.createClass({
     let loginUserInfo = AppStore.getLoginUserInfo();
     let userInfo = MarketStore.getUserInfoByUserId(marketInfo.userId);
 
-    if (loginUserInfo.userId == marketInfo.userId){
+    if (loginUserInfo.userId == marketInfo.userId) {
       userInfo = loginUserInfo;
     }
 
@@ -51,11 +51,15 @@ let BusinessDetail = React.createClass({
       marketInfo: marketInfo,
       orderUserId: marketInfo.userId,
       lastModifyDate: DateHelper.formatBillDetail(t),
-      userInfo: userInfo
+      userInfo: userInfo,
+      bizOrderOwnerBean: []
     }
   },
 
   componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+      this.getBizOrderInMarket(this.state.marketInfo.id);
+    });
   },
 
   componentWillUnmount: function () {
@@ -108,6 +112,12 @@ let BusinessDetail = React.createClass({
   },
 
   render: function () {
+    if (this.state.bizOrderOwnerBean.length == 0) {
+      return (
+        <NavBarView navigator={this.props.navigator} title='业务详情'>
+        </NavBarView>
+      );
+    }
     return (
       <NavBarView navigator={this.props.navigator} title='业务详情'>
         {this._renderContent()}
@@ -119,7 +129,8 @@ let BusinessDetail = React.createClass({
     return (
       <View style={{flexDirection:'row',alignItems:'center',paddingVertical:8}}>
         <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor,flex:1}}>{desc}</Text>
-        <Text style={{fontSize:16,color:(desc == '更新时间:')?DictStyle.marketSet.modifyDateColor:DictStyle.marketSet.fontColor,width:235/375*screenWidth}}>{value}</Text>
+        <Text
+          style={{fontSize:16,color:(desc == '更新时间:')?DictStyle.marketSet.modifyDateColor:DictStyle.marketSet.fontColor,width:235/375*screenWidth}}>{value}</Text>
       </View>
     );
   },
@@ -141,38 +152,28 @@ let BusinessDetail = React.createClass({
     return (
       <View style={{backgroundColor:'#f0f0f0',borderRadius:2,margin:10}}>
         {this.renderPromulgator()}
-        {this.returnInfoItem(require('../../image/market/email.png'), this.state.userInfo.email, true)}
-        {this.returnInfoItem(require('../../image/market/tel.png'), this.state.userInfo.phoneNumber == null ? '未填写' : this.state.userInfo.phoneNumber, this.state.userInfo.publicPhone)}
-        {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.userInfo.mobileNumber == null ? '未填写' : this.state.userInfo.mobileNumber, this.state.userInfo.publicMobile)}
-        {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.userInfo.qqNo == null ? '未填写' : this.state.userInfo.qqNo, this.state.userInfo.publicQQ)}
-        {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.userInfo.weChatNo == null ? '未填写' : this.state.userInfo.weChatNo, this.state.userInfo.publicWeChat)}
+        {this.returnInfoItem(require('../../image/market/email.png'), this.state.bizOrderOwnerBean.userName, true)}
+        {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber == null || this.state.bizOrderOwnerBean.phoneNumber == '' ? '--' : this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone != false ? true : false)}
+        {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber == null || this.state.bizOrderOwnerBean.mobileNumber == '' ? '--' : this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile != false ? true : false)}
+        {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo == null || this.state.bizOrderOwnerBean.qqNo == '' ? '--' : this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQ != false ? true : false)}
+        {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo == null || this.state.bizOrderOwnerBean.weChatNo == '' ? '--' : this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChat != false ? true : false)}
       </View>
     );
   },
   renderPromulgator: function () {
-    if (this.state.userId == this.state.orderUserId) {
-      return (
-        <View style={{flexDirection:'row',alignItems:'center'}}>
-          {this.renderUserPhoto(this.state.userInfo)}
-          <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}>{this.state.marketInfo.userName}</Text>
-          <Text style={{marginTop:5,width:screenWidth - 124,fontSize:12,color:DictStyle.marketSet.fontColor}}
-                numberOfLines={1}>{'-' + this.state.marketInfo.orgName}</Text>
-        </View>
-      );
-    } else {
-      return (
-        <View style={{flexDirection:'row',alignItems:'center'}}>
-          {this.renderUserPhoto(this.state.userInfo)}
-          <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
-                numberOfLines={1}>{this.state.marketInfo.userName}</Text>
-          <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#f0f0f0' activeOpacity={0.8}>
-            <Text style={{marginTop:5 ,fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
-          </TouchableHighlight>
-          <Text style={{marginTop:5,width:(screenWidth - 184)/2,fontSize:12,color:DictStyle.marketSet.fontColor}}
-                numberOfLines={1}>{'-' + this.state.marketInfo.orgName}</Text>
-        </View>
-      );
-    }
+    return (
+      <View style={{flexDirection:'row',alignItems:'center'}}>
+        {this.renderUserPhoto(this.state.userInfo)}
+        <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
+              numberOfLines={1}>{this.state.marketInfo.userName}</Text>
+        <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#f0f0f0' activeOpacity={0.8}>
+          <Text style={{marginTop:5 ,fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
+        </TouchableHighlight>
+        <Text style={{marginTop:5,width:(screenWidth - 184)/2,fontSize:12,color:DictStyle.marketSet.fontColor}}
+              numberOfLines={1}>{'-' + this.state.marketInfo.orgName}</Text>
+      </View>
+    );
+
   },
   renderUserPhoto: function () {
     if (this.state.marketInfo.photoStoredFileUrl == null) {
@@ -181,7 +182,7 @@ let BusinessDetail = React.createClass({
           <NameCircular name={this.state.marketInfo.userName}/>
         </View>
       );
-    }else{
+    } else {
       return (
         <View style={{margin:10}}>
           <Image
@@ -199,7 +200,8 @@ let BusinessDetail = React.createClass({
           <Image style={{width:16,height:16}}
                  source={url}
           />
-          <Text style={{marginLeft:10,fontSize:16,color:DictStyle.marketSet.fontColor,width:screenWidth - 60}}>{value}</Text>
+          <Text
+            style={{marginLeft:10,fontSize:16,color:DictStyle.marketSet.fontColor,width:screenWidth - 60}}>{value}</Text>
         </View>
       );
     } else {
@@ -221,14 +223,14 @@ let BusinessDetail = React.createClass({
         {
           this.state.fileUrlList.map((item, index) => {
             return (
-                <Lightbox key={index} imageSource={{uri:item, isStatic: true}}
-                          navigator={this.props.navigator} springConfig={{tension: 35, friction: 6}}
-                >
-                  <Image
-                      style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
-                      source={{uri:item, isStatic: true}}
-                  />
-                </Lightbox>
+              <Lightbox key={index} imageSource={{uri:item, isStatic: true}}
+                        navigator={this.props.navigator} springConfig={{tension: 35, friction: 6}}
+              >
+                <Image
+                  style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
+                  source={{uri:item, isStatic: true}}
+                />
+              </Lightbox>
             )
           })
         }
@@ -255,12 +257,8 @@ let BusinessDetail = React.createClass({
             orderId: id
           }
         ).then((response)=> {
-          let t = new Date(response.lastModifyDate);
           this.setState({
-            detailData: response,
-            bizOrderOwnerBean: response.bizOrderOwnerBean,
-            fileUrlList: response.fileUrlList,
-            lastModifyDate: DateHelper.formatBillDetail(t)
+            bizOrderOwnerBean: response.bizOrderOwnerBean
           });
         }).catch(
           (errorData) => {

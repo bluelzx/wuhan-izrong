@@ -61,8 +61,6 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   updateUserInfo: (column, value)=> _updateUserInfo(column, value),
   saveCategory: (data) => _saveCategory(data),
   getCategory: ()=> _getCategory(),
-  saveItem: (data) => _saveItem(data),
-  getItem: ()=> _getItem(),
   queryAllHomePageInfo: ()=>_queryAllHomePageInfo(),
   queryAllPlatFormInfo: ()=>_queryAllPlatFormInfo(),
   getBadge: ()=>_getBadge(),
@@ -213,21 +211,11 @@ let _saveCategory = (data) => {
   _.assign(_data, {
     category: data
   });
-};
-
-let _saveItem = (data) => {
-  _.assign(_data, {
-    item: data
-  });
   AppStore.emitChange(MARKET_CHANGE);
 };
 
 let _getCategory = () => {
   return _data.category;
-};
-
-let _getItem = () => {
-  return _data.item;
 };
 
 let _getBadge = () => {

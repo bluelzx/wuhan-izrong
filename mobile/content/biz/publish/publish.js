@@ -463,7 +463,8 @@ let Publish = React.createClass({
       bizOrientation: params.bizOrientation,
       term: params.term,
       amount: params.amount,
-      rate: params.rate
+      rate: params.rate,
+      remark: params.remark
     };
     if (param && param.isFromIM) {
       this.props.navigator.pop();
@@ -554,7 +555,8 @@ let Publish = React.createClass({
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
     let shareContent = data.bizCategory + '\n' + '业务方向:  ' +(data.bizOrientation == 'IN' ? '收' : '出') + '  '
-      + '金额:' + amount + '  ' + '期限:'+ dayNum + '  ' + '利率:'+ rate + '\n' + '--来自爱资融APP' + '\n' + 'http://www.baidu.com';
+      + '金额:' + amount + '  ' + '期限:'+ dayNum + '  ' + '利率:'+ rate + '\n' + '备注:' + data.remark
+      + '\n'+'--来自爱资融APP' + '\n' + 'http://www.baidu.com';
     Share.open({
       share_text: shareContent,
       share_URL: Platform.OS === 'android' ? shareContent : '',

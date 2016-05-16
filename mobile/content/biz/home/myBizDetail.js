@@ -62,7 +62,7 @@ let MyBizDetail = React.createClass({
     return {
       marketInfo: marketInfo,
       bizOrientationDefault: (marketInfo.bizOrientation == 'IN') ? 0 : 1,
-      termDefault: marketInfo.term == null || marketInfo.term == 0 ? 0 :(marketInfo.term % 365 == 0) ? 2 : (marketInfo.term % 30 == 0) ? 1 : 0,
+      termDefault: marketInfo.term == null || marketInfo.term == 0 ? 0 : (marketInfo.term % 365 == 0) ? 2 : (marketInfo.term % 30 == 0) ? 1 : 0,
       amountDefault: (marketInfo.amount < 100000000) ? 0 : 1,
       termText: this.termChangeHelp(marketInfo.term).toString(),
       amountText: marketInfo.amount == null || marketInfo.amount == 0 ? '' : (marketInfo.amount < 100000000) ? (marketInfo.amount / 10000).toString() : (marketInfo.amount / 100000000).toString(),
@@ -91,31 +91,31 @@ let MyBizDetail = React.createClass({
 
 
   termChangeHelp(term){
-    if(term == null || term == 0){
+    if (term == null || term == 0) {
       return '';
-    }else if (term % 365 == 0){
-      return term/365
-    }else if (term % 30 == 0){
-      return term/30
-    } else{
+    } else if (term % 365 == 0) {
+      return term / 365
+    } else if (term % 30 == 0) {
+      return term / 30
+    } else {
       return term
     }
   },
 
-    termLimitChangeHelp(term){
-        if(term == null || term == 0){
-            return '--';
-        }else if (term % 365 == 0){
-            return term/365 + '年';
-        }else if (term % 30 == 0){
-            return term/30 + '月';
-        }else if (term == 1){
-            return '隔夜';
-        }
-        else{
-            return term + '天';
-        }
-    },
+  termLimitChangeHelp(term){
+    if (term == null || term == 0) {
+      return '--';
+    } else if (term % 365 == 0) {
+      return term / 365 + '年';
+    } else if (term % 30 == 0) {
+      return term / 30 + '月';
+    } else if (term == 1) {
+      return '隔夜';
+    }
+    else {
+      return term + '天';
+    }
+  },
 
   render: function () {
     let {title}  = this.props;
@@ -132,6 +132,7 @@ let MyBizDetail = React.createClass({
               {this.renderAddImg()}
               {this.renderRemarks()}
               {this.renderModifyData()}
+              {this.renderDownBizImage()}
             </ScrollView>
             {this.renderSaveBtn()}
           </View>
@@ -168,7 +169,7 @@ let MyBizDetail = React.createClass({
     } else if (key == 'amountText') {
       this.setState({amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000});
     } else {
-        this.setState({rate: Number(value)});
+      this.setState({rate: Number(value)});
     }
     if (this.state.termText.length == 0 || this.state.amountText.length == 0 || this.state.rateText.length == 0) {
       this.setState({disabled: true});
@@ -180,7 +181,7 @@ let MyBizDetail = React.createClass({
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
         <TouchableOpacity
-                          onPress={()=>this.shutDownBiz()}>
+          onPress={()=>this.shutDownBiz()}>
           <Text style={{color:'#ffffff'}}>{'下架'}</Text>
         </TouchableOpacity>
       );
@@ -192,14 +193,13 @@ let MyBizDetail = React.createClass({
   },
   renderSelectOrg: function () {
     return (
-      <View
-        style={{marginTop:10,height:36,alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
-        <Text
-          style={{fontSize:16,marginLeft:10,color:DictStyle.marketSet.fontColor}}
-        >{'业务类型: ' + this.state.marketInfo.bizCategoryDesc
-        }</Text>
+      <View style={{flexDirection:'column',marginTop:10}}>
+        <View style={{flexDirection:'row'}}>
+          {this.returnItem('业务类型:', this.state.marketInfo.bizCategoryDesc)}
+        </View>
       </View>
-    )
+
+    );
   },
   renderBusinessType: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
@@ -302,7 +302,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : numeral(this.state.marketInfo.rate * 100).format('0,0.00')+ '%')}
+          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : numeral(this.state.marketInfo.rate * 100).format('0,0.00') + '%')}
         </View>
       );
     }
@@ -322,13 +322,6 @@ let MyBizDetail = React.createClass({
         </View>
 
       )
-    } else {
-      return (
-        <View>
-          {this.renderImageTitle()}
-          {this.renderImageItem()}
-        </View>
-      );
     }
   },
 
@@ -382,8 +375,8 @@ let MyBizDetail = React.createClass({
                     }}
         >
           <Image
-              style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-              source={{uri:rowData}}
+            style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+            source={{uri:rowData}}
           />
         </Lightbox>
       </ImagePicker>
@@ -414,7 +407,7 @@ let MyBizDetail = React.createClass({
         <View style={{marginTop:10}}>
           <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
             <View
-                style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height:50, backgroundColor: 'white'}}>
+              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height:50, backgroundColor: 'white'}}>
               <Text style={{marginLeft:10,color:DictStyle.marketSet.fontColor}}>
                 {'备注'}
               </Text>
@@ -444,6 +437,16 @@ let MyBizDetail = React.createClass({
 
     )
   },
+  renderDownBizImage: function(){
+    if (this.state.marketInfo.status != 'ACTIVE'){
+      return (
+        <View>
+          {this.renderImageTitle()}
+          {this.renderImageItem()}
+        </View>
+      );
+    }
+  },
   renderSaveBtn: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
@@ -463,10 +466,10 @@ let MyBizDetail = React.createClass({
 
   returnItem: function (desc, value) {
     return (
-      <View style={{marginLeft:10,flexDirection:'row',alignItems:'center',paddingVertical:5}}>
-        <Text style={{fontSize:15,color:DictStyle.marketSet.fontColor,flex:1}}>{desc}</Text>
+      <View style={{marginLeft:10,flexDirection:'row',alignItems:'center',paddingVertical:8}}>
+        <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor,width:Adjust.width(120)}}>{desc}</Text>
         <Text
-          style={{marginLeft:10,fontSize:15,color:(desc == '最近修改时间:')?DictStyle.marketSet.modifyDateColor:DictStyle.marketSet.fontColor,width:225/375*screenWidth}}>{value}</Text>
+          style={{marginLeft:10,fontSize:16,color:(desc == '最近修改时间:')?DictStyle.marketSet.modifyDateColor:DictStyle.marketSet.fontColor,width:225/375*screenWidth}}>{value}</Text>
       </View>
     )
   },
@@ -486,7 +489,9 @@ let MyBizDetail = React.createClass({
         (buttonIndex) => {
           if (buttonIndex == 0) {
             CameraRoll.saveImageWithTag('file://' + this.state.fileUrlList[rowId]).then(
-              (data) => {Alert('保存成功')},
+              (data) => {
+                Alert('保存成功')
+              },
               (err) => {
                 console.log('CameraRoll,err' + err);
               }
@@ -500,7 +505,7 @@ let MyBizDetail = React.createClass({
     } else {
       UserPhotoPicModule.showSaveImgDialog(
         (index) => {
-          switch(index) {
+          switch (index) {
             case 0:
               CameraRoll.saveImageWithTag('file://' + this.state.fileUrlList[rowId]).then(
                 (data) => {
@@ -607,7 +612,8 @@ let MyBizDetail = React.createClass({
       bizOrientation: params.bizOrientation,
       term: params.term,
       amount: params.amount,
-      rate: params.rate
+      rate: params.rate,
+      remark: params.remark
     };
     this.props.exec(
       ()=> {
@@ -635,12 +641,13 @@ let MyBizDetail = React.createClass({
       dayNum = parseInt(data.term / 365) + '年';
     } else if (data.term % 30 == 0) {
       dayNum = parseInt(data.term / 30) + '月';
-    }else {
+    } else {
       dayNum = data.term + '日';
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
-    let shareContent = this.state.marketInfo.bizCategoryDesc + '\n' + '业务方向:  ' +(data.bizOrientation == 'IN' ? '收' : '出') + '  '
-     + '金额:' + amount + '  ' + '期限:'+ dayNum + '  ' + '利率:'+ rate + '\n' + '--来自爱资融APP' + '\n' + 'http://www.baidu.com';
+    let shareContent = this.state.marketInfo.bizCategoryDesc + '\n' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出') + '  '
+      + '金额:' + amount + '  ' + '期限:' + dayNum + '  ' + '利率:' + rate + '\n' + '备注:' + data.remark
+      + '\n' + '--来自爱资融APP' + '\n' + 'http://www.baidu.com';
     Share.open({
       share_text: shareContent,
       share_URL: Platform.OS === 'android' ? shareContent : '',
@@ -657,7 +664,7 @@ let MyBizDetail = React.createClass({
             orderId: id
           }
         ).then((response)=> {
-          Alert('下架成功',()=>{
+          Alert('下架成功', ()=> {
             this.props.navigator.pop();
             AppStore.emitChange(MYBIZ_CHANGE);
           });
@@ -669,7 +676,7 @@ let MyBizDetail = React.createClass({
       }
     );
   },
-  handleSendImage(uri,index) {
+  handleSendImage(uri, index) {
     this.props.exec(
       ()=> {
         return ImAction.uploadImage(uri)
