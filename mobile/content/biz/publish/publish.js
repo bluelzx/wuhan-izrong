@@ -174,7 +174,7 @@ let Publish = React.createClass({
     } else if (key == 'amountText') {
       this.setState({amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000});
     } else {
-      this.setState({rate: Number(value)});
+        this.setState({rate: Number(value)});
     }
   },
 
@@ -376,7 +376,7 @@ let Publish = React.createClass({
   _pressPublish: function () {
 
     if (!Validation.isTerm(this.state.termText)) {
-      Alert('期限：请输入大于0的整数');
+      Alert('期限：请输入0-999间的整数');
     } else if (!Validation.isAmount(this.state.amountText)) {
       Alert('金额：请输入正确的浮点数');
     } else if (!Validation.isRate(this.state.rateText)) {

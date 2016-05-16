@@ -63,9 +63,9 @@ let MyBizDetail = React.createClass({
       marketInfo: marketInfo,
       bizOrientationDefault: (marketInfo.bizOrientation == 'IN') ? 0 : 1,
       termDefault: marketInfo.term == null || marketInfo.term == 0 ? 0 :(marketInfo.term % 365 == 0) ? 2 : (marketInfo.term % 30 == 0) ? 1 : 0,
-      amountDefault: (marketInfo.amount <= 100000000) ? 0 : 1,
+      amountDefault: (marketInfo.amount < 100000000) ? 0 : 1,
       termText: this.termChangeHelp(marketInfo.term).toString(),
-      amountText: marketInfo.amount == null || marketInfo.amount == 0 ? '' : (marketInfo.amount <= 100000000) ? (marketInfo.amount / 10000).toString() : (marketInfo.amount / 100000000).toString(),
+      amountText: marketInfo.amount == null || marketInfo.amount == 0 ? '' : (marketInfo.amount < 100000000) ? (marketInfo.amount / 10000).toString() : (marketInfo.amount / 100000000).toString(),
       rateText: marketInfo.rate == null || marketInfo.rate == 0 ? '' : numeral((marketInfo.rate * 100)).format('0,0.00'),
       remarkText: marketInfo.remark,
       lastModifyDate: DateHelper.formatBillDetail(t),
@@ -82,12 +82,12 @@ let MyBizDetail = React.createClass({
   },
 
   componentDidMount() {
+
   },
 
-  componentWillUnmount() {
+  componentWillUnmount () {
+
   },
-
-
 
 
   termChangeHelp(term){
@@ -168,7 +168,7 @@ let MyBizDetail = React.createClass({
     } else if (key == 'amountText') {
       this.setState({amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000});
     } else {
-      this.setState({rate: Number(value)});
+        this.setState({rate: Number(value)});
     }
     if (this.state.termText.length == 0 || this.state.amountText.length == 0 || this.state.rateText.length == 0) {
       this.setState({disabled: true});
@@ -526,11 +526,11 @@ let MyBizDetail = React.createClass({
 
   _pressSave: function () {
     if (!Validation.isTerm(this.state.termText)) {
-      Alert('期限：请输入大于0的整数');
+      Alert('期限：请输入0-999间的整数');
     } else if (!Validation.isAmount(this.state.amountText)) {
       Alert('金额：请输入正确的浮点数');
     } else if (!Validation.isRate(this.state.rateText)) {
-      Alert('利率：请输入0-99.99之间的小数');
+      Alert('利率：请输入0-99.99之间的两位小数');
     } else if (this.state.amount > 100000000000) {
       Alert('您输入的金额过大');
     } else {

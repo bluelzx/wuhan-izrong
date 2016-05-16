@@ -178,15 +178,15 @@ let Market = React.createClass({
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
           <Text
-            style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?DictStyle.marketSet.fontColor:'#cccccc'}}>
+            style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?DictStyle.marketSet.fontColor:'#c0c8ce'}}>
             {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'? rowData.amount == null || rowData.amount == 0 ? DictStyle.marketSet.fontColor :DictStyle.marketSet.amountColor:'#cccccc'}}>
+            style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'? rowData.amount == null || rowData.amount == 0 ? DictStyle.marketSet.fontColor :DictStyle.marketSet.amountColor:'#c0c8ce'}}>
             {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount < 100000000 ? numeral(rowData.amount / 10000) + '万' : numeral(rowData.amount / 100000000) + '亿'}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?DictStyle.marketSet.fontColor:'#cccccc'}}
+            style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?DictStyle.marketSet.fontColor:'#c0c8ce'}}
             numberOfLines={1}>
             {rowData.rate == null || rowData.rate == 0 ? '--' : numeral(rowData.rate * 100).format('0,0.00') + '%'}
           </Text>
