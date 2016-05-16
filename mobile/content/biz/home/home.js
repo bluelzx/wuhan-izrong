@@ -51,7 +51,7 @@ let Home = React.createClass({
       dataSource: PAGES.length?dataSource.cloneWithPages(PAGES):dataSource.cloneWithPages(DEFAULTPAGES),
       category: '资金业务',
       contentList: [],
-      bizCategoryID: categoryArr[0].id
+      bizCategoryID: categoryArr.length == 0 ? 0 : categoryArr[0].id
     };
   },
 
