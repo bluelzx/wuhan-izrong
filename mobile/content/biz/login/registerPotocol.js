@@ -38,7 +38,7 @@ let RegisterPotocol = React.createClass({
       <NavBarView navigator={this.props.navigator} title='用户协议'>
         <WebView
           style={styles.webView}
-          source={{uri: AppLinks.registerProtocal}}
+          source={{uri: AppLinks.registerProtocol}}
           javaScriptEnabled={true}
           domStorageEnabled={true}
           decelerationRate="normal"

@@ -35,6 +35,9 @@ let NameCircular = require('./nameCircular').NameCircular;
 let {sessionFilter} = require('./searchBarHelper');
 let { IM_SESSION_LIST } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
+let PlainStyle = require('../../constants/dictStyle');
+let NotifyHeader = require('./notifyHeader');
+let GroupNotifyList = require('./groupNotifyList');
 
 let WhitePage = React.createClass({
 
@@ -131,7 +134,7 @@ let WhitePage = React.createClass({
       <TouchableOpacity key={item.sessionId} onLongPress={
         ()=>
           {
-            Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
+            Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{});
           }
         }
                           onPress={()=>{SessionStore.setBadgeZero(item.sessionId); this.props.navigator.push({comp: Spread})}}>
@@ -142,8 +145,8 @@ let WhitePage = React.createClass({
             style={{ height:40, width:width-70}}>
             <View
               style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
-              <Text style={{color:'#ffffff'}}>{'环渤海银银合作平台'}</Text>
-              <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
+              <Text style={{color:PlainStyle.colorSet.commonTextColor}}>{'爱资融同业平台'}</Text>
+              <Text style={{color:PlainStyle.colorSet.commonTextColor}}>{DateHelper.descDate(item.lastTime)}</Text>
             </View>
             <Text numberOfLines={1}
                   style={{marginTop:5,color:DictStyle.colorSet.sessionDetailColor}}>{item.content}</Text>
@@ -320,6 +323,17 @@ let WhitePage = React.createClass({
           </View>
         </View>
       </TouchableOpacity>
+
+        //<NotifyHeader source={require('../../image/im/groupNotify.png')}
+        //              badge={1}
+        //              key={item.sessionId}
+        //              onLongPress={
+        //              ()=>Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{}) }
+        //              onPress={()=>{
+        //                 this.props.navigator.push({comp:GroupNotifyList});
+        //              }}
+        //></NotifyHeader>
+
     );
   },
 

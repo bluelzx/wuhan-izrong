@@ -47,9 +47,13 @@ let Remarks = React.createClass({
     this.setState({remarkText: value});
   },
   finish: function () {
+      var reg = /^[\w\u4e00-\u9fa5\u0000-\u00FF\uFF00-\uFFFF。、“”……——【】《》]+$/g;
+
     if(this.state.remarkText.length >50){
-      Alert('字数超过限制(50字以内)')
-    }else {
+        Alert('字数超过限制(50字以内)');
+    } else if (!reg.test(this.state.remarkText)) {
+        Alert('请输入正确的中英文文本');
+    } else {
       this.props.param.callBackRemarks(this.state.remarkText);
       this.props.navigator.pop();
     }

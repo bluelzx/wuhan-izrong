@@ -155,7 +155,7 @@ let Contacts = React.createClass({
             style={{borderTopWidth:0.5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
         <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
           <Image style={{height: 40,width: 40,borderRadius: 20}} source={DictIcon.imSpread} />
-          <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{'环渤海银银合作平台'}</Text>
+          <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{'爱资融同业平台'}</Text>
         </View>
       </TouchableOpacity>
     );
