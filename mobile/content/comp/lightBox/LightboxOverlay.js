@@ -139,17 +139,21 @@ var LightboxOverlay = React.createClass({
     close: function () {
         //StatusBar.setHidden(false, 'fade');
         this.setState({
-            isAnimating: true,
+          isAnimating: false,
         });
-        Animated.spring(
-            this.state.openVal,
-          {toValue: 0, ...this.props.param.springConfig}
-        ).start(() => {
-            this.setState({
-                isAnimating: false,
-            });
-          this.props.param.onClose();
-        });
+      this.props.param.onClose();
+      //this.setState({
+      //    isAnimating: true,
+      //});
+      //Animated.spring(
+      //    this.state.openVal,
+      //  {toValue: 0, ...this.props.param.springConfig}
+      //).start(() => {
+      //    this.setState({
+      //        isAnimating: false,
+      //    });
+      //  this.props.param.onClose();
+      //});
     },
 
     saveImg: function () {
