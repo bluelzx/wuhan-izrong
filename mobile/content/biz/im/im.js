@@ -36,6 +36,8 @@ let {sessionFilter} = require('./searchBarHelper');
 let { IM_SESSION_LIST } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
 let PlainStyle = require('../../constants/dictStyle');
+let NotifyHeader = require('./notifyHeader');
+let GroupNotifyList = require('./groupNotifyList');
 
 let WhitePage = React.createClass({
 
@@ -321,6 +323,17 @@ let WhitePage = React.createClass({
           </View>
         </View>
       </TouchableOpacity>
+
+        //<NotifyHeader source={require('../../image/im/groupNotify.png')}
+        //              badge={1}
+        //              key={item.sessionId}
+        //              onLongPress={
+        //              ()=>Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{}) }
+        //              onPress={()=>{
+        //                 this.props.navigator.push({comp:GroupNotifyList});
+        //              }}
+        //></NotifyHeader>
+
     );
   },
 
