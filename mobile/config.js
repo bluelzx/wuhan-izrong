@@ -5,7 +5,7 @@ var developConfig = {
 };
 
 var qaConfig = {
-  Dev: true,
+  Dev: false,
   //Host: 'http://192.168.64.205:9101/fas',     //qa
   Host: 'http://192.168.64.205:9101/fas',     //qa
   ImHost:'192.168.61.84:4000'//qa
@@ -17,7 +17,7 @@ var productConfig = {
   ImHost: '139.196.174.42:4000'
 };
 
-var Config = developConfig;
+var Config = productConfig;
 
 module.exports = Config;
 //module.exports = function () {

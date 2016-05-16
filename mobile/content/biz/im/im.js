@@ -35,6 +35,7 @@ let NameCircular = require('./nameCircular').NameCircular;
 let {sessionFilter} = require('./searchBarHelper');
 let { IM_SESSION_LIST } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
+let PlainStyle = require('../../constants/dictStyle');
 
 let WhitePage = React.createClass({
 
@@ -142,8 +143,8 @@ let WhitePage = React.createClass({
             style={{ height:40, width:width-70}}>
             <View
               style={{marginTop:5, flexDirection:'row', justifyContent:'space-between'}}>
-              <Text style={{color:'#ffffff'}}>{'爱资融同业平台'}</Text>
-              <Text style={{color:'#ffffff'}}>{DateHelper.descDate(item.lastTime)}</Text>
+              <Text style={{color:PlainStyle.colorSet.commonTextColor}}>{'爱资融同业平台'}</Text>
+              <Text style={{color:PlainStyle.colorSet.commonTextColor}}>{DateHelper.descDate(item.lastTime)}</Text>
             </View>
             <Text numberOfLines={1}
                   style={{marginTop:5,color:DictStyle.colorSet.sessionDetailColor}}>{item.content}</Text>
