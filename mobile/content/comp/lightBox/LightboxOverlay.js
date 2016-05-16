@@ -139,17 +139,21 @@ var LightboxOverlay = React.createClass({
     close: function () {
         //StatusBar.setHidden(false, 'fade');
         this.setState({
-            isAnimating: true,
+          isAnimating: false,
         });
-        Animated.spring(
-            this.state.openVal,
-          {toValue: 0, ...this.props.param.springConfig}
-        ).start(() => {
-            this.setState({
-                isAnimating: false,
-            });
-          this.props.param.onClose();
-        });
+      this.props.param.onClose();
+      //this.setState({
+      //    isAnimating: true,
+      //});
+      //Animated.spring(
+      //    this.state.openVal,
+      //  {toValue: 0, ...this.props.param.springConfig}
+      //).start(() => {
+      //    this.setState({
+      //        isAnimating: false,
+      //    });
+      //  this.props.param.onClose();
+      //});
     },
 
     saveImg: function () {
@@ -198,9 +202,8 @@ var LightboxOverlay = React.createClass({
                         this.saveImg();
                     } else if (buttonIndex == 1) {
                       if (this.props.param.deleteHeader) {
-
-                        this.props.param.deleteHeader();
-                        this.close();
+                          this.close();
+                          this.props.param.deleteHeader();
                         }
                     }
                 });
@@ -214,8 +217,8 @@ var LightboxOverlay = React.createClass({
                     break;
                   case 1:
                     if (this.props.param.deleteHeader) {
-                      this.props.param.deleteHeader();
-                      this.close();
+                        this.close();
+                        this.props.param.deleteHeader();
                     }
                     break;
                   default:

@@ -214,7 +214,7 @@ let Publish = React.createClass({
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
-                 placeholder='天数' maxLength={3} field='termText' inputType="numeric"
+                 placeholder='0-999' maxLength={3} field='termText' inputType="numeric"
                  onChangeText={this._onChangeText}
                  onFocus={() => this.refs['scroll'].scrollTo({y:60})}
           />
@@ -315,8 +315,8 @@ let Publish = React.createClass({
                   navigator={this.props.navigator}
                   deleteHeader={()=>{
                     let arr = this.state.fileUrlList;
-                    arr[rowID] = 0;
-                    this.setState({fileUrlList: _.compact(arr)})
+                    _.pullAt(arr,rowID);
+                    this.setState({fileUrlList: arr});
                     }}
         >
           <Image
