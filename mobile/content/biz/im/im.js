@@ -131,7 +131,7 @@ let WhitePage = React.createClass({
       <TouchableOpacity key={item.sessionId} onLongPress={
         ()=>
           {
-            Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
+            Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{});
           }
         }
                           onPress={()=>{SessionStore.setBadgeZero(item.sessionId); this.props.navigator.push({comp: Spread})}}>

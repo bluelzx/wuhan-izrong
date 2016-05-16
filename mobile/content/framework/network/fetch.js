@@ -100,7 +100,6 @@ var process = function (_promise, option) {
             }
             console.log('以下打印一次获取到的json:');
             console.log(response);
-
           }
         })
         .catch((errorData) => {
@@ -108,10 +107,7 @@ var process = function (_promise, option) {
           reject(errorData);
         });
     } else {
-      reject({
-        msgContent: '网络异常'
-      });
-      console.log('网络异常');
+      Alert('网络异常')
     }
   });
 

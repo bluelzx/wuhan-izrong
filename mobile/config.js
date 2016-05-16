@@ -17,9 +17,9 @@ var productConfig = {
   ImHost: '139.196.174.42:4000'
 };
 
-var Config = qaConfig;
+var Config = developConfig;
 
-module.exports = developConfig;
+module.exports = Config;
 //module.exports = function () {
 //  //switch(process.env.NODE_ENV){
 //  //  case 'develop':
