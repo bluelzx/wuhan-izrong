@@ -70,9 +70,10 @@ let _dealMsg = function (message, socket) {
     };
       break;
     case MSG_TYPE.HOME_PAGE:
-      message.homePageList && message.homePageList.forEach((msg) => {
-        ImStore.createHomePageInfo(msg.seq, msg.url);
-      });
+      //message.homePageList && message.homePageList.forEach((msg) => {
+      //  ImStore.createHomePageInfo(msg.seq, msg.url);
+      //});
+      ImStore.createHomePageInfo(message.homePageList);
       break;
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
       ImStore.updateContactInfo(message.address,

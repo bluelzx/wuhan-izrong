@@ -18,9 +18,10 @@ var AboutUs = React.createClass({
   getInitialState(){
     return {
       phone: '022-28405347',
-      email: 'bbcp.bankoftianjin.com',
+      email: 'zr@izirong.com',
       versionNo: '0.0.0.1',
-      content: '     平台秉着“平等、互利、开放、合作、务实、创新”的原则，推动成员行在流动性互助、金融功能互助、投资业务互助、信贷业务互助和信息政策互助方面加强合作'
+      content: '     爱资融APP是武汉安硕知信为广大银行同业交易从业人员推出的银行同业业务撮合及社交类软件。爱资融秉承“透明公开，服务为先” ' +
+      '的原则，立志为广大的银行同业交易员提供一个纯净高效的同业交流环境。公司邮箱：zr@izirong.com'
     };
   },
 
