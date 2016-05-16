@@ -568,7 +568,7 @@ let Market = React.createClass({
       navigator.push({
         comp: name,
         callBack: this.callback,
-        param: {needAll: true}
+        param: {needAll: true , isFromMarket: true}
       })
     }
   },

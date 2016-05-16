@@ -97,8 +97,10 @@ let Register_selectOrg = React.createClass({
   },
 
   render: function () {
+    let {param}  = this.props;
+    let title = param && param.isFromMarket ? '选择发布机构':'选择机构';
     return (
-      <NavBarView navigator={this.props.navigator} title='选择机构'>
+      <NavBarView navigator={this.props.navigator} title={title}>
         <SearchBar
           textChange={this.textChange}
         />
