@@ -122,16 +122,6 @@ var Main = React.createClass({
       }
 
       Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {});
-
-      //if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
-      //  //最近2秒内按过back键，可以退出应用。
-      //  //this.toast.cancel();
-      //  BackAndroid.exitApp();
-      //  return false;
-      //}
-      //this.lastBackPressed = Date.now();
-
-      //this.toast = ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
       return true;
     }
 
@@ -144,7 +134,7 @@ var Main = React.createClass({
       if (AppStore.isForceLogout()) {
         AppStore.logout(AppStore.getUserId());
         Alert(
-          '账号已在别处登陆,系统将切换到登陆界面',
+          '您的账号已经在其他设备上登录了，您将被强制登出，请确认您的账号密码没有被泄露',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
         );
       } else {

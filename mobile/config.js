@@ -1,6 +1,6 @@
 var developConfig = {
   Dev: true, // Switch for log. true means print.
-  Host: 'http://192.168.64.245:9081/fas',   //dev
+  Host: 'http://192.168.64.205:9102/fas',   //dev
   ImHost:'192.168.61.84:5000'//dev
 };
 
@@ -17,9 +17,9 @@ var productConfig = {
   ImHost: '139.196.174.42:4000'
 };
 
-var Config = developConfig;
+var Config = qaConfig;
 
-module.exports = Config;
+module.exports = developConfig;
 //module.exports = function () {
 //  //switch(process.env.NODE_ENV){
 //  //  case 'develop':
