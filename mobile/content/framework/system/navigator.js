@@ -44,6 +44,7 @@ let NotificationManager = require('./notificationManager');
 let Publish = require ('../../biz/publish/publish');
 let { SHOW_VIEW } = require('../../constants/dictEvent');
 
+const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');
 
 var Main = React.createClass({
@@ -284,6 +285,11 @@ var Main = React.createClass({
           })}
           initialRoute={{
             comp: initComp
+          }}
+          onDidFocus={(route) => {
+            // console.log('### onDidFocus ### ' + route.comp.displayName || route.comp);
+            // ImSocket.trace(KPI_TYPE.PAGE, route);
+            ImSocket.trace(KPI_TYPE.PAGE, route.comp.displayName || route.comp);
           }}
         />
 
