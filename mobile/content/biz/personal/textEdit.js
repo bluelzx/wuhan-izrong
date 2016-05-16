@@ -75,12 +75,18 @@ let TextEdit = React.createClass({
         }
         break;
       case 'phoneNumber':
-        this.setState({
-          newValue: this.state.tele + '-' + this.state.phone
-        });
-        if (Validation.isTelephone(this.state.newValue)) {
+          if (this.state.tele == '' && this.state.phone == '') {
+              this.setState({
+                  newValue: ''
+              });
+          } else {
+              this.setState({
+                  newValue: this.state.tele + '-' + this.state.phone
+              });
+          }
+          if (Validation.isTelephone(this.state.newValue) || (this.state.tele == '' && this.state.phone == '')) {
           this.updateUserInfo();
-        } else if((this.state.newValue == '未填写-undefined') || (this.state.tele == '' && this.state.phone == '')){
+          } else if ((this.state.newValue == '未填写-undefined')) {
             const { navigator } = this.props;
             if (navigator) {
                 navigator.pop();

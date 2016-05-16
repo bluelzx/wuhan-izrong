@@ -11,7 +11,8 @@ let {
   TouchableOpacity,
   Platform,
   Image,
-  ScrollView
+    ScrollView,
+    StyleSheet
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
 let _ = require('lodash');
@@ -35,6 +36,8 @@ let NameCircular = require('./nameCircular').NameCircular;
 let {sessionFilter} = require('./searchBarHelper');
 let { IM_SESSION_LIST } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
+let NotifyHeader = require('./notifyHeader');
+let GroupNotifyList = require('./groupNotifyList');
 
 let WhitePage = React.createClass({
 
@@ -320,6 +323,17 @@ let WhitePage = React.createClass({
           </View>
         </View>
       </TouchableOpacity>
+
+        //<NotifyHeader source={require('../../image/im/groupNotify.png')}
+        //              badge={1}
+        //              key={item.sessionId}
+        //              onLongPress={
+        //              ()=>Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{}) }
+        //              onPress={()=>{
+        //                 this.props.navigator.push({comp:GroupNotifyList});
+        //              }}
+        //></NotifyHeader>
+
     );
   },
 
@@ -369,6 +383,31 @@ let WhitePage = React.createClass({
       </NavBarView>
     );
   }
+});
+
+let Styles = StyleSheet.create({
+
+    rowDirection: {
+        flexDirection: 'row'
+    },
+
+    containerStyle: {
+        borderBottomColor: DictStyle.colorSet.demarcationColor,
+        borderBottomWidth: 0.5,
+        paddingVertical: 10,
+        marginHorizontal: 10,
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+
+    imageStyle: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        marginRight: 15,
+        marginLeft: 10
+    }
+
 });
 
 module.exports = WhitePage;
