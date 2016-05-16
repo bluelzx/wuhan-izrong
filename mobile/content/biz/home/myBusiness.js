@@ -139,7 +139,13 @@ let Market = React.createClass({
             allLoaded: true, // the end of the list is reached
           });
         }, 1000); // simulating network fetching
-        Alert(errorData.msgContent || 'exception');
+        if(errorData.msgCode == 'APP_SYS_TOKEN_INVALID'){
+          AppStore.forceLogout();
+        }else if(errorData.message.includes('Network request failed')){
+          Alert('网络异常');
+        }else{
+          Alert(errorData.msgContent || errorData.message);
+        }
       }
     );
   },
