@@ -175,7 +175,6 @@ var Main = React.createClass({
             Alert('网络异常');
           }
         });
-
       if (showLoading) {
         self.setState({
           isLoadingVisible: false

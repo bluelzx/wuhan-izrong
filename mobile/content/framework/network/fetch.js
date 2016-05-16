@@ -84,7 +84,6 @@ var process = function (_promise, option) {
             var json = JSON.parse(response);
             if (json.msgContent) {
               if (json.msgCode == 'SYS_TOKEN_INVALID') {
-                var action;
                 if (option.isLogout) {
                   AppStore.logout();
                 } else {
