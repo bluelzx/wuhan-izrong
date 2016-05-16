@@ -158,6 +158,10 @@ let Resolver = {
         break;
       case COMMAND_TYPE.SYNC_REQ:
         msgToSend = message;
+        break;
+      case COMMAND_TYPE.KPI_APP:
+        msgToSend = message;
+        break;
       default:
         console.log('None message type matched! [%s]', message.msgType);
     }

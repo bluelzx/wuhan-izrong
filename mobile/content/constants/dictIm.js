@@ -8,7 +8,14 @@ const MSG_CONTENT_TYPE = {
 const COMMAND_TYPE = {
   SEND_P2P_MSG: 'sendP2PMsg',
   SEND_GROUP_MSG: 'sendGroupMsg',
-  SYNC_REQ:'SYNC_REQ'
+  SYNC_REQ: 'SYNC_REQ',
+  KPI_APP: 'kpiApp'
+};
+
+const KPI_TYPE = {
+  PAGE: 'PAGE',
+  SHARE: 'SHARE',
+  PUSH: 'PUSH'
 };
 
 const MSG_TYPE = {
@@ -43,5 +50,6 @@ module.exports = {
   MSG_CONTENT_TYPE: MSG_CONTENT_TYPE,
   COMMAND_TYPE: COMMAND_TYPE,
   MSG_TYPE: MSG_TYPE,
+  KPI_TYPE: KPI_TYPE,
   SESSION_TYPE: SESSION_TYPE,
 };

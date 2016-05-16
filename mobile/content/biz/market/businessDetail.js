@@ -155,6 +155,8 @@ let BusinessDetail = React.createClass({
         <View style={{flexDirection:'row',alignItems:'center'}}>
           {this.renderUserPhoto(this.state.userInfo)}
           <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}>{this.state.marketInfo.userName}</Text>
+          <Text style={{marginTop:5,width:screenWidth - 124,fontSize:12,color:DictStyle.marketSet.fontColor}}
+                numberOfLines={1}>{'-' + this.state.marketInfo.orgName}</Text>
         </View>
       );
     } else {
@@ -164,14 +166,16 @@ let BusinessDetail = React.createClass({
           <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
                 numberOfLines={1}>{this.state.marketInfo.userName}</Text>
           <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#f0f0f0' activeOpacity={0.8}>
-            <Text style={{fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
+            <Text style={{marginTop:5 ,fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
           </TouchableHighlight>
+          <Text style={{marginTop:5,width:(screenWidth - 184)/2,fontSize:12,color:DictStyle.marketSet.fontColor}}
+                numberOfLines={1}>{'-' + this.state.marketInfo.orgName}</Text>
         </View>
       );
     }
   },
   renderUserPhoto: function () {
-    if (this.state.userInfo.photoStoredFileUrl == null) {
+    if (this.state.marketInfo.photoStoredFileUrl == null) {
       return (
         <View style={{margin:10}}>
           <NameCircular name={this.state.marketInfo.userName}/>
@@ -182,7 +186,7 @@ let BusinessDetail = React.createClass({
         <View style={{margin:10}}>
           <Image
             style={{height:36,width:36,borderRadius:18}}
-            source={{uri:this.state.userInfo.photoStoredFileUrl}}
+            source={{uri:this.state.marketInfo.photoStoredFileUrl}}
           />
         </View>
       );
