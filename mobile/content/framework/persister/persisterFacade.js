@@ -79,6 +79,7 @@ let _saveAppData = function (data) {
 let _saveLoginUserInfo = function (loginUserInfo, token) {
   _realm.create(LOGINUSERINFO, {
     userId: loginUserInfo.userId,
+    certificated: loginUserInfo.certificated,
     address: loginUserInfo.address,
     realName: loginUserInfo.realName,
     weChatNo: loginUserInfo.weChatNo,
