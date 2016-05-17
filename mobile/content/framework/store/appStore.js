@@ -48,6 +48,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),
+  simpleLogin: (data) => _simpleLogin(data),
   logout: (userId) => _logout(userId),
   forceLogout: () => _force_logout(),
   setForceLogout: () => _setForceLogout(),
@@ -120,7 +121,7 @@ let _login = (data) => {
     _.assign(_data, {
       token: _getToken()
     });
-    // imSocket.init(data.token);
+    //保存filter到_data
     _saveFilters(data.appOrderSearchResult);
     AppStore.emitChange();
   });
@@ -130,6 +131,15 @@ let _login = (data) => {
   //    ServiceModule.startAppService(_data.token, 0, ImHost);
   //  }
   //});
+};
+
+let _simpleLogin = (data) => {
+  return Persister.saveSimpleLoginData(data,AppStore.getUserId()).then(()=> {
+    _.assign(_data, {
+      token: _getToken()
+    });
+    AppStore.emitChange();
+  });
 };
 
 let _logout = (userId) => {

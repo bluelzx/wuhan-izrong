@@ -44,13 +44,15 @@ import java.util.Date;
 public class UserPhotoPicModule extends ReactContextBaseJavaModule implements ActivityEventListener {
     private static final int USER_IMAGE_REQUEST_CODE = 0x01;
     private static final int USER_CAMERA_REQUEST_CODE = 0x02;
-    private Callback mCallback ;
+    private Callback mCallback;
     private boolean crop;
     private String fileName;
     private WritableMap response;
     private File file;
     private Uri uri;
     private int size;
+    private int aspectX;
+    private int aspectY;
 
     public UserPhotoPicModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -113,14 +115,13 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                 }).show();
     }
 
-
     @ReactMethod
-    public void showImagePic(String type,boolean needCrop ,String name, Callback callback) {
-        showImagePicBySize(type, needCrop, name, callback, 100);
+    public void showImagePic(String type, boolean needCrop, String name, int aspectX, int aspectY, Callback callback) {
+        showImagePicBySize(type, needCrop, name, aspectX, aspectY, callback, 100);
     }
 
     @ReactMethod
-    public void showImagePicBySize(String type,boolean needCrop ,String name, Callback callback, int size) {
+    public void showImagePicBySize(String type, boolean needCrop, String name, int aspectX, int aspectY, Callback callback, int size) {
         File jsCode = getReactApplicationContext().getDir("JSCode", Context.MODE_PRIVATE);
         LogUtils.i("jsCode", jsCode.getPath());
         getFiles(jsCode.getPath());
@@ -128,6 +129,8 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         crop = needCrop;
         fileName = new Date().getTime() + ".jpg";
         mCallback = callback;
+        this.aspectX = aspectX;
+        this.aspectY = aspectY;
         switch (type) {
             case "all":
                 showSelectDdialog(callback);
@@ -140,6 +143,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                 break;
         }
     }
+
     private void getFiles(String filePath) {
         File root = new File(filePath);
         File[] files = root.listFiles();
@@ -256,10 +260,10 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                     beginCrop(uri);
                 } else {
                     File tempFile = new File(Environment.getExternalStorageDirectory(), fileName);
-                    String[] proj ={MediaStore.Images.Media.DATA};
+                    String[] proj = {MediaStore.Images.Media.DATA};
                     @SuppressWarnings("deprecation")
                     Cursor cursor = getCurrentActivity().managedQuery(data.getData(), proj, null, null, null);
-                    int photocolumn =  cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    int photocolumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                     cursor.moveToFirst();
                     String path = cursor.getString(photocolumn);
                     Uri uri1 = compressImage(tempFile, path);
@@ -304,7 +308,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                 fos.flush();
                 fos.close();
             }
-            if(bitmap != null && !bitmap.isRecycled()){
+            if (bitmap != null && !bitmap.isRecycled()) {
                 bitmap.recycle();
                 bitmap = null;
                 System.gc();
@@ -322,7 +326,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
             FileInputStream is = new FileInputStream(file.getPath());
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 1;
-            Bitmap image = BitmapFactory.decodeStream(is,null,options);
+            Bitmap image = BitmapFactory.decodeStream(is, null, options);
             is.close();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -348,7 +352,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         Uri destination = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), new Date().getTime() + ".jpg"));
         try {
             //Crop.of(source, destination).asSquare().start(getCurrentActivity());
-            Crop.of(source,destination).withAspect(1,2).start(getCurrentActivity());
+            Crop.of(source,destination).withAspect(this.aspectX,this.aspectY).start(getCurrentActivity());
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         }
@@ -373,7 +377,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         if (!tmpDir.exists()) {
             tmpDir.mkdir();
         }
-        File image = new File(tmpDir.getAbsolutePath() + "/" + fileName +".png");
+        File image = new File(tmpDir.getAbsolutePath() + "/" + fileName + ".png");
         try {
             FileOutputStream fos = new FileOutputStream(image);
             bm.compress(Bitmap.CompressFormat.PNG, 85, fos);

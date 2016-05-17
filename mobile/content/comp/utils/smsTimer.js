@@ -24,13 +24,15 @@ let SMSTimer = React.createClass({
       time: '点击获取',
       active: '',
       click: false,
-      disabled: this.props.disabled
+      disabled: this.props.disabled,
+      deepColor: false,
     };
   },
 
   getDefaultProps(){
     return {
-      isNeed: false
+      isNeed: false,
+      disabled: false
     };
   },
 
@@ -44,6 +46,7 @@ let SMSTimer = React.createClass({
         startTime: new Date().getTime(),
         deadline: 60,
         disabled: true,
+        deepColor: true,
         tim: this.setInterval(this.updateText, 1000)
       });
     } else if (this.state.time == '点击获取') {
@@ -51,6 +54,7 @@ let SMSTimer = React.createClass({
         startTime: new Date().getTime(),
         deadline: 60,
         disabled: true,
+        deepColor: true,
         tim: this.setInterval(this.updateText, 1000)
       });
     }
@@ -85,13 +89,15 @@ let SMSTimer = React.createClass({
     this.setState({
       deadline: t,
       time: t + '秒',
-      disabled: true
+      disabled: true,
+      deepColor: true
     });
     if (t == 0) {
       this.setState({
         time: '重新获取',
         click: true,
-        disabled: false
+        disabled: false,
+        deepColor: false,
       });
       this.clearInterval(this.state.tim);
     }
@@ -113,10 +119,10 @@ let SMSTimer = React.createClass({
         </View>
         <View style={{width: 75, marginLeft: 12}}>
           <TouchableOpacity
-            style={[{width: 75, height: 47}, styles.radius, styles.button,
-            {backgroundColor: this.state.disabled ? '#4F94CD' : '#1151B1'}]}
-            onPress={this.selectVerifyFunction}
-            activeOpacity={this.state.disabled ? 1 : 0.5 }
+              style={[{width: 75, height: 47}, styles.radius, styles.button,
+            {backgroundColor: this.state.deepColor ? '#4F94CD' : '#1151B1'}]}
+              onPress={this.selectVerifyFunction}
+              activeOpacity={this.state.deepColor ? 1 : 0.5 }
           >
             <Text style={[styles.fontColor]}>{this.state.time}</Text>
           </TouchableOpacity>
