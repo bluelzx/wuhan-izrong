@@ -1,6 +1,6 @@
 __true__
 
-#   (2016-05-16)
+#   (2016-05-17)
 
 
 
@@ -123,6 +123,8 @@ __true__
   ([42d38368](http://192.168.64.208/wuhan/fas-app/commits/42d383686c7fbcd388f5f1669cc53dd292afcfee))
   - add switch for log, update eslint rules.
   ([f637a9c7](http://192.168.64.208/wuhan/fas-app/commits/f637a9c77342706c1f78114f896e66c1f113f3bf))
+- **test:** add GT support for IOS
+  ([533cdef7](http://192.168.64.208/wuhan/fas-app/commits/533cdef76ed3824203c049047440684058465054))
 
 
 
