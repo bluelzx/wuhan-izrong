@@ -7,10 +7,7 @@ import android.os.Bundle;
 import com.facebook.react.ReactActivity;
 import com.fasapp.R;
 import com.fasapp.utils.ReactNativeAutoUpdater;
-
 import javax.annotation.Nullable;
-
-import okhttp3.OkHttpClient;
 
 /**
  * @author rahul
@@ -19,7 +16,6 @@ public abstract class ReactNativeAutoUpdaterActivity extends ReactActivity
         implements ReactNativeAutoUpdater.Interface {
 
     private ReactNativeAutoUpdater updater;
-    private static OkHttpClient mClient;
 
     @Nullable
     @Override

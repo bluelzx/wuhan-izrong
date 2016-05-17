@@ -364,6 +364,7 @@ let MyBizDetail = React.createClass({
         onSelected={(response) => {this.handleSendImage(response, rowID)}}
         onError={(error) => this.handleImageError(error)}
         title="选择图片"
+        allowsEditing={true}
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
       >
         <Lightbox imageSource={{uri:rowData}}
@@ -437,8 +438,8 @@ let MyBizDetail = React.createClass({
 
     )
   },
-  renderDownBizImage: function(){
-    if (this.state.marketInfo.status != 'ACTIVE'){
+  renderDownBizImage: function () {
+    if (this.state.marketInfo.status != 'ACTIVE') {
       return (
         <View>
           {this.renderImageTitle()}
