@@ -10,6 +10,8 @@ import com.fasapp.utils.ReactNativeAutoUpdater;
 
 import javax.annotation.Nullable;
 
+import okhttp3.OkHttpClient;
+
 /**
  * @author rahul
  */
@@ -17,6 +19,7 @@ public abstract class ReactNativeAutoUpdaterActivity extends ReactActivity
         implements ReactNativeAutoUpdater.Interface {
 
     private ReactNativeAutoUpdater updater;
+    private static OkHttpClient mClient;
 
     @Nullable
     @Override
@@ -29,7 +32,6 @@ public abstract class ReactNativeAutoUpdaterActivity extends ReactActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         updater = ReactNativeAutoUpdater.getInstance(this.getApplicationContext());
         updater.setUpdateMetadataUrl(this.getUpdateMetadataUrl())
                 .setMetadataAssetName(this.getMetadataAssetName())

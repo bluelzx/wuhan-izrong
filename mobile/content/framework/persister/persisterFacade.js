@@ -38,7 +38,8 @@ let PersisterFacade = {
   getOrgList: ()=>_getOrgList(),
   getOrgByOrgName: (orgName)=> _getOrgByOrgName(orgName),
   deleteDevice: ()=> _deleteDevice(),
-  updateLastSyncTime: (t)=>_updateLastSyncTime(t)
+  updateLastSyncTime: (t)=>_updateLastSyncTime(t),
+
 };
 
 
@@ -352,4 +353,5 @@ let _getOrgByOrgName = function (orgName) {
   }
 };
 module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
-  require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'), require('./homePagePersisterFacade'));
+  require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'),
+  require('./homePagePersisterFacade'), require('./orgPersisterFacade'));

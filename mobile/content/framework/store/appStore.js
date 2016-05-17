@@ -58,6 +58,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   saveFilters: (filters) => _saveFilters(filters),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
+  updateOrgInfo: (orgInfo)=> _updateOrgInfo(orgInfo),
   getOrgList: ()=> _getOrgList(),
   updateUserInfo: (column, value)=> _updateUserInfo(column, value),
   saveCategory: (data) => _saveCategory(data),
@@ -198,6 +199,9 @@ let _getOrgList = ()=> {
   return Persister.getOrgList();
 };
 
+let _updateOrgInfo = (orgInfo)=> {
+  Persister.updateOrgInfo(orgInfo);
+};
 
 let _getOrgByOrgId = (orgId)=> {
   return Persister.getOrgByOrgId(orgId);
