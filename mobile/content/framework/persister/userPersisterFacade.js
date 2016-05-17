@@ -150,6 +150,22 @@ let _updateUserInfo = function (column, value) {
         }, true);
       });
       break;
+    case 'certificated':
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId: userId,
+          certificated: value
+        }, true);
+      });
+      break;
+    case 'status':
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId: userId,
+          status: value
+        }, true);
+      });
+      break;
   }
 };
 

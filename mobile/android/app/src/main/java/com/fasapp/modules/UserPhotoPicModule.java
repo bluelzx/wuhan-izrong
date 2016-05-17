@@ -347,7 +347,8 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
     private void beginCrop(Uri source) {
         Uri destination = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), new Date().getTime() + ".jpg"));
         try {
-            Crop.of(source, destination).asSquare().start(getCurrentActivity());
+            //Crop.of(source, destination).asSquare().start(getCurrentActivity());
+            Crop.of(source,destination).withAspect(1,2).start(getCurrentActivity());
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         }

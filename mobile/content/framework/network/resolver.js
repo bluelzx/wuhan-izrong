@@ -3,6 +3,7 @@ let ImStore = require('../store/imStore');
 let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE } = require('../../constants/dictIm');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
+let AppStore = require('../store/appStore');
 //let {Alert} = require('mx-artifacts');
 let _dealMsg = function (message, socket) {
   let userInfo = ContactSotre.getUserInfo();
@@ -108,16 +109,21 @@ let _dealMsg = function (message, socket) {
         _dealMsg(JSON.parse(item), socket);
       });
       break;
-    case MSG_TYPE.CERTIFICATION:
+    case MSG_TYPE.CONTANCT_INFO_CERTIFY:
+      if(message.userId == AppStore.getUserId()){
+        AppStore.updateUserInfo('certificated',message.isCertificated);
+      }else{
+        ImStore.updateContactInfo();
+      }
+      break;
+    case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
 
       break;
-    case MSG_TYPE.USER_FROZEN:
-
-      break;
-    case MSG_TYPE.USER_DELETE:
+    case MSG_TYPE.CONTANCT_INFO_FREEZE:
 
       break;
     case MSG_TYPE.ORG_INFO_UPDATE:
+      AppStore.updateOrgInfo(message);
       break;
     default:
       console.log('None message type matched! [%s]', message.msgType);
@@ -127,7 +133,6 @@ let _dealMsg = function (message, socket) {
 
 
 let Resolver = {
-
   deal: function (message, socket) {
     switch (message.type) {
       case 'message':

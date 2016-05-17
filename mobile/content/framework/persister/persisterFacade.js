@@ -38,7 +38,8 @@ let PersisterFacade = {
   getOrgList: ()=>_getOrgList(),
   getOrgByOrgName: (orgName)=> _getOrgByOrgName(orgName),
   deleteDevice: ()=> _deleteDevice(),
-  updateLastSyncTime: (t)=>_updateLastSyncTime(t)
+  updateLastSyncTime: (t)=>_updateLastSyncTime(t),
+
 };
 
 
@@ -107,6 +108,7 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
 };
 
 let _saveAppUserGroupBeanList = function (appUserGroupBeanList,resolve) {
+  if(appUserGroupBeanList != null){
     for (var i = 0; i < appUserGroupBeanList.length; i++) {
       _realm.create(GROUP, {
         groupId: appUserGroupBeanList[i].groupId,
@@ -118,6 +120,7 @@ let _saveAppUserGroupBeanList = function (appUserGroupBeanList,resolve) {
         mute: appUserGroupBeanList[i].mute
       }, true);
     }
+  }
   resolve();
 };
 
@@ -147,7 +150,8 @@ let _saveImUsers = function (imUserBeanList) {
         publicEmail: !!(imUserBeanList[i].publicEmail == true || imUserBeanList[i].publicEmail === null),
         publicAddress: !!(imUserBeanList[i].publicAddress == true || imUserBeanList[i].publicAddress === null),
         publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
-        publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null)
+        publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
+        certificated: false
       }, true);
     }
 };
@@ -352,4 +356,5 @@ let _getOrgByOrgName = function (orgName) {
   }
 };
 module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
-  require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'), require('./homePagePersisterFacade'));
+  require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'),
+  require('./homePagePersisterFacade'), require('./orgPersisterFacade'));
