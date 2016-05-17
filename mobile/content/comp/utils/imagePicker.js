@@ -11,6 +11,7 @@ let {
 
 let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+let dismissKeyboard = require('react-native-dismiss-keyboard');
 
 let ImagePicker = React.createClass({
   propTypes: {
@@ -93,6 +94,7 @@ let ImagePicker = React.createClass({
   },
 
   _selectPhoto() {
+      dismissKeyboard();
     if (Platform.OS === 'android') {
       this._selectAndroid();
     } else {

@@ -112,6 +112,15 @@ let Publish = React.createClass({
     this.setState({
       keyboardSpace: keyboardSpace,
     });
+
+      this.activeInput.measure((ox, oy, width, height, px, py) => {
+          let keyBoardTop = screenHeight - this.state.keyboardSpace;
+          let activeInputBottom = py + height;
+
+          if (activeInputBottom >= keyBoardTop + 10) {
+              this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
+          }
+      });
   },
 
   resetKeyboardSpace: function () {
@@ -210,13 +219,16 @@ let Publish = React.createClass({
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'期限'}</Text>
-        <View style={{marginTop:10,flexDirection:'row'}}>
+          <View style={{marginTop:10,flexDirection:'row'}} ref="timeLimitInputView">
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                  placeholder='0-999' maxLength={3} field='termText' inputType="numeric"
                  onChangeText={this._onChangeText}
-                 onFocus={() => this.refs['scroll'].scrollTo({y:60})}
+                 onFocus={
+                 //() => this.refs['scroll'].scrollTo({y:60})
+                 () => this.activeInput = this.refs['timeLimitInputView']
+                 }
           />
           <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._termDataChange}/>
 
@@ -228,14 +240,17 @@ let Publish = React.createClass({
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'金额'}</Text>
-        <View style={{marginTop:10,flexDirection:'row'}}>
+          <View style={{marginTop:10,flexDirection:'row'}} ref="amountInputView">
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                  placeholder='0-1000亿' maxLength={this.state.amountTextDigit} field='amountText'
                  inputType="numeric"
-                 onChangeText={this._onChangeText} ref="amountInput"
-                 onFocus={() => this.refs['scroll'].scrollTo({y:120})}
+                 onChangeText={this._onChangeText}
+                 onFocus={
+                 //() => this.refs['scroll'].scrollTo({y:120})
+                 () => this.activeInput = this.refs['amountInputView']
+                 }
           />
           <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault}
                      change={this._amountDataChange}/>
@@ -248,13 +263,16 @@ let Publish = React.createClass({
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'利率'}</Text>
-        <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
+          <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}} ref="rateInputView">
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                  placeholder='0-99.99' maxLength={5} field='rateText' inputType="numeric"
-                 onChangeText={this._onChangeText} ref="rateInput"
-                 onFocus={() => this.refs['scroll'].scrollTo({y:160})}
+                 onChangeText={this._onChangeText}
+                 onFocus={
+                 //() => this.refs['scroll'].scrollTo({y:160})
+                 () => this.activeInput = this.refs['rateInputView']
+                 }
           />
           <Text style={{marginLeft:10,fontWeight: 'bold', color:DictStyle.marketSet.fontColor}}>{'%'}</Text>
         </View>
