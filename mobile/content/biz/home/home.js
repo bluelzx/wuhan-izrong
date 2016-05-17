@@ -20,7 +20,7 @@ let ViewPager = require('react-native-viewpager');
 let BusinessDetail = require('../market/businessDetail');
 let MyBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
-let {MARKET_CHANGE} = require('../../constants/dictEvent');
+let {MARKET_CHANGE,MYBIZ_CHANGE} = require('../../constants/dictEvent');
 let MarketStore = require('../../framework/store/marketStore');
 let MarketAction = require('../../framework/action/marketAction');
 let Adjust = require('../../comp/utils/adjust');
@@ -61,14 +61,19 @@ let Home = React.createClass({
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
+    AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
     this.bizOrderMarketSearch();
   },
 
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
+    AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
+  },
+  _search: function () {
+    this.bizOrderMarketSearch();
   },
 
   bizOrderMarketSearch: function () {
