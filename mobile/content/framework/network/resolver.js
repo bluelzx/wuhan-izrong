@@ -109,17 +109,17 @@ let _dealMsg = function (message, socket) {
         _dealMsg(JSON.parse(item), socket);
       });
       break;
-    case MSG_TYPE.CERTIFICATION:
+    case MSG_TYPE.CONTANCT_INFO_CERTIFY:
       if(message.userId == AppStore.getUserId()){
         AppStore.updateUserInfo('certificated',message.isCertificated);
       }else{
         ImStore.updateContactInfo();
       }
       break;
-    case MSG_TYPE.USER_FROZEN:
+    case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
 
       break;
-    case MSG_TYPE.USER_DELETE:
+    case MSG_TYPE.CONTANCT_INFO_FREEZE:
 
       break;
     case MSG_TYPE.ORG_INFO_UPDATE:

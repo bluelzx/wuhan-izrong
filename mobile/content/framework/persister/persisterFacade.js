@@ -108,6 +108,7 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
 };
 
 let _saveAppUserGroupBeanList = function (appUserGroupBeanList,resolve) {
+  if(appUserGroupBeanList != null){
     for (var i = 0; i < appUserGroupBeanList.length; i++) {
       _realm.create(GROUP, {
         groupId: appUserGroupBeanList[i].groupId,
@@ -119,6 +120,7 @@ let _saveAppUserGroupBeanList = function (appUserGroupBeanList,resolve) {
         mute: appUserGroupBeanList[i].mute
       }, true);
     }
+  }
   resolve();
 };
 
@@ -148,7 +150,8 @@ let _saveImUsers = function (imUserBeanList) {
         publicEmail: !!(imUserBeanList[i].publicEmail == true || imUserBeanList[i].publicEmail === null),
         publicAddress: !!(imUserBeanList[i].publicAddress == true || imUserBeanList[i].publicAddress === null),
         publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
-        publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null)
+        publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
+        certificated: false
       }, true);
     }
 };
