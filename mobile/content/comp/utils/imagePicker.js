@@ -20,14 +20,22 @@ let ImagePicker = React.createClass({
     allowsEditing: React.PropTypes.bool,
     onError: React.PropTypes.func,
     fileId: React.PropTypes.string,
-    title: React.PropTypes.string
+    title: React.PropTypes.string,
+    maxWidth:React.PropTypes.number,
+    maxHeight:React.PropTypes.number,
+    aspectX:React.PropTypes.number,
+    aspectY:React.PropTypes.number
   },
 
   getDefaultProps() {
     return {
       type: 'all',
       allowsEditing: false,
-      title: ''
+      title: '',
+      maxWidth:600,
+      maxHeight:300,
+      aspectX: 1,
+      aspectY: 1
     };
   },
 
@@ -40,10 +48,10 @@ let ImagePicker = React.createClass({
       cameraType: 'back', // 'front' or 'back'
       mediaType: 'photo', // 'photo' or 'video'
       videoQuality: 'high', // 'low', 'medium', or 'high'
-      maxWidth: 300, // photos only
-      maxHeight: 300, // photos only
-      aspectX: 1, // aspectX:aspectY, the cropping image's ratio of width to height
-      aspectY: 1, // aspectX:aspectY, the cropping image's ratio of width to height
+      maxWidth: this.props.maxWidth, // photos only
+      maxHeight:  this.props.maxHeight, // photos only
+      aspectX: this.props.aspectX, // aspectX:aspectY, the cropping image's ratio of width to height
+      aspectY: this.props.aspectY, // aspectX:aspectY, the cropping image's ratio of width to height
       quality: 1, // photos only
       allowsEditing: true, // Built in iOS functionality to resize/reposition the image
       noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
@@ -86,7 +94,7 @@ let ImagePicker = React.createClass({
   },
 
   _selectAndroid: function () {
-    UserPhotoPicModule.showImagePic(this.props.type, this.props.allowsEditing, this.props.fileId,
+    UserPhotoPicModule.showImagePic(this.props.type, this.props.allowsEditing, this.props.fileId,this.props.aspectX,this.props.aspectY,
       (response) => {
         console.log('Response = ', response.uri);
         this.props.onSelected(response.uri);

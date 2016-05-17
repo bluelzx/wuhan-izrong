@@ -23,6 +23,7 @@ let {Platform} = React;
 let PersisterFacade = {
   //interface for AppStore
   saveAppData: (data) => _saveAppData(data),
+  saveSimpleLoginData: (data,userId) => _saveSimpleLoginData(data,userId),
   saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
   getAPNSToken: () => _getAPNSToken(),
   getToken: ()=> _getToken(),
@@ -39,8 +40,8 @@ let PersisterFacade = {
   getOrgByOrgName: (orgName)=> _getOrgByOrgName(orgName),
   deleteDevice: ()=> _deleteDevice(),
   updateLastSyncTime: (t)=>_updateLastSyncTime(t)
-};
 
+};
 
 //test method
 let _deleteDevice = function () {
@@ -58,22 +59,26 @@ let _saveAppData = function (data) {
   let orgBeanList = data.orgBeanList;
   let appUserGroupBeanList = data.appUserGroupBeanList;
   let imUserBeanList = data.imUserBeanList;
-  //return new Promise((resolve)=> {
-  //  resolve(_saveLoginUserInfo(loginUserInfo, token));
-  //})
-  //  .then(_saveImUsers(imUserBeanList))
-  //  .then(_saveOrgBeanList(orgBeanList))
-  //  .then(_saveAppUserGroupBeanList(appUserGroupBeanList));
   return new Promise((resolve)=> {
     _realm.write(() => {
       _saveLoginUserInfo(loginUserInfo, token);
       _saveImUsers(imUserBeanList);
       _saveOrgBeanList(orgBeanList);
       _saveFilters(appOrderSearchResult);
-      _saveAppUserGroupBeanList(appUserGroupBeanList,resolve);
+      _saveAppUserGroupBeanList(appUserGroupBeanList, resolve);
 
     });
   })
+};
+
+let _saveSimpleLoginData = function (data,userId) {
+  _realm.write(()=> {
+      _realm.create(LOGINUSERINFO, {
+        userId: userId,
+        token: data.appToken
+      }, true);
+    }
+  );
 };
 
 let _saveLoginUserInfo = function (loginUserInfo, token) {
@@ -106,74 +111,58 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
   }, true);
 };
 
-let _saveAppUserGroupBeanList = function (appUserGroupBeanList,resolve) {
-    for (var i = 0; i < appUserGroupBeanList.length; i++) {
-      _realm.create(GROUP, {
-        groupId: appUserGroupBeanList[i].groupId,
-        groupImageUrl: appUserGroupBeanList[i].groupImageUrl,
-        groupName: appUserGroupBeanList[i].groupName,
-        groupMasterUid: appUserGroupBeanList[i].groupOwnerId,
-        memberNum: appUserGroupBeanList[i].members.length,
-        members: JSON.stringify(appUserGroupBeanList[i].members),
-        mute: appUserGroupBeanList[i].mute
-      }, true);
-    }
-  resolve();
-};
-
-
-
 let _saveImUsers = function (imUserBeanList) {
-    for (var i = 0; i < imUserBeanList.length; i++) {
-      _realm.create(IMUSERINFO, {
-        userId: imUserBeanList[i].userId,
-        address: imUserBeanList[i].address,
-        realName: imUserBeanList[i].realName,
-        nameCardFileUrl: imUserBeanList[i].nameCardFileUrl,
-        department: imUserBeanList[i].department,
-        jobTitle: imUserBeanList[i].jobTitle,
-        qqNo: imUserBeanList[i].qqNo,
-        email: imUserBeanList[i].email,
-        weChatNo: imUserBeanList[i].weChatNo,
-        mute: imUserBeanList[i].mute,
-        mobileNumber: imUserBeanList[i].mobileNumber,
-        photoFileUrl: imUserBeanList[i].photoFileUrl,
-        orgId: imUserBeanList[i].orgId,
-        phoneNumber: imUserBeanList[i].phoneNumber,
-        publicTitle: !!(imUserBeanList[i].publicTitle == true || imUserBeanList[i].publicTitle === null),
-        publicMobile: !!(imUserBeanList[i].publicMobile == true || imUserBeanList[i].publicMobile === null),
-        publicDepart: !!(imUserBeanList[i].publicDepart == true || imUserBeanList[i].publicDepart === null),
-        publicPhone: !!(imUserBeanList[i].publicPhone == true || imUserBeanList[i].publicPhone === null),
-        publicEmail: !!(imUserBeanList[i].publicEmail == true || imUserBeanList[i].publicEmail === null),
-        publicAddress: !!(imUserBeanList[i].publicAddress == true || imUserBeanList[i].publicAddress === null),
-        publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
-        publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null)
-      }, true);
-    }
+  for (var i = 0; i < imUserBeanList.length; i++) {
+    _realm.create(IMUSERINFO, {
+      userId: imUserBeanList[i].userId,
+      address: imUserBeanList[i].address,
+      realName: imUserBeanList[i].realName,
+      nameCardFileUrl: imUserBeanList[i].nameCardFileUrl,
+      department: imUserBeanList[i].department,
+      jobTitle: imUserBeanList[i].jobTitle,
+      qqNo: imUserBeanList[i].qqNo,
+      email: imUserBeanList[i].email,
+      weChatNo: imUserBeanList[i].weChatNo,
+      mute: imUserBeanList[i].mute,
+      mobileNumber: imUserBeanList[i].mobileNumber,
+      photoFileUrl: imUserBeanList[i].photoFileUrl,
+      orgId: imUserBeanList[i].orgId,
+      phoneNumber: imUserBeanList[i].phoneNumber,
+      publicTitle: !!(imUserBeanList[i].publicTitle == true || imUserBeanList[i].publicTitle === null),
+      publicMobile: !!(imUserBeanList[i].publicMobile == true || imUserBeanList[i].publicMobile === null),
+      publicDepart: !!(imUserBeanList[i].publicDepart == true || imUserBeanList[i].publicDepart === null),
+      publicPhone: !!(imUserBeanList[i].publicPhone == true || imUserBeanList[i].publicPhone === null),
+      publicEmail: !!(imUserBeanList[i].publicEmail == true || imUserBeanList[i].publicEmail === null),
+      publicAddress: !!(imUserBeanList[i].publicAddress == true || imUserBeanList[i].publicAddress === null),
+      publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
+      publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
+      certificated: false
+    }, true);
+  }
 };
 
 let _saveOrgBeanList = function (orgBeanList) {
-    for (var i = 0; i < orgBeanList.length; i++) {
-      _realm.create(ORGBEAN, {
-        id: orgBeanList[i].id,
-        orgCategory: orgBeanList[i].orgCategory,
-        orgCode: orgBeanList[i].orgCode,
-        orgValue: orgBeanList[i].orgValue,
-        corporationType: orgBeanList[i].corporationType,
-        orgValueAlias: orgBeanList[i].orgValueAlias,
-        isDisabled: orgBeanList[i].isDisabled,
-        creator: orgBeanList[i].creator,
-        creatorDate: orgBeanList[i].creatorDate,
-        lastUpdateBy: orgBeanList[i].lastUpdateBy,
-        lastUpdateDate: orgBeanList[i].lastUpdateDate,
-        isNeedAudit: orgBeanList[i].isNeedAudit,
-        totalQuota: orgBeanList[i].totalQuota,
-        occupiedQuota: orgBeanList[i].occupiedQuota,
-        isDeleted: orgBeanList[i].isDeleted,
-        isApply: orgBeanList[i].isApply,
-        remark: orgBeanList[i].remark
-      }, true);
-    }
+  for (var i = 0; i < orgBeanList.length; i++) {
+    _realm.create(ORGBEAN, {
+      id: orgBeanList[i].id,
+      orgCategory: orgBeanList[i].orgCategory,
+      orgCode: orgBeanList[i].orgCode,
+      orgValue: orgBeanList[i].orgValue,
+      corporationType: orgBeanList[i].corporationType,
+      orgValueAlias: orgBeanList[i].orgValueAlias,
+      isDisabled: orgBeanList[i].isDisabled,
+      creator: orgBeanList[i].creator,
+      creatorDate: orgBeanList[i].creatorDate,
+      lastUpdateBy: orgBeanList[i].lastUpdateBy,
+      lastUpdateDate: orgBeanList[i].lastUpdateDate,
+      isNeedAudit: orgBeanList[i].isNeedAudit,
+      totalQuota: orgBeanList[i].totalQuota,
+      occupiedQuota: orgBeanList[i].occupiedQuota,
+      isDeleted: orgBeanList[i].isDeleted,
+      isApply: orgBeanList[i].isApply,
+      remark: orgBeanList[i].remark
+    }, true);
+  }
 };
 
 let _saveOrgBeanItem = function (orgBean) {
@@ -200,6 +189,23 @@ let _saveOrgBeanItem = function (orgBean) {
       }, true);
     }));
   });
+};
+
+let _saveAppUserGroupBeanList = function (appUserGroupBeanList, resolve) {
+  if (appUserGroupBeanList != null) {
+    for (var i = 0; i < appUserGroupBeanList.length; i++) {
+      _realm.create(GROUP, {
+        groupId: appUserGroupBeanList[i].groupId,
+        groupImageUrl: appUserGroupBeanList[i].groupImageUrl,
+        groupName: appUserGroupBeanList[i].groupName,
+        groupMasterUid: appUserGroupBeanList[i].groupOwnerId,
+        memberNum: appUserGroupBeanList[i].members.length,
+        members: JSON.stringify(appUserGroupBeanList[i].members),
+        mute: appUserGroupBeanList[i].mute
+      }, true);
+    }
+  }
+  resolve();
 };
 
 let _getAPNSToken = function () {
@@ -284,25 +290,25 @@ let _saveFilters = function (filters) {
   let filterItems = filters.filterItems;
   let orderItems = filters.orderItems;
   orderItems.forEach(function (orderItem, index) {
-      _realm.create(ORDERITEM, {
-        id: index + 1,
-        fieldName: orderItem.fieldName,
-        fieldDisplayName: orderItem.fieldDisplayName,
-        fieldDisplayCode: orderItem.fieldDisplayCode,
-        displaySequence: orderItem.displaySequence,
-        filterId: orderItem.filterId,
-        selected: orderItem.selected,
-        asc: orderItem.asc
-      }, true);
+    _realm.create(ORDERITEM, {
+      id: index + 1,
+      fieldName: orderItem.fieldName,
+      fieldDisplayName: orderItem.fieldDisplayName,
+      fieldDisplayCode: orderItem.fieldDisplayCode,
+      displaySequence: orderItem.displaySequence,
+      filterId: orderItem.filterId,
+      selected: orderItem.selected,
+      asc: orderItem.asc
+    }, true);
   });
   filterItems.forEach(function (filterItem, index) {
-      _realm.create(FILTERITEMS, {
-        id: index + 1,
-        descrCode: filterItem.descrCode,
-        descrName: filterItem.descrName,
-        displaySeq: filterItem.displaySeq,
-        options: filterItem.options
-      }, true);
+    _realm.create(FILTERITEMS, {
+      id: index + 1,
+      descrCode: filterItem.descrCode,
+      descrName: filterItem.descrName,
+      displaySeq: filterItem.displaySeq,
+      options: filterItem.options
+    }, true);
   });
 };
 
@@ -352,4 +358,5 @@ let _getOrgByOrgName = function (orgName) {
   }
 };
 module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
-  require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'), require('./homePagePersisterFacade'));
+  require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'),
+  require('./homePagePersisterFacade'), require('./orgPersisterFacade'));

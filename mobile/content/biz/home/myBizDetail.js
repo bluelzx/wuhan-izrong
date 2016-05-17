@@ -245,7 +245,7 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
           <View style={{flexDirection:'row'}}>
-            {this.returnItem('方向:', this.state.marketInfo.bizOrientationDesc)}
+            {this.returnItem('方\u3000\u3000向:', this.state.marketInfo.bizOrientationDesc)}
           </View>
         </View>
       );
@@ -275,7 +275,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('期限:', this.termLimitChangeHelp(this.state.marketInfo.term))}
+          {this.returnItem('期\u3000\u3000限:', this.termLimitChangeHelp(this.state.marketInfo.term))}
         </View>
       );
     }
@@ -304,7 +304,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('金额:',
+          {this.returnItem('金\u3000\u3000额:',
             this.state.marketInfo.amount == null || this.state.marketInfo.amount == 0 ? '--' :
               this.state.marketInfo.amount < 100000000 ? this.state.marketInfo.amount / 10000 + '万' :
               (this.state.marketInfo.amount / 100000000) + '亿')
@@ -337,7 +337,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : numeral(this.state.marketInfo.rate * 100).format('0,0.00') + '%')}
+          {this.returnItem('利\u3000\u3000率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : numeral(this.state.marketInfo.rate * 100).format('0,0.00') + '%')}
         </View>
       );
     }
@@ -399,6 +399,7 @@ let MyBizDetail = React.createClass({
         onSelected={(response) => {this.handleSendImage(response, rowID)}}
         onError={(error) => this.handleImageError(error)}
         title="选择图片"
+        allowsEditing={true}
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
       >
         <Lightbox imageSource={{uri:rowData}}
@@ -459,7 +460,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row'}}>
-          {this.returnItem('备注:', this.state.remarkText == null || this.state.remarkText.length == 0 ? '--' : this.state.remarkText)}
+          {this.returnItem('备\u3000\u3000注:', this.state.remarkText == null || this.state.remarkText.length == 0 ? '--' : this.state.remarkText)}
         </View>
       );
     }
@@ -467,13 +468,13 @@ let MyBizDetail = React.createClass({
   renderModifyData: function () {
     return (
       <View style={{flexDirection:'row',alignItems:'center',marginTop:10}}>
-        {this.returnItem('最近修改时间:', this.state.lastModifyDate)}
+        {this.returnItem('更新时间:', this.state.lastModifyDate)}
       </View>
 
     )
   },
-  renderDownBizImage: function(){
-    if (this.state.marketInfo.status != 'ACTIVE'){
+  renderDownBizImage: function () {
+    if (this.state.marketInfo.status != 'ACTIVE') {
       return (
         <View>
           {this.renderImageTitle()}
@@ -502,9 +503,11 @@ let MyBizDetail = React.createClass({
   returnItem: function (desc, value) {
     return (
       <View style={{marginLeft:10,flexDirection:'row',alignItems:'center',paddingVertical:8}}>
-        <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor,width:Adjust.width(120)}}>{desc}</Text>
+        <Text style={{alignSelf:'stretch',fontSize:16,color:DictStyle.marketSet.fontColor,width:Adjust.width(120)}}>{desc}</Text>
         <Text
-          style={{marginLeft:10,fontSize:16,color:(desc == '最近修改时间:')?DictStyle.marketSet.modifyDateColor:DictStyle.marketSet.fontColor,width:225/375*screenWidth}}>{value}</Text>
+          style={{alignSelf:'stretch',marginLeft:10,fontSize:16,color:(desc == '更新时间:')?
+          DictStyle.marketSet.modifyDateColor:(desc == '备\u3000\u3000注:')?DictStyle.marketSet.amountColor:DictStyle.marketSet.fontColor,
+          width:225/375*screenWidth}}>{value}</Text>
       </View>
     )
   },

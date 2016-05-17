@@ -24,6 +24,7 @@ let AppLinks = {
   validateSmsCode: Host + pub + '/validateSmsCode',
   validateEmail:Host + pub +'/validateEmail',
   login: Host + pub + '/login',
+  simpleLogin: Host + pub + '/simpleLogin',
   logout: Host + api + '/Account/logout',
   registerProtocol: Host + '/protocol.html',
   register: Host + pub + '/register',

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import com.facebook.react.ReactActivity;
 import com.fasapp.R;
 import com.fasapp.utils.ReactNativeAutoUpdater;
-
 import javax.annotation.Nullable;
 
 /**
@@ -29,7 +28,6 @@ public abstract class ReactNativeAutoUpdaterActivity extends ReactActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         updater = ReactNativeAutoUpdater.getInstance(this.getApplicationContext());
         updater.setUpdateMetadataUrl(this.getUpdateMetadataUrl())
                 .setMetadataAssetName(this.getMetadataAssetName())

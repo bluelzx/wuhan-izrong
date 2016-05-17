@@ -46,6 +46,7 @@ let { SHOW_VIEW } = require('../../constants/dictEvent');
 
 const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');
+const UploadNameCard = require('../../biz/login/uploadNameCard');
 
 var Main = React.createClass({
   _navigator: null,
@@ -171,8 +172,8 @@ var Main = React.createClass({
             AppStore.forceLogout();
           } else if(errorData.msgContent || errorData.message){
             Alert(errorData.msgContent || errorData.message);
-          }else if(errorData.message.includes('Network request failed')) {
-            Alert('网络异常');
+          }else if(errorData.includes('Network request failed')) {
+            Alert('网络异常,');
           }
         });
       if (showLoading) {
@@ -232,10 +233,10 @@ var Main = React.createClass({
       );
     }
 
-    var initComp = Login;
+    var initComp = UploadNameCard;
     //var initComp = Chat;
     if (this.state.token) {
-      initComp = TabView;
+      initComp = UploadNameCard;
      this.initSocket(this.state.token);
     }else{
       ImSocket.disconnect();

@@ -17,6 +17,7 @@ let LoginActions = {
   forceLogOut: () => AppStore.forceLogout(),
   logout: (p) => _logout(AppLinks.logout, p),
   login: (p) => _login(AppLinks.login, p),
+  simpleLogin: (p) => _simpleLogin(AppLinks.simpleLogin, p),
   register: (p, c, f) => _register(AppLinks.register, p, c, f),
   sendSmsCodeToLoginMobile: (p)=> _sendSmsCodeToLoginMobile(AppLinks.sendSmsCodeToLoginMobile, p),
   sendSmsCodeToRegisterMobile: (p)=> _sendSmsCodeToRegisterMobile(AppLinks.sendSmsCodeToRegisterMobile, p),
@@ -66,6 +67,16 @@ let _login = function (url, p) {
   return new Promise((resolve, reject) => {
     BFetch(url, p).then((response) => {
       resolve(AppStore.login(response));
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _simpleLogin = function (url, p) {
+  return new Promise((resolve, reject) => {
+    BFetch(url, p).then((response) => {
+      resolve(AppStore.simpleLogin(response));
     }).catch((errorData) => {
       reject(errorData);
     });

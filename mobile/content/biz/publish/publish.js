@@ -50,6 +50,7 @@ import Share from 'react-native-share';
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Lightbox = require('../../comp/lightBox/Lightbox');
 let Icon = require('react-native-vector-icons/Ionicons');
+let { MARKET_CHANGE } = require('../../constants/dictEvent');
 
 let Publish = React.createClass({
   getInitialState(){
@@ -99,11 +100,20 @@ let Publish = React.createClass({
     //// Keyboard events监听
     DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
     DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
+    AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   componentWillUnmount: function () {
     DeviceEventEmitter.removeAllListeners('keyboardWillShow');
     DeviceEventEmitter.removeAllListeners('keyboardWillHide');
+    AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
+  },
+
+  _onChange () {
+    let myCategory = AppStore.getCategory();
+    this.setState({
+      bizCategory: myCategory != null ? myCategory : categoryArr.length == 0 ? [] : categoryArr[0]
+    })
   },
 
   // Keyboard actions
