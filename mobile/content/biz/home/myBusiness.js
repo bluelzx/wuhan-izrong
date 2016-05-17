@@ -246,6 +246,7 @@ let Market = React.createClass({
           }
         ).then((response)=> {
           Alert('刷新成功', ()=>this.refs.marketGiftedListView._refreshWithoutSpinner());
+          AppStore.emitChange(MYBIZ_CHANGE);
         }).catch((errorData) => {
           throw errorData;
         });
