@@ -352,7 +352,7 @@ var styles = StyleSheet.create({
     },
     header: {
         position: 'absolute',
-        top: 10,
+        top: 20,
         left: 0,
         width: WINDOW_WIDTH,
         backgroundColor: 'transparent',
@@ -361,10 +361,10 @@ var styles = StyleSheet.create({
     },
 
     closeButton: {
-        fontSize: 35,
+        fontSize: 40,
         color: 'white',
-        lineHeight: 40,
-        width: 40,
+        lineHeight: 50,
+        width: 60,
         textAlign: 'center',
         shadowOffset: {
             width: 0,
