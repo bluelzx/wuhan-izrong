@@ -9,7 +9,8 @@ let DictStyle = require('../../constants/dictStyle');
 var styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
-    marginBottom: 10,
+    marginBottom: 20,
+    alignItems:'center'
   },
   name: {
     color: '#aaaaaa',
@@ -75,58 +76,63 @@ export default class Message extends React.Component {
   }
 
   renderImage(rowData, rowID, diffMessage, forceRenderImage, onImagePress){
-    if (rowData.image !== undefined && rowData.image !== null) {
-      if (forceRenderImage === true) {
-        diffMessage = null; // force rendering
-      }
-
-      if (diffMessage === null || (diffMessage != null && (rowData.name !== diffMessage.name || rowData.id !== diffMessage.id))) {
-        if (typeof onImagePress === 'function') {
-
-          //return (
-          //  <NameCircular name={rowData.name} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
-          //);
-          return (
-            <TouchableHighlight
-              underlayColor='transparent'
-              onPress={() => onImagePress(rowData, rowID)}
-            >
-              <View>
-                <HeaderPic name={rowData.name}
-                           photoFileUrl={rowData.image}  certified={rowData.certified}
-                           style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
-              </View>
-            </TouchableHighlight>
-          );
-
-          //return (
-          //  <TouchableHighlight
-          //    underlayColor='transparent'
-          //    onPress={() => onImagePress(rowData, rowID)}
-          //  >
-          //    <Image source={rowData.image} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
-          //  </TouchableHighlight>
-          //);
-        } else {
-
-          return (
-            <HeaderPic name={rowData.name}
-                       photoFileUrl={rowData.image}  certified={rowData.certified}
-                       style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
-          );
-          //return (
-          //  <Image source={rowData.image} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
-          //);
-        }
-      } else {
-        return (
-          <View style={styles.imagePosition}/>
-        );
-      }
-    }
     return (
-      <View style={styles.spacer}/>
+      <HeaderPic name={rowData.name}
+                 photoFileUrl={rowData.image}  certified={rowData.certified}
+                 style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
     );
+    //if (rowData.image !== undefined && rowData.image !== null) {
+    //  if (forceRenderImage === true) {
+    //    diffMessage = null; // force rendering
+    //  }
+    //
+    //  if (diffMessage === null || (diffMessage != null && (rowData.name !== diffMessage.name || rowData.id !== diffMessage.id))) {
+    //    if (typeof onImagePress === 'function') {
+    //
+    //      //return (
+    //      //  <NameCircular name={rowData.name} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+    //      //);
+    //      return (
+    //        <TouchableHighlight
+    //          underlayColor='transparent'
+    //          onPress={() => onImagePress(rowData, rowID)}
+    //        >
+    //          <View>
+    //            <HeaderPic name={rowData.name}
+    //                       photoFileUrl={rowData.image}  certified={rowData.certified}
+    //                       style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+    //          </View>
+    //        </TouchableHighlight>
+    //      );
+    //
+    //      //return (
+    //      //  <TouchableHighlight
+    //      //    underlayColor='transparent'
+    //      //    onPress={() => onImagePress(rowData, rowID)}
+    //      //  >
+    //      //    <Image source={rowData.image} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+    //      //  </TouchableHighlight>
+    //      //);
+    //    } else {
+    //
+    //      return (
+    //        <HeaderPic name={rowData.name}
+    //                   photoFileUrl={rowData.image}  certified={rowData.certified}
+    //                   style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+    //      );
+    //      //return (
+    //      //  <Image source={rowData.image} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+    //      //);
+    //    }
+    //  } else {
+    //    return (
+    //      <View style={styles.imagePosition}/>
+    //    );
+    //  }
+    //}
+    //return (
+    //  <View style={styles.spacer}/>
+    //);
   }
 
   renderErrorButton(rowData, rowID, onErrorButtonPress){
@@ -203,18 +209,16 @@ export default class Message extends React.Component {
             justifyContent: position==='left'?"flex-start":"flex-end"
           }]}>
           {position === 'left' ? this.renderImage(rowData, rowID, diffMessage, forceRenderImage, onImagePress) : null}
-
+          {position === 'right' ? this.renderErrorButton(rowData, rowID, onErrorButtonPress) : null}
           {position === 'left' ? this._renderAngle(rowData) : null}
           <RowView
             {...rowData}
             renderCustomText={this.props.renderCustomText}
-            styles={styles}
             name={position === 'left' && this.props.displayNamesInsideBubble ? this.renderName(rowData.name, displayNames, diffMessage) : null}
             leftBackgroundColor={this.props.leftBackgroundColor}
             rightBackgroundColor={this.props.rightBackgroundColor}
             errorBackgroundColor={/*this.props.errorBackgroundColor*/this.props.rightBackgroundColor}
           />
-          {position === 'right' ? this.renderErrorButton(rowData, rowID, onErrorButtonPress) : null}
           {position === 'right' ? this._renderAngle(rowData) : null}
           {rowData.position === 'right' ? this.renderImage(rowData, rowID, diffMessage, forceRenderImage, onImagePress) : null}
         </View>

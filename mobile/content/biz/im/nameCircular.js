@@ -41,7 +41,7 @@ let NameCircular = React.createClass({
   renderV: function(isV) {
     if(isV){
       return (
-        <Image style={[{ width: 15, height: 15}, {position: 'absolute',bottom:0,marginLeft:25}]}
+        <Image style={[{ width: 15, height: 15}, {position: 'absolute',bottom:0,marginLeft:40}]}
              resizeMode="cover" source={require('../../image/user/certificated.png')}/>
       );
     }else{
@@ -55,11 +55,11 @@ let NameCircular = React.createClass({
     return (
       <View>
         <View
-          style={{backgroundColor: this.getColor(f), height: 40,width: 40,borderRadius: 20,justifyContent:'center',alignItems:'center'}}>
+          style={{backgroundColor: this.getColor(f), height: 54,width: 54,borderRadius: 27,justifyContent:'center',alignItems:'center'}}>
           <View
-            style={{backgroundColor: 'white', height: 38,width: 38,borderRadius: 19,justifyContent:'center',alignItems:'center'}}>
+            style={{backgroundColor: 'white', height: 52,width: 52,borderRadius: 26,justifyContent:'center',alignItems:'center'}}>
             <View
-              style={{backgroundColor: this.getColor(f), height: 36,width: 36,borderRadius: 18,justifyContent:'center',alignItems:'center'}}>
+              style={{backgroundColor: this.getColor(f), height: 50,width: 50,borderRadius: 25,justifyContent:'center',alignItems:'center'}}>
               <Text style={{color:'white',fontWeight:'900',fontSize:20}}>{f}</Text>
             </View>
           </View>

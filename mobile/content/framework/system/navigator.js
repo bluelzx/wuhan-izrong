@@ -23,12 +23,7 @@ var {
   BackAndroid,
   DeviceEventEmitter,
   Platform,
-  ToastAndroid,
   AppStateIOS,
-  styles,
-  Modal,
-  TouchableHighlight,
-  Image
   } = React;
 var AppAction = require('../action/appAction');
 //var ImAction = require('../action/imAction');
@@ -42,7 +37,6 @@ let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
 let Publish = require ('../../biz/publish/publish');
-let { SHOW_VIEW } = require('../../constants/dictEvent');
 
 const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');
@@ -52,8 +46,7 @@ var Main = React.createClass({
   _getStateFromStores: function() {
     return {
       initLoading: AppStore.getInitLoadingState(),
-      token: AppStore.getToken(),
-      showView:false
+      token: AppStore.getToken()
     };
   },
   getInitialState: function() {
@@ -84,7 +77,6 @@ var Main = React.createClass({
     AppStore.saveNavigator(this.refs['navigator']);
 
     AppStore.addChangeListener(this._activeApp, 'active_app');
-    AppStore.addChangeListener( this._onViewChanged, SHOW_VIEW);
   },
 
   _activeApp:function(){
@@ -112,7 +104,6 @@ var Main = React.createClass({
       AppStateIOS.removeEventListener('change', this._handleAppStateChange);
     }
     NotificationManager.closeNotification();
-    AppStore.removeChangeListener(this._onViewChanged, SHOW_VIEW);
   },
 
   _onAndroidBackPressed: function () {
@@ -169,8 +160,8 @@ var Main = React.createClass({
           console.log(errorData);
           if(errorData.msgCode == 'APP_SYS_TOKEN_INVALID'){
             AppStore.forceLogout();
-          } else if(errorData.msgContent || errorData.message){
-            Alert(errorData.msgContent || errorData.message);
+          } else if(errorData.msgContent || errorData.message || errorData.errMsg){
+            Alert(errorData.msgContent || errorData.message || errorData.errMsg);
           }else if(errorData.includes('Network request failed')) {
             Alert('网络异常,');
           }
@@ -210,10 +201,6 @@ var Main = React.createClass({
         return sTime && sTime.lastSyncTime;
       });
     }
-  },
-
-  _onViewChanged: function(){
-    this.setState({showView:true});
   },
 
   render: function () {
@@ -256,18 +243,6 @@ var Main = React.createClass({
 
     return (
       <View style={{ width: Device.width, height: Device.height }}>
-
-        <Modal
-          animationType={'fade'}
-          transparent={false}
-          visible={this.state.showView}
-        >
-          <TouchableHighlight style={[styles.container, modalBackgroundStyle]} onPress={() => {this.setState({showView:false})}}>
-            <Image style={{resizeMode:'contain',flex:1}} source={{uri:AppStore.getPicUrl()}}>
-            </Image>
-          </TouchableHighlight>
-        </Modal>
-
 
         <StatusBar
           backgroundColor={DictStyle.colorSet.navBar}

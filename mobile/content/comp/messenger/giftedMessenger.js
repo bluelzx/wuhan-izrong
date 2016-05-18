@@ -20,6 +20,7 @@ let {
 
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let moment = require('moment');
+moment.locale('zh-cn');
 let Icon = require('react-native-vector-icons/Ionicons');
 let TimerMixin = require('react-timer-mixin');
 let Publish = require('../../biz/publish/publish');
@@ -961,6 +962,8 @@ let GiftedMessenger = React.createClass({
       },
       listView: {
         flex: 1,
+        paddingHorizontal:5
+
       },
       date: {
         color: '#aaaaaa',
