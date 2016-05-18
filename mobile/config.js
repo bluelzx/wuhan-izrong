@@ -4,6 +4,15 @@ var developConfig = {
   ImHost:'192.168.61.84:5000'//dev
 };
 
+var uncleConfig = {
+  Dev: true, // Switch for log. true means print.
+  Host: 'http://192.168.64.245:9081/fas',   //dev
+  //Host: 'http://192.168.64.205:9102/fas',   //dev
+  ImHost:'192.168.64.224:3000'//dev
+};
+
+
+
 var qaConfig = {
   Dev: false,
   //Host: 'http://192.168.64.205:9101/fas',     //qa
@@ -17,7 +26,7 @@ var productConfig = {
   ImHost: '139.196.174.42:4000'
 };
 
-var Config = developConfig;
+var Config = uncleConfig;
 
 module.exports = Config;
 //module.exports = function () {

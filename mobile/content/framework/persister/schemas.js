@@ -57,7 +57,7 @@ let SessionSchema = {
     lastTime: {type: 'date', optional: true},
     contentType: {type: 'string', optional: true}
   }
-}
+};
 
 let GroupNoticeSchema = {
   name: "groupNotice",
@@ -73,7 +73,7 @@ let GroupNoticeSchema = {
     msgType: {type: 'string', optional: true},
     isInvited: {type: 'bool', optional: true}
   }
-}
+};
 
 //im用户信息
 let ImUserInfoSchema = {
@@ -134,8 +134,9 @@ let LoginUserInfoSchema = {
     orgId: {type: 'int', optional: true},
     lastLoginTime: {type: 'date', optional: true},  //本地增加,用于多用户登陆排序
     token: {type: 'string', optional: true},
-    lastSyncTime: {type: 'date', optional: true},
-    certificated: {type: 'bool', optional: true}, //用户是否认证
+    lastSyncTime:{type:'date', optional:true},
+    certified:{type:'bool', optional:true},
+    friendList:{type:'string', optional:true}
   }
 };
 
@@ -250,6 +251,23 @@ let PlatFormInfo = {
 };
 
 
+//新好友通知
+let NewFriendNotic = {
+  name:"newFriendNotic",
+  primaryKey:'noticId',
+  properties: {
+    noticId: {type:'string', optional: true},
+    userId:{type:'int', optional: true},
+    realName:{type:'string', optional: true},
+    orgName:{type:'string', optional: true},
+    photoFileUrl:{type:'string', optional: true},
+    ownerId:{type:'int', optional: true},
+    isAccept:{type:'bool', optional:true},
+    certified:{type:'bool', optional:true}
+  }
+}
+
+
 module.exports = {
   DeviceSchema: DeviceSchema,
   GroupSchema: GroupSchema,
@@ -266,6 +284,7 @@ module.exports = {
   HomePageSchema:HomePageSchema,
   PlatFormInfoSchema:PlatFormInfo,
   NoticeSchema: GroupNoticeSchema,
+  NewFriendNoticSchema:NewFriendNotic,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
@@ -280,5 +299,6 @@ module.exports = {
   SESSION:'session',
   HOMEPAGE:'homePage',
   PLATFORMINFO:'platFormInfo',
-  NOTICE: 'groupNotice'
+  NOTICE: 'groupNotice',
+  NEWFRIENDNOTIC:'newFriendNotic'
 };
