@@ -1,15 +1,13 @@
 import React, {View, Text, TouchableHighlight, StyleSheet, Image} from 'react-native';
 import { Spinner } from 'mx-artifacts';
+let DictStyle = require('../../constants/dictStyle');
 
 let styles = StyleSheet.create({
   errorButtonContainer: {
-    position:'absolute',
-    right:50,
-    bottom:0,
     alignSelf: 'center',
     justifyContent: 'center',
     backgroundColor: '#e6e6eb',
-    borderRadius: 15,
+    //borderRadius: 15,
     width: 5,
     height: 5,
   },
@@ -49,7 +47,7 @@ export default class ErrorButton extends React.Component {
           backgroundColor: 'transparent',
           borderRadius: 0,
         }]}>
-          <Spinner color="#ECECEC"/>
+          <Spinner color={DictStyle.imChat.chatTipsTextColor}/>
         </View>
       );
     }

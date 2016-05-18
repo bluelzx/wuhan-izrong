@@ -32,6 +32,7 @@ let DictStyle = require('../../constants/dictStyle');
 import  Angle  from '../../comp/messenger/angle';
 const { Device,Alert } = require('mx-artifacts');
 
+
 let Contacts = React.createClass({
 
   componentDidMount() {
@@ -73,7 +74,7 @@ let Contacts = React.createClass({
     return (
       <Text
         style={
-          {color: DictStyle.colorSet.imTitleTextColor}}>
+          {fontSize:16,color: DictStyle.colorSet.imTitleTextColor}}>
         {title}
       </Text>
     );
@@ -105,9 +106,9 @@ let Contacts = React.createClass({
         <TouchableOpacity key={data.groupId}
                             onPress={() => this.toGroup(data)}
                             style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
-          <View style={{flexDirection:'row', paddingVertical:5}}>
-            <Image style={{height: 40,width: 40,borderRadius: 20}} source={DictIcon.imMyGroup} />
-            <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{data.groupName}</Text>
+          <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
+            <Image style={{height: 54,width: 54,borderRadius: 27}} source={DictIcon.imMyGroup} />
+            <Text style={{fontSize:16,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.groupName}</Text>
           </View>
         </TouchableOpacity>
 
@@ -117,9 +118,9 @@ let Contacts = React.createClass({
         <TouchableOpacity key={data.userId}
                             onPress={() => this.toUser(data)}
                             style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
-          <View style={{flexDirection:'row', paddingVertical:5}}>
+          <View style={{flexDirection:'row', paddingVertical:5,alignItems:'center'}}>
             <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-            <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{data.realName}</Text>
+            <Text style={{fontSize:16,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
           </View>
         </TouchableOpacity>
 
@@ -143,7 +144,7 @@ let Contacts = React.createClass({
       <TouchableOpacity onPress={()=>{
       this.addMore();
       }}>
-        {<Image style={{width:20,height:20}} source={DictIcon.imCreateGroupBtn}/>}
+        {<Image style={{width:25,height:25}} source={DictIcon.imCreateGroupBtn}/>}
       </TouchableOpacity>
     );
   },
@@ -152,10 +153,10 @@ let Contacts = React.createClass({
     return (
       <TouchableOpacity
         onPress={() => this.props.navigator.push({comp:Spread})}
-            style={{borderTopWidth:0.5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
+            style={{backgroundColor:DictStyle.colorSet.extenListGroundCol, borderTopWidth:0.5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
         <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
-          <Image style={{height: 40,width: 40,borderRadius: 20}} source={DictIcon.imSpread} />
-          <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{'环渤海银银合作平台'}</Text>
+          <Image style={{height: 54,width: 54,borderRadius: 27}} source={DictIcon.imSpread} />
+          <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{'资融网'}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -177,7 +178,7 @@ let Contacts = React.createClass({
                 onStartShouldSetResponder={(evt) => true}
                 onResponderRelease={()=>this.setState({showView:false})}
                 style={{flex:1,justifyContent:'center',backgroundColor:'transparent'}}>
-            <View style={{position:'absolute',top:Device.navBarHeight,right:5,width:100}}>
+            <View style={{position:'absolute',top:Device.navBarHeight,right:5,width:150}}>
             <View>
               <View style={{ alignItems: 'flex-end',paddingRight:10}}>
                 <Angle direction="up" color='#375EE4'/>
@@ -193,9 +194,10 @@ let Contacts = React.createClass({
                             });
                       }
                 }>
-                <View style={{alignItems:'center', justifyContent:'center',flexDirection:'row', borderBottomWidth:1,borderBottomColor:'#273CDF',paddingBottom:5}}>
-                  <Icon name="ios-search-strong" size={18} color='#fff' />
-                  <Text style={{marginLeft:5, color:'#fff'}}>添加好友</Text></View>
+                <View style={{alignItems:'center', justifyContent:'center',flexDirection:'row', paddingBottom:10,borderBottomWidth:1,borderBottomColor:'#273CDF'}}>
+                  <Icon name="ios-search-strong" size={20} color='#fff' />
+                  <Text style={{marginLeft:5, color:'#fff',fontSize:18}}>添加好友</Text>
+                </View>
                 </TouchableOpacity>
                 <TouchableOpacity
                    onPress={
@@ -206,9 +208,9 @@ let Contacts = React.createClass({
                             });
                       }
                 }>
-                  <View style={{alignItems:'center',justifyContent:'center',flexDirection:'row', marginTop:5}}>
-                    <Icon name="android-add" size={18} color='#fff' />
-                    <Text style={{marginLeft:5, color:'#fff'}}>创建群组</Text></View>
+                  <View style={{alignItems:'center',justifyContent:'center',paddingTop:5,flexDirection:'row', marginTop:5}}>
+                    <Icon name="android-add" size={20} color='#fff' />
+                    <Text style={{marginLeft:5, color:'#fff',fontSize:18}}>创建群组</Text></View>
                 </TouchableOpacity>
               </View>
             </View>
@@ -225,13 +227,13 @@ let Contacts = React.createClass({
           if(dataSource && dataSource.length > 0){
             if(dataSource.length == 1 && dataSource[0].length == 0){
               return (
-                <View style={{backgroundColor:'transparent', alignItems:'center'}}>
-                  <Text>{'无符合条件的用户'}</Text>
+                <View style={{backgroundColor:'transparent', alignItems:'center', marginTop:20}}>
+                  <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>
                 </View>
               );
             }else
             return (
-              <ExtenList itemHeight={51}
+              <ExtenList itemHeight={65}
                          groundColor={DictStyle.colorSet.extenListGroundCol}
                          groupBorderColor={DictStyle.colorSet.demarcationColor}
                          arrowColor={DictStyle.colorSet.extenListArrowColor}
@@ -244,8 +246,8 @@ let Contacts = React.createClass({
             );
           }else{
             return (
-              <View style={{backgroundColor:'transparent', alignItems:'center'}}>
-                <Text>{'无符合条件的用户'}</Text>
+              <View style={{backgroundColor:'transparent', alignItems:'center', marginTop:20}}>
+                <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>
               </View>
             );
           }

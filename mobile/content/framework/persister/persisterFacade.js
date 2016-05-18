@@ -54,9 +54,10 @@ let _saveAppData = function (data) {
   console.log("start" + new Date().getTime());
   let appOrderSearchResult = data.appOrderSearchResult;
   let loginUserInfo = data.appUserInfoOutBean;
+  loginUserInfo.friendList = data.friendList;
   let token = data.appToken;
   let orgBeanList = data.orgBeanList;
-  let appUserGroupBeanList = data.appUserGroupBeanList;
+  let appUserGroupBeanList = data.appUserGroupBeanList || [];
   let imUserBeanList = data.imUserBeanList;
   //return new Promise((resolve)=> {
   //  resolve(_saveLoginUserInfo(loginUserInfo, token));
@@ -101,7 +102,11 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
     publicAddress: !!(loginUserInfo.publicAddress == true || loginUserInfo.publicAddress === null),
     publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat === null),
     publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
-    lastSyncTime: null
+    lastSyncTime: null,
+    friendList:loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList).forEach((item)=>{
+      return parseInt(item);
+    }),
+    certified:loginUserInfo.certified||false
   }, true);
 };
 
@@ -146,7 +151,8 @@ let _saveImUsers = function (imUserBeanList) {
         publicEmail: !!(imUserBeanList[i].publicEmail == true || imUserBeanList[i].publicEmail === null),
         publicAddress: !!(imUserBeanList[i].publicAddress == true || imUserBeanList[i].publicAddress === null),
         publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
-        publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null)
+        publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
+        certified:imUserBeanList.certified||false
       }, true);
     }
 };
@@ -351,4 +357,5 @@ let _getOrgByOrgName = function (orgName) {
   }
 };
 module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
-  require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'), require('./homePagePersisterFacade'));
+  require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'), require('./homePagePersisterFacade'),
+  require('./newFriendNoticPersisterFacade'));

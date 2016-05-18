@@ -55,7 +55,7 @@ let SessionSchema = {
     title: {type: 'string', optional: true},
     content:{type: 'string', optional: true},
     lastTime: {type: 'date', optional: true},
-    contentType: {type: 'string', optional: true}
+    contentType: {type: 'string', optional: true},
   }
 };
 
@@ -85,7 +85,8 @@ let ImUserInfoSchema = {
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
     orgId: {type: 'int', optional: true},
-    mute: {type: 'bool', optional: true}  //是否屏蔽该用户
+    mute: {type: 'bool', optional: true},  //是否屏蔽该用户
+    certified:{type:'bool', optional:true},
   }
 };
 
@@ -117,7 +118,9 @@ let LoginUserInfoSchema = {
     orgId: {type: 'int', optional: true},
     lastLoginTime:{type: 'date', optional: true},  //本地增加,用于多用户登陆排序
     token: {type: 'string', optional: true},
-    lastSyncTime:{type:'date', optional:true}
+    lastSyncTime:{type:'date', optional:true},
+    certified:{type:'bool', optional:true},
+    friendList:{type:'string', optional:true}
   }
 };
 
@@ -230,7 +233,21 @@ let PlatFormInfo = {
   }
 };
 
-
+//新好友通知
+let NewFriendNotic = {
+  name:"newFriendNotic",
+  primaryKey:'noticId',
+  properties: {
+    noticId: {type:'string', optional: true},
+    userId:{type:'int', optional: true},
+    realName:{type:'string', optional: true},
+    orgName:{type:'string', optional: true},
+    photoFileUrl:{type:'string', optional: true},
+    ownerId:{type:'int', optional: true},
+    isAccept:{type:'bool', optional:true},
+    certified:{type:'bool', optional:true}
+  }
+}
 
 
 module.exports = {
@@ -248,6 +265,7 @@ module.exports = {
   SessionSchema:SessionSchema,
   HomePageSchema:HomePageSchema,
   PlatFormInfoSchema:PlatFormInfo,
+  NewFriendNoticSchema:NewFriendNotic,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
@@ -261,5 +279,6 @@ module.exports = {
   ORDERITEM:'orderItem',
   SESSION:'session',
   HOMEPAGE:'homePage',
-  PLATFORMINFO:'platFormInfo'
+  PLATFORMINFO:'platFormInfo',
+  NEWFRIENDNOTIC:'newFriendNotic'
 };

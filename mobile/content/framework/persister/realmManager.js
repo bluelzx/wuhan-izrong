@@ -18,13 +18,15 @@ const {
   OrderItemSchema,
   SessionSchema,
   PlatFormInfoSchema,
-  HomePageSchema
+  HomePageSchema,
+  NewFriendNoticSchema
   } = require('./schemas');
 console.log(Realm.defaultPath);
 let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema, LoginUserInfoSchema, OrgBeanSchema,
-    BizOrderCategorySchema, BizOrderItemSchema, FilterItemSchema, FilterItemsSchema, OrderItemSchema, SessionSchema,PlatFormInfoSchema,HomePageSchema],
-  schemaVersion: 23
+    BizOrderCategorySchema, BizOrderItemSchema, FilterItemSchema, FilterItemsSchema, OrderItemSchema, SessionSchema,PlatFormInfoSchema,HomePageSchema,
+    NewFriendNoticSchema],
+  schemaVersion: 27
 });
 
 module.exports = _realm;

@@ -9,12 +9,14 @@ const {
   MESSAGE,
   IMUSERINFO,
   ORGBEAN,
-  SESSION
+  SESSION,
+  LOGINUSERINFO
   } = require('./schemas');
 let ContactPersisterFacade = {
 getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
   getAllGroups: () => _getAllGroups(),
   getUsersGroupByOrg: () => _getUsersGroupByOrg(),
+  getAllUsersGroupByOrg:()=>_getAllUsersGroupByOrg(),
   getUserInfoByUserId: (id) => _getUserInfoByUserId(id),
   getGroupMembersByGroupId: (id) => _getGroupMembersByGroupId(id),
   getGroupInfoByGroupId:(id) => _getGroupInfoByGroupId(id),
@@ -30,6 +32,9 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
   deleteContactInfo:(userIdList) => _deleteContactInfo(userIdList),
   updateContactInfo: (address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId) =>
     _updateContactInfo(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId),
+  addFriend: (userInfo) => _addFriend(userInfo),
+  isStranger:(userId) => _isStranger(userId),
+  getOrgValueByOrgId:(orgId) => _getOrgValueByOrgId(orgId)
 }
 
 //***** helper
@@ -95,10 +100,17 @@ let _getGroupInfoByGroupId = function (groupId) {
 
 };
 
+let _getOrgValueByOrgId = function(orgId) {
+  let orgs = _realm.objects(ORGBEAN).filtered('id =' + orgId);
+  return orgs[0]&&orgs[0].orgValue;
+}
+
 //****按照机构分组
-let _getUsersGroupByOrg = function () {
+let _getAllUsersGroupByOrg = function () {
   //获得所有机构
   let orgs = _realm.objects(ORGBEAN).sorted('orgValue', false);
+  let tag = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true]);
+
   let result = [];
   orgs.forEach((org) => {
     let tmp = {
@@ -106,39 +118,48 @@ let _getUsersGroupByOrg = function () {
       orgMembers:[]
     }
     let users = _realm.objects(IMUSERINFO).filtered('orgId = ' + org.id);
-    //users&&users.forEach((item)=>{
-    //  let u = {
-    //    userId: item.userId,
-    //    address: item.address,
-    //    realName: item.realName,
-    //    weChatNo: item.weChatNo,
-    //    email: item.email,
-    //    nameCardFileUrl: item.nameCardFileUrl,
-    //    qqNo: item.qqNo,
-    //    department: item.department,
-    //    mobileNumber: item.mobileNumber,
-    //    jobTitle: item.jobTitle,
-    //    phoneNumber: item.phoneNumber,
-    //    photoFileUrl: item.photoFileUrl,
-    //    publicTitle: item.publicTitle,
-    //    publicMobile: item.publicMobile,
-    //    publicDepart: item.publicDepart,
-    //    publicPhone: item.publicPhone,
-    //    publicEmail: item.publicEmail,
-    //    publicAddress: item.publicAddress,
-    //    publicWeChat: item.publicWeChat,
-    //    publicQQ: item.publicQQ,
-    //    orgId: item.orgId,
-    //    mute: item.mute
-    //  };
-    //
-    //  u.orgValue = org.orgValue;
-    //  tmp.orgMembers.push(u);
-    //});
     tmp.orgMembers = users;
     result.push(tmp);
+
   });
   return result;
+};
+
+let _isStranger = function(userId) {
+  let tag = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true]);
+  let friendList =  JSON.parse(tag[0].friendList||'[]');
+  return !(_.indexOf(friendList, userId)>=0);
+}
+
+//****按照机构分组
+let _getUsersGroupByOrg = function () {
+  //获得所有机构
+  let orgs = _realm.objects(ORGBEAN).sorted('orgValue', false);
+  let tag = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true]);
+  let friendList =  JSON.parse(tag[0].friendList||'[]');
+  if(friendList && friendList.length > 0){
+    let result = [];
+    orgs.forEach((org) => {
+      let tmp = {
+        orgValue:org.orgValue,
+        orgMembers:[]
+      }
+      let users = _realm.objects(IMUSERINFO).filtered('orgId = ' + org.id);
+      //userId in friendList
+      tmp.orgMembers = [];
+      users && users.forEach((u)=>{
+        if(_.indexOf(friendList, u.userId) >= 0){
+          tmp.orgMembers.push(u);
+        }
+
+      });
+      result.push(tmp);
+    });
+    return result;
+  }else{
+    return [];
+  }
+
 };
 
 //****添加群组
@@ -328,15 +349,12 @@ let _kickOutMember = function (groupId, members) {
   });
 }
 
-
-
 let _dismissGroup = function(groupId) {
   _realm.write(() => {
     let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
     _realm.delete(group);
   });
 }
-
 
 //invoke in translater
 let _selfDeleteSession = function(sessionId){
@@ -371,4 +389,42 @@ let _setGroupMute = function(groupId, value){
     _realm.create(GROUP, param, true);
   });
 }
+
+let _addFriend = function(userInfo) {
+  let param = {
+    userId:userInfo.userId,
+    address:userInfo.address,
+    realName:userInfo.realName,
+    weChatNo:userInfo.weChatNo,
+    email:userInfo.email,
+    nameCardFileUrl:userInfo.nameCardFileUrl,
+    qqNo:userInfo.qqNo,
+    department:userInfo.department,
+    mobileNumber:userInfo.mobileNumber,
+    jobTitle:userInfo.jobTitle,
+    publicDepart:userInfo.publicDepart,
+    publicTitle:userInfo.publicTitle,
+    publicMobile:userInfo.publicMobile,
+    phoneNumber:userInfo.phoneNumber,
+    publicPhone:userInfo.publicPhone,
+    publicEmail:userInfo.publicEmail,
+    publicAddress:userInfo.publicAddress,
+    publicWeChat:userInfo.publicWeChat,
+    photoFileUrl:userInfo.photoFileUrl,
+    publicQQ:userInfo.publicQQ,
+    orgId:userInfo.orgId,
+  };
+
+  _realm.write(()=>{
+    _realm.create(IMUSERINFO, param, true);
+    let user = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true])[0];
+    let friendList = user.friendList;
+    friendList = JSON.parse(friendList||'[]');
+
+    friendList.push(param.userId);
+    _realm.create(LOGINUSERINFO,{userId:user.userId, friendList:JSON.stringify(friendList)},true);
+  });
+
+}
+
 module.exports = ContactPersisterFacade;

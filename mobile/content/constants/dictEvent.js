@@ -36,7 +36,10 @@ const DictEvent = keyMirror({
    */
   ORG_CHANGE: null,
 
-  SHOW_VIEW: null,
+  /**
+   * new Friend
+   * */
+  NEW_FRIEND:null
 });
 
 module.exports = DictEvent;

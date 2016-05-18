@@ -72,7 +72,7 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.HOME_PAGE:
       message.homePageList && message.homePageList.forEach((msg) => {
-        ImStore.createHomePageInfo(msg.req, msg.url);
+        ImStore.createHomePageInfo(msg.seq, msg.url);
       });
       break;
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
@@ -115,6 +115,19 @@ let _dealMsg = function (message, socket) {
 
       break;
     case MSG_TYPE.USER_DELETE:
+
+      break;
+    case MSG_TYPE.FRIEND_INVITE:
+      ContactSotre.newFriendNotic({
+        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, message.uid),
+        userId: message.uid,
+        realName: message.realName,
+        orgName: message.orgName,
+        photoFileUrl: message.photoFileUrl,
+        certified:message.certified,
+      }, userId);
+      break;
+    case MSG_TYPE.FRIEND_PROMISE:
 
       break;
     default:

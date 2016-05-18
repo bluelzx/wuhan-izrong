@@ -199,7 +199,7 @@ let _saveMsg = (message, userId) => {
   if (message.sessionId === _data.sessionId) {
     if (message.fromUId) { // Received
       // TODO. Get user info by id.
-      let userInfo = ContactStore.getUserInfoByUserId(object.fromUId);
+      let userInfo = ContactStore.getUserInfoByUserId(message.fromUId);
       let name = userInfo.realName;
       _data.messages.push({
         msgId: message.msgId,

@@ -63,7 +63,7 @@ let DeleteMember = React.createClass({
     return (
       <Text
         style={
-          {color: DictStyle.colorSet.imTitleTextColor}}>
+          {fontSize:16,color: DictStyle.colorSet.imTitleTextColor}}>
         {data.orgValue}
       </Text>
     );
@@ -90,12 +90,10 @@ let DeleteMember = React.createClass({
                   item={data}
                   choice={this.checkBoxChoice}
                   unChoice={this.unCheckBoxChoice}
-                  style={{width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
-          <View style={{flexDirection:'row'}}>
-            <View style={{height: 40,width: 40}}>
+                  style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
+          <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
               <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-            </View>
-            <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{data.realName}</Text>
+            <Text style={{fontSize:16,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
           </View>
         </CheckBox>
       );
@@ -112,7 +110,7 @@ let DeleteMember = React.createClass({
           let dataSource = groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
           if(dataSource && dataSource.length > 0) {
             return (
-              <ExtenList itemHeight={51}
+              <ExtenList itemHeight={65}
                          groundColor={DictStyle.colorSet.extenListGroundCol}
                          groupBorderColor={DictStyle.colorSet.demarcationColor}
                          arrowColor={DictStyle.colorSet.extenListArrowColor}
@@ -126,7 +124,7 @@ let DeleteMember = React.createClass({
           }else{
             return (
               <View style={{backgroundColor:'transparent', alignItems:'center'}}>
-                <Text>{'无符合条件的用户'}</Text>
+                <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>
               </View>
             );
           }

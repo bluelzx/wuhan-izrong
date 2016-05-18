@@ -3,6 +3,7 @@ const MSG_CONTENT_TYPE = {
   IMAGE: 'image',
   NAMECARD:'namecard',
   BIZINFO:'bizinfo',
+  NULL:'null'
 };
 
 const COMMAND_TYPE = {
@@ -28,7 +29,9 @@ const MSG_TYPE = {
   FORCE_LOGOUT:'FORCE_LOGOUT',
   CERTIFICATION:'CERTIFICATION',
   USER_FROZEN:'USER_FROZEN',
-  USER_DELETE:'USER_DELETE'
+  USER_DELETE:'USER_DELETE',
+  FRIEND_INVITE:'FRIEND_INVITE',
+  FRIEND_PROMISE:'FRIEND_PROMISE'
 };
 
 const SESSION_TYPE = {
@@ -37,6 +40,7 @@ const SESSION_TYPE = {
   INVITE:'invite',
   INVITED:'invited',
   PLATFORMINFO:'platforminfo',
+  NEWFRIEND:'newfriend'
 };
 
 module.exports = {
