@@ -8,7 +8,7 @@ let Persister = require('../persister/persisterFacade');
 let SessionAction = require('../action/sessionAction');
 let AppStore = require('./appStore');
 let ContactStore = require('./contactStore');
-
+let NoticeAction = require('../action/noticeAction');
 let _info = {
   initLoadingState: true,
   netWorkState: false,
@@ -128,10 +128,14 @@ let _sessionInit = (data) => {
 let _saveMsg = (message, userId) => {
 
   console.log(message);
-
-  if(message.msgType == SESSION_TYPE.INVITE){
-    //TODO  这种情况考虑换个地方处理
-    SessionAction.updateSession(SESSION_TYPE.INVITE, message.sessionId,message.groupName,'群邀请',message.revTime,message.contentType, {groupId:message.groupId, notAdd:true});
+  //TODO 还有INVITED和有人退出群组消息的情况需要处理
+  if(message.msgType == SESSION_TYPE.GROUP_NOTICE){
+    //TODO 这种情况考虑换个地方处理,群通知在会话中只有一个所以是覆盖前一个群通知会话
+    SessionAction.updateSession(message.msgType, message.sessionId, message.groupName,'群邀请',message.revTime,message.contentType, {noticeType:message.noticeType, notAdd:true});
+    //TODO: 根据noticeType区分是什么类型的群通知
+    let title = '王某某-工商银行';
+    let content = '邀请您加入一二三四五群聊';
+    NoticeAction.updateNotice(message.noticeType, message.sessionId, message.groupName, message.revTime, title, content,  message.groupId, message.groupOwnerId);
     return ;
   }
   if(message.type == SESSION_TYPE.USER){

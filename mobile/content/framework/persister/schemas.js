@@ -57,7 +57,23 @@ let SessionSchema = {
     lastTime: {type: 'date', optional: true},
     contentType: {type: 'string', optional: true}
   }
-};
+}
+
+let GroupNoticeSchema = {
+  name: "groupNotice",
+  primaryKey: 'noticeId',
+  properties: {
+    noticeId: {type: 'string', optional: true},
+    title:{type: 'string', optional: true},
+    content: {type: 'string', optional: true},
+    groupName: {type: 'string', optional: true},
+    groupId: {type: 'int', optional: true},
+    groupOwnerId: {type: 'int', optional: true},
+    revTime: {type: 'date', optional: true},
+    msgType: {type: 'string', optional: true},
+    isInvited: {type: 'bool', optional: true}
+  }
+}
 
 //im用户信息
 let ImUserInfoSchema = {
@@ -243,12 +259,13 @@ module.exports = {
   OrgBeanSchema: OrgBeanSchema,
   BizOrderCategorySchema: BizOrderCategorySchema,
   BizOrderItemSchema: BizOrderItemSchema,
-  FilterItemSchema: FilterItemSchema,
-  FilterItemsSchema: FilterItemsSchema,
-  OrderItemSchema: OrderItemSchema,
-  SessionSchema: SessionSchema,
-  HomePageSchema: HomePageSchema,
-  PlatFormInfoSchema: PlatFormInfo,
+  FilterItemSchema:FilterItemSchema,
+  FilterItemsSchema:FilterItemsSchema,
+  OrderItemSchema:OrderItemSchema,
+  SessionSchema:SessionSchema,
+  HomePageSchema:HomePageSchema,
+  PlatFormInfoSchema:PlatFormInfo,
+  NoticeSchema: GroupNoticeSchema,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
@@ -257,10 +274,11 @@ module.exports = {
   ORGBEAN: 'orgBean',
   BIZORDERCATEGORY: 'bizOrderCategory',
   BIZORDERITEM: 'bizOrderItem',
-  FILTERITEMS: 'filterItems',
-  FILTERITEM: 'filterItem',
-  ORDERITEM: 'orderItem',
-  SESSION: 'session',
-  HOMEPAGE: 'homePage',
-  PLATFORMINFO: 'platFormInfo'
+  FILTERITEMS:'filterItems',
+  FILTERITEM:'filterItem',
+  ORDERITEM:'orderItem',
+  SESSION:'session',
+  HOMEPAGE:'homePage',
+  PLATFORMINFO:'platFormInfo',
+  NOTICE: 'groupNotice'
 };

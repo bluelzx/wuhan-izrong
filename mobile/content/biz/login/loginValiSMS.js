@@ -54,9 +54,11 @@ let ValiSMS = React.createClass({
   login: function () {
     if (this.state.verify.length != 6) {
       Alert('请输入完整的短信验证码');
-    } else if(AppStore.getLoginUserInfo().mobileNo == this.props.param.mobileNo) {
-      this.simpleLogin();
-    }else{
+    }
+    //else if(AppStore.getLoginUserInfo().mobileNumber == this.props.param.mobileNo) {
+    //  this.simpleLogin();
+    //}
+    else{
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.login({

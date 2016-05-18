@@ -1,9 +1,8 @@
 //let ImAction = require('../action/imAction');
 let ImStore = require('../store/imStore');
-let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE } = require('../../constants/dictIm');
+let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE, UPDATE_GROUP_TYPE, NOTICE_TYPE } = require('../../constants/dictIm');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
-let AppStore = require('../store/appStore');
 //let {Alert} = require('mx-artifacts');
 let _dealMsg = function (message, socket) {
   let userInfo = ContactSotre.getUserInfo();
@@ -36,13 +35,14 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.GROUP_JOIN_INVITE:
       ImStore.saveMsg({
-        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId),
-        groupId: message.groupId,
-        groupName: message.groupName,
-        groupOwnerId: message.groupOwnerId,
-        msgType: SESSION_TYPE.INVITE,
-        revTime: new Date()
-      }, userId);
+        sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId),
+        groupId:message.groupId,
+        groupName:message.groupName,
+        groupOwnerId:message.groupOwnerId,
+        msgType:SESSION_TYPE.GROUP_NOTICE,
+        revTime:new Date(),
+        noticeType: NOTICE_TYPE.INVITE
+      },userId);
       break;
     case MSG_TYPE.REC_GROUP_MSG:
       ImStore.saveMsg({
@@ -71,9 +71,6 @@ let _dealMsg = function (message, socket) {
     };
       break;
     case MSG_TYPE.HOME_PAGE:
-      //message.homePageList && message.homePageList.forEach((msg) => {
-      //  ImStore.createHomePageInfo(msg.seq, msg.url);
-      //});
       ImStore.createHomePageInfo(message.homePageList);
       break;
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
@@ -87,7 +84,33 @@ let _dealMsg = function (message, socket) {
       ImStore.deleteContactInfo(message.userIdList);
       break;
     case MSG_TYPE.GROUP_INFO_UPDATE:
-      ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
+      switch (message.action) {
+        case UPDATE_GROUP_TYPE.CREATE_GROUP:
+          ContactSotre.createGroup(message.groupId, message.groupName,message.groupOwnerId,message.members,false);
+          break;
+        case UPDATE_GROUP_TYPE.UPDATE_GROUP_NAME:
+          break;
+        case UPDATE_GROUP_TYPE.UPDATE_GROUP_IMAGE_URL:
+          break;
+        case UPDATE_GROUP_TYPE.ADD_GROUP_MEMBER:
+          ImStore.saveMsg({
+            sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId),
+            groupId:message.groupId,
+            groupName:message.groupName,
+            groupOwnerId:message.groupOwnerId,
+            msgType:SESSION_TYPE.GROUP_NOTICE,
+            revTime:new Date(),
+            noticeType: NOTICE_TYPE.INVITED
+          },userId);
+          break;
+        case UPDATE_GROUP_TYPE.DELETE_GROUP_MEMBER:
+          //TODO 退出群组的处理...
+          break;
+        default:
+          console.log('None message type matched! [%s]', message.msgType);
+          console.log(message);
+          break;
+      }
       break;
     case MSG_TYPE.GROUP_INFO_DELETE:
       ContactSotre.leaveGroup(message.groupId);
@@ -117,7 +140,11 @@ let _dealMsg = function (message, socket) {
       }
       break;
     case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
-
+      if(message.userId == AppStore.getUserId()){
+        AppStore.updateUserInfo('certificated',message.isCertificated);
+      }else{
+        ImStore.updateContactInfo();
+      }
       break;
     case MSG_TYPE.CONTANCT_INFO_FREEZE:
 
@@ -172,10 +199,8 @@ let Resolver = {
       default:
         console.log('None message type matched! [%s]', message.msgType);
     }
-
     return msgToSend;
   }
-
 };
 
 module.exports = Resolver;

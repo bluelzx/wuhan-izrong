@@ -1,21 +1,30 @@
 package com.fasapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.shell.MainReactPackage;
 import com.fasapp.pakage.ZXReactPackage;
+import com.fasapp.utils.ReactNativeAutoUpdater;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 import cl.json.RNSharePackage;
 import io.realm.react.RealmReactPackage;
 
 public class MainActivity extends ReactActivity {
+    public static final String RNAU_SHARED_PREFERENCES = "React_Native_Auto_Updater_Shared_Preferences";
+    public static final String RNAU_STORED_VERSION = "React_Native_Auto_Updater_Stored_Version";
     public static ReactApplicationContext context;
 
     /**
@@ -58,5 +67,21 @@ public class MainActivity extends ReactActivity {
             new ZXReactPackage(this),
             new ExtraDimensionsPackage(this)
         );
+    }
+
+    @Nullable
+    @Override
+    protected String getBundleAssetName() {
+        return "index.android.bundle";
+    }
+
+    @Nullable
+    @Override
+    protected String getJSBundleFile() {
+        SharedPreferences prefs = this.getApplicationContext().getSharedPreferences(RNAU_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        String bundle = prefs.getString(RNAU_STORED_VERSION, "bundle");
+        String jsBundleFile = getDir("jsCode", Context.MODE_PRIVATE).getAbsolutePath() + "/bundle"+ bundle +"/index.android.bundle";
+        File file = new File(jsBundleFile);
+        return file.exists() ? jsBundleFile : null;
     }
 }
