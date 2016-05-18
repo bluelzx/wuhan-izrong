@@ -21,7 +21,7 @@ module.exports = {
   },
   realName: function (data) {
     if (!_.isEmpty(data)) {
-      let reg = /^[\u4e00-\u9fa5a-zA-Z]+$/;
+      let reg = /^[\u4e00-\u9fa5a-zA-Z]{0,20}$/;
       if (!reg.test(data)) {
         return false;
       }
@@ -123,7 +123,7 @@ module.exports = {
   },
   isTerm: function (data) {
     if (!_.isEmpty(data)) {
-      let reg = /^[1-9][0-9]{0,2}$/;
+      let reg = /^[0-9][0-9]{0,2}$/;
       if (!reg.test(data)) {
         console.log('格式不合法：请输入整数');
         return false;

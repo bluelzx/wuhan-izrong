@@ -155,8 +155,8 @@ let Contacts = React.createClass({
         onPress={() => this.props.navigator.push({comp:Spread})}
             style={{backgroundColor:DictStyle.colorSet.extenListGroundCol, borderTopWidth:0.5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
         <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
-          <Image style={{height: 54,width: 54,borderRadius: 27}} source={DictIcon.imSpread} />
-          <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{'资融网'}</Text>
+          <Image style={{height: 40,width: 40,borderRadius: 20}} source={DictIcon.imSpread} />
+          <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{'爱资融同业平台'}</Text>
         </View>
       </TouchableOpacity>
     );

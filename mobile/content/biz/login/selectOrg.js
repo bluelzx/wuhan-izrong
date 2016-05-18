@@ -57,14 +57,14 @@ let Register_selectOrg = React.createClass({
   rendSelectAll: function () {
     if (this.props.param.needAll) {
       return (
-        <TouchableHighlight style={{backgroundColor: '#162a40'}} activeOpacity={0.8} underlayColor='#18304b'
+        <TouchableHighlight style={{backgroundColor: '#f7f7f7'}} activeOpacity={0.8} underlayColor='#f4f7fd'
                             onPress={()=>{
                               that.props.callback({orgValue: '全部',id: 0});
                               that.props.navigator.pop();}
                              }>
           <View
-            style={{height: 40, marginLeft: 20, justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#122335'}}>
-            <Text style={{color: '#FFFFFF', textAlign: 'left'}}>全部</Text>
+            style={{height: 40,  backgroundColor: '#f7f7f7',justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#ebeef7'}}>
+            <Text style={{marginLeft: 20, color: '#3b4549', textAlign: 'left'}}>全部</Text>
           </View>
         </TouchableHighlight>
       );
@@ -74,10 +74,11 @@ let Register_selectOrg = React.createClass({
   renderList: function () {
     if (this.state.data == '') {
       return (
-        <View>
-          <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop:20,marginHorizontal:16,alignItems:'center'}]}>
-            您的机构不再平台的机构列表中。如有问题，请联系客服
+        <View style={{marginTop:20,marginHorizontal:16,alignItems:'center',flex:1,justifyContent:'center',flexDirection:'column'}}>
+          <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>
+            您的机构不在平台的机构列表中
           </Text>
+          <Text> 如有问题，请联系客服</Text>
         </View>
       )
     } else {
@@ -96,8 +97,10 @@ let Register_selectOrg = React.createClass({
   },
 
   render: function () {
+    let {param}  = this.props;
+    let title = param && param.isFromMarket ? '选择发布机构':'选择机构';
     return (
-      <NavBarView navigator={this.props.navigator} title='选择机构'>
+      <NavBarView navigator={this.props.navigator} title={title}>
         <SearchBar
           textChange={this.textChange}
         />

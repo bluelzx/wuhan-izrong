@@ -21,6 +21,7 @@ let SMSTimer = require('../../comp/utils/smsTimer');
 let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
 let MarketAction = require('../../framework/action/marketAction');
 let DictStyle = require('../../constants/dictStyle');
+let CallPhone = require('../../comp/utils/callPhone');
 
 let ValiSMS = React.createClass({
   getStateFromStores() {
@@ -53,10 +54,40 @@ let ValiSMS = React.createClass({
   login: function () {
     if (this.state.verify.length != 6) {
       Alert('请输入完整的短信验证码');
-    } else {
+    }
+    //else if(AppStore.getLoginUserInfo().mobileNumber == this.props.param.mobileNo) {
+    //  this.simpleLogin();
+    //}
+    else{
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.login({
+          mobileNo: this.props.param.mobileNo,
+          inputSmsCode: this.state.verify,
+          deviceToken: this.state.APNSToken,
+          deviceModel: this.state.deviceModel
+        }).then((response) => {
+          const {navigator} = this.props;
+          if (navigator) {
+            this.props.navigator.resetTo({
+              comp: 'tabView',
+              sceneConfig: Navigator.SceneConfigs.FadeAndroid
+            });
+          }
+        }).catch((errorData) => {
+          throw errorData;
+        });
+      });
+    }
+  },
+
+  simpleLogin: function() {
+    if (this.state.verify.length != 6) {
+      Alert('请输入完整的短信验证码');
+    } else {
+      dismissKeyboard();
+      this.props.exec(() => {
+        return LoginAction.simpleLogin({
           mobileNo: this.props.param.mobileNo,
           inputSmsCode: this.state.verify,
           deviceToken: this.state.APNSToken,
@@ -118,7 +149,7 @@ let ValiSMS = React.createClass({
         <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
           <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
             <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
-            <TouchableOpacity onPress={()=>{}}>
+            <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
               <Text
                 style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
             </TouchableOpacity>

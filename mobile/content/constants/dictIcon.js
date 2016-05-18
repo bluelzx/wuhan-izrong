@@ -23,5 +23,6 @@ module.exports = {
   imUserMore: require('../image/im/usermore.png'),
   imGroupMore: require('../image/im/groupmore.png'),
   imCreateGroupBtn: require('../image/im/createGroupBtn.png'),
+  imGroupNotice: require('../image/im/groupNotice.png'),
   imNewFriendNotic: require('../image/im/newFriendNotic.png')
 };

@@ -8,7 +8,6 @@ let api = '/app/api';
 let AppLinks = {
   ImSocket: imSocket,
   ImHttp: imHttp,
-  protocal: '',
   validatePassword: '',
   validateMobileForResetMobile: '',
   sendSMSCodeToNewMobile: '',
@@ -25,8 +24,9 @@ let AppLinks = {
   validateSmsCode: Host + pub + '/validateSmsCode',
   validateEmail:Host + pub +'/validateEmail',
   login: Host + pub + '/login',
+  simpleLogin: Host + pub + '/simpleLogin',
   logout: Host + api + '/Account/logout',
-  registerProtocal: Host + '/protocal.html',
+  registerProtocol: Host + '/protocol.html',
   register: Host + pub + '/register',
   uploadFile: Host + pub + '/File/upload',
   downLoadFile: Host + pub + '/File/downLoad/',

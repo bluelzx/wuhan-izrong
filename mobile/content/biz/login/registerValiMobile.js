@@ -22,6 +22,8 @@ let CheckBox = require('../../comp/utils/checkboxUtil');
 let Register_AccountInfo = require('./accountInfo');
 let RegisterPotocol = require('./registerPotocol');
 let DictStyle = require('../../constants/dictStyle');
+let PlainStyle = require('../../constants/dictStyle');
+let CallPhone = require('../../comp/utils/callPhone');
 
 let Register_valiMobile = React.createClass({
   getStateFromStores() {
@@ -29,7 +31,8 @@ let Register_valiMobile = React.createClass({
       mobileNo: '',
       verify: '',
       checkbox: true,
-      disabled: true
+      disabled: true,
+      smsDisabled: true
     };
   },
   getInitialState: function () {
@@ -88,6 +91,11 @@ let Register_valiMobile = React.createClass({
     } else {
       this.setState({disabled: false});
     }
+    if(this.state.mobileNo.length == 0){
+      this.setState({smsDisabled: true});
+    }else{
+      this.setState({smsDisabled: false});
+    }
   },
 
   selectChange(select){
@@ -111,6 +119,7 @@ let Register_valiMobile = React.createClass({
                     func={LoginAction.sendSmsCodeToRegisterMobile}
                     parameter={this.state.mobileNo}
                     onChanged={this._onChangeText}
+                    disabled={this.state.smsDisabled}
                     exec={this.props.exec}
           />
           <View style={{flexDirection: 'row'}}>
@@ -120,7 +129,7 @@ let Register_valiMobile = React.createClass({
                       unCheckedUrl={require('../../image/utils/radioUncheck.png')}
                       checked={this.state.checkbox}
             />
-            <TouchableHighlight activeOpacity={0.8} underlayColor='#18304b'
+            <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content}
                                 onPress={()=>this.toPage(RegisterPotocol)}
             >
               <Text style={{ marginLeft: -5,marginTop: 20, color: 'grey', fontSize: 16, lineHeight: 20}}>
@@ -141,7 +150,7 @@ let Register_valiMobile = React.createClass({
         <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
           <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
             <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服:</Text>
-            <TouchableOpacity onPress={()=>{}}>
+            <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
               <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
             </TouchableOpacity>
           </View>

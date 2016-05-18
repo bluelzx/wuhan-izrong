@@ -17,17 +17,14 @@ let {
 
 let _ = require('lodash');
 let NavBarView = require('../../framework/system/navBarView');
-let Validation = require('../../comp/utils/validation');
 let Item = require('../../comp/utils/item');
 let Icon = require('react-native-vector-icons/Ionicons');
 let TextEdit = require('./textEdit');
 let { Alert } = require('mx-artifacts');
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let LoginAction = require('../../framework/action/loginAction');
-let Login = require('../../biz/login/login');
 let ImagePicker = require('../../comp/utils/imagePicker');
 let AppStore = require('../../framework/store/appStore');
-let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
 let NameCircular = require('../im/nameCircular').NameCircular;
 let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
 let PlainStyle = require('../../constants/dictStyle');
@@ -59,7 +56,8 @@ let UserInfo = React.createClass({
       address: userInfo.address,
       publicAddress: userInfo.publicAddress,
       nameCardFileUrl: userInfo.nameCardFileUrl,
-      certified:true
+      certificated: userInfo.certificated,
+      certificatedValue: userInfo.certificated ? '(已认证)' : '(未认证)'
     };
   },
 
@@ -105,7 +103,7 @@ let UserInfo = React.createClass({
 
   returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
-      if(this.state.certified){
+      if (this.state.certificated) {
         return (
           <View>
             <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
@@ -115,18 +113,13 @@ let UserInfo = React.createClass({
         );
       }
       return (
-          <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+        <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
       );
-    }else {
-      if(this.state.certified){
-        return (
-          <View>
-            <NameCircular name={this.state.realName}/>
-          </View>
-        );
-      }
+    } else {
       return (
-        <NameCircular name={this.state.realName}/>
+        <View>
+          <NameCircular name={this.state.realName} isV={this.state.certificated}/>
+        </View>
       );
     }
   },
@@ -219,7 +212,7 @@ let UserInfo = React.createClass({
             </ImagePicker>
             <TouchableOpacity
               style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}
-              onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'publicRealName', true, 'default', 20, true, false)}
+              onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'isPublicRealName', true, 'default', 20, true, false)}
             >
               <Text style={[DictStyle.userInfoValueItem,{ marginRight: 20,width: 150}]}
                     numberOfLines={1}
@@ -231,15 +224,15 @@ let UserInfo = React.createClass({
           </View>
 
           {this.renderRow('手机号', require('../../image/user/mobileNo.png'), 'mobileNumber', this.state.mobileNumber,
-            'publicMobile', this.state.publicMobile, 'number-pad', 11, false, true, false)}
+            'isPublicMobile', this.state.publicMobile, 'number-pad', 11, false, true, false)}
 
-          {this.renderRow('座机号', require('../../image/user/telephoneNo.png'), 'phoneNumber', this.state.phoneNumber, 'publicPhone',
+          {this.renderRow('座机号', require('../../image/user/telephoneNo.png'), 'phoneNumber', this.state.phoneNumber, 'isPublicPhone',
             this.state.publicPhone, 'number-pad', 11, true, true, false)}
 
-          {this.renderRow('QQ', require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'publicQq',
+          {this.renderRow('QQ', require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'isPublicQq',
             this.state.publicQQ, 'number-pad', 20, true, true, false)}
 
-          {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'publicWeChat',
+          {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'isPublicWeChat',
             this.state.publicWeChat, 'default', 40, true, true, false)}
 
           <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
@@ -274,7 +267,7 @@ let UserInfo = React.createClass({
                     backgroundColor:PlainStyle.colorSet.personalItemColor,justifyContent: 'space-between'}}>
                     <Text style={[DictStyle.userInfoValueItem,{flex:1}]}
                           numberOfLines={2}>
-                      {this.state.orgBeanName}
+                      {this.state.orgBeanName + this.state.certificatedValue}
                     </Text>
                   </View>
                 </View>
@@ -282,10 +275,10 @@ let UserInfo = React.createClass({
               </View>
             </TouchableHighlight>
 
-            {this.renderRow('部门', require('../../image/user/department.png'), 'department', this.state.department, 'publicDepart',
+            {this.renderRow('部门', require('../../image/user/department.png'), 'department', this.state.department, 'isPublicDepart',
               this.state.publicDepart, 'default', 20, true, true, false)}
 
-            {this.renderRow('职位', require('../../image/user/jobTitle.png'), 'jobTitle', this.state.jobTitle, 'publicTitle',
+            {this.renderRow('职位', require('../../image/user/jobTitle.png'), 'jobTitle', this.state.jobTitle, 'isPublicTitle',
               this.state.publicTitle, 'default', 20, true, true, false)}
           </View>
         </ScrollView>
@@ -328,7 +321,7 @@ let styles = StyleSheet.create({
     borderColor: '#cccccc',
     borderWidth: 1
   },
-  certified:{
+  certified: {
     width: 15,
     height: 15
   },

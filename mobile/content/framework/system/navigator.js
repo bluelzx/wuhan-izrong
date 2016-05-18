@@ -38,6 +38,7 @@ let co = require('co');
 let NotificationManager = require('./notificationManager');
 let Publish = require ('../../biz/publish/publish');
 
+const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');
 
 var Main = React.createClass({
@@ -113,16 +114,6 @@ var Main = React.createClass({
       }
 
       Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {});
-
-      //if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
-      //  //最近2秒内按过back键，可以退出应用。
-      //  //this.toast.cancel();
-      //  BackAndroid.exitApp();
-      //  return false;
-      //}
-      //this.lastBackPressed = Date.now();
-
-      //this.toast = ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
       return true;
     }
 
@@ -133,15 +124,14 @@ var Main = React.createClass({
     this.setState(this._getStateFromStores());
     if (AppStore.isLogout()) {
       if (AppStore.isForceLogout()) {
-        AppStore.logout(AppStore.getUserId());
         Alert(
-          '账号已在别处登陆,系统将切换到登陆界面',
+          '    您的账号已经在其他设备上登录了，您将被强制登出，请确认您的账号密码没有被泄露',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
         );
+        AppStore.setForceLogout();
       } else {
         Promise.resolve().then((resolve) => {
           this.refs.navigator.resetTo({comp: Login});
-          AppStore.setForceLogout(false);
         }).catch((e) => {
           Alert('系统异常');
         });
@@ -151,7 +141,7 @@ var Main = React.createClass({
   _exec: function (func, showLoading = true) {
     let self = this;
     if (showLoading) {
-      this.setState({
+      self.setState({
         isLoadingVisible: true
       });
     }
@@ -170,11 +160,12 @@ var Main = React.createClass({
           console.log(errorData);
           if(errorData.msgCode == 'APP_SYS_TOKEN_INVALID'){
             AppStore.forceLogout();
-          }else{
+          } else if(errorData.msgContent || errorData.message || errorData.errMsg){
             Alert(errorData.msgContent || errorData.message || errorData.errMsg);
+          }else if(errorData.includes('Network request failed')) {
+            Alert('网络异常,');
           }
         });
-
       if (showLoading) {
         self.setState({
           isLoadingVisible: false
@@ -268,6 +259,11 @@ var Main = React.createClass({
           })}
           initialRoute={{
             comp: initComp
+          }}
+          onDidFocus={(route) => {
+            // console.log('### onDidFocus ### ' + route.comp.displayName || route.comp);
+            // ImSocket.trace(KPI_TYPE.PAGE, route);
+            ImSocket.trace(KPI_TYPE.PAGE, route.comp.displayName || route.comp);
           }}
         />
 

@@ -20,7 +20,7 @@ let ViewPager = require('react-native-viewpager');
 let BusinessDetail = require('../market/businessDetail');
 let MyBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
-let {MARKET_CHANGE} = require('../../constants/dictEvent');
+let {MARKET_CHANGE,MYBIZ_CHANGE} = require('../../constants/dictEvent');
 let MarketStore = require('../../framework/store/marketStore');
 let MarketAction = require('../../framework/action/marketAction');
 let Adjust = require('../../comp/utils/adjust');
@@ -39,8 +39,7 @@ let Home = React.createClass({
     let dataSource = new ViewPager.DataSource({
       pageHasChanged: (p1, p2) => p1 !== p2
     });
-    let myCategory = AppStore.getCategory();
-    let myItem = AppStore.getItem();
+
     let PAGES = AppStore.queryAllHomePageInfo();
     let DEFAULTPAGES = [
       require('../../image/home/launch-01.png'),
@@ -50,9 +49,9 @@ let Home = React.createClass({
     return {
       categoryArr: categoryArr,
       dataSource: PAGES.length?dataSource.cloneWithPages(PAGES):dataSource.cloneWithPages(DEFAULTPAGES),
-      category: myCategory != null ? myCategory.displayName : '资金业务',
+      category: '资金业务',
       contentList: [],
-      bizCategoryID: myCategory != null ? myCategory.id : categoryArr.length == 0 ? 0 : categoryArr[0].id,
+      bizCategoryID: categoryArr.length == 0 ? 0 : categoryArr[0].id
     };
   },
 
@@ -62,14 +61,19 @@ let Home = React.createClass({
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
+    AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
     this.bizOrderMarketSearch();
   },
 
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
+    AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
+  },
+  _search: function () {
+    this.bizOrderMarketSearch();
   },
 
   bizOrderMarketSearch: function () {
@@ -78,8 +82,7 @@ let Home = React.createClass({
       orderType: 'desc',
       pageIndex: 1,
       filterList: [
-        this.state.bizCategoryID,
-        this.state.bizItemID
+        this.state.bizCategoryID
       ]
     };
     this.props.exec(
@@ -225,13 +228,13 @@ let Home = React.createClass({
             {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天'}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:PlainStyle.colorSet.homeListTextColor}}>
+            style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:rowData.amount == null || rowData.amount == 0 ? DictStyle.marketSet.fontColor :DictStyle.marketSet.amountColor}}>
             {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount < 100000000 ? (rowData.amount / 10000) + '万' : rowData.amount / 100000000 + '亿'}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor,width:Adjust.width(135)}}
             numberOfLines={1}>
-            {rowData.orgName}
+            {rowData.userName != null ? rowData.userName + '-' + rowData.orgName : rowData.orgName}
           </Text>
         </View>
       </TouchableHighlight>

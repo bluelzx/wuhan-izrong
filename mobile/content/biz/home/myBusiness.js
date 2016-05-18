@@ -87,11 +87,11 @@ let Market = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange,MYBIZ_CHANGE);
+    AppStore.addChangeListener(this._onChange, MYBIZ_CHANGE);
   },
 
   componentWillUnmount () {
-    AppStore.removeChangeListener(this._onChange,MYBIZ_CHANGE);
+    AppStore.removeChangeListener(this._onChange, MYBIZ_CHANGE);
   },
 
   _onChange () {
@@ -107,8 +107,15 @@ let Market = React.createClass({
    */
   _onFetch(page = 1, callback, options) {
     return MarketAction.bizOrderAdminSearch({
-        orderField: this.state.orderField,
-        orderType: this.state.orderType,
+        orderFieldList: [
+          {
+            orderField: 'status',
+            orderType: 'asc'
+          }, {
+            orderField: this.state.orderField,
+            orderType: this.state.orderType
+          }
+        ],
         pageIndex: page,
         filterList: [
           this.state.bizCategoryID,
@@ -139,22 +146,28 @@ let Market = React.createClass({
             allLoaded: true, // the end of the list is reached
           });
         }, 1000); // simulating network fetching
-        Alert(errorData.msgContent || 'exception');
+        if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
+          AppStore.forceLogout();
+        } else if (errorData.message.includes('Network request failed')) {
+          Alert('网络异常');
+        } else {
+          Alert(errorData.msgContent || errorData.message);
+        }
       }
     );
   },
 
   termChangeHelp(term){
-    if(term == null || term == 0){
+    if (term == null || term == 0) {
       return '--';
-    }else if (term % 365 == 0){
-      return term/365 + '年';
-    }else if (term % 30 == 0){
-      return term/30 + '月';
-    }else if (term == 1){
+    } else if (term % 365 == 0) {
+      return term / 365 + '年';
+    } else if (term % 30 == 0) {
+      return term / 30 + '月';
+    } else if (term == 1) {
       return '隔夜';
     }
-    else{
+    else {
       return term + '天';
     }
   },
@@ -172,15 +185,15 @@ let Market = React.createClass({
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
           <Text
-            style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?DictStyle.marketSet.fontColor:'#cccccc'}}>
+            style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?DictStyle.marketSet.fontColor:'#c0c8ce'}}>
             {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'? rowData.amount == null || rowData.amount == 0 ? DictStyle.marketSet.fontColor :DictStyle.marketSet.amountColor:'#cccccc'}}>
-            {rowData.amount == null || rowData.amount == 0 ? '--' :  rowData.amount <= 100000000 ? numeral(rowData.amount / 10000) + '万' : numeral(rowData.amount / 100000000) + '亿'}
+            style={{position:"absolute",left:Adjust.width(120),top:0, marginLeft:15,marginTop:15,color:rowData.status == 'ACTIVE'? rowData.amount == null || rowData.amount == 0 ? DictStyle.marketSet.fontColor :DictStyle.marketSet.amountColor:'#c0c8ce'}}>
+            {rowData.amount == null || rowData.amount == 0 ? '--' : rowData.amount < 100000000 ? numeral(rowData.amount / 10000) + '万' : numeral(rowData.amount / 100000000) + '亿'}
           </Text>
           <Text
-            style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?DictStyle.marketSet.fontColor:'#cccccc'}}
+            style={{position:"absolute",left:Adjust.width(200),top:0, marginLeft:15, marginTop:15,color:rowData.status == 'ACTIVE'?DictStyle.marketSet.fontColor:'#c0c8ce'}}
             numberOfLines={1}>
             {rowData.rate == null || rowData.rate == 0 ? '--' : numeral(rowData.rate * 100).format('0,0.00') + '%'}
           </Text>
@@ -233,6 +246,7 @@ let Market = React.createClass({
           }
         ).then((response)=> {
           Alert('刷新成功', ()=>this.refs.marketGiftedListView._refreshWithoutSpinner());
+          AppStore.emitChange(MYBIZ_CHANGE);
         }).catch((errorData) => {
           throw errorData;
         });
@@ -248,13 +262,16 @@ let Market = React.createClass({
           <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
             {'方向'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
+          <Text
+            style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
             {'期限'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(120),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
+          <Text
+            style={{position:"absolute",left:Adjust.width(120),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
             {'金额'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(200),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
+          <Text
+            style={{position:"absolute",left:Adjust.width(200),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
             {'利率'}
           </Text>
         </View>
@@ -287,7 +304,7 @@ let Market = React.createClass({
   },
 
   _emptyView: function () {
-    return(
+    return (
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
         <Text style={{fontSize:15, color:'#355d81'}}>暂无业务</Text>
       </View>
@@ -543,15 +560,15 @@ let Market = React.createClass({
   },
 
   _pressPublish: function () {
-      const { navigator } = this.props;
-      if (navigator) {
-          navigator.push({
-            comp: 'publish',
-            param: {
-              isFromMyBusiness:true
-            }
-          })
-      }
+    const { navigator } = this.props;
+    if (navigator) {
+      navigator.push({
+        comp: 'publish',
+        param: {
+          isFromMyBusiness: true
+        }
+      })
+    }
   },
 
   confirmBtn: function () {

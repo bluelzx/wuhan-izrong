@@ -75,12 +75,18 @@ let TextEdit = React.createClass({
         }
         break;
       case 'phoneNumber':
-        this.setState({
-          newValue: this.state.tele + '-' + this.state.phone
-        });
-        if (Validation.isTelephone(this.state.newValue)) {
+          if (this.state.tele == '' && this.state.phone == '') {
+              this.setState({
+                  newValue: ''
+              });
+          } else {
+              this.setState({
+                  newValue: this.state.tele + '-' + this.state.phone
+              });
+          }
+          if (Validation.isTelephone(this.state.newValue) || (this.state.tele == '' && this.state.phone == '')) {
           this.updateUserInfo();
-        } else if((this.state.newValue == '未填写-undefined') || (this.state.tele == '' && this.state.phone == '')){
+          } else if ((this.state.newValue == '未填写-undefined')) {
             const { navigator } = this.props;
             if (navigator) {
                 navigator.pop();
@@ -215,7 +221,7 @@ let TextEdit = React.createClass({
             style={[DictStyle.textEditItem,{marginTop: 20}]}
           >
             <View style={[styles.view, {flexDirection: 'row'}]}>
-              <TextInput style={[styles.text, {width: 80}]} defaultValue={this.state.oldValue.split('-')[0]}
+              <TextInput style={[styles.text, {width: 70}]} defaultValue={this.state.oldValue.split('-')[0]}
                          keyboardType='number-pad'
                          underlineColorAndroid="transparent"
                          maxLength={4}
@@ -223,12 +229,12 @@ let TextEdit = React.createClass({
                          this.setState({tele:text});
                          this.textChange(text);
                          }}
-                         //autoFocus={true}
                          autoCapitalize="none"
                          autoCorrect={false}
+
               />
               <Text style={styles.text}>-</Text>
-              <TextInput style={[styles.text, {flex: 1, marginLeft: 10}]}
+              <TextInput style={[styles.text, {flex: 1, marginLeft: 20}]}
                          underlineColorAndroid="transparent"
                          defaultValue={this.state.oldValue.split('-')[1]}
                          keyboardType='number-pad'

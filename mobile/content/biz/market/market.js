@@ -126,6 +126,7 @@ let Market = React.createClass({
 
   _onChange () {
     this.setState(this.getStateFromStores());
+    this.refs.marketGiftedListView._refresh();
   },
 
   /**
@@ -184,7 +185,13 @@ let Market = React.createClass({
             allLoaded: true // the end of the list is reached
           });
         }, 1000); // simulating network fetching
-        Alert(errorData.msgContent || 'exception');
+        if(errorData.msgCode == 'APP_SYS_TOKEN_INVALID'){
+          AppStore.forceLogout();
+        }else if(errorData.message.includes('Network request failed')){
+          Alert('网络异常');
+        }else{
+          Alert(errorData.msgContent || errorData.message);
+        }
       }
     );
   },
@@ -465,7 +472,7 @@ let Market = React.createClass({
                 style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4b76df',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
                 <Text
                   style={{fontSize:16,marginLeft:10,width: screenWidth-66,color:'white'}}
-                  numberOfLines={1}>{this.state.orgValue == '' ? '全部发布机构' : this.state.orgValue}</Text>
+                  numberOfLines={1}>{this.state.orgValue == '' ? '全部' : this.state.orgValue}</Text>
                 <Image style={{margin:10,width:16,height:16}}
                        source={require('../../image/market/next.png')}
                 />
@@ -562,7 +569,7 @@ let Market = React.createClass({
       navigator.push({
         comp: name,
         callBack: this.callback,
-        param: {needAll: true}
+        param: {needAll: true , isFromMarket: true}
       })
     }
   },
