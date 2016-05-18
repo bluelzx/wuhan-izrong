@@ -43,7 +43,7 @@ const PlainStyle = {
     extenListGroundCol:'#FEFEFE',
     extenListArrowColor:'#A3AAAE',
     extenListGroupTitleColor:'#F4F4F4',
-    sessionDetailColor:'#687886'
+    sessionDetailColor:'#687886',
   },
 
   heightSet: {
@@ -51,12 +51,13 @@ const PlainStyle = {
     navBar: Device.navBarHeight,
     content: Device.height - Device.navBarHeight,
     tabBar: TABBAR_HEIGHT,
-    tabContent: Device.height - Device.navBarHeight - TABBAR_HEIGHT
+    tabContent: Device.height - Device.navBarHeight - TABBAR_HEIGHT,
+    filter: 44,
   },
 
   tabBar: {
-    tintColor: '#ffffff',
-    barTintColor: '#2b3849'
+    //tintColor: '#ffffff',
+    barTintColor: '#f2f2f2'
   },
 
   //market
@@ -65,6 +66,8 @@ const PlainStyle = {
     filterSelectColor: '#4fc1e9',
     amountColor: '#4074e6',
     modifyDateColor: '#f33b1e',
+    filterBorder: '#c9cacf',
+    filterFontSize: 15,
   },
 
   imChat:{
@@ -86,8 +89,11 @@ const PlainStyle = {
     memberNameColor:'#3B4549',
     memberListBackgroundColor:'#FEFEFE',
     buttonArrowColor:'#A3AAAE',
-  }
+  },
 
+  searchFriend:{
+    textInputColor:'#64C3EA',
+  }
 
 };
 

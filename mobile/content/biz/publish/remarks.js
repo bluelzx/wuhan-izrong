@@ -12,6 +12,7 @@ let {
 
 let DictStyle = require('../../constants/dictStyle');
 let NavBarView = require('../../framework/system/navBarView');
+let CountedTextInput = require('../../comp/utils/CountedTextInput');
 let {Alert} = require('mx-artifacts');
 
 let Remarks = React.createClass({
@@ -24,16 +25,13 @@ let Remarks = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} title='备注' actionButton={this.renderFinish}>
         <View style={{backgroundColor:'white',marginTop:10}}>
-          <TextInput
-            value={this.state.remarkText}
-            placeholder={'50字以内'}
-            placeholderTextColor='#d3d5df'
-            returnKeyType="search"
-            maxLength={50}
-            onChangeText={(value) => this.onChangeText(value)}
-            underlineColorAndroid={'transparent'}
-            clearButtonMode="while-editing"
-            style={{width:DictStyle.fullScreen.width - 20,height:40,marginLeft:10,marginRight:10,color:DictStyle.marketSet.fontColor}}/>
+          <CountedTextInput
+              placeholder="请输入备注(限50字)"
+              maxLength={50}
+              callback={(text) => this.setState({remarkText: text})}
+              stateCallback={(bOut) => this.setState({bOpinionOut: bOut})}
+              value={this.state.remarkText}
+          />
         </View>
       </NavBarView>
     )
@@ -49,9 +47,13 @@ let Remarks = React.createClass({
     this.setState({remarkText: value});
   },
   finish: function () {
+      var reg = /^[\w\u4e00-\u9fa5\u0000-\u00FF\uFF00-\uFFFF。、“”……——【】《》]+$/g;
+
     if(this.state.remarkText.length >50){
-      Alert('字数超过限制(50字以内)')
-    }else {
+        Alert('字数超过限制(50字以内)');
+    } else if (!reg.test(this.state.remarkText)) {
+        Alert('请输入正确的中英文文本');
+    } else {
       this.props.param.callBackRemarks(this.state.remarkText);
       this.props.navigator.pop();
     }

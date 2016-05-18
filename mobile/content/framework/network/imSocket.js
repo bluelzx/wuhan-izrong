@@ -1,9 +1,9 @@
 let Manager = require('./manager');
 let { Alert, Device, Loading } = require('mx-artifacts');
 let Resolver = require('./resolver');
-let {ImHost } = require('../../../config');
+let { ImHost } = require('../../../config');
 let { COMMAND_TYPE } = require('../../constants/dictIm');
-let {Platform} = require('react-native');
+let { Platform } = require('react-native');
 let ContactSotre = require('../store/contactStore');
 
 let _socket = null;
@@ -74,14 +74,29 @@ let ImSocket = {
 
   },
 
-  sendSyncReq:()=>{
+  sendSyncReq: () => {
     let userInfo = ContactSotre.getUserInfo();
     let lastSyncTime = userInfo.lastSyncTime;
     let message = {msgType: COMMAND_TYPE.SYNC_REQ,lastSyncTime:lastSyncTime};
     _send(message);
   },
 
-  send:(message)=>_send(message)
+  send: (message)=>_send(message),
+  trace: (actionType, content) => {
+    _send({
+      msgType: COMMAND_TYPE.KPI_APP,
+      command: COMMAND_TYPE.KPI_APP,
+      // time: new Date(),
+      // userId: 'testUser',
+      actionType: actionType,
+      content: content,
+      deviceType: Platform.OS
+    }).then(() => {
+      //
+    }).catch((error) => {
+      console.log('### KPI ### ' + error);
+    });
+  },
 };
 
 module.exports = ImSocket;

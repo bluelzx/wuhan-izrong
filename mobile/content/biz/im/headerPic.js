@@ -4,8 +4,17 @@
 
 let React = require('react-native');
 const {Image, View, Platform, Text, StyleSheet} = React;
+let _ = require('lodash');
+let NameCircular = require('./nameCircular').NameCircular;
+
 
 let HeaderPic = React.createClass({
+
+
+  returnImage: function () {
+
+  },
+
 
   unReadIcon: function(badge, showBadge){
     if(showBadge) {
@@ -32,12 +41,30 @@ let HeaderPic = React.createClass({
   },
 
   render: function () {
-    let {source, style, badge, showBadge=true} = this.props;
-    return (
-     <Image source={source} style={style}>
-       {this.unReadIcon(badge, showBadge)}
-     </Image>
-    );
+    let {name, photoFileUrl, badge, certified = false} = this.props;
+    if (!_.isEmpty(photoFileUrl)) {
+
+        return (
+          <View>
+            <Image style={styles.head} resizeMode="cover" source={{uri: photoFileUrl}}/>
+            {(()=>{
+              if(certified){
+                return (
+                  <Image style={[styles.certified,{position: 'absolute',bottom:0,right:0}]}
+                         resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+                );
+              }else{
+                return null;
+              }
+            })()}
+          </View>
+        );
+
+    }else {
+      return (
+        <NameCircular name={name} badge={badge} isV={certified}/>
+      );
+    }
   }
 });
 
@@ -53,6 +80,17 @@ let styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     backgroundColor: '#ff0000',
+  },
+  head: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderColor: '#cccccc',
+    borderWidth: 1
+  },
+  certified:{
+    width: 15,
+    height: 15
   }
 });
 module.exports = HeaderPic;

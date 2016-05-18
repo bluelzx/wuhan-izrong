@@ -34,7 +34,7 @@ let NavBarView =
       fontColor: DictStyle.colorSet.navBarFont,
       contentBackgroundColor: DictStyle.colorSet.content,
       actionButton: null,
-      navBarBottomWidth: 1
+      navBarBottomWidth: 0
     };
   },
   _renderLeft: function () {

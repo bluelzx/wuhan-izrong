@@ -22,7 +22,8 @@ let Input = React.createClass({
     maxLength: React.PropTypes.number,
     value: React.PropTypes.string,
     field: React.PropTypes.string.isRequired,
-    onFocus: React.PropTypes.func
+    onFocus: React.PropTypes.func,
+    onLayout: React.PropTypes.func
   },
 
   getDefaultProps(){
@@ -56,20 +57,21 @@ let Input = React.createClass({
       <View style={this.props.containerStyle}>
         <Image style={this.props.iconStyle} source={DictIcon[this.props.icon]}/>
         <TextInput
-          style={this.props.inputStyle}
-          underlineColorAndroid="transparent"
-          onChangeText={(text) => this.props.onChangeText(this.props.field, text)}
-          maxLength={this.props.maxLength}
-          defaultValue={this.props.defaultValue}
-          secureTextEntry={this.props.inputType === 'password'}
-          autoCorrect={false}
-          autoCapitalize="none"
-          value={this.props.value}
-          placeholder={this.props.placeholder}
-          placeholderTextColor={this.props.placeholderTextColor}
-          clearButtonMode="while-editing"
-          keyboardType={this.props.inputType}
-          onFocus={this.props.onFocus}
+            style={this.props.inputStyle}
+            underlineColorAndroid="transparent"
+            onChangeText={(text) => this.props.onChangeText(this.props.field, text)}
+            maxLength={this.props.maxLength}
+            defaultValue={this.props.defaultValue}
+            secureTextEntry={this.props.inputType === 'password'}
+            autoCorrect={false}
+            autoCapitalize="none"
+            value={this.props.value}
+            placeholder={this.props.placeholder}
+            placeholderTextColor={this.props.placeholderTextColor}
+            clearButtonMode="while-editing"
+            keyboardType={this.props.inputType}
+            onFocus={this.props.onFocus}
+            onLayout={this.props.onLayout}
         />
       </View>
     );

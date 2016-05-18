@@ -20,6 +20,7 @@ let Register_valiMobile = require('./registerValiMobile');
 let Login_ValiSMS = require('./loginValiSMS');
 let Validation = require('../../comp/utils/validation');
 let DictStyle = require('../../constants/dictStyle');
+let CallPhone = require('../../comp/utils/callPhone');
 
 let Login = React.createClass({
   getStateFromStores() {
@@ -92,7 +93,7 @@ let Login = React.createClass({
                resizeMode='cover'
                source={require('../../image/login/logo.png')}
         />
-        <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop: 18}]}>资融网同业平台</Text>
+        <Text style={{fontSize:20}}>爱资融同业平台</Text>
       </View>
     );
   },
@@ -102,9 +103,12 @@ let Login = React.createClass({
       <NavBarView navigator={this.props.navigator} title='登录' showBack={false}>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.renderLogo()}
-          <Input  type="default" placeholder='手机号' maxLength={11}
-                 field='mobileNo' onChangeText={this._onChangeText} icon='phone' inputType="number-pad"
-          />
+          <View style={{marginTop:10}}>
+            <Input  type="default" placeholder='手机号' maxLength={11}
+                    field='mobileNo' onChangeText={this._onChangeText} icon='phone' inputType="number-pad"
+            />
+          </View>
+
 
           <Button
             containerStyle={{marginTop: 20}}
@@ -126,7 +130,7 @@ let Login = React.createClass({
         <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
           <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
             <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
-            <TouchableOpacity onPress={()=>{}}>
+            <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
               <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
             </TouchableOpacity>
           </View>
@@ -177,8 +181,8 @@ let styles = StyleSheet.create({
   },
   logo: {
     marginTop: 30,
-    height: 60,
-    width: 120
+    height: 110,
+    width: 100
   },
   inputStyle: {
     height: 47,

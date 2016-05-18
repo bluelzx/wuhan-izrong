@@ -126,6 +126,7 @@ let Market = React.createClass({
 
   _onChange () {
     this.setState(this.getStateFromStores());
+    this.refs.marketGiftedListView._refresh();
   },
 
   /**
@@ -184,7 +185,13 @@ let Market = React.createClass({
             allLoaded: true // the end of the list is reached
           });
         }, 1000); // simulating network fetching
-        Alert(errorData.msgContent || 'exception');
+        if(errorData.msgCode == 'APP_SYS_TOKEN_INVALID'){
+          AppStore.forceLogout();
+        }else if(errorData.message.includes('Network request failed')){
+          Alert('网络异常');
+        }else{
+          Alert(errorData.msgContent || errorData.message);
+        }
       }
     );
   },
@@ -224,7 +231,7 @@ let Market = React.createClass({
       <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
         <View
           style={{flexDirection:'row',height: 50, backgroundColor: 'white',alignItems:'center',borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}>
-          <Image style={{width:25,height:25,marginLeft:15,borderRadius:5}}
+          <Image style={{width:30,height:30,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
           <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:DictStyle.marketSet.fontColor}}>
@@ -364,11 +371,11 @@ let Market = React.createClass({
         <TouchableOpacity onPress={pressFilterType} activeOpacity={1}
                           underlayColor="#f0f0f0">
           <View
-            style={{width: screenWidth / 3,height:36,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderRightColor:'#edeef4',borderRightWidth:1,borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}>
+            style={{width: screenWidth / 3,height:DictStyle.heightSet.filter,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderRightColor:DictStyle.marketSet.filterBorder,borderRightWidth:1,borderBottomWidth:0.5,borderBottomColor:DictStyle.marketSet.filterBorder}}>
             <Text
-              style={{width:screenWidth/3 - 30,color:(this.state.clickFilterType == 1)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}}
+              style={{width:screenWidth/3 - 30,textAlign:'center',fontSize:DictStyle.marketSet.filterFontSize,color:(this.state.clickFilterType == 1)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}}
               numberOfLines={1}>{this.state.levelOneText}</Text>
-            <Icon name={(this.state.clickFilterType == 1)?"arrow-up-b":"arrow-down-b"} size={20}
+            <Icon name={(this.state.clickFilterType == 1)?'chevron-up':'chevron-down'} size={15}
                   color={(this.state.clickFilterType == 1)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}/>
 
           </View>
@@ -376,22 +383,22 @@ let Market = React.createClass({
         <TouchableOpacity onPress={pressFilterTime} activeOpacity={1}
                           underlayColor="#f0f0f0">
           <View
-            style={{width: screenWidth / 3,height:36,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderRightColor:'#edeef4',borderRightWidth:1,borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}>
+            style={{width: screenWidth / 3,height:DictStyle.heightSet.filter,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderRightColor:DictStyle.marketSet.filterBorder,borderRightWidth:0.5,borderBottomWidth:0.5,borderBottomColor:DictStyle.marketSet.filterBorder}}>
             <Text
-              style={{width:screenWidth/3 - 30,color:(this.state.clickFilterTime == 1)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}}
+              style={{width:screenWidth/3 - 30,textAlign:'center',fontSize:DictStyle.marketSet.filterFontSize,color:(this.state.clickFilterTime == 1)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}}
               numberOfLines={1}>{this.state.optionTwoText}</Text>
-            <Icon name={(this.state.clickFilterTime == 1)?"arrow-up-b":"arrow-down-b"} size={20}
+            <Icon name={(this.state.clickFilterTime == 1)?'chevron-up':'chevron-down'} size={15}
                   color={(this.state.clickFilterTime == 1)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}/>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={pressFilterOther} activeOpacity={1}
                           underlayColor="#f0f0f0">
           <View
-            style={{width: screenWidth / 3,height:36,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}>
+            style={{width: screenWidth / 3,height:DictStyle.heightSet.filter,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderBottomWidth:0.5,borderBottomColor:DictStyle.marketSet.filterBorder}}>
             <Text
-              style={{width:screenWidth/3 - 30,color:(this.state.clickFilterOther == 1)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}}
+              style={{width:screenWidth/3 - 30,textAlign:'center',fontSize:DictStyle.marketSet.filterFontSize,color:(this.state.clickFilterOther == 1)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}}
               numberOfLines={1}>{'筛选'}</Text>
-            <Icon name={(this.state.clickFilterOther == 1)?"arrow-up-b":"arrow-down-b"} size={20}
+            <Icon name={(this.state.clickFilterOther == 1)?'chevron-up':'chevron-down'} size={15}
                   color={(this.state.clickFilterOther == 1)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}/>
           </View>
         </TouchableOpacity>
@@ -409,14 +416,14 @@ let Market = React.createClass({
     }
     else {
       return (
-        <View style={{position:"absolute",left:0,top:36}}>
+        <View style={{position:"absolute",left:0,top:DictStyle.heightSet.filter}}>
           <TouchableOpacity onPress={()=>this.pressFilterType()} activeOpacity={0.8} underlayColor="#f0f0f0">
             <View
               style={{flex: 1, backgroundColor: 'black',opacity:0.2,height:screenHeight,width:screenWidth}}>
             </View>
           </TouchableOpacity>
           <ListView
-            style={{backgroundColor:'white',height:180,position:"absolute",left:0,top:0,opacity:this.state.clickFilterType}}
+            style={{backgroundColor:'white',height:DictStyle.heightSet.filter*5,position:"absolute",left:0,top:0,opacity:this.state.clickFilterType}}
             dataSource={data.cloneWithRows(this.state.categorySource)}
             enableEmptySections={true}
             renderRow={this.renderTypeRow1}/>
@@ -432,14 +439,14 @@ let Market = React.createClass({
       )
     } else {
       return (
-        <View style={{position:"absolute",left:0,top:36}}>
+        <View style={{position:"absolute",left:0,top:DictStyle.heightSet.filter}}>
           <TouchableOpacity onPress={()=>this.pressFilterTime()} activeOpacity={0.8} underlayColor="#f0f0f0">
             <View
               style={{flex: 1, backgroundColor: 'black',opacity:0.2,height:screenHeight,width:screenWidth}}>
             </View>
           </TouchableOpacity>
           <ListView
-            style={{backgroundColor:'white',height:108,position:"absolute",left:0,top:0,opacity:this.state.clickFilterTime}}
+            style={{backgroundColor:'white',height:DictStyle.heightSet.filter*3,position:"absolute",left:0,top:0,opacity:this.state.clickFilterTime}}
             dataSource={data.cloneWithRows(this.state.termSource)}
             enableEmptySections={true}
             renderRow={this.renderTimeRow}
@@ -458,14 +465,14 @@ let Market = React.createClass({
     } else {
       return (
         <View
-          style={{backgroundColor:'white',width:screenWidth,height:screenHeight - 149,position:"absolute",left:0,top:36}}>
+          style={{backgroundColor:'white',width:screenWidth,height:screenHeight - 149,position:"absolute",left:0,top:DictStyle.heightSet.filter}}>
           <ScrollView>
             <TouchableOpacity onPress={()=>this.toSelectOrg(SelectOrg)} activeOpacity={0.8} underlayColor="#f0f0f0">
               <View
                 style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4b76df',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
                 <Text
                   style={{fontSize:16,marginLeft:10,width: screenWidth-66,color:'white'}}
-                  numberOfLines={1}>{this.state.orgValue == '' ? '全部发布机构' : this.state.orgValue}</Text>
+                  numberOfLines={1}>{this.state.orgValue == '' ? '全部' : this.state.orgValue}</Text>
                 <Image style={{margin:10,width:16,height:16}}
                        source={require('../../image/market/next.png')}
                 />
@@ -504,11 +511,11 @@ let Market = React.createClass({
   renderTypeRow1(rowData, sectionID, rowID){
     return (
       <TouchableOpacity
-        style={{height:36,backgroundColor:(this.state.pickTypeRow1 == rowID)?'#f4fdfc':'white',alignItems: "center",justifyContent: "center",borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}
+        style={{height:DictStyle.heightSet.filter,backgroundColor:(this.state.pickTypeRow1 == rowID)?'#f4fdfc':'white',alignItems: "center",justifyContent: "center",borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}
         onPress={()=>this.pressTypeRow1(rowID)} activeOpacity={1}
         underlayColor="#f0f0f0">
         <View style={{width:screenWidth}}>
-          <Text style={{marginLeft:10,color:DictStyle.marketSet.fontColor}}>{rowData.displayName}</Text>
+          <Text style={{fontSize:DictStyle.marketSet.filterFontSize,marginLeft:10,color:DictStyle.marketSet.fontColor}}>{rowData.displayName}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -516,11 +523,11 @@ let Market = React.createClass({
   renderTimeRow(rowData, sectionID, rowID){
     return (
       <TouchableOpacity
-        style={{height:36,backgroundColor:(this.state.pickTimeRow == rowID)?'#f4fdfc':'white',alignItems: "center",justifyContent: "center",borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}
+        style={{height:DictStyle.heightSet.filter,backgroundColor:(this.state.pickTimeRow == rowID)?'#f4fdfc':'white',alignItems: "center",justifyContent: "center",borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}
         onPress={()=>this.pressTimeRow(rowID)} activeOpacity={1}
         underlayColor="#f0f0f0">
         <View style={{width:screenWidth}}>
-          <Text style={{marginLeft:10,color:DictStyle.marketSet.fontColor}}>{rowData.fieldDisplayName}</Text>
+          <Text style={{fontSize:DictStyle.marketSet.filterFontSize,marginLeft:10,color:DictStyle.marketSet.fontColor}}>{rowData.fieldDisplayName}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -562,7 +569,7 @@ let Market = React.createClass({
       navigator.push({
         comp: name,
         callBack: this.callback,
-        param: {needAll: true}
+        param: {needAll: true , isFromMarket: true}
       })
     }
   },

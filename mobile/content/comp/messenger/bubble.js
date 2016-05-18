@@ -5,6 +5,8 @@ import numeral from 'numeral';
 
 let PicViewer = require('../utils/picViewer');
 let screenWidth = Dimensions.get('window').width;
+let Lightbox = require('../lightBox/Lightbox');
+
 let styles = StyleSheet.create({
   bubble: {
     borderRadius: 5,
@@ -79,9 +81,33 @@ export default class Bubble extends React.Component {
 
     if (this.props.contentType === MSG_CONTENT_TYPE.IMAGE) {
       return (
-        <View style={[styles.bubble, customStyle]}>
-          <PicViewer source={this.props.content} />
-        </View>
+
+      <View style={[styles.bubble, customStyle]}>
+        <Image
+          style={{
+                flex: 1,
+                width: 100,
+                height: 100,
+                }}
+          source={{uri: this.props.content}}
+        ></Image>
+      </View>
+
+          //<Lightbox underlayColor='#44B5E6'
+          //          imageSource={{uri:this.props.content}}>
+          //    <View style={[styles.bubble, customStyle]}>
+          //        <Image
+          //            style={{
+          //      flex: 1,
+          //      width: 100,
+          //      height: 100,
+          //      }}
+          //            source={{uri: this.props.content}}
+          //        ></Image>
+          //    </View>
+          //</Lightbox>
+
+
       );
     }
 

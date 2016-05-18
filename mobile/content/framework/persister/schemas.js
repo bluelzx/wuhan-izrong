@@ -5,8 +5,8 @@ let DeviceSchema = {
   name: "device",
   primaryKey: 'id',
   properties: {
-    id:{type: 'int', optional: true},
-    deviceOS: {type: 'string',optional: true},
+    id: {type: 'int', optional: true},
+    deviceOS: {type: 'string', optional: true},
     APNSToken: {type: 'string', optional: true}
   }
 };
@@ -16,7 +16,7 @@ let GroupSchema = {
   primaryKey: 'groupId',
   properties: {
     groupId: {type: 'int', optional: true},
-    groupImageUrl:{type: 'string', optional: true},
+    groupImageUrl: {type: 'string', optional: true},
     groupName: {type: 'string', optional: true},
     groupMasterUid: {type: 'int', optional: true},
     memberNum: {type: 'int', optional: true},
@@ -41,7 +41,7 @@ let MessageSchema = {
     revTime: {type: 'date', optional: true},
     isRead: {type: 'bool', option: true},
     status: {type: 'string', optional: true},//状态: 是否发送成功
-    ownerId:{type:'int',optional: true}
+    ownerId: {type: 'int', optional: true}
   }
 };
 
@@ -51,9 +51,9 @@ let SessionSchema = {
   properties: {
     sessionId: {type: 'string', optional: true},
     type: {type: 'string', optional: true},
-    badge:{type: 'int', optional: true},
+    badge: {type: 'int', optional: true},
     title: {type: 'string', optional: true},
-    content:{type: 'string', optional: true},
+    content: {type: 'string', optional: true},
     lastTime: {type: 'date', optional: true},
     contentType: {type: 'string', optional: true}
   }
@@ -101,7 +101,8 @@ let ImUserInfoSchema = {
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
     orgId: {type: 'int', optional: true},
-    mute: {type: 'bool', optional: true}  //是否屏蔽该用户
+    mute: {type: 'bool', optional: true},  //是否屏蔽该用户
+    certificated: {type: 'bool', optional: true} //用户是否认证
   }
 };
 
@@ -131,9 +132,10 @@ let LoginUserInfoSchema = {
     publicWeChat: {type: 'bool', optional: true},
     publicQQ: {type: 'bool', optional: true},
     orgId: {type: 'int', optional: true},
-    lastLoginTime:{type: 'date', optional: true},  //本地增加,用于多用户登陆排序
+    lastLoginTime: {type: 'date', optional: true},  //本地增加,用于多用户登陆排序
     token: {type: 'string', optional: true},
-    lastSyncTime:{type:'date', optional:true}
+    lastSyncTime: {type: 'date', optional: true},
+    certificated: {type: 'bool', optional: true}, //用户是否认证
   }
 };
 
@@ -226,27 +228,26 @@ let OrderItemSchema = {
 
 //主页轮播图片地址
 let HomePageSchema = {
-  name:"homePage",
-  primaryKey:'seq',
+  name: "homePage",
+  primaryKey: 'seq',
   properties: {
-    seq:{type:'string', optional:true},
-    url:{type:'string', optional:true},
+    id: {type: 'int', optional: true},
+    seq: {type: 'string', optional: true},
+    url: {type: 'string', optional: true}
   }
 };
 
 //平台推送消息
 let PlatFormInfo = {
-  name:"platFormInfo",
-  primaryKey:'infoId',
+  name: "platFormInfo",
+  primaryKey: 'infoId',
   properties: {
-    infoId:{type:'int', optional:true},
-    title:{type:'string', optional:true},
-    content:{type:'string', optional:true},
-    createDate:{type: 'date', optional: true},
+    infoId: {type: 'int', optional: true},
+    title: {type: 'string', optional: true},
+    content: {type: 'string', optional: true},
+    createDate: {type: 'date', optional: true},
   }
 };
-
-
 
 
 module.exports = {

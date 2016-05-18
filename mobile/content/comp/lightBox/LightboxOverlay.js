@@ -26,6 +26,7 @@ var WINDOW_WIDTH = Dimensions.get('window').width;
 var DRAG_DISMISS_THRESHOLD = 150;
 var STATUS_BAR_OFFSET = (Platform.OS === 'android' ? -25 : 0);
 var { Alert } = require('mx-artifacts');
+var UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 
 var LightboxOverlay = React.createClass({
     propTypes: {
@@ -102,7 +103,7 @@ var LightboxOverlay = React.createClass({
                 } else {
                     Animated.spring(
                         this.state.pan,
-                        {toValue: 0, ...this.props.springConfig}
+                      {toValue: 0, ...this.props.param.springConfig}
                     ).start(() => {
                         this.setState({isPanning: false});
                     });
@@ -112,7 +113,7 @@ var LightboxOverlay = React.createClass({
     },
 
     componentDidMount: function () {
-        if (this.props.isOpen) {
+      if (this.props.param.isOpen) {
             this.open();
         }
     },
@@ -131,40 +132,58 @@ var LightboxOverlay = React.createClass({
 
         Animated.spring(
             this.state.openVal,
-            {toValue: 1, ...this.props.springConfig}
+          {toValue: 1, ...this.props.param.springConfig}
         ).start(() => this.setState({isAnimating: false}));
     },
 
     close: function () {
         //StatusBar.setHidden(false, 'fade');
         this.setState({
-            isAnimating: true,
+          isAnimating: false,
         });
-        Animated.spring(
-            this.state.openVal,
-            {toValue: 0, ...this.props.springConfig}
-        ).start(() => {
-            this.setState({
-                isAnimating: false,
-            });
-            this.props.onClose();
-        });
+      this.props.param.onClose();
+      //this.setState({
+      //    isAnimating: true,
+      //});
+      //Animated.spring(
+      //    this.state.openVal,
+      //  {toValue: 0, ...this.props.param.springConfig}
+      //).start(() => {
+      //    this.setState({
+      //        isAnimating: false,
+      //    });
+      //  this.props.param.onClose();
+      //});
     },
 
     saveImg: function () {
-        CameraRoll.saveImageWithTag(this.props.imageSource.uri).then(
-            (data) => {
-                console.log(data);
-                Alert('保存成功')
-            },
-            (err) => {
-                console.log('CameraRoll,err' + err);
-            });
+      console.log(this.props.param.imageSource.uri);
+      if (Platform.OS === 'ios') {
+        CameraRoll.saveImageWithTag(this.props.param.imageSource.uri).then(
+          (data) => {
+            console.log(data);
+            Alert('保存成功');
+          },
+          (err) => {
+            console.log('CameraRoll,err' + err);
+            Alert('保存失败');
+          });
+      } else {
+        CameraRoll.saveImageWithTag(this.props.param.imageSource.uri).then(
+          (data) => {
+            console.log(data);
+            Alert('保存成功');
+          },
+          (err) => {
+            console.log('CameraRoll,err' + err);
+            Alert('保存失败');
+          });
+      }
     },
 
     moreHandle: function () {
         if (Platform.OS === 'ios') {
-            let options = this.props.deleteHeader ? [
+          let options = this.props.param.deleteHeader ? [
                 '保存图片',
                 '删除图片',
                 '返回'
@@ -176,41 +195,49 @@ var LightboxOverlay = React.createClass({
                 {
                     title: '更多操作',
                     options: options,
-                    cancelButtonIndex: this.props.deleteHeader ? 2 : 1
+                  cancelButtonIndex: this.props.param.deleteHeader ? 2 : 1
                 },
                 (buttonIndex) => {
                     if (buttonIndex == 0) {
                         this.saveImg();
                     } else if (buttonIndex == 1) {
-                        if (this.props.deleteHeader) {
-                            this.close();
-                            this.props.deleteHeader();
+                      if (this.props.param.deleteHeader) {
+                          this.close();
+                          this.props.param.deleteHeader();
                         }
                     }
                 });
         } else {
+          if (this.props.param.deleteHeader) {
             UserPhotoPicModule.showSaveImgDialog(
-                (index) => {
-                    switch (index) {
-                        case 0:
-                            this.saveImg();
-                            break;
-                        case 1:
-                            if (this.props.deleteHeader) {
-                                this.close();
-                                this.props.deleteHeader();
-                            }
-                            break;
-                        default:
-                            break;
+              (index) => {
+                switch (index) {
+                  case 0:
+                    this.saveImg();
+                    break;
+                  case 1:
+                    if (this.props.param.deleteHeader) {
+                        this.close();
+                        this.props.param.deleteHeader();
                     }
+                    break;
+                  default:
+                    break;
                 }
+              }
             );
+          } else {
+            UserPhotoPicModule.showImgDialog(
+              () => {
+                this.saveImg();
+              }
+            );
+          }
         }
     },
 
     componentWillReceiveProps: function (props) {
-        if (this.props.isOpen != props.isOpen && props.isOpen) {
+      if (this.props.param.isOpen != props.isOpen && props.isOpen) {
             this.open();
         }
     },
@@ -222,7 +249,7 @@ var LightboxOverlay = React.createClass({
             swipeToDismiss,
             origin,
             backgroundColor,
-            } = this.props;
+          } = this.props.param;
 
         var {
             isPanning,
@@ -285,7 +312,7 @@ var LightboxOverlay = React.createClass({
         var content = (
             <Animated.Image style={[openStyle,dragStyle,{justifyContent:'center',alignItems:'center'}]} {...handlers}
                             resizeMode='contain'
-                            source={this.props.imageSource}
+                            source={this.props.param.imageSource}
             >
             </Animated.Image>
         );
@@ -351,7 +378,7 @@ var styles = StyleSheet.create({
     moreView: {
         fontSize: 35,
         color: 'white',
-        lineHeight: 35,
+      lineHeight: 40,
         width: 50,
         textAlign: 'center',
         shadowOffset: {

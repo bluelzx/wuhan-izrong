@@ -28,7 +28,7 @@ let Spread = React.createClass({
   render: function () {
     return (
       <NavBarView
-        navigator={this.props.navigator} title='详细内容'>
+        navigator={this.props.navigator} title='爱资融同业平台'>
         <ScrollView style={{flexDirection: 'column'}}>
           {this.renderItem(this.props.param.item)}
         </ScrollView>

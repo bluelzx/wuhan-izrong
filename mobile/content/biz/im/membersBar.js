@@ -7,8 +7,9 @@ const {Text, View, TouchableOpacity} = React;
 let CircularButton = require('./circularButton');
 let ImUserInfo = require('./imUserInfo');
 let DictStyle = require('../../constants/dictStyle');
+let HeaderPic = require('./headerPic');
 
-let NameCircular = require('./nameCircular').NameCircular;
+//let NameCircular = require('./nameCircular').NameCircular;
 
 let MembersBar = React.createClass({
 
@@ -32,7 +33,7 @@ let MembersBar = React.createClass({
         param:member
         })} key={member.userId} style={{alignItems:'center',padding:5}}>
         <View style={{marginTop:5,height: 40,width: 40}}>
-          <NameCircular name={member.realName}/>
+          <HeaderPic photoFileUrl={member.photoFileUrl}  certified={member.certified} name={member.realName}/>
         </View>
         <Text numberOfLines={1} style={{color:DictStyle.groupManage.memberNameColor,marginTop:4, width:40}}>{member.realName}</Text>
       </TouchableOpacity>

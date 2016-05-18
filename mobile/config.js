@@ -1,9 +1,14 @@
 var developConfig = {
   Dev: true, // Switch for log. true means print.
-  //Host: 'http://192.168.64.205:9101/fas',
-  Host: 'http://192.168.64.205:9102/fas',
-  //Host: 'http://192.168.64.248:9081/fas',
+  Host: 'http://192.168.64.205:9102/fas',   //dev
   ImHost:'192.168.61.84:5000'//dev
+};
+
+var qaConfig = {
+  Dev: false,
+  //Host: 'http://192.168.64.205:9101/fas',     //qa
+  Host: 'http://192.168.64.205:9101/fas',     //qa
+  ImHost:'192.168.61.84:4000'//qa
 };
 
 var productConfig = {

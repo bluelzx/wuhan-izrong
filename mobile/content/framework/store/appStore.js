@@ -45,14 +45,13 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getAPNSToken: () => _get_apns_token(),
   updateLastSyncTime: (t)=>_updateLastSyncTime(t),
   getToken: () => _data.token || '',
-  //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTAxIiwiaWF0IjoxNDYxNTUyNDY0LCJzdWIiOiJzd2VpMUBxcS5jb20iLCJpc3MiOiJVc2VySWQtMTAxIn0.8NmlrWPTvJqIWJDjFxte53YKnGLmmejM9RrqDT1MAvM',
-  //getToken:() => 'eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJVc2VySWQtMTA5IiwiaWF0IjoxNDYxNTUzMTgzLCJzdWIiOiJ3ZWlzZW4zIiwiaXNzIjoiVXNlcklkLTEwOSJ9.SahHndVnBfJo2RforCkAN0XMXAcrL10Gzi3-EMQQsBM',
   appInit: () => _appInit(),
   register: (data)=> _register(data),
   login: (data) => _login(data),
+  simpleLogin: (data) => _simpleLogin(data),
   logout: (userId) => _logout(userId),
   forceLogout: () => _force_logout(),
-  setForceLogout:(isForceLogout) => _setForceLogout(isForceLogout),
+  setForceLogout: () => _setForceLogout(),
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
@@ -60,24 +59,23 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   saveFilters: (filters) => _saveFilters(filters),
   getFilters: ()=> _getFilters(),
   saveOrgList: (orgList)=> _saveOrgList(orgList),
+  updateOrgInfo: (orgInfo)=> _updateOrgInfo(orgInfo),
   getOrgList: ()=> _getOrgList(),
   updateUserInfo: (column, value)=> _updateUserInfo(column, value),
   saveCategory: (data) => _saveCategory(data),
   getCategory: ()=> _getCategory(),
-  saveItem: (data) => _saveItem(data),
-  getItem: ()=> _getItem(),
   queryAllHomePageInfo: ()=>_queryAllHomePageInfo(),
   queryAllPlatFormInfo: ()=>_queryAllPlatFormInfo(),
   getBadge: ()=>_getBadge(),
   startJavaServer: () => ServiceModule.startAppService(_data.token, 0, ImHost),
   //stopJavaServer:() => ServiceModule.stopMyAppService()
   savePicUrl: (picUrl) => _data.picUrl = picUrl,
-  getPicUrl:()=>_data.picUrl
+  getPicUrl: ()=>_data.picUrl
 });
 
 let _queryAllPlatFormInfo = function () {
   return Persister.queryAllPlatFormInfo();
-}
+};
 
 // Private Functions
 let _handleConnectivityChange = (isConnected) => {
@@ -85,15 +83,15 @@ let _handleConnectivityChange = (isConnected) => {
 };
 
 let _appInit = () => {
-  //NetInfo.isConnected.addEventListener(
-  //  'change',
-  //  _handleConnectivityChange
-  //);
-  //NetInfo.isConnected.fetch().done(
-  //  (isConnected) => {
-  //    _info.netWorkState = isConnected;
-  //  }
-  //);
+  NetInfo.isConnected.addEventListener(
+    'change',
+    _handleConnectivityChange
+  );
+  NetInfo.isConnected.fetch().done(
+    (isConnected) => {
+      _info.netWorkState = isConnected;
+    }
+  );
   _info.initLoadingState = false;
   _info.apnTokens = Persister.getAPNSToken();
   _.assign(_data, {
@@ -110,6 +108,7 @@ let _appInit = () => {
 
 let _register = (data) => {
   Persister.saveAppData(data);
+  _saveFilters(data.appOrderSearchResult);
   _.assign(_data, {
     token: _getToken()
   });
@@ -117,11 +116,13 @@ let _register = (data) => {
 };
 
 let _login = (data) => {
+  _data.filters = data.appOrderSearchResult;
   return Persister.saveAppData(data).then(()=> {
     _.assign(_data, {
       token: _getToken()
     });
-    // imSocket.init(data.token);
+    //保存filter到_data
+    _saveFilters(data.appOrderSearchResult);
     AppStore.emitChange();
   });
   //.then(()=>{
@@ -130,6 +131,15 @@ let _login = (data) => {
   //    ServiceModule.startAppService(_data.token, 0, ImHost);
   //  }
   //});
+};
+
+let _simpleLogin = (data) => {
+  return Persister.saveSimpleLoginData(data,AppStore.getUserId()).then(()=> {
+    _.assign(_data, {
+      token: _getToken()
+    });
+    AppStore.emitChange();
+  });
 };
 
 let _logout = (userId) => {
@@ -143,16 +153,16 @@ let _logout = (userId) => {
 };
 
 let _force_logout = () => {
-  _info.isLogout = true;
-  _info.isForceLogout = true;
   //TODO:'强制登出'
+  _info.isForceLogout = true;
+  //清空token
+  _logout(_getUserId());
   AppStore.emitChange();
 };
 
-//TODO:'强制登出后设置为未登出'
-let _setForceLogout = (isForceLogout)=>{
-  _info.isLogout = isForceLogout;
-  _info.isForceLogout = isForceLogout;
+let _setForceLogout = () => {
+  _info.isLogout = false;
+  _info.isForceLogout = false;
 };
 
 let _save_apns_token = (apnsToken) => {
@@ -181,8 +191,8 @@ let _getLoginUserInfo = () => {
 
 let _saveFilters = function (filters) {
   _data.filters = filters;
-  Persister.saveFilters(filters);
   AppStore.emitChange(MARKET_CHANGE);
+  AppStore.emitChange();
 };
 
 let _getFilters = ()=> {
@@ -199,6 +209,9 @@ let _getOrgList = ()=> {
   return Persister.getOrgList();
 };
 
+let _updateOrgInfo = (orgInfo)=> {
+  Persister.updateOrgInfo(orgInfo);
+};
 
 let _getOrgByOrgId = (orgId)=> {
   return Persister.getOrgByOrgId(orgId);
@@ -221,12 +234,6 @@ let _saveCategory = (data) => {
   _.assign(_data, {
     category: data
   });
-};
-
-let _saveItem = (data) => {
-  _.assign(_data, {
-    item: data
-  });
   AppStore.emitChange(MARKET_CHANGE);
 };
 
@@ -234,9 +241,6 @@ let _getCategory = () => {
   return _data.category;
 };
 
-let _getItem = () => {
-  return _data.item;
-};
 
 let _getBadge = () => {
   let badge = Persister.getSessionBadge();

@@ -32,7 +32,9 @@ let Chat = React.createClass({
       toId: param.userId,
       sessionId: param.sessionId,
       userId:user.userId,
-      myName:user.realName
+      myName:user.realName,
+      photoFileUrl:user.photoFileUrl,
+      certified:user.certified
     });
     AppStore.addChangeListener(this._onChange, IM_SESSION);
   },

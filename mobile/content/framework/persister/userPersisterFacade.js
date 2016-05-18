@@ -38,7 +38,7 @@ let _updateUserInfo = function (column, value) {
         }, true);
       });
       break;
-    case 'publicMobile':
+    case 'isPublicMobile':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
           userId: userId,
@@ -54,7 +54,7 @@ let _updateUserInfo = function (column, value) {
         }, true);
       });
       break;
-    case 'publicPhone':
+    case 'isPublicPhone':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
           userId: userId,
@@ -70,7 +70,7 @@ let _updateUserInfo = function (column, value) {
         }, true);
       });
       break;
-    case 'publicQq':
+    case 'isPublicQq':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
           userId: userId,
@@ -86,7 +86,7 @@ let _updateUserInfo = function (column, value) {
         }, true);
       });
       break;
-    case 'publicWeChat':
+    case 'isPublicWeChat':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
           userId: userId,
@@ -102,7 +102,7 @@ let _updateUserInfo = function (column, value) {
         }, true);
       });
       break;
-    case 'publicEmail':
+    case 'isPublicEmail':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
           userId: userId,
@@ -118,7 +118,7 @@ let _updateUserInfo = function (column, value) {
         }, true);
       });
       break;
-    case 'publicDepart':
+    case 'isPublicDepart':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
           userId: userId,
@@ -134,7 +134,7 @@ let _updateUserInfo = function (column, value) {
         }, true);
       });
       break;
-    case 'publicTitle':
+    case 'isPublicTitle':
       _realm.write(() => {
         _realm.create(LOGINUSERINFO, {
           userId: userId,
@@ -147,6 +147,22 @@ let _updateUserInfo = function (column, value) {
         _realm.create(LOGINUSERINFO, {
           userId: userId,
           photoFileUrl: value
+        }, true);
+      });
+      break;
+    case 'certificated':
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId: userId,
+          certificated: value
+        }, true);
+      });
+      break;
+    case 'status':
+      _realm.write(() => {
+        _realm.create(LOGINUSERINFO, {
+          userId: userId,
+          status: value
         }, true);
       });
       break;

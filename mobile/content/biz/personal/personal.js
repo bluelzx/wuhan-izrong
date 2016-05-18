@@ -35,7 +35,7 @@ let Personal = React.createClass({
       realName: userInfo.realName,
       orgName: orgBean.orgValue,
       photoFileUrl: userInfo.photoFileUrl,
-      certified: true
+      certificated: userInfo.certificated
     };
   },
 
@@ -66,7 +66,7 @@ let Personal = React.createClass({
 
   returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
-      if (this.state.certified) {
+      if (this.state.certificated) {
         return (
           <View>
             <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
@@ -79,18 +79,13 @@ let Personal = React.createClass({
         <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
       );
     } else {
-      if (this.state.certified) {
-        return (
-          <View style={{marginLeft:20}}>
-            <NameCircular name={this.state.realName}/>
-          </View>
-        );
-      }
+
       return (
         <View style={{marginLeft:20}}>
-          <NameCircular name={this.state.realName}/>
+          <NameCircular name={this.state.realName} isV={this.state.certificated}/>
         </View>
       );
+
     }
   },
 
@@ -155,10 +150,10 @@ let styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold'
   },
-  certified:{
+  certified: {
     width: 15,
     height: 15,
-    marginLeft:20
+    marginLeft: 20
   }
 });
 

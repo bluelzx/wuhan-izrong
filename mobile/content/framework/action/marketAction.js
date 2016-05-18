@@ -13,7 +13,6 @@ let AppLinks = require('../../constants/appLinks');
 let pub = '/pub';
 
 let MarketActions = {
-  bizOrderMarketSearchDefaultSearch: () => _bizOrderMarketSearchDefaultSearch(AppLinks.bizOrderMarketSearchDefaultSearch),
   bizOrderMarketSearch: (p) => _bfetchWithUrlAndP(AppLinks.bizOrderMarketSearch, p),
   getBizOrderInMarket: (p) => _pfetchWithUrlAndP(AppLinks.getBizOrderInMarket, p),
 
@@ -25,18 +24,6 @@ let MarketActions = {
   downselfBizOrder: (p) => _pfetchWithUrlAndP(AppLinks.downselfBizOrder, p),
   updateBizOrder: (p) => _bfetchWithUrlAndP(AppLinks.updateBizOrder, p),
   getBizOrderCategoryAndItem: () => _pfetch1WithUrl(AppLinks.getBizOrderCategoryAndItem)
-
-};
-
-let _bizOrderMarketSearchDefaultSearch = function(url){
-  return new Promise((resolve, reject) => {
-    BFetch(url).then((response) => {
-      resolve(response);
-      AppStore.saveFilters(response);
-    }).catch((errorData) => {
-      reject(errorData);
-    });
-  });
 };
 
 let _bfetchWithUrl = function (url) {

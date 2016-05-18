@@ -49,6 +49,8 @@ let amountUnit = ['万', '亿'];
 import Share from 'react-native-share';
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Lightbox = require('../../comp/lightBox/Lightbox');
+let Icon = require('react-native-vector-icons/Ionicons');
+let { MARKET_CHANGE } = require('../../constants/dictEvent');
 
 let Publish = React.createClass({
   getInitialState(){
@@ -78,7 +80,7 @@ let Publish = React.createClass({
       amount: 0,
       fileUrlList: [],
 
-      keyboardSpace: 0,
+      keyboardSpace: 0
     }
   },
 
@@ -98,11 +100,20 @@ let Publish = React.createClass({
     //// Keyboard events监听
     DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
     DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
+    AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   componentWillUnmount: function () {
     DeviceEventEmitter.removeAllListeners('keyboardWillShow');
     DeviceEventEmitter.removeAllListeners('keyboardWillHide');
+    AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
+  },
+
+  _onChange () {
+    let myCategory = AppStore.getCategory();
+    this.setState({
+      bizCategory: myCategory != null ? myCategory : categoryArr.length == 0 ? [] : categoryArr[0]
+    })
   },
 
   // Keyboard actions
@@ -111,6 +122,15 @@ let Publish = React.createClass({
     this.setState({
       keyboardSpace: keyboardSpace,
     });
+
+      this.activeInput.measure((ox, oy, width, height, px, py) => {
+          let keyBoardTop = screenHeight - this.state.keyboardSpace;
+          let activeInputBottom = py + height;
+
+          if (activeInputBottom >= keyBoardTop + 10) {
+              this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
+          }
+      });
   },
 
   resetKeyboardSpace: function () {
@@ -173,7 +193,7 @@ let Publish = React.createClass({
     } else if (key == 'amountText') {
       this.setState({amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000});
     } else {
-      this.setState({rate: Number(value)});
+        this.setState({rate: Number(value)});
     }
   },
 
@@ -209,13 +229,16 @@ let Publish = React.createClass({
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'期限'}</Text>
-        <View style={{marginTop:10,flexDirection:'row'}}>
+          <View style={{marginTop:10,flexDirection:'row'}} ref="timeLimitInputView">
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
-                 placeholder='天数' maxLength={3} field='termText' inputType="numeric"
+                 placeholder='0-999' maxLength={3} field='termText' inputType="numeric"
                  onChangeText={this._onChangeText}
-                 onFocus={() => this.refs['scroll'].scrollTo({y:60})}
+                 onFocus={
+                 //() => this.refs['scroll'].scrollTo({y:60})
+                 () => this.activeInput = this.refs['timeLimitInputView']
+                 }
           />
           <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._termDataChange}/>
 
@@ -227,14 +250,17 @@ let Publish = React.createClass({
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'金额'}</Text>
-        <View style={{marginTop:10,flexDirection:'row'}}>
+          <View style={{marginTop:10,flexDirection:'row'}} ref="amountInputView">
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                  placeholder='0-1000亿' maxLength={this.state.amountTextDigit} field='amountText'
                  inputType="numeric"
-                 onChangeText={this._onChangeText} ref="amountInput"
-                 onFocus={() => this.refs['scroll'].scrollTo({y:120})}
+                 onChangeText={this._onChangeText}
+                 onFocus={
+                 //() => this.refs['scroll'].scrollTo({y:120})
+                 () => this.activeInput = this.refs['amountInputView']
+                 }
           />
           <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault}
                      change={this._amountDataChange}/>
@@ -247,13 +273,16 @@ let Publish = React.createClass({
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'利率'}</Text>
-        <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
+          <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}} ref="rateInputView">
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                  placeholder='0-99.99' maxLength={5} field='rateText' inputType="numeric"
-                 onChangeText={this._onChangeText} ref="rateInput"
-                 onFocus={() => this.refs['scroll'].scrollTo({y:160})}
+                 onChangeText={this._onChangeText}
+                 onFocus={
+                 //() => this.refs['scroll'].scrollTo({y:160})
+                 () => this.activeInput = this.refs['rateInputView']
+                 }
           />
           <Text style={{marginLeft:10,fontWeight: 'bold', color:DictStyle.marketSet.fontColor}}>{'%'}</Text>
         </View>
@@ -311,10 +340,11 @@ let Publish = React.createClass({
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
       >
         <Lightbox imageSource={{uri:rowData}}
+                  navigator={this.props.navigator}
                   deleteHeader={()=>{
                     let arr = this.state.fileUrlList;
-                    arr[rowID] = 0;
-                    this.setState({fileUrlList: _.compact(arr)})
+                    _.pullAt(arr,rowID);
+                    this.setState({fileUrlList: arr});
                     }}
         >
           <Image
@@ -331,18 +361,16 @@ let Publish = React.createClass({
         <View style={{marginTop:10,marginBottom:10}}>
           <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
             <View
-              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 40, backgroundColor: 'white'}}>
+                style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 50, backgroundColor: 'white'}}>
               <Text style={{marginLeft:10,color:DictStyle.marketSet.fontColor}}>
                 {'备注'}
               </Text>
               <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                 <Text
-                  style={{marginRight:10,color:(this.state.remarkText == '') ? '#d3d5df' : DictStyle.marketSet.fontColor}}
-                  numberOfLines={1}>{(this.state.remarkText == '') ? '50字以内' : this.state.remarkText}
+                    style={{marginRight:10,color:(this.state.remarkText == '') ? '#d3d5df' : DictStyle.marketSet.fontColor,flex:1,width:screenWidth-120}}
+                >{(this.state.remarkText == '') ? '50字以内' : this.state.remarkText}
                 </Text>
-                <Image style={{margin:10,width:16,height:16}}
-                       source={require('../../image/market/next.png')}
-                />
+                <Icon style={{marginRight: 10}} name="ios-arrow-right" size={30} color='#a8afb3'/>
               </View>
             </View>
           </TouchableHighlight>
@@ -359,7 +387,7 @@ let Publish = React.createClass({
           disabled={this.state.disabled}
           onPress={() => this._pressPublish()}
         >
-          {isFromIM ? '发送' : '+发布新业务'}
+          {isFromIM ? '发送' : '发布'}
         </Button>
       </View>
     )
@@ -374,8 +402,9 @@ let Publish = React.createClass({
   },
 
   _pressPublish: function () {
+
     if (!Validation.isTerm(this.state.termText)) {
-      Alert('期限：请输入大于0的整数');
+      Alert('期限：请输入0-999间的整数');
     } else if (!Validation.isAmount(this.state.amountText)) {
       Alert('金额：请输入正确的浮点数');
     } else if (!Validation.isRate(this.state.rateText)) {
@@ -437,7 +466,15 @@ let Publish = React.createClass({
   },
 
   addBizOrder: function () {
+
     dismissKeyboard();
+
+    if (this.state.term % 360 == 0) {
+      this.setState({
+        term: this.state.term + (this.state.term / 360) * 5
+      });
+    }
+
     let {title, param}  = this.props;
     let params = {
       id: '',
@@ -454,7 +491,8 @@ let Publish = React.createClass({
       bizOrientation: params.bizOrientation,
       term: params.term,
       amount: params.amount,
-      rate: params.rate
+      rate: params.rate,
+      remark: params.remark
     };
     if (param && param.isFromIM) {
       this.props.navigator.pop();
@@ -534,7 +572,7 @@ let Publish = React.createClass({
   shareDialog (data) {
     let amount = data.amount == '' ? '--' : (data.amount > 99999999 ? data.amount / 100000000 + '亿' : data.amount / 10000 + '万');
     let dayNum;
-    if (data.term == '') {
+    if (data.term == '' || data.term == 0) {
       dayNum = '--'
     } else if (data.term % 365 == 0) {
       dayNum = parseInt(data.term / 365) + '年';
@@ -544,10 +582,13 @@ let Publish = React.createClass({
       dayNum = data.term + '日';
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
-    let shareContent = data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate + '\n' + '--来自爱资融APP';
+    let remark = data.remark == '' ? '--' : data.remark;
+    let shareContent = data.bizCategory + '\n' + '业务方向:  ' +(data.bizOrientation == 'IN' ? '收' : '出') + '  '
+      + '金额:' + amount + '  ' + '期限:'+ dayNum + '  ' + '利率:'+ rate + '\n' + '备注:' + remark
+      + '\n'+'--来自爱资融APP' + '\n' + 'http://www.baidu.com';
     Share.open({
       share_text: shareContent,
-      share_URL: Platform.OS === 'android' ? shareContent : "http://google.cl",
+      share_URL: Platform.OS === 'android' ? shareContent : '',
       title: "Share Link"
     }, (e) => {
       console.log(e);
@@ -559,9 +600,9 @@ let Publish = React.createClass({
       .then((response) => {
         let arr = this.state.fileUrlList;
         if (index > 5) {
-          arr.push(uri);
+          arr.push(response.fileUrl);
         } else {
-          arr[index] = uri;
+          arr[index] = response.fileUrl;
         }
         this.setState({
           fileUrlList: arr

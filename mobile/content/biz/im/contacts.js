@@ -9,10 +9,12 @@ let {
   TouchableHighlight,
   TouchableOpacity,
   Image,
-  InteractionManager
+  Modal,
+  StyleSheet
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
 let CreateGroup = require('./createGroup');
+let SearchFriend = require('./searchFriend');
 let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let Chat = require('./chat');
@@ -22,10 +24,13 @@ let AppStore = require('../../framework/store/appStore');
 let DictIcon = require('../../constants/dictIcon');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Spread = require('./spread');
-let NameCircular = require('./nameCircular').NameCircular;
+//let NameCircular = require('./nameCircular').NameCircular;
+let HeaderPic = require('./headerPic');
 let {contactFilter} = require('./searchBarHelper');
 let { IM_CONTACT } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
+import  Angle  from '../../comp/messenger/angle';
+const { Device,Alert } = require('mx-artifacts');
 
 let Contacts = React.createClass({
 
@@ -47,7 +52,7 @@ let Contacts = React.createClass({
   },
 
   getInitialState: function(){
-    return Object.assign({ keyWord:'',userInfo:ContactStore.getUserInfo()},this.getStateFromStores());
+    return Object.assign({ showView:false,keyWord:'',userInfo:ContactStore.getUserInfo()},this.getStateFromStores());
   },
 
   renderImg: function(data) {
@@ -113,7 +118,7 @@ let Contacts = React.createClass({
                             onPress={() => this.toUser(data)}
                             style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row', paddingVertical:5}}>
-            <NameCircular name={data.realName}/>
+            <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
             <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{data.realName}</Text>
           </View>
         </TouchableOpacity>
@@ -127,16 +132,18 @@ let Contacts = React.createClass({
     this.setState({keyWord:text});
   },
 
+  addMore: function() {
+
+   this.setState({showView:true});
+  },
+
   //创建组群
   renderAdd: function() {
     return (
       <TouchableOpacity onPress={()=>{
-      this.props.navigator.push({
-            comp: CreateGroup
-      });
+      this.addMore();
       }}>
-        {/*<Image  style={{width:20,height:20}} source={DictIcon.imCreateGroupBtn}/>*/}
-        <Text style={{color:'#fff',fontSize:15}}>建群</Text>
+        {<Image style={{width:20,height:20}} source={DictIcon.imCreateGroupBtn}/>}
       </TouchableOpacity>
     );
   },
@@ -148,7 +155,7 @@ let Contacts = React.createClass({
             style={{borderTopWidth:0.5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
         <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
           <Image style={{height: 40,width: 40,borderRadius: 20}} source={DictIcon.imSpread} />
-          <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{'环渤海银银合作平台'}</Text>
+          <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{'爱资融同业平台'}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -160,6 +167,56 @@ let Contacts = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} title='通讯录' actionButton={this.renderAdd}>
         <SearchBar textChange={this.textChange}/>
+
+        <Modal
+          animationType={'fade'}
+          transparent={true}
+          visible={this.state.showView}
+        >
+          <View pointerEvents="auto"
+                onStartShouldSetResponder={(evt) => true}
+                onResponderRelease={()=>this.setState({showView:false})}
+                style={{flex:1,justifyContent:'center',backgroundColor:'transparent'}}>
+            <View style={{position:'absolute',top:Device.navBarHeight,right:5,width:100}}>
+            <View>
+              <View style={{ alignItems: 'flex-end',paddingRight:10}}>
+                <Angle direction="up" color='#375EE4'/>
+              </View>
+              <View style={{backgroundColor:'#375EE4', borderRadius:5,paddingHorizontal:5,paddingVertical:10}}>
+                <TouchableOpacity
+                  onPress={
+                () => {
+                  this.setState({showView:false});
+
+                  this.props.navigator.push({
+                            comp: SearchFriend
+                            });
+                      }
+                }>
+                <View style={{alignItems:'center', justifyContent:'center',flexDirection:'row', borderBottomWidth:1,borderBottomColor:'#273CDF',paddingBottom:5}}>
+                  <Icon name="ios-search-strong" size={18} color='#fff' />
+                  <Text style={{marginLeft:5, color:'#fff'}}>添加好友</Text></View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                   onPress={
+                () => {
+                  this.setState({showView:false});
+                  this.props.navigator.push({
+                            comp: CreateGroup
+                            });
+                      }
+                }>
+                  <View style={{alignItems:'center',justifyContent:'center',flexDirection:'row', marginTop:5}}>
+                    <Icon name="android-add" size={18} color='#fff' />
+                    <Text style={{marginLeft:5, color:'#fff'}}>创建群组</Text></View>
+                </TouchableOpacity>
+              </View>
+            </View>
+              </View>
+          </View>
+        </Modal>
+
+
         {this.renderGlobal()}
 
         {(()=>{
@@ -201,3 +258,13 @@ let Contacts = React.createClass({
 });
 
 module.exports = Contacts;
+
+
+
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  }
+});

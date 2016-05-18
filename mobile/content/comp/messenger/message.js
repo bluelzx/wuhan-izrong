@@ -2,7 +2,8 @@ import React, {View, Text, StyleSheet, TouchableHighlight, Image} from 'react-na
 import Bubble from './bubble';
 import ErrorButton from './errorButton';
 import Angle from './angle';
-import {NameCircular} from '../../biz/im/nameCircular';
+//import {NameCircular} from '../../biz/im/nameCircular';
+let HeaderPic = require('../../biz/im/headerPic');
 let DictStyle = require('../../constants/dictStyle');
 
 var styles = StyleSheet.create({
@@ -91,8 +92,9 @@ export default class Message extends React.Component {
               onPress={() => onImagePress(rowData, rowID)}
             >
               <View>
-                <NameCircular name={rowData.name}
-                              style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+                <HeaderPic name={rowData.name}
+                           photoFileUrl={rowData.image}  certified={rowData.certified}
+                           style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
               </View>
             </TouchableHighlight>
           );
@@ -108,7 +110,9 @@ export default class Message extends React.Component {
         } else {
 
           return (
-            <NameCircular name={rowData.name} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
+            <HeaderPic name={rowData.name}
+                       photoFileUrl={rowData.image}  certified={rowData.certified}
+                       style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
           );
           //return (
           //  <Image source={rowData.image} style={[styles.imagePosition, styles.image, (rowData.position === 'left' ? styles.imageLeft : styles.imageRight)]}/>
@@ -160,9 +164,9 @@ export default class Message extends React.Component {
     }
 
     let bgColor = this.props.rightBackgroundColor;
-    if (rowData.status === 'ErrorButton') {
-      bgColor = this.props.errorBackgroundColor;
-    }
+    //if (rowData.status === 'ErrorButton') {
+    //  bgColor = this.props.errorBackgroundColor;
+    //}
     return (
       <Angle direction='right' color={bgColor} />
     );
@@ -199,7 +203,7 @@ export default class Message extends React.Component {
             justifyContent: position==='left'?"flex-start":"flex-end"
           }]}>
           {position === 'left' ? this.renderImage(rowData, rowID, diffMessage, forceRenderImage, onImagePress) : null}
-          {position === 'right' ? this.renderErrorButton(rowData, rowID, onErrorButtonPress) : null}
+
           {position === 'left' ? this._renderAngle(rowData) : null}
           <RowView
             {...rowData}
@@ -208,8 +212,9 @@ export default class Message extends React.Component {
             name={position === 'left' && this.props.displayNamesInsideBubble ? this.renderName(rowData.name, displayNames, diffMessage) : null}
             leftBackgroundColor={this.props.leftBackgroundColor}
             rightBackgroundColor={this.props.rightBackgroundColor}
-            errorBackgroundColor={this.props.errorBackgroundColor}
+            errorBackgroundColor={/*this.props.errorBackgroundColor*/this.props.rightBackgroundColor}
           />
+          {position === 'right' ? this.renderErrorButton(rowData, rowID, onErrorButtonPress) : null}
           {position === 'right' ? this._renderAngle(rowData) : null}
           {rowData.position === 'right' ? this.renderImage(rowData, rowID, diffMessage, forceRenderImage, onImagePress) : null}
         </View>

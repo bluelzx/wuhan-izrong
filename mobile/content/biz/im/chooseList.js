@@ -3,7 +3,8 @@
  */
 let React = require('react-native');
 const {View, ScrollView} = React;
-let NameCircular = require('./nameCircular').NameCircular;
+//let NameCircular = require('./nameCircular').NameCircular;
+let HeaderPic = require('./headerPic');
 let _ = require('lodash');
 
 let ChooseList = React.createClass({
@@ -87,7 +88,7 @@ let ChooseList = React.createClass({
     return data.map((item, index)=>{
       return (
         <View key={item.userId} style={{padding:2}}>
-          <NameCircular name={item.realName}/>
+          <HeaderPic photoFileUrl={item.photoFileUrl}  certified={item.certified} name={item.realName}/>
         </View>
       );
     });
