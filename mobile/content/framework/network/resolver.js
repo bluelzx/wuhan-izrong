@@ -71,9 +71,6 @@ let _dealMsg = function (message, socket) {
     };
       break;
     case MSG_TYPE.HOME_PAGE:
-      //message.homePageList && message.homePageList.forEach((msg) => {
-      //  ImStore.createHomePageInfo(msg.seq, msg.url);
-      //});
       ImStore.createHomePageInfo(message.homePageList);
       break;
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
@@ -117,7 +114,11 @@ let _dealMsg = function (message, socket) {
       }
       break;
     case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
-
+      if(message.userId == AppStore.getUserId()){
+        AppStore.updateUserInfo('certificated',message.isCertificated);
+      }else{
+        ImStore.updateContactInfo();
+      }
       break;
     case MSG_TYPE.CONTANCT_INFO_FREEZE:
 
@@ -172,10 +173,8 @@ let Resolver = {
       default:
         console.log('None message type matched! [%s]', message.msgType);
     }
-
     return msgToSend;
   }
-
 };
 
 module.exports = Resolver;

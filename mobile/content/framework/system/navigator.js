@@ -233,10 +233,10 @@ var Main = React.createClass({
       );
     }
 
-    var initComp = UploadNameCard;
+    var initComp = Login;
     //var initComp = Chat;
     if (this.state.token) {
-      initComp = UploadNameCard;
+      initComp = TabView;
      this.initSocket(this.state.token);
     }else{
       ImSocket.disconnect();
