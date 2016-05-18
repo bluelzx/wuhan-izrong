@@ -3,6 +3,7 @@ let ImStore = require('../store/imStore');
 let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE, UPDATE_GROUP_TYPE, NOTICE_TYPE } = require('../../constants/dictIm');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
+let AppStore = require('../store/appStore');
 //let {Alert} = require('mx-artifacts');
 let _dealMsg = function (message, socket) {
   let userInfo = ContactSotre.getUserInfo();
@@ -80,7 +81,7 @@ let _dealMsg = function (message, socket) {
         message.realName, message.email, message.nameCardFileUrl, message.department,
         message.publicDepart, message.jobTitle, message.publicTitle, message.mobileNumber, message.publicMobile,
         message.phoneNumber, message.publicPhone, message.publicEmail, message.publicAddress, message.publicWeChat,
-        message.photoFileUrl, message.qqNo, message.publicQQ, message.weChatNo, message.userId, message.orgId)
+        message.photoFileUrl, message.qqNo, message.publicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
       break;
     case MSG_TYPE.CONTANCT_INFO_DELETE:
       ImStore.deleteContactInfo(message.userIdList);
@@ -138,18 +139,28 @@ let _dealMsg = function (message, socket) {
       if(message.userId == AppStore.getUserId()){
         AppStore.updateUserInfo('certificated',message.isCertificated);
       }else{
-        ImStore.updateContactInfo();
+        ImStore.updateContactInfo(message.address,
+          message.realName, message.email, message.nameCardFileUrl, message.department, message.publicDepart,
+          message.jobTitle, message.publicTitle, message.mobileNumber, message.publicMobile, message.phoneNumber,
+          message.publicPhone, message.publicEmail, message.publicAddress, message.publicWeChat, message.photoFileUrl,
+          message.qqNo, message.publicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
       }
       break;
     case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
       if(message.userId == AppStore.getUserId()){
         AppStore.updateUserInfo('certificated',message.isCertificated);
       }else{
-        ImStore.updateContactInfo();
+        ImStore.updateContactInfo(message.address,
+          message.realName, message.email, message.nameCardFileUrl, message.department, message.publicDepart,
+          message.jobTitle, message.publicTitle, message.mobileNumber, message.publicMobile, message.phoneNumber,
+          message.publicPhone, message.publicEmail, message.publicAddress, message.publicWeChat, message.photoFileUrl,
+          message.qqNo, message.publicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
       }
       break;
     case MSG_TYPE.CONTANCT_INFO_FREEZE:
-
+      if(message.userId == AppStore.getUserId()){
+        AppStore.forceLogout();
+      }
       break;
     case MSG_TYPE.FRIEND_INVITE:
       ContactSotre.newFriendNotic({
@@ -158,7 +169,7 @@ let _dealMsg = function (message, socket) {
         realName: message.realName,
         orgName: message.orgName,
         photoFileUrl: message.photoFileUrl,
-        certified:message.certified,
+        certified:message.certified
       }, userId);
       break;
     case MSG_TYPE.FRIEND_PROMISE:

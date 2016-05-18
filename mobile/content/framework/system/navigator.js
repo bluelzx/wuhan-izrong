@@ -136,6 +136,12 @@ var Main = React.createClass({
           Alert('系统异常');
         });
       }
+    }else if(AppStore.isFreezing()){
+      Promise.resolve().then((resolve) => {
+        this.refs.navigator.resetTo({comp: Login});
+      }).catch((e) => {
+        Alert('系统异常');
+      });
     }
   },
   _exec: function (func, showLoading = true) {
