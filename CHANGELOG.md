@@ -1,6 +1,6 @@
 __true__
 
-#   (2016-05-13)
+#   (2016-05-17)
 
 
 
@@ -44,6 +44,8 @@ __true__
   ([50657e37](http://192.168.64.208/wuhan/fas-app/commits/50657e3736a28a63567820e6497a1c3580665c9d))
 - **IM:** update event to 'IM_SESSION'.
   ([ec5e7c9b](http://192.168.64.208/wuhan/fas-app/commits/ec5e7c9bef47fbc02506618b414abc80c6a883b0))
+- **market:** 001,014
+  ([5c882dd2](http://192.168.64.208/wuhan/fas-app/commits/5c882dd2284d83e14963c57d39296a99dd2e8e68))
 - **system:**
   - update colors for spinner and button.
   ([665db68c](http://192.168.64.208/wuhan/fas-app/commits/665db68c7b7c98caa256b0c0c5aec9f257fd890b))
@@ -99,6 +101,8 @@ __true__
 - **startup:** remove useless image
   ([39f5ab89](http://192.168.64.208/wuhan/fas-app/commits/39f5ab891c50396080d2d183926488f5ff00abd3))
 - **system:**
+  - add KPI support
+  ([80823e88](http://192.168.64.208/wuhan/fas-app/commits/80823e8898ff6b8752bb6acaf10a69dc40e37751))
   - update color for loading and status bar
   ([367466c0](http://192.168.64.208/wuhan/fas-app/commits/367466c0c5a60503e1308450da515193e7e0db7e))
   - add style dict
@@ -119,6 +123,8 @@ __true__
   ([42d38368](http://192.168.64.208/wuhan/fas-app/commits/42d383686c7fbcd388f5f1669cc53dd292afcfee))
   - add switch for log, update eslint rules.
   ([f637a9c7](http://192.168.64.208/wuhan/fas-app/commits/f637a9c77342706c1f78114f896e66c1f113f3bf))
+- **test:** add GT support for IOS
+  ([533cdef7](http://192.168.64.208/wuhan/fas-app/commits/533cdef76ed3824203c049047440684058465054))
 
 
 

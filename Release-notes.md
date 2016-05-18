@@ -1,5 +1,18 @@
 __true__
 
+# v0.0.5 (2016-05-16 21:02)
+
+---
+
+## Bug Fixes
+- **market:** 001,014
+  ([5c882dd2](http://192.168.64.208/wuhan/fas-app/commits/5c882dd2284d83e14963c57d39296a99dd2e8e68))
+
+## Features
+- **system:**
+  - add KPI support
+  ([80823e88](http://192.168.64.208/wuhan/fas-app/commits/80823e8898ff6b8752bb6acaf10a69dc40e37751))
+
 # v0.0.4 (2016-05-13 10:03)
 
 ---
