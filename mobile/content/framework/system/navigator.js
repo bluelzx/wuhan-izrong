@@ -46,7 +46,6 @@ let { SHOW_VIEW } = require('../../constants/dictEvent');
 
 const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');
-const UploadNameCard = require('../../biz/login/uploadNameCard');
 
 var Main = React.createClass({
   _navigator: null,
@@ -233,10 +232,10 @@ var Main = React.createClass({
       );
     }
 
-    var initComp = UploadNameCard;
+    var initComp = Login;
     //var initComp = Chat;
     if (this.state.token) {
-      initComp = UploadNameCard;
+      initComp = TabView;
      this.initSocket(this.state.token);
     }else{
       ImSocket.disconnect();
