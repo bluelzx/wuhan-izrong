@@ -9,6 +9,7 @@ let {
   View,
   Text,
   TouchableOpacity,
+  TouchableHighlight,
   Platform,
   Image,
   ScrollView
@@ -18,10 +19,11 @@ let _ = require('lodash');
 let Icon = require('react-native-vector-icons/Ionicons');
 let DateHelper = require('../../comp/utils/dateHelper');
 let { Device,Alert } = require('mx-artifacts');
-let Swipeout= require('react-native-swipeout');
+let Swipeout = require('react-native-swipeout');
 let Contacts = require('./contacts');
 let Chat = require('./chat');
 let SearchBar = require('./searchBar');
+let GroupNotice = require('./groupNotice');
 let DictIcon = require('../../constants/dictIcon');
 let Spread = require('./spread');
 let HeadPic = require('./headerPic');
@@ -38,7 +40,6 @@ let DictStyle = require('../../constants/dictStyle');
 let PlainStyle = require('../../constants/dictStyle');
 let NotifyHeader = require('./notifyHeader');
 let GroupNotifyList = require('./groupNotifyList');
-
 let WhitePage = React.createClass({
 
   componentDidMount() {
@@ -52,21 +53,21 @@ let WhitePage = React.createClass({
     this.setState(this.getStateFromStores());
   },
 
-  getStateFromStores: function() {
+  getStateFromStores: function () {
     let userInfo = ContactStore.getUserInfo();
-    return {data:ContactStore.getIMNotificationMessage(userInfo.userId)};
+    return {data: ContactStore.getIMNotificationMessage(userInfo.userId)};
   },
 
-  getInitialState: function(){
-    return Object.assign(this.getStateFromStores(),{keyWord:''});
+  getInitialState: function () {
+    return Object.assign(this.getStateFromStores(), {keyWord: ''});
   },
 
 
-  textChange: function(text) {
-    this.setState({keyWord:text});
+  textChange: function (text) {
+    this.setState({keyWord: text});
   },
 
-  renderContact: function() {
+  renderContact: function () {
     return (
       <TouchableOpacity onPress={()=>{
        // AppStore.updateLastSyncTime(new Date());
@@ -79,7 +80,7 @@ let WhitePage = React.createClass({
     );
   },
 
-  unReadIcon: function(item){
+  unReadIcon: function (item) {
     if (item.badge > 0) {
       return (
         <View style={[{marginLeft:22,width:18,height:18,borderRadius:9,backgroundColor:'red',
@@ -90,7 +91,7 @@ let WhitePage = React.createClass({
     }
   },
 
-  renderImg: function(item, index) {
+  renderImg: function (item, index) {
     return (
       <View style={{marginTop:5,backgroundColor: '#F3AD2C', height: 40,width: 40,borderRadius: 20, marginRight:15}}>
         {this.unReadIcon(item)}
@@ -98,21 +99,21 @@ let WhitePage = React.createClass({
     );
   },
 
-  toOther: function(item) {
+  toOther: function (item) {
     // TODO:  事务
     let userinfo = ContactStore.getUserInfo();
     SessionStore.setBadgeZero(item.sessionId);
 
     let option = null;
     let param = {};
-    if(SESSION_TYPE.GROUP == item.type){ // 区分聊天窗口类型
-      let g = SessionStore.getGroupInfoBySessionId(item.sessionId,userinfo.userId)
+    if (SESSION_TYPE.GROUP == item.type) { // 区分聊天窗口类型
+      let g = SessionStore.getGroupInfoBySessionId(item.sessionId, userinfo.userId)
       param.chatType = SESSION_TYPE.GROUP;
       param.title = item.title;
       param.groupId = g.groupId; //query
       param.groupMasterUid = g.groupMasterUid; //query
-    }else{
-      let u = SessionStore.getUserInfoBySessionId(item.sessionId,userinfo.userId)
+    } else {
+      let u = SessionStore.getUserInfoBySessionId(item.sessionId, userinfo.userId)
       param.chatType = SESSION_TYPE.USER;
       param.title = item.title;
       param.userId = u.userId;  //query
@@ -124,8 +125,8 @@ let WhitePage = React.createClass({
   },
 
 
-  renderSpread: function(item) {
-    if(_.isEmpty(item)){
+  renderSpread: function (item, index, length) {
+    if (_.isEmpty(item)) {
       return;
     }
 
@@ -139,7 +140,7 @@ let WhitePage = React.createClass({
         }
                           onPress={()=>{SessionStore.setBadgeZero(item.sessionId); this.props.navigator.push({comp: Spread})}}>
         <View
-          style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
+          style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal: index == length - 1 ? 0 : 10, paddingHorizontal: index == length - 1 ? 10 : 0}}>
           <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imSpread} />
           <View
             style={{ height:40, width:width-70}}>
@@ -156,8 +157,39 @@ let WhitePage = React.createClass({
     );
   },
 
+  renderGroupNotice (item, index, length) {
+    if (_.isEmpty(item)) {
+      return;
+    }
+    let {width} = Device;
+    return (
+      <TouchableOpacity key={item.sessionId} onLongPress={
+        ()=>
+          {
+            Alert('确定删除所有群通知消息吗?', () => {this.deleteSession(item.sessionId)},()=>{})
+          }
+        }
+                        onPress={()=>{SessionStore.setBadgeZero(item.sessionId); this.props.navigator.push({comp: GroupNotice})}}>
+        <View
+          style={{borderBottomColor: PlainStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal: index == length - 1 ? 0 : 10, paddingHorizontal: index == length - 1 ? 10 : 0}}>
+          <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imGroupNotice}/>
+          <View
+            style={{ height:40, width:width-70, paddingHorizontal:10}}>
+            <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+              <View style={{ height:40, justifyContent:'center'}}>
+                <Text style={{color:'#434b4f'}}>{'群通知'}</Text>
+              </View>
+              <View style={{ height:40, justifyContent:'center'}}>
+                <Icon name="ios-arrow-right" size={26} color={PlainStyle.colorSet.arrowColor}/>
+              </View>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  },
 
-  renderGroup: function(item, index){
+  renderGroup: function (item, index, length) {
     let {width} = Device;
 
     return (
@@ -199,64 +231,64 @@ let WhitePage = React.createClass({
     }
   },
 
-  renderUser: function(item, index){
+  renderUser: function (item, index, length) {
     let {width} = Device;
 
     return (
-        <TouchableOpacity key={item.sessionId}  onLongPress={
+      <TouchableOpacity key={item.sessionId} onLongPress={
         ()=>
           {
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
           }
         } onPress={()=>this.toOther(item)}>
-          <View
-            style={{borderBottomColor: DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
-            <View style={{ height:40,width: 40, marginRight:15}}>
-              <NameCircular badge={item.badge} name={item.title}/>
-            </View>
-            <View
-              style={{ height:40,width:width-70,paddingHorizontal:10, justifyContent:'center'}}>
-              <View
-                style={{flexDirection:'row', justifyContent:'space-between',flex:1}}>
-                <Text style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
-                <Text style={{color:DictStyle.colorSet.imTimeTextColor}}>{DateHelper.descDate(item.lastTime)}</Text>
-              </View>
-              <Text numberOfLines={1}
-                    style={{marginTop:5,color:'#8A9499'}}>{this.showText(item)}</Text>
-            </View>
+        <View
+          style={{borderBottomColor: PlainStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal: index == length - 1 ? 0 : 10, paddingHorizontal: index == length - 1 ? 10 : 0}}>
+          <View style={{ height:40,width: 40, marginRight:15}}>
+            <NameCircular badge={item.badge} name={item.title}/>
           </View>
-        </TouchableOpacity>
+          <View
+            style={{ height:40,width:width-70,paddingHorizontal:10, justifyContent:'center'}}>
+            <View
+              style={{flexDirection:'row', justifyContent:'space-between',flex:1}}>
+              <Text style={{color:PlainStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
+              <Text style={{color:PlainStyle.colorSet.imTimeTextColor}}>{DateHelper.descDate(item.lastTime)}</Text>
+            </View>
+            <Text numberOfLines={1}
+                  style={{marginTop:5,color:'#8A9499'}}>{this.showText(item)}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
 
     );
   },
 
-  acceptInvite: function(item) {
+  acceptInvite: function (item) {
     this.props.exec(
-      ()=>{
+      ()=> {
         let groupId = this.getIdFromSessionId(item.sessionId);
-        return ContactAction.acceptInvitation(groupId).then(()=>{
+        return ContactAction.acceptInvitation(groupId).then(()=> {
           SessionStore.updateInViteSession(item.sessionId);
-        }).catch((err)=>{
+        }).catch((err)=> {
           Alert(err);
         });
       }
     );
   },
 
-  deleteSession: function(sessionId){
+  deleteSession: function (sessionId) {
     SessionStore.deleteSession(sessionId);
   },
 
-  renderInvite:function(item, index) {
+  renderInvite: function (item, index) {
     let {width} = Device;
     console.log(item);
     return (
-      <TouchableOpacity key={item.sessionId}  onLongPress={
+      <TouchableOpacity key={item.sessionId} onLongPress={
         ()=>
           {
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
           }
-        } >
+        }>
         <View
           style={{borderBottomColor: DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
           <HeadPic badge={0} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup}/>
@@ -296,7 +328,7 @@ let WhitePage = React.createClass({
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
           }
         }
-          onPress={()=>{
+        onPress={()=>{
         let groupId = this.getIdFromSessionId(item.sessionId);
          let groupInfo = ContactStore.getGroupDetailById(groupId);
         let param = {};
@@ -312,13 +344,13 @@ let WhitePage = React.createClass({
           <View
             style={{ flexDirection:'row',paddingHorizontal:10, height:40, width:width-70, justifyContent:'space-between', alignItems:'center'}}>
             <View>
-              <Text style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
+              <Text style={{color:PlainStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
               <Text numberOfLines={1}
                     style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT == item.contentType ? item.content : '点击查看详情'}</Text>
             </View>
 
-              <Text
-                style={{borderRadius:5,color:'#ffffff', paddingHorizontal:20,paddingVertical:5}}>{'已接受'}</Text>
+            <Text
+              style={{borderRadius:5,color:'#91989c', paddingHorizontal:20,paddingVertical:5}}>{'已接受'}</Text>
 
           </View>
         </View>
@@ -337,45 +369,50 @@ let WhitePage = React.createClass({
     );
   },
 
-  renderItem: function(item, index) {
-    if(item.type == SESSION_TYPE.USER){
-      return this.renderUser(item, index);
-    }else if(item.type == SESSION_TYPE.GROUP){
-      return this.renderGroup(item, index);
-    }else if(item.type == SESSION_TYPE.INVITE){
-      return this.renderInvite(item, index);
-    }else if(item.type == SESSION_TYPE.INVITED){
-      return this.renderInvited(item, index);
-    }else if(item.type == SESSION_TYPE.PLATFORMINFO){
-      return this.renderSpread(item);
-    }else{
+  renderItem: function (item, index, length) {
+    if (item.type == SESSION_TYPE.USER) {
+      return this.renderUser(item, index, length);
+    } else if (item.type == SESSION_TYPE.GROUP) {
+      return this.renderGroup(item, index, length);
+    } else if (item.type == SESSION_TYPE.PLATFORMINFO) {
+      return this.renderSpread(item, index, length);
+    } else if (item.type == SESSION_TYPE.GROUP_NOTICE) {
+      return this.renderGroupNotice(item, index, length);
+    } else {
       throw 'IM 会话类型不存在';
     }
+
+    //else if(item.type == SESSION_TYPE.INVITE){
+    //  return this.renderInvite(item, index);
+    //}else if(item.type == SESSION_TYPE.INVITED){
+    //  return this.renderInvited(item, index);
+    //}
   },
 
-  renderMessage: function() {
+  renderMessage: function () {
     let msg = [];
     let listData = sessionFilter(this.state.data.msg, 'title', 'content', this.state.keyWord);
-    if(_.isEmpty(listData) || listData.length == 0){
+    if (_.isEmpty(listData) || listData.length == 0) {
       return this.renderNull();
     } else {
+      let length = listData.length;
       listData.map((item, index)=> {
-        msg.push(this.renderItem(item, index));
+        msg.push(this.renderItem(item, index, length));
       });
       return msg;
     }
   },
 
-  renderNull: function(){
+  renderNull: function () {
     return (
       <Text style={{flex:1, textAlign:'center'}}>没有记录</Text>
     );
   },
 
-  render: function() {
+  render: function () {
     let {title}  = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} title='IM' showBack={false} actionButton={this.renderContact}>
+      <NavBarView navigator={this.props.navigator} title='聊天' showBack={false} actionButton={this.renderContact}>
         <SearchBar textChange={this.textChange}/>
         <ScrollView style={{flexDirection: 'column',backgroundColor:'#FEFEFE'}}>
           {this.renderMessage()}

@@ -81,12 +81,36 @@ let MyBizDetail = React.createClass({
     }
   },
 
-  componentDidMount() {
+    componentDidMount: function () {
+        //// Keyboard events监听
+        DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
+        DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
+    },
 
+    componentWillUnmount: function () {
+        DeviceEventEmitter.removeAllListeners('keyboardWillShow');
+        DeviceEventEmitter.removeAllListeners('keyboardWillHide');
   },
 
-  componentWillUnmount () {
+    // Keyboard actions
+    updateKeyboardSpace: function (frames) {
+        const keyboardSpace = frames.endCoordinates.height//获取键盘高度
+        this.setState({
+            keyboardSpace: keyboardSpace,
+        });
 
+        this.activeInput.measure((ox, oy, width, height, px, py) => {
+            let keyBoardTop = screenHeight - this.state.keyboardSpace;
+            let activeInputBottom = py + height;
+
+            if (activeInputBottom >= keyBoardTop + 10) {
+                this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
+            }
+        });
+    },
+
+    resetKeyboardSpace: function () {
+        this.refs['scroll'].scrollTo({y: 0})
   },
 
 
@@ -123,7 +147,9 @@ let MyBizDetail = React.createClass({
       <NavBarView navigator={this.props.navigator} title='业务详情' actionButton={this.renderShutDownBiz}>
         <View style={{height:screenHeight-64,backgroundColor:'#f7f7f7'}}>
           <View style={{flex:1}}>
-            <ScrollView>
+              <ScrollView ref="scroll"
+                          keyboardShouldPersistTaps={true}
+              >
               {this.renderSelectOrg()}
               {this.renderBusinessType()}
               {this.renderTimeLimit()}
@@ -219,7 +245,7 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
           <View style={{flexDirection:'row'}}>
-            {this.returnItem('方向:', this.state.marketInfo.bizOrientationDesc)}
+            {this.returnItem('方\u3000\u3000向:', this.state.marketInfo.bizOrientationDesc)}
           </View>
         </View>
       );
@@ -230,13 +256,16 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
           <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'期限'}</Text>
-          <View style={{marginTop:10,flexDirection:'row'}}>
+            <View style={{marginTop:10,flexDirection:'row'}} ref="timeLimitInputView">
             <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                    iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                    inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                    placeholder='0-999' maxLength={3} field='termText' inputType="numeric"
                    onChangeText={this._onChangeText}
                    value={this.state.termText}
+                   onFocus={
+                 () => this.activeInput = this.refs['timeLimitInputView']
+                 }
             />
             <SelectBtn dataList={termUnit} defaultData={this.state.termDefault} change={this._termDataChange}/>
 
@@ -246,7 +275,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('期限:', this.termLimitChangeHelp(this.state.marketInfo.term))}
+          {this.returnItem('期\u3000\u3000限:', this.termLimitChangeHelp(this.state.marketInfo.term))}
         </View>
       );
     }
@@ -256,13 +285,16 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
           <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'金额'}</Text>
-          <View style={{marginTop:10,flexDirection:'row'}}>
+            <View style={{marginTop:10,flexDirection:'row'}} ref="amountInputView">
             <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                    iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                    inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
                    placeholder='0-1000亿' maxLength={8} field='amountText' inputType="numeric"
                    onChangeText={this._onChangeText}
                    value={this.state.amountText}
+                   onFocus={
+                 () => this.activeInput = this.refs['amountInputView']
+                 }
             />
             <SelectBtn dataList={amountUnit} defaultData={this.state.amountDefault} change={this._amountDataChange}/>
 
@@ -272,7 +304,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('金额:',
+          {this.returnItem('金\u3000\u3000额:',
             this.state.marketInfo.amount == null || this.state.marketInfo.amount == 0 ? '--' :
               this.state.marketInfo.amount < 100000000 ? this.state.marketInfo.amount / 10000 + '万' :
               (this.state.marketInfo.amount / 100000000) + '亿')
@@ -286,7 +318,7 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
           <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'利率'}</Text>
-          <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
+            <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}} ref="rateInputView">
             <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                    iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                    inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
@@ -294,6 +326,9 @@ let MyBizDetail = React.createClass({
                    onChangeText={this._onChangeText}
                    value={this.state.rateText}
                    editable={false}
+                   onFocus={
+                 () => this.activeInput = this.refs['rateInputView']
+                 }
             />
             <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'%'}</Text>
           </View>
@@ -302,7 +337,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('利率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : numeral(this.state.marketInfo.rate * 100).format('0,0.00') + '%')}
+          {this.returnItem('利\u3000\u3000率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : numeral(this.state.marketInfo.rate * 100).format('0,0.00') + '%')}
         </View>
       );
     }
@@ -364,6 +399,7 @@ let MyBizDetail = React.createClass({
         onSelected={(response) => {this.handleSendImage(response, rowID)}}
         onError={(error) => this.handleImageError(error)}
         title="选择图片"
+        allowsEditing={true}
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
       >
         <Lightbox imageSource={{uri:rowData}}
@@ -424,7 +460,7 @@ let MyBizDetail = React.createClass({
     } else {
       return (
         <View style={{flexDirection:'row'}}>
-          {this.returnItem('备注:', this.state.remarkText == null || this.state.remarkText.length == 0 ? '--' : this.state.remarkText)}
+          {this.returnItem('备\u3000\u3000注:', this.state.remarkText == null || this.state.remarkText.length == 0 ? '--' : this.state.remarkText)}
         </View>
       );
     }
@@ -432,13 +468,13 @@ let MyBizDetail = React.createClass({
   renderModifyData: function () {
     return (
       <View style={{flexDirection:'row',alignItems:'center',marginTop:10}}>
-        {this.returnItem('最近修改时间:', this.state.lastModifyDate)}
+        {this.returnItem('更新时间:', this.state.lastModifyDate)}
       </View>
 
     )
   },
-  renderDownBizImage: function(){
-    if (this.state.marketInfo.status != 'ACTIVE'){
+  renderDownBizImage: function () {
+    if (this.state.marketInfo.status != 'ACTIVE') {
       return (
         <View>
           {this.renderImageTitle()}
@@ -467,9 +503,11 @@ let MyBizDetail = React.createClass({
   returnItem: function (desc, value) {
     return (
       <View style={{marginLeft:10,flexDirection:'row',alignItems:'center',paddingVertical:8}}>
-        <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor,width:Adjust.width(120)}}>{desc}</Text>
+        <Text style={{alignSelf:'stretch',fontSize:16,color:DictStyle.marketSet.fontColor,width:Adjust.width(120)}}>{desc}</Text>
         <Text
-          style={{marginLeft:10,fontSize:16,color:(desc == '最近修改时间:')?DictStyle.marketSet.modifyDateColor:DictStyle.marketSet.fontColor,width:225/375*screenWidth}}>{value}</Text>
+          style={{alignSelf:'stretch',marginLeft:10,fontSize:16,color:(desc == '更新时间:')?
+          DictStyle.marketSet.modifyDateColor:(desc == '备\u3000\u3000注:')?DictStyle.marketSet.amountColor:DictStyle.marketSet.fontColor,
+          width:225/375*screenWidth}}>{value}</Text>
       </View>
     )
   },
@@ -645,8 +683,9 @@ let MyBizDetail = React.createClass({
       dayNum = data.term + '日';
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
+    let remark = data.remark == '' ? '--' : data.remark;
     let shareContent = this.state.marketInfo.bizCategoryDesc + '\n' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出') + '  '
-      + '金额:' + amount + '  ' + '期限:' + dayNum + '  ' + '利率:' + rate + '\n' + '备注:' + data.remark
+      + '金额:' + amount + '  ' + '期限:' + dayNum + '  ' + '利率:' + rate + '\n' + '备注:' + remark
       + '\n' + '--来自爱资融APP' + '\n' + 'http://www.baidu.com';
     Share.open({
       share_text: shareContent,

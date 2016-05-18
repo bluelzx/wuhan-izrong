@@ -51,8 +51,8 @@ var styles = StyleSheet.create({
   badgeWithNumber: {
     flexDirection: 'row',
     justifyContent: 'center',
-    top: 4,
-    right: 24,
+    top: 1,
+    right: 12,
     position: 'absolute',
     width: 18,
     height: 18,

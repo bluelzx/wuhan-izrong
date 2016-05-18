@@ -54,10 +54,40 @@ let ValiSMS = React.createClass({
   login: function () {
     if (this.state.verify.length != 6) {
       Alert('请输入完整的短信验证码');
-    } else {
+    }
+    //else if(AppStore.getLoginUserInfo().mobileNumber == this.props.param.mobileNo) {
+    //  this.simpleLogin();
+    //}
+    else{
       dismissKeyboard();
       this.props.exec(() => {
         return LoginAction.login({
+          mobileNo: this.props.param.mobileNo,
+          inputSmsCode: this.state.verify,
+          deviceToken: this.state.APNSToken,
+          deviceModel: this.state.deviceModel
+        }).then((response) => {
+          const {navigator} = this.props;
+          if (navigator) {
+            this.props.navigator.resetTo({
+              comp: 'tabView',
+              sceneConfig: Navigator.SceneConfigs.FadeAndroid
+            });
+          }
+        }).catch((errorData) => {
+          throw errorData;
+        });
+      });
+    }
+  },
+
+  simpleLogin: function() {
+    if (this.state.verify.length != 6) {
+      Alert('请输入完整的短信验证码');
+    } else {
+      dismissKeyboard();
+      this.props.exec(() => {
+        return LoginAction.simpleLogin({
           mobileNo: this.props.param.mobileNo,
           inputSmsCode: this.state.verify,
           deviceToken: this.state.APNSToken,
@@ -106,7 +136,6 @@ let ValiSMS = React.createClass({
                     func={LoginAction.sendSmsCodeToLoginMobile}
                     parameter={this.state.mobileNo}
                     exec={this.props.exec}
-                    disabled={true}
           />
           <Button
             containerStyle={{marginTop: 20}}

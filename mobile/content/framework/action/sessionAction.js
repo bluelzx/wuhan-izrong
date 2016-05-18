@@ -22,10 +22,11 @@ let SessiontStore = require('../store/sessionStore');
 let _updateSession = function (type, sessionId, title, content, lastTime, contentType, opts) {
   let  groupId = opts && opts.groupId;
   let notAdd = opts && opts.notAdd;
+  let noticeType = opts && opts.noticeType;
   let param = {
     sessionId:sessionId,
     type: type,
-    badge:groupId||0,
+    badge:0,
     title: title,
     content:content,
     lastTime: lastTime,
@@ -34,7 +35,7 @@ let _updateSession = function (type, sessionId, title, content, lastTime, conten
   if(!notAdd){
     param.badge = 1;
   }
-  SessiontStore.updateSession(param, notAdd);
+  SessiontStore.updateSession(param, notAdd, noticeType);
 }
 
 /**

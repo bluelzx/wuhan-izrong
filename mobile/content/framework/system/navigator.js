@@ -171,8 +171,8 @@ var Main = React.createClass({
             AppStore.forceLogout();
           } else if(errorData.msgContent || errorData.message){
             Alert(errorData.msgContent || errorData.message);
-          }else if(errorData.message.includes('Network request failed')) {
-            Alert('网络异常');
+          }else if(errorData.includes('Network request failed')) {
+            Alert('网络异常,');
           }
         });
       if (showLoading) {
