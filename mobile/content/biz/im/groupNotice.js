@@ -12,6 +12,7 @@ let {
   TouchableHighlight,
   Platform,
   Image,
+  ListView,
   ScrollView
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
@@ -23,7 +24,6 @@ let Swipeout = require('react-native-swipeout');
 let Contacts = require('./contacts');
 let Chat = require('./chat');
 let SearchBar = require('./searchBar');
-let GroupNotice = require('./groupNotice');
 let DictIcon = require('../../constants/dictIcon');
 let Spread = require('./spread');
 let HeadPic = require('./headerPic');
@@ -31,6 +31,7 @@ let AppStore = require('../../framework/store/appStore');
 
 let ContactStore = require('../../framework/store/contactStore');
 let SessionStore = require('../../framework/store/sessionStore');
+let NoticeStore = require('../../framework/store/noticeStore');
 let ContactAction = require('../../framework/action/contactAction');
 let { MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 let NameCircular = require('./nameCircular').NameCircular;
@@ -38,7 +39,8 @@ let {sessionFilter} = require('./searchBarHelper');
 let { IM_SESSION_LIST } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
 let PlainStyle = require('../../constants/dictStyle');
-let WhitePage = React.createClass({
+let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+let GroupNotice = React.createClass({
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, IM_SESSION_LIST);
@@ -53,7 +55,11 @@ let WhitePage = React.createClass({
 
   getStateFromStores: function () {
     let userInfo = ContactStore.getUserInfo();
-    return {data: ContactStore.getIMNotificationMessage(userInfo.userId)};
+    let data = NoticeStore.getNotificationMessage(userInfo.userId);
+    return {
+      data: data,
+      dataSource: ds.cloneWithRows(data)
+    };
   },
 
   getInitialState: function () {
@@ -123,7 +129,7 @@ let WhitePage = React.createClass({
   },
 
 
-  renderSpread: function (item, index, length) {
+  renderSpread: function (item) {
     if (_.isEmpty(item)) {
       return;
     }
@@ -138,7 +144,7 @@ let WhitePage = React.createClass({
         }
                         onPress={()=>{SessionStore.setBadgeZero(item.sessionId); this.props.navigator.push({comp: Spread})}}>
         <View
-          style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal: index == length - 1 ? 0 : 10, paddingHorizontal: index == length - 1 ? 10 : 0}}>
+          style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
           <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imSpread}/>
           <View
             style={{ height:40, width:width-70}}>
@@ -155,7 +161,7 @@ let WhitePage = React.createClass({
     );
   },
 
-  renderGroupNotice (item, index, length) {
+  renderGroupNotice (item) {
     if (_.isEmpty(item)) {
       return;
     }
@@ -167,9 +173,9 @@ let WhitePage = React.createClass({
             Alert('确定删除所有群通知消息吗?', () => {this.deleteSession(item.sessionId)},()=>{})
           }
         }
-                        onPress={()=>{SessionStore.setBadgeZero(item.sessionId); this.props.navigator.push({comp: GroupNotice})}}>
+                        onPress={()=>{SessionStore.setBadgeZero(item.sessionId); this.props.navigator.push({comp: Spread})}}>
         <View
-          style={{borderBottomColor: PlainStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal: index == length - 1 ? 0 : 10, paddingHorizontal: index == length - 1 ? 10 : 0}}>
+          style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>
           <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imGroupNotice}/>
           <View
             style={{ height:40, width:width-70, paddingHorizontal:10}}>
@@ -187,7 +193,7 @@ let WhitePage = React.createClass({
     );
   },
 
-  renderGroup: function (item, index, length) {
+  renderGroup: function (item, index) {
     let {width} = Device;
 
     return (
@@ -198,17 +204,17 @@ let WhitePage = React.createClass({
           }
         }>
         <View
-          style={{borderBottomColor: PlainStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal: index == length - 1 ? 0 : 10, paddingHorizontal: index == length - 1 ? 10 : 0}}>
+          style={{borderBottomColor: DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
           <HeadPic badge={item.badge} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup}/>
           <View
             style={{ height:40, width:width-70, paddingHorizontal:10,justifyContent:'center'}}>
             <View
               style={{flexDirection:'row', justifyContent:'space-between'}}>
-              <Text style={{color:PlainStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
-              <Text style={{color:PlainStyle.colorSet.imTimeTextColor}}>{DateHelper.descDate(item.lastTime)}</Text>
+              <Text style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
+              <Text style={{color:DictStyle.colorSet.imTimeTextColor}}>{DateHelper.descDate(item.lastTime)}</Text>
             </View>
             <Text numberOfLines={1}
-                  style={{marginTop:5,color:PlainStyle.colorSet.sessionDetailColor}}>{this.showText(item)}</Text>
+                  style={{marginTop:5,color:DictStyle.colorSet.sessionDetailColor}}>{this.showText(item)}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -229,7 +235,7 @@ let WhitePage = React.createClass({
     }
   },
 
-  renderUser: function (item, index, length) {
+  renderUser: function (item, index) {
     let {width} = Device;
 
     return (
@@ -240,7 +246,7 @@ let WhitePage = React.createClass({
           }
         } onPress={()=>this.toOther(item)}>
         <View
-          style={{borderBottomColor: PlainStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal: index == length - 1 ? 0 : 10, paddingHorizontal: index == length - 1 ? 10 : 0}}>
+          style={{borderBottomColor: DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
           <View style={{ height:40,width: 40, marginRight:15}}>
             <NameCircular badge={item.badge} name={item.title}/>
           </View>
@@ -248,8 +254,8 @@ let WhitePage = React.createClass({
             style={{ height:40,width:width-70,paddingHorizontal:10, justifyContent:'center'}}>
             <View
               style={{flexDirection:'row', justifyContent:'space-between',flex:1}}>
-              <Text style={{color:PlainStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
-              <Text style={{color:PlainStyle.colorSet.imTimeTextColor}}>{DateHelper.descDate(item.lastTime)}</Text>
+              <Text style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
+              <Text style={{color:DictStyle.colorSet.imTimeTextColor}}>{DateHelper.descDate(item.lastTime)}</Text>
             </View>
             <Text numberOfLines={1}
                   style={{marginTop:5,color:'#8A9499'}}>{this.showText(item)}</Text>
@@ -263,10 +269,11 @@ let WhitePage = React.createClass({
   acceptInvite: function (item) {
     this.props.exec(
       ()=> {
-        let groupId = this.getIdFromSessionId(item.sessionId);
         return ContactAction.acceptInvitation(groupId).then(()=> {
-          SessionStore.updateInViteSession(item.sessionId);
-        }).catch((err)=> {
+          NoticeStore.updateInViteNotice(item.noticeId);
+        }).then(
+          this.toChat(item)
+        ).catch((err)=> {
           Alert(err);
         });
       }
@@ -288,12 +295,12 @@ let WhitePage = React.createClass({
           }
         }>
         <View
-          style={{borderBottomColor: PlainStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
+          style={{borderBottomColor: DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
           <HeadPic badge={0} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup}/>
           <View
             style={{ flexDirection:'row',paddingHorizontal:10, height:40, width:width-70, justifyContent:'space-between', alignItems:'center'}}>
             <View>
-              <Text style={{color:PlainStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
+              <Text style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.title}</Text>
               <Text numberOfLines={1}
                     style={{marginTop:5,color:'#687886'}}>{MSG_CONTENT_TYPE.TEXT == item.contentType ? item.content : '点击查看详情'}</Text>
             </View>
@@ -337,7 +344,7 @@ let WhitePage = React.createClass({
           this.props.navigator.push({comp:Chat, param:param});
         }}>
         <View
-          style={{borderBottomColor: PlainStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
+          style={{borderBottomColor: DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
           <HeadPic badge={0} style={{height: 40,width: 40, marginRight:15}} source={DictIcon.imMyGroup}/>
           <View
             style={{ flexDirection:'row',paddingHorizontal:10, height:40, width:width-70, justifyContent:'space-between', alignItems:'center'}}>
@@ -356,15 +363,15 @@ let WhitePage = React.createClass({
     );
   },
 
-  renderItem: function (item, index, length) {
+  renderItem: function (item, index) {
     if (item.type == SESSION_TYPE.USER) {
-      return this.renderUser(item, index, length);
+      return this.renderUser(item, index);
     } else if (item.type == SESSION_TYPE.GROUP) {
-      return this.renderGroup(item, index, length);
+      return this.renderGroup(item, index);
     } else if (item.type == SESSION_TYPE.PLATFORMINFO) {
-      return this.renderSpread(item, index, length);
+      return this.renderSpread(item);
     } else if (item.type == SESSION_TYPE.GROUP_NOTICE) {
-      return this.renderGroupNotice(item, index, length);
+      return this.renderGroupNotice(item);
     } else {
       throw 'IM 会话类型不存在';
     }
@@ -382,9 +389,8 @@ let WhitePage = React.createClass({
     if (_.isEmpty(listData) || listData.length == 0) {
       return this.renderNull();
     } else {
-      let length = listData.length;
       listData.map((item, index)=> {
-        msg.push(this.renderItem(item, index, length));
+        msg.push(this.renderItem(item, index));
       });
       return msg;
     }
@@ -396,17 +402,108 @@ let WhitePage = React.createClass({
     );
   },
 
+  renderBtn (item) {
+    if (item.isInvited) {
+      return (
+        <View style={{height:50,flexDirection:'column', justifyContent:'center'}}>
+          <Text style={{color:PlainStyle.colorSet.imTimeTextColor}}>已接受</Text>
+        </View>
+      );
+    } else {
+      //TODO: onPress方法中要调用接受邀请的接口
+      return (
+        <TouchableHighlight style={{borderRadius: 5, backgroundColor: '#1095ef',paddingHorizontal:20,paddingVertical:5}}
+                            underlayColor='#08a0f7' onPress={()=>{this.acceptInvite(item)}}>
+          <Text
+            style={{color: '#ffffff', textAlign:'center'}}>{'接受'}</Text>
+        </TouchableHighlight>
+      );
+    }
+  },
+
+  toChat(item) {
+    let param = {
+      chatType: SESSION_TYPE.GROUP,
+      title: item.groupName,
+      groupId: item.groupId,
+      groupMasterUid: item.groupOwnerId
+    };
+    this.props.navigator.push({
+      comp: Chat,
+      param: param
+    })
+  },
+
+  renderRow (item) {
+    let {width} = Device;
+    if (item.msgType == SESSION_TYPE.INVITE) {
+      return (
+        <TouchableOpacity activeOpacity={1} onLongPress={()=>{
+            Alert('确定删除该条记录?', () => {
+              NoticeStore.deleteNotice(item.noticeId);
+              if (this.state.data.length == 1) {
+                this.deleteSession(item.noticeId);
+                this.props.navigator.pop();
+              }
+            },()=>{})
+          }} onPress={()=>{item.isInvited ? this.toChat(item) : null}}>
+          <View
+            style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:16,justifyContent:'center'}}>
+            <HeadPic badge={0} style={{ height:40,width: 40, marginRight:15,justifyContent:'center', marginTop: 5}}
+                     source={DictIcon.imGroupNotice}/>
+            <View
+              style={{height:50, width:width-70,paddingHorizontal:10, justifyContent:'center',flexDirection:'row'}}>
+              <View
+                style={{flexDirection:'column', justifyContent:'center',flex:1, marginRight: 10}}>
+                <Text numberOfLines={1} style={{color:PlainStyle.colorSet.imTitleTextColor}}>{'王某某'}</Text>
+                <Text numberOfLines={2}
+                      style={{color:'#8a9499', marginTop: 6}}>{'邀请您加入一二三四五六七八九一邀请您加入一二三四五六七八九一'}</Text>
+              </View>
+              <View style={{height:50,flexDirection:'column', justifyContent:'center'}}>
+                {this.renderBtn(item)}
+              </View>
+            </View>
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity activeOpacity={1} onLongPress={()=>{
+            Alert('确定删除该条记录?', () => {
+              NoticeStore.deleteNotice(item.noticeId);
+              if (this.state.data.length == 1) {
+                this.deleteSession(item.noticeId);
+                this.props.navigator.pop();
+              }
+            },()=>{})
+          }} onPress={()=>{}}>
+          <View
+            style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:16,justifyContent:'center'}}>
+            <HeadPic badge={0} style={{ height:40,width: 40, marginRight:15,justifyContent:'center', marginTop: 5}}
+                     source={DictIcon.imGroupNotice}/>
+            <View
+              style={{height:50, width:width-70,paddingHorizontal:10, justifyContent:'center',flexDirection:'row'}}>
+              <View
+                style={{flexDirection:'column', justifyContent:'center',flex:1, marginRight: 10}}>
+                <Text numberOfLines={1} style={{color:PlainStyle.colorSet.imTitleTextColor}}>{'群名称'}</Text>
+                <Text numberOfLines={2}
+                      style={{color:'#8a9499', marginTop: 6}}>{'王某某退出了/加入了群聊'}</Text>
+              </View>
+            </View>
+          </View>
+        </TouchableOpacity>
+      );
+    }
+  },
+
   render: function () {
     let {title}  = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} title='聊天' showBack={false} actionButton={this.renderContact}>
-        <SearchBar textChange={this.textChange}/>
-        <ScrollView style={{flexDirection: 'column',backgroundColor:'#FEFEFE'}}>
-          {this.renderMessage()}
-        </ScrollView>
+      <NavBarView navigator={this.props.navigator} title='群通知' showBack={true}>
+        {this.state.data && <ListView renderRow={this.renderRow} dataSource={this.state.dataSource}/>}
       </NavBarView>
     );
   }
 });
 
-module.exports = WhitePage;
+module.exports = GroupNotice;

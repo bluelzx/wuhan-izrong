@@ -28,17 +28,35 @@ const MSG_TYPE = {
   FORCE_LOGOUT:'FORCE_LOGOUT'
 };
 
+const UPDATE_GROUP_TYPE = {
+  CREATE_GROUP: 'createGroup',
+  UPDATE_GROUP_NAME: 'updateGroupName',
+  UPDATE_GROUP_IMAGE_URL: 'updateGroupImageUrl',
+  ADD_GROUP_MEMBER: 'addGroupMember',
+  DELETE_GROUP_MEMBER: 'deleteGroupMember'
+};
+
 const SESSION_TYPE = {
   GROUP: 'group',
   USER: 'user',
   INVITE:'invite',
   INVITED:'invited',
-  PLATFORMINFO:'platforminfo',
+  PLATFORMINFO:'platformInfo',
+  LEAVE_GROUP: 'leave',
+  ADD_FRIEND: 'addFriend',
+  GROUP_NOTICE: 'groupNotice'
 };
+
+const NOTICE_TYPE = {
+  INVITE:'invite',
+  INVITED:'invited',
+  LEAVE_GROUP: 'leave'
+}
 
 module.exports = {
   MSG_CONTENT_TYPE: MSG_CONTENT_TYPE,
   COMMAND_TYPE: COMMAND_TYPE,
   MSG_TYPE: MSG_TYPE,
   SESSION_TYPE: SESSION_TYPE,
+  NOTICE_TYPE: NOTICE_TYPE
 };

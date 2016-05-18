@@ -57,7 +57,23 @@ let SessionSchema = {
     lastTime: {type: 'date', optional: true},
     contentType: {type: 'string', optional: true}
   }
-};
+}
+
+let GroupNoticeSchema = {
+  name: "groupNotice",
+  primaryKey: 'noticeId',
+  properties: {
+    noticeId: {type: 'string', optional: true},
+    title:{type: 'string', optional: true},
+    content: {type: 'string', optional: true},
+    groupName: {type: 'string', optional: true},
+    groupId: {type: 'int', optional: true},
+    groupOwnerId: {type: 'int', optional: true},
+    revTime: {type: 'date', optional: true},
+    msgType: {type: 'string', optional: true},
+    isInvited: {type: 'bool', optional: true}
+  }
+}
 
 //im用户信息
 let ImUserInfoSchema = {
@@ -248,6 +264,7 @@ module.exports = {
   SessionSchema:SessionSchema,
   HomePageSchema:HomePageSchema,
   PlatFormInfoSchema:PlatFormInfo,
+  NoticeSchema: GroupNoticeSchema,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
@@ -261,5 +278,6 @@ module.exports = {
   ORDERITEM:'orderItem',
   SESSION:'session',
   HOMEPAGE:'homePage',
-  PLATFORMINFO:'platFormInfo'
+  PLATFORMINFO:'platFormInfo',
+  NOTICE: 'groupNotice'
 };

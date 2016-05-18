@@ -14,7 +14,7 @@ let SessionPersisterFacade = {
   queryAllSession: () => _queryAllSession(),
   getGroupIdBySessionId: (sid, cuid) => _getGroupIdBySessionId(sid, cuid),
   getUserIdBySessionId: (sid, cuid) => _getUserIdBySessionId(sid, cuid),
-  updateSession: (param, notAdd)=>_updateSession(param, notAdd),
+  updateSession: (param, notAdd, noticeType)=>_updateSession(param, notAdd, noticeType),
   querySessionById: (id, type) => _querySessionById(id, type),
   setBadgeZero: (sessionId) => _setBadgeZero(sessionId),
   updateInViteSession:(sessionId) => _updateInViteSession(sessionId),
@@ -59,16 +59,34 @@ let _getUserIdBySessionId = function(sid, cuid) {
   return  tagId ;
 }
 
-let _updateSession = function (param, notAdd){
+let _updateSession = function (param, notAdd, noticeType){
   _realm.write(()=>{
-    let p = _realm.objects(SESSION).filtered("sessionId = '" + param.sessionId + "'");
-    if(p.lastTime > param.lastTime){
-      return;
-    }
-    if(p.length > 0){
-      if(param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER){
-        if(!notAdd){
-          param.badge = p[0].badge + 1;
+    if (param.type == SESSION_TYPE.GROUP_NOTICE) {
+      let d = _realm.objects(SESSION).filtered('type = \'' + SESSION_TYPE.GROUP_NOTICE + '\'');
+      if (d.length > 0) {
+        if (noticeType == SESSION_TYPE.INVITE) {
+          param.badge = d[0].badge + 1;
+        } else {
+          param.badge = d[0].badge + 100000;
+        }
+        _realm.delete(d)
+      } else {
+        if (param.type == SESSION_TYPE.INVITE) {
+          param.badge = 1;
+        } else {
+          param.badge = 100000;
+        }
+      }
+    } else {
+      let p = _realm.objects(SESSION).filtered("sessionId = '" + param.sessionId + "'");
+      if(p.length > 0){
+        if(p[0].lastTime > param.lastTime){
+          return;
+        }
+        if(param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER){
+          if(!notAdd){
+            param.badge = p[0].badge + 1;
+          }
         }
       }
     }

@@ -349,4 +349,5 @@ let _getOrgByOrgName = function (orgName) {
   }
 };
 module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
-  require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'), require('./homePagePersisterFacade'));
+  require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'),
+  require('./homePagePersisterFacade'), require('./noticePersisterFacade'));
