@@ -98,14 +98,26 @@ let Publish = React.createClass({
 
   componentDidMount: function () {
     //// Keyboard events监听
-    DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
-    DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
+      if (Platform.OS === 'android') {
+          DeviceEventEmitter.addListener('keyboardDidShow', this.updateKeyboardSpace);
+          DeviceEventEmitter.addListener('keyboardDidHide', this.resetKeyboardSpace);
+      } else {
+          DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
+          DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
+      }
+
     AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   componentWillUnmount: function () {
-    DeviceEventEmitter.removeAllListeners('keyboardWillShow');
-    DeviceEventEmitter.removeAllListeners('keyboardWillHide');
+      if (Platform.OS === 'android') {
+          DeviceEventEmitter.removeAllListeners('keyboardDidShow');
+          DeviceEventEmitter.removeAllListeners('keyboardDidHide');
+      } else {
+          DeviceEventEmitter.removeAllListeners('keyboardWillShow');
+          DeviceEventEmitter.removeAllListeners('keyboardWillHide');
+      }
+
     AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
   },
 
@@ -127,7 +139,7 @@ let Publish = React.createClass({
           let keyBoardTop = screenHeight - this.state.keyboardSpace;
           let activeInputBottom = py + height;
 
-          if (activeInputBottom >= keyBoardTop + 10) {
+          if (activeInputBottom > keyBoardTop + 10) {
               this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
           }
       });

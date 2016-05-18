@@ -4,7 +4,8 @@ let _ = require('lodash');
 module.exports = {
   isMobile: function (data) {
     if (!_.isEmpty(data)) {
-      let re = /^[1]\d{10}$/;
+        //let re = /^[1]\d{10}$/;
+        let re = /^[1][34578]\d{9}/;
       if (!re.test(data)) {
         return false;
       }
