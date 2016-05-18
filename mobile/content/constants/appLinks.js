@@ -53,6 +53,10 @@ let AppLinks = {
   setGroupMute: imHttp + 'setGroupMute',
   inviteMember: imHttp + 'inviteMember',
   leaveGroup: imHttp + 'leaveGroup',
+  addFriend: imHttp + 'addFriend',
+  acceptFriend: imHttp + 'acceptFriend',
+
+  searcUser: Host + api + '/IMUserManage/getIMUserByKeyWord',
 };
 
 module.exports = AppLinks;

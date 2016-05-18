@@ -1,5 +1,6 @@
 package com.fasapp.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -8,6 +9,7 @@ import android.os.PowerManager;
 import android.widget.Toast;
 
 import com.fasapp.R;
+import com.fasapp.SplashActivity;
 
 import org.json.JSONObject;
 
@@ -20,6 +22,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipFile;
 
 /**
@@ -31,9 +34,9 @@ public class ReactNativeAutoUpdater {
     public static final String RNAU_SHARED_PREFERENCES = "React_Native_Auto_Updater_Shared_Preferences";
     public static final String RNAU_STORED_VERSION = "React_Native_Auto_Updater_Stored_Version";
     private final String RNAU_LAST_UPDATE_TIMESTAMP = "React_Native_Auto_Updater_Last_Update_Timestamp";
-    private final String RNAU_STORED_JS_FILENAME = "main.android.jsbundle";
-    private final String RNAU_STORED_JS_FOLDER = "JSCode";
-    private final String RNAU_STORED_BUNDLE_FOLDER = "bundle";
+    private final String RNAU_STORED_JS_FILENAME = "index.android.bundle";
+    private final String RNAU_STORED_JS_FOLDER = "jsCode";
+    public static String RNAU_STORED_BUNDLE_FOLDER = "bundle";
     private final String RNAU_STORED_BUNDLE_ZIP = "bundle.zip";
 
     public enum ReactNativeAutoUpdaterFrequency {
@@ -50,12 +53,17 @@ public class ReactNativeAutoUpdater {
     private ReactNativeAutoUpdaterFrequency updateFrequency = ReactNativeAutoUpdaterFrequency.EACH_TIME;
     private ReactNativeAutoUpdaterUpdateType updateType = ReactNativeAutoUpdaterUpdateType.MINOR;
     private Context context;
+    private SplashActivity currActivity;
     private boolean showProgress = true;
     private String hostname;
     private Interface activity;
 
-    public static ReactNativeAutoUpdater getInstance(Context context) {
-        ourInstance.context = context;
+    public static ReactNativeAutoUpdater getInstance(Activity activity) {
+        ourInstance.context = activity.getApplicationContext();
+        ourInstance.currActivity = (SplashActivity) activity;
+        SharedPreferences prefs = activity.getApplicationContext().getSharedPreferences(RNAU_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        String bundle = prefs.getString(RNAU_STORED_VERSION, "bundle");
+        RNAU_STORED_BUNDLE_FOLDER = "bundle" + bundle;
         return ourInstance;
     }
 
@@ -99,9 +107,12 @@ public class ReactNativeAutoUpdater {
 
     public void checkForUpdates() {
         if (this.shouldCheckForUpdates()) {
-            this.showProgressToast(R.string.auto_updater_checking);
+//            this.showProgressToast(R.string.auto_updater_checking);
+            currActivity.setTvUpdateVisible();
             FetchMetadataTask task = new FetchMetadataTask();
             task.execute(this.updateMetadataUrl);
+        } else {
+            currActivity.finishAct();
         }
     }
 
@@ -180,24 +191,32 @@ public class ReactNativeAutoUpdater {
 
     private void verifyMetadata(JSONObject metadata) {
         try {
+            if (metadata == null) {
+                currActivity.finishAct();
+                return;
+            }
             String version = metadata.getString("version");
-            String minContainerVersion = metadata.getString("minContainerVersion");
-            if (this.shouldDownloadUpdate(version, minContainerVersion)) {
-                this.showProgressToast(R.string.auto_updater_downloading);
-                String downloadURL = metadata.getJSONObject("url").getString("url");
-                if (metadata.getJSONObject("url").getBoolean("isRelative")) {
-                    if (this.hostname == null) {
-                        this.showProgressToast(R.string.auto_updater_no_hostname);
-                        System.out.println("No hostname provided for relative downloads. Aborting");
-                    } else {
-                        downloadURL = this.hostname + downloadURL;
+            if (!"null".equals(version)) {
+                String minContainerVersion = metadata.getString("minContainerVersion");
+                if (this.shouldDownloadUpdate(version, minContainerVersion)) {
+//                    this.showProgressToast(R.string.auto_updater_downloading);
+                    String downloadURL = metadata.getJSONObject("url").getString("url");
+                    if (metadata.getJSONObject("url").getBoolean("isRelative")) {
+                        if (this.hostname == null) {
+//                            this.showProgressToast(R.string.auto_updater_no_hostname);
+                            System.out.println("No hostname provided for relative downloads. Aborting");
+                        }
+                        downloadURL = this.hostname != null ? this.hostname : "" + downloadURL;
                     }
+                    FetchUpdateTask updateTask = new FetchUpdateTask();
+                    updateTask.execute(downloadURL, version);
+                } else {
+//                    this.showProgressToast(R.string.auto_updater_up_to_date);
+                    currActivity.finishAct();
+                    System.out.println("Already Up to Date");
                 }
-                FetchUpdateTask updateTask = new FetchUpdateTask();
-                updateTask.execute(downloadURL, version);
             } else {
-                this.showProgressToast(R.string.auto_updater_up_to_date);
-                System.out.println("Already Up to Date");
+                currActivity.finishAct();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -290,9 +309,10 @@ public class ReactNativeAutoUpdater {
                 metadataStr = total.toString();
                 if (!metadataStr.isEmpty()) {
                     metadata = new JSONObject(metadataStr);
-                } else {
-                    ReactNativeAutoUpdater.this.showProgressToast(R.string.auto_updater_no_metadata);
                 }
+//                else {
+//                    ReactNativeAutoUpdater.this.showProgressToast(R.string.auto_updater_no_metadata);
+//                }
             } catch (Exception e) {
                 ReactNativeAutoUpdater.this.showProgressToast(R.string.auto_updater_invalid_metadata);
                 e.printStackTrace();
@@ -313,9 +333,9 @@ public class ReactNativeAutoUpdater {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
-            mWakeLock.acquire();
+//            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+//            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
+//            mWakeLock.acquire();
         }
 
         @Override
@@ -331,10 +351,22 @@ public class ReactNativeAutoUpdater {
                 // expect HTTP 200 OK, so we don't mistakenly save error report
                 // instead of the file
                 if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    currActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            currActivity.setTvUpdateText("网络连接出错!");
+                        }
+                    });
+
                     return "Server returned HTTP " + connection.getResponseCode()
                             + " " + connection.getResponseMessage();
                 }
-
+                currActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        currActivity.setTvUpdateText("正在更新请稍后...");
+                    }
+                });
                 // download the file
                 input = connection.getInputStream();
                 File jsCodeDir = context.getDir(RNAU_STORED_JS_FOLDER, Context.MODE_PRIVATE);
@@ -361,14 +393,19 @@ public class ReactNativeAutoUpdater {
                 if (haveUpdate) {
                     //TODO: 删除原来的Bundle文件并解压下载的压缩包
                     File bundleFile = new File(jsCodeDir, RNAU_STORED_BUNDLE_FOLDER);
-                    delete(bundleFile);
-                    ZipUtils.unzip(jsCodeFile.getPath(), bundleFile.getPath());
+                    String unzip = ZipUtils.unzip(jsCodeFile.getPath(), jsCodeDir.getPath());
+                    if (unzip == null) {
+                        delete(bundleFile);
+                        SharedPreferences prefs = context.getSharedPreferences(RNAU_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(RNAU_STORED_VERSION, params[1]);
+                        editor.putLong(RNAU_LAST_UPDATE_TIMESTAMP, new Date().getTime());
+                        editor.apply();
+                    } else {
+                        return unzip;
+                    }
                 }
-                SharedPreferences prefs = context.getSharedPreferences(RNAU_SHARED_PREFERENCES, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString(RNAU_STORED_VERSION, params[1]);
-                editor.putLong(RNAU_LAST_UPDATE_TIMESTAMP, new Date().getTime());
-                editor.apply();
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return e.toString();
@@ -411,12 +448,25 @@ public class ReactNativeAutoUpdater {
 
         @Override
         protected void onPostExecute(String result) {
-            mWakeLock.release();
+//            mWakeLock.release();
             if (result != null) {
                 ReactNativeAutoUpdater.this.showProgressToast(R.string.auto_updater_downloading_error);
+                currActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        currActivity.setTvUpdateText("更新失败");
+                    }
+                });
+                currActivity.finishAct();
             } else {
                 ReactNativeAutoUpdater.this.updateDownloaded();
                 ReactNativeAutoUpdater.this.showProgressToast(R.string.auto_updater_downloading_success);
+                currActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        currActivity.setTvUpdateText("更新成功");
+                    }
+                });
             }
         }
     }

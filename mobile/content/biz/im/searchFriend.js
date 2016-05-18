@@ -7,26 +7,31 @@ let NavBarView = require('../../framework/system/navBarView');
 let DictStyle = require('../../constants/dictStyle');
 let NameCircular = require('./nameCircular').NameCircular;
 let ImUserInfo = require('./imUserInfo');
+let { Alert } = require('mx-artifacts');
+let ContactAction = require('../../framework/action/contactAction');
+let ContactStore = require('../../framework/store/contactStore');
+
 let SearchFriend = React.createClass({
 
 
   getInitialState:function(){
     return {
-      dataSource: []
+      dataSource: [],
+      keyWord:''
     }
   },
 
-  toOther: function(userId) {
+  toOther: function(data) {
     this.props.navigator.push({
       comp:ImUserInfo,
-      param:{userId:userId}
-    })
+      param:Object.assign(data,{isStranger:ContactStore.isStranger(data.userId)})
+    });
   },
 
   renderItem: function(data) {
     return (
     <TouchableOpacity key={data.userId}
-                      onPress={() => this.toOther(data.userId)}
+                      onPress={() => this.toOther(data)}
                       style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
       <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
         <NameCircular name={data.realName}/>
@@ -45,13 +50,41 @@ let SearchFriend = React.createClass({
   },
 
   searchFriend : function(){
-    this.setState(
-      {dataSource:[{userId:9,realName:'张某某', orgValue:'中国银行'},
-      {userId:10,realName:'王某某', orgValue:'中国银行'},
-      {userId:11,realName:'李某某', orgValue:'中国银行'}
-      ]
-      }
-    );
+    if(!this.state.keyWord || this.state.keyWord.length == 0){
+      Alert('请输入关键字');
+      return;
+    }else{
+      this.props.exec(()=>{
+        return  ContactAction.searchUser(this.state.keyWord).then((response)=>{
+          let userInfo = ContactStore.getUserInfo();
+          let nIndex = -1;
+          response.imSearchUsers && response.imSearchUsers.forEach((item,index)=>{
+            if(userInfo.userId == item.userId){
+              nIndex = index;
+            }else {
+              item.certificated = item.isCertificated;
+              item.orgValue = ContactStore.getOrgValueByOrgId(item.orgId);
+            }
+          });
+          if(nIndex != -1){
+            response.imSearchUsers.splice(nIndex, 1);
+
+          }
+          return response;
+        }).then((response)=>{
+
+          this.setState({dataSource:response.imSearchUsers});
+        }).catch((err)=>{
+          throw err;
+        });
+      });
+    }
+
+  },
+
+
+  textChange: function(keyWord){
+    this.setState({keyWord:keyWord});
   },
 
   render: function() {
@@ -65,9 +98,10 @@ let SearchFriend = React.createClass({
          <View style={{flexDirection:'row',justifyContent:'space-between'}}>
            <TextInput
              selectionColor={DictStyle.colorSet.textInputColor}
+             onChangeText={(text) => this.textChange(text)}
              style={{paddingHorizontal:5,flex:8,borderRadius:6,color: DictStyle.searchFriend.textInputColor, height:(Platform.OS === 'ios')?30:60,backgroundColor:'#ffffff',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}>
            </TextInput>
-           <TouchableOpacity style={{flex:1,height:(Platform.OS === 'ios')?30:60,justifyContent:'center',alignItems:'center'}} onPress={()=>this.searchFriend()}><Text style={{color:'#3C62E4'}}>搜索</Text></TouchableOpacity>
+           <TouchableOpacity style={{flex:1,height:(Platform.OS === 'ios')?30:60,justifyContent:'center',alignItems:'center'}} onPress={()=>this.searchFriend()}><Text style={{color:'#3C62E4',fontSize:16}}>搜索</Text></TouchableOpacity>
          </View>
 
          {(()=>{
@@ -82,7 +116,7 @@ let SearchFriend = React.createClass({
            }else{
              return (
                <View style={{flex:1,justifyContent:'center',marginTop:10}}>
-                 <Text style={{textAlign:'center',color:'#CBD3DB'}}>输入姓名/机构名以搜索好友</Text>
+                 <Text style={{textAlign:'center',color:DictStyle.searchFriend.nullUnitColor}}>输入姓名/机构名以搜索好友</Text>
                </View>
              );
            }

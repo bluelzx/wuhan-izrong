@@ -3,17 +3,16 @@ import {MSG_CONTENT_TYPE} from '../../constants/dictIm';
 import _ from 'lodash';
 import numeral from 'numeral';
 
-let PicViewer = require('../utils/picViewer');
+
 let screenWidth = Dimensions.get('window').width;
 let Lightbox = require('../lightBox/Lightbox');
+let AppStore = require('../../framework/store/appStore');
 
 let styles = StyleSheet.create({
   bubble: {
     borderRadius: 5,
-    paddingLeft: 14,
-    paddingRight: 14,
-    paddingBottom: 10,
-    paddingTop: 8,
+    paddingHorizontal:10,
+    paddingVertical:14
   },
   text: {
     color: '#000',
@@ -82,30 +81,31 @@ export default class Bubble extends React.Component {
     if (this.props.contentType === MSG_CONTENT_TYPE.IMAGE) {
       return (
 
-      <View style={[styles.bubble, customStyle]}>
-        <Image
-          style={{
+      //<View style={[styles.bubble, customStyle]}>
+      //  <Image
+      //    style={{
+      //          flex: 1,
+      //          width: 100,
+      //          height: 100,
+      //          }}
+      //    source={{uri: this.props.content}}
+      //  ></Image>
+      //</View>
+
+          <Lightbox underlayColor='#44B5E6'
+                    imageSource={{uri:this.props.content}}
+                    navigator={AppStore.getNavigator()} >
+              <View style={[styles.bubble, customStyle]}>
+                  <Image
+                      style={{
                 flex: 1,
                 width: 100,
                 height: 100,
                 }}
-          source={{uri: this.props.content}}
-        ></Image>
-      </View>
-
-          //<Lightbox underlayColor='#44B5E6'
-          //          imageSource={{uri:this.props.content}}>
-          //    <View style={[styles.bubble, customStyle]}>
-          //        <Image
-          //            style={{
-          //      flex: 1,
-          //      width: 100,
-          //      height: 100,
-          //      }}
-          //            source={{uri: this.props.content}}
-          //        ></Image>
-          //    </View>
-          //</Lightbox>
+                      source={{uri: this.props.content}}
+                  ></Image>
+              </View>
+          </Lightbox>
 
 
       );

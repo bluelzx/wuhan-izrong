@@ -2,7 +2,7 @@
  * Created by baoyinghai on 4/20/16.
  */
 
-let SessiontStore = require('../store/sessionStore');
+let NoticeStore = require('../store/noticeStore');
 
 /**
  * 增加和更新
@@ -19,23 +19,19 @@ let SessiontStore = require('../store/sessionStore');
  lastTime: {type: 'date', optional: true},
  contentType: {type: 'string', optional: true}
  */
-let _updateSession = function (type, sessionId, title, content, lastTime, contentType, opts) {
-  let  groupId = opts && opts.groupId;
-  let notAdd = opts && opts.notAdd;
-  let noticeType = opts && opts.noticeType;
+let _updateNotice = function (type, noticeId,groupName, lastTime, title, content, groupId, ownerId) {
   let param = {
-    sessionId:sessionId,
-    type: type,
-    badge:0,
+    noticeId:noticeId,
     title: title,
     content:content,
-    lastTime: lastTime,
-    contentType: contentType
+    groupName: groupName,
+    groupId:groupId,
+    groupOwnerId: ownerId,
+    revTime: lastTime,
+    msgType: type,
+    isInvited: false
   };
-  if(!notAdd){
-    param.badge = 1;
-  }
-  SessiontStore.updateSession(param, notAdd, noticeType);
+  NoticeStore.updateNotice(param);
 }
 
 /**
@@ -43,20 +39,20 @@ let _updateSession = function (type, sessionId, title, content, lastTime, conten
  * @param sessionId
  * */
 let _deleteSession = function(sessionId) {
-  SessiontStore.deleteSession(sessionId);
+  //SessionStore.deleteSession(sessionId);
 }
 
 /**
  * 查询会话
  * */
 let _queryAllSession = function(ownerId) {
-  return SessiontStore.queryAllSession(ownerId);
+  //return SessionStore.queryAllSession(ownerId);
 }
 
-let sessionAction = {
-  updateSession:_updateSession,
+let noticeAction = {
+  updateNotice:_updateNotice,
   deleteSession:_deleteSession,
   queryAllSession:_queryAllSession
 }
 
-module.exports = sessionAction;
+module.exports = noticeAction;

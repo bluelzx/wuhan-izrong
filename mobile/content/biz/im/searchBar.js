@@ -41,10 +41,10 @@ let SearchBar = React.createClass({
     } else {
       return (
         <TouchableOpacity onPress={() => {this.setState({editAble:true})}}
-          style={{height:(Platform.OS === 'ios')?30:60,justifyContent:'center', alignItems:'center',backgroundColor:'#ffffff',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}
+          style={{height:(Platform.OS === 'ios')?30:60,justifyContent:'center', alignItems:'center',backgroundColor:'#ffffff',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10,alignSelf:'stretch'}}
         >
           <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-            <Icon name="ios-search-strong" size={18} color={DictStyle.colorSet.searchBarColor} />
+            <Icon name="ios-search-strong" size={22} color={DictStyle.colorSet.searchBarColor} />
             <Text style={{color:DictStyle.colorSet.searchBarColor, marginLeft:5, fontSize:16, fontWeight:'normal'}}>搜索</Text>
           </View>
         </TouchableOpacity>
@@ -56,7 +56,8 @@ let SearchBar = React.createClass({
     return (
       <View style={{backgroundColor:'#f0f0f0',paddingBottom:5,borderBottomColor:'#d3d5e0',borderBottomWidth:1}}>
         <View
-          style={{height:30,backgroundColor:'#ffffff',marginTop:5,marginLeft:10,marginRight:10,borderRadius:6}}>
+          style={{height:40,backgroundColor:'#ffffff',marginTop:5,marginLeft:10,marginRight:10,borderRadius:6,
+          justifyContent:'center', alignItems:'center'}}>
           {this.renderBar()}
         </View>
       </View>

@@ -29,10 +29,6 @@ let _onNotification = function(notification) {
   // });
 };
 
-let _showPic = function(src){
-  AppStore.savePicUrl(src);
-  AppStore.emitChange(SHOW_VIEW);
-}
 
 let AppActions = {
   appInit: () => _appInit(),
@@ -40,7 +36,7 @@ let AppActions = {
   onNotification: (notification) => _onNotification(notification),
   freshNotification: (notification) => _onNotification(notification),
   emitActiveApp:()=>{AppStore.emitChange('active_app')},
-  showPic:(src) => _showPic(src)
+
 };
 
 module.exports = AppActions;

@@ -93,6 +93,7 @@ const PlainStyle = {
 
   searchFriend:{
     textInputColor:'#64C3EA',
+    nullUnitColor:'#CBD3DB'
   }
 
 };

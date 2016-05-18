@@ -59,6 +59,22 @@ let SessionSchema = {
   }
 };
 
+let GroupNoticeSchema = {
+  name: "groupNotice",
+  primaryKey: 'noticeId',
+  properties: {
+    noticeId: {type: 'string', optional: true},
+    title:{type: 'string', optional: true},
+    content: {type: 'string', optional: true},
+    groupName: {type: 'string', optional: true},
+    groupId: {type: 'int', optional: true},
+    groupOwnerId: {type: 'int', optional: true},
+    revTime: {type: 'date', optional: true},
+    msgType: {type: 'string', optional: true},
+    isInvited: {type: 'bool', optional: true}
+  }
+};
+
 //im用户信息
 let ImUserInfoSchema = {
   name: "imUserInfo",
@@ -118,8 +134,9 @@ let LoginUserInfoSchema = {
     orgId: {type: 'int', optional: true},
     lastLoginTime: {type: 'date', optional: true},  //本地增加,用于多用户登陆排序
     token: {type: 'string', optional: true},
-    lastSyncTime: {type: 'date', optional: true},
-    certificated: {type: 'bool', optional: true}, //用户是否认证
+    lastSyncTime:{type:'date', optional:true},
+    certified:{type:'bool', optional:true},
+    friendList:{type:'string', optional:true}
   }
 };
 
@@ -234,6 +251,23 @@ let PlatFormInfo = {
 };
 
 
+//新好友通知
+let NewFriendNotic = {
+  name:"newFriendNotic",
+  primaryKey:'noticId',
+  properties: {
+    noticId: {type:'string', optional: true},
+    userId:{type:'int', optional: true},
+    realName:{type:'string', optional: true},
+    orgName:{type:'string', optional: true},
+    photoFileUrl:{type:'string', optional: true},
+    ownerId:{type:'int', optional: true},
+    isAccept:{type:'bool', optional:true},
+    certified:{type:'bool', optional:true}
+  }
+}
+
+
 module.exports = {
   DeviceSchema: DeviceSchema,
   GroupSchema: GroupSchema,
@@ -243,12 +277,14 @@ module.exports = {
   OrgBeanSchema: OrgBeanSchema,
   BizOrderCategorySchema: BizOrderCategorySchema,
   BizOrderItemSchema: BizOrderItemSchema,
-  FilterItemSchema: FilterItemSchema,
-  FilterItemsSchema: FilterItemsSchema,
-  OrderItemSchema: OrderItemSchema,
-  SessionSchema: SessionSchema,
-  HomePageSchema: HomePageSchema,
-  PlatFormInfoSchema: PlatFormInfo,
+  FilterItemSchema:FilterItemSchema,
+  FilterItemsSchema:FilterItemsSchema,
+  OrderItemSchema:OrderItemSchema,
+  SessionSchema:SessionSchema,
+  HomePageSchema:HomePageSchema,
+  PlatFormInfoSchema:PlatFormInfo,
+  NoticeSchema: GroupNoticeSchema,
+  NewFriendNoticSchema:NewFriendNotic,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
@@ -257,10 +293,12 @@ module.exports = {
   ORGBEAN: 'orgBean',
   BIZORDERCATEGORY: 'bizOrderCategory',
   BIZORDERITEM: 'bizOrderItem',
-  FILTERITEMS: 'filterItems',
-  FILTERITEM: 'filterItem',
-  ORDERITEM: 'orderItem',
-  SESSION: 'session',
-  HOMEPAGE: 'homePage',
-  PLATFORMINFO: 'platFormInfo'
+  FILTERITEMS:'filterItems',
+  FILTERITEM:'filterItem',
+  ORDERITEM:'orderItem',
+  SESSION:'session',
+  HOMEPAGE:'homePage',
+  PLATFORMINFO:'platFormInfo',
+  NOTICE: 'groupNotice',
+  NEWFRIENDNOTIC:'newFriendNotic'
 };

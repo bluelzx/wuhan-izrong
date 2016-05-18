@@ -3,6 +3,7 @@ const MSG_CONTENT_TYPE = {
   IMAGE: 'image',
   NAMECARD:'namecard',
   BIZINFO:'bizinfo',
+  NULL:'null'
 };
 
 const COMMAND_TYPE = {
@@ -36,7 +37,20 @@ const MSG_TYPE = {
   CONTANCT_INFO_CERTIFY:'CONTANCT_INFO_CERTIFY',
   CONTANCT_INFO_UNCERTIFY:'CONTANCT_INFO_UNCERTIFY',
   CONTANCT_INFO_FREEZE:'CONTANCT_INFO_FREEZE',
-  ORG_INFO_UPDATE:'ORG_INFO_UPDATE'
+  ORG_INFO_UPDATE:'ORG_INFO_UPDATE',
+  CERTIFICATION:'CERTIFICATION',
+  USER_FROZEN:'USER_FROZEN',
+  USER_DELETE:'USER_DELETE',
+  FRIEND_INVITE:'FRIEND_INVITE',
+  FRIEND_PROMISE:'FRIEND_PROMISE'
+};
+
+const UPDATE_GROUP_TYPE = {
+  CREATE_GROUP: 'createGroup',
+  UPDATE_GROUP_NAME: 'updateGroupName',
+  UPDATE_GROUP_IMAGE_URL: 'updateGroupImageUrl',
+  ADD_GROUP_MEMBER: 'addGroupMember',
+  DELETE_GROUP_MEMBER: 'deleteGroupMember'
 };
 
 const SESSION_TYPE = {
@@ -45,7 +59,17 @@ const SESSION_TYPE = {
   INVITE:'invite',
   INVITED:'invited',
   PLATFORMINFO:'platforminfo',
+  NEWFRIEND:'newfriend',
+  LEAVE_GROUP: 'leave',
+  ADD_FRIEND: 'addFriend',
+  GROUP_NOTICE: 'groupNotice'
 };
+
+const NOTICE_TYPE = {
+  INVITE:'invite',
+  INVITED:'invited',
+  LEAVE_GROUP: 'leave'
+}
 
 module.exports = {
   MSG_CONTENT_TYPE: MSG_CONTENT_TYPE,
@@ -53,4 +77,5 @@ module.exports = {
   MSG_TYPE: MSG_TYPE,
   KPI_TYPE: KPI_TYPE,
   SESSION_TYPE: SESSION_TYPE,
+  NOTICE_TYPE: NOTICE_TYPE
 };
