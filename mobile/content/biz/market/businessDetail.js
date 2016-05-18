@@ -164,13 +164,17 @@ let BusinessDetail = React.createClass({
     return (
       <View style={{flexDirection:'row',alignItems:'center'}}>
         {this.renderUserPhoto(this.state.userInfo)}
-        <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
-              numberOfLines={1}>{this.state.marketInfo.userName}</Text>
-        <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#f0f0f0' activeOpacity={0.8}>
-          <Text style={{marginTop:5 ,fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
-        </TouchableHighlight>
-        <Text style={{marginTop:5,width:(screenWidth - 184)/2,fontSize:12,color:DictStyle.marketSet.fontColor}}
-              numberOfLines={1}>{'-' + this.state.marketInfo.orgName}</Text>
+        <View>
+          <View style={{flexDirection:'row',alignItems:'center'}}>
+            <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
+                  numberOfLines={1}>{this.state.marketInfo.userName}</Text>
+            <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#f0f0f0' activeOpacity={0.8}>
+              <Text style={{marginTop:5 ,fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
+            </TouchableHighlight>
+          </View>
+          <Text style={{marginTop:10,fontSize:12,color:DictStyle.marketSet.fontColor}}
+                numberOfLines={1}>{this.state.marketInfo.orgName}</Text>
+        </View>
       </View>
     );
 
@@ -186,7 +190,7 @@ let BusinessDetail = React.createClass({
       return (
         <View style={{margin:10}}>
           <Image
-            style={{height:36,width:36,borderRadius:18}}
+            style={{height:46,width:46,borderRadius:23}}
             source={{uri:this.state.marketInfo.photoStoredFileUrl}}
           />
         </View>
