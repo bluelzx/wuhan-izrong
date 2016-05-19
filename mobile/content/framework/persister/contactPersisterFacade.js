@@ -280,7 +280,7 @@ let _updateContactInfo = function(message){
     photoFileUrl:message.photoFileUrl,
     publicQQ:message.isPublicQq,
     orgId: message.orgId,
-    certified:message.isCertificated,
+    certificated:message.isCertificated,
     mute:false
   };
   let ret = {};
@@ -436,7 +436,8 @@ let _addFriend = function(userInfo) {
     photoFileUrl:userInfo.photoFileUrl,
     publicQQ:userInfo.publicQQ,
     orgId:userInfo.orgId,
-    mute:userInfo.mute
+    mute:userInfo.mute,
+    certificated:userInfo.isCertificated,
   };
 
   _realm.write(()=>{

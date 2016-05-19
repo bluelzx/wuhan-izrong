@@ -22,7 +22,7 @@ let ContactAction = require('../../framework/action/contactAction');
 //let NameCircular = require('./nameCircular').NameCircular;
 let HeaderPic = require('./headerPic');
 let DictStyle = require('../../constants/dictStyle');
-let { Device,Alert } = require('mx-artifacts');
+let { Button} = require('mx-artifacts');
 
 let ImUserInfo = React.createClass({
 
@@ -39,7 +39,7 @@ let ImUserInfo = React.createClass({
     console.log(userInfo.mute);
     return{
       data:userInfo,
-      mute:userInfo.mute,
+      mute:userInfo.mute||false,
     };
   },
 
@@ -101,16 +101,26 @@ let ImUserInfo = React.createClass({
   },
 
   renderAdd: function() {
+
+    //<TouchableOpacity onPress={()=>this.addFriend()}>
+    //  <View
+    //    style={{marginRight:10,borderRadius:6,flex:1,backgroundColor:'#44B5E6',height:40,justifyContent:'center', alignItems:'center'}}>
+    //    <Text style={{color:'#ffffff',textAlign:'center'}}>加为好友</Text>
+    //  </View>
+    //</TouchableOpacity>
     if(!this.props.param.isStranger){
      return null;
     }else {
       return (
-        <TouchableOpacity onPress={()=>this.addFriend()}>
-          <View
-            style={{marginRight:10,borderRadius:6,flex:1,backgroundColor:'#44B5E6',height:40,justifyContent:'center', alignItems:'center'}}>
-            <Text style={{color:'#ffffff',textAlign:'center'}}>加为好友</Text>
+        <View style={{paddingHorizontal:10}}>
+      <Button
+        containerStyle={{marginTop: 20, backgroundColor: '#4fb9fc'}}
+        style={{fontSize: 20, color: '#ffffff'}}
+        onPress={()=>this.addFriend()}
+      >
+        加为好友
+      </Button>
           </View>
-        </TouchableOpacity>
       );
     }
   },
@@ -120,7 +130,7 @@ let ImUserInfo = React.createClass({
     let privateDesc = "未公开";
     return (
       <NavBarView navigator={this.props.navigator} title='详细资料'>
-        <ScrollView automaticallyAdjustContentInsets={false}  style={{paddingLeft:0}} horizontal={false}>
+        <ScrollView automaticallyAdjustContentInsets={false}  horizontal={false}>
 
           <View style={styles.itemBackColor} >
             <View style={styles.layout}>
