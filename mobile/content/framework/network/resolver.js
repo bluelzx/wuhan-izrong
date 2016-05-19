@@ -4,6 +4,8 @@ let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE, UPDATE_GROUP_TYPE, NOTICE_TYPE } = r
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
 let AppStore = require('../store/appStore');
+let NotificationModule = require('NativeModules').NotificationModule;
+
 //let {Alert} = require('mx-artifacts');
 let _dealMsg = function (message, socket) {
   let userInfo = ContactSotre.getUserInfo();
@@ -132,6 +134,9 @@ let _dealMsg = function (message, socket) {
     case MSG_TYPE.CONTANCT_INFO_CERTIFY:
       if (message.userId == AppStore.getUserId()) {
         AppStore.updateUserInfo('certificated', message.isCertificated);
+        if(Platform.OS == 'android'){
+          NotificationModule.showNotification("系统提示","爱资融","您已通过系统管理员的认证");
+        }
       } else {
         ImStore.updateContactInfo(message);
       }
@@ -139,12 +144,18 @@ let _dealMsg = function (message, socket) {
     case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
       if (message.userId == AppStore.getUserId()) {
         AppStore.updateUserInfo('certificated', message.isCertificated);
+        if(Platform.OS == 'android'){
+          NotificationModule.showNotification("系统提示","爱资融","您已被系统管理员取消认证");
+        }
       } else {
         ImStore.updateContactInfo(message);
       }
       break;
     case MSG_TYPE.CONTANCT_INFO_FREEZE:
       if (message.userId == AppStore.getUserId()) {
+        if(Platform.OS == 'android'){
+          NotificationModule.showNotification("系统提示","爱资融","您的帐户已被冻结,请联系系统管理员");
+        }
         AppStore.forceLogout();
       }
       break;
