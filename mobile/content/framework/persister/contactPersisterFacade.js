@@ -259,7 +259,7 @@ let _updateContactInfo = function(address, realName, email, nameCardFileUrl, dep
     photoFileUrl:photoFileUrl,
     publicQQ:publicQQ,
     orgId:orgId,
-    certified:certified
+    certified:certified,
     mute:false
   };
   let ret = {};
