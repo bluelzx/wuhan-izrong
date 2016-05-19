@@ -8,13 +8,13 @@ const {
   MESSAGE
   } = require('./schemas');
 let { SESSION_TYPE } = require('../../constants/dictIm');
-
+let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
 let SessionPersisterFacade = {
   deleteSession: (sessionId) => _deleteSession(sessionId),
-  queryAllSession: () => _queryAllSession(),
+  queryAllSession: (currUserId) => _queryAllSession(currUserId),
   getGroupIdBySessionId: (sid, cuid) => _getGroupIdBySessionId(sid, cuid),
   getUserIdBySessionId: (sid, cuid) => _getUserIdBySessionId(sid, cuid),
-  updateSession: (param, notAdd, noticeType)=>_updateSession(param, notAdd, noticeType),
+  updateSession: (param, notAdd, noticeType, currUserId)=>_updateSession(param, notAdd, noticeType, currUserId),
   querySessionById: (id, type) => _querySessionById(id, type),
   setBadgeZero: (sessionId) => _setBadgeZero(sessionId),
   updateInViteSession:(sessionId) => _updateInViteSession(sessionId),
@@ -28,19 +28,21 @@ let _deleteSession = function(sessionId) {
   });
 }
 
-let _queryAllSession = function() {
+let _queryAllSession = function(currUserId) {
   let ret = [];
   _realm.objects(SESSION).sorted('lastTime',[true]).forEach((item)=>{
-    let p = {
-      sessionId: item.sessionId,
-      type: item.type,
-      badge:item.badge,
-      title: item.title,
-      content:item.content,
-      lastTime: item.lastTime,
-      contentType: item.contentType
-    };
-    ret.push(p);
+    if(currUserId == SessionIdSplit.getUserIdFromSessionId(item.sessionId)) {
+      let p = {
+        sessionId: item.sessionId,
+        type: item.type,
+        badge:item.badge,
+        title: item.title,
+        content:item.content,
+        lastTime: item.lastTime,
+        contentType: item.contentType
+      };
+      ret.push(p);
+    }
   });
   return ret;
 }
@@ -59,17 +61,25 @@ let _getUserIdBySessionId = function(sid, cuid) {
   return  tagId ;
 }
 
-let _updateSession = function (param, notAdd, noticeType){
+let _updateSession = function (param, notAdd, noticeType, currUserId){
   _realm.write(()=>{
     if (param.type == SESSION_TYPE.GROUP_NOTICE) {
       let d = _realm.objects(SESSION).filtered('type = \'' + SESSION_TYPE.GROUP_NOTICE + '\'');
-      if (d.length > 0) {
-        if (noticeType == SESSION_TYPE.INVITE) {
-          param.badge = d[0].badge + 1;
-        } else {
-          param.badge = d[0].badge + 100000;
+      let groupSession = [];
+      d.forEach((item) => {
+        let userId = SessionIdSplit.getUserIdFromSessionId(item.sessionId);
+        if (currUserId == userId) {
+          groupSession.push(item);
         }
-        _realm.delete(d)
+      });
+      if (groupSession.length > 0) {
+        if (noticeType == SESSION_TYPE.INVITE) {
+          param.badge = groupSession[0].badge + 1;
+        } else {
+          param.badge = groupSession[0].badge + 100000;
+        }
+        let wd = _realm.objects(SESSION).filtered('sessionId = \'' + groupSession.sessionId + '\'');
+        _realm.delete(wd)
       } else {
         if (param.type == SESSION_TYPE.INVITE) {
           param.badge = 1;

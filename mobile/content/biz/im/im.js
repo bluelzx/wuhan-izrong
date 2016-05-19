@@ -38,8 +38,7 @@ let {sessionFilter} = require('./searchBarHelper');
 let { IM_SESSION_LIST } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
 let PlainStyle = require('../../constants/dictStyle');
-let NotifyHeader = require('./notifyHeader');
-let GroupNotifyList = require('./groupNotifyList');
+let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
 let WhitePage = React.createClass({
 
   componentDidMount() {
@@ -54,7 +53,7 @@ let WhitePage = React.createClass({
   },
 
   getStateFromStores: function () {
-    let userInfo = ContactStore.getUserInfo();
+    let userInfo = AppStore.getLoginUserInfo();
     return {data: ContactStore.getIMNotificationMessage(userInfo.userId)};
   },
 
@@ -312,8 +311,7 @@ let WhitePage = React.createClass({
   },
 
   getIdFromSessionId: function(sessionId){
-    let i = sessionId.indexOf(':');
-    return parseInt(sessionId.substring(i+1));
+    return SessionIdSplit.getIdFromSessionId(sessionId);
   },
 
   renderInvited:function(item, index) {

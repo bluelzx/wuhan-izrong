@@ -269,7 +269,7 @@ let GroupNotice = React.createClass({
   acceptInvite: function (item) {
     this.props.exec(
       ()=> {
-        return ContactAction.acceptInvitation(groupId).then(()=> {
+        return ContactAction.acceptInvitation(item.groupId).then(()=> {
           NoticeStore.updateInViteNotice(item.noticeId);
         }).then(
           this.toChat(item)
@@ -410,7 +410,6 @@ let GroupNotice = React.createClass({
         </View>
       );
     } else {
-      //TODO: onPress方法中要调用接受邀请的接口
       return (
         <TouchableHighlight style={{borderRadius: 5, backgroundColor: '#1095ef',paddingHorizontal:20,paddingVertical:5}}
                             underlayColor='#08a0f7' onPress={()=>{this.acceptInvite(item)}}>

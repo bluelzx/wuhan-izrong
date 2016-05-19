@@ -4,6 +4,12 @@ var developConfig = {
   ImHost:'192.168.61.84:5000'//dev
 };
 
+var developConfigDocker= {
+  Dev: true, // Switch for log. true means print.
+  Host: 'http://192.168.64.152:8080/fas',   //dev
+  ImHost:'192.168.61.84:3000'//dev
+};
+
 var qaConfig = {
   Dev: false,
   //Host: 'http://192.168.64.205:9101/fas',     //qa
@@ -17,7 +23,7 @@ var productConfig = {
   ImHost: '139.196.174.42:4000'
 };
 
-var Config = developConfig;
+var Config = developConfigDocker;
 
 module.exports = Config;
 //module.exports = function () {

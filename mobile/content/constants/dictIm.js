@@ -44,7 +44,8 @@ const UPDATE_GROUP_TYPE = {
   UPDATE_GROUP_NAME: 'updateGroupName',
   UPDATE_GROUP_IMAGE_URL: 'updateGroupImageUrl',
   ADD_GROUP_MEMBER: 'addGroupMember',
-  DELETE_GROUP_MEMBER: 'deleteGroupMember'
+  KICK_OUT_GROUP_MEMBER: 'kickOutGroupMember',
+  LEAVE_GROUP: 'leaveGroup'
 };
 
 const SESSION_TYPE = {
@@ -70,5 +71,6 @@ module.exports = {
   MSG_TYPE: MSG_TYPE,
   KPI_TYPE: KPI_TYPE,
   SESSION_TYPE: SESSION_TYPE,
-  NOTICE_TYPE: NOTICE_TYPE
+  NOTICE_TYPE: NOTICE_TYPE,
+  UPDATE_GROUP_TYPE: UPDATE_GROUP_TYPE
 };

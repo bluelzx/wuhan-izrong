@@ -15,7 +15,7 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.REC_P2P_MSG:
       ImStore.saveMsg({
-        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.fromUid),
+        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.fromUid, userId),
         // sessionId: 'user:3',
         msgId: message.msgId,
         fromUId: message.fromUid,
@@ -35,18 +35,20 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.GROUP_JOIN_INVITE:
       ImStore.saveMsg({
-        sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId),
+        sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId, userId),
         groupId:message.groupId,
         groupName:message.groupName,
         groupOwnerId:message.groupOwnerId,
         msgType:SESSION_TYPE.GROUP_NOTICE,
         revTime:new Date(),
-        noticeType: NOTICE_TYPE.INVITE
+        noticeType: NOTICE_TYPE.INVITE,
+        groupInviterName: message.groupInviterName,
+        groupInviterOrgValue: message.groupInviterOrgValue
       },userId);
       break;
     case MSG_TYPE.REC_GROUP_MSG:
       ImStore.saveMsg({
-        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.GROUP, message.gid),
+        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.GROUP, message.gid, userId),
         msgId: message.msgId,
         fromUId: message.fromUid,
         groupId: message.gid,
@@ -94,17 +96,30 @@ let _dealMsg = function (message, socket) {
           break;
         case UPDATE_GROUP_TYPE.ADD_GROUP_MEMBER:
           ImStore.saveMsg({
-            sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId),
+            sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId, userId),
             groupId:message.groupId,
             groupName:message.groupName,
             groupOwnerId:message.groupOwnerId,
             msgType:SESSION_TYPE.GROUP_NOTICE,
             revTime:new Date(),
-            noticeType: NOTICE_TYPE.INVITED
+            noticeType: NOTICE_TYPE.INVITED,
+            realName: message.userInfo.realName,
+            orgValue: message.userInfo.orgValue
           },userId);
           break;
-        case UPDATE_GROUP_TYPE.DELETE_GROUP_MEMBER:
+        case UPDATE_GROUP_TYPE.KICK_OUT_GROUP_MEMBER:
+        case UPDATE_GROUP_TYPE.LEAVE_GROUP:
           //TODO 退出群组的处理...
+          ImStore.saveMsg({
+            sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId, userId),
+            groupId:message.groupId,
+            groupName:message.groupName,
+            groupOwnerId:message.groupOwnerId,
+            msgType:SESSION_TYPE.GROUP_NOTICE,
+            revTime:new Date(),
+            noticeType: NOTICE_TYPE.LEAVE_GROUP,
+            userId: message.userInfo.userId
+          },userId);
           break;
         default:
           console.log('None message type matched! [%s]', message.msgType);
@@ -113,7 +128,7 @@ let _dealMsg = function (message, socket) {
       }
       break;
     case MSG_TYPE.GROUP_INFO_DELETE:
-      ContactSotre.leaveGroup(message.groupId);
+      //ContactSotre.leaveGroup(message.groupId);
       break;
     case MSG_TYPE.SYNC_REQ:
       //message.msgArray.forEach((item)=>{

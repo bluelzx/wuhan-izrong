@@ -345,6 +345,7 @@ let _selfDeleteSession = function(sessionId){
 }
 
 let _leaveGroup = function(groupId) {
+  //TODO: sessionId要加用户ID
   _realm.write(() => {
     let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
     _realm.delete(group);
