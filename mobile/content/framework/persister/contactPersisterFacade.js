@@ -250,31 +250,37 @@ let _getUsersExpress = function(groupId) {
 };
 
 
-let _updateContactInfo = function(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified){
+//let _updateContactInfo = function(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified){
+let _updateContactInfo = function(message){
+ // message.address,
+    //  message.realName, message.email, message.nameCardFileUrl, message.department, message.isPublicDepart,
+    //  message.jobTitle, message.isPublicTitle, message.mobileNo, message.isPublicMobile, message.phoneNumber,
+    //  message.isPublicPhone, message.isPublicEmail, message.isPublicAddress, message.isPublicWeChat, message.photoFileUrl,
+    //  message.qqNo, message.isPublicQq, message.weChatNo, message.userId, message.orgId, message.isCertificated
 
   let param = {
-    userId:userId,
-    address:address,
-    realName:realName,
-    weChatNo:weChatNo,
-    email:email,
-    nameCardFileUrl:nameCardFileUrl,
-    qqNo:qqNo,
-    department:department,
-    mobileNumber:mobileNumber,
-    jobTitle:jobTitle,
-    publicDepart:publicDepart,
-    publicTitle:publicTitle,
-    publicMobile:publicMobile,
-    phoneNumber:phoneNumber,
-    publicPhone:publicPhone,
-    publicEmail:publicEmail,
-    publicAddress:publicAddress,
-    publicWeChat:publicWeChat,
-    photoFileUrl:photoFileUrl,
-    publicQQ:publicQQ,
-    orgId:orgId,
-    certified:certified,
+    userId:message.userId,
+    address:message.address,
+    realName:message.realName,
+    weChatNo:message.weChatNo,
+    email:message.email,
+    nameCardFileUrl:message.nameCardFileUrl,
+    qqNo:message.qqNo,
+    department:message.department,
+    mobileNumber:message.mobileNo,
+    jobTitle:message.jobTitle,
+    publicDepart:message.isPublicDepart,
+    publicTitle:message.isPublicTitle,
+    publicMobile:message.isPublicMobile,
+    phoneNumber:message.phoneNumber,
+    publicPhone:message.isPublicPhone,
+    publicEmail:message.isPublicEmail,
+    publicAddress:message.isPublicAddress,
+    publicWeChat: message.isPublicWeChat,
+    photoFileUrl:message.photoFileUrl,
+    publicQQ:message.isPublicQq,
+    orgId: message.orgId,
+    certified:message.isCertificated,
     mute:false
   };
   let ret = {};
