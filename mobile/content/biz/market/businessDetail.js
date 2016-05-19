@@ -165,11 +165,11 @@ let BusinessDetail = React.createClass({
       <View style={{flexDirection:'row',alignItems:'center'}}>
         {this.renderUserPhoto(this.state.userInfo)}
         <View>
-          <View style={{flexDirection:'row',alignItems:'center'}}>
+          <View style={{flexDirection:'row',alignItems:'flex-end'}}>
             <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
                   numberOfLines={1}>{this.state.marketInfo.userName}</Text>
             <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#f0f0f0' activeOpacity={0.8}>
-              <Text style={{marginTop:5 ,fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
+              <Text style={{fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
             </TouchableHighlight>
           </View>
           <Text style={{marginTop:10,fontSize:12,color:DictStyle.marketSet.fontColor}}
@@ -239,6 +239,15 @@ let BusinessDetail = React.createClass({
     );
   },
   gotoIM: function (name) {
+    let sessionId = 'user:' + this.state.orderUserId.toString();
+    let content = {
+      "bizCategory": this.state.marketInfo.bizCategoryDesc,
+      "bizOrientation": this.state.marketInfo.bizOrientation,
+      "term": this.state.marketInfo.term,
+      "amount": this.state.marketInfo.amount,
+      "rate": this.state.marketInfo.rate,
+      "remark": this.state.marketInfo.remark
+    };
     const { navigator } = this.props;
     if (navigator) {
       navigator.push({
@@ -246,14 +255,9 @@ let BusinessDetail = React.createClass({
         param: {
           chatType: SESSION_TYPE.USER,
           userId: this.state.orderUserId,
-          content: {
-            "bizCategory": '资金业务',
-            "bizOrientation": 'IN',
-            "term": '0',
-            "amount": '0',
-            "rate": '0',
-            "remark": ''
-          }
+          sessionId: sessionId,
+          content: JSON.stringify(content),
+          isFromBizDetail: true
         }
       })
     }

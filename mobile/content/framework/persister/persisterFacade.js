@@ -73,13 +73,15 @@ let _saveAppData = function (data) {
 };
 
 let _saveSimpleLoginData = function (data,userId) {
-  _realm.write(()=> {
-      _realm.create(LOGINUSERINFO, {
-        userId: userId,
-        token: data.appToken
-      }, true);
-    }
-  );
+  return new Promise((resolve)=> {
+    _realm.write(()=> {
+        _realm.create(LOGINUSERINFO, {
+          userId: userId,
+          token: data.appToken
+        }, true);
+      }
+    );
+  });
 };
 
 let _saveLoginUserInfo = function (loginUserInfo, token) {

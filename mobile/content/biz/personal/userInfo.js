@@ -56,8 +56,8 @@ let UserInfo = React.createClass({
       address: userInfo.address,
       publicAddress: userInfo.publicAddress,
       nameCardFileUrl: userInfo.nameCardFileUrl,
-      certificated: userInfo.certificated,
-      certificatedValue: userInfo.certificated ? '(已认证)' : '(未认证)'
+      certificated: userInfo.certified,
+      certificatedValue: userInfo.certified ? '(已认证)' : '(未认证)'
     };
   },
 

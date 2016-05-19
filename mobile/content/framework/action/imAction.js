@@ -46,7 +46,10 @@ let ImAction = {
   uploadImage: (fileFieldName) => _uploadImage(AppLinks.uploadFile, fileFieldName),
   notificationRegister: (token) => _notificationRegister(token),
   onNotification: (notification) => _onNotification(notification),
-  freshNotification: (notification) => _onNotification(notification)
+  freshNotification: (notification) => _onNotification(notification),
+  initSend:() => {
+    _send();
+  },
 };
 
 module.exports = ImAction;

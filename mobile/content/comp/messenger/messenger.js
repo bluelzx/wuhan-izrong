@@ -50,6 +50,9 @@ let Messenger = React.createClass({
 
   componentDidMount() {
     ImStore.addChangeListener(this._onChange, IM_SESSION);
+    //if (this.props.param.isFromBizDetail) {
+    //  this._sendMessage(MSG_CONTENT_TYPE.BIZINFO, this.props.param.content);
+    //}
   },
 
   componentWillUnmount() {
