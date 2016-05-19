@@ -62,46 +62,59 @@ let _getUserIdBySessionId = function(sid, cuid) {
 }
 
 let _updateSession = function (param, notAdd, noticeType, currUserId){
-  _realm.write(()=>{
-    if (param.type == SESSION_TYPE.GROUP_NOTICE) {
-      let d = _realm.objects(SESSION).filtered('type = \'' + SESSION_TYPE.GROUP_NOTICE + '\'');
-      let groupSession = [];
-      d.forEach((item) => {
-        if (item && !_.isEmpty(item)) {
-          let userId = SessionIdSplit.getUserIdFromSessionId(item.sessionId);
-          if (currUserId == userId) {
-            groupSession.push(item);
-            let wd = _realm.objects(SESSION).filtered('sessionId = \'' + item.sessionId + '\'');
-            _realm.delete(wd)
+  if (param.type == SESSION_TYPE.GROUP_NOTICE) {
+    param.contentType = SESSION_TYPE.GROUP_NOTICE;
+    let d = _realm.objects(SESSION).filtered('type = \'' + SESSION_TYPE.GROUP_NOTICE + '\'');
+    let groupSession = [];
+    d.forEach((item) => {
+      if (item && !_.isEmpty(item)) {
+        let userId = SessionIdSplit.getUserIdFromSessionId(item.sessionId);
+        if (currUserId == userId) {
+          let ret = {
+            sessionId: item.sessionId,
+            type: item.type,
+            badge: item.badge,
+            title: item.title,
+            content: item.content,
+            lastTime: item.lastTime,
+            contentType: item.contentType
           }
-        }
-      });
-      if (groupSession.length > 0) {
-        if (noticeType == SESSION_TYPE.INVITE) {
-          param.badge = groupSession[0].badge + 1;
-        } else {
-          param.badge = groupSession[0].badge + 100000;
-        }
-      } else {
-        if (param.type == SESSION_TYPE.INVITE) {
-          param.badge = 1;
-        } else {
-          param.badge = 100000;
+          groupSession.push(ret);
+          let wd = _realm.objects(SESSION).filtered('sessionId = \'' + item.sessionId + '\'');
+          _realm.write(() => {
+            _realm.delete(wd)
+          })
+
         }
       }
+    });
+    if (groupSession.length > 0) {
+      if (noticeType == SESSION_TYPE.INVITE) {
+        param.badge = groupSession[0].badge + 1;
+      } else {
+        param.badge = groupSession[0].badge + 100000;
+      }
     } else {
-      let p = _realm.objects(SESSION).filtered("sessionId = '" + param.sessionId + "'");
-      if(p.length > 0){
-        if(p[0].lastTime > param.lastTime){
-          return;
-        }
-        if(param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER){
-          if(!notAdd){
-            param.badge = p[0].badge + 1;
-          }
+      if (noticeType == SESSION_TYPE.INVITE) {
+        param.badge = 1;
+      } else {
+        param.badge = 100000;
+      }
+    }
+  } else {
+    let p = _realm.objects(SESSION).filtered("sessionId = '" + param.sessionId + "'");
+    if(p.length > 0){
+      if(p[0].lastTime > param.lastTime){
+        return;
+      }
+      if(param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER){
+        if(!notAdd){
+          param.badge = p[0].badge + 1;
         }
       }
     }
+  }
+  _realm.write(()=>{
     _realm.create(SESSION, param, true);
   });
 }

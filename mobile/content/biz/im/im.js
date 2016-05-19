@@ -187,7 +187,7 @@ let WhitePage = React.createClass({
           flexDirection:'row',
           paddingVertical:7,
           paddingHorizontal: 10}}>
-          <HeadPic badge={item.badge} source={DictIcon.imGroupNotice}/>
+          <HeadPic badge={item.badge} source={DictIcon.imGroupNotice} showBadge={true}/>
           <View
             style={{  flex:1,paddingHorizontal:10}}>
             <View style={{flexDirection:'row', justifyContent:'space-between',flex:1}}>

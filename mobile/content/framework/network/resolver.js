@@ -98,17 +98,19 @@ let _dealMsg = function (message, socket) {
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_IMAGE_URL:
           break;
         case UPDATE_GROUP_TYPE.ADD_GROUP_MEMBER:
-          ImStore.saveMsg({
-            sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId, userId),
-            groupId:message.groupId,
-            groupName:message.groupName,
-            groupOwnerId:message.groupOwnerId,
-            msgType:SESSION_TYPE.GROUP_NOTICE,
-            revTime:new Date(),
-            noticeType: NOTICE_TYPE.INVITED,
-            realName: message.userInfo.realName,
-            orgValue: message.userInfo.orgValue
-          },userId);
+          if (userId != message.userInfo.userId) {
+            ImStore.saveMsg({
+              sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId, userId),
+              groupId:message.groupId,
+              groupName:message.groupName,
+              groupOwnerId:message.groupOwnerId,
+              msgType:SESSION_TYPE.GROUP_NOTICE,
+              revTime:new Date(),
+              noticeType: NOTICE_TYPE.INVITED,
+              realName: message.userInfo.realName,
+              orgValue: message.userInfo.orgValue
+            },userId);
+          }
           break;
         case UPDATE_GROUP_TYPE.KICK_OUT_GROUP_MEMBER:
         case UPDATE_GROUP_TYPE.LEAVE_GROUP:
