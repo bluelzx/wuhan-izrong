@@ -30,8 +30,8 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
   setGroupMute:(groupId, value) => _setGroupMute(groupId, value),
   leaveGroup:(groupId) => _leaveGroup(groupId),
   deleteContactInfo:(userIdList) => _deleteContactInfo(userIdList),
-  updateContactInfo: (address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId) =>
-    _updateContactInfo(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId),
+  updateContactInfo: (address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified) =>
+    _updateContactInfo(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified),
   addFriend: (userInfo) => _addFriend(userInfo),
   isStranger:(userId) => _isStranger(userId),
   getOrgValueByOrgId:(orgId) => _getOrgValueByOrgId(orgId)
@@ -235,7 +235,7 @@ let _getUsersExpress = function(groupId) {
 };
 
 
-let _updateContactInfo = function(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId){
+let _updateContactInfo = function(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified){
 
   let param = {
     userId:userId,
@@ -259,6 +259,7 @@ let _updateContactInfo = function(address, realName, email, nameCardFileUrl, dep
     photoFileUrl:photoFileUrl,
     publicQQ:publicQQ,
     orgId:orgId,
+    certified:certified
   };
   let ret = {};
   for(let k in param){

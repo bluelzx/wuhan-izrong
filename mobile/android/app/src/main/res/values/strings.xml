@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">环渤银通</string>
+  <string name="app_name">爱资融</string>
 
   <string name="auto_updater_downloaded_title">更新成功</string>
   <string name="auto_updater_downloaded_message">更新已完成。 是否立即生效？</string>
