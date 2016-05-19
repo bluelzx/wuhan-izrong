@@ -55,11 +55,11 @@ let NameCircular = React.createClass({
     return (
       <View>
         <View
-          style={{backgroundColor: this.getColor(f), height: 54,width: 54,borderRadius: 27,justifyContent:'center',alignItems:'center'}}>
+          style={{backgroundColor: this.getColor(f), height: 46,width: 46,borderRadius: 23,justifyContent:'center',alignItems:'center'}}>
           <View
-            style={{backgroundColor: 'white', height: 52,width: 52,borderRadius: 26,justifyContent:'center',alignItems:'center'}}>
+            style={{backgroundColor: 'white', height: 44,width: 44,borderRadius: 22,justifyContent:'center',alignItems:'center'}}>
             <View
-              style={{backgroundColor: this.getColor(f), height: 50,width: 50,borderRadius: 25,justifyContent:'center',alignItems:'center'}}>
+              style={{backgroundColor: this.getColor(f), height: 42,width: 42,borderRadius: 21,justifyContent:'center',alignItems:'center'}}>
               <Text style={{color:'white',fontWeight:'900',fontSize:20}}>{f}</Text>
             </View>
           </View>
