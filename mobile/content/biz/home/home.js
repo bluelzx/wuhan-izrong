@@ -35,7 +35,6 @@ let Home = React.createClass({
     let filterItems = AppStore.getFilters().filterItems;
     let category = MarketStore.getFilterOptions(filterItems,'bizCategory');
     let categoryArr = this.deleteFirstObj(category.options);
-
     let dataSource = new ViewPager.DataSource({
       pageHasChanged: (p1, p2) => p1 !== p2
     });
