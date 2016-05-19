@@ -241,12 +241,12 @@ let BusinessDetail = React.createClass({
   gotoIM: function (name) {
     let sessionId = 'user:' + this.state.orderUserId.toString();
     let content = {
-      "bizCategory": '资金业务',
-      "bizOrientation": 'IN',
-      "term": '0',
-      "amount": '0',
-      "rate": '0',
-      "remark": ''
+      "bizCategory": this.state.marketInfo.bizCategoryDesc,
+      "bizOrientation": this.state.marketInfo.bizOrientation,
+      "term": this.state.marketInfo.term,
+      "amount": this.state.marketInfo.amount,
+      "rate": this.state.marketInfo.rate,
+      "remark": this.state.marketInfo.remark
     };
     const { navigator } = this.props;
     if (navigator) {
