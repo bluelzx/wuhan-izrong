@@ -57,6 +57,7 @@ let HeaderPic = React.createClass({
         );
     }else if(!!source){
       return (
+
         <Image style={styles.head} resizeMode="cover" source={source}/>
       );
     }else {

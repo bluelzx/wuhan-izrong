@@ -72,6 +72,7 @@ let NewFriendList = React.createClass({
     return (
       <TouchableOpacity
         key={item.userId}
+        style={{backgroundColor:'#FEFEFE'}}
         onLongPress={
         ()=>
           {
@@ -96,15 +97,15 @@ let NewFriendList = React.createClass({
               if(item.isAccept){
                 return (
                   <Text
-                    style={{borderRadius:5,color:'#ffffff', paddingHorizontal:20,paddingVertical:5}}>{'已接受'}</Text>
+                    style={{borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'已接受'}</Text>
 
                 );
               }else{
                 return (
                   <TouchableOpacity style={{marginRight:10}} onPress={()=>this.acceptInvite(item)}>
-                    <View style={{borderRadius: 5, backgroundColor: '#3EC3A4',paddingHorizontal:20,paddingVertical:5}}>
+                    <View style={{borderRadius: 5, backgroundColor: '#23ABF3',paddingHorizontal:20,paddingVertical:5}}>
                       <Text
-                        style={{color: '#ffffff', textAlign:'center'}}>{'加为好友'}</Text>
+                        style={{color: '#EAF7FD', textAlign:'center'}}>{'加好友'}</Text>
                     </View>
                   </TouchableOpacity>
                 );
