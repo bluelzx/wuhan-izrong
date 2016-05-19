@@ -11,8 +11,6 @@ var uncleConfig = {
   ImHost:'192.168.64.224:3000'//dev
 };
 
-
-
 var qaConfig = {
   Dev: false,
   //Host: 'http://192.168.64.205:9101/fas',     //qa
