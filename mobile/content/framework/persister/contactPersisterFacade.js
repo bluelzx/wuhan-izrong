@@ -279,7 +279,7 @@ let _updateContactInfo = function(address, realName, email, nameCardFileUrl, dep
   };
   let ret = {};
   for(let k in param){
-    if(param[k]){
+    if(param[k] != undefined){
       ret[k] = param[k];
     }
   }

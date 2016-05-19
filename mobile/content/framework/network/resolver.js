@@ -78,10 +78,10 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
       ImStore.updateContactInfo(message.address,
-        message.realName, message.email, message.nameCardFileUrl, message.department,
-        message.publicDepart, message.jobTitle, message.publicTitle, message.mobileNumber, message.publicMobile,
-        message.phoneNumber, message.publicPhone, message.publicEmail, message.publicAddress, message.publicWeChat,
-        message.photoFileUrl, message.qqNo, message.publicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
+        message.realName, message.email, message.nameCardFileUrl, message.department, message.isPublicDepart,
+        message.jobTitle, message.isPublicTitle, message.mobileNumber, message.isPublicMobile, message.phoneNumber,
+        message.isPublicPhone, message.isPublicEmail, message.isPublicAddress, message.isPublicWeChat, message.photoFileUrl,
+        message.qqNo, message.isPublicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
       break;
     case MSG_TYPE.CONTANCT_INFO_DELETE:
       ImStore.deleteContactInfo(message.userIdList);
@@ -123,7 +123,7 @@ let _dealMsg = function (message, socket) {
       //  // console.log(JSON.parse(item));
       //  _dealMsg(JSON.parse(item), socket);
       //});
-      socket.send({msgType: COMMAND_TYPE.SYNC_REQ, lastSyncTime: lastSyncTime});
+      socket.send({command: COMMAND_TYPE.SYNC_REQ, lastSyncTime: lastSyncTime});
       break;
     case MSG_TYPE.FORCE_LOGOUT:
       //强制登出
@@ -140,10 +140,10 @@ let _dealMsg = function (message, socket) {
         AppStore.updateUserInfo('certificated',message.isCertificated);
       }else{
         ImStore.updateContactInfo(message.address,
-          message.realName, message.email, message.nameCardFileUrl, message.department, message.publicDepart,
-          message.jobTitle, message.publicTitle, message.mobileNumber, message.publicMobile, message.phoneNumber,
-          message.publicPhone, message.publicEmail, message.publicAddress, message.publicWeChat, message.photoFileUrl,
-          message.qqNo, message.publicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
+          message.realName, message.email, message.nameCardFileUrl, message.department, message.isPublicDepart,
+          message.jobTitle, message.isPublicTitle, message.mobileNumber, message.isPublicMobile, message.phoneNumber,
+          message.isPublicPhone, message.isPublicEmail, message.isPublicAddress, message.isPublicWeChat, message.photoFileUrl,
+          message.qqNo, message.isPublicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
       }
       break;
     case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
@@ -151,10 +151,10 @@ let _dealMsg = function (message, socket) {
         AppStore.updateUserInfo('certificated',message.isCertificated);
       }else{
         ImStore.updateContactInfo(message.address,
-          message.realName, message.email, message.nameCardFileUrl, message.department, message.publicDepart,
-          message.jobTitle, message.publicTitle, message.mobileNumber, message.publicMobile, message.phoneNumber,
-          message.publicPhone, message.publicEmail, message.publicAddress, message.publicWeChat, message.photoFileUrl,
-          message.qqNo, message.publicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
+          message.realName, message.email, message.nameCardFileUrl, message.department, message.isPublicDepart,
+          message.jobTitle, message.isPublicTitle, message.mobileNumber, message.isPublicMobile, message.phoneNumber,
+          message.isPublicPhone, message.isPublicEmail, message.isPublicAddress, message.isPublicWeChat, message.photoFileUrl,
+          message.qqNo, message.isPublicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
       }
       break;
     case MSG_TYPE.CONTANCT_INFO_FREEZE:

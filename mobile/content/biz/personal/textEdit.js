@@ -166,7 +166,6 @@ let TextEdit = React.createClass({
   },
 
   update: function (data) {
-
     this.props.exec(() => {
       return UserInfoAction.updateUserInfo(data)
         .then(() => {
@@ -178,7 +177,7 @@ let TextEdit = React.createClass({
               navigator.pop();
           }
         }).catch((errorData) => {
-          Alert(errorData.msgContent || errorData.message);
+          throw errorData;
         });
     });
   },

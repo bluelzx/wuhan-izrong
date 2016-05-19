@@ -33,7 +33,7 @@ let DeleteMember = React.createClass({
       return ContactAction.deleteGroupMembers(this.props.param.groupId, members).then(()=>{
         this.props.navigator.pop();
       }).catch((errorData) => {
-        Alert(errorData);
+        throw errorData;
       });;
     });
   },
