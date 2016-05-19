@@ -153,7 +153,7 @@ let Publish = React.createClass({
               });
 
               //if (activeInputBottom > keyBoardTop + 15) {
-              this.refs['scroll'].scrollTo({y: 200});
+            //this.refs['scroll'].scrollTo({y: 200});
               //}
           });
 
