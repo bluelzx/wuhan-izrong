@@ -2,7 +2,7 @@
  * Created by baoyinghai on 4/20/16.
  */
 let React= require('react-native');
-const {View, Text, Image} = React;
+const {View, Text, Image, Platform} = React;
 
 let nameColor = {};
 

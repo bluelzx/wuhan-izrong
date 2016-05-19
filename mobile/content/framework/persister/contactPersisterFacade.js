@@ -93,7 +93,7 @@ let _getGroupInfoByGroupId = function (groupId) {
       memberNum: result[0].memberNum,
       groupImageUrl:DEFAULT_GROUP_IMAGE,
       members: members,
-      mute: result[0].mute
+      mute: result[0].mute || false
     };
     return ret;
   }
@@ -131,12 +131,17 @@ let _isStranger = function(userId) {
   return !(_.indexOf(friendList, userId)>=0);
 }
 
+let _getFriendList = function(){
+  let tag = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true]);
+  let friendList =  JSON.parse(tag[0].friendList||'[]');
+  return friendList;
+}
+
 //****按照机构分组
 let _getUsersGroupByOrg = function () {
   //获得所有机构
   let orgs = _realm.objects(ORGBEAN).sorted('orgValue', false);
-  let tag = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true]);
-  let friendList =  JSON.parse(tag[0].friendList||'[]');
+  let friendList = _getFriendList();
   if(friendList && friendList.length > 0){
     let result = [];
     orgs.forEach((org) => {
@@ -209,13 +214,23 @@ let _modifyGroupName = function(groupId, groupName){
     _realm.create(GROUP, newGroup, true);
   });
 }
+
 //****  查询所有用户,不包含某群成员, 并且按照机构分组
 let _getUsersExpress = function(groupId) {
   let existMembers = _getGroupInfoByGroupId(groupId);//获得群组用户
   if(!existMembers || !existMembers.members){
     return _getUsersGroupByOrg();
   }else{
-    let users = _realm.objects(IMUSERINFO);//获得所有用户
+
+    let friendList = _getFriendList();
+    let allUsers = _realm.objects(IMUSERINFO);//获得所有用户
+    let users = [];
+    allUsers.forEach((item)=>{
+      if(_.indexOf(friendList, item.userId) >= 0){
+       users.push(item);
+      }
+    });
+
     let existM = existMembers.members;
     let userArray = [];
     users.forEach((u)=>{
