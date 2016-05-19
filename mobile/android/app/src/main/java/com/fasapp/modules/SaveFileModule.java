@@ -31,6 +31,7 @@ import java.util.Date;
 public class SaveFileModule extends ReactContextBaseJavaModule {
     private Callback mCallback;
     private WritableMap response;
+    ReactApplicationContext reactContext;
 
     @Override
     public String getName() {
@@ -51,8 +52,11 @@ public class SaveFileModule extends ReactContextBaseJavaModule {
                     @Override
                     public Object parseNetworkResponse(okhttp3.Response response) throws Exception {
                         InputStream inputStream = response.body().byteStream();
-                        String fileName = new Date().getTime() + ".png";
-                        File file = new File(Environment.getExternalStorageDirectory()+"/fas-wuhan/",fileName);
+                        File photoDir = new File(Environment.getExternalStorageDirectory()+ "/fas-wuhan");
+                        if (!photoDir.exists()) {
+                            photoDir.mkdir();
+                        }
+                        File file = new File(photoDir.getAbsolutePath() + "/"+ new Date().getTime() + ".png");
                         FileUtils.inputStreamToFile(inputStream,file);
                         return file;
                     }
