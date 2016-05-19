@@ -98,7 +98,7 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
     jobTitle: loginUserInfo.jobTitle,
     phoneNumber: loginUserInfo.phoneNumber,
     photoFileUrl: loginUserInfo.photoFileUrl,
-    orgId: loginUserInfo.orgBeanId,
+    orgId: loginUserInfo.orgId,
     token: token,
     lastLoginTime: new Date(),
     publicTitle: !!(loginUserInfo.publicTitle == true || loginUserInfo.publicTitle === null),
@@ -110,9 +110,7 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
     publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat === null),
     publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
     lastSyncTime: null,
-    friendList:loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList).forEach((item)=>{
-      return parseInt(item);
-    }),
+    friendList:loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList),
     certified:loginUserInfo.certified||false
   }, true);
 };
@@ -272,7 +270,8 @@ let _logout = function (userId) {
       token: ''
     }, true);
     _realm.delete(_realm.objects(SESSION));
-    _realm.delete(_realm.objects(GROUP));
+    _realm.delete(_realm.objects(IMUSERINFO));
+    //_realm.delete(_realm.objects(GROUP));
   });
 };
 

@@ -93,7 +93,7 @@ let _getGroupInfoByGroupId = function (groupId) {
       memberNum: result[0].memberNum,
       groupImageUrl:DEFAULT_GROUP_IMAGE,
       members: members,
-      mute: result[0].mute
+      mute: result[0].mute || false
     };
     return ret;
   }
@@ -131,12 +131,17 @@ let _isStranger = function(userId) {
   return !(_.indexOf(friendList, userId)>=0);
 }
 
+let _getFriendList = function(){
+  let tag = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true]);
+  let friendList =  JSON.parse(tag[0].friendList||'[]');
+  return friendList;
+}
+
 //****按照机构分组
 let _getUsersGroupByOrg = function () {
   //获得所有机构
   let orgs = _realm.objects(ORGBEAN).sorted('orgValue', false);
-  let tag = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true]);
-  let friendList =  JSON.parse(tag[0].friendList||'[]');
+  let friendList = _getFriendList();
   if(friendList && friendList.length > 0){
     let result = [];
     orgs.forEach((org) => {
@@ -209,13 +214,23 @@ let _modifyGroupName = function(groupId, groupName){
     _realm.create(GROUP, newGroup, true);
   });
 }
+
 //****  查询所有用户,不包含某群成员, 并且按照机构分组
 let _getUsersExpress = function(groupId) {
   let existMembers = _getGroupInfoByGroupId(groupId);//获得群组用户
   if(!existMembers || !existMembers.members){
     return _getUsersGroupByOrg();
   }else{
-    let users = _realm.objects(IMUSERINFO);//获得所有用户
+
+    let friendList = _getFriendList();
+    let allUsers = _realm.objects(IMUSERINFO);//获得所有用户
+    let users = [];
+    allUsers.forEach((item)=>{
+      if(_.indexOf(friendList, item.userId) >= 0){
+       users.push(item);
+      }
+    });
+
     let existM = existMembers.members;
     let userArray = [];
     users.forEach((u)=>{
@@ -235,35 +250,42 @@ let _getUsersExpress = function(groupId) {
 };
 
 
-let _updateContactInfo = function(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified){
+//let _updateContactInfo = function(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified){
+let _updateContactInfo = function(message){
+ // message.address,
+    //  message.realName, message.email, message.nameCardFileUrl, message.department, message.isPublicDepart,
+    //  message.jobTitle, message.isPublicTitle, message.mobileNo, message.isPublicMobile, message.phoneNumber,
+    //  message.isPublicPhone, message.isPublicEmail, message.isPublicAddress, message.isPublicWeChat, message.photoFileUrl,
+    //  message.qqNo, message.isPublicQq, message.weChatNo, message.userId, message.orgId, message.isCertificated
 
   let param = {
-    userId:userId,
-    address:address,
-    realName:realName,
-    weChatNo:weChatNo,
-    email:email,
-    nameCardFileUrl:nameCardFileUrl,
-    qqNo:qqNo,
-    department:department,
-    mobileNumber:mobileNumber,
-    jobTitle:jobTitle,
-    publicDepart:publicDepart,
-    publicTitle:publicTitle,
-    publicMobile:publicMobile,
-    phoneNumber:phoneNumber,
-    publicPhone:publicPhone,
-    publicEmail:publicEmail,
-    publicAddress:publicAddress,
-    publicWeChat:publicWeChat,
-    photoFileUrl:photoFileUrl,
-    publicQQ:publicQQ,
-    orgId:orgId,
-    certified:certified
+    userId:message.userId,
+    address:message.address,
+    realName:message.realName,
+    weChatNo:message.weChatNo,
+    email:message.email,
+    nameCardFileUrl:message.nameCardFileUrl,
+    qqNo:message.qqNo,
+    department:message.department,
+    mobileNumber:message.mobileNo,
+    jobTitle:message.jobTitle,
+    publicDepart:message.isPublicDepart,
+    publicTitle:message.isPublicTitle,
+    publicMobile:message.isPublicMobile,
+    phoneNumber:message.phoneNumber,
+    publicPhone:message.isPublicPhone,
+    publicEmail:message.isPublicEmail,
+    publicAddress:message.isPublicAddress,
+    publicWeChat: message.isPublicWeChat,
+    photoFileUrl:message.photoFileUrl,
+    publicQQ:message.isPublicQq,
+    orgId: message.orgId,
+    certified:message.isCertificated,
+    mute:false
   };
   let ret = {};
   for(let k in param){
-    if(param[k]){
+    if(param[k] != undefined){
       ret[k] = param[k];
     }
   }
@@ -414,6 +436,7 @@ let _addFriend = function(userInfo) {
     photoFileUrl:userInfo.photoFileUrl,
     publicQQ:userInfo.publicQQ,
     orgId:userInfo.orgId,
+    mute:userInfo.mute
   };
 
   _realm.write(()=>{

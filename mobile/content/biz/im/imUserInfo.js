@@ -76,7 +76,7 @@ let ImUserInfo = React.createClass({
       return null;
     else
       return (
-      <View style={{backgroundColor:'transparent',height:50,marginTop:20}}>
+      <View style={[{height:50,marginTop:5},styles.itemBackColor,{borderBottomWidth:0.5,borderBottomColor:'#F4F4F4'}]}>
         <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
           <Text style={{color:  DictStyle.colorSet.commonTextColor,fontSize:18,marginLeft:20}}>屏蔽此人</Text>
           <Switch style={{margin:20}}
@@ -120,9 +120,9 @@ let ImUserInfo = React.createClass({
     let privateDesc = "未公开";
     return (
       <NavBarView navigator={this.props.navigator} title='详细资料'>
-        <ScrollView automaticallyAdjustContentInsets={false}  style={{paddingLeft:10}} horizontal={false}>
+        <ScrollView automaticallyAdjustContentInsets={false}  style={{paddingLeft:0}} horizontal={false}>
 
-          <View style={{backgroundColor:'transparent'}} >
+          <View style={styles.itemBackColor} >
             <View style={styles.layout}>
               <View style={{paddingLeft:16}}>
                 <HeaderPic  photoFileUrl={this.state.data.photoFileUrl}  certified={this.state.data.certified} name={this.state.data.realName}/>
@@ -130,14 +130,15 @@ let ImUserInfo = React.createClass({
               <Text style={{color:'#979fa2',fontSize:18, marginRight:20}}>{this.state.data.realName}</Text>
             </View>
           </View>
-          <Item itemStyle={{backgroundColor:'transparent'}} hiddenArrow={true} wrap={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.data.publicMobile?this.descValue(this.state.data.mobileNumber):privateDesc}/>
-          <Item itemStyle={{backgroundColor:'transparent'}} hiddenArrow={true} wrap={true} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.data.publicPhone?this.descValue(this.state.data.phoneNumber):privateDesc}/>
-          <Item itemStyle={{backgroundColor:'transparent'}} hiddenArrow={true} wrap={true} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.data.publicQQ?this.descValue(this.state.data.qqNo):privateDesc}/>
-          <Item itemStyle={{backgroundColor:'transparent'}} hiddenArrow={true} wrap={true} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.data.publicWeChat?this.descValue(this.state.data.weChatNo):privateDesc}/>
-          <Item itemStyle={{backgroundColor:'transparent'}} hiddenArrow={true} wrap={true} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.data.publicEmail?this.descValue(this.state.data.email):privateDesc}/>
-          <Item itemStyle={{backgroundColor:'transparent'}} hiddenArrow={true} wrap={true} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.data.orgValue}/>
-          <Item itemStyle={{backgroundColor:'transparent'}} hiddenArrow={true} wrap={true} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicDepart?this.descValue(this.state.data.department):privateDesc}/>
-          <Item itemStyle={{backgroundColor:'transparent'}} hiddenArrow={true} wrap={true} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicTitle?this.descValue(this.state.data.jobTitle):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.data.publicMobile?this.descValue(this.state.data.mobileNumber):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.data.publicPhone?this.descValue(this.state.data.phoneNumber):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.data.publicQQ?this.descValue(this.state.data.qqNo):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.data.publicWeChat?this.descValue(this.state.data.weChatNo):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.data.publicEmail?this.descValue(this.state.data.email):privateDesc}/>
+          <View style={{marginTop:5,backgroundColor:'transparent',borderBottomWidth:0.5,borderBottomColor:'#F4F4F4'}}></View>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.data.orgValue}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicDepart?this.descValue(this.state.data.department):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicTitle?this.descValue(this.state.data.jobTitle):privateDesc}/>
           {this.renderMute()}
           {this.renderAdd()}
           <View style={{height:20}}></View>
@@ -171,6 +172,9 @@ let styles = StyleSheet.create({
     borderColor: '#cccccc',
     borderWidth: 1,
     marginLeft: 20
+  },
+  itemBackColor:{
+    backgroundColor:'#FEFEFE'
   }
 });
 

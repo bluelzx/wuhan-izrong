@@ -29,9 +29,9 @@ import java.util.Date;
  * Created by vison on 16/5/17.
  */
 public class SaveFileModule extends ReactContextBaseJavaModule {
-    private File file;
     private Callback mCallback;
     private WritableMap response;
+    ReactApplicationContext reactContext;
 
     @Override
     public String getName() {
@@ -52,8 +52,11 @@ public class SaveFileModule extends ReactContextBaseJavaModule {
                     @Override
                     public Object parseNetworkResponse(okhttp3.Response response) throws Exception {
                         InputStream inputStream = response.body().byteStream();
-                        String fileName = new Date().getTime() + ".png";
-                        file = new File(Environment.getExternalStorageDirectory()+"/fas-wuhan/",fileName);
+                        File photoDir = new File(Environment.getExternalStorageDirectory()+ "/fas-wuhan");
+                        if (!photoDir.exists()) {
+                            photoDir.mkdir();
+                        }
+                        File file = new File(photoDir.getAbsolutePath() + "/"+ new Date().getTime() + ".png");
                         FileUtils.inputStreamToFile(inputStream,file);
                         return file;
                     }
@@ -66,17 +69,15 @@ public class SaveFileModule extends ReactContextBaseJavaModule {
                     @Override
                     public void onResponse(Object o) {
                         try {
-                            MediaStore.Images.Media.insertImage(getCurrentActivity().getContentResolver(),file.getPath(), "title", "description");
-                           // getCurrentActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + file.getPath())));
+                            File file1 = (File)o;
+                            MediaStore.Images.Media.insertImage(getCurrentActivity().getContentResolver(), file1.getPath(), "title", "description");
+                            getCurrentActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + file1.getPath())));
                             mCallback.invoke(1);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                             mCallback.invoke(0);
                         }
-                        //MediaStore.Images.Media.insertImage(getCurrentActivity().getContentResolver(), (Bitmap) o, "title", "description");
-
                     }
                 });
     }
-
 }

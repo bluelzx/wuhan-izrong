@@ -32,7 +32,7 @@ let MembersBar = React.createClass({
         comp:ImUserInfo,
         param:member
         })} key={member.userId} style={{alignItems:'center',padding:5}}>
-        <View style={{marginTop:5,height: 55,width: 55}}>
+        <View style={{marginTop:5,height: 51,width: 51}}>
           <HeaderPic photoFileUrl={member.photoFileUrl}  certified={member.certified} name={member.realName}/>
         </View>
         <Text numberOfLines={1} style={{color:DictStyle.groupManage.memberNameColor,marginTop:4, width:40}}>{member.realName}</Text>

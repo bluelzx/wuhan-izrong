@@ -1,7 +1,6 @@
 /**
  * Created by baoyinghai on 16/4/6.
  */
-
 let React = require('react-native');
 const {Text, ScrollView, View, TouchableOpacity} = React;
 let NavBarView = require('../../framework/system/navBarView');
@@ -68,7 +67,7 @@ let Spread = React.createClass({
   render: function () {
     return (
       <NavBarView
-        navigator={this.props.navigator} title='环渤海银银合作平台'>
+        navigator={this.props.navigator} title='爱资融同业平台'>
         <ScrollView style={{flexDirection: 'column'}}>
         {this.renderBody()}
         </ScrollView>

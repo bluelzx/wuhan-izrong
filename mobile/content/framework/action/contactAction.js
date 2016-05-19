@@ -1,5 +1,7 @@
 let contactStore = require('../store/contactStore');
 let AppLinks = require('../../constants/appLinks');
+let _ = require('lodash');
+
 
 let {
   BFetch,
@@ -250,7 +252,7 @@ let _searchUser = function(keyWord) {
  * */
 let _addFriend = function(userId) {
   let param = {
-    userId:userId
+    uid:userId
   }
 
   return new Promise((resolve, reject) => {
@@ -266,9 +268,12 @@ let _addFriend = function(userId) {
  * @param usrId
  * */
 let _acceptFriend = function(userId) {
-  let param = {userId:userId};
-  return new Promise((resolve, reject)=>{
+  let param = {uid:userId};
+  return new Promise((resolve, reject) => {
     BFetch(AppLinks.acceptFriend, param).then((response) => {
+      if(_.isEmpty(response)){
+        resolve();
+      }
       contactStore.addFriend(response);
       resolve(response);
     }).catch((err) => {

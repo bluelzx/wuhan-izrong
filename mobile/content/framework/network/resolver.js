@@ -36,14 +36,14 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.GROUP_JOIN_INVITE:
       ImStore.saveMsg({
-        sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId),
-        groupId:message.groupId,
-        groupName:message.groupName,
-        groupOwnerId:message.groupOwnerId,
-        msgType:SESSION_TYPE.GROUP_NOTICE,
-        revTime:new Date(),
+        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId),
+        groupId: message.groupId,
+        groupName: message.groupName,
+        groupOwnerId: message.groupOwnerId,
+        msgType: SESSION_TYPE.GROUP_NOTICE,
+        revTime: new Date(),
         noticeType: NOTICE_TYPE.INVITE
-      },userId);
+      }, userId);
       break;
     case MSG_TYPE.REC_GROUP_MSG:
       ImStore.saveMsg({
@@ -62,26 +62,20 @@ let _dealMsg = function (message, socket) {
       }, userId);
       break;
     case MSG_TYPE.PLATFORM_INFO:
-    {
       if (lastSyncTime < message.createDate) {
-
         ImStore.createPlatFormInfo(message.infoId, message.title, message.content, new Date(message.createDate));
         ContactSotre.syncReq(new Date(message.createDate));
         lastSyncTime = message.createDate;
       }
-    };
       break;
     case MSG_TYPE.HOME_PAGE:
       message.homePageList && message.homePageList.forEach((msg) => {
         ImStore.createHomePageInfo(msg.seq, msg.url);
       });
       break;
+
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
-      ImStore.updateContactInfo(message.address,
-        message.realName, message.email, message.nameCardFileUrl, message.department,
-        message.publicDepart, message.jobTitle, message.publicTitle, message.mobileNumber, message.publicMobile,
-        message.phoneNumber, message.publicPhone, message.publicEmail, message.publicAddress, message.publicWeChat,
-        message.photoFileUrl, message.qqNo, message.publicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
+      ImStore.updateContactInfo(message);
       break;
     case MSG_TYPE.CONTANCT_INFO_DELETE:
       ImStore.deleteContactInfo(message.userIdList);
@@ -89,7 +83,7 @@ let _dealMsg = function (message, socket) {
     case MSG_TYPE.GROUP_INFO_UPDATE:
       switch (message.action) {
         case UPDATE_GROUP_TYPE.CREATE_GROUP:
-          ContactSotre.createGroup(message.groupId, message.groupName,message.groupOwnerId,message.members,false);
+          ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
           break;
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_NAME:
           break;
@@ -97,14 +91,14 @@ let _dealMsg = function (message, socket) {
           break;
         case UPDATE_GROUP_TYPE.ADD_GROUP_MEMBER:
           ImStore.saveMsg({
-            sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId),
-            groupId:message.groupId,
-            groupName:message.groupName,
-            groupOwnerId:message.groupOwnerId,
-            msgType:SESSION_TYPE.GROUP_NOTICE,
-            revTime:new Date(),
+            sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId),
+            groupId: message.groupId,
+            groupName: message.groupName,
+            groupOwnerId: message.groupOwnerId,
+            msgType: SESSION_TYPE.GROUP_NOTICE,
+            revTime: new Date(),
             noticeType: NOTICE_TYPE.INVITED
-          },userId);
+          }, userId);
           break;
         case UPDATE_GROUP_TYPE.DELETE_GROUP_MEMBER:
           //TODO 退出群组的处理...
@@ -123,7 +117,7 @@ let _dealMsg = function (message, socket) {
       //  // console.log(JSON.parse(item));
       //  _dealMsg(JSON.parse(item), socket);
       //});
-      socket.send({msgType: COMMAND_TYPE.SYNC_REQ, lastSyncTime: lastSyncTime});
+      socket.send({command: COMMAND_TYPE.SYNC_REQ, lastSyncTime: lastSyncTime});
       break;
     case MSG_TYPE.FORCE_LOGOUT:
       //强制登出
@@ -131,49 +125,36 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.SYNC_RES:
       message.msgArray.forEach((item)=> {
-        // console.log(JSON.parse(item));
         _dealMsg(JSON.parse(item), socket);
       });
+      ContactSotre.syncReq(new Date());
       break;
     case MSG_TYPE.CONTANCT_INFO_CERTIFY:
-      if(message.userId == AppStore.getUserId()){
-        AppStore.updateUserInfo('certificated',message.isCertificated);
-      }else{
-        ImStore.updateContactInfo(message.address,
-          message.realName, message.email, message.nameCardFileUrl, message.department, message.publicDepart,
-          message.jobTitle, message.publicTitle, message.mobileNumber, message.publicMobile, message.phoneNumber,
-          message.publicPhone, message.publicEmail, message.publicAddress, message.publicWeChat, message.photoFileUrl,
-          message.qqNo, message.publicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
+      if (message.userId == AppStore.getUserId()) {
+        AppStore.updateUserInfo('certificated', message.isCertificated);
+      } else {
+        ImStore.updateContactInfo(message);
       }
       break;
     case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
-      if(message.userId == AppStore.getUserId()){
-        AppStore.updateUserInfo('certificated',message.isCertificated);
-      }else{
-        ImStore.updateContactInfo(message.address,
-          message.realName, message.email, message.nameCardFileUrl, message.department, message.publicDepart,
-          message.jobTitle, message.publicTitle, message.mobileNumber, message.publicMobile, message.phoneNumber,
-          message.publicPhone, message.publicEmail, message.publicAddress, message.publicWeChat, message.photoFileUrl,
-          message.qqNo, message.publicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
+      if (message.userId == AppStore.getUserId()) {
+        AppStore.updateUserInfo('certificated', message.isCertificated);
+      } else {
+        ImStore.updateContactInfo(message);
       }
       break;
     case MSG_TYPE.CONTANCT_INFO_FREEZE:
-      if(message.userId == AppStore.getUserId()){
+      if (message.userId == AppStore.getUserId()) {
         AppStore.forceLogout();
       }
       break;
     case MSG_TYPE.FRIEND_INVITE:
-      ContactSotre.newFriendNotic({
-        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, message.uid),
-        userId: message.uid,
-        realName: message.realName,
-        orgName: message.orgName,
-        photoFileUrl: message.photoFileUrl,
-        certified:message.certified
-      }, userId);
+      ContactSotre.newFriendNotic(Object.assign({
+        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, userId)
+      }, message.userInfo), userId);
       break;
     case MSG_TYPE.FRIEND_PROMISE:
-
+      console.log(message.uid + '同意加你为好友');
       break;
     case MSG_TYPE.ORG_INFO_UPDATE:
       AppStore.updateOrgInfo(message);
