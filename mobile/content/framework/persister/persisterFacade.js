@@ -98,7 +98,7 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
     jobTitle: loginUserInfo.jobTitle,
     phoneNumber: loginUserInfo.phoneNumber,
     photoFileUrl: loginUserInfo.photoFileUrl,
-    orgId: loginUserInfo.orgBeanId,
+    orgId: loginUserInfo.orgId,
     token: token,
     lastLoginTime: new Date(),
     publicTitle: !!(loginUserInfo.publicTitle == true || loginUserInfo.publicTitle === null),

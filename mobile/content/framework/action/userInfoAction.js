@@ -17,7 +17,7 @@ let AppLinks = require('../../constants/appLinks');
 
 let UserInfoAction = {
   getLoginUserInfo: ()=> _getLoginUserInfo(),
-  getOrgById: (orgBeanId)=> _getOrgById(orgBeanId),
+  getOrgById: (orgId)=> _getOrgById(orgId),
   updateUserInfo: (p)=> _updateUserInfo(AppLinks.updateUserInfo, p),
   uploadFile: (p, fileFieldName) => _uploadFile(AppLinks.uploadFile, p, fileFieldName)
 };
@@ -25,8 +25,8 @@ _getLoginUserInfo = function () {
   return AppStore.getLoginUserInfo();
 };
 
-_getOrgById = function (orgBeanId) {
-  return AppStore.getOrgByOrgId(orgBeanId);
+_getOrgById = function (orgId) {
+  return AppStore.getOrgByOrgId(orgId);
 };
 
 _updateUserInfo = function (url, p) {
