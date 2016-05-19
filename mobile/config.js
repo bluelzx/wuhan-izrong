@@ -1,7 +1,7 @@
 var developConfigDocker2 = {
   Dev: true, // Switch for log. true means print.
   Host: 'http://192.168.64.152:8080/fas',   //dev
-  ImHost:'192.168.61.84:3000'//dev
+  ImHost:'192.168.64.152:3000'//dev
 };
 
 var developConfigDocker = {

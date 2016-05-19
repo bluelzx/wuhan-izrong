@@ -54,7 +54,7 @@ let SearchBar = React.createClass({
 
   render: function() {
     return (
-      <View style={{backgroundColor:'#f0f0f0',paddingBottom:5,borderBottomColor:'#d3d5e0',borderBottomWidth:1}}>
+      <View style={{backgroundColor:'#f0f0f0',paddingBottom:5,borderBottomColor:'#d3d5e0',borderBottomWidth:0.5}}>
         <View
           style={{height:40,backgroundColor:'#ffffff',marginTop:5,marginLeft:10,marginRight:10,borderRadius:6,
           justifyContent:'center', alignItems:'center'}}>

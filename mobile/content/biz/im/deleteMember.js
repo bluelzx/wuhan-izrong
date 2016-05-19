@@ -63,7 +63,7 @@ let DeleteMember = React.createClass({
     return (
       <Text
         style={
-          {fontSize:16,color: DictStyle.colorSet.imTitleTextColor}}>
+          {fontSize:15,color: DictStyle.colorSet.imTitleTextColor}}>
         {data.orgValue}
       </Text>
     );
@@ -93,7 +93,7 @@ let DeleteMember = React.createClass({
                   style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
               <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-            <Text style={{fontSize:16,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
+            <Text style={{fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
           </View>
         </CheckBox>
       );
@@ -110,7 +110,7 @@ let DeleteMember = React.createClass({
           let dataSource = groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
           if(dataSource && dataSource.length > 0) {
             return (
-              <ExtenList itemHeight={65}
+              <ExtenList itemHeight={57}
                          groundColor={DictStyle.colorSet.extenListGroundCol}
                          groupBorderColor={DictStyle.colorSet.demarcationColor}
                          arrowColor={DictStyle.colorSet.extenListArrowColor}

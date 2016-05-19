@@ -32,7 +32,7 @@ let DictStyle = require('../../constants/dictStyle');
 import  Angle  from '../../comp/messenger/angle';
 const { Device,Alert } = require('mx-artifacts');
 
-
+const PLATFORMNAME = '爱资融同业平台';
 let Contacts = React.createClass({
 
   componentDidMount() {
@@ -74,7 +74,7 @@ let Contacts = React.createClass({
     return (
       <Text
         style={
-          {fontSize:16,color: DictStyle.colorSet.imTitleTextColor}}>
+          {fontSize:15,color: DictStyle.colorSet.imTitleTextColor}}>
         {title}
       </Text>
     );
@@ -107,8 +107,8 @@ let Contacts = React.createClass({
                             onPress={() => this.toGroup(data)}
                             style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
-            <Image style={{height: 54,width: 54,borderRadius: 27}} source={DictIcon.imMyGroup} />
-            <Text style={{fontSize:16,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.groupName}</Text>
+            <Image style={{height: 46,width: 46,borderRadius: 23}} source={DictIcon.imMyGroup} />
+            <Text style={[{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10},FontSize.realName]}>{data.groupName}</Text>
           </View>
         </TouchableOpacity>
 
@@ -120,7 +120,7 @@ let Contacts = React.createClass({
                             style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row', paddingVertical:5,alignItems:'center'}}>
             <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-            <Text style={{fontSize:16,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
+            <Text style={[{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10},FontSize.realName]}>{data.realName}</Text>
           </View>
         </TouchableOpacity>
 
@@ -150,16 +150,24 @@ let Contacts = React.createClass({
   },
 
   renderGlobal: function() {
+    if(!!~PLATFORMNAME.indexOf(this.state.keyWord) || this.state.keyWord==''){
     return (
       <TouchableOpacity
         onPress={() => this.props.navigator.push({comp:Spread})}
-            style={{backgroundColor:DictStyle.colorSet.extenListGroundCol, borderTopWidth:0.5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
+            style={{
+            backgroundColor:DictStyle.colorSet.extenListGroundCol,
+            borderTopWidth:0.5,
+            borderTopColor: DictStyle.colorSet.demarcationColor}}
+      >
         <View style={{flexDirection:'row',paddingHorizontal:10, paddingVertical:5}}>
-          <Image style={{height: 40,width: 40,borderRadius: 20}} source={DictIcon.imSpread} />
-          <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15}}>{'爱资融同业平台'}</Text>
+          <HeaderPic source={DictIcon.imSpread} />
+          <Text style={[{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10, marginTop:15},FontSize.realName]}>{PLATFORMNAME}</Text>
         </View>
       </TouchableOpacity>
     );
+    }else{
+      return null;
+    }
   },
 
 
@@ -226,14 +234,18 @@ let Contacts = React.createClass({
           let  dataSource = contactFilter(this.state.dataSource,'orgMembers','groupName','orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
           if(dataSource && dataSource.length > 0){
             if(dataSource.length == 1 && dataSource[0].length == 0){
-              return (
-                <View style={{backgroundColor:'transparent', alignItems:'center', marginTop:20}}>
-                  <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>
-                </View>
-              );
+              if(!!~PLATFORMNAME.indexOf(this.state.keyWord) || this.state.keyWord=='') {
+                return (
+                  <View style={{backgroundColor:'transparent', alignItems:'center', marginTop:20}}>
+                    <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>
+                  </View>
+                );
+              }else{
+                return null;
+              }
             }else
             return (
-              <ExtenList itemHeight={65}
+              <ExtenList itemHeight={57}
                          groundColor={DictStyle.colorSet.extenListGroundCol}
                          groupBorderColor={DictStyle.colorSet.demarcationColor}
                          arrowColor={DictStyle.colorSet.extenListArrowColor}
@@ -245,11 +257,15 @@ let Contacts = React.createClass({
                          groupTitleRender={this.titleRender} />
             );
           }else{
-            return (
-              <View style={{backgroundColor:'transparent', alignItems:'center', marginTop:20}}>
-                <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>
-              </View>
-            );
+            if(!!~PLATFORMNAME.indexOf(this.state.keyWord) || this.state.keyWord=='') {
+              return (
+                <View style={{backgroundColor:'transparent', alignItems:'center', marginTop:20}}>
+                  <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>
+                </View>
+              );
+            }else{
+              return null;
+            }
           }
 
         })()}
@@ -268,5 +284,17 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
+  }
+});
+
+let FontSize = StyleSheet.create({
+  realName:{
+    fontSize:15
+  },
+  rightTime:{
+    fontSize:11
+  },
+  bottomDesc:{
+    fontSize:15
   }
 });
