@@ -95,7 +95,6 @@ let MyBizDetail = React.createClass({
       DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
     }
 
-    AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   componentWillUnmount: function () {
@@ -106,8 +105,6 @@ let MyBizDetail = React.createClass({
       DeviceEventEmitter.removeAllListeners('keyboardWillShow');
       DeviceEventEmitter.removeAllListeners('keyboardWillHide');
     }
-
-    AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   // Keyboard actions
@@ -380,8 +377,8 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
           <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'利率'}</Text>
-          <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}
-                ref="rateInputView"
+          <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}
+            } ref="rateInputView"
                 onLayout={() => {}}
           >
             <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
