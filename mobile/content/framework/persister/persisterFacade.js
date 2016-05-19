@@ -270,7 +270,8 @@ let _logout = function (userId) {
       token: ''
     }, true);
     _realm.delete(_realm.objects(SESSION));
-    _realm.delete(_realm.objects(GROUP));
+    _realm.delete(_realm.objects(IMUSERINFO));
+    //_realm.delete(_realm.objects(GROUP));
   });
 };
 
