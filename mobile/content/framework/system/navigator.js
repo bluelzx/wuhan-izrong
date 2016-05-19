@@ -23,12 +23,7 @@ var {
   BackAndroid,
   DeviceEventEmitter,
   Platform,
-  ToastAndroid,
   AppStateIOS,
-  styles,
-  Modal,
-  TouchableHighlight,
-  Image
   } = React;
 var AppAction = require('../action/appAction');
 //var ImAction = require('../action/imAction');
@@ -41,37 +36,35 @@ let { Alert, Device, Loading } = require('mx-artifacts');
 let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
-let Publish = require ('../../biz/publish/publish');
-let { SHOW_VIEW } = require('../../constants/dictEvent');
+let Publish = require('../../biz/publish/publish');
 
 const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');
 
 var Main = React.createClass({
   _navigator: null,
-  _getStateFromStores: function() {
+  _getStateFromStores: function () {
     return {
       initLoading: AppStore.getInitLoadingState(),
-      token: AppStore.getToken(),
-      showView:false
+      token: AppStore.getToken()
     };
   },
-  getInitialState: function() {
+  getInitialState: function () {
     return _.assign(this._getStateFromStores(), {
       isLoadingVisible: false,
     });
   },
-  componentDidMount: function() {
+  componentDidMount: function () {
     AppStore.addChangeListener(this._onChange);
     if (Platform.OS === 'android') {
       BackAndroid.addEventListener('hardwareBackPress', this._onAndroidBackPressed);
 
-      DeviceEventEmitter.addListener('onPause',function(e:Event){
+      DeviceEventEmitter.addListener('onPause', function (e:Event) {
         ImSocket.disconnect();
         AppStore.startJavaServer();
       });
 
-      DeviceEventEmitter.addListener('onResume',function(e:Event){
+      DeviceEventEmitter.addListener('onResume', function (e:Event) {
         //AppStore.stopJavaServer();
         AppAction.emitActiveApp();
       });
@@ -84,23 +77,24 @@ var Main = React.createClass({
     AppStore.saveNavigator(this.refs['navigator']);
 
     AppStore.addChangeListener(this._activeApp, 'active_app');
-    AppStore.addChangeListener( this._onViewChanged, SHOW_VIEW);
   },
 
-  _activeApp:function(){
+  _activeApp: function () {
     ImSocket.reconnect();
   },
 
-  _handleAppStateChange:  (currentAppState) => {
+  _handleAppStateChange: (currentAppState) => {
     //let that = this;
     switch (currentAppState) {
       case "active":
         AppAction.emitActiveApp();
         break;
-      default: {
+      default:
+      {
         ImSocket.disconnect();
 
-      };
+      }
+        ;
     }
   },
 
@@ -112,7 +106,6 @@ var Main = React.createClass({
       AppStateIOS.removeEventListener('change', this._handleAppStateChange);
     }
     NotificationManager.closeNotification();
-    AppStore.removeChangeListener(this._onViewChanged, SHOW_VIEW);
   },
 
   _onAndroidBackPressed: function () {
@@ -122,7 +115,8 @@ var Main = React.createClass({
         return true;
       }
 
-      Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {});
+      Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {
+      });
       return true;
     }
 
@@ -145,6 +139,12 @@ var Main = React.createClass({
           Alert('系统异常');
         });
       }
+    } else if (AppStore.isFreezing()) {
+      Promise.resolve().then((resolve) => {
+        this.refs.navigator.resetTo({comp: Login});
+      }).catch((e) => {
+        Alert('系统异常');
+      });
     }
   },
   _exec: function (func, showLoading = true) {
@@ -167,12 +167,16 @@ var Main = React.createClass({
             });
           }
           console.log(errorData);
-          if(errorData.msgCode == 'APP_SYS_TOKEN_INVALID'){
+          if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
             AppStore.forceLogout();
-          } else if(errorData.msgContent || errorData.message){
-            Alert(errorData.msgContent || errorData.message);
-          }else if(errorData.includes('Network request failed')) {
-            Alert('网络异常,');
+          } else if (errorData.message) {
+            if (errorData.message.includes('Network request failed')) {
+              Alert('网络异常');
+            }else{
+              Alert(errorData.message);
+            }
+          } else if (errorData.msgContent || errorData.errMsg) {
+            Alert(errorData.msgContent || errorData.errMsg);
           }
         });
       if (showLoading) {
@@ -189,11 +193,11 @@ var Main = React.createClass({
     var Comp = route.comp;
     let tabName = null;
     if (Comp == 'tabView') {
-      if(route.tabName) tabName = route.tabName;
+      if (route.tabName) tabName = route.tabName;
       Comp = TabView;
     }
 
-    if(Comp == 'publish'){
+    if (Comp == 'publish') {
       Comp = Publish;
     }
 
@@ -203,17 +207,13 @@ var Main = React.createClass({
     );
   },
 
-  initSocket:function(token){
-    if(token) {
+  initSocket: function (token) {
+    if (token) {
       ImSocket.init(token, ()=> {
         let sTime = AppStore.getLoginUserInfo();
         return sTime && sTime.lastSyncTime;
       });
     }
-  },
-
-  _onViewChanged: function(){
-    this.setState({showView:true});
   },
 
   render: function () {
@@ -236,8 +236,8 @@ var Main = React.createClass({
     //var initComp = Chat;
     if (this.state.token) {
       initComp = TabView;
-     this.initSocket(this.state.token);
-    }else{
+      this.initSocket(this.state.token);
+    } else {
       ImSocket.disconnect();
     }
 
@@ -256,18 +256,6 @@ var Main = React.createClass({
 
     return (
       <View style={{ width: Device.width, height: Device.height }}>
-
-        <Modal
-          animationType={'fade'}
-          transparent={false}
-          visible={this.state.showView}
-        >
-          <TouchableHighlight style={[styles.container, modalBackgroundStyle]} onPress={() => {this.setState({showView:false})}}>
-            <Image style={{resizeMode:'contain',flex:1}} source={{uri:AppStore.getPicUrl()}}>
-            </Image>
-          </TouchableHighlight>
-        </Modal>
-
 
         <StatusBar
           backgroundColor={DictStyle.colorSet.navBar}

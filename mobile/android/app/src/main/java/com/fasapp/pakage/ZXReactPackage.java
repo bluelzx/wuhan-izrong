@@ -8,6 +8,8 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.fasapp.modules.ActivityListenerModule;
+import com.fasapp.modules.NotificationModule;
+import com.fasapp.modules.SaveFileModule;
 import com.fasapp.modules.ServiceModule;
 import com.fasapp.modules.UserPhotoPicModule;
 import com.fasapp.view.viewpager.ZXViewPagerManager;
@@ -28,6 +30,8 @@ public class ZXReactPackage implements ReactPackage {
         modules.add(new UserPhotoPicModule(reactContext));
         modules.add(new ServiceModule(reactContext));
         modules.add(new ActivityListenerModule(reactContext));
+        modules.add(new SaveFileModule(reactContext));
+        modules.add(new NotificationModule(reactContext));
         return modules;
     }
 

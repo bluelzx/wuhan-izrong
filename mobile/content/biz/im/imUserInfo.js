@@ -22,16 +22,24 @@ let ContactAction = require('../../framework/action/contactAction');
 //let NameCircular = require('./nameCircular').NameCircular;
 let HeaderPic = require('./headerPic');
 let DictStyle = require('../../constants/dictStyle');
+let { Device,Alert } = require('mx-artifacts');
 
 let ImUserInfo = React.createClass({
 
 
   getStateFromStores: function() {
-    let userInfo = ContactStore.getUserInfoByUserId(this.props.param.userId);
+    ////// 是否已经是好友
+    let userInfo;
+    if(!this.props.param.isStranger){
+      userInfo = ContactStore.getUserInfoByUserId(this.props.param.userId);
+    }else{
+      userInfo = this.props.param;
+    }
+
     console.log(userInfo.mute);
     return{
       data:userInfo,
-      mute:userInfo.mute
+      mute:userInfo.mute,
     };
   },
 
@@ -79,14 +87,32 @@ let ImUserInfo = React.createClass({
     );
   },
 
+  addFriend: function() {
+    this.props.exec(()=>{
+      return ContactAction.addFriend(this.props.param.userId).then((response)=>{
+        ContactStore.addFriend(this.props.param);
+      }).then((response)=>{
+        this.props.navigator.popToTop();
+      }).catch((err)=>{
+        throw err;
+      });
+    });
+
+  },
+
   renderAdd: function() {
-    return (
-      <TouchableOpacity onPress={()=>''}>
-        <View style={{marginRight:10,borderRadius:6,flex:1,backgroundColor:'#44B5E6',height:40,justifyContent:'center', alignItems:'center'}}>
-          <Text style={{color:'#ffffff',textAlign:'center'}}>加为好友</Text>
-        </View>
-      </TouchableOpacity>
-    );
+    if(!this.props.param.isStranger){
+     return null;
+    }else {
+      return (
+        <TouchableOpacity onPress={()=>this.addFriend()}>
+          <View
+            style={{marginRight:10,borderRadius:6,flex:1,backgroundColor:'#44B5E6',height:40,justifyContent:'center', alignItems:'center'}}>
+            <Text style={{color:'#ffffff',textAlign:'center'}}>加为好友</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
   },
 
   render: function () {

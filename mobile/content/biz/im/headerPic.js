@@ -82,9 +82,9 @@ let styles = StyleSheet.create({
     backgroundColor: '#ff0000',
   },
   head: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 54,
+    height: 54,
+    borderRadius: 27,
     borderColor: '#cccccc',
     borderWidth: 1
   },

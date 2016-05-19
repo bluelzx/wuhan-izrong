@@ -11,9 +11,14 @@ let _getMessageKey = (s, id) => {
   return s + ':' + new Date().getTime() + ':' + _device_id + ':' + id;
 };
 
+let _getNewFriendKey = (t, id) => {
+  return t + ':' + id;
+}
+
 let KeyGenerator = {
   getSessionKey: (t, id, userId) => _getSessionKey(t, id, userId),
   getMessageKey: (s, id) => _getMessageKey(s, id),
+  getNewFriendKey: (t, id) => _getNewFriendKey(t, id)
 };
 
 module.exports = KeyGenerator;

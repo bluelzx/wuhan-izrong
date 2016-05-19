@@ -2,7 +2,7 @@
  * Created by baoyinghai on 16/4/12.
  */
 
-let { MSG_TYPE } = require('../../constants/dictIm');
+let { SESSION_TYPE, MSG_CONTENT_TYPE } = require('../../constants/dictIm');
 let PersisterFacade = require('../persister/persisterFacade');
 let AppStore = require('./appStore');
 //let SessionStore = require('./sessionStore');
@@ -21,6 +21,10 @@ let _getContact = function(){
 
 let _getUsers = function() {
   return PersisterFacade.getUsersGroupByOrg();
+}
+
+let _getAllUsers = function() {
+  return PersisterFacade.getAllUsersGroupByOrg();
 }
 
 let _getIMNotificationMessage = function(userId) {
@@ -109,14 +113,17 @@ let _dismissGroup = function(groupId) {
   AppStore.emitChange(IM_GROUP);
   AppStore.emitChange(IM_SESSION_LIST);
 }
+
 let _setContactMute = function(userId, value) {
   PersisterFacade.setContactMute(userId, value);
   AppStore.emitChange(IM_GROUP);
 }
+
 let _setGroupMute = function(groupId, value){
   PersisterFacade.setGroupMute(groupId, value);
   AppStore.emitChange(IM_GROUP);
 }
+
 let _leaveGroup = function(groupId){
   PersisterFacade.leaveGroup(groupId);
   AppStore.emitChange(IM_CONTACT);
@@ -125,9 +132,41 @@ let _leaveGroup = function(groupId){
   AppStore.emitChange(IM_SESSION_LIST);
 }
 
+let _addFriend = function(userInfo) {
+  PersisterFacade.addFriend(userInfo);
+  AppStore.emitChange(IM_CONTACT);
+}
+
 let _syncReq = function(data){
   //TODO:....
   AppStore.updateLastSyncTime(data);
+}
+
+
+let _newFriendNotic = function(param, userId) {
+  let orgValue = PersisterFacade.getOrgValueByOrgId(param.orgId);
+  PersisterFacade.createNewNotic(param.noticId, param.userId, param.realName, orgValue, param.photoFileUrl,param.certificated, userId);
+  //updateSession
+  let p = {
+    sessionId: param.noticId,
+    type: SESSION_TYPE.NEWFRIEND,
+    badge:0,
+    title: '',
+    content:'',
+    lastTime: new Date(),
+    contentType: MSG_CONTENT_TYPE.NULL
+  };
+  PersisterFacade.updateSession(p, {notAdd:false});
+  PersisterFacade.addFriend(param);
+  AppStore.emitChange(IM_SESSION_LIST);
+}
+
+let _isStranger = function(userId){
+  return PersisterFacade.isStranger(userId);
+}
+
+let _getOrgValueByOrgId = function(orgId){
+  return PersisterFacade.getOrgValueByOrgId(orgId);
 }
 
 let ContactStore = {
@@ -150,7 +189,13 @@ let ContactStore = {
   setGroupMute:_setGroupMute,
   leaveGroup:_leaveGroup,
 
+  addFriend:_addFriend,
+  newFriendNotic:_newFriendNotic,
+
   syncReq:_syncReq, //同步全部信息
+  getAllUsers:_getAllUsers,                             //获得所有用户 按照org分组    ok 包括非好友部分
+  isStranger:_isStranger,
+  getOrgValueByOrgId:_getOrgValueByOrgId
 };
 
 

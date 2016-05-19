@@ -11,11 +11,11 @@ let DictIcon = require('../../constants/dictIcon');
 let { IM_SESSION } = require('../../constants/dictEvent');
 let ImUserInfo = require('./imUserInfo');
 const Messenger = require('./../../comp/messenger/messenger');
-let { SESSION_TYPE } = require('../../constants/dictIm');
 let AppStore = require('../../framework/store/appStore');
 let ContactStore = require('../../framework/store/contactStore');
 let SessionStore = require('../../framework/store/sessionStore');
 let ImAction = require('../../framework/action/imAction');
+let { MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 
@@ -36,6 +36,9 @@ let Chat = React.createClass({
       photoFileUrl:user.photoFileUrl,
       certified:user.certified
     });
+    if (this.props.param.isFromBizDetail) {
+      this.refs['BIZ_Message']._sendMessage(MSG_CONTENT_TYPE.BIZINFO, this.props.param.content);
+    }
     AppStore.addChangeListener(this._onChange, IM_SESSION);
   },
 
@@ -134,7 +137,7 @@ let Chat = React.createClass({
         title={this.state.title}
         actionButton={this.renderEdit}
       >
-        <Messenger param={item} navigator={this.props.navigator}></Messenger>
+        <Messenger ref="BIZ_Message" param={item} navigator={this.props.navigator}></Messenger>
       </NavBarView>
     );
   }

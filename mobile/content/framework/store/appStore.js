@@ -40,6 +40,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getNetWorkState: () => _info.netWorkState,
   getInitLoadingState: () => _info.initLoadingState,
   isLogout: () => _info.isLogout,
+  isFreezing:() => _info.isFreezing,
   isForceLogout: () => _info.isForceLogout,
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
@@ -69,8 +70,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getBadge: ()=>_getBadge(),
   startJavaServer: () => ServiceModule.startAppService(_data.token, 0, ImHost),
   //stopJavaServer:() => ServiceModule.stopMyAppService()
-  savePicUrl: (picUrl) => _data.picUrl = picUrl,
-  getPicUrl: ()=>_data.picUrl
+
 });
 
 let _queryAllPlatFormInfo = function () {
@@ -134,7 +134,8 @@ let _login = (data) => {
 };
 
 let _simpleLogin = (data) => {
-  return Persister.saveSimpleLoginData(data,AppStore.getUserId()).then(()=> {
+  return Persister.saveSimpleLoginData(data,AppStore.getUserId())
+    .then(()=> {
     _.assign(_data, {
       token: _getToken()
     });
@@ -157,6 +158,13 @@ let _force_logout = () => {
   _info.isForceLogout = true;
   //清空token
   _logout(_getUserId());
+  AppStore.emitChange();
+};
+
+let _freezing = () =>{
+  //清空token
+  _logout(_getUserId());
+  _info.isFreezing = true;
   AppStore.emitChange();
 };
 

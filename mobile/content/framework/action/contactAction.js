@@ -1,5 +1,7 @@
 let contactStore = require('../store/contactStore');
 let AppLinks = require('../../constants/appLinks');
+let _ = require('lodash');
+
 
 let {
   BFetch,
@@ -202,6 +204,87 @@ let _updateGroupInfo = function (groupId, groupName, groupMasterUid, members, mu
   contactStore.createGroup(groupId, groupName, groupMasterUid, members, mute)
 }
 
+/** 查询好友
+ *  @param keyWord string
+ * */
+let _searchUser = function(keyWord) {
+  let param = {
+    keyWord:keyWord
+  };
+
+  return new Promise((resolve, reject) => {
+    PFetch( AppLinks.searcUser, param).then((response)=>{
+      resolve(response);
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+
+  //return new Promise((resolve, reject) => {
+  //  try {
+  //    let res = contactStore.getAllUsers();
+  //    let ret = [];
+  //    res && res.forEach((item)=> {
+  //      if (item.orgValue && !!~item.orgValue.indexOf(keyWord)) {
+  //        item.orgMembers && item.orgMembers.forEach((i) => {
+  //          i.orgValue = item.orgValue;
+  //          ret.push(i);
+  //        })
+  //      } else {
+  //        item.orgMembers && item.orgMembers.forEach((i) => {
+  //          if (i.realName && !!~i.realName.indexOf(keyWord)) {
+  //            i.orgValue = item.orgValue;
+  //            ret.push(i);
+  //          }
+  //        })
+  //      }
+  //    });
+  //    resolve(ret);
+  //  }catch(err){
+  //    reject(err);
+  //  }
+  //});
+
+}
+
+/**添加好友
+ * @param userId
+ * */
+let _addFriend = function(userId) {
+  let param = {
+    uid:userId
+  }
+
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.addFriend, param).then((response) => {
+      resolve(response);
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+}
+
+/**接受好友邀请
+ * @param usrId
+ * */
+let _acceptFriend = function(userId) {
+  let param = {uid:userId};
+  return new Promise((resolve, reject) => {
+    BFetch(AppLinks.acceptFriend, param).then((response) => {
+      if(_.isEmpty(response)){
+        resolve();
+      }
+      contactStore.addFriend(response);
+      resolve(response);
+    }).catch((err) => {
+      reject(err);
+    });
+
+  });
+
+
+}
+
 let ContactAction = {
   createGroup:(members, groupName, groupMasterUid) => _createGroup(members, groupName, groupMasterUid),
   muteUser:_muteUser,
@@ -214,7 +297,11 @@ let ContactAction = {
   acceptInvitation:_acceptInvitation,
   updateGroupInfo:_updateGroupInfo,
   storeDeleteGroup:_storeDeleteGroup,
-  storeLeaveGroup:_storeLeaveGroup
+  storeLeaveGroup:_storeLeaveGroup,
+  addFriend:_addFriend,
+
+  acceptFriend:_acceptFriend,
+  searchUser:_searchUser
 };
 
 module.exports = ContactAction;

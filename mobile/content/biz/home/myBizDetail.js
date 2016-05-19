@@ -21,7 +21,8 @@ let {
   Platform,
   CameraRoll,
   ToastAndroid,
-  DeviceEventEmitter
+    DeviceEventEmitter,
+    Animated
   }=React;
 
 let { Alert } = require('mx-artifacts');
@@ -77,40 +78,84 @@ let MyBizDetail = React.createClass({
       bizOrientation: marketInfo.bizOrientation,
       bizCategory: marketInfo.bizCategory,
       amount: marketInfo.amount,
-      fileUrlList: marketInfo.fileUrlList
+      fileUrlList: marketInfo.fileUrlList,
+
+      keyboardSpace: 0,
+      scrollHeight: screenHeight - 108
     }
   },
 
-    componentDidMount: function () {
-        //// Keyboard events监听
-        DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
-        DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
-    },
+  componentDidMount: function () {
+    //// Keyboard events监听
+    if (Platform.OS === 'android') {
+      DeviceEventEmitter.addListener('keyboardDidShow', this.updateKeyboardSpace);
+      DeviceEventEmitter.addListener('keyboardDidHide', this.resetKeyboardSpace);
+    } else {
+      DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
+      DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
+    }
 
-    componentWillUnmount: function () {
-        DeviceEventEmitter.removeAllListeners('keyboardWillShow');
-        DeviceEventEmitter.removeAllListeners('keyboardWillHide');
   },
 
-    // Keyboard actions
-    updateKeyboardSpace: function (frames) {
-        const keyboardSpace = frames.endCoordinates.height//获取键盘高度
+  componentWillUnmount: function () {
+    if (Platform.OS === 'android') {
+      DeviceEventEmitter.removeAllListeners('keyboardDidShow');
+      DeviceEventEmitter.removeAllListeners('keyboardDidHide');
+    } else {
+      DeviceEventEmitter.removeAllListeners('keyboardWillShow');
+      DeviceEventEmitter.removeAllListeners('keyboardWillHide');
+    }
+  },
+
+  // Keyboard actions
+  updateKeyboardSpace: function (frames) {
+    const keyboardSpace = frames.endCoordinates ? frames.endCoordinates.height : frames.end.height//获取键盘高度
+    this.setState({
+      keyboardSpace: keyboardSpace,
+    });
+
+    if (Platform.OS === 'android') {
+      this.activeInput.measure((ox, oy, width, height, px, py) => {
+        let keyBoardTop = screenHeight - this.state.keyboardSpace;
+        let activeInputBottom = py + height;
+
+        //Animated.timing(this.state.scrollHeight, {
+        //    toValue: screenHeight - (this.state.keyboardSpace + 64),
+        //    duration: 200,
+        //}).start(()=> {
+        //
+        //});
         this.setState({
-            keyboardSpace: keyboardSpace,
+          scrollHeight: screenHeight - (this.state.keyboardSpace + 80),
         });
 
-        this.activeInput.measure((ox, oy, width, height, px, py) => {
-            let keyBoardTop = screenHeight - this.state.keyboardSpace;
-            let activeInputBottom = py + height;
+        //if (activeInputBottom > keyBoardTop + 15) {
+        //this.refs['scroll'].scrollTo({y: 200});
+        //}
+      });
 
-            if (activeInputBottom >= keyBoardTop + 10) {
-                this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
-            }
-        });
-    },
 
-    resetKeyboardSpace: function () {
-        this.refs['scroll'].scrollTo({y: 0})
+    } else {
+      this.activeInput.measure((ox, oy, width, height, px, py) => {
+        let keyBoardTop = screenHeight - this.state.keyboardSpace;
+        let activeInputBottom = py + height;
+
+        if (activeInputBottom > keyBoardTop + 15) {
+          this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
+        }
+      });
+    }
+  },
+
+  resetKeyboardSpace: function () {
+
+    if (Platform.OS === 'android') {
+      this.setState({
+        scrollHeight: screenHeight - 108
+      });
+    }
+
+    this.refs['scroll'].scrollTo({y: 0})
   },
 
 
@@ -147,8 +192,15 @@ let MyBizDetail = React.createClass({
       <NavBarView navigator={this.props.navigator} title='业务详情' actionButton={this.renderShutDownBiz}>
         <View style={{height:screenHeight-64,backgroundColor:'#f7f7f7'}}>
           <View style={{flex:1}}>
+            <Animated.View
+                style={{
+                     height: this.state.scrollHeight,
+                    }}
+            >
               <ScrollView ref="scroll"
                           keyboardShouldPersistTaps={true}
+                          keyboardDismissMode='none'
+                          onLayout={() => {}}
               >
               {this.renderSelectOrg()}
               {this.renderBusinessType()}
@@ -160,6 +212,7 @@ let MyBizDetail = React.createClass({
               {this.renderModifyData()}
               {this.renderDownBizImage()}
             </ScrollView>
+            </Animated.View>
             {this.renderSaveBtn()}
           </View>
         </View>
@@ -256,7 +309,10 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
           <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'期限'}</Text>
-            <View style={{marginTop:10,flexDirection:'row'}} ref="timeLimitInputView">
+          <View style={{marginTop:10,flexDirection:'row'}}
+                ref="timeLimitInputView"
+                onLayout={() => {}}
+          >
             <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                    iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                    inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
@@ -285,7 +341,10 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
           <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'金额'}</Text>
-            <View style={{marginTop:10,flexDirection:'row'}} ref="amountInputView">
+          <View style={{marginTop:10,flexDirection:'row'}}
+                ref="amountInputView"
+                onLayout={() => {}}
+          >
             <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                    iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                    inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
@@ -318,7 +377,10 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:10}}>
           <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'利率'}</Text>
-            <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}} ref="rateInputView">
+          <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}
+            } ref="rateInputView"
+                onLayout={() => {}}
+          >
             <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                    iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                    inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
@@ -686,10 +748,10 @@ let MyBizDetail = React.createClass({
     let remark = data.remark == '' ? '--' : data.remark;
     let shareContent = this.state.marketInfo.bizCategoryDesc + '\n' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出') + '  '
       + '金额:' + amount + '  ' + '期限:' + dayNum + '  ' + '利率:' + rate + '\n' + '备注:' + remark
-      + '\n' + '--来自爱资融APP' + '\n' + 'http://www.baidu.com';
+      + '\n' + '--来自爱资融APP';
     Share.open({
       share_text: shareContent,
-      share_URL: Platform.OS === 'android' ? shareContent : '',
+      share_URL: 'http://www.baidu.com',
       title: "Share Link"
     }, (e) => {
       console.log(e);
