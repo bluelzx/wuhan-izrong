@@ -32,6 +32,7 @@ var shuaiConfig = {
 
 var qaConfig = {
   Dev: false,
+  //Host: 'http://192.168.64.205:9101/fas',     //qa
   Host: 'http://192.168.64.205:9101/fas',     //qa
   ImHost:'192.168.61.84:4000'//qa
 };

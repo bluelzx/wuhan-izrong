@@ -10,9 +10,13 @@ let AppStore = require('../../framework/store/appStore');
 
 let styles = StyleSheet.create({
   bubble: {
-    borderRadius: 5,
-    paddingHorizontal:10,
-    paddingVertical:14
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    paddingHorizontal:14,
+    paddingVertical:10,
+    borderTopWidth:0.5,
+    borderBottomWidth:0.5,
+    borderColor:'#E9E9E9'
   },
   text: {
     color: '#000',
@@ -80,22 +84,13 @@ export default class Bubble extends React.Component {
 
     if (this.props.contentType === MSG_CONTENT_TYPE.IMAGE) {
       return (
-
-      //<View style={[styles.bubble, customStyle]}>
-      //  <Image
-      //    style={{
-      //          flex: 1,
-      //          width: 100,
-      //          height: 100,
-      //          }}
-      //    source={{uri: this.props.content}}
-      //  ></Image>
-      //</View>
-
-          <Lightbox underlayColor='#44B5E6'
+        <View style={[styles.bubble, customStyle,
+               this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
+      this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
+      <Lightbox underlayColor='#44B5E6'
                     imageSource={{uri:this.props.content}}
                     navigator={AppStore.getNavigator()} >
-              <View style={[styles.bubble, customStyle]}>
+
                   <Image
                       style={{
                 flex: 1,
@@ -104,8 +99,9 @@ export default class Bubble extends React.Component {
                 }}
                       source={{uri: this.props.content}}
                   ></Image>
-              </View>
+
           </Lightbox>
+        </View>
 
 
       );
@@ -116,10 +112,14 @@ export default class Bubble extends React.Component {
       let nameCardStyle = this.props.position === 'left' ? styles.textLeft : styles.textRight;
 
       return (
-        <View style={[styles.bubble, customStyle, {flex:1}]}>
+        <View style={[styles.bubble, customStyle, {flex:1},
+         this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
+      this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
           <Text
             style={[{flexWrap:'wrap'},styles.text, nameCardStyle]}>{data.realName + '--' + data.orgBeanName}</Text>
-          <View style={[{height:0,flex:1,borderWidth:0.5,borderColor:'#fff',marginVertical:4},this.props.position === 'left' && {borderColor:'#000'}]}></View>
+          <Text style={[{borderTopWidth:0.5,borderColor:'#cccccc',marginVertical:4}]}>
+
+          </Text>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>手机:</Text>
@@ -183,7 +183,9 @@ export default class Bubble extends React.Component {
       let shareContent = '我利用[渤海银通]分享了一个业务信息给您：' + data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate;
       return (
         <TouchableOpacity onLongPress={() => this._onLongPress(shareContent)} activeOpacity={0.7}>
-          <View style={[styles.bubble, customStyle]}>
+          <View style={[styles.bubble, customStyle,
+           this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
+      this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
             <Text
               style={[styles.text, (this.props.position === 'left' ? styles.textLeft : styles.textRight), {paddingBottom: 5}]}>{data.bizCategory}</Text>
             <View
@@ -218,7 +220,9 @@ export default class Bubble extends React.Component {
     }
 
     return (
-      <View style={[styles.bubble, customStyle, flexStyle]}>
+      <View style={[styles.bubble, customStyle, flexStyle,
+      this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
+      this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
         {this.props.name}
         {this.renderText(this.props.content, this.props.position)}
       </View>
