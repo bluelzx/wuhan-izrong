@@ -381,12 +381,8 @@ let WhitePage = React.createClass({
 
     let {width} = Device;
     return (
-      <TouchableOpacity style={{backgroundColor:'#FEFEFE'}} key={item.sessionId} onLongPress={
-        ()=>
-          {
-            Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
-          }
-        }
+      <TouchableOpacity style={{backgroundColor:'#FEFEFE'}} key={item.sessionId}
+
                         onPress={()=>{SessionStore.setBadgeZero(item.sessionId); this.props.navigator.push({comp: NewFriendList,param:{noticId:item.sessionId}})}}>
         <View
           style={{alignItems:'center',borderBottomColor:DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:10}}>

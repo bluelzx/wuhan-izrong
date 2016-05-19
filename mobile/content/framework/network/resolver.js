@@ -131,9 +131,9 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.SYNC_RES:
       message.msgArray.forEach((item)=> {
-        // console.log(JSON.parse(item));
         _dealMsg(JSON.parse(item), socket);
       });
+      ContactSotre.syncReq(new Date());
       break;
     case MSG_TYPE.CONTANCT_INFO_CERTIFY:
       if(message.userId == AppStore.getUserId()){
@@ -163,17 +163,12 @@ let _dealMsg = function (message, socket) {
       }
       break;
     case MSG_TYPE.FRIEND_INVITE:
-      ContactSotre.newFriendNotic({
-        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, message.uid),
-        userId: message.uid,
-        realName: message.realName,
-        orgName: message.orgName,
-        photoFileUrl: message.photoFileUrl,
-        certified:message.certified
-      }, userId);
+      ContactSotre.newFriendNotic(Object.assign({
+        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, userId)
+      },message.userInfo), userId);
       break;
     case MSG_TYPE.FRIEND_PROMISE:
-
+      console.log(message.uid + '同意加你为好友');
       break;
     case MSG_TYPE.ORG_INFO_UPDATE:
       AppStore.updateOrgInfo(message);

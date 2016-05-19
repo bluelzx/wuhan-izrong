@@ -259,7 +259,8 @@ let _updateContactInfo = function(address, realName, email, nameCardFileUrl, dep
     photoFileUrl:photoFileUrl,
     publicQQ:publicQQ,
     orgId:orgId,
-    certified:certified
+    certified:certified,
+    mute:false
   };
   let ret = {};
   for(let k in param){
@@ -414,6 +415,7 @@ let _addFriend = function(userInfo) {
     photoFileUrl:userInfo.photoFileUrl,
     publicQQ:userInfo.publicQQ,
     orgId:userInfo.orgId,
+    mute:userInfo.mute
   };
 
   _realm.write(()=>{

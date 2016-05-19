@@ -51,9 +51,16 @@ let NewFriendList = React.createClass({
 
 
   acceptInvite: function(item) {
+
+    let userInfo = this.state.userInfo;
+
     this.props.exec(()=>{
-      ContactAction.acceptFriend(item.userId).then((response) => {
-        NewFriendStore.modifyInviteState(item.noticId, this.state.userInfo.userId);
+
+      return ContactAction.acceptFriend(item.userId).then((response) => {
+       // Alert(response);
+        NewFriendStore.modifyInviteState(item.noticId, userInfo.userId);
+      }).catch((err)=>{
+        throw err;
       });
     });
 

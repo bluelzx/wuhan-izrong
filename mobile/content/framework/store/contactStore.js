@@ -144,7 +144,8 @@ let _syncReq = function(data){
 
 
 let _newFriendNotic = function(param, userId) {
-  PersisterFacade.createNewNotic(param.noticId, param.userId, param.realName, param.orgName, param.photoFileUrl,param.certificated, userId);
+  let orgValue = PersisterFacade.getOrgValueByOrgId(param.orgId);
+  PersisterFacade.createNewNotic(param.noticId, param.userId, param.realName, orgValue, param.photoFileUrl,param.certificated, userId);
   //updateSession
   let p = {
     sessionId: param.noticId,
@@ -156,6 +157,8 @@ let _newFriendNotic = function(param, userId) {
     contentType: MSG_CONTENT_TYPE.NULL
   };
   PersisterFacade.updateSession(p, {notAdd:false});
+  PersisterFacade.addFriend(param);
+  AppStore.emitChange(IM_SESSION_LIST);
 }
 
 let _isStranger = function(userId){

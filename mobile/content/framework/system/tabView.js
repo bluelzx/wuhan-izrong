@@ -61,7 +61,7 @@ var TabView = React.createClass({
     //} else {
       return {
         token: token,
-        initialPage: 0,
+        initialPage: 3,
         badge: badge
       }
     //}
@@ -117,6 +117,7 @@ var TabView = React.createClass({
     if(!tabName){
       tabName = 'home';
     }
+    tabName = 'IM';
     let initialPage = PageDic[tabName];
     return _.assign(
       this.getStateFromStores(),

@@ -110,9 +110,7 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
     publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat === null),
     publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
     lastSyncTime: null,
-    friendList:loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList).forEach((item)=>{
-      return parseInt(item);
-    }),
+    friendList:loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList),
     certified:loginUserInfo.certified||false
   }, true);
 };
