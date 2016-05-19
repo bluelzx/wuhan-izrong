@@ -750,8 +750,8 @@ let MyBizDetail = React.createClass({
       + '金额:' + amount + '  ' + '期限:' + dayNum + '  ' + '利率:' + rate + '\n' + '备注:' + remark
       + '\n' + '--来自爱资融APP';
     Share.open({
-      share_text: shareContent,
-      share_URL: 'http://www.baidu.com',
+      share_text: '',
+      share_URL: shareContent,
       title: "Share Link"
     }, (e) => {
       console.log(e);
