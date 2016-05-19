@@ -793,6 +793,7 @@ let MyBizDetail = React.createClass({
             });
           }).catch((errorData) => {
             console.log('Image upload error ' + JSON.stringify(errorData));
+            throw errorData;
           });
       }
     )

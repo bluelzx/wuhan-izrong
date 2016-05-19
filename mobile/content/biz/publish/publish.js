@@ -21,8 +21,8 @@ let {
   InteractionManager,
   CameraRoll,
   ToastAndroid,
-    DeviceEventEmitter,
-    Animated
+  DeviceEventEmitter,
+  Animated
   }=React;
 
 let { Alert ,Button } = require('mx-artifacts');
@@ -81,8 +81,8 @@ let Publish = React.createClass({
       amount: 0,
       fileUrlList: [],
 
-        keyboardSpace: 0,
-        scrollHeight: screenHeight - 108
+      keyboardSpace: 0,
+      scrollHeight: screenHeight - 108
     }
   },
 
@@ -100,25 +100,25 @@ let Publish = React.createClass({
 
   componentDidMount: function () {
     //// Keyboard events监听
-      if (Platform.OS === 'android') {
-          DeviceEventEmitter.addListener('keyboardDidShow', this.updateKeyboardSpace);
-          DeviceEventEmitter.addListener('keyboardDidHide', this.resetKeyboardSpace);
-      } else {
-          DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
-          DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
-      }
+    if (Platform.OS === 'android') {
+      DeviceEventEmitter.addListener('keyboardDidShow', this.updateKeyboardSpace);
+      DeviceEventEmitter.addListener('keyboardDidHide', this.resetKeyboardSpace);
+    } else {
+      DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
+      DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
+    }
 
     AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   componentWillUnmount: function () {
-      if (Platform.OS === 'android') {
-          DeviceEventEmitter.removeAllListeners('keyboardDidShow');
-          DeviceEventEmitter.removeAllListeners('keyboardDidHide');
-      } else {
-          DeviceEventEmitter.removeAllListeners('keyboardWillShow');
-          DeviceEventEmitter.removeAllListeners('keyboardWillHide');
-      }
+    if (Platform.OS === 'android') {
+      DeviceEventEmitter.removeAllListeners('keyboardDidShow');
+      DeviceEventEmitter.removeAllListeners('keyboardDidHide');
+    } else {
+      DeviceEventEmitter.removeAllListeners('keyboardWillShow');
+      DeviceEventEmitter.removeAllListeners('keyboardWillHide');
+    }
 
     AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
   },
@@ -132,51 +132,51 @@ let Publish = React.createClass({
 
   // Keyboard actions
   updateKeyboardSpace: function (frames) {
-      const keyboardSpace = frames.endCoordinates ? frames.endCoordinates.height : frames.end.height//获取键盘高度
+    const keyboardSpace = frames.endCoordinates ? frames.endCoordinates.height : frames.end.height//获取键盘高度
     this.setState({
       keyboardSpace: keyboardSpace,
     });
 
-      if (Platform.OS === 'android') {
-          this.activeInput.measure((ox, oy, width, height, px, py) => {
-              let keyBoardTop = screenHeight - this.state.keyboardSpace;
-              let activeInputBottom = py + height;
+    if (Platform.OS === 'android') {
+      this.activeInput.measure((ox, oy, width, height, px, py) => {
+        let keyBoardTop = screenHeight - this.state.keyboardSpace;
+        let activeInputBottom = py + height;
 
-              //Animated.timing(this.state.scrollHeight, {
-              //    toValue: screenHeight - (this.state.keyboardSpace + 64),
-              //    duration: 200,
-              //}).start(()=> {
-              //
-              //});
-              this.setState({
-                  scrollHeight: screenHeight - (this.state.keyboardSpace + 80),
-              });
+        //Animated.timing(this.state.scrollHeight, {
+        //    toValue: screenHeight - (this.state.keyboardSpace + 64),
+        //    duration: 200,
+        //}).start(()=> {
+        //
+        //});
+        this.setState({
+          scrollHeight: screenHeight - (this.state.keyboardSpace + 80),
+        });
 
-              //if (activeInputBottom > keyBoardTop + 15) {
-            //this.refs['scroll'].scrollTo({y: 200});
-              //}
-          });
+        //if (activeInputBottom > keyBoardTop + 15) {
+        //this.refs['scroll'].scrollTo({y: 200});
+        //}
+      });
 
 
-      } else {
-          this.activeInput.measure((ox, oy, width, height, px, py) => {
-              let keyBoardTop = screenHeight - this.state.keyboardSpace;
-              let activeInputBottom = py + height;
+    } else {
+      this.activeInput.measure((ox, oy, width, height, px, py) => {
+        let keyBoardTop = screenHeight - this.state.keyboardSpace;
+        let activeInputBottom = py + height;
 
-              if (activeInputBottom > keyBoardTop + 15) {
-                  this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
-              }
-          });
-      }
+        if (activeInputBottom > keyBoardTop + 15) {
+          this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
+        }
+      });
+    }
   },
 
   resetKeyboardSpace: function () {
 
-      if (Platform.OS === 'android') {
-          this.setState({
-              scrollHeight: screenHeight - 108
-          });
-      }
+    if (Platform.OS === 'android') {
+      this.setState({
+        scrollHeight: screenHeight - 108
+      });
+    }
 
     this.refs['scroll'].scrollTo({y: 0})
   },
@@ -188,27 +188,27 @@ let Publish = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} title='发布新业务'
                   actionButton={isFromIM || isFromMyBusiness ? null : this.renderToMyBiz}>
-          <View style={{height: screenHeight - 64 ,backgroundColor:DictStyle.colorSet.content}}>
+        <View style={{height: screenHeight - 64 ,backgroundColor:DictStyle.colorSet.content}}>
           <View style={{flex:1}}>
-              <Animated.View
-                  style={{
+            <Animated.View
+              style={{
                      height: this.state.scrollHeight,
                     }}
+            >
+              <ScrollView ref="scroll"
+                          keyboardShouldPersistTaps={true}
+                          keyboardDismissMode='none'
+                          onLayout={() => {}}
               >
-                  <ScrollView ref="scroll"
-                              keyboardShouldPersistTaps={true}
-                              keyboardDismissMode='none'
-                              onLayout={() => {}}
-                  >
-                      {this.renderSelectOrg()}
-                      {this.renderBusinessType()}
-                      {this.renderTimeLimit()}
-                      {this.renderAmount()}
-                      {this.renderRate()}
-                      {this.renderAddImg(isFromIM)}
-                      {this.renderRemarks(isFromIM)}
-                  </ScrollView>
-              </Animated.View>
+                {this.renderSelectOrg()}
+                {this.renderBusinessType()}
+                {this.renderTimeLimit()}
+                {this.renderAmount()}
+                {this.renderRate()}
+                {this.renderAddImg(isFromIM)}
+                {this.renderRemarks(isFromIM)}
+              </ScrollView>
+            </Animated.View>
             {this.renderReleaseBtn(isFromIM)}
           </View>
         </View>
@@ -245,7 +245,7 @@ let Publish = React.createClass({
     } else if (key == 'amountText') {
       this.setState({amount: (this.state.amountDefault == 0) ? Number(value) * 10000 : Number(value) * 100000000});
     } else {
-        this.setState({rate: Number(value)});
+      this.setState({rate: Number(value)});
     }
   },
 
@@ -281,10 +281,10 @@ let Publish = React.createClass({
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'期限'}</Text>
-          <View style={{marginTop:10,flexDirection:'row'}}
-                ref="timeLimitInputView"
-                onLayout={() => {}}
-          >
+        <View style={{marginTop:10,flexDirection:'row'}}
+              ref="timeLimitInputView"
+              onLayout={() => {}}
+        >
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
@@ -304,10 +304,10 @@ let Publish = React.createClass({
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'金额'}</Text>
-          <View style={{marginTop:10,flexDirection:'row'}}
-                ref="amountInputView"
-                onLayout={() => {}}
-          >
+        <View style={{marginTop:10,flexDirection:'row'}}
+              ref="amountInputView"
+              onLayout={() => {}}
+        >
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
@@ -329,10 +329,10 @@ let Publish = React.createClass({
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
         <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'利率'}</Text>
-          <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}
-                ref="rateInputView"
-                onLayout={() => {}}
-          >
+        <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}
+              ref="rateInputView"
+              onLayout={() => {}}
+        >
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
@@ -406,8 +406,8 @@ let Publish = React.createClass({
                     }}
         >
           <Image
-              style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-              source={{uri:rowData}}
+            style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+            source={{uri:rowData}}
           />
         </Lightbox>
       </ImagePicker>
@@ -419,13 +419,13 @@ let Publish = React.createClass({
         <View style={{marginTop:10,marginBottom:10}}>
           <TouchableHighlight onPress={() => this.toRemarks(Remarks)} underlayColor='rgba(129,127,201,0)'>
             <View
-                style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 50, backgroundColor: 'white'}}>
+              style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',height: 50, backgroundColor: 'white'}}>
               <Text style={{marginLeft:10,color:DictStyle.marketSet.fontColor}}>
                 {'备注'}
               </Text>
               <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                 <Text
-                    style={{marginRight:10,color:(this.state.remarkText == '') ? '#d3d5df' : DictStyle.marketSet.fontColor,flex:1,width:screenWidth-120}}
+                  style={{marginRight:10,color:(this.state.remarkText == '') ? '#d3d5df' : DictStyle.marketSet.fontColor,flex:1,width:screenWidth-120}}
                 >{(this.state.remarkText == '') ? '50字以内' : this.state.remarkText}
                 </Text>
                 <Icon style={{marginRight: 10}} name="ios-arrow-right" size={30} color='#a8afb3'/>
@@ -641,9 +641,9 @@ let Publish = React.createClass({
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
     let remark = data.remark == '' ? '--' : data.remark;
-    let shareContent = data.bizCategory + '\n' + '业务方向:  ' +(data.bizOrientation == 'IN' ? '收' : '出') + '  '
-      + '金额:' + amount + '  ' + '期限:'+ dayNum + '  ' + '利率:'+ rate + '\n' + '备注:' + remark
-      + '\n'+'--来自爱资融APP';
+    let shareContent = data.bizCategory + '\n' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出') + '  '
+      + '金额:' + amount + '  ' + '期限:' + dayNum + '  ' + '利率:' + rate + '\n' + '备注:' + remark
+      + '\n' + '--来自爱资融APP';
     Share.open({
       share_text: shareContent,
       share_URL: 'http://www.baidu.com',
@@ -654,19 +654,22 @@ let Publish = React.createClass({
   },
 
   handleSendImage(uri, index) {
-    ImAction.uploadImage(uri)
-      .then((response) => {
-        let arr = this.state.fileUrlList;
-        if (index > 5) {
-          arr.push(response.fileUrl);
-        } else {
-          arr[index] = response.fileUrl;
-        }
-        this.setState({
-          fileUrlList: arr
-        });
-      }).catch((errorData) => {
-      console.log('Image upload error ' + JSON.stringify(errorData));
+    this.props.exec(() => {
+      ImAction.uploadImage(uri)
+        .then((response) => {
+          let arr = this.state.fileUrlList;
+          if (index > 5) {
+            arr.push(response.fileUrl);
+          } else {
+            arr[index] = response.fileUrl;
+          }
+          this.setState({
+            fileUrlList: arr
+          });
+        }).catch((errorData) => {
+        console.log('Image upload error ' + JSON.stringify(errorData));
+        throw errorData;
+      });
     });
   },
 
