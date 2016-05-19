@@ -267,8 +267,8 @@ let GroupNotice = React.createClass({
   },
 
   acceptInvite: function (item) {
-    this.props.exec(
-      ()=> {
+    //this.props.exec(
+    //  ()=> {
         return ContactAction.acceptInvitation(item.groupId).then(()=> {
           NoticeStore.updateInViteNotice(item.noticeId);
         }).then(
@@ -276,8 +276,8 @@ let GroupNotice = React.createClass({
         ).catch((err)=> {
           Alert(err);
         });
-      }
-    );
+      //}
+    //);
   },
 
   deleteSession: function (sessionId) {

@@ -26,7 +26,7 @@ let _updateInViteNotice = function (id) {
 }
 
 let noticeStore = {
-  updateNotice:()=>_updateNotice(),
+  updateNotice:(param)=>_updateNotice(param),
   getNotificationMessage: (param) => _getNotificationMessage(param),
   deleteNotice: (id) => _deleteNotice(id),
   updateInViteNotice: (id) => _updateInViteNotice(id)

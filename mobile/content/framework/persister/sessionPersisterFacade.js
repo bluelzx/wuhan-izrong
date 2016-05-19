@@ -67,9 +67,13 @@ let _updateSession = function (param, notAdd, noticeType, currUserId){
       let d = _realm.objects(SESSION).filtered('type = \'' + SESSION_TYPE.GROUP_NOTICE + '\'');
       let groupSession = [];
       d.forEach((item) => {
-        let userId = SessionIdSplit.getUserIdFromSessionId(item.sessionId);
-        if (currUserId == userId) {
-          groupSession.push(item);
+        if (item && !_.isEmpty(item)) {
+          let userId = SessionIdSplit.getUserIdFromSessionId(item.sessionId);
+          if (currUserId == userId) {
+            groupSession.push(item);
+            let wd = _realm.objects(SESSION).filtered('sessionId = \'' + item.sessionId + '\'');
+            _realm.delete(wd)
+          }
         }
       });
       if (groupSession.length > 0) {
@@ -78,8 +82,6 @@ let _updateSession = function (param, notAdd, noticeType, currUserId){
         } else {
           param.badge = groupSession[0].badge + 100000;
         }
-        let wd = _realm.objects(SESSION).filtered('sessionId = \'' + groupSession.sessionId + '\'');
-        _realm.delete(wd)
       } else {
         if (param.type == SESSION_TYPE.INVITE) {
           param.badge = 1;
