@@ -1,3 +1,9 @@
+var developConfigDocker2 = {
+  Dev: true, // Switch for log. true means print.
+  Host: 'http://192.168.64.152:8080/fas',   //dev
+  ImHost:'192.168.61.84:3000'//dev
+};
+
 var developConfigDocker = {
   Dev: true, // Switch for log. true means print.
   Host: 'http://192.168.64.152:8080/fas',   //dev
@@ -21,7 +27,7 @@ var shuaiConfig = {
   Dev: true, // Switch for log. true means print.
   Host: 'http://192.168.64.207:8080/fas',   //dev
   //Host: 'http://192.168.64.205:9102/fas',   //dev
-  ImHost:'192.168.61.84:3000'//dev
+  ImHost:'192.168.99.100:3000'//dev
 };
 
 var qaConfig = {

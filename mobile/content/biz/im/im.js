@@ -134,7 +134,9 @@ let WhitePage = React.createClass({
 
     let {width} = Device;
     return (
-      <TouchableOpacity key={item.sessionId} onLongPress={
+      <TouchableOpacity key={item.sessionId}
+                        style={{backgroundColor:'#FEFEFE'}}
+                        onLongPress={
         ()=>
           {
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{});
@@ -165,7 +167,9 @@ let WhitePage = React.createClass({
     }
     let {width} = Device;
     return (
-      <TouchableOpacity key={item.sessionId} onLongPress={
+      <TouchableOpacity key={item.sessionId}
+                        style={{backgroundColor:'#FEFEFE'}}
+                        onLongPress={
         ()=>
           {
             Alert('确定删除所有群通知消息吗?', () => {this.deleteSession(item.sessionId)},()=>{})
@@ -195,7 +199,9 @@ let WhitePage = React.createClass({
     let {width} = Device;
 
     return (
-        <TouchableOpacity key={item.sessionId} onPress={()=>this.toOther(item)} onLongPress={
+        <TouchableOpacity key={item.sessionId}
+                          style={{backgroundColor:'#FEFEFE'}}
+                          onPress={()=>this.toOther(item)} onLongPress={
         ()=>
           {
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
@@ -240,7 +246,9 @@ let WhitePage = React.createClass({
 
 
     return (
-      <TouchableOpacity key={item.sessionId} onLongPress={
+      <TouchableOpacity key={item.sessionId}
+                        style={{backgroundColor:'#FEFEFE'}}
+                        onLongPress={
         ()=>
           {
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
@@ -286,7 +294,9 @@ let WhitePage = React.createClass({
     let {width} = Device;
     console.log(item);
     return (
-      <TouchableOpacity key={item.sessionId} onLongPress={
+      <TouchableOpacity key={item.sessionId}
+                        style={{backgroundColor:'#FEFEFE'}}
+                        onLongPress={
         ()=>
           {
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
@@ -330,6 +340,7 @@ let WhitePage = React.createClass({
             Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
           }
         }
+          style={{backgroundColor:'#FEFEFE'}}
         onPress={()=>{
         let groupId = this.getIdFromSessionId(item.sessionId);
          let groupInfo = ContactStore.getGroupDetailById(groupId);
@@ -398,7 +409,7 @@ let WhitePage = React.createClass({
 
   },
 
-  renderItem: function(item, index) {
+  renderItem: function(item, index, length) {
 
     if(item.type == SESSION_TYPE.USER ){
       return this.renderUser(item, index);
