@@ -34,6 +34,17 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         initData();
     }
 
+
+    public void initData() {
+        AnimationSet set = new AnimationSet(false);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1f);
+        set.addAnimation(alphaAnimation);
+        set.setAnimationListener(this);
+        set.setDuration(3000);
+        mImageView.setAnimation(set);
+        set.start();
+    }
+
     @Override
     public void onAnimationStart(Animation animation) {
     }
@@ -86,16 +97,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     @Override
     public void onAnimationRepeat(Animation animation) {
 
-    }
-
-    public void initData() {
-        AnimationSet set = new AnimationSet(false);
-        AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1f);
-        set.addAnimation(alphaAnimation);
-        set.setAnimationListener(this);
-        set.setDuration(3000);
-        mImageView.setAnimation(set);
-        set.start();
     }
 
     @Override
