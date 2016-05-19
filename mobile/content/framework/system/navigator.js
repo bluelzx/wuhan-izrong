@@ -36,35 +36,35 @@ let { Alert, Device, Loading } = require('mx-artifacts');
 let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
-let Publish = require ('../../biz/publish/publish');
+let Publish = require('../../biz/publish/publish');
 
 const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');
 
 var Main = React.createClass({
   _navigator: null,
-  _getStateFromStores: function() {
+  _getStateFromStores: function () {
     return {
       initLoading: AppStore.getInitLoadingState(),
       token: AppStore.getToken()
     };
   },
-  getInitialState: function() {
+  getInitialState: function () {
     return _.assign(this._getStateFromStores(), {
       isLoadingVisible: false,
     });
   },
-  componentDidMount: function() {
+  componentDidMount: function () {
     AppStore.addChangeListener(this._onChange);
     if (Platform.OS === 'android') {
       BackAndroid.addEventListener('hardwareBackPress', this._onAndroidBackPressed);
 
-      DeviceEventEmitter.addListener('onPause',function(e:Event){
+      DeviceEventEmitter.addListener('onPause', function (e:Event) {
         ImSocket.disconnect();
         AppStore.startJavaServer();
       });
 
-      DeviceEventEmitter.addListener('onResume',function(e:Event){
+      DeviceEventEmitter.addListener('onResume', function (e:Event) {
         //AppStore.stopJavaServer();
         AppAction.emitActiveApp();
       });
@@ -79,20 +79,22 @@ var Main = React.createClass({
     AppStore.addChangeListener(this._activeApp, 'active_app');
   },
 
-  _activeApp:function(){
+  _activeApp: function () {
     ImSocket.reconnect();
   },
 
-  _handleAppStateChange:  (currentAppState) => {
+  _handleAppStateChange: (currentAppState) => {
     //let that = this;
     switch (currentAppState) {
       case "active":
         AppAction.emitActiveApp();
         break;
-      default: {
+      default:
+      {
         ImSocket.disconnect();
 
-      };
+      }
+        ;
     }
   },
 
@@ -113,7 +115,8 @@ var Main = React.createClass({
         return true;
       }
 
-      Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {});
+      Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {
+      });
       return true;
     }
 
@@ -136,7 +139,7 @@ var Main = React.createClass({
           Alert('系统异常');
         });
       }
-    }else if(AppStore.isFreezing()){
+    } else if (AppStore.isFreezing()) {
       Promise.resolve().then((resolve) => {
         this.refs.navigator.resetTo({comp: Login});
       }).catch((e) => {
@@ -164,12 +167,16 @@ var Main = React.createClass({
             });
           }
           console.log(errorData);
-          if(errorData.msgCode == 'APP_SYS_TOKEN_INVALID'){
+          if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
             AppStore.forceLogout();
-          } else if(errorData.msgContent || errorData.message || errorData.errMsg){
-            Alert(errorData.msgContent || errorData.message || errorData.errMsg);
-          }else if(errorData.includes('Network request failed')) {
-            Alert('网络异常,');
+          } else if (errorData.message) {
+            if (errorData.message.includes('Network request failed')) {
+              Alert('网络异常');
+            }else{
+              Alert(errorData.message);
+            }
+          } else if (errorData.msgContent || errorData.errMsg) {
+            Alert(errorData.msgContent || errorData.errMsg);
           }
         });
       if (showLoading) {
@@ -186,11 +193,11 @@ var Main = React.createClass({
     var Comp = route.comp;
     let tabName = null;
     if (Comp == 'tabView') {
-      if(route.tabName) tabName = route.tabName;
+      if (route.tabName) tabName = route.tabName;
       Comp = TabView;
     }
 
-    if(Comp == 'publish'){
+    if (Comp == 'publish') {
       Comp = Publish;
     }
 
@@ -200,8 +207,8 @@ var Main = React.createClass({
     );
   },
 
-  initSocket:function(token){
-    if(token) {
+  initSocket: function (token) {
+    if (token) {
       ImSocket.init(token, ()=> {
         let sTime = AppStore.getLoginUserInfo();
         return sTime && sTime.lastSyncTime;
@@ -229,8 +236,8 @@ var Main = React.createClass({
     //var initComp = Chat;
     if (this.state.token) {
       initComp = TabView;
-     this.initSocket(this.state.token);
-    }else{
+      this.initSocket(this.state.token);
+    } else {
       ImSocket.disconnect();
     }
 
