@@ -64,14 +64,11 @@ let _dealMsg = function (message, socket) {
       }, userId);
       break;
     case MSG_TYPE.PLATFORM_INFO:
-    {
       if (lastSyncTime < message.createDate) {
-
         ImStore.createPlatFormInfo(message.infoId, message.title, message.content, new Date(message.createDate));
         ContactSotre.syncReq(new Date(message.createDate));
         lastSyncTime = message.createDate;
       }
-    };
       break;
     case MSG_TYPE.HOME_PAGE:
       message.homePageList && message.homePageList.forEach((msg) => {
@@ -79,11 +76,7 @@ let _dealMsg = function (message, socket) {
       });
       break;
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
-      ImStore.updateContactInfo(message.address,
-        message.realName, message.email, message.nameCardFileUrl, message.department, message.isPublicDepart,
-        message.jobTitle, message.isPublicTitle, message.mobileNumber, message.isPublicMobile, message.phoneNumber,
-        message.isPublicPhone, message.isPublicEmail, message.isPublicAddress, message.isPublicWeChat, message.photoFileUrl,
-        message.qqNo, message.isPublicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
+      ImStore.updateContactInfo(message);
       break;
     case MSG_TYPE.CONTANCT_INFO_DELETE:
       ImStore.deleteContactInfo(message.userIdList);
@@ -91,7 +84,7 @@ let _dealMsg = function (message, socket) {
     case MSG_TYPE.GROUP_INFO_UPDATE:
       switch (message.action) {
         case UPDATE_GROUP_TYPE.CREATE_GROUP:
-          ContactSotre.createGroup(message.groupId, message.groupName,message.groupOwnerId,message.members,false);
+          ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
           break;
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_NAME:
           break;
@@ -153,36 +146,28 @@ let _dealMsg = function (message, socket) {
       ContactSotre.syncReq(new Date());
       break;
     case MSG_TYPE.CONTANCT_INFO_CERTIFY:
-      if(message.userId == AppStore.getUserId()){
-        AppStore.updateUserInfo('certificated',message.isCertificated);
-      }else{
-        ImStore.updateContactInfo(message.address,
-          message.realName, message.email, message.nameCardFileUrl, message.department, message.isPublicDepart,
-          message.jobTitle, message.isPublicTitle, message.mobileNumber, message.isPublicMobile, message.phoneNumber,
-          message.isPublicPhone, message.isPublicEmail, message.isPublicAddress, message.isPublicWeChat, message.photoFileUrl,
-          message.qqNo, message.isPublicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
+      if (message.userId == AppStore.getUserId()) {
+        AppStore.updateUserInfo('certificated', message.isCertificated);
+      } else {
+        ImStore.updateContactInfo(message);
       }
       break;
     case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
-      if(message.userId == AppStore.getUserId()){
-        AppStore.updateUserInfo('certificated',message.isCertificated);
-      }else{
-        ImStore.updateContactInfo(message.address,
-          message.realName, message.email, message.nameCardFileUrl, message.department, message.isPublicDepart,
-          message.jobTitle, message.isPublicTitle, message.mobileNumber, message.isPublicMobile, message.phoneNumber,
-          message.isPublicPhone, message.isPublicEmail, message.isPublicAddress, message.isPublicWeChat, message.photoFileUrl,
-          message.qqNo, message.isPublicQQ, message.weChatNo, message.userId, message.orgId, message.isCertificated);
+      if (message.userId == AppStore.getUserId()) {
+        AppStore.updateUserInfo('certificated', message.isCertificated);
+      } else {
+        ImStore.updateContactInfo(message);
       }
       break;
     case MSG_TYPE.CONTANCT_INFO_FREEZE:
-      if(message.userId == AppStore.getUserId()){
+      if (message.userId == AppStore.getUserId()) {
         AppStore.forceLogout();
       }
       break;
     case MSG_TYPE.FRIEND_INVITE:
       ContactSotre.newFriendNotic(Object.assign({
         noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, userId)
-      },message.userInfo), userId);
+      }, message.userInfo), userId);
       break;
     case MSG_TYPE.FRIEND_PROMISE:
       console.log(message.uid + '同意加你为好友');

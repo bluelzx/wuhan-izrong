@@ -146,7 +146,7 @@ let WhitePage = React.createClass({
           borderBottomWidth:0.5,
           flexDirection:'row',
           paddingVertical:7,
-          paddingHorizontal: 10 }}
+          marginHorizontal: 10 }}
         >
           <HeadPic badge={item.badge} source={DictIcon.imSpread} />
           <View
@@ -186,7 +186,7 @@ let WhitePage = React.createClass({
           borderBottomWidth:0.5,
           flexDirection:'row',
           paddingVertical:7,
-          paddingHorizontal: 10}}>
+          marginHorizontal: 10}}>
           <HeadPic badge={item.badge} source={DictIcon.imGroupNotice} showBadge={true}/>
           <View
             style={{  flex:1,paddingHorizontal:10}}>
@@ -327,9 +327,9 @@ let WhitePage = React.createClass({
           borderBottomWidth:0.5,
           flexDirection:'row',
           paddingVertical:7,
-          paddingHorizontal:10}}>
+          marginHorizontal:10}}>
 
-          <HeadPic badge={item.badge} source={DictIcon.imSpread} />
+          <HeadPic badge={item.badge} source={DictIcon.imNewFriendNotic} />
 
             <View
               style={{  flex:1,paddingHorizontal:10}}

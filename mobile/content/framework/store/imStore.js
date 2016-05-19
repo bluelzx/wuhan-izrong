@@ -54,8 +54,8 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
     Persister.deleteContactInfo(userIdList);
     AppStore.emitChange(IM_CONTACT);
   },
-  updateContactInfo:(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified) =>{
-    Persister.updateContactInfo(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified);
+  updateContactInfo:(message) =>{
+    Persister.updateContactInfo(message);
     AppStore.emitChange(IM_CONTACT);
   },
   forceLogOut:()=>{AppStore.forceLogout()},
@@ -85,9 +85,11 @@ let _resovleMessages = (bInit = false) => {
         name: name,
         image: userInfo.photoFileUrl,
         position: 'left',
-        date: object.revTime
+        date: object.revTime,
+        orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       };
     } else { // Sent
+      let userInfo = ContactStore.getUserInfoByUserId(_data.userId);
       tmpMessage = {
         msgId: object.msgId,
         contentType: object.contentType,
@@ -97,7 +99,8 @@ let _resovleMessages = (bInit = false) => {
         image: _data.userPhotoFileUrl,
         position: 'right',
         date: object.revTime,
-        status: object.status
+        status: object.status,
+        orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       };
     }
 
@@ -226,8 +229,10 @@ let _saveMsg = (message, userId) => {
         position: 'left',
         date: message.revTime,
         certified:userInfo.certified,
+        orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       });
     } else { // Send
+      let userInfo = ContactStore.getUserInfoByUserId(_data.userId);
       _data.messages.push({
         msgId: message.msgId,
         contentType: message.contentType,
@@ -238,6 +243,7 @@ let _saveMsg = (message, userId) => {
         date: message.revTime,
         status: message.status,
         certified:_data.certified,
+        orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       });
     }
 

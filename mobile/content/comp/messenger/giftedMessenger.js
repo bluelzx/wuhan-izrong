@@ -200,7 +200,7 @@ let GiftedMessenger = React.createClass({
       if (diffMessage === null) {
         return (
           <Text style={[this.styles.date]}>
-            {moment(rowData.date).calendar()}
+            {'--  '+ moment(rowData.date).calendar() + '  --'}
           </Text>
         );
       } else if (diffMessage.date instanceof Date) {
@@ -208,7 +208,7 @@ let GiftedMessenger = React.createClass({
         if (diff > 5) {
           return (
             <Text style={[this.styles.date]}>
-              {moment(rowData.date).calendar()}
+              {'--  '+moment(rowData.date).calendar()+ '  --'}
             </Text>
           );
         }
@@ -966,10 +966,10 @@ let GiftedMessenger = React.createClass({
 
       },
       date: {
+        paddingVertical:10,
         color: '#aaaaaa',
         fontSize: 12,
         textAlign: 'center',
-        fontWeight: 'bold',
         marginBottom: 8,
       },
       link: {

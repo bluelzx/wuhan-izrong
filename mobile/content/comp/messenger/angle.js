@@ -16,12 +16,14 @@ export default class Angle extends React.Component {
       case 'left':
         customStyle = {
           borderLeftWidth: 0,
+          borderTopWidth: 0,
           borderRightColor: this.props.color
         };
         break;
       case 'right':
         customStyle = {
           borderRightWidth: 0,
+          borderTopWidth: 0,
           borderLeftColor: this.props.color
         };
         break;
@@ -40,7 +42,7 @@ export default class Angle extends React.Component {
             //flex: 4,
             borderColor: 'transparent',
             borderWidth: this.props.width,
-            marginTop: 10,
+            marginTop: 0,
             height:0
           }]}
       />
