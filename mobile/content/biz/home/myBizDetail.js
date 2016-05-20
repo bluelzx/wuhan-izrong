@@ -114,37 +114,37 @@ let MyBizDetail = React.createClass({
       keyboardSpace: keyboardSpace,
     });
 
-    if (Platform.OS === 'android') {
-      this.activeInput.measure((ox, oy, width, height, px, py) => {
-        let keyBoardTop = screenHeight - this.state.keyboardSpace;
-        let activeInputBottom = py + height;
-
-        //Animated.timing(this.state.scrollHeight, {
-        //    toValue: screenHeight - (this.state.keyboardSpace + 64),
-        //    duration: 200,
-        //}).start(()=> {
-        //
-        //});
-        this.setState({
-          scrollHeight: screenHeight - (this.state.keyboardSpace + 80),
-        });
-
-        //if (activeInputBottom > keyBoardTop + 15) {
-        //this.refs['scroll'].scrollTo({y: 200});
-        //}
-      });
-
-
-    } else {
-      this.activeInput.measure((ox, oy, width, height, px, py) => {
-        let keyBoardTop = screenHeight - this.state.keyboardSpace;
-        let activeInputBottom = py + height;
-
-        if (activeInputBottom > keyBoardTop + 15) {
-          this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
-        }
-      });
-    }
+    //if (Platform.OS === 'android') {
+    //  this.activeInput.measure((ox, oy, width, height, px, py) => {
+    //    let keyBoardTop = screenHeight - this.state.keyboardSpace;
+    //    let activeInputBottom = py + height;
+    //
+    //    //Animated.timing(this.state.scrollHeight, {
+    //    //    toValue: screenHeight - (this.state.keyboardSpace + 64),
+    //    //    duration: 200,
+    //    //}).start(()=> {
+    //    //
+    //    //});
+    //    //this.setState({
+    //    //  scrollHeight: screenHeight - (this.state.keyboardSpace + 80),
+    //    //});
+    //
+    //    //if (activeInputBottom > keyBoardTop + 15) {
+    //    //this.refs['scroll'].scrollTo({y: 200});
+    //    //}
+    //  });
+    //
+    //
+    //} else {
+    //  this.activeInput.measure((ox, oy, width, height, px, py) => {
+    //    let keyBoardTop = screenHeight - this.state.keyboardSpace;
+    //    let activeInputBottom = py + height;
+    //
+    //    if (activeInputBottom > keyBoardTop + 15) {
+    //      this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
+    //    }
+    //  });
+    //}
   },
 
   resetKeyboardSpace: function () {
@@ -283,14 +283,14 @@ let MyBizDetail = React.createClass({
   renderBusinessType: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
-        <View style={{flexDirection:'column',marginTop:10}}>
+          <View style={{flexDirection:'column',marginTop:5}}>
           <View style={{flexDirection:'row'}}>
             <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'方向'}</Text>
             <Text style={{color:'#dd656c'}}>{'*'}</Text>
-          </View>
-          <View style={{marginTop:10,flexDirection:'row'}}>
-            <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
-                       change={this._bizOrientationDataChange}/>
+            <View style={{marginTop:5,flexDirection:'row'}}>
+              <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
+                         change={this._bizOrientationDataChange}/>
+            </View>
           </View>
         </View>
       );
@@ -307,16 +307,15 @@ let MyBizDetail = React.createClass({
   renderTimeLimit: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
-        <View style={{flexDirection:'column',marginTop:10}}>
-          <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'期限'}</Text>
-          <View style={{marginTop:10,flexDirection:'row'}}
+          <View style={{flexDirection:'column',marginTop:5}}>
+            <View style={{marginTop:5,flexDirection:'row'}}
                 ref="timeLimitInputView"
                 onLayout={() => {}}
           >
             <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                    iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                    inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
-                   placeholder='0-999' maxLength={3} field='termText' inputType="numeric"
+                   placeholder='期限' maxLength={3} field='termText' inputType="numeric"
                    onChangeText={this._onChangeText}
                    value={this.state.termText}
                    onFocus={
@@ -339,16 +338,15 @@ let MyBizDetail = React.createClass({
   renderAmount: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
-        <View style={{flexDirection:'column',marginTop:10}}>
-          <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'金额'}</Text>
-          <View style={{marginTop:10,flexDirection:'row'}}
+          <View style={{flexDirection:'column',marginTop:5}}>
+            <View style={{marginTop:5,flexDirection:'row'}}
                 ref="amountInputView"
                 onLayout={() => {}}
           >
             <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                    iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                    inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
-                   placeholder='0-1000亿' maxLength={8} field='amountText' inputType="numeric"
+                   placeholder='金额' maxLength={8} field='amountText' inputType="numeric"
                    onChangeText={this._onChangeText}
                    value={this.state.amountText}
                    onFocus={
@@ -375,16 +373,15 @@ let MyBizDetail = React.createClass({
   renderRate: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
-        <View style={{flexDirection:'column',marginTop:10}}>
-          <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'利率'}</Text>
-          <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}
+          <View style={{flexDirection:'column',marginTop:5}}>
+            <View style={{alignItems:'center',marginTop:5,flexDirection:'row'}
             } ref="rateInputView"
                 onLayout={() => {}}
           >
             <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                    iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                    inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
-                   placeholder='0-99.99' maxLength={5} field='rateText' inputType="numeric"
+                   placeholder='利率' maxLength={5} field='rateText' inputType="numeric"
                    onChangeText={this._onChangeText}
                    value={this.state.rateText}
                    editable={false}
