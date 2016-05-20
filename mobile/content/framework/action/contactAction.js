@@ -2,7 +2,6 @@ let contactStore = require('../store/contactStore');
 let AppLinks = require('../../constants/appLinks');
 let _ = require('lodash');
 
-
 let {
   BFetch,
   PFetch,

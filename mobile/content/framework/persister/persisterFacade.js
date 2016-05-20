@@ -81,6 +81,9 @@ let _saveSimpleLoginData = function (data,userId) {
         }, true);
       }
     );
+    resolve();
+  }).catch((errorData)=>{
+    throw errorData;
   });
 };
 

@@ -3,7 +3,7 @@ let EventEmitter = require('events').EventEmitter;
 
 let { SESSION_TYPE, NOTICE_TYPE } = require('../../constants/dictIm');
 let DictEvent = require('../../constants/dictEvent');
-let { IM_CONTACT } = require('../../constants/dictEvent');
+let { IM_CONTACT,HOMEPAGE_CHANGE } = require('../../constants/dictEvent');
 let Persister = require('../persister/persisterFacade');
 let SessionAction = require('../action/sessionAction');
 let AppStore = require('./appStore');
@@ -44,6 +44,7 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
   getEarlier: () => _getEarlier(),
   createHomePageInfo:(msgList)=>{
     Persister.createHomePageInfo(msgList);
+    AppStore.emitChange(HOMEPAGE_CHANGE);
     //TODO:emit home event
   },
   createPlatFormInfo:(infoId, title, content, createDate, userId)=>{
@@ -145,7 +146,10 @@ let _saveMsg = (message, userId) => {
     } else if (message.noticeType == NOTICE_TYPE.INVITED){
       title = message.groupName;
       content = message.realName + '-' + message.orgValue + '加入了群聊';
-    } else {
+    } else if (message.noticeType == NOTICE_TYPE.DELETE_GROUP) {
+      title = message.groupName;
+      content = '群主' + message.realName + '解散了' + message.groupName + '群聊';
+    }else {
       title = message.groupInviterName + '-' + message.groupInviterOrgValue ;
       content = '邀请您加入'+ message.groupName +'群聊';
     }
