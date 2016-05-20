@@ -67,16 +67,15 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.PLATFORM_INFO:
       if (lastSyncTime < message.createDate) {
-        ImStore.createPlatFormInfo(message.infoId, message.title, message.content, new Date(message.createDate));
+        ImStore.createPlatFormInfo(message.infoId,
+          message.title, message.content,
+          new Date(message.createDate),userId);
         ContactSotre.syncReq(new Date(message.createDate));
         lastSyncTime = message.createDate;
       }
       break;
     case MSG_TYPE.HOME_PAGE:
       message.homePageList && ImStore.createHomePageInfo(message.homePageList);
-      //message.homePageList && message.homePageList.forEach((msg) => {
-      //  ImStore.createHomePageInfo(msg.seq, msg.url);
-      //});
       break;
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
       ImStore.updateContactInfo(message);

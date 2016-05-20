@@ -115,5 +115,17 @@ let sessionFilter = function(data,title,content,keyWord){
   return ret;
 }
 
-module.exports = {groupFilter, contactFilter, sessionFilter}
+let userFilter = function(data,f1,f2,keyWord){
+  let ret = [];
+  data && data.forEach((item)=>{
+    if(!!~item[f1].indexOf(keyWord)){
+      ret.push(item);
+    }else if(!!~item[f2].indexOf(keyWord)){
+      ret.push(item);
+    }
+  });
+  return ret;
+}
+
+module.exports = {groupFilter, contactFilter, sessionFilter, userFilter}
 

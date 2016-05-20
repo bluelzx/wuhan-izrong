@@ -40,7 +40,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getNetWorkState: () => _info.netWorkState,
   getInitLoadingState: () => _info.initLoadingState,
   isLogout: () => _info.isLogout,
-  isFreezing:() => _info.isFreezing,
+  isFreezing: () => _info.isFreezing,
   isForceLogout: () => _info.isForceLogout,
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
@@ -125,22 +125,18 @@ let _login = (data) => {
     _saveFilters(data.appOrderSearchResult);
     AppStore.emitChange();
   });
-  //.then(()=>{
-  //  if (Platform.OS === 'android' && _data.token) {
-  //    //ServiceModule.setIsLoginToSP(true);
-  //    ServiceModule.startAppService(_data.token, 0, ImHost);
-  //  }
-  //});
 };
 
 let _simpleLogin = (data) => {
-  return Persister.saveSimpleLoginData(data,AppStore.getUserId())
+  return Persister.saveSimpleLoginData(data, AppStore.getUserId())
     .then(()=> {
-    _.assign(_data, {
-      token: _getToken()
+      _.assign(_data, {
+        token: _getToken()
+      });
+      //AppStore.emitChange();
+    }).catch((errorData)=> {
+      throw errorData;
     });
-    AppStore.emitChange();
-  });
 };
 
 let _logout = (userId) => {
@@ -161,7 +157,7 @@ let _force_logout = () => {
   AppStore.emitChange();
 };
 
-let _freezing = () =>{
+let _freezing = () => {
   //清空token
   _logout(_getUserId());
   _info.isFreezing = true;
