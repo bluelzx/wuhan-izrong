@@ -1,6 +1,6 @@
 //let ImAction = require('../action/imAction');
 let ImStore = require('../store/imStore');
-let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE, UPDATE_GROUP_TYPE, NOTICE_TYPE } = require('../../constants/dictIm');
+let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE, UPDATE_GROUP_TYPE, NOTICE_TYPE, DELETE_TYPE } = require('../../constants/dictIm');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
 let AppStore = require('../store/appStore');
@@ -139,6 +139,10 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.GROUP_INFO_DELETE:
       //TODO 区分被踢和解散
+      let noticeType = DELETE_TYPE.KICK_OUT;
+      if (message.action == DELETE_TYPE.DELETE_GROUP) {
+        noticeType = DELETE_TYPE.DELETE_GROUP;
+      }
       ContactSotre.leaveGroup(message.groupId);
       let group = ContactSotre.getGroupDetailById(message.groupId);
       ImStore.saveMsg({
@@ -148,7 +152,7 @@ let _dealMsg = function (message, socket) {
         groupOwnerId:group.groupMasterUid,
         msgType:SESSION_TYPE.GROUP_NOTICE,
         revTime:new Date(),
-        noticeType: NOTICE_TYPE.DELETE_GROUP,
+        noticeType: noticeType,
         userId: group.groupMasterUid
       },userId);
       break;
