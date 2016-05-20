@@ -84,11 +84,21 @@ let _dealMsg = function (message, socket) {
       ImStore.deleteContactInfo(message.userIdList);
       break;
     case MSG_TYPE.GROUP_INFO_UPDATE:
+      ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
       switch (message.action) {
         case UPDATE_GROUP_TYPE.CREATE_GROUP:
           ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
           break;
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_NAME:
+          ImStore.saveMsg({
+            sessionId:KeyGenerator.getSessionKey(NOTICE_TYPE.UPDATE_GROUP_NAME, message.groupId, userId),
+            groupId:message.groupId,
+            groupName:message.groupName,
+            groupOwnerId:message.groupOwnerId,
+            msgType:SESSION_TYPE.GROUP_NOTICE,
+            revTime:new Date(),
+            noticeType: NOTICE_TYPE.UPDATE_GROUP_NAME
+          },userId);
           break;
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_IMAGE_URL:
           break;
@@ -128,6 +138,7 @@ let _dealMsg = function (message, socket) {
       }
       break;
     case MSG_TYPE.GROUP_INFO_DELETE:
+      //TODO 区分被踢和解散
       ContactSotre.leaveGroup(message.groupId);
       let group = ContactSotre.getGroupDetailById(message.groupId);
       ImStore.saveMsg({

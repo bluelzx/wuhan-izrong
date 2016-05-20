@@ -59,13 +59,17 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
     AppStore.emitChange(IM_CONTACT);
   },
   forceLogOut:()=>{AppStore.forceLogout()},
-
+  isInGroupById: (id) => _isInGroupById(id)
 });
 
 // Private Functions
 let _imInit = () => {
 
 };
+
+let _isInGroupById = function(id) {
+  return Persister.isInGroupById(id);
+}
 
 let _resovleMessages = (bInit = false) => {
   let savedMessages = Persister.getMessageBySessionId(_data.sessionId, _data.page, _data.userId);
@@ -148,8 +152,14 @@ let _saveMsg = (message, userId) => {
     } else if (message.noticeType == NOTICE_TYPE.DELETE_GROUP) {
       title = message.groupName;
       content = '群主' + message.realName + '解散了' + message.groupName + '群聊';
+    }else if (message.noticeType == NOTICE_TYPE.KICK_OUT_GROUP) {
+      title = message.groupName;
+      content = '群主' + message.realName + '将你请出了' + message.groupName + '群聊';
+    } else if (message.noticeType == NOTICE_TYPE.UPDATE_GROUP_NAME) {
+      title = message.groupName;
+      content = '群主已将群名称修改为' +  + message.groupName;
     }else {
-      title = message.groupInviterName + '-' + message.groupInviterOrgValue ;
+      title = message.groupInviterName + '-' + message.groupInviterOrgValue;
       content = '邀请您加入'+ message.groupName +'群聊';
     }
 
@@ -234,7 +244,15 @@ let _saveMsg = (message, userId) => {
         certified:userInfo.certified,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       });
-    } else { // Send
+    } else if (message.fromUId == -1) {
+      _data.messages.push({
+        msgId: message.msgId,
+        contentType: message.contentType,
+        content: message.content,
+        position: 'middle',
+        date: message.revTime,
+      });
+    }else { // Send
       let userInfo = ContactStore.getUserInfoByUserId(_data.userId);
       _data.messages.push({
         msgId: message.msgId,
