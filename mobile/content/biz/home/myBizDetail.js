@@ -21,8 +21,8 @@ let {
   Platform,
   CameraRoll,
   ToastAndroid,
-    DeviceEventEmitter,
-    Animated
+  DeviceEventEmitter,
+  Animated
   }=React;
 
 let { Alert } = require('mx-artifacts');
@@ -193,7 +193,7 @@ let MyBizDetail = React.createClass({
         <View style={{height:screenHeight-64,backgroundColor:'#f7f7f7'}}>
           <View style={{flex:1}}>
             <Animated.View
-                style={{
+              style={{
                      height: this.state.scrollHeight,
                     }}
             >
@@ -202,16 +202,16 @@ let MyBizDetail = React.createClass({
                           keyboardDismissMode='none'
                           onLayout={() => {}}
               >
-              {this.renderSelectOrg()}
-              {this.renderBusinessType()}
-              {this.renderTimeLimit()}
-              {this.renderAmount()}
-              {this.renderRate()}
-              {this.renderAddImg()}
-              {this.renderRemarks()}
-              {this.renderModifyData()}
-              {this.renderDownBizImage()}
-            </ScrollView>
+                {this.renderSelectOrg()}
+                {this.renderBusinessType()}
+                {this.renderTimeLimit()}
+                {this.renderAmount()}
+                {this.renderRate()}
+                {this.renderAddImg()}
+                {this.renderRemarks()}
+                {this.renderModifyData()}
+                {this.renderDownBizImage()}
+              </ScrollView>
             </Animated.View>
             {this.renderSaveBtn()}
           </View>
@@ -565,7 +565,8 @@ let MyBizDetail = React.createClass({
   returnItem: function (desc, value) {
     return (
       <View style={{marginLeft:10,flexDirection:'row',alignItems:'center',paddingVertical:8}}>
-        <Text style={{alignSelf:'stretch',fontSize:16,color:DictStyle.marketSet.fontColor,width:Adjust.width(120)}}>{desc}</Text>
+        <Text
+          style={{alignSelf:'stretch',fontSize:16,color:DictStyle.marketSet.fontColor,width:Adjust.width(120)}}>{desc}</Text>
         <Text
           style={{alignSelf:'stretch',marginLeft:10,fontSize:16,color:(desc == '更新时间:')?
           DictStyle.marketSet.modifyDateColor:(desc == '备\u3000\u3000注:')?DictStyle.marketSet.amountColor:DictStyle.marketSet.fontColor,
@@ -748,14 +749,19 @@ let MyBizDetail = React.createClass({
     let remark = data.remark == '' ? '--' : data.remark;
     let shareContent = this.state.marketInfo.bizCategoryDesc + '\n' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出') + '  '
       + '金额:' + amount + '  ' + '期限:' + dayNum + '  ' + '利率:' + rate + '\n' + '备注:' + remark
-      + '\n' + '--来自爱资融APP';
-    Share.open({
-      share_text: '',
-      share_URL: shareContent,
-      title: "Share Link"
-    }, (e) => {
-      console.log(e);
-    });
+      + '\n' + '——来自爱资融APP';
+    //if (Platform.OS === 'android') {
+      Share.open({
+        share_text: shareContent,
+        share_URL: Platform.OS === 'android' ? shareContent : undefined,
+        title: Platform.OS === 'android' ? "Share Link": undefined
+      }, (e) => {
+        console.log(e);
+      });
+    //} else {
+    //  ActionSheetIOS.showShareActionSheetWithOptions({options: [{message:shareContent}]});
+    //}
+
   },
 
   downselfBizOrder: function (id) {

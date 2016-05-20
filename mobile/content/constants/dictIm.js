@@ -69,7 +69,8 @@ const SESSION_TYPE = {
 const NOTICE_TYPE = {
   INVITE:'invite',
   INVITED:'invited',
-  LEAVE_GROUP: 'leave'
+  LEAVE_GROUP: 'leave',
+  DELETE_GROUP: 'deleteGroup'
 }
 
 module.exports = {
