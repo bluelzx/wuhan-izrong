@@ -46,8 +46,8 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
     Persister.createHomePageInfo(msgList);
     //TODO:emit home event
   },
-  createPlatFormInfo:(infoId, title, content, createDate)=>{
-    Persister.createPlatFormInfo(infoId, title, content, createDate);
+  createPlatFormInfo:(infoId, title, content, createDate, userId)=>{
+    Persister.createPlatFormInfo(infoId, title, content, createDate, userId);
    //TODO:emit plat event
   },
   deleteContactInfo:(userIdList)=>{
