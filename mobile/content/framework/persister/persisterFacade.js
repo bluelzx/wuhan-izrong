@@ -39,8 +39,13 @@ let PersisterFacade = {
   getOrgList: ()=>_getOrgList(),
   getOrgByOrgName: (orgName)=> _getOrgByOrgName(orgName),
   deleteDevice: ()=> _deleteDevice(),
-  updateLastSyncTime: (t)=>_updateLastSyncTime(t)
+  updateLastSyncTime: (t)=>_updateLastSyncTime(t),
+  isInGroupById: (id) => _isInGroupById(id)
+};
 
+let _isInGroupById = function(id) {
+  let ret = _realm.objects(GROUP).filtered('groupId = \'' + id + '\'');
+  return ret.length > 0;
 };
 
 //test method

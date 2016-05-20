@@ -70,7 +70,9 @@ const NOTICE_TYPE = {
   INVITE:'invite',
   INVITED:'invited',
   LEAVE_GROUP: 'leave',
-  DELETE_GROUP: 'deleteGroup'
+  DELETE_GROUP: 'deleteGroup',
+  KICK_OUT_GROUP: 'kickOutGroup',
+  UPDATE_GROUP_NAME: 'updateGroupName'
 }
 
 module.exports = {
