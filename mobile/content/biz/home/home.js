@@ -139,14 +139,16 @@ let Home = React.createClass({
 
 
   _renderPage: function (data:Object) {
-    if(data.url.includes('http')){
-      return (
-        <Image
-          style={styles.page}
-          source={{uri:data.url}}
-        />
-      );
-    }else{
+    if (data.url) {
+      if (data.url.includes('http')) {
+        return (
+            <Image
+                style={styles.page}
+                source={{uri:data.url}}
+            />
+        );
+      }
+    } else {
       return (
         <Image
           style={styles.page}
