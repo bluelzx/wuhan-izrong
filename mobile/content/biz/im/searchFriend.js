@@ -5,7 +5,7 @@ let React = require('react-native');
 const {View, TextInput, Text, TouchableOpacity, Platform, ScrollView} = React;
 let NavBarView = require('../../framework/system/navBarView');
 let DictStyle = require('../../constants/dictStyle');
-let NameCircular = require('./nameCircular').NameCircular;
+let HeaderPic = require('./headerPic');
 let ImUserInfo = require('./imUserInfo');
 let { Alert } = require('mx-artifacts');
 let ContactAction = require('../../framework/action/contactAction');
@@ -34,7 +34,7 @@ let SearchFriend = React.createClass({
                       onPress={() => this.toOther(data)}
                       style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
       <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
-        <NameCircular name={data.realName}/>
+        <HeaderPic photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
         <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName + '-'+data.orgValue}</Text>
       </View>
     </TouchableOpacity>
