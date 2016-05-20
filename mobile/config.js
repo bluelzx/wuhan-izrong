@@ -1,6 +1,6 @@
 var outLine = {
   Dev: true, // Switch for log. true means print.
-  Host: 'http://114.55.16.46:801/fas',   //dev
+  Host: 'http://114.55.16.46:80/fas',   //dev
   ImHost:'114.55.16.46:3000'//dev
 }
 
@@ -49,7 +49,7 @@ var productConfig = {
   ImHost: '139.196.174.42:4000'
 };
 
-var Config = developConfigDocker2;
+var Config = developConfigDocker;
 
 module.exports = Config;
 //module.exports = function () {
