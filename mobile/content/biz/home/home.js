@@ -251,6 +251,14 @@ let Home = React.createClass({
       })
     }
   },
+
+  //处理viewpager左右滑动和scrollView上下滑动冲突问题
+  scrollViewMove: function(e: Event){
+     console.log('move');
+    //if(e.nativeEvent.locationY <= 50){
+    //  this.refs.scrollView.scrollTo({x:0,y:0,animated:true});
+    //}
+  }
 });
 
 var styles = StyleSheet.create({
