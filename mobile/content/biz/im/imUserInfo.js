@@ -88,15 +88,20 @@ let ImUserInfo = React.createClass({
   },
 
   addFriend: function() {
-    this.props.exec(()=>{
-      return ContactAction.addFriend(this.props.param.userId).then((response)=>{
-        ContactStore.addFriend(this.props.param);
-      }).then((response)=>{
-        this.props.navigator.popToTop();
-      }).catch((err)=>{
-        throw err;
+    if(!!this.props.param.callBack){
+      this.props.param.callBack();
+      this.props.navigator.pop();
+    }else {
+      this.props.exec(()=> {
+        return ContactAction.addFriend(this.props.param.userId).then((response)=> {
+          ContactStore.addFriend(this.props.param);
+        }).then((response)=> {
+          this.props.navigator.popToTop();
+        }).catch((err)=> {
+          throw err;
+        });
       });
-    });
+    }
 
   },
 

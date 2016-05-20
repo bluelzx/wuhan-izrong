@@ -643,10 +643,10 @@ let Publish = React.createClass({
     let remark = data.remark == '' ? '--' : data.remark;
     let shareContent = data.bizCategory + '\n' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出') + '  '
       + '金额:' + amount + '  ' + '期限:' + dayNum + '  ' + '利率:' + rate + '\n' + '备注:' + remark
-      + '\n' + '--来自爱资融APP';
+      + '\n' + '——来自爱资融APP';
     Share.open({
       share_text: shareContent,
-      share_URL: 'http://www.baidu.com',
+      share_URL: Platform.OS === 'android' ? shareContent : '',
       title: "Share Link"
     }, (e) => {
       console.log(e);

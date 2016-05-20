@@ -218,7 +218,7 @@ let WhitePage = React.createClass({
             paddingVertical:7,
             marginHorizontal:10}}
           >
-            <HeadPic badge={item.badge} source={DictIcon.imMyGroup} />
+            <HeadPic badge={item.badge} showBadge={true} source={DictIcon.imMyGroup} />
             <View
               style={{ flex:1,paddingHorizontal:10}}
             >
@@ -269,7 +269,7 @@ let WhitePage = React.createClass({
             marginHorizontal:10,
             alignItems:'center',flex:1}}
           >
-              <HeaderPic  photoFileUrl={tagUser.photoFileUrl}  certified={tagUser.certified} name={tagUser.realName}/>
+              <HeaderPic badge={item.badge} showBadge={true} photoFileUrl={tagUser.photoFileUrl}  certified={tagUser.certified} name={tagUser.realName}/>
              <View
               style={{ flex:1,paddingHorizontal:10}}
              >

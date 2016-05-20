@@ -157,8 +157,8 @@ let _newFriendNotic = function(param, userId) {
     lastTime: new Date(),
     contentType: MSG_CONTENT_TYPE.NULL
   };
-  PersisterFacade.updateSession(p, {notAdd:false});
-  PersisterFacade.addFriend(param);
+  PersisterFacade.updateSession(p, true,null, userId);
+  PersisterFacade.updateContactInfo(param);
   AppStore.emitChange(IM_SESSION_LIST);
 }
 

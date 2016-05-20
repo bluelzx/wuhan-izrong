@@ -20,6 +20,7 @@ let AppStore = require('../../framework/store/appStore');
 let { Device,Alert } = require('mx-artifacts');
 let DictStyle = require('../../constants/dictStyle');
 let HeaderPic = require('./headerPic');
+let ImUserInfo = require('./imUserInfo');
 
 let NewFriendList = React.createClass({
 
@@ -66,6 +67,20 @@ let NewFriendList = React.createClass({
 
   },
 
+  toOther: function(item) {
+    let data = ContactSotre.getUserInfoByUserId(item.userId);
+    let opt = {};
+    if(item.isAccept){
+      opt = {isStringer:false};
+    }else{
+      opt={isStranger:true,callBack:()=>this.acceptInvite(item)};
+    }
+    this.props.navigator.push({
+      comp:ImUserInfo,
+      param:Object.assign(data,opt)
+    });
+  },
+
   renderItem: function(item) {
     let {width} = Device;
 
@@ -80,7 +95,7 @@ let NewFriendList = React.createClass({
           }
         }
         onPress={()=>{
-
+        this.toOther(item);
         }}>
         <View
           style={{borderBottomColor: DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
