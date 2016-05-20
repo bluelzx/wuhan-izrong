@@ -22,12 +22,13 @@ let KeyGenerator = require('../../comp/utils/keyGenerator');
 let Chat = React.createClass({
 
   componentDidMount() {
-    let { param } = this.props;
-    param.sessionId = SessionStore.querySessionById(this.props.param.userId || this.props.param.groupId,this.props.param.chatType);
-    param.sessionId || (param.sessionId=KeyGenerator.getSessionKey(param.chatType, this.props.param.userId || this.props.param.groupId));
-
     let user = ContactStore.getUserInfo();
+    let { param } = this.props;
     param.myId = user.userId;
+    param.sessionId = SessionStore.querySessionById(this.props.param.userId || this.props.param.groupId,this.props.param.chatType);
+    param.sessionId || (param.sessionId=KeyGenerator.getSessionKey(param.chatType, this.props.param.userId || this.props.param.groupId, user.userId));
+
+
     ImAction.sessionInit({
       toId: param.userId,
       sessionId: param.sessionId,

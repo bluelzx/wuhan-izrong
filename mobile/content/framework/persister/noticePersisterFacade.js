@@ -8,7 +8,7 @@ const {
   NOTICE
   } = require('./schemas');
 let { SESSION_TYPE } = require('../../constants/dictIm');
-
+let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
 let NoticePersisterFacade = {
   updateNotice: (param)=>_updateNotice(param),
   getAllNotice: (param) => _getAllNotice(param),
@@ -25,26 +25,30 @@ let _updateNotice = function (param) {
 let _getAllNotice = function (param) {
   let ret = [];
   let arr = _realm.objects(NOTICE).sorted('revTime', [true]);
+  let currUserId = param;
   arr.forEach((item) => {
-    let p = {
-      noticeId: item.noticeId,
-      title: item.title,
-      content: item.content,
-      groupName: item.groupName,
-      groupId: item.groupId,
-      groupOwnerId: item.groupOwnerId,
-      revTime: item.revTime,
-      msgType: item.msgType,
-      isInvited: item.isInvited
+    let userId = SessionIdSplit.getUserIdFromSessionId(item.noticeId);
+    if (userId == currUserId) {
+      let p = {
+        noticeId: item.noticeId,
+        title: item.title,
+        content: item.content,
+        groupName: item.groupName,
+        groupId: item.groupId,
+        groupOwnerId: item.groupOwnerId,
+        revTime: item.revTime,
+        msgType: item.msgType,
+        isInvited: item.isInvited
+      }
+      ret.push(p);
     }
-    ret.push(p);
   });
   return ret;
 };
 
 let _deleteNotice = function (id) {
   _realm.write(()=>{
-    let item = _realm.objects(NOTICE).filtered("noticeId = '" + id + "'")
+    let item = _realm.objects(NOTICE).filtered('\'' + id + '\' =  noticeId');
     _realm.delete(item);
   });
 }

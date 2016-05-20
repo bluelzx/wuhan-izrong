@@ -119,7 +119,12 @@ let EditGroupMaster = React.createClass({
             <TouchableOpacity onPress={() => this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}})}
               style={{backgroundColor: DictStyle.groupManage.memberListBackgroundColor, paddingHorizontal:10}}>
               <View
-                style={{paddingVertical:10,borderTopColor:DictStyle.groupManage.buttonArrowColor,borderTopWidth:0.5,flexDirection:'row', justifyContent:'space-between', marginTop:5,alignItems:'center'}}>
+                style={{
+                borderTopColor:DictStyle.colorSet.demarcationColor,
+                paddingVertical:10,
+                borderTopWidth:0.5,flexDirection:'row',
+                justifyContent:'space-between',
+                marginTop:5,alignItems:'center'}}>
                 <Text style={{color:DictStyle.groupManage.memberNameColor}}>{'全部群成员(' + this.state.groupInfo.memberNum + ')'}</Text>
                 <Icon name="ios-arrow-right" size={20} color={DictStyle.groupManage.buttonArrowColor}/>
               </View>

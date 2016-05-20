@@ -73,6 +73,6 @@ let NameCircular = React.createClass({
 
 let Main = {
   NameCircular:NameCircular
-}
+};
 
-module.exports = Main
+module.exports = Main;

@@ -272,8 +272,8 @@ let _logout = function (userId) {
       userId: userId,
       token: ''
     }, true);
-    _realm.delete(_realm.objects(SESSION));
-    _realm.delete(_realm.objects(IMUSERINFO));
+    //_realm.delete(_realm.objects(SESSION));
+    //_realm.delete(_realm.objects(IMUSERINFO));
     //_realm.delete(_realm.objects(GROUP));
   });
 };
