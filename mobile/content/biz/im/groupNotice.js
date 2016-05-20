@@ -33,7 +33,7 @@ let ContactStore = require('../../framework/store/contactStore');
 let SessionStore = require('../../framework/store/sessionStore');
 let NoticeStore = require('../../framework/store/noticeStore');
 let ContactAction = require('../../framework/action/contactAction');
-let { MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
+let { MSG_CONTENT_TYPE, SESSION_TYPE, NOTICE_TYPE } = require('../../constants/dictIm');
 let NameCircular = require('./nameCircular').NameCircular;
 let {sessionFilter} = require('./searchBarHelper');
 let { IM_SESSION_LIST } = require('../../constants/dictEvent');
@@ -163,9 +163,9 @@ let GroupNotice = React.createClass({
 
   renderRow (item) {
     let {width} = Device;
-    if (item.msgType == SESSION_TYPE.INVITE) {
+    if (item.msgType == NOTICE_TYPE.INVITE) {
       return (
-        <TouchableOpacity activeOpacity={1} onLongPress={()=>{
+        <TouchableOpacity style={{backgroundColor: '#FEFEFE'}}activeOpacity={1} onLongPress={()=>{
             Alert('确定删除该条记录?', () => {
               let last = false;
               if (this.state.data.length == 1) {
@@ -179,7 +179,7 @@ let GroupNotice = React.createClass({
             },()=>{})
           }} onPress={()=>{item.isInvited ? this.toChat(item) : null}}>
           <View
-            style={{borderBottomColor: '#111D2A',borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, paddingHorizontal:16,justifyContent:'center'}}>
+            style={{borderBottomColor: PlainStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10,justifyContent:'center'}}>
             <HeadPic badge={0} style={{ height:40,width: 40, marginRight:15,justifyContent:'center', marginTop: 5}}
                      source={DictIcon.imGroupNotice}/>
             <View

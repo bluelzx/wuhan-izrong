@@ -4,13 +4,15 @@
 let _realm = require('./realmManager');
 const DEFAULT_GROUP_IMAGE = "";
 const _ = require('lodash');
+let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
 const {
   GROUP,
   MESSAGE,
   IMUSERINFO,
   ORGBEAN,
   SESSION,
-  LOGINUSERINFO
+  LOGINUSERINFO,
+  NOTICE
   } = require('./schemas');
 let ContactPersisterFacade = {
 getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
@@ -25,10 +27,10 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
   createGroup:(groupId, groupName,groupMasterUid,number,members,mute) => _createGroup(groupId, groupName,groupMasterUid,number,members,mute),
   kickOutMember:(groupId, members) => _kickOutMember(groupId, members),
   modifyGroupName:(groupId, groupName) => _modifyGroupName(groupId, groupName),
-  dismissGroup:(groupId) => _dismissGroup(groupId),
+  dismissGroup:(groupId, userId) => _dismissGroup(groupId, userId),
   setContactMute:(userId, value) => _setContactMute(userId, value),
   setGroupMute:(groupId, value) => _setGroupMute(groupId, value),
-  leaveGroup:(groupId) => _leaveGroup(groupId),
+  leaveGroup:(groupId, userId) => _leaveGroup(groupId, userId),
   deleteContactInfo:(userIdList) => _deleteContactInfo(userIdList),
   updateContactInfo: (address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified) =>
     _updateContactInfo(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified),
@@ -372,10 +374,11 @@ let _kickOutMember = function (groupId, members) {
   });
 }
 
-let _dismissGroup = function(groupId) {
+let _dismissGroup = function(groupId, userId) {
   _realm.write(() => {
     let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
     _realm.delete(group);
+    _selfDeleteSession('group:' + groupId + ':' + userId);
   });
 }
 
@@ -385,13 +388,33 @@ let _selfDeleteSession = function(sessionId){
     _realm.delete(session);
 }
 
-let _leaveGroup = function(groupId) {
+let _selfDeleteNotice = function (groupId, userId) {
+  let session = _realm.objects(NOTICE);
+  let noticeNum = 0;
+  let deleteNum = 0;
+  session.forEach((item)=>{
+    if (SessionIdSplit.getUserIdFromSessionId(item.sessionId) == userId) {
+      noticeNum = noticeNum + 1;
+      if (SessionIdSplit.getIdFromSessionId(item.sessionId) == groupId) {
+        deleteNum = deleteNum + 1;
+        let ret = _realm.objects(NOTICE).filtered('sessionId = \'' + item.sessionId + '\'');
+        _realm.delete(ret)
+      }
+    }
+  });
+  if (noticeNum == deleteNum && noticeNum > 0) {
+    let ret = _realm.objects(SESSION).filtered('type = \'' + SESSION_TYPE.GROUP_NOTICE + '\'');
+    _realm.delete(ret);
+  }
+}
+
+let _leaveGroup = function(groupId, userId) {
   //TODO: sessionId要加用户ID
   _realm.write(() => {
     let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
     _realm.delete(group);
-    _selfDeleteSession('group:' + groupId);
-    _selfDeleteSession('invite:' + groupId);
+    _selfDeleteSession('group:' + groupId + ':' + userId);
+    _selfDeleteNotice(groupId, userId);
   });
 }
 

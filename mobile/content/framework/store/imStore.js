@@ -145,7 +145,10 @@ let _saveMsg = (message, userId) => {
     } else if (message.noticeType == NOTICE_TYPE.INVITED){
       title = message.groupName;
       content = message.realName + '-' + message.orgValue + '加入了群聊';
-    } else {
+    } else if (message.noticeType == NOTICE_TYPE.DELETE_GROUP) {
+      title = message.groupName;
+      content = '群主' + message.realName + '解散了' + message.groupName + '群聊';
+    }else {
       title = message.groupInviterName + '-' + message.groupInviterOrgValue ;
       content = '邀请您加入'+ message.groupName +'群聊';
     }

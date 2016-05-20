@@ -38,7 +38,7 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.GROUP_JOIN_INVITE:
       ImStore.saveMsg({
-        sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId, userId),
+        sessionId:KeyGenerator.getSessionKey(NOTICE_TYPE.INVITE, message.groupId, userId),
         groupId:message.groupId,
         groupName:message.groupName,
         groupOwnerId:message.groupOwnerId,
@@ -95,7 +95,7 @@ let _dealMsg = function (message, socket) {
         case UPDATE_GROUP_TYPE.ADD_GROUP_MEMBER:
           if (userId != message.userInfo.userId) {
             ImStore.saveMsg({
-              sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId, userId),
+              sessionId:KeyGenerator.getSessionKey(NOTICE_TYPE.INVITED, message.groupId, userId),
               groupId:message.groupId,
               groupName:message.groupName,
               groupOwnerId:message.groupOwnerId,
@@ -111,7 +111,7 @@ let _dealMsg = function (message, socket) {
         case UPDATE_GROUP_TYPE.LEAVE_GROUP:
           //TODO 退出群组的处理...
           ImStore.saveMsg({
-            sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId, userId),
+            sessionId:KeyGenerator.getSessionKey(NOTICE_TYPE.LEAVE_GROUP, message.groupId, userId),
             groupId:message.groupId,
             groupName:message.groupName,
             groupOwnerId:message.groupOwnerId,
@@ -128,7 +128,18 @@ let _dealMsg = function (message, socket) {
       }
       break;
     case MSG_TYPE.GROUP_INFO_DELETE:
-      //ContactSotre.leaveGroup(message.groupId);
+      ContactSotre.leaveGroup(message.groupId);
+      let group = ContactSotre.getGroupDetailById(message.groupId);
+      ImStore.saveMsg({
+        sessionId:KeyGenerator.getSessionKey(NOTICE_TYPE.DELETE_GROUP, message.groupId, userId),
+        groupId:message.groupId,
+        groupName:group.groupName,
+        groupOwnerId:group.groupMasterUid,
+        msgType:SESSION_TYPE.GROUP_NOTICE,
+        revTime:new Date(),
+        noticeType: NOTICE_TYPE.DELETE_GROUP,
+        userId: group.groupMasterUid
+      },userId);
       break;
     case MSG_TYPE.SYNC_REQ:
       //message.msgArray.forEach((item)=>{

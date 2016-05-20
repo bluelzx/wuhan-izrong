@@ -57,7 +57,7 @@ let HeaderPic = React.createClass({
         );
     }else if(!!source){
       return (
-        <Image style={styles.head} resizeMode="cover" source={source}>
+        <Image resizeMode="cover" source={source}>
           {this.unReadIcon(badge, showBadge)}
         </Image>
       );

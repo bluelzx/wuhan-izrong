@@ -108,7 +108,7 @@ let _modifyGroupName = function(groupId, groupName) {
 }
 
 let _dismissGroup = function(groupId) {
-  PersisterFacade.dismissGroup(groupId);
+  PersisterFacade.dismissGroup(groupId, _getUserInfo().userId);
   AppStore.emitChange(IM_CONTACT);
   AppStore.emitChange(IM_GROUP);
   AppStore.emitChange(IM_SESSION_LIST);
@@ -125,7 +125,8 @@ let _setGroupMute = function(groupId, value){
 }
 
 let _leaveGroup = function(groupId){
-  PersisterFacade.leaveGroup(groupId);
+  let userId = PersisterFacade.getLoginUserInfo().userId;
+  PersisterFacade.leaveGroup(groupId, userId);
   AppStore.emitChange(IM_CONTACT);
   AppStore.emitChange(IM_SESSION);
   AppStore.emitChange(IM_GROUP);
