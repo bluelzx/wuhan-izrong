@@ -3,7 +3,7 @@ let EventEmitter = require('events').EventEmitter;
 
 let { SESSION_TYPE, NOTICE_TYPE } = require('../../constants/dictIm');
 let DictEvent = require('../../constants/dictEvent');
-let { IM_CONTACT } = require('../../constants/dictEvent');
+let { IM_CONTACT,HOMEPAGE_CHANGE } = require('../../constants/dictEvent');
 let Persister = require('../persister/persisterFacade');
 let SessionAction = require('../action/sessionAction');
 let AppStore = require('./appStore');
@@ -44,6 +44,7 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
   getEarlier: () => _getEarlier(),
   createHomePageInfo:(msgList)=>{
     Persister.createHomePageInfo(msgList);
+    AppStore.emitChange(HOMEPAGE_CHANGE);
     //TODO:emit home event
   },
   createPlatFormInfo:(infoId, title, content, createDate)=>{
