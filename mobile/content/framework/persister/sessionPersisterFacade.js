@@ -8,13 +8,13 @@ const {
   MESSAGE
   } = require('./schemas');
 let { SESSION_TYPE } = require('../../constants/dictIm');
-
+let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
 let SessionPersisterFacade = {
   deleteSession: (sessionId) => _deleteSession(sessionId),
-  queryAllSession: () => _queryAllSession(),
+  queryAllSession: (currUserId) => _queryAllSession(currUserId),
   getGroupIdBySessionId: (sid, cuid) => _getGroupIdBySessionId(sid, cuid),
   getUserIdBySessionId: (sid, cuid) => _getUserIdBySessionId(sid, cuid),
-  updateSession: (param, notAdd, noticeType)=>_updateSession(param, notAdd, noticeType),
+  updateSession: (param, notAdd, noticeType, currUserId)=>_updateSession(param, notAdd, noticeType, currUserId),
   querySessionById: (id, type) => _querySessionById(id, type),
   setBadgeZero: (sessionId) => _setBadgeZero(sessionId),
   updateInViteSession:(sessionId) => _updateInViteSession(sessionId),
@@ -28,19 +28,21 @@ let _deleteSession = function(sessionId) {
   });
 }
 
-let _queryAllSession = function() {
+let _queryAllSession = function(currUserId) {
   let ret = [];
   _realm.objects(SESSION).sorted('lastTime',[true]).forEach((item)=>{
-    let p = {
-      sessionId: item.sessionId,
-      type: item.type,
-      badge:item.badge,
-      title: item.title,
-      content:item.content,
-      lastTime: item.lastTime,
-      contentType: item.contentType
-    };
-    ret.push(p);
+    if(currUserId == SessionIdSplit.getUserIdFromSessionId(item.sessionId)) {
+      let p = {
+        sessionId: item.sessionId,
+        type: item.type,
+        badge:item.badge,
+        title: item.title,
+        content:item.content,
+        lastTime: item.lastTime,
+        contentType: item.contentType
+      };
+      ret.push(p);
+    }
   });
   return ret;
 }
@@ -59,37 +61,60 @@ let _getUserIdBySessionId = function(sid, cuid) {
   return  tagId ;
 }
 
-let _updateSession = function (param, notAdd, noticeType){
-  _realm.write(()=>{
-    if (param.type == SESSION_TYPE.GROUP_NOTICE) {
-      let d = _realm.objects(SESSION).filtered('type = \'' + SESSION_TYPE.GROUP_NOTICE + '\'');
-      if (d.length > 0) {
-        if (noticeType == SESSION_TYPE.INVITE) {
-          param.badge = d[0].badge + 1;
-        } else {
-          param.badge = d[0].badge + 100000;
-        }
-        _realm.delete(d)
-      } else {
-        if (param.type == SESSION_TYPE.INVITE) {
-          param.badge = 1;
-        } else {
-          param.badge = 100000;
+let _updateSession = function (param, notAdd, noticeType, currUserId){
+  if (param.type == SESSION_TYPE.GROUP_NOTICE) {
+    param.contentType = SESSION_TYPE.GROUP_NOTICE;
+    let d = _realm.objects(SESSION).filtered('type = \'' + SESSION_TYPE.GROUP_NOTICE + '\'');
+    let groupSession = [];
+    d.forEach((item) => {
+      if (item && !_.isEmpty(item)) {
+        let userId = SessionIdSplit.getUserIdFromSessionId(item.sessionId);
+        if (currUserId == userId) {
+          let ret = {
+            sessionId: item.sessionId,
+            type: item.type,
+            badge: item.badge,
+            title: item.title,
+            content: item.content,
+            lastTime: item.lastTime,
+            contentType: item.contentType
+          }
+          groupSession.push(ret);
+          let wd = _realm.objects(SESSION).filtered('sessionId = \'' + item.sessionId + '\'');
+          _realm.write(() => {
+            _realm.delete(wd)
+          })
+
         }
       }
+    });
+    if (groupSession.length > 0) {
+      if (noticeType == SESSION_TYPE.INVITE) {
+        param.badge = groupSession[0].badge + 1;
+      } else {
+        param.badge = groupSession[0].badge + 100000;
+      }
     } else {
-      let p = _realm.objects(SESSION).filtered("sessionId = '" + param.sessionId + "'");
-      if(p.length > 0){
-        if(p[0].lastTime > param.lastTime){
-          return;
-        }
-        if(param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER){
-          if(!notAdd){
-            param.badge = p[0].badge + 1;
-          }
+      if (noticeType == SESSION_TYPE.INVITE) {
+        param.badge = 1;
+      } else {
+        param.badge = 100000;
+      }
+    }
+  } else {
+    let p = _realm.objects(SESSION).filtered("sessionId = '" + param.sessionId + "'");
+    if(p.length > 0){
+      if(p[0].lastTime > param.lastTime){
+        return;
+      }
+      if(param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER){
+        if(!notAdd){
+          param.badge = p[0].badge + 1;
         }
       }
     }
+  }
+  _realm.write(()=>{
     _realm.create(SESSION, param, true);
   });
 }

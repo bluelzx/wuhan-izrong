@@ -1,7 +1,7 @@
 let _ = require('lodash');
 let EventEmitter = require('events').EventEmitter;
 
-let { SESSION_TYPE } = require('../../constants/dictIm');
+let { SESSION_TYPE, NOTICE_TYPE } = require('../../constants/dictIm');
 let DictEvent = require('../../constants/dictEvent');
 let { IM_CONTACT } = require('../../constants/dictEvent');
 let Persister = require('../persister/persisterFacade');
@@ -134,10 +134,22 @@ let _saveMsg = (message, userId) => {
   //TODO 还有INVITED和有人退出群组消息的情况需要处理
   if(message.msgType == SESSION_TYPE.GROUP_NOTICE){
     //TODO 这种情况考虑换个地方处理,群通知在会话中只有一个所以是覆盖前一个群通知会话
-    SessionAction.updateSession(message.msgType, message.sessionId, message.groupName,'群邀请',message.revTime,message.contentType, {noticeType:message.noticeType, notAdd:true});
+    SessionAction.updateSession(message.msgType, message.sessionId, message.groupName,'群邀请',message.revTime,message.contentType, userId, {noticeType:message.noticeType, notAdd:true});
     //TODO: 根据noticeType区分是什么类型的群通知
-    let title = '王某某-工商银行';
-    let content = '邀请您加入一二三四五群聊';
+    let title = '';
+    let content = '';
+    if (message.noticeType == NOTICE_TYPE.LEAVE_GROUP) {
+      title = message.groupName;
+      let userInfo = ContactStore.getUserInfoByUserId(message.userId);
+      content = userInfo.realName + '-' + userInfo.orgValue + '离开了群聊';
+    } else if (message.noticeType == NOTICE_TYPE.INVITED){
+      title = message.groupName;
+      content = message.realName + '-' + message.orgValue + '加入了群聊';
+    } else {
+      title = message.groupInviterName + '-' + message.groupInviterOrgValue ;
+      content = '邀请您加入'+ message.groupName +'群聊';
+    }
+
     NoticeAction.updateNotice(message.noticeType, message.sessionId, message.groupName, message.revTime, title, content,  message.groupId, message.groupOwnerId);
     return ;
   }
@@ -169,7 +181,7 @@ let _saveMsg = (message, userId) => {
     }
 
     let user = ContactStore.getUserInfoByUserId(message.toId || message.fromUId);
-    SessionAction.updateSession(message.type, message.sessionId,user.realName ,message.content,message.revTime,message.contentType, {notAdd:notAdd});
+    SessionAction.updateSession(message.type, message.sessionId,user.realName ,message.content,message.revTime,message.contentType, userId, {notAdd:notAdd});
   }else if(message.type == SESSION_TYPE.GROUP){
 
     let notAdd = false;
@@ -200,7 +212,7 @@ let _saveMsg = (message, userId) => {
     }
 
     let group = ContactStore.getGroupDetailById(message.groupId);
-    SessionAction.updateSession(message.type, message.sessionId,group.groupName,message.content,message.revTime,message.contentType, {notAdd:notAdd});
+    SessionAction.updateSession(message.type, message.sessionId,group.groupName,message.content,message.revTime,message.contentType, userId, {notAdd:notAdd});
   }
 
   if (message.sessionId === _data.sessionId) {

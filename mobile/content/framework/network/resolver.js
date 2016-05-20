@@ -4,6 +4,8 @@ let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE, UPDATE_GROUP_TYPE, NOTICE_TYPE } = r
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
 let AppStore = require('../store/appStore');
+let NotificationModule = require('NativeModules').NotificationModule;
+
 //let {Alert} = require('mx-artifacts');
 let _dealMsg = function (message, socket) {
   let userInfo = ContactSotre.getUserInfo();
@@ -16,7 +18,7 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.REC_P2P_MSG:
       ImStore.saveMsg({
-        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.fromUid),
+        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.fromUid, userId),
         // sessionId: 'user:3',
         msgId: message.msgId,
         fromUId: message.fromUid,
@@ -36,18 +38,20 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.GROUP_JOIN_INVITE:
       ImStore.saveMsg({
-        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId),
-        groupId: message.groupId,
-        groupName: message.groupName,
-        groupOwnerId: message.groupOwnerId,
-        msgType: SESSION_TYPE.GROUP_NOTICE,
-        revTime: new Date(),
-        noticeType: NOTICE_TYPE.INVITE
-      }, userId);
+        sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId, userId),
+        groupId:message.groupId,
+        groupName:message.groupName,
+        groupOwnerId:message.groupOwnerId,
+        msgType:SESSION_TYPE.GROUP_NOTICE,
+        revTime:new Date(),
+        noticeType: NOTICE_TYPE.INVITE,
+        groupInviterName: message.groupInviterName,
+        groupInviterOrgValue: message.groupInviterOrgValue
+      },userId);
       break;
     case MSG_TYPE.REC_GROUP_MSG:
       ImStore.saveMsg({
-        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.GROUP, message.gid),
+        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.GROUP, message.gid, userId),
         msgId: message.msgId,
         fromUId: message.fromUid,
         groupId: message.gid,
@@ -69,11 +73,11 @@ let _dealMsg = function (message, socket) {
       }
       break;
     case MSG_TYPE.HOME_PAGE:
-      message.homePageList && message.homePageList.forEach((msg) => {
-        ImStore.createHomePageInfo(msg.seq, msg.url);
-      });
+      message.homePageList && ImStore.createHomePageInfo(message.homePageList);
+      //message.homePageList && message.homePageList.forEach((msg) => {
+      //  ImStore.createHomePageInfo(msg.seq, msg.url);
+      //});
       break;
-
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
       ImStore.updateContactInfo(message);
       break;
@@ -90,18 +94,33 @@ let _dealMsg = function (message, socket) {
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_IMAGE_URL:
           break;
         case UPDATE_GROUP_TYPE.ADD_GROUP_MEMBER:
-          ImStore.saveMsg({
-            sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId),
-            groupId: message.groupId,
-            groupName: message.groupName,
-            groupOwnerId: message.groupOwnerId,
-            msgType: SESSION_TYPE.GROUP_NOTICE,
-            revTime: new Date(),
-            noticeType: NOTICE_TYPE.INVITED
-          }, userId);
+          if (userId != message.userInfo.userId) {
+            ImStore.saveMsg({
+              sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId, userId),
+              groupId:message.groupId,
+              groupName:message.groupName,
+              groupOwnerId:message.groupOwnerId,
+              msgType:SESSION_TYPE.GROUP_NOTICE,
+              revTime:new Date(),
+              noticeType: NOTICE_TYPE.INVITED,
+              realName: message.userInfo.realName,
+              orgValue: message.userInfo.orgValue
+            },userId);
+          }
           break;
-        case UPDATE_GROUP_TYPE.DELETE_GROUP_MEMBER:
+        case UPDATE_GROUP_TYPE.KICK_OUT_GROUP_MEMBER:
+        case UPDATE_GROUP_TYPE.LEAVE_GROUP:
           //TODO 退出群组的处理...
+          ImStore.saveMsg({
+            sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId, userId),
+            groupId:message.groupId,
+            groupName:message.groupName,
+            groupOwnerId:message.groupOwnerId,
+            msgType:SESSION_TYPE.GROUP_NOTICE,
+            revTime:new Date(),
+            noticeType: NOTICE_TYPE.LEAVE_GROUP,
+            userId: message.userInfo.userId
+          },userId);
           break;
         default:
           console.log('None message type matched! [%s]', message.msgType);
@@ -110,7 +129,7 @@ let _dealMsg = function (message, socket) {
       }
       break;
     case MSG_TYPE.GROUP_INFO_DELETE:
-      ContactSotre.leaveGroup(message.groupId);
+      //ContactSotre.leaveGroup(message.groupId);
       break;
     case MSG_TYPE.SYNC_REQ:
       //message.msgArray.forEach((item)=>{
@@ -132,6 +151,9 @@ let _dealMsg = function (message, socket) {
     case MSG_TYPE.CONTANCT_INFO_CERTIFY:
       if (message.userId == AppStore.getUserId()) {
         AppStore.updateUserInfo('certificated', message.isCertificated);
+        if(Platform.OS == 'android'){
+          NotificationModule.showNotification("系统提示","爱资融","您已通过系统管理员的认证");
+        }
       } else {
         ImStore.updateContactInfo(message);
       }
@@ -139,18 +161,24 @@ let _dealMsg = function (message, socket) {
     case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
       if (message.userId == AppStore.getUserId()) {
         AppStore.updateUserInfo('certificated', message.isCertificated);
+        if(Platform.OS == 'android'){
+          NotificationModule.showNotification("系统提示","爱资融","您已被系统管理员取消认证");
+        }
       } else {
         ImStore.updateContactInfo(message);
       }
       break;
     case MSG_TYPE.CONTANCT_INFO_FREEZE:
       if (message.userId == AppStore.getUserId()) {
+        if(Platform.OS == 'android'){
+          NotificationModule.showNotification("系统提示","爱资融","您的帐户已被冻结,请联系系统管理员");
+        }
         AppStore.forceLogout();
       }
       break;
     case MSG_TYPE.FRIEND_INVITE:
       ContactSotre.newFriendNotic(Object.assign({
-        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, userId)
+        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND,message.userInfo&&message.userInfo.userId, userId)
       }, message.userInfo), userId);
       break;
     case MSG_TYPE.FRIEND_PROMISE:

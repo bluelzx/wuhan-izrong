@@ -17,14 +17,14 @@ let HeaderPic = React.createClass({
     if(showBadge) {
       if (badge < 100000 && badge > 0) {
         return (
-          <View style={[{marginLeft:22,width:18,height:18,borderRadius:9,backgroundColor:'red',
+          <View style={[{position:'absolute',top:0,right:0,width:18,height:18,borderRadius:9,backgroundColor:'red',
                 flexDirection:'row',justifyContent:'center',alignItems:'center'},badge > 99 && {height:20,width:(Platform.OS === 'ios')?24:22,marginLeft:18}]}>
             <Text style={{color:'white',fontSize:11}}>{badge > 99 ? "99+" : badge}</Text>
           </View>
         )
       }else if (badge / 100000 > 0) {
         return (
-          <View style={[styles.badgeNoNumber]}>
+          <View style={[styles.badgeNoNumber,{position:'absolute',top:0,right:0}]}>
           </View>
         )
       } else {
@@ -38,16 +38,18 @@ let HeaderPic = React.createClass({
   },
 
   render: function () {
-    let {name, photoFileUrl, badge, certified = false, source=false} = this.props;
+    let {name, photoFileUrl, badge, certified = false, source=false, showBadge=false} = this.props;
     if (!_.isEmpty(photoFileUrl)) {
         return (
           <View>
-            <Image style={styles.head} resizeMode="cover" source={{uri: photoFileUrl}}/>
-            {(()=>{
+            <Image style={[styles.head]} resizeMode="cover" source={{uri: photoFileUrl}}/>
+            {this.unReadIcon(badge, showBadge)}
+              {(()=>{
               if(certified){
                 return (
                   <Image style={[styles.certified,{position: 'absolute',bottom:0,right:0}]}
-                         resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+                         resizeMode="cover" source={require('../../image/user/certificated.png')}>
+                  </Image>
                 );
               }else{
                 return null;
@@ -57,7 +59,10 @@ let HeaderPic = React.createClass({
         );
     }else if(!!source){
       return (
-        <Image style={styles.head} resizeMode="cover" source={source}/>
+        <View>
+          <Image style={[styles.head]} resizeMode="cover" source={source}/>
+          {this.unReadIcon(badge, showBadge)}
+        </View>
       );
     }else {
       return (

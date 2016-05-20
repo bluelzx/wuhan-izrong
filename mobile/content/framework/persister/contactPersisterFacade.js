@@ -30,8 +30,8 @@ getLastMessageBySessionId:(id) => _getLastMessageBySessionId(id),
   setGroupMute:(groupId, value) => _setGroupMute(groupId, value),
   leaveGroup:(groupId) => _leaveGroup(groupId),
   deleteContactInfo:(userIdList) => _deleteContactInfo(userIdList),
-  updateContactInfo: (address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified) =>
-    _updateContactInfo(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified),
+  updateContactInfo: (message) =>
+    _updateContactInfo(message),
   addFriend: (userInfo) => _addFriend(userInfo),
   isStranger:(userId) => _isStranger(userId),
   getOrgValueByOrgId:(orgId) => _getOrgValueByOrgId(orgId)
@@ -250,13 +250,7 @@ let _getUsersExpress = function(groupId) {
 };
 
 
-//let _updateContactInfo = function(address, realName, email, nameCardFileUrl, department, publicDepart, jobTitle, publicTitle, mobileNumber, publicMobile, phoneNumber, publicPhone, publicEmail, publicAddress, publicWeChat, photoFileUrl, qqNo, publicQQ, weChatNo, userId, orgId, certified){
 let _updateContactInfo = function(message){
- // message.address,
-    //  message.realName, message.email, message.nameCardFileUrl, message.department, message.isPublicDepart,
-    //  message.jobTitle, message.isPublicTitle, message.mobileNo, message.isPublicMobile, message.phoneNumber,
-    //  message.isPublicPhone, message.isPublicEmail, message.isPublicAddress, message.isPublicWeChat, message.photoFileUrl,
-    //  message.qqNo, message.isPublicQq, message.weChatNo, message.userId, message.orgId, message.isCertificated
 
   let param = {
     userId:message.userId,
@@ -277,10 +271,10 @@ let _updateContactInfo = function(message){
     publicEmail:message.isPublicEmail,
     publicAddress:message.isPublicAddress,
     publicWeChat: message.isPublicWeChat,
-    photoFileUrl:message.photoFileUrl,
+    photoFileUrl:message.photoStoredFileUrl,
     publicQQ:message.isPublicQq,
     orgId: message.orgId,
-    certified:message.isCertificated,
+    certificated:message.isCertificated,
     mute:false
   };
   let ret = {};
@@ -386,6 +380,7 @@ let _selfDeleteSession = function(sessionId){
 }
 
 let _leaveGroup = function(groupId) {
+  //TODO: sessionId要加用户ID
   _realm.write(() => {
     let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
     _realm.delete(group);
@@ -436,7 +431,8 @@ let _addFriend = function(userInfo) {
     photoFileUrl:userInfo.photoFileUrl,
     publicQQ:userInfo.publicQQ,
     orgId:userInfo.orgId,
-    mute:userInfo.mute
+    mute:userInfo.mute,
+    certificated:userInfo.isCertificated,
   };
 
   _realm.write(()=>{

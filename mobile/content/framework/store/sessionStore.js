@@ -27,8 +27,8 @@ let _getUserInfoBySessionId = function(sessionId, currentUserId) {
 
 }
 
-let _updateSession = function(param, notAdd, noticeType){
-  PersisterFacade.updateSession(param, notAdd, noticeType);
+let _updateSession = function(param, notAdd, noticeType, currUserId){
+  PersisterFacade.updateSession(param, notAdd, noticeType, currUserId);
   AppStore.emitChange(IM_SESSION_LIST);
 }
 

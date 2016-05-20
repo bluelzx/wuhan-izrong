@@ -41,8 +41,7 @@ let HeaderPic = require('./headerPic');
 let NewFriendList = require('./newFriendList');
 
 let PlainStyle = require('../../constants/dictStyle');
-let NotifyHeader = require('./notifyHeader');
-let GroupNotifyList = require('./groupNotifyList');
+let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
 let WhitePage = React.createClass({
 
   componentDidMount() {
@@ -57,7 +56,7 @@ let WhitePage = React.createClass({
   },
 
   getStateFromStores: function () {
-    let userInfo = ContactStore.getUserInfo();
+    let userInfo = AppStore.getLoginUserInfo();
     return {data: ContactStore.getIMNotificationMessage(userInfo.userId)};
   },
 
@@ -147,7 +146,7 @@ let WhitePage = React.createClass({
           borderBottomWidth:0.5,
           flexDirection:'row',
           paddingVertical:7,
-          paddingHorizontal: 10 }}
+          marginHorizontal: 10 }}
         >
           <HeadPic badge={item.badge} source={DictIcon.imSpread} />
           <View
@@ -187,8 +186,8 @@ let WhitePage = React.createClass({
           borderBottomWidth:0.5,
           flexDirection:'row',
           paddingVertical:7,
-          paddingHorizontal: 10}}>
-          <HeadPic badge={item.badge} source={DictIcon.imGroupNotice}/>
+          marginHorizontal: 10}}>
+          <HeadPic badge={item.badge} source={DictIcon.imGroupNotice} showBadge={true}/>
           <View
             style={{  flex:1,paddingHorizontal:10}}>
             <View style={{flexDirection:'row', justifyContent:'space-between',flex:1}}>
@@ -219,7 +218,7 @@ let WhitePage = React.createClass({
             paddingVertical:7,
             marginHorizontal:10}}
           >
-            <HeadPic badge={item.badge} source={DictIcon.imMyGroup} />
+            <HeadPic badge={item.badge} showBadge={true} source={DictIcon.imMyGroup} />
             <View
               style={{ flex:1,paddingHorizontal:10}}
             >
@@ -270,7 +269,7 @@ let WhitePage = React.createClass({
             marginHorizontal:10,
             alignItems:'center',flex:1}}
           >
-              <HeaderPic  photoFileUrl={tagUser.photoFileUrl}  certified={tagUser.certified} name={tagUser.realName}/>
+              <HeaderPic badge={item.badge} showBadge={true} photoFileUrl={tagUser.photoFileUrl}  certified={tagUser.certified} name={tagUser.realName}/>
              <View
               style={{ flex:1,paddingHorizontal:10}}
              >
@@ -306,8 +305,7 @@ let WhitePage = React.createClass({
   },
 
   getIdFromSessionId: function(sessionId){
-    let i = sessionId.indexOf(':');
-    return parseInt(sessionId.substring(i+1));
+    return SessionIdSplit.getIdFromSessionId(sessionId);
   },
 
   renderNewFriend : function(item) {
@@ -329,9 +327,9 @@ let WhitePage = React.createClass({
           borderBottomWidth:0.5,
           flexDirection:'row',
           paddingVertical:7,
-          paddingHorizontal:10}}>
+          marginHorizontal:10}}>
 
-          <HeadPic badge={item.badge} source={DictIcon.imSpread} />
+          <HeadPic badge={item.badge} source={DictIcon.imNewFriendNotic} />
 
             <View
               style={{  flex:1,paddingHorizontal:10}}
