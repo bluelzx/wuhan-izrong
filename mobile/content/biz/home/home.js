@@ -215,7 +215,7 @@ let Home = React.createClass({
             {'金额'}
           </Text>
           <Text style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
-            {'发布人'}
+            {'发布方'}
           </Text>
         </View>
         <ListView

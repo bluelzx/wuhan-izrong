@@ -26,7 +26,7 @@ let LoginAction = require('../../framework/action/loginAction');
 let ImagePicker = require('../../comp/utils/imagePicker');
 let AppStore = require('../../framework/store/appStore');
 let NameCircular = require('../im/nameCircular').NameCircular;
-let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
+let {ORG_CHANGE,USER_CHANGE,MYBIZ_CHANGE} = require('../../constants/dictEvent');
 let PlainStyle = require('../../constants/dictStyle');
 let DictStyle = require('../../constants/dictStyle');
 
@@ -91,6 +91,7 @@ let UserInfo = React.createClass({
           }]).then(
             ()=> {
               AppStore.updateUserInfo('photoFileUrl', response.fileUrl);
+              AppStore.emitChange(MYBIZ_CHANGE);
             }
           ).catch((errorData) => {
             throw errorData;
