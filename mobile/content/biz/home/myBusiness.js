@@ -478,8 +478,8 @@ let Market = React.createClass({
             <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
               <View style={{alignItems: 'center',justifyContent:'center'}}>
                 <View
-                  style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:30,borderColor:'#ed135a',borderWidth:1}}>
-                  <Text style={{color:'#ed135a'}}>{'清空'}</Text>
+                  style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:30,borderColor:'#ed5867',borderWidth:1}}>
+                  <Text style={{color:'#ed5867'}}>{'清空'}</Text>
                 </View>
               </View>
             </TouchableHighlight>

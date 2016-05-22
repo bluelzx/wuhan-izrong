@@ -30,7 +30,7 @@ let BusinessDetail = require('./businessDetail');
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
-let { MARKET_CHANGE } = require('../../constants/dictEvent');
+let { MARKET_CHANGE,MYBIZ_CHANGE } = require('../../constants/dictEvent');
 let _ = require('lodash');
 let {Alert, GiftedListView} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
@@ -118,10 +118,12 @@ let Market = React.createClass({
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
+    AppStore.addChangeListener(this._onChange, MYBIZ_CHANGE);
   },
 
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
+    AppStore.removeChangeListener(this._onChange, MYBIZ_CHANGE);
   },
 
   _onChange () {
@@ -273,7 +275,7 @@ let Market = React.createClass({
             {'金额'}
           </Text>
           <Text style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
-            {'发布人'}
+            {'发布方'}
           </Text>
         </View>
 
@@ -472,7 +474,7 @@ let Market = React.createClass({
                 style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4b76df',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
                 <Text
                   style={{fontSize:16,marginLeft:10,width: screenWidth-66,color:'white'}}
-                  numberOfLines={1}>{this.state.orgValue == '' ? '全部' : this.state.orgValue}</Text>
+                  numberOfLines={1}>{this.state.orgValue == '' ? '全部发布机构' : this.state.orgValue}</Text>
                 <Image style={{margin:10,width:16,height:16}}
                        source={require('../../image/market/next.png')}
                 />
@@ -492,8 +494,8 @@ let Market = React.createClass({
             <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
               <View style={{alignItems: 'center',justifyContent:'center'}}>
                 <View
-                  style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:30,borderColor:'#dd656c',borderWidth:1}}>
-                  <Text style={{color:'#dd656c'}}>{'清空'}</Text>
+                  style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:30,borderColor:'#ed5867',borderWidth:1}}>
+                  <Text style={{color:'#ed5867'}}>{'清空'}</Text>
                 </View>
               </View>
             </TouchableHighlight>
