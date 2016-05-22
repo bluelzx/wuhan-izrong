@@ -11,11 +11,11 @@ let { SESSION_TYPE, MSG_CONTENT_TYPE } = require('../../constants/dictIm');
 
 
 let PlatFormInfoPersisterFacade = {
-  createPlatFormInfo:(infoId, title, content, createDate)=>_createPlatFormInfo(infoId, title, content, createDate),
+  createPlatFormInfo:(infoId, title, content, createDate, userId)=>_createPlatFormInfo(infoId, title, content, createDate, userId),
   queryAllPlatFormInfo: () => _queryAll(),
 }
 
-let _createPlatFormInfo = function(infoId, title, content, createDate) {
+let _createPlatFormInfo = function(infoId, title, content, createDate, userId) {
   _realm.write(() => {
     let platInfo = _realm.objects(SESSION).filtered("type = '" + 'platinfo:global' + "'");
     if(platInfo.length > 0 ){
@@ -27,7 +27,7 @@ let _createPlatFormInfo = function(infoId, title, content, createDate) {
       }
     }else{
       _realm.create(SESSION,{
-        sessionId: 'platinfo:global',
+        sessionId: 'platinfo:global:'+userId,
         type: SESSION_TYPE.PLATFORMINFO,
         badge:1,
         title: title,

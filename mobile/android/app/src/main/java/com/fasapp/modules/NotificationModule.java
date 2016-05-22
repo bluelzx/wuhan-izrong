@@ -23,6 +23,7 @@ import com.fasapp.R;
 /**
  * Created by vison on 16/5/18.
  */
+
 public class NotificationModule extends ReactContextBaseJavaModule {
 
     public NotificationModule(ReactApplicationContext reactContext) {
@@ -53,7 +54,6 @@ public class NotificationModule extends ReactContextBaseJavaModule {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         // 设置通知主题的意图
         mBuilder.setContentIntent(null);*/
-
         //获取通知管理器对象
         NotificationManager mNotificationManager = (NotificationManager) getCurrentActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(0, mBuilder.build());

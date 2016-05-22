@@ -20,7 +20,7 @@ let ViewPager = require('react-native-viewpager');
 let BusinessDetail = require('../market/businessDetail');
 let MyBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
-let {MARKET_CHANGE,MYBIZ_CHANGE} = require('../../constants/dictEvent');
+let {MARKET_CHANGE,MYBIZ_CHANGE,HOMEPAGE_CHANGE} = require('../../constants/dictEvent');
 let MarketStore = require('../../framework/store/marketStore');
 let MarketAction = require('../../framework/action/marketAction');
 let Adjust = require('../../comp/utils/adjust');
@@ -61,12 +61,14 @@ let Home = React.createClass({
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
     AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
+    AppStore.addChangeListener(this._onChange,HOMEPAGE_CHANGE);
     this.bizOrderMarketSearch();
   },
 
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
     AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
+    AppStore.addChangeListener(this._onChange,HOMEPAGE_CHANGE);
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
@@ -137,12 +139,23 @@ let Home = React.createClass({
 
 
   _renderPage: function (data:Object) {
+    if (data.url) {
+      if (data.url.includes('http')) {
+        return (
+            <Image
+                style={styles.page}
+                source={{uri:data.url}}
+            />
+        );
+      }
+    } else {
       return (
         <Image
           style={styles.page}
           source={data}
         />
       );
+    }
   },
 
   rendViewPager: function () {
@@ -251,6 +264,14 @@ let Home = React.createClass({
       })
     }
   },
+
+  //处理viewpager左右滑动和scrollView上下滑动冲突问题
+  scrollViewMove: function(e: Event){
+     console.log('move');
+    //if(e.nativeEvent.locationY <= 50){
+    //  this.refs.scrollView.scrollTo({x:0,y:0,animated:true});
+    //}
+  }
 });
 
 var styles = StyleSheet.create({

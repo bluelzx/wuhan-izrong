@@ -35,6 +35,10 @@ let _uploadImage = function (url, fileFieldName) {
   });
 };
 
+let _isInGroupById = function (id) {
+  return ImStore.isInGroupById(id);
+}
+
 let ImAction = {
   imInit: () => ImSocket.init(),
   sessionInit: function(data) {
@@ -50,6 +54,7 @@ let ImAction = {
   initSend:() => {
     _send();
   },
+  isInGroupById: (id) => _isInGroupById(id)
 };
 
 module.exports = ImAction;

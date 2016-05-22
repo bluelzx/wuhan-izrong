@@ -1,11 +1,13 @@
 //let ImAction = require('../action/imAction');
 let ImStore = require('../store/imStore');
-let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE, UPDATE_GROUP_TYPE, NOTICE_TYPE } = require('../../constants/dictIm');
+let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE, UPDATE_GROUP_TYPE, NOTICE_TYPE, DELETE_TYPE } = require('../../constants/dictIm');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
 let AppStore = require('../store/appStore');
 let NotificationModule = require('NativeModules').NotificationModule;
-
+let {
+  Platform
+  }=require('react-native');
 //let {Alert} = require('mx-artifacts');
 let _dealMsg = function (message, socket) {
   let userInfo = ContactSotre.getUserInfo();
@@ -38,7 +40,7 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.GROUP_JOIN_INVITE:
       ImStore.saveMsg({
-        sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITE, message.groupId, userId),
+        sessionId:KeyGenerator.getSessionKey(NOTICE_TYPE.INVITE, message.groupId, userId),
         groupId:message.groupId,
         groupName:message.groupName,
         groupOwnerId:message.groupOwnerId,
@@ -65,38 +67,51 @@ let _dealMsg = function (message, socket) {
         status: 'Sean'
       }, userId);
       break;
+    //已测,小红点及数字不消失
     case MSG_TYPE.PLATFORM_INFO:
       if (lastSyncTime < message.createDate) {
-        ImStore.createPlatFormInfo(message.infoId, message.title, message.content, new Date(message.createDate));
+        ImStore.createPlatFormInfo(message.infoId,
+          message.title, message.content,
+          new Date(message.createDate),userId);
         ContactSotre.syncReq(new Date(message.createDate));
         lastSyncTime = message.createDate;
       }
       break;
+    //已测 weisen
     case MSG_TYPE.HOME_PAGE:
       message.homePageList && ImStore.createHomePageInfo(message.homePageList);
-      //message.homePageList && message.homePageList.forEach((msg) => {
-      //  ImStore.createHomePageInfo(msg.seq, msg.url);
-      //});
       break;
+    //已测  weisen
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
       ImStore.updateContactInfo(message);
       break;
+    //
     case MSG_TYPE.CONTANCT_INFO_DELETE:
       ImStore.deleteContactInfo(message.userIdList);
       break;
     case MSG_TYPE.GROUP_INFO_UPDATE:
+      ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
       switch (message.action) {
         case UPDATE_GROUP_TYPE.CREATE_GROUP:
           ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
           break;
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_NAME:
+          ImStore.saveMsg({
+            sessionId:KeyGenerator.getSessionKey(NOTICE_TYPE.UPDATE_GROUP_NAME, message.groupId, userId),
+            groupId:message.groupId,
+            groupName:message.groupName,
+            groupOwnerId:message.groupOwnerId,
+            msgType:SESSION_TYPE.GROUP_NOTICE,
+            revTime:new Date(),
+            noticeType: NOTICE_TYPE.UPDATE_GROUP_NAME
+          },userId);
           break;
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_IMAGE_URL:
           break;
         case UPDATE_GROUP_TYPE.ADD_GROUP_MEMBER:
           if (userId != message.userInfo.userId) {
             ImStore.saveMsg({
-              sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId, userId),
+              sessionId:KeyGenerator.getSessionKey(NOTICE_TYPE.INVITED, message.groupId, userId),
               groupId:message.groupId,
               groupName:message.groupName,
               groupOwnerId:message.groupOwnerId,
@@ -109,10 +124,12 @@ let _dealMsg = function (message, socket) {
           }
           break;
         case UPDATE_GROUP_TYPE.KICK_OUT_GROUP_MEMBER:
+
+              break;
         case UPDATE_GROUP_TYPE.LEAVE_GROUP:
           //TODO 退出群组的处理...
           ImStore.saveMsg({
-            sessionId:KeyGenerator.getSessionKey(SESSION_TYPE.INVITED, message.groupId, userId),
+            sessionId:KeyGenerator.getSessionKey(NOTICE_TYPE.LEAVE_GROUP, message.groupId, userId),
             groupId:message.groupId,
             groupName:message.groupName,
             groupOwnerId:message.groupOwnerId,
@@ -129,7 +146,23 @@ let _dealMsg = function (message, socket) {
       }
       break;
     case MSG_TYPE.GROUP_INFO_DELETE:
-      //ContactSotre.leaveGroup(message.groupId);
+      //TODO 区分被踢和解散
+      let noticeType = DELETE_TYPE.KICK_OUT;
+      if (message.action == DELETE_TYPE.DELETE_GROUP) {
+        noticeType = DELETE_TYPE.DELETE_GROUP;
+      }
+      ContactSotre.leaveGroup(message.groupId);
+      let group = ContactSotre.getGroupDetailById(message.groupId);
+      ImStore.saveMsg({
+        sessionId:KeyGenerator.getSessionKey(NOTICE_TYPE.DELETE_GROUP, message.groupId, userId),
+        groupId:message.groupId,
+        groupName:group.groupName,
+        groupOwnerId:group.groupMasterUid,
+        msgType:SESSION_TYPE.GROUP_NOTICE,
+        revTime:new Date(),
+        noticeType: noticeType,
+        userId: group.groupMasterUid
+      },userId);
       break;
     case MSG_TYPE.SYNC_REQ:
       //message.msgArray.forEach((item)=>{
@@ -173,7 +206,8 @@ let _dealMsg = function (message, socket) {
         if(Platform.OS == 'android'){
           NotificationModule.showNotification("系统提示","爱资融","您的帐户已被冻结,请联系系统管理员");
         }
-        AppStore.forceLogout();
+        //AppStore.forceLogout();
+        AppStore.freezAccount();
       }
       break;
     case MSG_TYPE.FRIEND_INVITE:

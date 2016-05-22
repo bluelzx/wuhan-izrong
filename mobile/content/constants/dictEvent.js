@@ -37,6 +37,11 @@ const DictEvent = keyMirror({
   ORG_CHANGE: null,
 
   /**
+   * homePage
+   */
+  HOMEPAGE_CHANGE: null,
+
+  /**
    * new Friend
    * */
   NEW_FRIEND:null

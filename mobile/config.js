@@ -1,3 +1,9 @@
+var outLine = {
+  Dev: true, // Switch for log. true means print.
+  Host: 'http://114.55.16.46:801/fas',   //dev
+  ImHost:'114.55.16.46:3000'//dev
+}
+
 var developConfigDocker2 = {
   Dev: true, // Switch for log. true means print.
   Host: 'http://192.168.64.152:8080/fas',   //dev
@@ -25,7 +31,7 @@ var uncleConfig = {
 
 var shuaiConfig = {
   Dev: true, // Switch for log. true means print.
-  Host: 'http://192.168.64.207:8080/fas',   //dev
+  Host: 'http://192.168.64.209:9081/fas',   //dev
   //Host: 'http://192.168.64.205:9102/fas',   //dev
   ImHost:'192.168.99.100:3000'//dev
 };
@@ -39,11 +45,11 @@ var qaConfig = {
 
 var productConfig = {
   Dev: false, // Switch for log. true means print.
-  Host: 'http://139.196.174.42:9201/fas',
+  Host: 'http://114.55.16.46:80/fas',
   ImHost: '139.196.174.42:4000'
 };
 
-var Config = developConfigDocker;
+var Config = productConfig;
 
 module.exports = Config;
 //module.exports = function () {

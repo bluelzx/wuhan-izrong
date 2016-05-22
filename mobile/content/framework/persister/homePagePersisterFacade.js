@@ -33,10 +33,13 @@ let _queryAll = function() {
   let ret = [];
   pages.forEach((item)=>{
     let p = {
-      req:item.req,
+      id:item.id,
+      seq:item.seq,
       url:item.url
     };
-    ret.push(p);
+    if(item.url){
+      ret.push(p);
+    }
   });
   if(ret.length == 0){
     return [];
