@@ -4,7 +4,8 @@
 
 let ConvertChineseKey = {
   makePy: (str) => _makePy(str),
-  buildOrgList: (orgList)=> _buildOrgList(orgList)
+  buildOrgList: (orgList)=> _buildOrgList(orgList),
+  buildGroupMemberList:(data)=>_buildGroupMemberList(data)
 };
 
 // 汉字拼音首字母列表 本列表包含了20902个汉字,用于配合 ToChineseSpell
@@ -155,6 +156,220 @@ function _buildOrgList(orgList){
         break;
       case '$':
         $.push(orgItem);
+    }
+  });
+
+  let buildList = {
+    'A':A, 'B':B, 'C':C, 'D':D, 'E':E, 'F':F, 'G':G,
+    'H':H, 'I':I, 'J':J, 'K':K, 'L':L, 'M':M, 'N':N,
+    'O':O, 'P':P, 'Q':Q, 'R':R, 'S':S, 'T':T, 'U':U,
+    'V':V, 'W':W, 'X':X, 'Y':Y, 'Z':Z, '$':$
+  };
+  console.log(buildList);
+  return buildList;
+}
+
+let _buildGroupMemberList = function(data){
+  let A = [];
+  let B = [];
+  let C = [];
+  let D = [];
+  let E = [];
+  let F = [];
+  let G = [];
+  let H = [];
+  let I = [];
+  let J = [];
+  let K = [];
+  let L = [];
+  let M = [];
+  let N = [];
+  let O = [];
+  let P = [];
+  let Q = [];
+  let R = [];
+  let S = [];
+  let T = [];
+  let U = [];
+  let V = [];
+  let W = [];
+  let X = [];
+  let Y = [];
+  let Z = [];
+  let $ = [];
+
+  data.forEach(function (orgItem) {
+    console.log(orgItem);
+    switch (ConvertChineseKey.makePy(orgItem.realName)) {
+      case 'A':
+        A.push(orgItem);
+        break;
+      case 'B':
+        B.push(orgItem);
+        break;
+      case 'C':
+        C.push(orgItem);
+        break;
+      case 'D':
+        D.push(orgItem);
+        break;
+      case 'E':
+        E.push(orgItem);
+        break;
+      case 'F':
+        F.push(orgItem);
+        break;
+      case 'G':
+        G.push(orgItem);
+        break;
+      case 'H':
+        H.push(orgItem);
+        break;
+      case 'I':
+        I.push(orgItem);
+        break;
+      case 'J':
+        J.push(orgItem);
+        break;
+      case 'K':
+        K.push(orgItem);
+        break;
+      case 'L':
+        L.push(orgItem);
+        break;
+      case 'M':
+        M.push(orgItem);
+        break;
+      case 'N':
+        N.push(orgItem);
+        break;
+      case 'O':
+        O.push(orgItem);
+        break;
+      case 'P':
+        P.push(orgItem);
+        break;
+      case 'Q':
+        A.push(orgItem);
+        break;
+      case 'R':
+        R.push(orgItem);
+        break;
+      case 'S':
+        S.push(orgItem);
+        break;
+      case 'T':
+        T.push(orgItem);
+        break;
+      case 'U':
+        U.push(orgItem);
+        break;
+      case 'V':
+        V.push(orgItem);
+        break;
+      case 'W':
+        W.push(orgItem);
+        break;
+      case 'X':
+        X.push(orgItem);
+        break;
+      case 'Y':
+        Y.push(orgItem);
+        break;
+      case 'Z':
+        Z.push(orgItem);
+        break;
+      case '$':{
+        if(orgItem.realName&&orgItem.realName.length>0){
+          let f = (orgItem.realName + ' ')[0];
+          f = f.toUpperCase();
+          switch(f){
+            case 'A':
+              A.push(orgItem);
+              break;
+            case 'B':
+              B.push(orgItem);
+              break;
+            case 'C':
+              C.push(orgItem);
+              break;
+            case 'D':
+              D.push(orgItem);
+              break;
+            case 'E':
+              E.push(orgItem);
+              break;
+            case 'F':
+              F.push(orgItem);
+              break;
+            case 'G':
+              G.push(orgItem);
+              break;
+            case 'H':
+              H.push(orgItem);
+              break;
+            case 'I':
+              I.push(orgItem);
+              break;
+            case 'J':
+              J.push(orgItem);
+              break;
+            case 'K':
+              K.push(orgItem);
+              break;
+            case 'L':
+              L.push(orgItem);
+              break;
+            case 'M':
+              M.push(orgItem);
+              break;
+            case 'N':
+              N.push(orgItem);
+              break;
+            case 'O':
+              O.push(orgItem);
+              break;
+            case 'P':
+              P.push(orgItem);
+              break;
+            case 'Q':
+              A.push(orgItem);
+              break;
+            case 'R':
+              R.push(orgItem);
+              break;
+            case 'S':
+              S.push(orgItem);
+              break;
+            case 'T':
+              T.push(orgItem);
+              break;
+            case 'U':
+              U.push(orgItem);
+              break;
+            case 'V':
+              V.push(orgItem);
+              break;
+            case 'W':
+              W.push(orgItem);
+              break;
+            case 'X':
+              X.push(orgItem);
+              break;
+            case 'Y':
+              Y.push(orgItem);
+              break;
+            case 'Z':
+              Z.push(orgItem);
+              break;
+            default:
+              $.push(orgItem);
+          }
+        }else {
+          $.push(orgItem);
+        }
+      }
+
     }
   });
 

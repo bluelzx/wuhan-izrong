@@ -82,8 +82,37 @@ let _getGroupInfoByGroupId = function (groupId) {
     memlist.forEach(
       (userId) => {
         let user = _realm.objects(IMUSERINFO).filtered('userId = ' + userId);
-        if(user.length > 0)
-          members.push(user[0]);
+
+        if(user.length > 0) {
+          let orgName = _realm.objects(ORGBEAN).filtered('id = $0',user[0].orgId);
+          let param = {
+            userId:user[0].userId,
+            address:user[0].address,
+            realName:user[0].realName,
+            weChatNo:user[0].weChatNo,
+            email:user[0].email,
+            nameCardFileUrl:user[0].nameCardFileUrl,
+            qqNo:user[0].qqNo,
+            department:user[0].department,
+            mobileNumber:user[0].mobileNumber,
+            jobTitle:user[0].jobTitle,
+            publicDepart:user[0].publicDepart,
+            publicTitle:user[0].publicTitle,
+            publicMobile:user[0].publicMobile,
+            phoneNumber:user[0].phoneNumber,
+            publicPhone:user[0].publicPhone,
+            publicEmail:user[0].publicEmail,
+            publicAddress:user[0].publicAddress,
+            publicWeChat: user[0].publicWeChat,
+            photoFileUrl:user[0].photoFileUrl,
+            publicQQ:user[0].publicQQ,
+            orgId: user[0].orgId,
+            certificated:user[0].certificated,
+            mute:user[0].mute
+          };
+          orgName[0]&& (param.orgValue = orgName[0].orgValue);
+          members.push(param);
+        }
       }
     );
 

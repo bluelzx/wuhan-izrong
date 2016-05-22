@@ -70,6 +70,13 @@ const NOTICE_TYPE = {
   INVITE:'invite',
   INVITED:'invited',
   LEAVE_GROUP: 'leave',
+  DELETE_GROUP: 'deleteGroup',
+  KICK_OUT_GROUP: 'kickOutGroup',
+  UPDATE_GROUP_NAME: 'updateGroupName'
+}
+
+const DELETE_TYPE = {
+  KICK_OUT: 'kickOut',
   DELETE_GROUP: 'deleteGroup'
 }
 
@@ -80,5 +87,6 @@ module.exports = {
   KPI_TYPE: KPI_TYPE,
   SESSION_TYPE: SESSION_TYPE,
   NOTICE_TYPE: NOTICE_TYPE,
-  UPDATE_GROUP_TYPE: UPDATE_GROUP_TYPE
+  UPDATE_GROUP_TYPE: UPDATE_GROUP_TYPE,
+  DELETE_TYPE: DELETE_TYPE
 };

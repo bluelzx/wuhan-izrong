@@ -1,3 +1,20 @@
+var outLine = {
+  Dev: true, // Switch for log. true means print.
+  Host: 'http://114.55.16.46:801/fas',   //dev
+  ImHost:'114.55.16.46:3000'//dev
+}
+
+var developConfigDocker2 = {
+  Dev: true, // Switch for log. true means print.
+  Host: 'http://192.168.64.152:8080/fas',   //dev
+  ImHost:'192.168.64.152:3000'//dev
+};
+
+var developConfigDocker = {
+  Dev: true, // Switch for log. true means print.
+  Host: 'http://192.168.64.152:8080/fas',   //dev
+  ImHost:'192.168.61.84:4000'//dev
+};
 
 var developConfig = {
   Dev: true, // Switch for log. true means print.

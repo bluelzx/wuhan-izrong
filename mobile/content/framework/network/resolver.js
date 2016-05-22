@@ -1,6 +1,6 @@
 //let ImAction = require('../action/imAction');
 let ImStore = require('../store/imStore');
-let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE, UPDATE_GROUP_TYPE, NOTICE_TYPE } = require('../../constants/dictIm');
+let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE, UPDATE_GROUP_TYPE, NOTICE_TYPE, DELETE_TYPE } = require('../../constants/dictIm');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
 let AppStore = require('../store/appStore');
@@ -70,7 +70,9 @@ let _dealMsg = function (message, socket) {
     //已测,小红点及数字不消失
     case MSG_TYPE.PLATFORM_INFO:
       if (lastSyncTime < message.createDate) {
-        ImStore.createPlatFormInfo(message.infoId, message.title, message.content, new Date(message.createDate));
+        ImStore.createPlatFormInfo(message.infoId,
+          message.title, message.content,
+          new Date(message.createDate),userId);
         ContactSotre.syncReq(new Date(message.createDate));
         lastSyncTime = message.createDate;
       }
@@ -88,11 +90,21 @@ let _dealMsg = function (message, socket) {
       ImStore.deleteContactInfo(message.userIdList);
       break;
     case MSG_TYPE.GROUP_INFO_UPDATE:
+      ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
       switch (message.action) {
         case UPDATE_GROUP_TYPE.CREATE_GROUP:
           ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
           break;
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_NAME:
+          ImStore.saveMsg({
+            sessionId:KeyGenerator.getSessionKey(NOTICE_TYPE.UPDATE_GROUP_NAME, message.groupId, userId),
+            groupId:message.groupId,
+            groupName:message.groupName,
+            groupOwnerId:message.groupOwnerId,
+            msgType:SESSION_TYPE.GROUP_NOTICE,
+            revTime:new Date(),
+            noticeType: NOTICE_TYPE.UPDATE_GROUP_NAME
+          },userId);
           break;
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_IMAGE_URL:
           break;
@@ -134,6 +146,11 @@ let _dealMsg = function (message, socket) {
       }
       break;
     case MSG_TYPE.GROUP_INFO_DELETE:
+      //TODO 区分被踢和解散
+      let noticeType = DELETE_TYPE.KICK_OUT;
+      if (message.action == DELETE_TYPE.DELETE_GROUP) {
+        noticeType = DELETE_TYPE.DELETE_GROUP;
+      }
       ContactSotre.leaveGroup(message.groupId);
       let group = ContactSotre.getGroupDetailById(message.groupId);
       ImStore.saveMsg({
@@ -143,7 +160,7 @@ let _dealMsg = function (message, socket) {
         groupOwnerId:group.groupMasterUid,
         msgType:SESSION_TYPE.GROUP_NOTICE,
         revTime:new Date(),
-        noticeType: NOTICE_TYPE.DELETE_GROUP,
+        noticeType: noticeType,
         userId: group.groupMasterUid
       },userId);
       break;

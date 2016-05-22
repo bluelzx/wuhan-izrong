@@ -2,7 +2,7 @@
  * Created by baoyinghai on 16/4/6.
  */
 let React = require('react-native');
-const {View, TouchableOpacity,Platform, Text} = React;
+const {View, TouchableOpacity,Platform, Text, ListView} = React;
 let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList, Device, Alert } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
@@ -20,11 +20,30 @@ let DeleteMember = React.createClass({
 
   getInitialState:function() {
     let groupId = this.props.param.groupId;
+    //return {
+    //  data:ContactStore.getUsersByGroupId(groupId),
+    //  memberList:{},
+    //  userInfo:ContactStore.getUserInfo()
+    //}
+    let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    let groupDetail = ContactStore.getGroupDetailById(groupId);
+    let orgData = groupDetail&&groupDetail.members;
+    let nIndex = -1;
+    orgData.forEach((item, index)=>{
+      if(item.userId == groupDetail.groupMasterUid){
+        nIndex = index;
+      }
+    });
+    if(nIndex != -1){
+      orgData.splice(nIndex, 1);
+    }
     return {
-      data:ContactStore.getUsersByGroupId(groupId),
+      orgData:orgData,
+      dataSource: ds.cloneWithRows(orgData),
       memberList:{},
       userInfo:ContactStore.getUserInfo()
-    }
+    };
+
   },
 
   delUser: function( groupId, members) {
@@ -84,6 +103,7 @@ let DeleteMember = React.createClass({
   //渲染组成员
   itemRender: function(data) {
       return (
+        <View style={{ backgroundColor:'#FEFEFE'}}>
         <CheckBox
           init={this.state.memberList[data.userId]}
           key={data.userId}
@@ -91,11 +111,19 @@ let DeleteMember = React.createClass({
                   choice={this.checkBoxChoice}
                   unChoice={this.unCheckBoxChoice}
                   style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
-          <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
+          <View style={{flex:1,flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
               <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-            <Text style={{fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
+            <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
+              <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'flex-start'}}>
+                <Text
+                  style={{fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
+                <Text
+                  style={{flex:1,fontSize:15,color:'#B7C0C7', marginLeft: 2,flexWrap:'wrap'}}>{'-'+ data.orgValue }</Text>
+              </View>
+            </View>
           </View>
         </CheckBox>
+          </View>
       );
   },
 
@@ -103,23 +131,32 @@ let DeleteMember = React.createClass({
   render: function() {
     return (
       <NavBarView navigator={this.props.navigator} title='删除群成员' actionButton={this.renderState}>
-        <SearchBar textChange={this.textChange}/>
+        {/*<SearchBar textChange={this.textChange}/>*/}
 
         {(()=>{
 
-          let dataSource = groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
+          //let dataSource = groupFilter(this.state.data,'orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
+          let dataSource = this.state.orgData;
           if(dataSource && dataSource.length > 0) {
+
+            //return (
+            //  <ExtenList itemHeight={57}
+            //             groundColor={DictStyle.colorSet.extenListGroundCol}
+            //             groupBorderColor={DictStyle.colorSet.demarcationColor}
+            //             arrowColor={DictStyle.colorSet.extenListArrowColor}
+            //             groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
+            //             titleBorderColor={DictStyle.colorSet.demarcationColor}
+            //             dataSource={dataSource}
+            //             groupDataName={'orgMembers'}
+            //             groupItemRender={this.itemRender}
+            //             groupTitleRender={this.titleRender} />
+            //);
             return (
-              <ExtenList itemHeight={57}
-                         groundColor={DictStyle.colorSet.extenListGroundCol}
-                         groupBorderColor={DictStyle.colorSet.demarcationColor}
-                         arrowColor={DictStyle.colorSet.extenListArrowColor}
-                         groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
-                         titleBorderColor={DictStyle.colorSet.demarcationColor}
-                         dataSource={dataSource}
-                         groupDataName={'orgMembers'}
-                         groupItemRender={this.itemRender}
-                         groupTitleRender={this.titleRender} />
+                <ListView
+                  style={{marginTop:10}}
+                  dataSource={this.state.dataSource}
+                  renderRow={this.itemRender}
+                />
             );
           }else{
             return (

@@ -64,35 +64,39 @@ let Messenger = React.createClass({
   },
 
   _sendMessage(contentType, content, isReSend = false, msgId = '') {
-    let msgToSend = {
-      sessionId: this.props.param.sessionId,
-      msgId: isReSend ? msgId : KeyGenerator.getMessageKey(this.props.param.sessionId, this.props.param.userId),
-      fromUId: null,
-      contentType: contentType,
-      content: content,
-      revTime: new Date(),
-      isRead: true,
-      status: 'ErrorButton',
+    if (this.props.param.chatType === SESSION_TYPE.GROUP && !ImAction.isInGroupById(this.props.param.groupId)) {
+      //TODO: 用户已不在群组....
+    } else {
+      let msgToSend = {
+        sessionId: this.props.param.sessionId,
+        msgId: isReSend ? msgId : KeyGenerator.getMessageKey(this.props.param.sessionId, this.props.param.userId),
+        fromUId: null,
+        contentType: contentType,
+        content: content,
+        revTime: new Date(),
+        isRead: true,
+        status: 'ErrorButton',
 
-    };
-    if (this.props.param.chatType === SESSION_TYPE.USER) {
-      _.assign(msgToSend, {
-        // toId: this.props.param.userId,
-        toId: this.props.param.userId,
-        groupId: null,
-        type: SESSION_TYPE.USER,
-        msgType: COMMAND_TYPE.SEND_P2P_MSG
-      });
-    } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
-      _.assign(msgToSend, {
-        toId: null,
-        groupId: this.props.param.groupId,
-        type: SESSION_TYPE.GROUP,
-        msgType: COMMAND_TYPE.SEND_GROUP_MSG
-      });
+      };
+      if (this.props.param.chatType === SESSION_TYPE.USER) {
+        _.assign(msgToSend, {
+          // toId: this.props.param.userId,
+          toId: this.props.param.userId,
+          groupId: null,
+          type: SESSION_TYPE.USER,
+          msgType: COMMAND_TYPE.SEND_P2P_MSG
+        });
+      } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
+        _.assign(msgToSend, {
+          toId: null,
+          groupId: this.props.param.groupId,
+          type: SESSION_TYPE.GROUP,
+          msgType: COMMAND_TYPE.SEND_GROUP_MSG
+        });
+      }
+
+      ImAction.send(msgToSend, isReSend, this.props.param.myId);
     }
-
-    ImAction.send(msgToSend, isReSend, this.props.param.myId);
   },
 
   handleSend(message = {}, rowID = null) {
