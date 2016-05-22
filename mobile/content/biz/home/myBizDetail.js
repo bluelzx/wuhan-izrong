@@ -744,21 +744,17 @@ let MyBizDetail = React.createClass({
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
     let remark = data.remark == '' ? '--' : data.remark;
-    let shareContent = this.state.marketInfo.bizCategoryDesc + '\n' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出') + '  '
-      + '金额:' + amount + '  ' + '期限:' + dayNum + '  ' + '利率:' + rate + '\n' + '备注:' + remark
+    let shareContent = this.state.marketInfo.bizCategoryDesc + '  ' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出') + '\n'
+      + '金额:' + amount + '\n' + '期限:' + dayNum + '\n' + '利率:' + rate + '\n' + '备注:' + remark
       + '\n' + '——来自爱资融APP';
-    //if (Platform.OS === 'android') {
-      Share.open({
-        share_text: shareContent,
-        share_URL: Platform.OS === 'android' ? shareContent : undefined,
-        title: Platform.OS === 'android' ? "Share Link": undefined
-      }, (e) => {
-        console.log(e);
-      });
-    //} else {
-    //  ActionSheetIOS.showShareActionSheetWithOptions({options: [{message:shareContent}]});
-    //}
 
+    Share.open({
+      share_text: shareContent,
+      share_URL: Platform.OS === 'android' ? shareContent : 'http://www.izirong.com/fas',
+      title: "Share Link"
+    }, (e) => {
+      console.log(e);
+    });
   },
 
   downselfBizOrder: function (id) {

@@ -640,12 +640,13 @@ let Publish = React.createClass({
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
     let remark = data.remark == '' ? '--' : data.remark;
-    let shareContent = data.bizCategory + '\n' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出') + '  '
-      + '金额:' + amount + '  ' + '期限:' + dayNum + '  ' + '利率:' + rate + '\n' + '备注:' + remark
+    let shareContent = data.bizCategory + '  ' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出')  + '\n'
+      + '金额:' + amount  + '\n' + '期限:' + dayNum + '\n'  + '利率:' + rate + '\n' + '备注:' + remark
       + '\n' + '——来自爱资融APP';
+
     Share.open({
       share_text: shareContent,
-      share_URL: Platform.OS === 'android' ? shareContent : '',
+      share_URL: Platform.OS === 'android' ? shareContent : 'http://www.izirong.com/fas',
       title: "Share Link"
     }, (e) => {
       console.log(e);
