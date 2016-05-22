@@ -5,7 +5,9 @@ let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
 let AppStore = require('../store/appStore');
 let NotificationModule = require('NativeModules').NotificationModule;
-
+let {
+  Platform
+  }=require('react-native');
 //let {Alert} = require('mx-artifacts');
 let _dealMsg = function (message, socket) {
   let userInfo = ContactSotre.getUserInfo();
@@ -65,6 +67,7 @@ let _dealMsg = function (message, socket) {
         status: 'Sean'
       }, userId);
       break;
+    //已测,小红点及数字不消失
     case MSG_TYPE.PLATFORM_INFO:
       if (lastSyncTime < message.createDate) {
         ImStore.createPlatFormInfo(message.infoId, message.title, message.content, new Date(message.createDate));
@@ -72,12 +75,15 @@ let _dealMsg = function (message, socket) {
         lastSyncTime = message.createDate;
       }
       break;
+    //已测 weisen
     case MSG_TYPE.HOME_PAGE:
       message.homePageList && ImStore.createHomePageInfo(message.homePageList);
       break;
+    //已测  weisen
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
       ImStore.updateContactInfo(message);
       break;
+    //
     case MSG_TYPE.CONTANCT_INFO_DELETE:
       ImStore.deleteContactInfo(message.userIdList);
       break;
@@ -106,6 +112,8 @@ let _dealMsg = function (message, socket) {
           }
           break;
         case UPDATE_GROUP_TYPE.KICK_OUT_GROUP_MEMBER:
+
+              break;
         case UPDATE_GROUP_TYPE.LEAVE_GROUP:
           //TODO 退出群组的处理...
           ImStore.saveMsg({
@@ -181,7 +189,8 @@ let _dealMsg = function (message, socket) {
         if(Platform.OS == 'android'){
           NotificationModule.showNotification("系统提示","爱资融","您的帐户已被冻结,请联系系统管理员");
         }
-        AppStore.forceLogout();
+        //AppStore.forceLogout();
+        AppStore.freezAccount();
       }
       break;
     case MSG_TYPE.FRIEND_INVITE:

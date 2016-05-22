@@ -52,7 +52,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   simpleLogin: (data) => _simpleLogin(data),
   logout: (userId) => _logout(userId),
   forceLogout: () => _force_logout(),
-  setForceLogout: () => _setForceLogout(),
+  freezAccount: () => _freezAccount(),
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
@@ -120,6 +120,7 @@ let _login = (data) => {
   return Persister.saveAppData(data).then(()=> {
     _.assign(_data, {
       token: _getToken()
+
     });
     //保存filter到_data
     _saveFilters(data.appOrderSearchResult);
@@ -131,7 +132,10 @@ let _simpleLogin = (data) => {
   return Persister.saveSimpleLoginData(data, AppStore.getUserId())
     .then(()=> {
       _.assign(_data, {
-        token: _getToken()
+        token: _getToken(),
+        isLogout:false,
+        isForceLogout:false,
+        isFreezing:false
       });
       //AppStore.emitChange();
     }).catch((errorData)=> {
@@ -157,16 +161,11 @@ let _force_logout = () => {
   AppStore.emitChange();
 };
 
-let _freezing = () => {
+let _freezAccount = () => {
   //清空token
   _logout(_getUserId());
   _info.isFreezing = true;
   AppStore.emitChange();
-};
-
-let _setForceLogout = () => {
-  _info.isLogout = false;
-  _info.isForceLogout = false;
 };
 
 let _save_apns_token = (apnsToken) => {
