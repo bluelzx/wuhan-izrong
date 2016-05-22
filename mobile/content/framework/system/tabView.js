@@ -158,7 +158,7 @@ var TabView = React.createClass({
             title="发布"
             icon={require('../../image/tab/publish.png')}
             //selected={this.state.selectedTab === 'publish'}
-            selectedIcon={require('../../image/tab/publish-selected2.png')}
+            selectedIcon={require('../../image/tab/publish-selected.png')}
             onPress={() => {
             this.props.navigator.push({
                 comp: Publish,
@@ -214,7 +214,7 @@ var TabView = React.createClass({
             navigator={this.props.navigator}
             tabDesc="发布"
             icon={require('../../image/tab/publish.png')}
-            selectedIcon={require('../../image/tab/publish-selected2.png')}
+            selectedIcon={require('../../image/tab/publish-selected.png')}
             exec={this.props.exec}
             onPress={() => {navigator.push({
             comp: Publish,

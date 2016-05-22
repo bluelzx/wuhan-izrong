@@ -17,7 +17,9 @@ let _info = {
   netWorkState: false,
   isLogout: false,
   isForceLogout: false,
-  apnTokens: null
+  apnTokens: null,
+  isFreezing: false,
+  isDelete: false
 };
 
 
@@ -42,6 +44,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   isLogout: () => _info.isLogout,
   isFreezing: () => _info.isFreezing,
   isForceLogout: () => _info.isForceLogout,
+  isDelete: ()=> _info.isDelete,
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
   updateLastSyncTime: (t)=>_updateLastSyncTime(t),
@@ -51,8 +54,9 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   login: (data) => _login(data),
   simpleLogin: (data) => _simpleLogin(data),
   logout: (userId) => _logout(userId),
-  forceLogout: () => _force_logout(),
+  forceLogout: () => _forceLogout(),
   freezAccount: () => _freezAccount(),
+  deleteLoginUser: (userId) => _deleteLoginUser(userId),
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
@@ -120,8 +124,11 @@ let _login = (data) => {
   return Persister.saveAppData(data).then(()=> {
     _.assign(_data, {
       token: _getToken()
-
     });
+    _info.isLogout = false;
+    _info.isForceLogout = false;
+    _info.isFreezing = false;
+    _info.isDelete = false;
     //保存filter到_data
     _saveFilters(data.appOrderSearchResult);
     AppStore.emitChange();
@@ -131,11 +138,12 @@ let _login = (data) => {
 let _simpleLogin = (data) => {
   return Persister.saveSimpleLoginData(data, AppStore.getUserId())
     .then(()=> {
+      _info.isLogout = false;
+      _info.isForceLogout = false;
+      _info.isFreezing = false;
+      _info.isDelete = false;
       _.assign(_data, {
-        token: _getToken(),
-        isLogout:false,
-        isForceLogout:false,
-        isFreezing:false
+        token: _getToken()
       });
       //AppStore.emitChange();
     }).catch((errorData)=> {
@@ -153,11 +161,19 @@ let _logout = (userId) => {
   AppStore.emitChange();
 };
 
-let _force_logout = () => {
+let _forceLogout = () => {
   //TODO:'强制登出'
   _info.isForceLogout = true;
   //清空token
   _logout(_getUserId());
+  AppStore.emitChange();
+};
+
+let _deleteLoginUser = (userId) => {
+  Persister.logout(userId);
+  _info.isLogout = true;
+  _data.token = '';
+  _info.isDelete = true;
   AppStore.emitChange();
 };
 
@@ -167,6 +183,7 @@ let _freezAccount = () => {
   _info.isFreezing = true;
   AppStore.emitChange();
 };
+
 
 let _save_apns_token = (apnsToken) => {
   _info.apnTokens = apnsToken;

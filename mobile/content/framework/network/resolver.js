@@ -85,9 +85,13 @@ let _dealMsg = function (message, socket) {
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
       ImStore.updateContactInfo(message);
       break;
-    //
+    //已测
     case MSG_TYPE.CONTANCT_INFO_DELETE:
-      ImStore.deleteContactInfo(message.userIdList);
+      if (message.userId == AppStore.getUserId()) {
+            AppStore.deleteLoginUser(message.userId);
+      }else{
+        ImStore.deleteContactInfo(message.userId);
+      }
       break;
     case MSG_TYPE.GROUP_INFO_UPDATE:
       ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
@@ -181,9 +185,10 @@ let _dealMsg = function (message, socket) {
       });
       ContactSotre.syncReq(new Date());
       break;
+    //已测
     case MSG_TYPE.CONTANCT_INFO_CERTIFY:
       if (message.userId == AppStore.getUserId()) {
-        AppStore.updateUserInfo('certificated', message.isCertificated);
+        AppStore.updateUserInfo('isCertificated', message.isCertificated);
         if(Platform.OS == 'android'){
           NotificationModule.showNotification("系统提示","爱资融","您已通过系统管理员的认证");
         }
@@ -191,9 +196,10 @@ let _dealMsg = function (message, socket) {
         ImStore.updateContactInfo(message);
       }
       break;
+    //已测
     case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
       if (message.userId == AppStore.getUserId()) {
-        AppStore.updateUserInfo('certificated', message.isCertificated);
+        AppStore.updateUserInfo('isCertificated', message.isCertificated);
         if(Platform.OS == 'android'){
           NotificationModule.showNotification("系统提示","爱资融","您已被系统管理员取消认证");
         }
@@ -201,12 +207,12 @@ let _dealMsg = function (message, socket) {
         ImStore.updateContactInfo(message);
       }
       break;
+    //已测
     case MSG_TYPE.CONTANCT_INFO_FREEZE:
       if (message.userId == AppStore.getUserId()) {
         if(Platform.OS == 'android'){
           NotificationModule.showNotification("系统提示","爱资融","您的帐户已被冻结,请联系系统管理员");
         }
-        //AppStore.forceLogout();
         AppStore.freezAccount();
       }
       break;
@@ -218,6 +224,7 @@ let _dealMsg = function (message, socket) {
     case MSG_TYPE.FRIEND_PROMISE:
       console.log(message.uid + '同意加你为好友');
       break;
+    //已测
     case MSG_TYPE.ORG_INFO_UPDATE:
       AppStore.updateOrgInfo(message);
       break;

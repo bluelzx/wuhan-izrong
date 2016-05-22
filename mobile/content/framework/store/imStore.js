@@ -51,8 +51,8 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
     Persister.createPlatFormInfo(infoId, title, content, createDate, userId);
    //TODO:emit plat event
   },
-  deleteContactInfo:(userIdList)=>{
-    Persister.deleteContactInfo(userIdList);
+  deleteContactInfo:(userId)=>{
+    Persister.deleteContactInfo(userId);
     AppStore.emitChange(IM_CONTACT);
   },
   updateContactInfo:(message) =>{

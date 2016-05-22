@@ -23,7 +23,7 @@ let {Platform} = React;
 let PersisterFacade = {
   //interface for AppStore
   saveAppData: (data) => _saveAppData(data),
-  saveSimpleLoginData: (data,userId) => _saveSimpleLoginData(data,userId),
+  saveSimpleLoginData: (data, userId) => _saveSimpleLoginData(data, userId),
   saveAPNSToken: (apnsToken) => _saveAPNSToken(apnsToken),
   getAPNSToken: () => _getAPNSToken(),
   getToken: ()=> _getToken(),
@@ -43,7 +43,7 @@ let PersisterFacade = {
   isInGroupById: (id) => _isInGroupById(id)
 };
 
-let _isInGroupById = function(id) {
+let _isInGroupById = function (id) {
   let ret = _realm.objects(GROUP).filtered('groupId = \'' + id + '\'');
   return ret.length > 0;
 };
@@ -67,6 +67,8 @@ let _saveAppData = function (data) {
   let imUserBeanList = data.imUserBeanList;
   return new Promise((resolve)=> {
     _realm.write(() => {
+      _deleteImUsers();
+      _deleteGroup();
       _saveLoginUserInfo(loginUserInfo, token);
       _saveImUsers(imUserBeanList);
       _saveOrgBeanList(orgBeanList);
@@ -77,7 +79,7 @@ let _saveAppData = function (data) {
   })
 };
 
-let _saveSimpleLoginData = function (data,userId) {
+let _saveSimpleLoginData = function (data, userId) {
   return new Promise((resolve)=> {
     _realm.write(()=> {
         _realm.create(LOGINUSERINFO, {
@@ -87,9 +89,19 @@ let _saveSimpleLoginData = function (data,userId) {
       }
     );
     resolve();
-  }).catch((errorData)=>{
+  }).catch((errorData)=> {
     throw errorData;
   });
+};
+
+let _deleteImUsers = function () {
+  let imUsers = _realm.objects(IMUSERINFO);
+  _realm.delete(imUsers);
+};
+
+let _deleteGroup = function () {
+  let groups = _realm.objects(GROUP);
+  _realm.delete(groups);
 };
 
 let _saveLoginUserInfo = function (loginUserInfo, token) {
@@ -118,8 +130,8 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
     publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat === null),
     publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
     lastSyncTime: null,
-    friendList:loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList),
-    certified:loginUserInfo.certified||false
+    friendList: loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList),
+    certified: loginUserInfo.certified || false
   }, true);
 };
 
@@ -151,33 +163,33 @@ let _saveImUsers = function (imUserBeanList) {
       certificated: false
     }, true);
   }
-    for (var i = 0; i < imUserBeanList.length; i++) {
-      _realm.create(IMUSERINFO, {
-        userId: imUserBeanList[i].userId,
-        address: imUserBeanList[i].address,
-        realName: imUserBeanList[i].realName,
-        nameCardFileUrl: imUserBeanList[i].nameCardFileUrl,
-        department: imUserBeanList[i].department,
-        jobTitle: imUserBeanList[i].jobTitle,
-        qqNo: imUserBeanList[i].qqNo,
-        email: imUserBeanList[i].email,
-        weChatNo: imUserBeanList[i].weChatNo,
-        mute: imUserBeanList[i].mute,
-        mobileNumber: imUserBeanList[i].mobileNumber,
-        photoFileUrl: imUserBeanList[i].photoFileUrl,
-        orgId: imUserBeanList[i].orgId,
-        phoneNumber: imUserBeanList[i].phoneNumber,
-        publicTitle: !!(imUserBeanList[i].publicTitle == true || imUserBeanList[i].publicTitle === null),
-        publicMobile: !!(imUserBeanList[i].publicMobile == true || imUserBeanList[i].publicMobile === null),
-        publicDepart: !!(imUserBeanList[i].publicDepart == true || imUserBeanList[i].publicDepart === null),
-        publicPhone: !!(imUserBeanList[i].publicPhone == true || imUserBeanList[i].publicPhone === null),
-        publicEmail: !!(imUserBeanList[i].publicEmail == true || imUserBeanList[i].publicEmail === null),
-        publicAddress: !!(imUserBeanList[i].publicAddress == true || imUserBeanList[i].publicAddress === null),
-        publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
-        publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
-        certified:imUserBeanList.certified||false
-      }, true);
-    }
+  for (var i = 0; i < imUserBeanList.length; i++) {
+    _realm.create(IMUSERINFO, {
+      userId: imUserBeanList[i].userId,
+      address: imUserBeanList[i].address,
+      realName: imUserBeanList[i].realName,
+      nameCardFileUrl: imUserBeanList[i].nameCardFileUrl,
+      department: imUserBeanList[i].department,
+      jobTitle: imUserBeanList[i].jobTitle,
+      qqNo: imUserBeanList[i].qqNo,
+      email: imUserBeanList[i].email,
+      weChatNo: imUserBeanList[i].weChatNo,
+      mute: imUserBeanList[i].mute,
+      mobileNumber: imUserBeanList[i].mobileNumber,
+      photoFileUrl: imUserBeanList[i].photoFileUrl,
+      orgId: imUserBeanList[i].orgId,
+      phoneNumber: imUserBeanList[i].phoneNumber,
+      publicTitle: !!(imUserBeanList[i].publicTitle == true || imUserBeanList[i].publicTitle === null),
+      publicMobile: !!(imUserBeanList[i].publicMobile == true || imUserBeanList[i].publicMobile === null),
+      publicDepart: !!(imUserBeanList[i].publicDepart == true || imUserBeanList[i].publicDepart === null),
+      publicPhone: !!(imUserBeanList[i].publicPhone == true || imUserBeanList[i].publicPhone === null),
+      publicEmail: !!(imUserBeanList[i].publicEmail == true || imUserBeanList[i].publicEmail === null),
+      publicAddress: !!(imUserBeanList[i].publicAddress == true || imUserBeanList[i].publicAddress === null),
+      publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
+      publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
+      certified: imUserBeanList.certified || false
+    }, true);
+  }
 };
 
 let _saveOrgBeanList = function (orgBeanList) {
@@ -399,4 +411,4 @@ let _getOrgByOrgName = function (orgName) {
 };
 module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
   require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'),
-  require('./homePagePersisterFacade'), require('./noticePersisterFacade'), require('./orgPersisterFacade'),require('./newFriendNoticPersisterFacade'));
+  require('./homePagePersisterFacade'), require('./noticePersisterFacade'), require('./orgPersisterFacade'), require('./newFriendNoticPersisterFacade'));
