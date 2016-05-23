@@ -109,7 +109,7 @@ let Register_valiMobile = React.createClass({
 
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} title='短信验证'>
+      <NavBarView navigator={this.props.navigator} title='注册'>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <Input placeholder='手机号' maxLength={11} field='mobileNo'
                  onChangeText={this._onChangeText} icon='phone' inputType='number-pad'
@@ -141,23 +141,25 @@ let Register_valiMobile = React.createClass({
           <Button
             containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
+            disabledBackgroundColor = '#b3c7f5'
+            enabledBackgroundColor = '#4b76df'
             disabled={this.state.disabled}
             onPress={()=>this.validateSmsCode()}
           >
             下一步
           </Button>
         </View>
-        <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
-          <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
-            <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服:</Text>
-            <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
-              <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
       </NavBarView>
     );
   }
+//<View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
+//  <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
+//    <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服:</Text>
+//    <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
+//      <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
+//    </TouchableOpacity>
+//  </View>
+//</View>
 });
 let styles = StyleSheet.create({
   radio: {

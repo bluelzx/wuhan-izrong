@@ -163,6 +163,8 @@ let Register_accountInfo = React.createClass({
           <Button
             containerStyle={{marginTop: 40}}
             style={{fontSize: 20, color: '#ffffff'}}
+            disabledBackgroundColor = '#b3c7f5'
+            enabledBackgroundColor = '#4b76df'
             disabled={this.state.disabled}
             onPress={()=>this.next(Register_uploadNameCard,
                  {
@@ -175,21 +177,21 @@ let Register_accountInfo = React.createClass({
             下一步
           </Button>
         </View>
-        <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
-          <View style={{flexDirection: 'row', justifyContent: 'center',marginBottom:10}}>
-            <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>如未找到您所在的机构</Text>
-          </View>
-          <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30}}>
-            <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
-            <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
-              <Text
-                style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
       </NavBarView>
     );
   }
+//<View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
+//  <View style={{flexDirection: 'row', justifyContent: 'center',marginBottom:10}}>
+//    <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>如未找到您所在的机构</Text>
+//  </View>
+//  <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30}}>
+//    <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
+//    <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
+//      <Text
+//        style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
+//    </TouchableOpacity>
+//  </View>
+//</View>
 });
 let styles = StyleSheet.create({
   paddingLR: {
