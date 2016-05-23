@@ -170,6 +170,15 @@ let _getOrgValueByOrgId = function(orgId){
   return PersisterFacade.getOrgValueByOrgId(orgId);
 }
 
+
+let _saveIMUserInfo = function (item) {
+  PersisterFacade.saveIMUserInfo(item);
+}
+
+let _saveMembersDetails = function (membersDetails) {
+  PersisterFacade.saveImUsers(membersDetails)
+}
+
 let ContactStore = {
   getGroupInfoBySessionId:_getGroupInfoBySessionId,  //根据会话Id获得群组信息
   getUserInfoBySessionId:_getUserInfoBySessionId,       //根据会话Id获得用户信息
@@ -196,7 +205,9 @@ let ContactStore = {
   syncReq:_syncReq, //同步全部信息
   getAllUsers:_getAllUsers,                             //获得所有用户 按照org分组    ok 包括非好友部分
   isStranger:_isStranger,
-  getOrgValueByOrgId:_getOrgValueByOrgId
+  getOrgValueByOrgId:_getOrgValueByOrgId,
+  saveIMUserInfo: _saveIMUserInfo,
+  saveMembersDetails: _saveMembersDetails
 };
 
 

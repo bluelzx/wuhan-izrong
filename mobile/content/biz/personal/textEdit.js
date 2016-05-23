@@ -261,6 +261,8 @@ let TextEdit = React.createClass({
                          keyboardType={this.props.param.type}
                          underlineColorAndroid="transparent"
                          maxLength={this.props.param.maxLength}
+                         placeholder={this.props.param.desc}
+
                          onChangeText={(text) => {
                          this.setState({newValue:text});
                          this.textChange(text);
@@ -285,6 +287,7 @@ let TextEdit = React.createClass({
                          keyboardType={this.props.param.type}
                          underlineColorAndroid="transparent"
                          maxLength={this.props.param.maxLexngth}
+                         placeholder={this.props.param.desc}
                          onChangeText={(text) => {
                          this.setState({newValue:text});
                          this.textChange(text);

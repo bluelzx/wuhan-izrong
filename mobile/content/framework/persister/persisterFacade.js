@@ -40,7 +40,8 @@ let PersisterFacade = {
   getOrgByOrgName: (orgName)=> _getOrgByOrgName(orgName),
   deleteDevice: ()=> _deleteDevice(),
   updateLastSyncTime: (t)=>_updateLastSyncTime(t),
-  isInGroupById: (id) => _isInGroupById(id)
+  isInGroupById: (id) => _isInGroupById(id),
+  saveImUsers: (membersDetail) => _saveImUsersOpen(membersDetail)
 };
 
 let _isInGroupById = function (id) {
@@ -135,23 +136,29 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
   }, true);
 };
 
+let _saveImUsersOpen = function(imUserBeanList){
+  _realm.write(()=>{
+    _saveImUsers(imUserBeanList);
+  });
+}
+
 let _saveImUsers = function (imUserBeanList) {
   for (var i = 0; i < imUserBeanList.length; i++) {
-    _realm.create(IMUSERINFO, {
+    let param = {
       userId: imUserBeanList[i].userId,
-      address: imUserBeanList[i].address,
-      realName: imUserBeanList[i].realName,
-      nameCardFileUrl: imUserBeanList[i].nameCardFileUrl,
-      department: imUserBeanList[i].department,
-      jobTitle: imUserBeanList[i].jobTitle,
-      qqNo: imUserBeanList[i].qqNo,
-      email: imUserBeanList[i].email,
-      weChatNo: imUserBeanList[i].weChatNo,
-      mute: imUserBeanList[i].mute,
-      mobileNumber: imUserBeanList[i].mobileNumber,
-      photoFileUrl: imUserBeanList[i].photoFileUrl,
-      orgId: imUserBeanList[i].orgId,
-      phoneNumber: imUserBeanList[i].phoneNumber,
+      address: !_.isEmpty(imUserBeanList[i].address) ? imUserBeanList[i].address : '',
+      realName: imUserBeanList[i].realName ? imUserBeanList[i].realName : '',
+      nameCardFileUrl: !_.isEmpty(imUserBeanList[i].nameCardFileUrl) ? imUserBeanList[i].nameCardFileUrl : '',
+      department: !_.isEmpty(imUserBeanList[i].department) ? imUserBeanList[i].department : '',
+      jobTitle: !_.isEmpty(imUserBeanList[i].jobTitle) ? imUserBeanList[i].jobTitle : '',
+      qqNo: imUserBeanList[i].qqNo ? imUserBeanList[i].qqNo : '',
+      email: imUserBeanList[i].email ? imUserBeanList[i].email : '',
+      weChatNo: !_.isEmpty(imUserBeanList[i].weChatNo) ? imUserBeanList[i].weChatNo : '',
+      mute: !_.isEmpty(imUserBeanList[i].mute) ? imUserBeanList[i].mute : false,
+      mobileNumber: imUserBeanList[i].mobileNumber ? imUserBeanList[i].mobileNumber : '',
+      photoFileUrl: !_.isEmpty(imUserBeanList[i].photoFileUrl) ? imUserBeanList[i].photoFileUrl : '',
+      orgId: imUserBeanList[i].orgId ? imUserBeanList[i].orgId : '',
+      phoneNumber: !_.isEmpty(imUserBeanList[i].phoneNumber) ? imUserBeanList[i].phoneNumber : '',
       publicTitle: !!(imUserBeanList[i].publicTitle == true || imUserBeanList[i].publicTitle === null),
       publicMobile: !!(imUserBeanList[i].publicMobile == true || imUserBeanList[i].publicMobile === null),
       publicDepart: !!(imUserBeanList[i].publicDepart == true || imUserBeanList[i].publicDepart === null),
@@ -161,7 +168,8 @@ let _saveImUsers = function (imUserBeanList) {
       publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
       publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
       certificated: imUserBeanList[i].isCertificated || false
-    }, true);
+    }
+    _realm.create(IMUSERINFO, param, true);
   }
 };
 

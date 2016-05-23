@@ -11,7 +11,9 @@ const {
 let PersisterFacade = require('./persisterFacade');
 
 let UserPersisterFacade = {
-  updateUserInfo: (column, value) => _updateUserInfo(column, value)
+  updateUserInfo: (column, value) => _updateUserInfo(column, value),
+  updateUserInfoByPush: (data) => _updateUserInfoByPush(data)
+
 };
 
 let _updateUserInfo = function (column, value) {
@@ -167,6 +169,48 @@ let _updateUserInfo = function (column, value) {
       });
       break;
   }
+};
+
+let _updateUserInfoByPush = function(message){
+  let param = {
+    userId:  message.userId,
+    address: message.address,
+    realName: message.realName,
+    weChatNo: message.weChatNo,
+    email: message.email,
+    nameCardFileUrl: message.nameCardFileUrl,
+    qqNo: message.qqNo,
+    department: message.department,
+    mobileNumber: message.mobileNo,
+    jobTitle: message.jobTitle,
+    phoneNumber:  message.phoneNumber,
+    photoFileUrl: message.photoStoredFileUrl,
+    orgId: message.orgId,
+    publicTitle:  message.isPublicTitle,
+    publicMobile:  message.isPublicMobile,
+    publicDepart: message.isPublicDepart,
+    publicPhone: message.isPublicPhone,
+    publicEmail: message.isPublicEmail,
+    publicAddress: message.isPublicAddress,
+    publicWeChat: message.isPublicWeChat,
+    publicQQ: message.isPublicQq,
+    certified: message.isCertificated
+  };
+  let ret = {};
+  for (let k in param) {
+    if (param[k] != undefined) {
+      ret[k] = param[k];
+    }
+  }
+  _realm.write(()=> {
+    try {
+      //更新
+      _realm.create(LOGINUSERINFO, ret, true);
+    } catch (err) {
+      //创建
+      _realm.create(LOGINUSERINFO, param, true);
+    }
+  });
 };
 
 module.exports = UserPersisterFacade;

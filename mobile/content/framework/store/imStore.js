@@ -1,7 +1,7 @@
 let _ = require('lodash');
 let EventEmitter = require('events').EventEmitter;
 
-let { SESSION_TYPE, NOTICE_TYPE } = require('../../constants/dictIm');
+let { SESSION_TYPE, NOTICE_TYPE, DELETE_TYPE } = require('../../constants/dictIm');
 let DictEvent = require('../../constants/dictEvent');
 let { IM_CONTACT,HOMEPAGE_CHANGE ,IM_SESSION_LIST} = require('../../constants/dictEvent');
 let Persister = require('../persister/persisterFacade');
@@ -149,12 +149,12 @@ let _saveMsg = (message, userId) => {
     } else if (message.noticeType == NOTICE_TYPE.INVITED){
       title = message.groupName;
       content = message.realName + '-' + message.orgValue + '加入了群聊';
-    } else if (message.noticeType == NOTICE_TYPE.DELETE_GROUP) {
+    } else if (message.noticeType == DELETE_TYPE.DELETE_GROUP) {
       title = message.groupName;
       content = '群主' + message.realName + '解散了' + message.groupName + '群聊';
-    }else if (message.noticeType == NOTICE_TYPE.KICK_OUT_GROUP) {
+    }else if (message.noticeType == DELETE_TYPE.KICK_OUT) {
       title = message.groupName;
-      content = '群主' + message.realName + '将你请出了' + message.groupName + '群聊';
+      content = '群主将你请出了' + message.groupName + '群聊';
     } else if (message.noticeType == NOTICE_TYPE.UPDATE_GROUP_NAME) {
       title = message.groupName;
       content = '群主已将群名称修改为' +  + message.groupName;

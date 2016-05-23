@@ -184,6 +184,7 @@ let _acceptInvitation = function (groupId) {
     BFetch(AppLinks.acceptInvitation, param).then((response)=> {
       //TODO:将membersDetails遍历加入到IMUserInfo表中
       _updateGroupInfo(response.gid,response.groupName, response.groupOwnerId, response.members, false, response.groupImageUrl);
+      contactStore.saveMembersDetails(response.membersDetails);
       resolve(response);
     }).catch((err)=>{
       reject(err);

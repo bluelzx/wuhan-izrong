@@ -67,6 +67,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   updateOrgInfo: (orgInfo)=> _updateOrgInfo(orgInfo),
   getOrgList: ()=> _getOrgList(),
   updateUserInfo: (column, value)=> _updateUserInfo(column, value),
+  updateUserInfoByPush: (data)=>_updateUserInfoByPush(data),
   saveCategory: (data) => _saveCategory(data),
   getCategory: ()=> _getCategory(),
   queryAllHomePageInfo: ()=>_queryAllHomePageInfo(),
@@ -247,6 +248,10 @@ let _getOrgByOrgName = (orgName)=> {
 let _updateUserInfo = (column, value)=> {
   Persister.updateUserInfo(column, value);
   AppStore.emitChange(USER_CHANGE);
+};
+
+let _updateUserInfoByPush = (data)=>{
+  Persister.updateUserInfoByPush(data);
 };
 
 let _updateLastSyncTime = function (t) {

@@ -33,11 +33,43 @@ let ContactPersisterFacade = {
   setGroupMute: (groupId, value) => _setGroupMute(groupId, value),
   leaveGroup: (groupId, userId) => _leaveGroup(groupId, userId),
   deleteContactInfo: (userId) => _deleteContactInfo(userId),
-  updateContactInfo: (message) =>
-    _updateContactInfo(message),
+  updateContactInfo: (message) => _updateContactInfo(message),
   addFriend: (userInfo) => _addFriend(userInfo),
   isStranger: (userId) => _isStranger(userId),
-  getOrgValueByOrgId: (orgId) => _getOrgValueByOrgId(orgId)
+  getOrgValueByOrgId: (orgId) => _getOrgValueByOrgId(orgId),
+  saveIMUserInfo: (item) => _saveIMUserInfo(item)
+}
+
+
+let _saveIMUserInfo = function(item) {
+  _realm.write(()=>{
+    let param = {
+      userId: item.userId,
+      address: !_.isEmpty(item.address) ? item.address : '',
+      realName: item.realName ? item.realName : '',
+      nameCardFileUrl: !_.isEmpty(item.nameCardFileUrl) ? item.nameCardFileUrl : '',
+      department: !_.isEmpty(item.department) ? item.department : '',
+      jobTitle: !_.isEmpty(item.jobTitle) ? item.jobTitle : '',
+      qqNo: !_.isEmpty(item.qqNo) ? item.qqNo : '',
+      email: !_.isEmpty(item.email) ? item.email : '',
+      weChatNo: !_.isEmpty(item.weChatNo) ? item.weChatNo : '',
+      mute: !_.isEmpty(item.mute) ? item.mute : false,
+      mobileNumber: !_.isEmpty(item.mobileNumber) ? item.mobileNumber : '',
+      photoFileUrl: !_.isEmpty(item.photoFileUrl) ? item.photoFileUrl : '',
+      orgId: item.orgId,
+      phoneNumber: !_.isEmpty(item.phoneNumber) ? item.phoneNumber : null,
+      publicTitle: !!(item.publicTitle == true || item.publicTitle === null),
+      publicMobile: !!(item.publicMobile == true || item.publicMobile === null),
+      publicDepart: !!(item.publicDepart == true || item.publicDepart === null),
+      publicPhone: !!(item.publicPhone == true || item.publicPhone === null),
+      publicEmail: !!(item.publicEmail == true || item.publicEmail === null),
+      publicAddress: !!(item.publicAddress == true || item.publicAddress === null),
+      publicWeChat: !!(item.publicWeChat == true || item.publicWeChat === null),
+      publicQQ: !!(item.publicQQ == true || item.publicQQ === null),
+      certificated: item.isCertificated || false
+    }
+    _realm.create(IMUSERINFO, param, true);
+  })
 }
 
 //***** helper
@@ -283,7 +315,6 @@ let _getUsersExpress = function (groupId) {
 
 
 let _updateContactInfo = function (message) {
-
   let param = {
     userId: message.userId,
     address: message.address,
@@ -307,7 +338,7 @@ let _updateContactInfo = function (message) {
     publicQQ: message.isPublicQq,
     orgId: message.orgId,
     certificated: message.isCertificated,
-    mute: false
+    mute: message.isMute?message.isMute:false
   };
   let ret = {};
   for (let k in param) {

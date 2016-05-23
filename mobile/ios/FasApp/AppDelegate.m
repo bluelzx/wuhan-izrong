@@ -14,7 +14,7 @@
 #import "RCTPushNotificationManager.h"
 #import "ReactNativeAutoUpdater.h"
 
-#define JS_CODE_METADATA_URL @"http://192.168.64.205:9101/fas/pub/rnupdate/meta?type=IOS_PATCH"
+#define JS_CODE_METADATA_URL @"http://114.55.16.46:80/fas/pub/rnupdate/meta?type=IOS_PATCH"
 
 @interface AppDelegate() <ReactNativeAutoUpdaterDelegate>
 
@@ -112,6 +112,14 @@ typedef enum{
 
 - (void)ReactNativeAutoUpdater_updateDownloadFailed {
   NSLog(@"Update failed to download");
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+        NSLog(@"调用的应用程序的Bundle ID是: %@", sourceApplication);
+        NSLog(@"URL scheme:%@", [url scheme]);
+        NSLog(@"URL query: %@", [url query]);
+        return YES;
 }
 
 // Required to register for notifications

@@ -124,7 +124,7 @@ let Register_uploadNameCard = React.createClass({
         <Image
           style={{flexDirection: 'column',borderWidth: 1,borderColor: '#d4d6e0',borderRadius: 6, width: Device.width-40,
           height: (Device.width-40)*3/5, justifyContent: 'space-around', marginTop: 20}}
-          resizeMode='stretch'
+          resizeMode='cover'
           source={{uri: this.state.uri, isStatic: true}}
         />
       </ImagePicker>
@@ -144,23 +144,25 @@ let Register_uploadNameCard = React.createClass({
           <Button
             containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
+            disabledBackgroundColor = '#b3c7f5'
+            enabledBackgroundColor = '#4b76df'
             disabled={this.state.disabled}
             onPress={()=>this.register()}
           >
             完成
           </Button>
         </View>
-        <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column', marginTop: 30}}>
-          <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30}}>
-            <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
-            <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
-              <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
       </NavBarView>
     );
   }
+//<View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column', marginTop: 30}}>
+//  <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30}}>
+//    <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
+//    <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
+//      <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
+//    </TouchableOpacity>
+//  </View>
+//</View>
 });
 let styles = StyleSheet.create({
   paddingLR: {

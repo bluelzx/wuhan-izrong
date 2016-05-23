@@ -113,6 +113,8 @@ let Login = React.createClass({
           <Button
             containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
+            disabledBackgroundColor = '#b3c7f5'
+            enabledBackgroundColor = '#4b76df'
             disabled={this.state.disabled}
             onPress={()=>this.sendSmsCodeToLoginMobile()}
           >
@@ -120,24 +122,26 @@ let Login = React.createClass({
           </Button>
 
           <Button
-            containerStyle={{marginTop: 20, backgroundColor: '#4fb9fc'}}
+            containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
+            enabledBackgroundColor = '#27b8f3'
             onPress={()=>this.toOther(Register_valiMobile)}
           >
             新用户注册
           </Button>
-        </View>
-        <View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
-          <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
-            <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
-            <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
-              <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
-            </TouchableOpacity>
-          </View>
+          <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>{this.state.versionName}</Text>
         </View>
       </NavBarView>
     );
   }
+  //<View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
+  //  <View style={{flexDirection: 'row', justifyContent: 'center',flex:1,alignItems:'center'}}>
+  //    <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
+  //    <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
+  //      <Text style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
+  //    </TouchableOpacity>
+  //  </View>
+  //</View>
 });
 let styles = StyleSheet.create({
   radio: {
