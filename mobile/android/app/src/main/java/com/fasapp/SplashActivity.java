@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +25,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     private ImageView mImageView;
     private TextView tvUpdate;
     private ReactNativeAutoUpdater updater;
+    private ConnectivityManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +51,32 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     public void onAnimationStart(Animation animation) {
     }
 
+    private boolean checkNetworkState() {
+        boolean flag = false;
+        //得到网络连接信息
+        manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        //去进行判断网络是否连接
+        if (manager.getActiveNetworkInfo() != null) {
+            flag = manager.getActiveNetworkInfo().isAvailable();
+        }
+        return flag;
+    }
+
     @Override
     public void onAnimationEnd(Animation animation) {
-        updater = ReactNativeAutoUpdater.getInstance(this);
-        updater.setUpdateMetadataUrl(this.getUpdateMetadataUrl())
-                .setMetadataAssetName(this.getMetadataAssetName())
-                .setUpdateFrequency(this.getUpdateFrequency())
-                .setUpdateTypesToDownload(this.getAllowedUpdateType())
-                .setHostnameForRelativeDownloadURLs(this.getHostnameForRelativeDownloadURLs())
-                .showProgress(this.getShowProgress())
-                .setParentActivity(this)
-                .checkForUpdates();
+        if (checkNetworkState()) {
+            updater = ReactNativeAutoUpdater.getInstance(this);
+            updater.setUpdateMetadataUrl(this.getUpdateMetadataUrl())
+                    .setMetadataAssetName(this.getMetadataAssetName())
+                    .setUpdateFrequency(this.getUpdateFrequency())
+                    .setUpdateTypesToDownload(this.getAllowedUpdateType())
+                    .setHostnameForRelativeDownloadURLs(this.getHostnameForRelativeDownloadURLs())
+                    .showProgress(this.getShowProgress())
+                    .setParentActivity(this)
+                    .checkForUpdates();
+        } else {
+            finishAct();
+        }
     }
 
     public void setTvUpdateVisible () {
