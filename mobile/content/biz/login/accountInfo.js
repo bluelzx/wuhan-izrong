@@ -132,12 +132,12 @@ let Register_accountInfo = React.createClass({
           <Input placeholder='真实姓名' maxLength={20} field='realName'
                  onChangeText={this._onChangeText} icon='realName' inputType='default'
           />
-          <Input placeholder='用户名(邮箱)' maxLength={60} field='userName'
+          <Input placeholder='邮箱' maxLength={60} field='userName'
                  onChangeText={this._onChangeText} icon='email' inputType='email-address'
           />
           <TouchableHighlight activeOpacity={0.8} underlayColor='#4fb9fc'
                               onPress={()=>this.toPage(Register_selectOrg,{needAll:false},this.callback)}
-                              style={{marginTop: 20, borderRadius: 6}}
+                              style={{marginTop: 12, borderRadius: 6}}
           >
             <View style={styles.selectOrg}>
               <View style={{flex: 1, alignItems: 'center'}}>
@@ -161,7 +161,7 @@ let Register_accountInfo = React.createClass({
           </TouchableHighlight>
 
           <Button
-            containerStyle={{marginTop: 20}}
+            containerStyle={{marginTop: 40}}
             style={{fontSize: 20, color: '#ffffff'}}
             disabled={this.state.disabled}
             onPress={()=>this.next(Register_uploadNameCard,
@@ -199,7 +199,7 @@ let styles = StyleSheet.create({
   selectOrg: {
     flex: 1,
     height: 47,
-    backgroundColor: '#148bf9',
+    backgroundColor: '#1151B1',
     borderRadius: 6,
     flexDirection: 'row',
     alignItems: 'center',
