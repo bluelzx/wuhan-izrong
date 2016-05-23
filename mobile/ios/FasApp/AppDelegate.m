@@ -14,7 +14,7 @@
 #import "RCTPushNotificationManager.h"
 #import "ReactNativeAutoUpdater.h"
 
-#define JS_CODE_METADATA_URL @"http://192.168.64.205:9101/fas/pub/rnupdate/meta?type=IOS_PATCH"
+#define JS_CODE_METADATA_URL @"http://114.55.16.46:80/fas/pub/rnupdate/meta?type=IOS_PATCH"
 
 @interface AppDelegate() <ReactNativeAutoUpdaterDelegate>
 

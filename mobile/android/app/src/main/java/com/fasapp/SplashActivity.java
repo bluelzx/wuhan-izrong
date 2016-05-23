@@ -71,7 +71,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     }
 
     protected String getUpdateMetadataUrl(){
-        return "http://192.168.64.205:9101/fas/pub/rnupdate/meta?type=ANDROID_PATCH";
+        return "http://114.55.16.46:80/fas/pub/rnupdate/meta?type=ANDROID_PATCH";
     }
 
     protected String getMetadataAssetName(){
