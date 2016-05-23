@@ -6,6 +6,7 @@ var {
   Image,
   ActionSheetIOS,
   TouchableHighlight,
+  Platform,
   ScrollView,
   Text,
   View,
@@ -22,10 +23,18 @@ var AboutUs = React.createClass({
   getInitialState(){
     return {
       email: 'zr@izirong.com',
-      versionNo: AppInfoModule.getAppVersion(()=>{}),
+      versionName: '',
       content: '     爱资融APP是武汉安硕织信为广大银行同业交易从业人员推出的银行同业业务撮合及社交类软件。爱资融秉承“透明公开，服务为先” ' +
       '的原则，立志为广大的银行同业交易员提供一个纯净高效的同业交流环境。'
     };
+  },
+
+  componentDidMount() {
+    AppInfoModule.getAppVersion((version)=> {
+      this.setState({
+        versionName: 'V '+ version
+      })
+    });
   },
 
   render(){
@@ -46,7 +55,7 @@ var AboutUs = React.createClass({
           </View>
           <View>
             <Item desc="网站邮箱:" img={false} icon={false} hiddenArrow={true} value={this.state.email}/>
-            <Item desc="版本号:" img={false} icon={false} hiddenArrow={true} value={this.state.versionNo}/>
+            <Item desc="版本号:" img={false} icon={false} hiddenArrow={true} value={this.state.versionName}/>
           </View>
 
           <View style={{marginTop:60,flexDirection: 'column'}}>

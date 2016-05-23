@@ -26,6 +26,7 @@ let NameCircular = require('../im/nameCircular').NameCircular;
 let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
 let PlainStyle = require('../../constants/dictStyle');
 let DictStyle = require('../../constants/dictStyle');
+let AppInfoModule = require('NativeModules').AppInfoModule;
 
 let Personal = React.createClass({
   getStateFromStores: function () {
@@ -35,7 +36,7 @@ let Personal = React.createClass({
       realName: userInfo.realName,
       orgName: orgBean.orgValue,
       photoFileUrl: userInfo.photoFileUrl,
-      certificated: userInfo.certified
+      certificated: userInfo.certified,
     };
   },
 

@@ -27,7 +27,6 @@ let Login = React.createClass({
     return {
       mobileNo: '',
       disabled: true
-
     };
   },
   getInitialState: function () {
