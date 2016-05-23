@@ -5,12 +5,12 @@
 
 let _getUserIdFromSessionId = (sessionId) => {
   let arr = sessionId.split(':');
-  return arr[2];
+  return parseInt(arr[2]);
 };
 
 let _getIdFromSessionId = (sessionId) => {
   let arr = sessionId.split(':');
-  return arr[1];
+  return parseInt(arr[1]);
 }
 
 let SessionSplit = {
