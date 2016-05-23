@@ -1,6 +1,6 @@
 var outLine = {
   Dev: true, // Switch for log. true means print.
-  Host: 'http://114.55.16.46:801/fas',   //dev
+  Host: 'http://114.55.16.46:80/fas',   //dev
   ImHost:'114.55.16.46:3000'//dev
 };
 

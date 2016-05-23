@@ -142,13 +142,16 @@ let WhitePage = React.createClass({
         }
                           onPress={()=>{SessionStore.setBadgeZero(item.sessionId); this.props.navigator.push({comp: Spread})}}>
         <View
-          style={{borderBottomColor: DictStyle.colorSet.demarcationColor,
+          style={{
+          flex:1,
+          alignItems:'center',
+          borderBottomColor: PlainStyle.colorSet.demarcationColor,
           borderBottomWidth:0.5,
           flexDirection:'row',
           paddingVertical:7,
-          marginHorizontal: 10 }}
+          marginHorizontal: 10}}
         >
-          <HeadPic badge={item.badge} source={DictIcon.imSpread} />
+          <HeadPic badge={item.badge} showBadge={true} source={DictIcon.imSpread} />
           <View
             style={{ flex:1,paddingHorizontal:10}}>
             <View
