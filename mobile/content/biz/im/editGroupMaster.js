@@ -37,7 +37,9 @@ let EditGroupMaster = React.createClass({
     let groupInfo = null;
     try {
       groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
-      groupInfo.masterName = ContactStore.getUserInfoByUserId(groupInfo.groupMasterUid).realName;
+      let masterInfo = ContactStore.getUserInfoByUserId(groupInfo.groupMasterUid);
+      groupInfo.masterName = masterInfo.realName;
+      groupInfo.orgValue = ContactStore.getOrgValueByOrgId(masterInfo.orgId);
     } catch (err) {
       this.props.navigator.popToTop();
       return {}
@@ -145,7 +147,7 @@ let EditGroupMaster = React.createClass({
             <View
               style={{height:50,backgroundColor: DictStyle.groupManage.memberListBackgroundColor,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
               <Text style={{color:DictStyle.groupManage.memberNameColor}}>群主</Text>
-              <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.masterName}</Text>
+              <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
             </View>
 
             <View

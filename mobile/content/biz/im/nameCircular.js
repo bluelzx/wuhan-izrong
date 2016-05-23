@@ -60,7 +60,7 @@ let NameCircular = React.createClass({
             style={{backgroundColor: 'white', height: 44,width: 44,borderRadius: 22,justifyContent:'center',alignItems:'center'}}>
             <View
               style={{backgroundColor: this.getColor(f), height: 42,width: 42,borderRadius: 21,justifyContent:'center',alignItems:'center'}}>
-              <Text style={{color:'white',fontWeight:'900',fontSize:20}}>{f}</Text>
+              <Text style={{color:'white',fontWeight:'900',fontSize:28}}>{f}</Text>
             </View>
           </View>
         </View>

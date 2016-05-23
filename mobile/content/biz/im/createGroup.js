@@ -33,8 +33,9 @@ let CreateGroup = React.createClass({
   titleRender: function(data) {
     return (
       <Text
+        numberOfLines={1}
         style={
-          {fontSize:15,color: DictStyle.colorSet.imTitleTextColor}}>
+          {flex:1,fontSize:15,color: DictStyle.colorSet.imTitleTextColor}}>
         {data.orgValue}
       </Text>
     );

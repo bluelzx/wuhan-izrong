@@ -254,6 +254,7 @@ let WhitePage = React.createClass({
 
   renderUser: function (item, index, length) {
     let tagUser = ContactStore.getUserInfoByUserId(this.getIdFromSessionId(item.sessionId));
+    let orgName = ContactStore.getOrgValueByOrgId(tagUser.orgId);
     return (
       <TouchableOpacity key={item.sessionId}
                         style={[ItemStyle.back]}
@@ -278,7 +279,7 @@ let WhitePage = React.createClass({
              >
               <View
                 style={{flexDirection:'row', justifyContent:'space-between',flex:1}}>
-                <Text style={[{color:DictStyle.colorSet.imTitleTextColor},FontSize.realName]}>{item.title}</Text>
+                <Text style={[{color:DictStyle.colorSet.imTitleTextColor},FontSize.realName]}>{item.title + '-' + orgName}</Text>
                 <Text style={[{color:DictStyle.colorSet.imTimeTextColor},FontSize.rightTime]}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
               <Text numberOfLines={1}
@@ -321,6 +322,13 @@ let WhitePage = React.createClass({
     return (
       <TouchableOpacity style={[ItemStyle.back]}
                         key={item.sessionId}
+                        onLongPress={
+        ()=>
+          {
+            Alert('确定删除该条记录?', () => {this.deleteSession(item.sessionId)},()=>{})
+          }
+        }
+
                         onPress={()=>{SessionStore.setBadgeZero(item.sessionId); this.props.navigator.push({comp: NewFriendList,param:{noticId:item.sessionId}})}}>
         <View
           style={{

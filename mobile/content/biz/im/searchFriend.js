@@ -17,7 +17,9 @@ let SearchFriend = React.createClass({
   getInitialState:function(){
     return {
       dataSource: [],
-      keyWord:''
+      keyWord:'',
+      justTop:true,
+      totalUserAmount:0
     }
   },
 
@@ -28,6 +30,22 @@ let SearchFriend = React.createClass({
     });
   },
 
+  renderMore: function() {
+    if(this.state.totalUserAmount > this.state.dataSource.length){
+      return (
+        <TouchableOpacity key={'morebtn'}
+                          onPress={() => {this.state.justTop=false;this.searchFriend()}}
+                          style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
+          <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center',justifyContent:'center'}}>
+            <Text>{'显示更多'}</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }else{
+      return null;
+    }
+  },
+
   renderItem: function(data) {
     return (
     <TouchableOpacity key={data.userId}
@@ -35,7 +53,7 @@ let SearchFriend = React.createClass({
                       style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
       <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
         <HeaderPic photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-        <Text style={{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName + '-'+data.orgValue}</Text>
+        <Text style={{flex:1,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}} numberOfLines={1}>{data.realName + '-'+data.orgValue}</Text>
       </View>
     </TouchableOpacity>
     );
@@ -46,6 +64,9 @@ let SearchFriend = React.createClass({
     this.state.dataSource.forEach((item)=>{
       ret.push(this.renderItem(item));
     });
+    if(this.state.justTop){
+      ret.push(this.renderMore());
+    }
     return ret;
   },
 
@@ -55,28 +76,56 @@ let SearchFriend = React.createClass({
       return;
     }else{
       this.props.exec(()=>{
-        return  ContactAction.searchUser(this.state.keyWord).then((response)=>{
-          let userInfo = ContactStore.getUserInfo();
-          let nIndex = -1;
-          response.imSearchUsers && response.imSearchUsers.forEach((item,index)=>{
-            if(userInfo.userId == item.userId){
-              nIndex = index;
-            }else {
-              item.certificated = item.isCertificated;
-              item.orgValue = ContactStore.getOrgValueByOrgId(item.orgId);
+
+        if(this.state.justTop == true) {
+          return ContactAction.getTop3IMUserByKeyWord(this.state.keyWord).then((response)=> {
+            let userInfo = ContactStore.getUserInfo();
+            let nIndex = -1;
+            response.imSearchUsers && response.imSearchUsers.forEach((item, index)=> {
+              if (userInfo.userId == item.userId) {
+                nIndex = index;
+              } else {
+                item.certificated = item.isCertificated;
+                item.orgValue = ContactStore.getOrgValueByOrgId(item.orgId);
+              }
+            });
+            if (nIndex != -1) {
+              response.imSearchUsers.splice(nIndex, 1);
+
             }
+            return response;
+          }).then((response)=> {
+
+            this.setState({dataSource: response.imSearchUsers, totalUserAmount: response.totalUserAmount});
+          }).catch((err)=> {
+            throw err;
           });
-          if(nIndex != -1){
-            response.imSearchUsers.splice(nIndex, 1);
+        }else{
+          return ContactAction.searchUser(this.state.keyWord).then((response)=> {
+            let userInfo = ContactStore.getUserInfo();
+            let nIndex = -1;
+            response.imSearchUsers && response.imSearchUsers.forEach((item, index)=> {
+              if (userInfo.userId == item.userId) {
+                nIndex = index;
+              } else {
+                item.certificated = item.isCertificated;
+                item.orgValue = ContactStore.getOrgValueByOrgId(item.orgId);
+              }
+            });
+            if (nIndex != -1) {
+              response.imSearchUsers.splice(nIndex, 1);
 
-          }
-          return response;
-        }).then((response)=>{
+            }
+            return response;
+          }).then((response)=> {
 
-          this.setState({dataSource:response.imSearchUsers});
-        }).catch((err)=>{
-          throw err;
-        });
+            this.setState({dataSource: response.imSearchUsers, totalUserAmount: response.totalUserAmount});
+          }).catch((err)=> {
+            throw err;
+          });
+
+        }
+
       });
     }
 
@@ -84,7 +133,7 @@ let SearchFriend = React.createClass({
 
 
   textChange: function(keyWord){
-    this.setState({keyWord:keyWord});
+    this.setState({keyWord:keyWord,dataSource:[]});
   },
 
   render: function() {
@@ -101,7 +150,7 @@ let SearchFriend = React.createClass({
              onChangeText={(text) => this.textChange(text)}
              style={{paddingHorizontal:5,flex:8,borderRadius:6,color: DictStyle.searchFriend.textInputColor, height:(Platform.OS === 'ios')?30:60,backgroundColor:'#ffffff',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}>
            </TextInput>
-           <TouchableOpacity style={{flex:1,height:(Platform.OS === 'ios')?30:60,justifyContent:'center',alignItems:'center'}} onPress={()=>this.searchFriend()}><Text style={{color:'#3C62E4',fontSize:16}}>搜索</Text></TouchableOpacity>
+           <TouchableOpacity style={{flex:1,height:(Platform.OS === 'ios')?30:60,justifyContent:'center',alignItems:'center'}} onPress={()=>{this.state.justTop=true;this.searchFriend()}}><Text style={{color:'#3C62E4',fontSize:16}}>搜索</Text></TouchableOpacity>
          </View>
 
          {(()=>{
@@ -116,7 +165,7 @@ let SearchFriend = React.createClass({
            }else{
              return (
                <View style={{flex:1,justifyContent:'center',marginTop:10}}>
-                 <Text style={{textAlign:'center',color:DictStyle.searchFriend.nullUnitColor}}>输入姓名/机构名以搜索好友</Text>
+                 <Text style={{textAlign:'center',color:DictStyle.searchFriend.nullUnitColor}}>输入姓名以搜索好友</Text>
                </View>
              );
            }

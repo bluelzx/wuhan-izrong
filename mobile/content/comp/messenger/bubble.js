@@ -7,6 +7,7 @@ import numeral from 'numeral';
 let screenWidth = Dimensions.get('window').width;
 let Lightbox = require('../lightBox/Lightbox');
 let AppStore = require('../../framework/store/appStore');
+let { Spinner, Button, Alert, Device } = require('mx-artifacts');
 
 let styles = StyleSheet.create({
   bubble: {
@@ -40,9 +41,9 @@ export default class Bubble extends React.Component {
 
   renderText(text = "", position) {
 
-    if (this.props.renderCustomText) {
-      return this.props.renderCustomText(this.props);
-    }
+    //if (this.props.renderCustomText) {
+    //  return this.props.renderCustomText(this.props);
+    //}
     return (
       <Text style={[styles.text, (position === 'left' ? styles.textLeft : styles.textRight)]}>
         {text}
@@ -223,7 +224,6 @@ export default class Bubble extends React.Component {
       <View style={[styles.bubble, customStyle, flexStyle,
       this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
       this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
-        {this.props.name}
         {this.renderText(this.props.content, this.props.position)}
       </View>
     );

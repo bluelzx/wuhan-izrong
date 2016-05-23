@@ -15,7 +15,6 @@ let {
 let NavBarView = require('../../framework/system/navBarView');
 let CreateGroup = require('./createGroup');
 let SearchFriend = require('./searchFriend');
-let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let Chat = require('./chat');
 let Icon = require('react-native-vector-icons/Ionicons');
@@ -30,7 +29,7 @@ let {contactFilter} = require('./searchBarHelper');
 let { IM_CONTACT } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
 import  Angle  from '../../comp/messenger/angle';
-const { Device,Alert } = require('mx-artifacts');
+const {ExtenList, Device,Alert } = require('mx-artifacts');
 
 const PLATFORMNAME = '爱资融同业平台';
 let Contacts = React.createClass({
@@ -73,8 +72,9 @@ let Contacts = React.createClass({
       title = data.orgValue;
     return (
       <Text
+        numberOfLines={1}
         style={
-          {fontSize:15,color: DictStyle.colorSet.imTitleTextColor}}>
+          {flex:1,fontSize:15,color: DictStyle.colorSet.imTitleTextColor}}>
         {title}
       </Text>
     );
@@ -134,7 +134,6 @@ let Contacts = React.createClass({
   },
 
   addMore: function() {
-
    this.setState({showView:true});
   },
 

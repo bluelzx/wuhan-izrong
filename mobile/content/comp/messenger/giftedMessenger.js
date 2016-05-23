@@ -25,7 +25,7 @@ let Icon = require('react-native-vector-icons/Ionicons');
 let TimerMixin = require('react-timer-mixin');
 let Publish = require('../../biz/publish/publish');
 
-let { Spinner, Button, Alert } = require('mx-artifacts');
+let { Spinner, Button, Alert, Device } = require('mx-artifacts');
 
 let AutoExpandingTextInput = require('./autoExpandingTextInput');
 //let Message = require('./Message');
@@ -37,6 +37,7 @@ let ImagePicker = require('../utils/imagePicker');
 
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let DictStyle = require('../../constants/dictStyle');
+
 //let BizAction  = require('');
 
 let GiftedMessenger = React.createClass({

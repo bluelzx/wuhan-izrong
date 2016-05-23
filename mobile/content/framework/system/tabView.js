@@ -168,7 +168,7 @@ var TabView = React.createClass({
           </TabBarIOS.Item>
 
           <TabBarIOS.Item
-            title="IM"
+            title="聊天"
             badge={(this.state.badge || null) > 99 ? '99+':(this.state.badge || null)}
             icon={require('../../image/tab/IM.png')}
             selectedIcon={require('../../image/tab/IM-selected2.png')}
@@ -224,7 +224,7 @@ var TabView = React.createClass({
 
 
           <IM navigator={this.props.navigator}
-              tabDesc="IM"
+              tabDesc="聊天"
               badge={(this.state.badge || null) > 99 ? '99+':(this.state.badge || null)}
               icon={require('../../image/tab/IM.png')}
               selectedIcon={require('../../image/tab/IM-selected2.png')}
