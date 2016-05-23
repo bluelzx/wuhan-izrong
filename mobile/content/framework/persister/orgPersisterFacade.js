@@ -28,7 +28,8 @@ let _updateOrgInfo = function (orgInfo) {
       isNeedAudit: orgInfo.isNeedAudit?orgInfo.isNeedAudit:null,
       isDeleted: orgInfo.isDeleted?orgInfo.isDeleted:null,
       isApply: orgInfo.isApply?orgInfo.isApply:null,
-      remark: orgInfo.remark?orgInfo.remark:null
+      remark: orgInfo.remark?orgInfo.remark:null,
+      lastUpdateDate:orgInfo.lastUpdateDate?orgInfo.lastUpdateDate:null
     }, true);
   });
 };

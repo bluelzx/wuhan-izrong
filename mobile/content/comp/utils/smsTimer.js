@@ -21,7 +21,7 @@ let SMSTimer = React.createClass({
   getInitialState: function () {
     return {
       verify: '',
-      time: '点击获取',
+      time: '获取验证码',
       active: '',
       click: false,
       disabled: this.props.disabled,
@@ -49,7 +49,7 @@ let SMSTimer = React.createClass({
         deepColor: true,
         tim: this.setInterval(this.updateText, 1000)
       });
-    } else if (this.state.time == '点击获取') {
+    } else if (this.state.time == '获取验证码') {
       this.setState({
         startTime: new Date().getTime(),
         deadline: 60,

@@ -37,6 +37,7 @@ let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
 let Publish = require('../../biz/publish/publish');
+let Account = require('../../biz/login/accountInfo');
 
 const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');
