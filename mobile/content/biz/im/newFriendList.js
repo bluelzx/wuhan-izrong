@@ -47,7 +47,7 @@ let NewFriendList = React.createClass({
   },
 
   deleteSession: function(item){
-   NewFriendStore.deleteFriendInvite(item.noticId, this.state.userInfo.userInfo)
+   NewFriendStore.deleteFriendInvite(item.noticId, this.state.userInfo.userId)
   },
 
 
@@ -68,17 +68,31 @@ let NewFriendList = React.createClass({
   },
 
   toOther: function(item) {
-    let data = ContactSotre.getUserInfoByUserId(item.userId);
-    let opt = {};
-    if(item.isAccept){
-      opt = {isStringer:false};
-    }else{
-      opt={isStranger:true,callBack:()=>this.acceptInvite(item)};
-    }
-    this.props.navigator.push({
-      comp:ImUserInfo,
-      param:Object.assign(data,opt)
+    let self = this;
+    this.props.exec(()=>{
+      return new Promise((resolve,reject)=>{
+        let data = {};
+        try {
+          data = ContactSotre.getUserInfoByUserId(item.userId);
+          resolve(data);
+        }catch(err){
+          //下载信息
+          resolve(ContactAction.getUserInfoFromServer(item.userId));
+        }
+      }).then((data)=>{
+        let opt = {};
+        if(item.isAccept){
+          opt = {isStringer:false};
+        }else{
+          opt={isStranger:true,callBack:()=>self.acceptInvite(item)};
+        }
+        this.props.navigator.push({
+          comp:ImUserInfo,
+          param:Object.assign(data,opt)
+        });
+      });
     });
+
   },
 
   renderItem: function(item) {
@@ -98,12 +112,26 @@ let NewFriendList = React.createClass({
         this.toOther(item);
         }}>
         <View
-          style={{borderBottomColor: DictStyle.colorSet.demarcationColor,borderBottomWidth:0.5,flexDirection:'row', paddingVertical:10, marginHorizontal:10}}>
+          style={{
+          borderBottomColor: DictStyle.colorSet.demarcationColor,
+           borderBottomWidth:0.5,
+            flexDirection:'row',
+            paddingVertical:7,
+            marginHorizontal:10,
+            alignItems:'center',flex:1}}
+        >
           <HeaderPic badge={0} name={item.realName} photoFileUrl={item.photoFileUrl} certified={item.certified}/>
           <View
-            style={{ flexDirection:'row',paddingHorizontal:10, height:40, width:width-70, justifyContent:'space-between', alignItems:'center'}}>
-            <View>
-              <Text style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.realName + '-' + item.orgName}</Text>
+             style={{
+             flex:1,paddingHorizontal:10
+             }}
+          >
+          <View
+            style={{
+            flexDirection:'row', justifyContent:'space-around',flex:1}}
+          >
+            <View style={{flex:2}}>
+              <Text numberOfLines={1} style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.realName + '-' + item.orgName+'hhhhh'}</Text>
               <Text numberOfLines={1}
                     style={{marginTop:5,color:'#687886'}}>{'已加你为好友'}</Text>
             </View>
@@ -112,13 +140,13 @@ let NewFriendList = React.createClass({
               if(item.isAccept){
                 return (
                   <Text
-                    style={{borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'已接受'}</Text>
+                    style={{flex:1,borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'已接受'}</Text>
 
                 );
               }else{
                 return (
-                  <TouchableOpacity style={{marginRight:10}} onPress={()=>this.acceptInvite(item)}>
-                    <View style={{borderRadius: 5, backgroundColor: '#23ABF3',paddingHorizontal:20,paddingVertical:5}}>
+                  <TouchableOpacity style={{flex:1,marginRight:10}} onPress={()=>this.acceptInvite(item)}>
+                    <View style={{borderRadius: 5, backgroundColor: '#23ABF3',paddingHorizontal:10,paddingVertical:5}}>
                       <Text
                         style={{color: '#EAF7FD', textAlign:'center'}}>{'加好友'}</Text>
                     </View>
@@ -127,7 +155,8 @@ let NewFriendList = React.createClass({
               }
             })()}
 
-          </View>
+            </View>
+            </View>
         </View>
       </TouchableOpacity>
     );

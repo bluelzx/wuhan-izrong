@@ -219,7 +219,7 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.FRIEND_INVITE:
       ContactSotre.newFriendNotic(Object.assign({
-        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, message.userInfo && message.userInfo.userId, userId)
+        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, 'new', userId)
       }, message.userInfo), userId);
       break;
     case MSG_TYPE.FRIEND_PROMISE:

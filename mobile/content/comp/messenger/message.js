@@ -203,16 +203,16 @@ export default class Message extends React.Component {
     }
 
     var messageView = (
-      <View>
+      <View >
         {position === 'left' && !this.props.displayNamesInsideBubble ? this.renderName(rowData.name, displayNames, diffMessage) : null}
-        <View style={[styles.rowContainer, {
+        <View style={[{flex:1},styles.rowContainer, {
              alignItems:'flex-start',
             justifyContent: position==='left'?"flex-start":"flex-end"
           }]}>
           {position === 'left' ? this.renderImage(rowData, rowID, diffMessage, forceRenderImage, onImagePress) : null}
-          <View style={[{paddingLeft:10,backgroundColor:'transparent',alignItems:position === 'right'?'flex-end':'flex-start'},position === 'right'&&{paddingRight:10}]}>
+          <View style={[{paddingLeft:10,flex:1,backgroundColor:'transparent',alignItems:position === 'right'?'flex-end':'flex-start'},position === 'right'&&{paddingRight:10}]}>
             <Text style={{color:'#555C5F', fontSize:12}}>{rowData.name + '-' + rowData.orgValue}</Text>
-            <View style={{flexDirection:'row',marginTop:5}}>
+            <View style={{alignSelf:'stretch',flexDirection:'row',marginTop:5,backgroundColor:'transparent',justifyContent:position === 'right'?'flex-end':'flex-start'}}>
               {position === 'right' ? this.renderErrorButton(rowData, rowID, onErrorButtonPress) : null}
               {position === 'left' ? this._renderAngle(rowData) : null}
               <RowView

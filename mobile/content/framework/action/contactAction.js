@@ -206,6 +206,23 @@ let _updateGroupInfo = function (groupId, groupName, groupMasterUid, members, mu
 /** 查询好友
  *  @param keyWord string
  * */
+let _getTop3IMUserByKeyWord = function(keyWord) {
+  let param = {
+    keyWord:keyWord
+  };
+
+  return new Promise((resolve, reject) => {
+    PFetch( AppLinks.getTop3IMUserByKeyWord, param).then((response)=>{
+      resolve(response);
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+}
+
+/** 查询全部好友
+ *  @param keyWord string
+ * */
 let _searchUser = function(keyWord) {
   let param = {
     keyWord:keyWord
@@ -218,32 +235,6 @@ let _searchUser = function(keyWord) {
       reject(err);
     });
   });
-
-  //return new Promise((resolve, reject) => {
-  //  try {
-  //    let res = contactStore.getAllUsers();
-  //    let ret = [];
-  //    res && res.forEach((item)=> {
-  //      if (item.orgValue && !!~item.orgValue.indexOf(keyWord)) {
-  //        item.orgMembers && item.orgMembers.forEach((i) => {
-  //          i.orgValue = item.orgValue;
-  //          ret.push(i);
-  //        })
-  //      } else {
-  //        item.orgMembers && item.orgMembers.forEach((i) => {
-  //          if (i.realName && !!~i.realName.indexOf(keyWord)) {
-  //            i.orgValue = item.orgValue;
-  //            ret.push(i);
-  //          }
-  //        })
-  //      }
-  //    });
-  //    resolve(ret);
-  //  }catch(err){
-  //    reject(err);
-  //  }
-  //});
-
 }
 
 /**添加好友
@@ -280,8 +271,18 @@ let _acceptFriend = function(userId) {
     });
 
   });
+}
 
-
+let _getUserInfoFromServer = function(userId){
+let param = {uid:userId};
+  return new Promise((resolve,reject) => {
+    BFetch(AppLinks.getUserInfoById, param).then((response) => {
+      contactStore.addFriend(response);
+      resolve(response);
+    }).catch((err)=>{
+      reject(err);
+    });
+  });
 }
 
 let ContactAction = {
@@ -300,7 +301,9 @@ let ContactAction = {
   addFriend:_addFriend,
 
   acceptFriend:_acceptFriend,
-  searchUser:_searchUser
+  searchUser:_searchUser,
+  getTop3IMUserByKeyWord:_getTop3IMUserByKeyWord,
+  getUserInfoFromServer:_getUserInfoFromServer
 };
 
 module.exports = ContactAction;

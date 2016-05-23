@@ -56,7 +56,9 @@ let AppLinks = {
   leaveGroup: imHttp + 'leaveGroup',
   addFriend: imHttp + 'addFriend',
   acceptFriend: imHttp + 'acceptFriend',
+  getUserInfoById: imHttp + 'getUserInfoById',
 
+  getTop3IMUserByKeyWord: Host + api + '/IMUserManage/getTop3IMUserByKeyWord',
   searcUser: Host + api + '/IMUserManage/getIMUserByKeyWord',
 };
 

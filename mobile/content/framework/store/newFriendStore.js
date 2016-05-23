@@ -2,9 +2,12 @@
  * Created by baoyinghai on 4/20/16.
  */
 let PersisterFacade = require('../persister/persisterFacade');
+let AppStore = require('./appStore');
+let { NEW_FRIEND } = require('../../constants/dictEvent');
 
 let _deleteInvite = function(noticId, userId) {
   PersisterFacade.deleteNewNotic(noticId, userId);
+  AppStore.emitChange(NEW_FRIEND);
 }
 
 let _modifyInviteState = function(noticId, userId) {
