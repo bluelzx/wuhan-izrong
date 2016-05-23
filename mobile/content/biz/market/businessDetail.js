@@ -130,7 +130,7 @@ let BusinessDetail = React.createClass({
         <Text style={{alignSelf:'stretch',fontSize:16,color:DictStyle.marketSet.fontColor,flex:1}}>{desc}</Text>
         <Text
           style={{alignSelf:'stretch',fontSize:16,color:(desc == '更新时间:')?DictStyle.marketSet.modifyDateColor:(desc == '备\u3000\u3000注:')?
-          DictStyle.marketSet.amountColor:DictStyle.marketSet.fontColor,width:235/375*screenWidth}}>{value}</Text>
+          this.state.marketInfo.remark == null || this.state.marketInfo.remark == 0 ? DictStyle.marketSet.fontColor :DictStyle.marketSet.amountColor:DictStyle.marketSet.fontColor,width:235/375*screenWidth}}>{value}</Text>
       </View>
     );
   },
@@ -180,7 +180,7 @@ let BusinessDetail = React.createClass({
 
   },
   renderUserPhoto: function () {
-    if (this.state.marketInfo.photoStoredFileUrl == null) {
+    if (this.state.bizOrderOwnerBean.photoStoredFileUrl == null) {
       return (
         <View style={{margin:10}}>
           <NameCircular name={this.state.marketInfo.userName}/>
@@ -191,7 +191,7 @@ let BusinessDetail = React.createClass({
         <View style={{margin:10}}>
           <Image
             style={{height:46,width:46,borderRadius:23}}
-            source={{uri:this.state.marketInfo.photoStoredFileUrl}}
+            source={{uri:this.state.bizOrderOwnerBean.photoStoredFileUrl}}
           />
         </View>
       );
