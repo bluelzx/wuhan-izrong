@@ -61,7 +61,7 @@ var TabView = React.createClass({
     //} else {
       return {
         token: token,
-        initialPage: 3,
+        initialPage: 0,
         badge: badge
       }
     //}
@@ -117,7 +117,6 @@ var TabView = React.createClass({
     if(!tabName){
       tabName = 'home';
     }
-    tabName = 'IM';
     let initialPage = PageDic[tabName];
     return _.assign(
       this.getStateFromStores(),
@@ -157,7 +156,7 @@ var TabView = React.createClass({
           <TabBarIOS.Item
             title="发布"
             icon={require('../../image/tab/publish.png')}
-            //selected={this.state.selectedTab === 'publish'}
+            selected={this.state.selectedTab === 'publish'}
             selectedIcon={require('../../image/tab/publish-selected.png')}
             onPress={() => {
             this.props.navigator.push({

@@ -23,7 +23,7 @@ let _queryAllNewNotic = function(ownerId){
 
 let _deleteNewNotic = function(noticId, ownerId){
   _realm.write(()=>{
-    let tag = _realm.objects(NEWFRIENDNOTIC).filtered('noticId == \'' + noticId + '\' && ownerId ==' + ownerId );
+    let tag = _realm.objects(NEWFRIENDNOTIC).filtered('$0==noticId && ownerId==$1',noticId, ownerId );
     _realm.delete(tag);
   });
 }

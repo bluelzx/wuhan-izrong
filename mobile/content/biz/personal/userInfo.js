@@ -194,7 +194,7 @@ let UserInfo = React.createClass({
   render: function () {
     let {title} = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} foolor='#ffffff' backgroundColor='#1151B1'
+      <NavBarView navigator={this.props.navigator} foolor='#ffffff'
                   contentBackgroundColor={PlainStyle.colorSet.content} title='个人信息' showBack={true} showBar={true}
                   actionButton={this.renderLogout}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}

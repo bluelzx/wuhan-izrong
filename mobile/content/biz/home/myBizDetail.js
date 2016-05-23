@@ -718,9 +718,9 @@ let MyBizDetail = React.createClass({
         return MarketAction.updateBizOrder(params).then((response)=> {
           Alert('保存成功, 是否分享?', () => {
             this.shareDialog(item);
+            AppStore.emitChange(MYBIZ_CHANGE);
           }, () => {
           }, '分享', '不分享');
-          AppStore.emitChange(MYBIZ_CHANGE);
           this.props.navigator.pop();
         }).catch(
           (errorData) => {
