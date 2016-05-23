@@ -78,7 +78,6 @@ let Register_selectOrg = React.createClass({
           <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>
             无符合条件的机构
           </Text>
-          <Text> 如有问题，请联系客服</Text>
         </View>
       )
     } else {
