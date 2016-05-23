@@ -44,12 +44,12 @@ var qaConfig = {
 };
 
 var productConfig = {
-  Dev: false, // Switch for log. true means print.
+  Dev: true, // Switch for log. true means print.
   Host: 'http://114.55.16.46:80/fas',
-  ImHost: '139.196.174.42:4000'
+  ImHost: '114.55.16.46:3000'
 };
 
-var Config = developConfig;
+var Config = productConfig;
 
 module.exports = Config;
 //module.exports = function () {

@@ -113,6 +113,7 @@ let _dealMsg = function (message, socket) {
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_IMAGE_URL:
           break;
         case UPDATE_GROUP_TYPE.ADD_GROUP_MEMBER:
+          //TODO: 把userInfo加入到IMUserInfo表中
           if (userId != message.userInfo.userId) {
             ImStore.saveMsg({
               sessionId:KeyGenerator.getSessionKey(NOTICE_TYPE.INVITED, message.groupId, userId),

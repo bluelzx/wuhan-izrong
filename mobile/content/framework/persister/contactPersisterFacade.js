@@ -5,6 +5,7 @@ let _realm = require('./realmManager');
 const DEFAULT_GROUP_IMAGE = "";
 const _ = require('lodash');
 let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
+let {SESSION_TYPE} = require('../../constants/dictIm');
 const {
   GROUP,
   MESSAGE,
@@ -418,12 +419,14 @@ let _selfDeleteNotice = function (groupId, userId) {
   let noticeNum = 0;
   let deleteNum = 0;
   session.forEach((item)=> {
-    if (SessionIdSplit.getUserIdFromSessionId(item.sessionId) == userId) {
-      noticeNum = noticeNum + 1;
-      if (SessionIdSplit.getIdFromSessionId(item.sessionId) == groupId) {
-        deleteNum = deleteNum + 1;
-        let ret = _realm.objects(NOTICE).filtered('sessionId = \'' + item.sessionId + '\'');
-        _realm.delete(ret)
+    if (item && !_.isEmpty(item)) {
+      if (SessionIdSplit.getUserIdFromSessionId(item.noticeId) == userId) {
+        noticeNum = noticeNum + 1;
+        if (SessionIdSplit.getIdFromSessionId(item.noticeId) == groupId) {
+          deleteNum = deleteNum + 1;
+          let ret = _realm.objects(NOTICE).filtered('\'' + item.noticeId + '\' =  noticeId');
+          _realm.delete(ret)
+        }
       }
     }
   });
