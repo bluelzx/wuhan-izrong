@@ -63,7 +63,7 @@ let Publish = React.createClass({
 
     return {
       filterItems: filterItems,
-      bizOrientationDefault: 0,
+      bizOrientationDefault: 3,
       termDefault: 0,
       amountDefault: 0,
       termText: '',
@@ -468,6 +468,8 @@ let Publish = React.createClass({
       Alert('利率：请输入0-99.99之间的小数');
     } else if (this.state.amount > 100000000000) {
       Alert('您输入的金额过大');
+    } else if (this.state.bizOrientationDefault === 3) {
+      Alert('请选择业务方向');
     } else {
       this.addBizOrder();
     }
@@ -655,7 +657,7 @@ let Publish = React.createClass({
 
   handleSendImage(uri, index) {
     this.props.exec(() => {
-      ImAction.uploadImage(uri)
+      return ImAction.uploadImage(uri)
         .then((response) => {
           let arr = this.state.fileUrlList;
           if (index > 5) {
@@ -669,7 +671,9 @@ let Publish = React.createClass({
         }).catch((errorData) => {
         console.log('Image upload error ' + JSON.stringify(errorData));
         throw errorData;
-      });
+        }).catch((errorData) => {
+          throw errorData;
+        });
     });
   },
 
