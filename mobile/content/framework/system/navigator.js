@@ -285,7 +285,6 @@ var Main = React.createClass({
             ImSocket.trace(KPI_TYPE.PAGE, route.comp.displayName || route.comp);
           }}
         />
-
         <Loading
           // panelColor="rgba(255, 255, 255, 0.3)"
           // color="white"
