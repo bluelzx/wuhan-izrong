@@ -214,7 +214,7 @@ let BusinessDetail = React.createClass({
   renderImageTitle(){
     if (this.state.fileUrlList.length > 0) {
       return (
-        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:DictStyle.marketSet.fontColor}}>{'附件:'}</Text>
+        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:DictStyle.marketSet.fontColor}}>{'附\u3000\u3000件:'}</Text>
       );
     }
   },

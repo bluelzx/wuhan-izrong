@@ -126,12 +126,23 @@ var Main = React.createClass({
   _onChange: function () {
     this.setState(this._getStateFromStores());
     if (AppStore.isLogout()) {
-      if (AppStore.isForceLogout()) {
+      if (AppStore.isFreezing()) {
+        Promise.resolve().then((resolve) => {
+          this.refs.navigator.resetTo({comp: Login});
+          Alert('  您的帐户已被冻结,请联系系统管理员')
+        }).catch((e) => {
+          Alert('系统异常');
+        });
+      } else if (AppStore.isForceLogout()) {
         Alert(
           '    您的账号已经在其他设备上登录了，您将被强制登出，请确认您的账号密码没有被泄露',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
         );
-        AppStore.setForceLogout();
+      } else if (AppStore.isDelete()) {
+        Alert(
+          '    您的账户已被删除,请联系系统管理员',
+          {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
+        );
       } else {
         Promise.resolve().then((resolve) => {
           this.refs.navigator.resetTo({comp: Login});
@@ -139,12 +150,6 @@ var Main = React.createClass({
           Alert('系统异常');
         });
       }
-    } else if (AppStore.isFreezing()) {
-      Promise.resolve().then((resolve) => {
-        this.refs.navigator.resetTo({comp: Login});
-      }).catch((e) => {
-        Alert('系统异常');
-      });
     }
   },
   _exec: function (func, showLoading = true) {
@@ -172,7 +177,7 @@ var Main = React.createClass({
           } else if (errorData.message) {
             if (errorData.message.includes('Network request failed')) {
               Alert('网络异常');
-            }else{
+            } else {
               Alert(errorData.message);
             }
           } else if (errorData.msgContent || errorData.errMsg) {

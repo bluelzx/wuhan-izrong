@@ -139,14 +139,16 @@ let Home = React.createClass({
 
 
   _renderPage: function (data:Object) {
-    if(data.url.includes('http')){
-      return (
-        <Image
-          style={styles.page}
-          source={{uri:data.url}}
-        />
-      );
-    }else{
+    if (data.url) {
+      if (data.url.includes('http')) {
+        return (
+            <Image
+                style={styles.page}
+                source={{uri:data.url}}
+            />
+        );
+      }
+    } else {
       return (
         <Image
           style={styles.page}
@@ -213,7 +215,7 @@ let Home = React.createClass({
             {'金额'}
           </Text>
           <Text style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
-            {'发布人'}
+            {'发布方'}
           </Text>
         </View>
         <ListView

@@ -59,12 +59,12 @@ let Register_selectOrg = React.createClass({
       return (
         <TouchableHighlight style={{backgroundColor: '#f7f7f7'}} activeOpacity={0.8} underlayColor='#f4f7fd'
                             onPress={()=>{
-                              that.props.callback({orgValue: '全部',id: 0});
+                              that.props.callback({orgValue: '全部发布机构',id: 0});
                               that.props.navigator.pop();}
                              }>
           <View
             style={{height: 40,  backgroundColor: '#f7f7f7',justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#ebeef7'}}>
-            <Text style={{marginLeft: 20, color: '#3b4549', textAlign: 'left'}}>全部</Text>
+            <Text style={{marginLeft: 20, color: '#3b4549', textAlign: 'left'}}>全部发布机构</Text>
           </View>
         </TouchableHighlight>
       );
@@ -76,7 +76,7 @@ let Register_selectOrg = React.createClass({
       return (
         <View style={{marginTop:20,marginHorizontal:16,alignItems:'center',flex:1,justifyContent:'center',flexDirection:'column'}}>
           <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>
-            您的机构不在平台的机构列表中
+            无符合条件的机构
           </Text>
           <Text> 如有问题，请联系客服</Text>
         </View>

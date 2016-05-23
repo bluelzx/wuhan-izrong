@@ -137,37 +137,37 @@ let Publish = React.createClass({
       keyboardSpace: keyboardSpace,
     });
 
-    if (Platform.OS === 'android') {
-      this.activeInput.measure((ox, oy, width, height, px, py) => {
-        let keyBoardTop = screenHeight - this.state.keyboardSpace;
-        let activeInputBottom = py + height;
-
-        //Animated.timing(this.state.scrollHeight, {
-        //    toValue: screenHeight - (this.state.keyboardSpace + 64),
-        //    duration: 200,
-        //}).start(()=> {
-        //
-        //});
-        this.setState({
-          scrollHeight: screenHeight - (this.state.keyboardSpace + 80),
-        });
-
-        //if (activeInputBottom > keyBoardTop + 15) {
-        //this.refs['scroll'].scrollTo({y: 200});
-        //}
-      });
-
-
-    } else {
-      this.activeInput.measure((ox, oy, width, height, px, py) => {
-        let keyBoardTop = screenHeight - this.state.keyboardSpace;
-        let activeInputBottom = py + height;
-
-        if (activeInputBottom > keyBoardTop + 15) {
-          this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
-        }
-      });
-    }
+      //if (Platform.OS === 'android') {
+      //  this.activeInput.measure((ox, oy, width, height, px, py) => {
+      //    let keyBoardTop = screenHeight - this.state.keyboardSpace;
+      //    let activeInputBottom = py + height;
+      //
+      //    //Animated.timing(this.state.scrollHeight, {
+      //    //    toValue: screenHeight - (this.state.keyboardSpace + 64),
+      //    //    duration: 200,
+      //    //}).start(()=> {
+      //    //
+      //    //});
+      //    //this.setState({
+      //    //  scrollHeight: screenHeight - (this.state.keyboardSpace + 80),
+      //    //});
+      //
+      //    //if (activeInputBottom > keyBoardTop + 15) {
+      //    //this.refs['scroll'].scrollTo({y: 200});
+      //    //}
+      //  });
+      //
+      //
+      //} else {
+      //  this.activeInput.measure((ox, oy, width, height, px, py) => {
+      //    let keyBoardTop = screenHeight - this.state.keyboardSpace;
+      //    let activeInputBottom = py + height;
+      //
+      //    if (activeInputBottom > keyBoardTop + 15) {
+      //      this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
+      //    }
+      //  });
+      //}
   },
 
   resetKeyboardSpace: function () {
@@ -269,26 +269,27 @@ let Publish = React.createClass({
         <View style={{flexDirection:'row'}}>
           <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'方向'}</Text>
           <Text style={{color:'#dd656c'}}>{'*'}</Text>
-        </View>
-        <View style={{marginTop:10,flexDirection:'row'}}>
-          <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
-                     change={this._bizOrientationDataChange}/>
+
+            <View style={{marginLeft:10,flexDirection:'row'}}>
+                <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
+                           change={this._bizOrientationDataChange}/>
+            </View>
+
         </View>
       </View>
     )
   },
   renderTimeLimit: function () {
     return (
-      <View style={{flexDirection:'column',marginTop:10}}>
-        <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'期限'}</Text>
-        <View style={{marginTop:10,flexDirection:'row'}}
+        <View style={{flexDirection:'column',marginTop:5}}>
+            <View style={{marginTop:5,flexDirection:'row'}}
               ref="timeLimitInputView"
               onLayout={() => {}}
         >
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
-                 placeholder='0-999' maxLength={3} field='termText' inputType="numeric"
+                 placeholder='期限' maxLength={3} field='termText' inputType="numeric"
                  onChangeText={this._onChangeText}
                  onFocus={
                  () => this.activeInput = this.refs['timeLimitInputView']
@@ -302,16 +303,15 @@ let Publish = React.createClass({
   },
   renderAmount: function () {
     return (
-      <View style={{flexDirection:'column',marginTop:10}}>
-        <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'金额'}</Text>
-        <View style={{marginTop:10,flexDirection:'row'}}
+        <View style={{flexDirection:'column',marginTop:5}}>
+            <View style={{marginTop:5,flexDirection:'row'}}
               ref="amountInputView"
               onLayout={() => {}}
         >
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
-                 placeholder='0-1000亿' maxLength={this.state.amountTextDigit} field='amountText'
+                 placeholder='金额' maxLength={this.state.amountTextDigit} field='amountText'
                  inputType="numeric"
                  onChangeText={this._onChangeText}
                  onFocus={
@@ -327,16 +327,15 @@ let Publish = React.createClass({
   },
   renderRate: function () {
     return (
-      <View style={{flexDirection:'column',marginTop:10}}>
-        <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'利率'}</Text>
-        <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}
+        <View style={{flexDirection:'column',marginTop:5}}>
+            <View style={{alignItems:'center',marginTop:5,flexDirection:'row'}}
               ref="rateInputView"
               onLayout={() => {}}
         >
           <Input containerStyle={{backgroundColor:'white',borderRadius:5,marginLeft:10,height:40}}
                  iconStyle={{}} placeholderTextColor={DictStyle.colorSet.inputPlaceholderTextColor}
                  inputStyle={{width:Adjust.width(100),height:40,marginLeft:10,color:'#7ac4e7'}}
-                 placeholder='0-99.99' maxLength={5} field='rateText' inputType="numeric"
+                 placeholder='利率' maxLength={5} field='rateText' inputType="numeric"
                  onChangeText={this._onChangeText}
                  onFocus={
                  () => this.activeInput = this.refs['rateInputView']
@@ -641,12 +640,13 @@ let Publish = React.createClass({
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
     let remark = data.remark == '' ? '--' : data.remark;
-    let shareContent = data.bizCategory + '\n' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出') + '  '
-      + '金额:' + amount + '  ' + '期限:' + dayNum + '  ' + '利率:' + rate + '\n' + '备注:' + remark
+    let shareContent = data.bizCategory + '  ' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出')  + '\n'
+      + '金额:' + amount  + '\n' + '期限:' + dayNum + '\n'  + '利率:' + rate + '\n' + '备注:' + remark
       + '\n' + '——来自爱资融APP';
+
     Share.open({
       share_text: shareContent,
-      share_URL: Platform.OS === 'android' ? shareContent : '',
+      share_URL: Platform.OS === 'android' ? shareContent : 'http://www.izirong.com/fas',
       title: "Share Link"
     }, (e) => {
       console.log(e);
