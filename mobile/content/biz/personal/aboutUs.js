@@ -5,17 +5,17 @@ var {
   StyleSheet,
   Image,
   ActionSheetIOS,
+  TouchableHighlight,
   ScrollView,
   Text,
   View,
-    Dimensions
+  Dimensions
   } = React;
 var Item = require('../../comp/utils/item');
 var NavBarView = require('../../framework/system/navBarView');
 let PlainStyle = require('../../constants/dictStyle');
 let DictStyle = require('../../constants/dictStyle');
-let screenWidth = Dimensions.get('window').width;
-let screenHeight = Dimensions.get('window').height;
+let PrivacyPolicy = require('../../biz/personal/privacyPolicy');
 
 var AboutUs = React.createClass({
   getInitialState(){
@@ -23,7 +23,7 @@ var AboutUs = React.createClass({
       phone: '022-28405347',
       email: 'zr@izirong.com',
       versionNo: '0.0.0.1',
-      content: '     爱资融APP是武汉安硕知信为广大银行同业交易从业人员推出的银行同业业务撮合及社交类软件。爱资融秉承“透明公开，服务为先” ' +
+      content: '     爱资融APP是武汉安硕织信为广大银行同业交易从业人员推出的银行同业业务撮合及社交类软件。爱资融秉承“透明公开，服务为先” ' +
       '的原则，立志为广大的银行同业交易员提供一个纯净高效的同业交流环境。'
     };
   },
@@ -52,15 +52,22 @@ var AboutUs = React.createClass({
 
           <View style={{marginTop:60,flexDirection: 'column'}}>
             <View style={{paddingTop:32, alignItems: 'center'}}>
-              <Text style={styles.font}>隐私政策</Text>
-              <Text style={styles.font}>© 2015,all rights reserved.</Text>
+              <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content}
+                                  onPress={()=>{
+                                  const { navigator } = this.props;
+                                  if (navigator) {
+                                      navigator.push({comp: PrivacyPolicy});
+                                  }
+                                }}>
+                <Text style={{ color: '#000000',fontSize: 16}}>隐私政策</Text>
+              </TouchableHighlight>
+
+              <Text style={[styles.font,{marginTop:10}]}>武汉安硕织信网络科技有限公司 版权所有</Text>
+              <Text style={styles.font}>Copyright © 2016 All Rights Reserved.</Text>
             </View>
             <View style={[styles.borderBottom, {marginTop:6, marginHorizontal:12}]}/>
           </View>
-
         </ScrollView>
-
-
       </NavBarView>
     );
   }
@@ -79,14 +86,14 @@ var styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    color:  PlainStyle.colorSet.aboutUsTextColor,
+    color: PlainStyle.colorSet.aboutUsTextColor
   },
   content: {
     marginTop: 10,
     fontSize: 13,
     color: PlainStyle.colorSet.aboutUsTextColor,
     lineHeight: 23,
-    marginHorizontal:16
+    marginHorizontal: 16
   },
   logo: {
     marginTop: 10,

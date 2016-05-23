@@ -123,14 +123,15 @@ let _login = (data) => {
   _data.filters = data.appOrderSearchResult;
   return Persister.saveAppData(data).then(()=> {
     _.assign(_data, {
-      token: _getToken()
+      token: _getToken(),
+      filters: data.appOrderSearchResult
     });
-    _info.isLogout = false;
-    _info.isForceLogout = false;
-    _info.isFreezing = false;
-    _info.isDelete = false;
-    //保存filter到_data
-    _saveFilters(data.appOrderSearchResult);
+    _.assign(_info, {
+      isLogout: false,
+      isForceLogout: false,
+      isFreezing: false,
+      isDelete: false
+    });
     AppStore.emitChange();
   });
 };
@@ -138,14 +139,16 @@ let _login = (data) => {
 let _simpleLogin = (data) => {
   return Persister.saveSimpleLoginData(data, AppStore.getUserId())
     .then(()=> {
-      _info.isLogout = false;
-      _info.isForceLogout = false;
-      _info.isFreezing = false;
-      _info.isDelete = false;
+      _.assign(_info, {
+        isLogout: false,
+        isForceLogout: false,
+        isFreezing: false,
+        isDelete: false
+      });
       _.assign(_data, {
         token: _getToken()
       });
-      //AppStore.emitChange();
+      AppStore.emitChange();
     }).catch((errorData)=> {
       throw errorData;
     });
@@ -164,7 +167,7 @@ let _logout = (userId) => {
 let _forceLogout = () => {
   //TODO:'强制登出'
   _info.isForceLogout = true;
-  //清空token
+  //清空token,isLogout = true
   _logout(_getUserId());
   AppStore.emitChange();
 };
