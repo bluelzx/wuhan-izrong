@@ -30,11 +30,17 @@ var AboutUs = React.createClass({
   },
 
   componentDidMount() {
-    AppInfoModule.getAppVersion((version)=> {
+    if(Platform.OS == 'ios'){
       this.setState({
-        versionName: 'V '+ version
+        versionName: 'V 0.1.1'
       })
-    });
+    }else{
+      AppInfoModule.getAppVersion((version)=> {
+        this.setState({
+          versionName: 'V '+ version
+        })
+      });
+    }
   },
 
   render(){
