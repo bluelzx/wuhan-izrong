@@ -27,6 +27,7 @@ let Login = React.createClass({
     return {
       mobileNo: '',
       disabled: true
+
     };
   },
   getInitialState: function () {
@@ -129,6 +130,7 @@ let Login = React.createClass({
           >
             新用户注册
           </Button>
+          <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>{this.state.versionName}</Text>
         </View>
       </NavBarView>
     );

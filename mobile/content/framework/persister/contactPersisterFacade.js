@@ -33,8 +33,7 @@ let ContactPersisterFacade = {
   setGroupMute: (groupId, value) => _setGroupMute(groupId, value),
   leaveGroup: (groupId, userId) => _leaveGroup(groupId, userId),
   deleteContactInfo: (userId) => _deleteContactInfo(userId),
-  updateContactInfo: (message) =>
-    _updateContactInfo(message),
+  updateContactInfo: (message) => _updateContactInfo(message),
   addFriend: (userInfo) => _addFriend(userInfo),
   isStranger: (userId) => _isStranger(userId),
   getOrgValueByOrgId: (orgId) => _getOrgValueByOrgId(orgId)
@@ -283,7 +282,6 @@ let _getUsersExpress = function (groupId) {
 
 
 let _updateContactInfo = function (message) {
-
   let param = {
     userId: message.userId,
     address: message.address,
@@ -307,7 +305,7 @@ let _updateContactInfo = function (message) {
     publicQQ: message.isPublicQq,
     orgId: message.orgId,
     certificated: message.isCertificated,
-    mute: false
+    mute: message.isMute?message.isMute:false
   };
   let ret = {};
   for (let k in param) {

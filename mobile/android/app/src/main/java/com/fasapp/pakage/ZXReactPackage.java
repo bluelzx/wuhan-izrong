@@ -8,6 +8,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.fasapp.modules.ActivityListenerModule;
+import com.fasapp.modules.AppInfoModule;
 import com.fasapp.modules.NotificationModule;
 import com.fasapp.modules.SaveFileModule;
 import com.fasapp.modules.ServiceModule;
@@ -32,6 +33,7 @@ public class ZXReactPackage implements ReactPackage {
         modules.add(new ActivityListenerModule(reactContext));
         modules.add(new SaveFileModule(reactContext));
         modules.add(new NotificationModule(reactContext));
+        modules.add(new AppInfoModule(reactContext));
         return modules;
     }
 

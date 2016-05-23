@@ -84,7 +84,7 @@ let _dealMsg = function (message, socket) {
     //已测  weisen
     case MSG_TYPE.CONTANCT_INFO_UPDATE:
       if(message.userId == AppStore.getUserId()){
-        //AppStore.updateUserInfo(message);
+        AppStore.updateUserInfoByPush(message);
       }else{
         ImStore.updateContactInfo(message);
       }

@@ -257,13 +257,12 @@ let TextEdit = React.createClass({
             style={[DictStyle.textEditItem,{marginTop: 20}]}
           >
             <View style={styles.view}>
-              <TextInput style={styles.text}
-                         defaultValue={this.state.oldValue}
+              <TextInput style={styles.text} defaultValue={this.state.oldValue}
                          keyboardType={this.props.param.type}
                          underlineColorAndroid="transparent"
                          maxLength={this.props.param.maxLength}
                          placeholder={this.props.param.desc}
-                         placeholderTextColor={'#000000'}
+
                          onChangeText={(text) => {
                          this.setState({newValue:text});
                          this.textChange(text);
@@ -289,7 +288,6 @@ let TextEdit = React.createClass({
                          underlineColorAndroid="transparent"
                          maxLength={this.props.param.maxLexngth}
                          placeholder={this.props.param.desc}
-                         placeholderTextColor='#000000'
                          onChangeText={(text) => {
                          this.setState({newValue:text});
                          this.textChange(text);
