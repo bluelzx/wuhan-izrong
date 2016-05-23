@@ -131,7 +131,7 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
     publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
     lastSyncTime: null,
     friendList: loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList),
-    certified: loginUserInfo.certified || false
+    certified: loginUserInfo.certificated || false
   }, true);
 };
 
@@ -160,34 +160,7 @@ let _saveImUsers = function (imUserBeanList) {
       publicAddress: !!(imUserBeanList[i].publicAddress == true || imUserBeanList[i].publicAddress === null),
       publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
       publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
-      certificated: false
-    }, true);
-  }
-  for (var i = 0; i < imUserBeanList.length; i++) {
-    _realm.create(IMUSERINFO, {
-      userId: imUserBeanList[i].userId,
-      address: imUserBeanList[i].address,
-      realName: imUserBeanList[i].realName,
-      nameCardFileUrl: imUserBeanList[i].nameCardFileUrl,
-      department: imUserBeanList[i].department,
-      jobTitle: imUserBeanList[i].jobTitle,
-      qqNo: imUserBeanList[i].qqNo,
-      email: imUserBeanList[i].email,
-      weChatNo: imUserBeanList[i].weChatNo,
-      mute: imUserBeanList[i].mute,
-      mobileNumber: imUserBeanList[i].mobileNumber,
-      photoFileUrl: imUserBeanList[i].photoFileUrl,
-      orgId: imUserBeanList[i].orgId,
-      phoneNumber: imUserBeanList[i].phoneNumber,
-      publicTitle: !!(imUserBeanList[i].publicTitle == true || imUserBeanList[i].publicTitle === null),
-      publicMobile: !!(imUserBeanList[i].publicMobile == true || imUserBeanList[i].publicMobile === null),
-      publicDepart: !!(imUserBeanList[i].publicDepart == true || imUserBeanList[i].publicDepart === null),
-      publicPhone: !!(imUserBeanList[i].publicPhone == true || imUserBeanList[i].publicPhone === null),
-      publicEmail: !!(imUserBeanList[i].publicEmail == true || imUserBeanList[i].publicEmail === null),
-      publicAddress: !!(imUserBeanList[i].publicAddress == true || imUserBeanList[i].publicAddress === null),
-      publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
-      publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
-      certified: imUserBeanList.certified || false
+      certificated: imUserBeanList[i].isCertificated || false
     }, true);
   }
 };

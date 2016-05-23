@@ -27,6 +27,7 @@ let AppLinks = {
   simpleLogin: Host + pub + '/simpleLogin',
   logout: Host + api + '/Account/logout',
   registerProtocol: Host + '/protocol.html',
+  privacy: Host + '/privacy.html',
   register: Host + pub + '/register',
   uploadFile: Host + pub + '/File/upload',
   downLoadFile: Host + pub + '/File/downLoad/',

@@ -182,7 +182,7 @@ let _acceptInvitation = function (groupId) {
   }
   return new Promise((resolve, reject) => {
     BFetch(AppLinks.acceptInvitation, param).then((response)=> {
-      //TODO:默认不屏蔽
+      //TODO:将membersDetails遍历加入到IMUserInfo表中
       _updateGroupInfo(response.gid,response.groupName, response.groupOwnerId, response.members, false, response.groupImageUrl);
       resolve(response);
     }).catch((err)=>{
