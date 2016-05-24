@@ -28,6 +28,9 @@ let { Alert } = require('mx-artifacts');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Chat = require('../im/chat');
 let Lightbox = require('../../comp/lightBox/Lightbox');
+let ContactStore = require('../../framework/store/contactStore');
+let ContactAction = require('../../framework/action/contactAction');
+let KeyGenerator = require('../../comp/utils/keyGenerator');
 
 let MarketAction = require('../../framework/action/marketAction');
 
@@ -50,7 +53,6 @@ let BusinessDetail = React.createClass({
       marketInfo: marketInfo,
       orderUserId: marketInfo.userId,
       lastModifyDate: DateHelper.formatBillDetail(t),
-      userInfo: userInfo,
       bizOrderOwnerBean: []
     }
   },
@@ -143,7 +145,7 @@ let BusinessDetail = React.createClass({
     );
   },
   renderUserInfo: function () {
-    if (this.state.userInfo == null) {
+    if (this.state.marketInfo == null) {
       return (
         <View>
         </View>
@@ -163,12 +165,12 @@ let BusinessDetail = React.createClass({
   renderPromulgator: function () {
     return (
       <View style={{flexDirection:'row',alignItems:'center'}}>
-        {this.renderUserPhoto(this.state.userInfo)}
+        {this.renderUserPhoto()}
         <View>
           <View style={{flexDirection:'row',alignItems:'flex-end'}}>
             <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
                   numberOfLines={1}>{this.state.marketInfo.userName}</Text>
-            <TouchableHighlight onPress={()=>this.gotoIM(Chat)} underlayColor='#f0f0f0' activeOpacity={0.8}>
+            <TouchableHighlight onPress={()=>this.gotoIM()} underlayColor='#f0f0f0' activeOpacity={0.8}>
               <Text style={{fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
             </TouchableHighlight>
           </View>
@@ -238,29 +240,49 @@ let BusinessDetail = React.createClass({
       </View>
     );
   },
-  gotoIM: function (name) {
-    let sessionId = 'user:' + this.state.orderUserId.toString();
-    let content = {
-      "bizCategory": this.state.marketInfo.bizCategoryDesc,
-      "bizOrientation": this.state.marketInfo.bizOrientation,
-      "term": this.state.marketInfo.term,
-      "amount": this.state.marketInfo.amount,
-      "rate": this.state.marketInfo.rate,
-      "remark": this.state.marketInfo.remark
-    };
-    const { navigator } = this.props;
-    if (navigator) {
-      navigator.push({
-        comp: name,
-        param: {
-          chatType: SESSION_TYPE.USER,
-          userId: this.state.orderUserId,
-          sessionId: sessionId,
-          content: JSON.stringify(content),
-          isFromBizDetail: true
+  gotoIM: function () {
+    let orderUserId = this.state.orderUserId;
+    let myInfo = ContactStore.getUserInfo();
+    let self = this;
+    this.props.exec(()=>{
+      return new Promise((resolve, reject)=>{
+        let user = ContactStore.getUserInfoByUserId(orderUserId);
+        resolve(user);
+      }).catch((err)=>{
+        //
+        if(err == 'userinfo is null') {
+          return ContactAction.getUserInfoFromServer(orderUserId);
+        }else {
+          throw err;
         }
-      })
-    }
+      }).then((user)=>{
+        let sessionId = KeyGenerator.getSessionKey(SESSION_TYPE.USER,user.userId,myInfo.userId);//'user:' + this.state.orderUserId.toString();
+        let content = {
+          "bizCategory": this.state.marketInfo.bizCategoryDesc,
+          "bizOrientation": this.state.marketInfo.bizOrientation,
+          "term": this.state.marketInfo.term,
+          "amount": this.state.marketInfo.amount,
+          "rate": this.state.marketInfo.rate,
+          "remark": this.state.marketInfo.remark
+        };
+        const { navigator } = self.props;
+        if (navigator) {
+          navigator.push({
+            comp: Chat,
+            param: {
+              chatType: SESSION_TYPE.USER,
+              userId: orderUserId,
+              sessionId: sessionId,
+              content: JSON.stringify(content),
+              isFromBizDetail: true
+            }
+          })
+        }
+
+      });
+    });
+
+
   },
 
   getBizOrderInMarket: function (id) {

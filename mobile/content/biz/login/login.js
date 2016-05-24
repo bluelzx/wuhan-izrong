@@ -100,7 +100,7 @@ let Login = React.createClass({
 
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} title='登录111' showBack={false}>
+      <NavBarView navigator={this.props.navigator} title='登录' showBack={false}>
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.renderLogo()}
           <View style={{marginTop:10}}>
