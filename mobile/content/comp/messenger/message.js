@@ -211,7 +211,7 @@ export default class Message extends React.Component {
           }]}>
           {position === 'left' ? this.renderImage(rowData, rowID, diffMessage, forceRenderImage, onImagePress) : null}
           <View style={[{paddingLeft:10,flex:1,backgroundColor:'transparent',alignItems:position === 'right'?'flex-end':'flex-start'},position === 'right'&&{paddingRight:10}]}>
-            <Text style={{color:'#555C5F', fontSize:12}}>{rowData.name + '-' + rowData.orgValue}</Text>
+            <Text numberOfLines={1} style={{alignSelf:'stretch',color:'#555C5F', textAlign:position,fontSize:12}}>{rowData.name + '-' + rowData.orgValue}</Text>
             <View style={{alignSelf:'stretch',flexDirection:'row',marginTop:5,backgroundColor:'transparent',justifyContent:position === 'right'?'flex-end':'flex-start'}}>
               {position === 'right' ? this.renderErrorButton(rowData, rowID, onErrorButtonPress) : null}
               {position === 'left' ? this._renderAngle(rowData) : null}

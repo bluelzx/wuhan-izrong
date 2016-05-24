@@ -254,7 +254,6 @@ let WhitePage = React.createClass({
 
   renderUser: function (item, index, length) {
     let tagUser = ContactStore.getUserInfoByUserId(this.getIdFromSessionId(item.sessionId));
-    let orgName = ContactStore.getOrgValueByOrgId(tagUser.orgId);
     return (
       <TouchableOpacity key={item.sessionId}
                         style={[ItemStyle.back]}
@@ -279,7 +278,7 @@ let WhitePage = React.createClass({
              >
               <View
                 style={{flexDirection:'row', justifyContent:'space-between',flex:1}}>
-                <Text style={[{color:DictStyle.colorSet.imTitleTextColor},FontSize.realName]}>{item.title + '-' + orgName}</Text>
+                <Text style={[{color:DictStyle.colorSet.imTitleTextColor},FontSize.realName]}>{item.title + '-' + item.orgValue}</Text>
                 <Text style={[{color:DictStyle.colorSet.imTimeTextColor},FontSize.rightTime]}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
               <Text numberOfLines={1}
@@ -385,7 +384,13 @@ let WhitePage = React.createClass({
 
   renderMessage: function () {
     let msg = [];
-    let listData = sessionFilter(this.state.data.msg, 'title', 'content', this.state.keyWord);
+    this.state.data.msg.forEach((item)=>{
+      if(item.type == SESSION_TYPE.USER){
+        let tagUser = ContactStore.getUserInfoByUserId(this.getIdFromSessionId(item.sessionId));
+        item.orgValue = ContactStore.getOrgValueByOrgId(tagUser.orgId);
+      }
+    });
+    let listData = sessionFilter(this.state.data.msg, 'title', 'content','orgValue', this.state.keyWord);
     if (_.isEmpty(listData) || listData.length == 0) {
       return this.renderNull();
     } else {

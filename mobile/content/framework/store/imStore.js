@@ -9,6 +9,7 @@ let SessionAction = require('../action/sessionAction');
 let AppStore = require('./appStore');
 let ContactStore = require('./contactStore');
 let NoticeAction = require('../action/noticeAction');
+let ContactAction = require('../action/appAction');
 let _info = {
   initLoadingState: true,
   netWorkState: false,
@@ -93,7 +94,8 @@ let _resovleMessages = (bInit = false) => {
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       };
     } else { // Sent
-      let userInfo = ContactStore.getUserInfoByUserId(_data.userId);
+      //let userInfo = ContactStore.getUserInfoByUserId(_data.userId);//本人
+      let userInfo = ContactStore.getUserInfo();//本人
       tmpMessage = {
         msgId: object.msgId,
         contentType: object.contentType,
@@ -193,7 +195,13 @@ let _saveMsg = (message, userId) => {
       }
     }
 
+
+    //let user = {};
+    //try{
     let user = ContactStore.getUserInfoByUserId(message.toId || message.fromUId);
+    //}catch(err){
+    //  user = {};
+    //}
     SessionAction.updateSession(message.type, message.sessionId,user.realName ,message.content,message.revTime,message.contentType, userId, {notAdd:notAdd});
   }else if(message.type == SESSION_TYPE.GROUP){
 
@@ -253,7 +261,8 @@ let _saveMsg = (message, userId) => {
         date: message.revTime,
       });
     }else { // Send
-      let userInfo = ContactStore.getUserInfoByUserId(_data.userId);
+     // let userInfo = ContactStore.getUserInfoByUserId(_data.userId);//本人
+      let userInfo = ContactStore.getUserInfo();//本人
       _data.messages.push({
         msgId: message.msgId,
         contentType: message.contentType,
