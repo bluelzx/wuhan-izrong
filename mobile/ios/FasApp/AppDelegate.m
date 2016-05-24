@@ -14,7 +14,7 @@
 #import "RCTPushNotificationManager.h"
 #import "ReactNativeAutoUpdater.h"
 
-#define JS_CODE_METADATA_URL @"http://114.55.16.46:80/fas/pub/rnupdate/meta?type=IOS_PATCH"
+#define JS_CODE_METADATA_URL @"http://114.55.16.46/fas/pub/rnupdate/meta?type=IOS_PATCH"
 
 @interface AppDelegate() <ReactNativeAutoUpdaterDelegate>
 
@@ -32,7 +32,7 @@ typedef enum{
 {
   [NSThread sleepForTimeInterval:1.0];
 
-  AppStarMode startType=Debug;
+  AppStarMode startType=AutoUpdate;
 
   NSURL* latestJSCodeLocation;
   if(startType==AutoUpdate){
@@ -40,7 +40,7 @@ typedef enum{
 
     ReactNativeAutoUpdater* updater = [ReactNativeAutoUpdater sharedInstance];
     [updater setDelegate:self];
-    [updater showProgress: NO];
+//    [updater showProgress: NO];
 
     // We set the location of the metadata file that has information about the JS Code that is shipped with the app.
     // This metadata is used to compare the shipped code against the updates.
@@ -49,7 +49,7 @@ typedef enum{
     [updater initializeWithUpdateMetadataUrl:[NSURL URLWithString:JS_CODE_METADATA_URL]
                        defaultJSCodeLocation:defaultJSCodeLocation
                  defaultMetadataFileLocation:defaultMetadataFileLocation ];
-    [updater setHostnameForRelativeDownloadURLs:@"http://192.168.64.205:9101"];
+    [updater setHostnameForRelativeDownloadURLs:@"http://114.55.16.46"];
     [updater checkUpdate];
 
     latestJSCodeLocation = [updater latestJSCodeLocation];

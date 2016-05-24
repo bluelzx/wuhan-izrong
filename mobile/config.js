@@ -49,7 +49,13 @@ var productConfig = {
   ImHost: '114.55.16.46:3000'
 };
 
-var Config = productConfig;
+var lyuConfig = {
+  Dev: true, // Switch for log. true means print.
+  Host: 'http://192.168.64.171:9081/fas',
+  ImHost: '192.168.64.205:6379'
+};
+
+var Config = outLine;
 
 module.exports = Config;
 //module.exports = function () {
