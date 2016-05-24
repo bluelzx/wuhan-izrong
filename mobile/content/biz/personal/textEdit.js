@@ -34,8 +34,7 @@ let TextEdit = React.createClass({
       newPublicValue: this.props.param.publicValue,
       type: type,
       tele: this.props.param.name == 'phoneNumber' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[0] ) : '',
-      phone: this.props.param.name == 'phoneNumber' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[1]) : '',
-
+      phone: this.props.param.name == 'phoneNumber' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[1]) : ''
     };
   },
 
@@ -196,6 +195,40 @@ let TextEdit = React.createClass({
     this.setState({newPublicValue: open});
   },
 
+  renderTextInput: function(){
+    if (this.state.oldValue == '') {
+      return (
+        <TextInput style={styles.text}
+                   keyboardType={this.props.param.type}
+                   underlineColorAndroid="transparent"
+                   maxLength={this.props.param.maxLength}
+                   placeholder={this.props.param.title}
+                   onChangeText={(text) => {
+                         this.setState({newValue:text});
+                         this.textChange(text);
+                         }}
+                   //autoFocus={true}
+                   autoCapitalize="none"
+                   autoCorrect={false}
+        />
+      );
+    }else{
+      return (
+        <TextInput style={styles.text} defaultValue={this.state.oldValue}
+                   keyboardType={this.props.param.type}
+                   underlineColorAndroid="transparent"
+                   maxLength={this.props.param.maxLength}
+                   onChangeText={(text) => {
+                         this.setState({newValue:text});
+                         this.textChange(text);
+                         }}
+                   autoCapitalize="none"
+                   autoCorrect={false}
+        />
+      );
+    }
+  },
+
   renderSwitch: function () {
     if (this.state.publicName != '') {
       return (
@@ -257,20 +290,7 @@ let TextEdit = React.createClass({
             style={[DictStyle.textEditItem,{marginTop: 20}]}
           >
             <View style={styles.view}>
-              <TextInput style={styles.text} defaultValue={this.state.oldValue}
-                         keyboardType={this.props.param.type}
-                         underlineColorAndroid="transparent"
-                         maxLength={this.props.param.maxLength}
-                         placeholder={this.props.param.desc}
-
-                         onChangeText={(text) => {
-                         this.setState({newValue:text});
-                         this.textChange(text);
-                         }}
-                         //autoFocus={true}
-                         autoCapitalize="none"
-                         autoCorrect={false}
-              />
+              {this.renderTextInput()}
             </View>
             {this.renderSwitch()}
           </View>
@@ -283,19 +303,7 @@ let TextEdit = React.createClass({
             style={[DictStyle.textEditItem,{marginTop: 20}]}
           >
             <View style={styles.view}>
-              <TextInput style={styles.text} defaultValue={this.state.oldValue}
-                         keyboardType={this.props.param.type}
-                         underlineColorAndroid="transparent"
-                         maxLength={this.props.param.maxLexngth}
-                         placeholder={this.props.param.desc}
-                         onChangeText={(text) => {
-                         this.setState({newValue:text});
-                         this.textChange(text);
-                         }}
-                         //autoFocus={true}
-                         autoCapitalize="none"
-                         autoCorrect={false}
-              />
+              {this.renderTextInput()}
             </View>
           </View>
         </NavBarView>
