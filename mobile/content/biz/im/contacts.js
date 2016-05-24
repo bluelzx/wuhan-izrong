@@ -172,7 +172,7 @@ let Contacts = React.createClass({
 
   renderMenu: function(){
     return (
-      <View style={{position:'absolute',top:Device.navBarHeight,right:5,width:150}}>
+      <View style={{position:'absolute',top:Platform.OS === 'ios'?Device.navBarHeight:0,right:5,width:150}}>
         <View>
           <View style={{ alignItems: 'flex-end',paddingRight:10}}>
             <Angle direction="up" color='#375EE4'/>
@@ -217,32 +217,6 @@ let Contacts = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} title='通讯录' actionButton={this.renderAdd}>
         <SearchBar textChange={this.textChange}/>
-        {(()=>{
-
-          if(Platform.OS === 'ios'){
-            return (
-              <Modal
-                animationType={'fade'}
-                transparent={true}
-                visible={this.state.showView}
-              >
-                <View pointerEvents="auto"
-                      onStartShouldSetResponder={(evt) => true}
-                      onResponderRelease={()=>this.setState({showView:false})}
-                      style={{flex:1,justifyContent:'center',backgroundColor:'transparent'}}>
-                  {this.renderMenu()}
-                </View>
-              </Modal>
-            );
-          }else{
-            if (this.state.showView)
-              return this.renderMenu();
-            else
-              return null;
-          }
-        })()}
-
-
 
         {this.renderGlobal()}
 
@@ -286,6 +260,32 @@ let Contacts = React.createClass({
           }
 
         })()}
+
+        {(()=>{
+
+          if(Platform.OS === 'ios'){
+            return (
+              <Modal
+                animationType={'fade'}
+                transparent={true}
+                visible={this.state.showView}
+              >
+                <View pointerEvents="auto"
+                      onStartShouldSetResponder={(evt) => true}
+                      onResponderRelease={()=>this.setState({showView:false})}
+                      style={{flex:1,justifyContent:'center',backgroundColor:'transparent'}}>
+                  {this.renderMenu()}
+                </View>
+              </Modal>
+            );
+          }else{
+            if (this.state.showView)
+              return this.renderMenu();
+            else
+              return null;
+          }
+        })()}
+
 
       </NavBarView>
     );

@@ -117,9 +117,7 @@ let UserInfo = React.createClass({
       );
     } else {
       return (
-        <View>
-          <NameCircular name={this.state.realName} isV={this.state.certificated}/>
-        </View>
+        <NameCircular name={this.state.realName} isV={this.state.certificated}/>
       );
     }
   },
@@ -198,7 +196,9 @@ let UserInfo = React.createClass({
                   actionButton={this.renderLogout}>
         <ScrollView automaticallyAdjustContentInsets={false} horizontal={false}
                     backgroundColor={PlainStyle.colorSet.content}>
+
           <View style={[styles.layout,DictStyle.userInfoBorderTop,DictStyle.userInfoBorderBottom]}>
+
             <ImagePicker
               type="all"
               onSelected={(response) => this.uploadUserPoto(response)}
@@ -206,10 +206,11 @@ let UserInfo = React.createClass({
               title="选择图片"
               fileId="userPhoto"
               allowsEditing={true}
-              style={{marginLeft: 20}}
+              style={{marginLeft: 20,paddingRight:20}}
             >
               {this.returnImage()}
             </ImagePicker>
+
             <TouchableOpacity
               style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}
               onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'isPublicRealName', true, 'default', 20, true, false)}
@@ -306,14 +307,7 @@ let styles = StyleSheet.create({
     borderBottomColor: '#0a1926',
     backgroundColor: PlainStyle.colorSet.personalItemColor
   },
-  img: {
-    width: 63,
-    height: 63,
-    borderRadius: 5,
-    marginTop: 18,
-    borderColor: '#7f7f7f',
-    borderWidth: 1
-  },
+
   head: {
     width: 60,
     height: 60,

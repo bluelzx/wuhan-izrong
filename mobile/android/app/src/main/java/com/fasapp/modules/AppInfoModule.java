@@ -17,7 +17,7 @@ import com.fasapp.R;
  */
 public class AppInfoModule extends ReactContextBaseJavaModule {
     private Callback mCallback;
-    private Activity mActivity = getCurrentActivity();
+    ReactApplicationContext reactContext;
 
     @Override
     public String getName() {
@@ -26,6 +26,7 @@ public class AppInfoModule extends ReactContextBaseJavaModule {
 
     public AppInfoModule(ReactApplicationContext reactContext) {
         super(reactContext);
+        this.reactContext = reactContext;
     }
 
     @ReactMethod
@@ -34,8 +35,8 @@ public class AppInfoModule extends ReactContextBaseJavaModule {
         int versionCode = 0;
         String versionName = null;
         try {
-            PackageManager manager = getCurrentActivity().getPackageManager();
-            PackageInfo info = manager.getPackageInfo(getCurrentActivity().getPackageName(), 0);
+            PackageManager manager = reactContext.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(reactContext.getPackageName(), 0);
             versionName = info.versionName;
             mCallback.invoke(versionName );
         } catch (Exception e) {

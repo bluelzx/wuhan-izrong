@@ -1,4 +1,4 @@
-import React, {Text, View, Animated, Image, StyleSheet} from 'react-native';
+import React, {Text, View, Animated, Image, StyleSheet, Platform} from 'react-native';
 
 export default class Angle extends React.Component {
 
@@ -24,29 +24,35 @@ export default class Angle extends React.Component {
         customStyle = {
           borderRightWidth: 0,
           borderTopWidth: 0,
-          borderLeftColor: this.props.color
+          borderLeftColor: this.props.color,
         };
         break;
       case 'up':
         customStyle = {
           borderTopWidth: 0,
           borderBottomColor: this.props.color,
-          width:0,
+          width:0
         };
         break;
     }
 
-    return (
-      <View
-        style={[customStyle, {
+    if(Platform.OS === 'ios') {
+      return (
+        <View
+          style={[customStyle, {
             //flex: 4,
             borderColor: 'transparent',
             borderWidth: this.props.width,
             marginTop: 0,
             height:0
           }]}
-      />
-    );
+        />
+      );
+    }else{
+      return (
+        <View style={{marginTop:10}}></View>
+      );
+    }
   }
 }
 

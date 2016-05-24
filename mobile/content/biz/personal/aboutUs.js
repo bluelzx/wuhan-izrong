@@ -18,29 +18,31 @@ let PlainStyle = require('../../constants/dictStyle');
 let DictStyle = require('../../constants/dictStyle');
 let PrivacyPolicy = require('../../biz/personal/privacyPolicy');
 let AppInfoModule = require('NativeModules').AppInfoModule;
+let deviceInfo = require('react-native-device-info');
 
 var AboutUs = React.createClass({
   getInitialState(){
     return {
       email: 'zr@izirong.com',
-      versionName: '',
+      versionName: deviceInfo.getVersion(),
       content: '     爱资融APP是武汉安硕织信为广大银行同业交易从业人员推出的银行同业业务撮合及社交类软件。爱资融秉承“透明公开，服务为先” ' +
       '的原则，立志为广大的银行同业交易员提供一个纯净高效的同业交流环境。'
     };
   },
 
   componentDidMount() {
-    if(Platform.OS == 'ios'){
-      this.setState({
-        versionName: 'V 0.1.1'
-      })
-    }else{
-      AppInfoModule.getAppVersion((version)=> {
-        this.setState({
-          versionName: 'V '+ version
-        })
-      });
-    }
+    //if(Platform.OS == 'ios'){
+    //  this.setState({
+    //    versionName: 'V 0.1.1'
+    //  })
+    //}else{
+    //  AppInfoModule.getAppVersion((version)=> {
+    //    this.setState({
+    //      versionName: 'V '+ version
+    //    })
+    //  });
+    //}
+
   },
 
   render(){
