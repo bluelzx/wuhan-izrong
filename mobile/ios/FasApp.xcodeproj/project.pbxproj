@@ -23,6 +23,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		175DAE7D1CF3FD3F00734E9E /* metadata.json in Resources */ = {isa = PBXBuildFile; fileRef = 175DAE7C1CF3FD3F00734E9E /* metadata.json */; };
 		3D0EB874CA0E45CEAE9FEC2F /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD1CB31887804B749696A715 /* libRealmReact.a */; };
 		427D11E01DFB47A6A9E8CC55 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 505A90BCAE64443FAF5EF7F6 /* FontAwesome.ttf */; };
 		46FC71B529974860B84F37A8 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5E937A13F1D543A7923DEDF0 /* MaterialIcons.ttf */; };
@@ -192,6 +193,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = FasApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = FasApp/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		175DAE7C1CF3FD3F00734E9E /* metadata.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = metadata.json; sourceTree = "<group>"; };
 		2A4D63A5A3F448198BCDB58B /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		2EDCC47CDB7C4B298EA53397 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		42633F8D661D4FBD97F4660F /* libRNShare.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNShare.a; sourceTree = "<group>"; };
@@ -352,6 +354,7 @@
 		13B07FAE1A68108700A75B9A /* FasApp */ = {
 			isa = PBXGroup;
 			children = (
+				175DAE7C1CF3FD3F00734E9E /* metadata.json */,
 				583992911CD842F000025A6B /* ZipArchive */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -819,6 +822,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				B60E2CE2AF5949E29390DAC7 /* Entypo.ttf in Resources */,
+				175DAE7D1CF3FD3F00734E9E /* metadata.json in Resources */,
 				0AADC07FE3BE48E18CC1E790 /* EvilIcons.ttf in Resources */,
 				427D11E01DFB47A6A9E8CC55 /* FontAwesome.ttf in Resources */,
 				708A9FFD6BE8486C8B69CDA1 /* Foundation.ttf in Resources */,

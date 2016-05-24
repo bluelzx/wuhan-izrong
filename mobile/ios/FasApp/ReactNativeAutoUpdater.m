@@ -84,7 +84,7 @@ static bool isFirstAccess = YES;
 - (void)defaults {
     self.showProgress = YES;
     self.allowCellularDataUse = NO;
-    self.updateType = ReactNativeAutoUpdaterMinorUpdate;
+    self.updateType = ReactNativeAutoUpdaterPatchUpdate;
 }
 
 #pragma mark - JS methods
@@ -123,11 +123,19 @@ static bool isFirstAccess = YES;
 }
 
 - (NSURL*)latestJSCodeLocation {
-    NSString* latestJSCodeURLString = [[[self libraryDirectory] stringByAppendingPathComponent:@"JSCode"] stringByAppendingPathComponent:@"main.jsbundle"];
-    if (latestJSCodeURLString && [[NSFileManager defaultManager] fileExistsAtPath:latestJSCodeURLString]) {
-        self._latestJSCodeLocation = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", latestJSCodeURLString]];
-    }
-    return self._latestJSCodeLocation ? self._latestJSCodeLocation : self.defaultJSCodeLocation;
+
+  NSDictionary* currentMetadata = [[NSUserDefaults standardUserDefaults] objectForKey:ReactNativeAutoUpdaterCurrentJSCodeMetadata];
+  if(currentMetadata){
+    NSString* newVersion=[currentMetadata objectForKey:@"version"];
+    NSString* filename = [NSString stringWithFormat:@"%@/%@", [self createCodeDirectory:newVersion], @"main.jsbundle"];
+    if([[NSFileManager defaultManager] fileExistsAtPath:filename]){
+      self._latestJSCodeLocation = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@", filename]];
+  }
+
+  }
+  return self._latestJSCodeLocation ? self._latestJSCodeLocation : self.defaultJSCodeLocation;
+
+
 }
 
 - (void)setHostnameForRelativeDownloadURLs:(NSString *)hostname {
@@ -159,14 +167,14 @@ static bool isFirstAccess = YES;
         [[NSUserDefaults standardUserDefaults] setObject:localMetadata forKey:ReactNativeAutoUpdaterCurrentJSCodeMetadata];
     }
     else {
-        if ([[savedMetadata objectForKey:@"version"] compare:[localMetadata objectForKey:@"version"] options:NSNumericSearch] == NSOrderedAscending) {
-            NSData* data = [NSData dataWithContentsOfURL:self.defaultJSCodeLocation];
-            NSString* filename = [NSString stringWithFormat:@"%@/%@", [self createCodeDirectory], @"main.jsbundle"];
-
-            if ([data writeToFile:filename atomically:YES]) {
-                [[NSUserDefaults standardUserDefaults] setObject:localMetadata forKey:ReactNativeAutoUpdaterCurrentJSCodeMetadata];
-            }
-        }
+//        if ([[savedMetadata objectForKey:@"version"] compare:[localMetadata objectForKey:@"version"] options:NSNumericSearch] == NSOrderedAscending) {
+//            NSData* data = [NSData dataWithContentsOfURL:self.defaultJSCodeLocation];
+//            NSString* filename = [NSString stringWithFormat:@"%@/%@", [self createCodeDirectory], @"main.jsbundle"];
+//
+//            if ([data writeToFile:filename atomically:YES]) {
+//                [[NSUserDefaults standardUserDefaults] setObject:localMetadata forKey:ReactNativeAutoUpdaterCurrentJSCodeMetadata];
+//            }
+//        }
     }
     self.initializationOK = YES;
 }
@@ -207,7 +215,7 @@ static bool isFirstAccess = YES;
             [StatusBarNotification showWithMessage:NSLocalizedString(@"Downloading Update.", nil) backgroundColor:[StatusBarNotification infoColor] autoHide:YES];
         }
         if (isRelative) {
-            urlToDownload = [self.hostname stringByAppendingString:urlToDownload];
+         //   urlToDownload = [self.hostname stringByAppendingString:urlToDownload];
         }
         [self startDownloadingUpdateFromURL:urlToDownload];
     }
@@ -398,9 +406,9 @@ static bool isFirstAccess = YES;
     return [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
 }
 
-- (NSString*)createCodeDirectory {
+- (NSString*)createCodeDirectory:(NSString *)version {
     NSString* libraryDirectory = [self libraryDirectory];
-    NSString *filePathAndDirectory = [libraryDirectory stringByAppendingPathComponent:@"JSCode"];
+  NSString *filePathAndDirectory = [[libraryDirectory stringByAppendingPathComponent:@"JSCode/"] stringByAppendingPathComponent:version];
     NSError *error;
 
     NSFileManager* fileManager = [NSFileManager defaultManager];
@@ -452,37 +460,43 @@ static bool isFirstAccess = YES;
     }
     NSError* error;
 
-
-    NSData* data = [NSData dataWithContentsOfURL:location];
-    NSString* filename = [NSString stringWithFormat:@"%@/%@", [self createCodeDirectory], @"main.jsbundle"];
+   NSString* newVersion=[self.updateMetadata objectForKey:@"version"];
+    //NSData* data = [NSData dataWithContentsOfURL:location];
+  NSString* filename = [NSString stringWithFormat:@"%@/%@", [self createCodeDirectory:newVersion], @"main.jsbundle"];
 
 
   NSFileManager *fm = [NSFileManager defaultManager];
 
-  for (NSString *file in [fm contentsOfDirectoryAtPath:[self createCodeDirectory] error:&error]) {
-    BOOL success = [fm removeItemAtPath:[NSString stringWithFormat:@"%@/%@", [self createCodeDirectory], file] error:&error];
-    if (!success || error) {
-      // it failed.
-    }
-  }
+//  for (NSString *file in [fm contentsOfDirectoryAtPath:[self createCodeDirectory] error:&error]) {
+//    BOOL success = [fm removeItemAtPath:[NSString stringWithFormat:@"%@/%@", [self createCodeDirectory], file] error:&error];
+//    if (!success || error) {
+//      // it failed.
+//    }
+//  }
   //[SSZipArchive unzipFileAtPath:location.path toDestination: [self createCodeDirectory] ];
+  bool unzipRes=false;
   ZipArchive* za = [[ZipArchive alloc] init];
 
   if( [za UnzipOpenFile:location.path] ) {
-    if( [za UnzipFileTo:[self createCodeDirectory]  overWrite:YES] != NO ) {
-      //unzip data success
-      //do something
+    if( [za UnzipFileTo:[self createCodeDirectory:newVersion]  overWrite:YES] != NO ) {
+      unzipRes=true;
+
     }
 
     [za UnzipCloseFile];
   }
+  if(unzipRes){
+    [[NSUserDefaults standardUserDefaults] setObject:self.updateMetadata forKey:ReactNativeAutoUpdaterCurrentJSCodeMetadata];
+    if ([self.delegate respondsToSelector:@selector(ReactNativeAutoUpdater_updateDownloadedToURL:)]) {
+
+      [self.delegate ReactNativeAutoUpdater_updateDownloadedToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@", filename]]];
+    }
+  }
 
 
 
-        [[NSUserDefaults standardUserDefaults] setObject:self.updateMetadata forKey:ReactNativeAutoUpdaterCurrentJSCodeMetadata];
-        if ([self.delegate respondsToSelector:@selector(ReactNativeAutoUpdater_updateDownloadedToURL:)]) {
-            [self.delegate ReactNativeAutoUpdater_updateDownloadedToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@", filename]]];
-        }
+
+
 
 }
 

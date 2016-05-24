@@ -99,7 +99,7 @@ let contactFilter = function(data, groupM,gN, groupName,groupMembers,groupMember
   return ret;
 }
 
-let sessionFilter = function(data,title,content,keyWord){
+let sessionFilter = function(data,title,content,orgValue,keyWord){
   if(!keyWord || keyWord==''){
     return data;
   }
@@ -107,7 +107,8 @@ let sessionFilter = function(data,title,content,keyWord){
   data && data.forEach((item)=>{
     let t = item[title];
     let c = item[content];
-    if((!!t && t.length && !!~t.indexOf(keyWord))||(!!c && c.length && !!~c.indexOf(keyWord))){
+    let d = item[orgValue];
+    if((!!t && t.length && !!~t.indexOf(keyWord))||(!!c && c.length && !!~c.indexOf(keyWord))||(!!d && d.length && !!~d.indexOf(keyWord))){
       ret.push(item);
     }
   });

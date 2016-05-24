@@ -10,7 +10,8 @@ let {
   TouchableOpacity,
   Image,
   Modal,
-  StyleSheet
+  StyleSheet,
+  Platform
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
 let CreateGroup = require('./createGroup');
@@ -169,30 +170,16 @@ let Contacts = React.createClass({
     }
   },
 
-
-  render: function() {
-    let {title}  = this.props;
+  renderMenu: function(){
     return (
-      <NavBarView navigator={this.props.navigator} title='通讯录' actionButton={this.renderAdd}>
-        <SearchBar textChange={this.textChange}/>
-
-        <Modal
-          animationType={'fade'}
-          transparent={true}
-          visible={this.state.showView}
-        >
-          <View pointerEvents="auto"
-                onStartShouldSetResponder={(evt) => true}
-                onResponderRelease={()=>this.setState({showView:false})}
-                style={{flex:1,justifyContent:'center',backgroundColor:'transparent'}}>
-            <View style={{position:'absolute',top:Device.navBarHeight,right:5,width:150}}>
-            <View>
-              <View style={{ alignItems: 'flex-end',paddingRight:10}}>
-                <Angle direction="up" color='#375EE4'/>
-              </View>
-              <View style={{backgroundColor:'#375EE4', borderRadius:5,paddingHorizontal:5,paddingVertical:10}}>
-                <TouchableOpacity
-                  onPress={
+      <View style={{position:'absolute',top:Device.navBarHeight,right:5,width:150}}>
+        <View>
+          <View style={{ alignItems: 'flex-end',paddingRight:10}}>
+            <Angle direction="up" color='#375EE4'/>
+          </View>
+          <View style={{backgroundColor:'#375EE4', borderRadius:5,paddingHorizontal:5,paddingVertical:10}}>
+            <TouchableOpacity
+              onPress={
                 () => {
                   this.setState({showView:false});
 
@@ -201,13 +188,13 @@ let Contacts = React.createClass({
                             });
                       }
                 }>
-                <View style={{alignItems:'center', justifyContent:'center',flexDirection:'row', paddingBottom:10,borderBottomWidth:1,borderBottomColor:'#273CDF'}}>
-                  <Icon name="ios-search-strong" size={20} color='#fff' />
-                  <Text style={{marginLeft:5, color:'#fff',fontSize:18}}>添加好友</Text>
-                </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                   onPress={
+              <View style={{alignItems:'center', justifyContent:'center',flexDirection:'row', paddingBottom:10,borderBottomWidth:1,borderBottomColor:'#273CDF'}}>
+                <Icon name="ios-search-strong" size={20} color='#fff' />
+                <Text style={{marginLeft:5, color:'#fff',fontSize:18}}>添加好友</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={
                 () => {
                   this.setState({showView:false});
                   this.props.navigator.push({
@@ -215,15 +202,46 @@ let Contacts = React.createClass({
                             });
                       }
                 }>
-                  <View style={{alignItems:'center',justifyContent:'center',paddingTop:5,flexDirection:'row', marginTop:5}}>
-                    <Icon name="android-add" size={20} color='#fff' />
-                    <Text style={{marginLeft:5, color:'#fff',fontSize:18}}>创建群组</Text></View>
-                </TouchableOpacity>
-              </View>
-            </View>
-              </View>
+              <View style={{alignItems:'center',justifyContent:'center',paddingTop:5,flexDirection:'row', marginTop:5}}>
+                <Icon name="android-add" size={20} color='#fff' />
+                <Text style={{marginLeft:5, color:'#fff',fontSize:18}}>创建群组</Text></View>
+            </TouchableOpacity>
           </View>
-        </Modal>
+        </View>
+      </View>
+    );
+  },
+
+  render: function() {
+    let {title}  = this.props;
+    return (
+      <NavBarView navigator={this.props.navigator} title='通讯录' actionButton={this.renderAdd}>
+        <SearchBar textChange={this.textChange}/>
+        {(()=>{
+
+          if(Platform.OS === 'ios'){
+            return (
+              <Modal
+                animationType={'fade'}
+                transparent={true}
+                visible={this.state.showView}
+              >
+                <View pointerEvents="auto"
+                      onStartShouldSetResponder={(evt) => true}
+                      onResponderRelease={()=>this.setState({showView:false})}
+                      style={{flex:1,justifyContent:'center',backgroundColor:'transparent'}}>
+                  {this.renderMenu()}
+                </View>
+              </Modal>
+            );
+          }else{
+            if (this.state.showView)
+              return this.renderMenu();
+            else
+              return null;
+          }
+        })()}
+
 
 
         {this.renderGlobal()}

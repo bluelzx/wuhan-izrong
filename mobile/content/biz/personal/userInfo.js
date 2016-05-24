@@ -91,7 +91,6 @@ let UserInfo = React.createClass({
           }]).then(
             ()=> {
               AppStore.updateUserInfo('photoFileUrl', response.fileUrl);
-              AppStore.emitChange(MYBIZ_CHANGE);
             }
           ).catch((errorData) => {
             throw errorData;
