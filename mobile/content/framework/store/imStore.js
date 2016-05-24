@@ -196,15 +196,12 @@ let _saveMsg = (message, userId) => {
     }
 
 
-    let user = {};
-    try{
-      user = ContactStore.getUserInfoByUserId(message.toId || message.fromUId);
-    }catch(err){
-      ContactAction.getUserInfoFromServer(message.toId || message.fromUId);
-      //TODO:
-      return;
-    }
-
+    //let user = {};
+    //try{
+    let user = ContactStore.getUserInfoByUserId(message.toId || message.fromUId);
+    //}catch(err){
+    //  user = {};
+    //}
     SessionAction.updateSession(message.type, message.sessionId,user.realName ,message.content,message.revTime,message.contentType, userId, {notAdd:notAdd});
   }else if(message.type == SESSION_TYPE.GROUP){
 

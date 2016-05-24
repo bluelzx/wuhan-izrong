@@ -186,7 +186,8 @@ let _dealMsg = function (message, socket) {
       ImStore.forceLogOut();
       break;
     case MSG_TYPE.SYNC_RES:
-      message.msgArray.forEach((item)=> {
+
+      message.msgArray&&message.msgArray.reverse().forEach((item)=> {
         _dealMsg(JSON.parse(item), socket);
       });
       ContactSotre.syncReq(new Date());

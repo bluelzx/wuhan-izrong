@@ -96,8 +96,9 @@ let _saveSimpleLoginData = function (data, userId) {
 };
 
 let _deleteImUsers = function () {
-  let imUsers = _realm.objects(IMUSERINFO);
-  _realm.delete(imUsers);
+  //imUsers不删
+  //let imUsers = _realm.objects(IMUSERINFO);
+  //_realm.delete(imUsers);
 };
 
 let _deleteGroup = function () {
