@@ -386,7 +386,8 @@ let WhitePage = React.createClass({
     let msg = [];
     this.state.data.msg.forEach((item)=>{
       if(item.type == SESSION_TYPE.USER){
-        item.orgValue = ContactStore.getOrgValueByOrgId(item.orgId);
+        let tagUser = ContactStore.getUserInfoByUserId(this.getIdFromSessionId(item.sessionId));
+        item.orgValue = ContactStore.getOrgValueByOrgId(tagUser.orgId);
       }
     });
     let listData = sessionFilter(this.state.data.msg, 'title', 'content','orgValue', this.state.keyWord);
