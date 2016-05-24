@@ -44,7 +44,7 @@ static bool isFirstAccess = YES;
         RNAUTOUPDATER_SINGLETON = [[super allocWithZone:NULL] init];
         [RNAUTOUPDATER_SINGLETON defaults];
     });
-    
+
     return RNAUTOUPDATER_SINGLETON;
 }
 
@@ -106,7 +106,7 @@ static bool isFirstAccess = YES;
     self.metadataUrl = url;
     self.defaultJSCodeLocation = defaultJSCodeLocation;
     self.defaultMetadataFileLocation = metadataFileLocation;
-    
+
     [self compareSavedMetadataAgainstContentsOfFile: self.defaultMetadataFileLocation];
 }
 
@@ -162,7 +162,7 @@ static bool isFirstAccess = YES;
         if ([[savedMetadata objectForKey:@"version"] compare:[localMetadata objectForKey:@"version"] options:NSNumericSearch] == NSOrderedAscending) {
             NSData* data = [NSData dataWithContentsOfURL:self.defaultJSCodeLocation];
             NSString* filename = [NSString stringWithFormat:@"%@/%@", [self createCodeDirectory], @"main.jsbundle"];
-            
+
             if ([data writeToFile:filename atomically:YES]) {
                 [[NSUserDefaults standardUserDefaults] setObject:localMetadata forKey:ReactNativeAutoUpdaterCurrentJSCodeMetadata];
             }
@@ -201,7 +201,7 @@ static bool isFirstAccess = YES;
     NSString* urlToDownload = [[self.updateMetadata objectForKey:@"url"] objectForKey:@"url"];
     NSString* minContainerVersion = [self.updateMetadata objectForKey:@"minContainerVersion"];
     BOOL isRelative = [[self.updateMetadata objectForKey:@"url"] objectForKey:@"isRelative"];
-    
+
     if ([self shouldDownloadUpdateWithVersion:versionToDownload forMinContainerVersion:minContainerVersion]) {
         if (self.showProgress) {
             [StatusBarNotification showWithMessage:NSLocalizedString(@"Downloading Update.", nil) backgroundColor:[StatusBarNotification infoColor] autoHide:YES];
@@ -222,7 +222,7 @@ static bool isFirstAccess = YES;
 
 - (BOOL)shouldDownloadUpdateWithVersion:(NSString*)version forMinContainerVersion:(NSString*)minContainerVersion {
     BOOL shouldDownload = NO;
-    
+
     /*
      * First check for the version match. If we have the update version, then don't download.
      * Also, check what kind of updates the user wants.
@@ -233,7 +233,7 @@ static bool isFirstAccess = YES;
     }
     else {
         NSString* currentVersion = [currentMetadata objectForKey:@"version"];
-        
+
         int currentMajor, currentMinor, currentPatch, updateMajor, updateMinor, updatePatch;
         NSArray* currentComponents = [currentVersion componentsSeparatedByString:@"."];
         if (currentComponents.count == 0) {
@@ -266,7 +266,7 @@ static bool isFirstAccess = YES;
         else {
             updatePatch = 0;
         }
-        
+
         switch (self.updateType) {
             case ReactNativeAutoUpdaterMajorUpdate: {
                 if (currentMajor < updateMajor) {
@@ -278,7 +278,7 @@ static bool isFirstAccess = YES;
                 if (currentMajor < updateMajor || (currentMajor == updateMajor && currentMinor < updateMinor)) {
                     shouldDownload = YES;
                 }
-                
+
                 break;
             }
             case ReactNativeAutoUpdaterPatchUpdate: {
@@ -294,7 +294,7 @@ static bool isFirstAccess = YES;
             }
         }
     }
-    
+
     /*
      * Then check if the update is good for our container version.
      */
@@ -305,7 +305,7 @@ static bool isFirstAccess = YES;
     else {
         shouldDownload = NO;
     }
-    
+
     return shouldDownload;
 }
 
@@ -330,7 +330,7 @@ static bool isFirstAccess = YES;
     if (![self lastUpdateCheckPerformedOnDate]) {
         [self checkUpdate];
     }
-    
+
     // If daily condition is satisfied, perform version check
     if ([self numberOfDaysElapsedBetweenLastVersionCheckDate] > 1) {
         [self checkUpdate];
@@ -346,7 +346,7 @@ static bool isFirstAccess = YES;
     if (![self lastUpdateCheckPerformedOnDate]) {
         [self checkUpdate];
     }
-    
+
     // If weekly condition is satisfied, perform version check
     if ([self numberOfDaysElapsedBetweenLastVersionCheckDate] > 7) {
         [self checkUpdate];
@@ -358,17 +358,17 @@ static bool isFirstAccess = YES;
 
 - (void)startDownloadingUpdateFromURL:(NSString*)urlString {
     NSURL* url = [NSURL URLWithString:urlString];
-    
+
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
     sessionConfig.allowsCellularAccess = self.allowCellularDataUse;
     sessionConfig.timeoutIntervalForRequest = 60.0;
     sessionConfig.timeoutIntervalForResource = 60.0;
     sessionConfig.HTTPMaximumConnectionsPerHost = 1;
-    
+
     NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig
                                                           delegate:self
                                                      delegateQueue:nil];
-    
+
     NSURLSessionDownloadTask* task = [session downloadTaskWithURL:url];
     [task resume];
 }
@@ -402,16 +402,16 @@ static bool isFirstAccess = YES;
     NSString* libraryDirectory = [self libraryDirectory];
     NSString *filePathAndDirectory = [libraryDirectory stringByAppendingPathComponent:@"JSCode"];
     NSError *error;
-    
+
     NSFileManager* fileManager = [NSFileManager defaultManager];
-    
+
     BOOL isDir;
     if ([fileManager fileExistsAtPath:filePathAndDirectory isDirectory:&isDir]) {
         if (isDir) {
             return filePathAndDirectory;
         }
     }
-    
+
     if (![fileManager createDirectoryAtPath:filePathAndDirectory
                 withIntermediateDirectories:YES
                                  attributes:nil
@@ -451,14 +451,14 @@ static bool isFirstAccess = YES;
                                       autoHide:YES];
     }
     NSError* error;
-  
-  
+
+
     NSData* data = [NSData dataWithContentsOfURL:location];
     NSString* filename = [NSString stringWithFormat:@"%@/%@", [self createCodeDirectory], @"main.jsbundle"];
-  
-  
+
+
   NSFileManager *fm = [NSFileManager defaultManager];
-  
+
   for (NSString *file in [fm contentsOfDirectoryAtPath:[self createCodeDirectory] error:&error]) {
     BOOL success = [fm removeItemAtPath:[NSString stringWithFormat:@"%@/%@", [self createCodeDirectory], file] error:&error];
     if (!success || error) {
@@ -467,23 +467,23 @@ static bool isFirstAccess = YES;
   }
   //[SSZipArchive unzipFileAtPath:location.path toDestination: [self createCodeDirectory] ];
   ZipArchive* za = [[ZipArchive alloc] init];
-  
+
   if( [za UnzipOpenFile:location.path] ) {
     if( [za UnzipFileTo:[self createCodeDirectory]  overWrite:YES] != NO ) {
       //unzip data success
       //do something
     }
-    
+
     [za UnzipCloseFile];
   }
-  
-   
- 
+
+
+
         [[NSUserDefaults standardUserDefaults] setObject:self.updateMetadata forKey:ReactNativeAutoUpdaterCurrentJSCodeMetadata];
         if ([self.delegate respondsToSelector:@selector(ReactNativeAutoUpdater_updateDownloadedToURL:)]) {
             [self.delegate ReactNativeAutoUpdater_updateDownloadedToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@", filename]]];
         }
- 
+
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
