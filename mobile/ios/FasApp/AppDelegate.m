@@ -54,7 +54,7 @@ typedef enum{
 
     latestJSCodeLocation = [updater latestJSCodeLocation];
   }else if(startType==Debug){
-    latestJSCodeLocation=[NSURL URLWithString:@"http://192.168.64.235:8081/index.ios.bundle?platform=ios"];
+    latestJSCodeLocation=[NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios"];
   }else{
     latestJSCodeLocation=[[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   }
@@ -112,14 +112,6 @@ typedef enum{
 
 - (void)ReactNativeAutoUpdater_updateDownloadFailed {
   NSLog(@"Update failed to download");
-}
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
-        NSLog(@"调用的应用程序的Bundle ID是: %@", sourceApplication);
-        NSLog(@"URL scheme:%@", [url scheme]);
-        NSLog(@"URL query: %@", [url query]);
-        return YES;
 }
 
 // Required to register for notifications

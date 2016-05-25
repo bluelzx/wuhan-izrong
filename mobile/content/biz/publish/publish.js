@@ -398,6 +398,7 @@ let Publish = React.createClass({
       >
         <Lightbox imageSource={{uri:rowData}}
                   navigator={this.props.navigator}
+                  underlayColor="#f7f7f7"
                   deleteHeader={()=>{
                     let arr = this.state.fileUrlList;
                     _.pullAt(arr,rowID);
