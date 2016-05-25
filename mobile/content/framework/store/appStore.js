@@ -205,7 +205,6 @@ let _freezAccount = () => {
   }
 };
 
-
 let _save_apns_token = (apnsToken) => {
   _info.apnTokens = apnsToken;
   Persister.saveAPNSToken(apnsToken);

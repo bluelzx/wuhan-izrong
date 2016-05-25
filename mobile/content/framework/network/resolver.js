@@ -135,8 +135,6 @@ let _dealMsg = function (message, socket) {
           }
           break;
         case UPDATE_GROUP_TYPE.KICK_OUT_GROUP_MEMBER:
-
-          break;
         case UPDATE_GROUP_TYPE.LEAVE_GROUP:
           //TODO 退出群组的处理...
           ImStore.saveMsg({
@@ -200,9 +198,6 @@ let _dealMsg = function (message, socket) {
         //if (Platform.OS == 'android') {
         //  NotificationModule.showNotification("系统提示", "爱资融", "您已通过系统管理员的认证");
         //}
-        ImStore.createPlatFormInfo(message.infoId,
-          message.title, message.content,
-          new Date(message.createDate), userId);
       } else {
         ImStore.updateContactInfo(message);
       }
