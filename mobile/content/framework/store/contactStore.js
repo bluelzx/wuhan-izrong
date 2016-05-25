@@ -7,13 +7,20 @@ let PersisterFacade = require('../persister/persisterFacade');
 let AppStore = require('./appStore');
 //let SessionStore = require('./sessionStore');
 let { IM_CONTACT, IM_GROUP, IM_SESSION, IM_SESSION_LIST } = require('../../constants/dictEvent');
+let DictIcon = require('../../constants/dictIcon');
 
 let _getContact = function(){
   //我的群  第一个元素必须为群组
   //联系人按群组分类
   let groups = PersisterFacade.getAllGroups();
+  groups.forEach((item)=>{
+    item.userId = item.groupId;
+    item.type='group';
+    item.realName=item.groupName;
+  });
   return [
     {
+      orgValue:'我的群组',
       orgMembers: groups
     }
   ].concat(_getUsers());

@@ -105,15 +105,17 @@ let _dealMsg = function (message, socket) {
           ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
           break;
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_NAME:
-          ImStore.saveMsg({
-            sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.UPDATE_GROUP_NAME, message.groupId, userId),
-            groupId: message.groupId,
-            groupName: message.groupName,
-            groupOwnerId: message.groupOwnerId,
-            msgType: SESSION_TYPE.GROUP_NOTICE,
-            revTime: new Date(),
-            noticeType: NOTICE_TYPE.UPDATE_GROUP_NAME
-          }, userId);
+          if (message.groupOwnerId != userId) {
+            ImStore.saveMsg({
+              sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.UPDATE_GROUP_NAME, message.groupId, userId),
+              groupId: message.groupId,
+              groupName: message.groupName,
+              groupOwnerId: message.groupOwnerId,
+              msgType: SESSION_TYPE.GROUP_NOTICE,
+              revTime: new Date(),
+              noticeType: NOTICE_TYPE.UPDATE_GROUP_NAME
+            }, userId);
+          }
           break;
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_IMAGE_URL:
           break;
@@ -121,7 +123,7 @@ let _dealMsg = function (message, socket) {
           //TODO: 把userInfo加入到IMUserInfo表中
           if (userId != message.userInfo.fulfillmentValue.userId) {
             ImStore.saveMsg({
-              sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.INVITED, message.groupId, userId),
+              sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.INVITED, message.groupId, userId, message.userInfo.fulfillmentValue.userId),
               groupId: message.groupId,
               groupName: message.groupName,
               groupOwnerId: message.groupOwnerId,
@@ -138,7 +140,7 @@ let _dealMsg = function (message, socket) {
         case UPDATE_GROUP_TYPE.LEAVE_GROUP:
           //TODO 退出群组的处理...
           ImStore.saveMsg({
-            sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.LEAVE_GROUP, message.groupId, userId),
+            sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.LEAVE_GROUP, message.groupId, userId, message.userInfo.userId),
             groupId: message.groupId,
             groupName: message.groupName,
             groupOwnerId: message.groupOwnerId,
@@ -161,17 +163,19 @@ let _dealMsg = function (message, socket) {
         noticeType = DELETE_TYPE.DELETE_GROUP;
       }
       let group = ContactSotre.getGroupDetailById(message.groupId);
-      ImStore.saveMsg({
-        sessionId: KeyGenerator.getSessionKey(noticeType, message.groupId, userId),
-        groupId: message.groupId,
-        groupName: group.groupName,
-        groupOwnerId: group.groupMasterUid,
-        msgType: SESSION_TYPE.GROUP_NOTICE,
-        revTime: new Date(),
-        noticeType: noticeType,
-        userId: group.groupMasterUid
-      }, userId);
-      ContactSotre.leaveGroup(message.groupId);
+      if (message.action == DELETE_TYPE.DELETE_GROUP && userId != group.groupMasterUid) {
+        ImStore.saveMsg({
+          sessionId: KeyGenerator.getSessionKey(noticeType, message.groupId, userId),
+          groupId: message.groupId,
+          groupName: group.groupName,
+          groupOwnerId: group.groupMasterUid,
+          msgType: SESSION_TYPE.GROUP_NOTICE,
+          revTime: new Date(),
+          noticeType: noticeType,
+          userId: group.groupMasterUid
+        }, userId);
+        ContactSotre.leaveGroup(message.groupId);
+      }
       break;
     case MSG_TYPE.SYNC_REQ:
       //message.msgArray.forEach((item)=>{
@@ -186,7 +190,7 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.SYNC_RES:
 
-      message.msgArray&&message.msgArray.reverse().forEach((item)=> {
+      message.msgArray&&message.msgArray.forEach((item)=> {
         _dealMsg(JSON.parse(item), socket);
       });
       ContactSotre.syncReq(new Date());

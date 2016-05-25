@@ -310,6 +310,7 @@ let Market = React.createClass({
   },
 
   render: function () {
+
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} title='市场信息' showBack={false}>

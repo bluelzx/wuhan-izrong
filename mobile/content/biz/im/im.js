@@ -240,18 +240,33 @@ let WhitePage = React.createClass({
 
   showText:(item)=> {
     //JSON.parse(item.content);
-    let arr = item.content.split(':::');
-    if (MSG_CONTENT_TYPE.TEXT == item.contentType) {
-      return arr[0] + '：' + arr[1];
-    } else if (MSG_CONTENT_TYPE.IMAGE == item.contentType) {
-      return arr[0] + '：[图片]'
-    } else if(MSG_CONTENT_TYPE.NAMECARD == item.contentType){
-      return arr[0] + '：[名片]';
-    }else if(MSG_CONTENT_TYPE.BIZINFO){
-      return arr[0] + '：[业务信息]';
-    }else {
-      return '点击查看详情'
+    if(item.type == SESSION_TYPE.USER) {
+      if (MSG_CONTENT_TYPE.TEXT == item.contentType) {
+        return item.content
+      } else if (MSG_CONTENT_TYPE.IMAGE == item.contentType) {
+        return '[图片]'
+      } else if(MSG_CONTENT_TYPE.NAMECARD == item.contentType){
+        return '[名片]';
+      }else if(MSG_CONTENT_TYPE.BIZINFO){
+        return '[业务信息]';
+      }else {
+        return '点击查看详情'
+      }
+    } else {
+      let arr = item.content.split(':::');
+      if (MSG_CONTENT_TYPE.TEXT == item.contentType) {
+        return arr[0] + '：' + arr[1];
+      } else if (MSG_CONTENT_TYPE.IMAGE == item.contentType) {
+        return arr[0] + '：[图片]'
+      } else if(MSG_CONTENT_TYPE.NAMECARD == item.contentType){
+        return arr[0] + '：[名片]';
+      }else if(MSG_CONTENT_TYPE.BIZINFO){
+        return arr[0] + '：[业务信息]';
+      }else {
+        return '点击查看详情'
+      }
     }
+
   },
 
   renderUser: function (item, index, length) {
@@ -414,12 +429,15 @@ let WhitePage = React.createClass({
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} title='聊天' showBack={false} actionButton={this.renderContact}>
+
+
         <SearchBar textChange={this.textChange}/>
         <ScrollView
           automaticallyAdjustContentInsets={false}
           style={{flexDirection: 'column',marginTop:0,backgroundColor:'#F4F4F4'}}>
           {this.renderMessage()}
         </ScrollView>
+
       </NavBarView>
     );
   }

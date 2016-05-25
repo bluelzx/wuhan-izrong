@@ -77,7 +77,7 @@ const NOTICE_TYPE = {
 
 const DELETE_TYPE = {
   KICK_OUT: 'kickOut',
-  DELETE_GROUP: 'deleteGroup'
+  DELETE_GROUP: 'dismissGroup'
 }
 
 module.exports = {
