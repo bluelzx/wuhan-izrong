@@ -178,7 +178,7 @@ var LightboxOverlay = React.createClass({
               Alert('保存失败');
               break;
             case 1:
-              Alert('保存成功');
+              Alert('成功保存至/fas-wuhan文件夹');
               break;
             default:
               break;

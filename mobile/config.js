@@ -55,7 +55,7 @@ var lyuConfig = {
   ImHost: '192.168.64.205:6379'
 };
 
-var Config = outLine;
+var Config = productConfig;
 
 module.exports = Config;
 //module.exports = function () {
