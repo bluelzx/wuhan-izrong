@@ -11,8 +11,6 @@ const {
   ImUserInfoSchema,
   LoginUserInfoSchema,
   OrgBeanSchema,
-  BizOrderCategorySchema,
-  BizOrderItemSchema,
   FilterItemSchema,
   FilterItemsSchema,
   OrderItemSchema,
@@ -20,13 +18,14 @@ const {
   PlatFormInfoSchema,
   HomePageSchema,
   NoticeSchema,
-  NewFriendNoticSchema
+  NewFriendNoticSchema,
+  MarketInfoSchema
   } = require('./schemas');
 console.log(Realm.defaultPath);
 let _realm = new Realm({
-  schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema, LoginUserInfoSchema, OrgBeanSchema,NoticeSchema,
-    BizOrderCategorySchema, BizOrderItemSchema, FilterItemSchema, FilterItemsSchema, OrderItemSchema, SessionSchema,PlatFormInfoSchema,HomePageSchema,NewFriendNoticSchema],
-  schemaVersion: 34
+  schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema, LoginUserInfoSchema, OrgBeanSchema,NoticeSchema,MarketInfoSchema,
+     FilterItemSchema, FilterItemsSchema, OrderItemSchema, SessionSchema,PlatFormInfoSchema,HomePageSchema,NewFriendNoticSchema],
+  schemaVersion: 36
 });
 
 module.exports = _realm;
