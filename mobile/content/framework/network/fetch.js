@@ -2,6 +2,8 @@ var Qs = require('qs');
 var { Alert } = require('mx-artifacts');
 var AppStore = require('../store/appStore');
 
+var MxFetch = require('./mxFetch');
+
 var BFetch = function (url, param, callback, failure, options) {
   var headers = {
     'Accept': 'application/json',
@@ -69,7 +71,7 @@ var rawFetch = function (url, param, callback, failure, option) {
   //  setTimeout(() => reject(new Error('链接超时')), 2000000);
   //})]);
  // process(fetch(url, param) ,callback,failure,option);
-  var _promise = fetch(url, param);
+  var _promise = MxFetch.fetch(url, param, 5000);
   return process(_promise, option);
 };
 

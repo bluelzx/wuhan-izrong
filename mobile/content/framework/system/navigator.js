@@ -181,7 +181,7 @@ var Main = React.createClass({
             AppStore.isDelete();
           } else if (errorData.message) {
             if (errorData.message.includes('Network request failed')) {
-              Alert('网络异常');
+              Alert('网络请求失败');
             } else {
               Alert(errorData.message);
             }

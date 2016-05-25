@@ -57,7 +57,7 @@ let _saveIMUserInfo = function(item) {
       mobileNumber: !_.isEmpty(item.mobileNumber) ? item.mobileNumber : '',
       photoFileUrl: !_.isEmpty(item.photoFileUrl) ? item.photoFileUrl : '',
       orgId: item.orgId,
-      phoneNumber: !_.isEmpty(item.phoneNumber) ? item.phoneNumber : null,
+      phoneNumber: !_.isEmpty(item.phoneNumber) ? item.phoneNumber : '',
       publicTitle: !!(item.publicTitle == true || item.publicTitle === null),
       publicMobile: !!(item.publicMobile == true || item.publicMobile === null),
       publicDepart: !!(item.publicDepart == true || item.publicDepart === null),
