@@ -193,6 +193,10 @@ var Main = React.createClass({
           console.log(errorData);
           if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
             AppStore.forceLogout();
+          } if (errorData.msgCode == 'USER_HAS_BEEN_FROZEN') {
+            AppStore.freezAccount();
+          } if (errorData.msgCode == 'USER_HAS_BEEN_DELETED') {
+            AppStore.isDelete();
           } else if (errorData.message) {
             if (errorData.message.includes('Network request failed')) {
               Alert('网络请求失败');
