@@ -107,10 +107,14 @@ let _updateSession = function (param, notAdd, noticeType, currUserId){
       if(p[0].lastTime > param.lastTime){
         return;
       }
-      if(param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER){
+      if(param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER || param.type == SESSION_TYPE.NEWFRIEND){
         if(!notAdd){
           param.badge = p[0].badge + 1;
         }
+      }
+    }else{
+      if(!notAdd){
+        param.badge =  1;
       }
     }
   }

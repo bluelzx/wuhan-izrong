@@ -13,6 +13,7 @@ let _dealMsg = function (message, socket) {
   let userInfo = ContactSotre.getUserInfo();
   let userId = userInfo.userId;
   let lastSyncTime = userInfo.lastSyncTime ? userInfo.lastSyncTime.getTime() : new Date().getTime();
+
   //console.log(message);
   switch (message.msgType) {
     case MSG_TYPE.EXCEPTION:
