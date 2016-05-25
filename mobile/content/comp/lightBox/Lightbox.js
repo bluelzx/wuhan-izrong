@@ -107,6 +107,10 @@ var Lightbox = React.createClass({
                     var route = {
                       comp: LightboxOverlay,
                       param: this.getOverlayProps(),
+                      handleBack: () => {
+                        this.onClose();
+                        return true;
+                      }
                     };
                     var routes = this.props.navigator.getCurrentRoutes();
                     routes.push(route);
