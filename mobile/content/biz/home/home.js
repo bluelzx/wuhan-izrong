@@ -95,11 +95,9 @@ let Home = React.createClass({
           this.setState({
             contentList: contentList
           });
-        }).catch(
-          (errorData) => {
-            throw errorData;
-          }
-        );
+        }).catch((errorData) => {
+          throw errorData;
+        });
       }
     );
   },
