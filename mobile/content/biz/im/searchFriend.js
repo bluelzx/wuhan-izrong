@@ -143,14 +143,20 @@ let SearchFriend = React.createClass({
         navigator={this.props.navigator}
         title='搜索好友'
       >
-       <View style={{paddingTop:10}}>
-         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-           <TextInput
-             selectionColor={DictStyle.colorSet.textInputColor}
-             onChangeText={(text) => this.textChange(text)}
-             style={{paddingHorizontal:5,flex:8,borderRadius:6,color: DictStyle.searchFriend.textInputColor, height:(Platform.OS === 'ios')?30:60,backgroundColor:'#ffffff',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}>
-           </TextInput>
-           <TouchableOpacity style={{flex:1,height:(Platform.OS === 'ios')?30:60,justifyContent:'center',alignItems:'center'}} onPress={()=>{this.state.justTop=true;this.searchFriend()}}><Text style={{color:'#3C62E4',fontSize:16}}>搜索</Text></TouchableOpacity>
+       <View style={{paddingTop:5}}>
+         <View style={{flexDirection:'row',justifyContent:'space-between', alignItems:'center',marginRight:10}}>
+           <View style={{flex:8,height:40,backgroundColor:'#ffffff',marginHorizontal:10,borderRadius:6,
+          justifyContent:'center', alignItems:'center',alignItems:'stretch'}}>
+              <TextInput
+                selectionColor={DictStyle.colorSet.textInputColor}
+                onChangeText={(text) => this.textChange(text)}
+                style={{flex:1,alignSelf:'stretch',color: DictStyle.colorSet.searchBarColor, height:(Platform.OS === 'ios')?30:60,backgroundColor:'#ffffff',marginTop:0,marginLeft:10,marginRight:10}}>
+              </TextInput>
+           </View>
+           <TouchableOpacity style={{flex:1,height:(Platform.OS === 'ios')?30:60,justifyContent:'center',alignItems:'center'}}
+                             onPress={()=>{this.state.justTop=true;this.searchFriend()}}>
+             <Text style={{color:'#3C62E4',fontSize:16}}>搜索</Text>
+           </TouchableOpacity>
          </View>
 
          {(()=>{

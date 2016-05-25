@@ -141,7 +141,9 @@ let Contacts = React.createClass({
   //创建组群
   renderAdd: function() {
     return (
-      <TouchableOpacity onPress={()=>{
+      <TouchableOpacity
+        style={{padding:25,marginRight:-25}}
+        onPress={()=>{
       this.addMore();
       }}>
         {<Image style={{width:25,height:25}} source={DictIcon.imCreateGroupBtn}/>}
@@ -177,7 +179,7 @@ let Contacts = React.createClass({
           <View style={{ alignItems: 'flex-end',paddingRight:10}}>
             <Angle direction="up" color='#375EE4'/>
           </View>
-          <View style={{backgroundColor:'#375EE4', borderRadius:5,paddingHorizontal:5,paddingVertical:10}}>
+          <View style={{backgroundColor:'#375EE4', borderRadius:5,paddingHorizontal:5,paddingVertical:10, marginTop:Platform.OS==='ios'?0:-12}}>
             <TouchableOpacity
               onPress={
                 () => {
