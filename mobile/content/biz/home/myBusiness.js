@@ -36,7 +36,6 @@ let {MYBIZ_CHANGE} = require('../../constants/dictEvent');
 let Adjust = require('../../comp/utils/adjust');
 let DictStyle = require('../../constants/dictStyle');
 
-let marketData = {contentList: []};
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Market = React.createClass({
 
@@ -82,7 +81,7 @@ let Market = React.createClass({
       bizOrientationID: '',
       termID: '',
       amountID: '',
-      marketData: marketData,
+      marketData: []
     }
   },
 
@@ -105,7 +104,7 @@ let Market = React.createClass({
    * @param {function} callback Should pass the rows
    * @param {object} options Inform if first load
    */
-  _onFetch(page = 1, callback, options) {
+  _onFetch(page, callback, options) {
     return MarketAction.bizOrderAdminSearch({
         orderFieldList: [
           {

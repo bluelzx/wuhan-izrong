@@ -37,8 +37,6 @@ let Adjust = require('../../comp/utils/adjust');
 let numeral = require('numeral');
 let DictStyle = require('../../constants/dictStyle');
 
-var marketData = {contentList: []};
-
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Market = React.createClass({
   getStateFromStores: function () {
@@ -82,38 +80,11 @@ let Market = React.createClass({
       bizOrientationID: '',
       termID: '',
       amountID: '',
-      marketData: marketData
+      marketData: []
     };
   },
   getInitialState(){
     return this.getStateFromStores();
-    this.bizOrderMarketSearch();
-  },
-
-  bizOrderMarketSearch: function () {
-    let requestBody = {
-      orderField: 'lastModifyDate',
-      orderType: 'desc',
-      pageIndex: 1,
-      filterList: [
-        this.state.bizCategoryID
-      ]
-    };
-    this.props.exec(
-      ()=> {
-        return MarketAction.bizOrderMarketSearch(requestBody
-        ).then((response)=> {
-          console.log(response);
-          this.setState({
-            contentList: response.contentList
-          });
-        }).catch(
-          (errorData) => {
-            throw errorData;
-          }
-        );
-      }
-    );
   },
 
   componentDidMount() {
@@ -138,7 +109,7 @@ let Market = React.createClass({
    * @param {function} callback Should pass the rows
    * @param {object} options Inform if first load
    */
-  _onFetch(page = 1, callback, options) {
+  _onFetch(page, callback, options) {
     let requestBody = {
       orderField: this.state.orderField,
       orderType: this.state.orderType,
