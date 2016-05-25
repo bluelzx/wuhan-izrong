@@ -105,15 +105,17 @@ let _dealMsg = function (message, socket) {
           ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
           break;
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_NAME:
-          ImStore.saveMsg({
-            sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.UPDATE_GROUP_NAME, message.groupId, userId),
-            groupId: message.groupId,
-            groupName: message.groupName,
-            groupOwnerId: message.groupOwnerId,
-            msgType: SESSION_TYPE.GROUP_NOTICE,
-            revTime: new Date(),
-            noticeType: NOTICE_TYPE.UPDATE_GROUP_NAME
-          }, userId);
+          if (message.groupOwnerId != userId) {
+            ImStore.saveMsg({
+              sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.UPDATE_GROUP_NAME, message.groupId, userId),
+              groupId: message.groupId,
+              groupName: message.groupName,
+              groupOwnerId: message.groupOwnerId,
+              msgType: SESSION_TYPE.GROUP_NOTICE,
+              revTime: new Date(),
+              noticeType: NOTICE_TYPE.UPDATE_GROUP_NAME
+            }, userId);
+          }
           break;
         case UPDATE_GROUP_TYPE.UPDATE_GROUP_IMAGE_URL:
           break;
