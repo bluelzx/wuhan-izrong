@@ -26,11 +26,18 @@ let AddMember = React.createClass({
       memberList:{},
       existMembers:this.props.param.existMembers,
       keyWord:'',
+      isOpen:false
     }
   },
 
   textChange: function(text) {
-    this.setState({keyWord:text});
+    if(text == ''){
+      isOpen = false;
+      this.setState({keyWord:text,isOpen:false});
+    }else{
+      isOpen = true;
+      this.setState({keyWord:text,isOpen:true});
+    }
   },
 
   addUser: function( groupId, members) {
@@ -107,7 +114,7 @@ let AddMember = React.createClass({
               style={{backgroundColor:DictStyle.colorSet.extenListGroundCol,paddingHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
       <View style={{flexDirection:'row', paddingVertical:5,alignItems:'center'}}>
         <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-        <Text style={{fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
+        <Text numberOfLines={1} style={{flex:1,fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
       </View>
     </CheckBox>
     );
@@ -136,7 +143,9 @@ let AddMember = React.createClass({
                          dataSource={dataSource}
                          groupDataName={'orgMembers'}
                          groupItemRender={this.itemRender}
-                         groupTitleRender={this.titleRender} />
+                         groupTitleRender={this.titleRender}
+                         isOpen={this.state.isOpen}
+              />
             );
           }else{
             return (

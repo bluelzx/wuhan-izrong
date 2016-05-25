@@ -39,6 +39,7 @@ let groupFilter = function(data, groupName,groupMembers,groupMembersName, keyWor
   data.forEach((group)=>{
     let gName = group[groupName];
     if(!!gName && gName.length && !!~gName.indexOf(keyWord)){
+      if(group[groupMembers]&&group[groupMembers].length>0)
       ret.push(group);
     }else{
       let mem = [];
@@ -91,7 +92,7 @@ let contactFilter = function(data, groupM,gN, groupName,groupMembers,groupMember
   if(k!=null){
     ret.push(k);
   }else{
-    ret.push([]);
+    //ret.push([]);
   }
   console.log('k'+k);
   ret.push(...groupFilter(data.slice(1), groupName,groupMembers,groupMembersName, keyWord, uid));

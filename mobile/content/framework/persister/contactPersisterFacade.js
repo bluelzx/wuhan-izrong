@@ -101,7 +101,21 @@ let _helperGroupByOrg = function (members) {
 }
 
 let _getAllGroups = function () {
-  return _realm.objects(GROUP);
+  let groups = _realm.objects(GROUP);
+  let ret = [];
+  groups.forEach((item)=>{
+    let tmp = {
+      groupId: item.groupId,
+      groupImageUrl: item.groupImageUrl,
+      groupName: item.groupName,
+      groupMasterUid: item.groupMasterUid,
+      memberNum: item.memberNum,
+      members: item.members,
+      mute: item.mute
+    };
+    ret.push(tmp);
+  });
+  return ret;
 };
 //***查询群的详细信息
 let _getGroupInfoByGroupId = function (groupId) {
