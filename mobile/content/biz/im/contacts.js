@@ -106,7 +106,7 @@ let Contacts = React.createClass({
       return (
         <TouchableOpacity key={data.groupId}
                             onPress={() => this.toGroup(data)}
-                            style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
+                            style={{backgroundColor:DictStyle.colorSet.extenListGroundCol,paddingHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
             <Image style={{height: 46,width: 46,borderRadius: 23}} source={DictIcon.imMyGroup} />
             <Text style={[{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10},FontSize.realName]}>{data.groupName}</Text>
@@ -118,7 +118,7 @@ let Contacts = React.createClass({
       return (
         <TouchableOpacity key={data.userId}
                             onPress={() => this.toUser(data)}
-                            style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
+                            style={{backgroundColor:DictStyle.colorSet.extenListGroundCol,paddingHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row', paddingVertical:5,alignItems:'center'}}>
             <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
             <Text style={[{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10},FontSize.realName]}>{data.realName}</Text>

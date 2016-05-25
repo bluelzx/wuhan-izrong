@@ -128,7 +128,7 @@ let NewFriendList = React.createClass({
           >
           <View
             style={{
-            flexDirection:'row', justifyContent:'space-around',flex:1}}
+            flexDirection:'row', justifyContent:'space-between',flex:1}}
           >
             <View style={{flex:2}}>
               <Text numberOfLines={1} style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.realName + '-' + item.orgName+'hhhhh'}</Text>
@@ -140,13 +140,13 @@ let NewFriendList = React.createClass({
               if(item.isAccept){
                 return (
                   <Text
-                    style={{flex:1,borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'已接受'}</Text>
+                    style={{textAlign:'right',flex:1,justifyContent:'flex-end',borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'已接受'}</Text>
 
                 );
               }else{
                 return (
                   <TouchableOpacity style={{flex:1,marginRight:10}} onPress={()=>this.acceptInvite(item)}>
-                    <View style={{borderRadius: 5, backgroundColor: '#23ABF3',paddingHorizontal:10,paddingVertical:5}}>
+                    <View style={{justifyContent:'flex-end',borderRadius: 5, backgroundColor: '#23ABF3',paddingHorizontal:10,paddingVertical:5}}>
                       <Text
                         style={{color: '#EAF7FD', textAlign:'center'}}>{'加好友'}</Text>
                     </View>

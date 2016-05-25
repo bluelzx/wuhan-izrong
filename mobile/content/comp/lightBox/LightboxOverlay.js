@@ -75,10 +75,20 @@ var LightboxOverlay = React.createClass({
     };
   },
 
-  componentWillMount: function () {
-    if (Platform.OS === 'android') {
-      BackAndroid.removeEventListener('hardwareBackPress', this.close);
+  componentDidMount: function () {
+    //if (Platform.OS === 'android') {
+    //  BackAndroid.addEventListener('hardwareBackPress',this.androidClose);
+    //}
+
+    if (this.props.param.isOpen) {
+      this.open();
     }
+  },
+
+  componentWillMount: function () {
+    //if (Platform.OS === 'android') {
+    //  BackAndroid.removeEventListener('hardwareBackPress',this.androidClose);
+    //}
 
     this._panResponder = PanResponder.create({
       // Ask to be the responder:
@@ -117,16 +127,6 @@ var LightboxOverlay = React.createClass({
         }
       },
     });
-  },
-
-  componentDidMount: function () {
-    if (Platform.OS === 'android') {
-      BackAndroid.addEventListener('hardwareBackPress', this.close);
-    }
-
-    if (this.props.param.isOpen) {
-      this.open();
-    }
   },
 
   open: function () {
