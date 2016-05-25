@@ -111,8 +111,26 @@ var Main = React.createClass({
 
   _onAndroidBackPressed: function () {
     if (this._navigator) {
-      if (this._navigator.getCurrentRoutes().length > 1) {
-        this._navigator.pop();
+      //if (this._navigator.getCurrentRoutes().length > 1) {
+      //  this._navigator.pop();
+      //  return true;
+      //}
+
+      const nav = this._navigator;
+      const routers = nav.getCurrentRoutes();
+      if (routers.length > 1) {
+        const top = routers[routers.length - 1];
+        if (top.ignoreBack || top.comp.ignoreBack) {
+          // 路由或组件上决定这个界面忽略back键
+          return true;
+        }
+        const handleBack = top.handleBack || top.comp.handleBack;
+        if (handleBack) {
+          // 路由或组件上决定这个界面自行处理back键
+          return handleBack();
+        }
+        // 默认行为： 退出当前界面。
+        nav.pop();
         return true;
       }
 
@@ -177,7 +195,7 @@ var Main = React.createClass({
             AppStore.forceLogout();
           } else if (errorData.message) {
             if (errorData.message.includes('Network request failed')) {
-              Alert('网络异常');
+              Alert('网络请求失败');
             } else {
               Alert(errorData.message);
             }

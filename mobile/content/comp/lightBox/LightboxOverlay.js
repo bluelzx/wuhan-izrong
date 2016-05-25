@@ -18,7 +18,8 @@ var {
   Platform,
   Image,
   CameraRoll,
-  ActionSheetIOS
+  ActionSheetIOS,
+  BackAndroid
   } = React;
 
 var WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -74,7 +75,21 @@ var LightboxOverlay = React.createClass({
     };
   },
 
+  componentDidMount: function () {
+    //if (Platform.OS === 'android') {
+    //  BackAndroid.addEventListener('hardwareBackPress',this.androidClose);
+    //}
+
+    if (this.props.param.isOpen) {
+      this.open();
+    }
+  },
+
   componentWillMount: function () {
+    //if (Platform.OS === 'android') {
+    //  BackAndroid.removeEventListener('hardwareBackPress',this.androidClose);
+    //}
+
     this._panResponder = PanResponder.create({
       // Ask to be the responder:
       onStartShouldSetPanResponder: (evt, gestureState) => !this.state.isAnimating,
@@ -112,12 +127,6 @@ var LightboxOverlay = React.createClass({
         }
       },
     });
-  },
-
-  componentDidMount: function () {
-    if (this.props.param.isOpen) {
-      this.open();
-    }
   },
 
   open: function () {
@@ -178,7 +187,7 @@ var LightboxOverlay = React.createClass({
               Alert('保存失败');
               break;
             case 1:
-              Alert('保存成功');
+              Alert('成功保存至/fas-wuhan文件夹');
               break;
             default:
               break;

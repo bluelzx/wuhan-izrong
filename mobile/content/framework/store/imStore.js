@@ -207,7 +207,15 @@ let _saveMsg = (message, userId) => {
     }
     SessionAction.updateSession(message.type, message.sessionId,user.realName ,message.content,message.revTime,message.contentType, userId, {notAdd:notAdd});
   }else if(message.type == SESSION_TYPE.GROUP){
-
+    let user;
+    if(message.fromUId == null){
+      user = ContactStore.getUserInfo(userId);
+      let orgValue = ContactStore.getOrgValueByOrgId(user.orgId);
+      user.orgValue = orgValue;
+    } else {
+      user = ContactStore.getUserInfoByUserId(message.fromUId);
+    }
+    let content = user.realName + '-' + user.orgValue + ':::' + message.content;
     let notAdd = false;
     //let group = ContactStore.getGroupDetailById(message.groupId);
     let n = AppStore.getNavigator();
@@ -236,7 +244,7 @@ let _saveMsg = (message, userId) => {
     }
 
     let group = ContactStore.getGroupDetailById(message.groupId);
-    SessionAction.updateSession(message.type, message.sessionId,group.groupName,message.content,message.revTime,message.contentType, userId, {notAdd:notAdd});
+    SessionAction.updateSession(message.type, message.sessionId,group.groupName,content,message.revTime,message.contentType, userId, {notAdd:notAdd});
   }
 
   if (message.sessionId === _data.sessionId) {
