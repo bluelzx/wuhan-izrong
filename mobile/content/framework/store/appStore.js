@@ -172,7 +172,9 @@ let _logout = (userId) => {
 };
 
 let _forceLogout = () => {
-  if(!_info.isForceLogout && !_info.isLogout){
+  if(_info.isForceLogout && _info.isLogout){
+
+  }else{
     //TODO:'强制登出'
     _info.isForceLogout = true;
     //清空token,isLogout = true
@@ -183,17 +185,24 @@ let _forceLogout = () => {
 
 let _deleteLoginUser = () => {
   //清空token,isLogout = true
-  _logout(_getUserId());
-  _info.isLogout = true;
-  _info.isDelete = true;
-  AppStore.emitChange();
+  if(_info.isLogout && _info.isDelete){
+
+  }else{
+    _logout(_getUserId());
+    _info.isDelete = true;
+    AppStore.emitChange();
+  }
 };
 
 let _freezAccount = () => {
-  //清空token
-  _logout(_getUserId());
-  _info.isFreezing = true;
-  AppStore.emitChange();
+  if(_info.isLogout && _info.isFreezing){
+
+  }else {
+    //清空token
+    _logout(_getUserId());
+    _info.isFreezing = true;
+    AppStore.emitChange();
+  }
 };
 
 
