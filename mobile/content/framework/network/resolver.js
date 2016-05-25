@@ -134,8 +134,6 @@ let _dealMsg = function (message, socket) {
           }
           break;
         case UPDATE_GROUP_TYPE.KICK_OUT_GROUP_MEMBER:
-
-          break;
         case UPDATE_GROUP_TYPE.LEAVE_GROUP:
           //TODO 退出群组的处理...
           ImStore.saveMsg({
