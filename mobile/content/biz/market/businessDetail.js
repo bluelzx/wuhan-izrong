@@ -226,8 +226,11 @@ let BusinessDetail = React.createClass({
         {
           this.state.fileUrlList.map((item, index) => {
             return (
-              <Lightbox key={index} imageSource={{uri:item, isStatic: true}}
-                        navigator={this.props.navigator} springConfig={{tension: 35, friction: 6}}
+              <Lightbox key={index}
+                        imageSource={{uri:item, isStatic: true}}
+                        underlayColor="#f7f7f7"
+                        navigator={this.props.navigator}
+                        springConfig={{tension: 35, friction: 6}}
               >
                 <Image
                   style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
