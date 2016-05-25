@@ -18,7 +18,8 @@ var {
   Platform,
   Image,
   CameraRoll,
-  ActionSheetIOS
+  ActionSheetIOS,
+  BackAndroid
   } = React;
 
 var WINDOW_HEIGHT = Dimensions.get('window').height;
@@ -75,6 +76,10 @@ var LightboxOverlay = React.createClass({
   },
 
   componentWillMount: function () {
+    if (Platform.OS === 'android') {
+      BackAndroid.removeEventListener('hardwareBackPress', this.close);
+    }
+
     this._panResponder = PanResponder.create({
       // Ask to be the responder:
       onStartShouldSetPanResponder: (evt, gestureState) => !this.state.isAnimating,
@@ -115,6 +120,10 @@ var LightboxOverlay = React.createClass({
   },
 
   componentDidMount: function () {
+    if (Platform.OS === 'android') {
+      BackAndroid.addEventListener('hardwareBackPress', this.close);
+    }
+
     if (this.props.param.isOpen) {
       this.open();
     }
