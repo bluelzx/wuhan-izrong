@@ -153,13 +153,14 @@ let _saveMsg = (message, userId) => {
       content = message.realName + '-' + message.orgValue + '加入了群聊';
     } else if (message.noticeType == DELETE_TYPE.DELETE_GROUP) {
       title = message.groupName;
-      content = '群主' + message.realName + '解散了' + message.groupName + '群聊';
+      let userInfo = ContactStore.getUserInfoByUserId(message.groupOwnerId);
+      content = '群主' + userInfo.realName + '解散了' + message.groupName + '群聊';
     }else if (message.noticeType == DELETE_TYPE.KICK_OUT) {
       title = message.groupName;
       content = '群主将你请出了' + message.groupName + '群聊';
     } else if (message.noticeType == NOTICE_TYPE.UPDATE_GROUP_NAME) {
       title = message.groupName;
-      content = '群主已将群名称修改为' +  + message.groupName;
+      content = '群主已将群名称修改为' + message.groupName;
     }else {
       title = message.groupInviterName + '-' + message.groupInviterOrgValue;
       content = '邀请您加入'+ message.groupName +'群聊';

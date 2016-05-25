@@ -161,17 +161,19 @@ let _dealMsg = function (message, socket) {
         noticeType = DELETE_TYPE.DELETE_GROUP;
       }
       let group = ContactSotre.getGroupDetailById(message.groupId);
-      ImStore.saveMsg({
-        sessionId: KeyGenerator.getSessionKey(noticeType, message.groupId, userId),
-        groupId: message.groupId,
-        groupName: group.groupName,
-        groupOwnerId: group.groupMasterUid,
-        msgType: SESSION_TYPE.GROUP_NOTICE,
-        revTime: new Date(),
-        noticeType: noticeType,
-        userId: group.groupMasterUid
-      }, userId);
-      ContactSotre.leaveGroup(message.groupId);
+      if (message.action == DELETE_TYPE.DELETE_GROUP && userId != group.groupMasterUid) {
+        ImStore.saveMsg({
+          sessionId: KeyGenerator.getSessionKey(noticeType, message.groupId, userId),
+          groupId: message.groupId,
+          groupName: group.groupName,
+          groupOwnerId: group.groupMasterUid,
+          msgType: SESSION_TYPE.GROUP_NOTICE,
+          revTime: new Date(),
+          noticeType: noticeType,
+          userId: group.groupMasterUid
+        }, userId);
+        ContactSotre.leaveGroup(message.groupId);
+      }
       break;
     case MSG_TYPE.SYNC_REQ:
       //message.msgArray.forEach((item)=>{
