@@ -107,7 +107,7 @@ let AddMember = React.createClass({
               style={{backgroundColor:DictStyle.colorSet.extenListGroundCol,paddingHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
       <View style={{flexDirection:'row', paddingVertical:5,alignItems:'center'}}>
         <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-        <Text style={{fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
+        <Text numberOfLines={1} style={{flex:1,fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
       </View>
     </CheckBox>
     );

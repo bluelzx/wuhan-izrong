@@ -10,6 +10,8 @@ let ImUserInfo = require('./imUserInfo');
 let { Alert } = require('mx-artifacts');
 let ContactAction = require('../../framework/action/contactAction');
 let ContactStore = require('../../framework/store/contactStore');
+let initS = '输入姓名以搜索好友';
+let nullRes = '无符合条件的用户';
 
 let SearchFriend = React.createClass({
 
@@ -19,7 +21,8 @@ let SearchFriend = React.createClass({
       dataSource: [],
       keyWord:'',
       justTop:true,
-      totalUserAmount:0
+      totalUserAmount:0,
+      desc: initS
     }
   },
 
@@ -96,7 +99,7 @@ let SearchFriend = React.createClass({
             return response;
           }).then((response)=> {
 
-            this.setState({dataSource: response.imSearchUsers, totalUserAmount: response.totalUserAmount});
+            this.setState({dataSource: response.imSearchUsers, totalUserAmount: response.totalUserAmount,desc:nullRes});
           }).catch((err)=> {
             throw err;
           });
@@ -119,7 +122,7 @@ let SearchFriend = React.createClass({
             return response;
           }).then((response)=> {
 
-            this.setState({dataSource: response.imSearchUsers, totalUserAmount: response.totalUserAmount});
+            this.setState({dataSource: response.imSearchUsers, totalUserAmount: response.totalUserAmount,desc:nullRes});
           }).catch((err)=> {
             throw err;
           });
@@ -133,7 +136,7 @@ let SearchFriend = React.createClass({
 
 
   textChange: function(keyWord){
-    this.setState({keyWord:keyWord,dataSource:[]});
+    this.setState({keyWord:keyWord,dataSource:[],desc:initS});
   },
 
   render: function() {
@@ -148,6 +151,7 @@ let SearchFriend = React.createClass({
            <View style={{flex:8,height:40,backgroundColor:'#ffffff',marginHorizontal:10,borderRadius:6,
           justifyContent:'center', alignItems:'center',alignItems:'stretch'}}>
               <TextInput
+                keyboardType="web-search"
                 selectionColor={DictStyle.colorSet.textInputColor}
                 onChangeText={(text) => this.textChange(text)}
                 style={{flex:1,alignSelf:'stretch',color: DictStyle.colorSet.searchBarColor, height:(Platform.OS === 'ios')?30:60,backgroundColor:'#ffffff',marginTop:0,marginLeft:10,marginRight:10}}>
@@ -171,7 +175,7 @@ let SearchFriend = React.createClass({
            }else{
              return (
                <View style={{flex:1,justifyContent:'center',marginTop:10}}>
-                 <Text style={{textAlign:'center',color:DictStyle.searchFriend.nullUnitColor}}>输入姓名以搜索好友</Text>
+                 <Text style={{textAlign:'center',color:DictStyle.searchFriend.nullUnitColor}}>{this.state.desc}</Text>
                </View>
              );
            }

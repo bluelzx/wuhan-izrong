@@ -138,11 +138,11 @@ let ImUserInfo = React.createClass({
         <ScrollView automaticallyAdjustContentInsets={false}  horizontal={false}>
 
           <View style={styles.itemBackColor} >
-            <View style={styles.layout}>
-              <View style={{paddingLeft:16}}>
+            <View style={[styles.layout,{flex:1}]}>
+              <View style={{flex:1,paddingLeft:16}}>
                 <HeaderPic  photoFileUrl={this.state.data.photoFileUrl}  certified={this.state.data.certified} name={this.state.data.realName}/>
               </View>
-              <Text style={{color:'#979fa2',fontSize:18, marginRight:20}}>{this.state.data.realName}</Text>
+              <Text numberOfLines={2} style={{flex:3,color:'#979fa2',fontSize:18, marginRight:20}}>{this.state.data.realName}</Text>
             </View>
           </View>
           <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.data.publicMobile!==false?this.descValue(this.state.data.mobileNumber):privateDesc}/>

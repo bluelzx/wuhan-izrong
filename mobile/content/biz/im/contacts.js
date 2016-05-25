@@ -109,7 +109,7 @@ let Contacts = React.createClass({
                             style={{backgroundColor:DictStyle.colorSet.extenListGroundCol,paddingHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
             <Image style={{height: 46,width: 46,borderRadius: 23}} source={DictIcon.imMyGroup} />
-            <Text style={[{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10},FontSize.realName]}>{data.groupName}</Text>
+            <Text  numberOfLines={1} style={[{flex:1,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10},FontSize.realName]}>{data.groupName}</Text>
           </View>
         </TouchableOpacity>
 
@@ -121,7 +121,7 @@ let Contacts = React.createClass({
                             style={{backgroundColor:DictStyle.colorSet.extenListGroundCol,paddingHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row', paddingVertical:5,alignItems:'center'}}>
             <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-            <Text style={[{color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10},FontSize.realName]}>{data.realName}</Text>
+            <Text  numberOfLines={1} style={[{flex:1,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10},FontSize.realName]}>{data.realName+'哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈'}</Text>
           </View>
         </TouchableOpacity>
 
