@@ -121,7 +121,7 @@ let _dealMsg = function (message, socket) {
           //TODO: 把userInfo加入到IMUserInfo表中
           if (userId != message.userInfo.fulfillmentValue.userId) {
             ImStore.saveMsg({
-              sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.INVITED, message.groupId, userId),
+              sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.INVITED, message.groupId, userId, message.userInfo.fulfillmentValue.userId),
               groupId: message.groupId,
               groupName: message.groupName,
               groupOwnerId: message.groupOwnerId,
@@ -138,7 +138,7 @@ let _dealMsg = function (message, socket) {
         case UPDATE_GROUP_TYPE.LEAVE_GROUP:
           //TODO 退出群组的处理...
           ImStore.saveMsg({
-            sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.LEAVE_GROUP, message.groupId, userId),
+            sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.LEAVE_GROUP, message.groupId, userId, message.userInfo.userId),
             groupId: message.groupId,
             groupName: message.groupName,
             groupOwnerId: message.groupOwnerId,
