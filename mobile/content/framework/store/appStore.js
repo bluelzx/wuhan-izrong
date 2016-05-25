@@ -117,6 +117,12 @@ let _register = (data) => {
   _.assign(_data, {
     token: _getToken()
   });
+  _.assign(_info, {
+    isLogout: false,
+    isForceLogout: false,
+    isFreezing: false,
+    isDelete: false
+  });
   AppStore.emitChange();
 };
 
@@ -166,17 +172,19 @@ let _logout = (userId) => {
 };
 
 let _forceLogout = () => {
-  //TODO:'强制登出'
-  _info.isForceLogout = true;
-  //清空token,isLogout = true
-  _logout(_getUserId());
-  AppStore.emitChange();
+  if(!_info.isForceLogout && !_info.isLogout){
+    //TODO:'强制登出'
+    _info.isForceLogout = true;
+    //清空token,isLogout = true
+    _logout(_getUserId());
+    AppStore.emitChange();
+  }
 };
 
-let _deleteLoginUser = (userId) => {
-  Persister.logout(userId);
+let _deleteLoginUser = () => {
+  //清空token,isLogout = true
+  _logout(_getUserId());
   _info.isLogout = true;
-  _data.token = '';
   _info.isDelete = true;
   AppStore.emitChange();
 };

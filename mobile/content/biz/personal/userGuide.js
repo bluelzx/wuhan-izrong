@@ -42,7 +42,7 @@ let UserGuide = React.createClass({
         <Image
           style={styles.page}
           source={data}
-          resizeMode='stretch'
+          resizeMode='cover'
         />
         <TouchableOpacity style={{position: 'absolute',top:30,left:20}}
                           activeOpacity={0.8}
@@ -67,15 +67,6 @@ let UserGuide = React.createClass({
         renderPage={this.renderPage}
         isLoop={true}
         autoPlay={false}
-        animation={(animatedValue, toValue, gestureState) => {
-            var duration = 1000;
-            return Animated.timing(animatedValue,
-            {
-              toValue: toValue,
-              duration: duration
-            });
-          }
-        }
       />
     );
   }
