@@ -160,7 +160,7 @@ let DeleteMember = React.createClass({
             );
           }else{
             return (
-              <View style={{backgroundColor:'transparent', alignItems:'center'}}>
+              <View style={{backgroundColor:'transparent', alignItems:'center', marginTop:10}}>
                 <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>
               </View>
             );

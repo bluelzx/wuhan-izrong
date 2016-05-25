@@ -227,7 +227,7 @@ let WhitePage = React.createClass({
             >
               <View
                 style={{flexDirection:'row', justifyContent:'space-between',flex:1}}>
-                <Text style={[{color:DictStyle.colorSet.imTitleTextColor},FontSize.realName]}>{item.title}</Text>
+                <Text numberOfLines={1} style={[{flex:1,color:DictStyle.colorSet.imTitleTextColor},FontSize.realName]}>{item.title}</Text>
                 <Text style={[{color:DictStyle.colorSet.imTimeTextColor},FontSize.rightTime]}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
               <Text numberOfLines={1}
@@ -239,14 +239,16 @@ let WhitePage = React.createClass({
   },
 
   showText:(item)=> {
+    //JSON.parse(item.content);
+    let arr = item.content.split(':::');
     if (MSG_CONTENT_TYPE.TEXT == item.contentType) {
-      return item.content
+      return arr[0] + '：' + arr[1];
     } else if (MSG_CONTENT_TYPE.IMAGE == item.contentType) {
-      return '[图片]'
+      return arr[0] + '：[图片]'
     } else if(MSG_CONTENT_TYPE.NAMECARD == item.contentType){
-      return '[名片]';
+      return arr[0] + '：[名片]';
     }else if(MSG_CONTENT_TYPE.BIZINFO){
-      return '[业务信息]';
+      return arr[0] + '：[业务信息]';
     }else {
       return '点击查看详情'
     }
@@ -278,7 +280,7 @@ let WhitePage = React.createClass({
              >
               <View
                 style={{flexDirection:'row', justifyContent:'space-between',flex:1}}>
-                <Text style={[{color:DictStyle.colorSet.imTitleTextColor},FontSize.realName]}>{item.title + '-' + item.orgValue}</Text>
+                <Text numberOfLines={1} style={[{flex:1,color:DictStyle.colorSet.imTitleTextColor},FontSize.realName]}>{item.title + '-' + item.orgValue }</Text>
                 <Text style={[{color:DictStyle.colorSet.imTimeTextColor},FontSize.rightTime]}>{DateHelper.descDate(item.lastTime)}</Text>
               </View>
               <Text numberOfLines={1}
@@ -339,7 +341,7 @@ let WhitePage = React.createClass({
           paddingVertical:7,
           marginHorizontal:10}}>
 
-          <HeadPic badge={item.badge} source={DictIcon.imNewFriendNotic} />
+          <HeadPic badge={item.badge} source={DictIcon.imNewFriendNotic} showBadge={true}/>
 
             <View
               style={{  flex:1,paddingHorizontal:10}}

@@ -13,6 +13,7 @@ let _dealMsg = function (message, socket) {
   let userInfo = ContactSotre.getUserInfo();
   let userId = userInfo.userId;
   let lastSyncTime = userInfo.lastSyncTime ? userInfo.lastSyncTime.getTime() : new Date().getTime();
+
   //console.log(message);
   switch (message.msgType) {
     case MSG_TYPE.EXCEPTION:
@@ -196,9 +197,12 @@ let _dealMsg = function (message, socket) {
     case MSG_TYPE.CONTANCT_INFO_CERTIFY:
       if (message.userId == AppStore.getUserId()) {
         AppStore.updateUserInfo('isCertificated', message.isCertificated);
-        if (Platform.OS == 'android') {
-          NotificationModule.showNotification("系统提示", "爱资融", "您已通过系统管理员的认证");
-        }
+        //if (Platform.OS == 'android') {
+        //  NotificationModule.showNotification("系统提示", "爱资融", "您已通过系统管理员的认证");
+        //}
+        ImStore.createPlatFormInfo(message.infoId,
+          message.title, message.content,
+          new Date(message.createDate), userId);
       } else {
         ImStore.updateContactInfo(message);
       }
@@ -207,9 +211,10 @@ let _dealMsg = function (message, socket) {
     case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
       if (message.userId == AppStore.getUserId()) {
         AppStore.updateUserInfo('isCertificated', message.isCertificated);
-        if (Platform.OS == 'android') {
-          NotificationModule.showNotification("系统提示", "爱资融", "您已被系统管理员取消认证");
-        }
+
+        //if (Platform.OS == 'android') {
+        //  NotificationModule.showNotification("系统提示", "爱资融", "您已被系统管理员取消认证");
+        //}
       } else {
         ImStore.updateContactInfo(message);
       }
