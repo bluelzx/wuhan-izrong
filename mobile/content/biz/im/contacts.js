@@ -26,13 +26,15 @@ let { SESSION_TYPE } = require('../../constants/dictIm');
 let Spread = require('./spread');
 //let NameCircular = require('./nameCircular').NameCircular;
 let HeaderPic = require('./headerPic');
-let {contactFilter} = require('./searchBarHelper');
+let {contactFilter,groupFilter} = require('./searchBarHelper');
 let { IM_CONTACT } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
 import  Angle  from '../../comp/messenger/angle';
 const {ExtenList, Device,Alert } = require('mx-artifacts');
 
 const PLATFORMNAME = '爱资融同业平台';
+let isOpen = false;
+
 let Contacts = React.createClass({
 
   componentDidMount() {
@@ -53,7 +55,7 @@ let Contacts = React.createClass({
   },
 
   getInitialState: function(){
-    return Object.assign({ showView:false,keyWord:'',userInfo:ContactStore.getUserInfo()},this.getStateFromStores());
+    return Object.assign({ isOpen:false,showView:false,keyWord:'',userInfo:ContactStore.getUserInfo()},this.getStateFromStores());
   },
 
   renderImg: function(data) {
@@ -66,11 +68,7 @@ let Contacts = React.createClass({
   //******************** 扩展列表
   //渲染组标题
   titleRender: function(data, index) {
-    let title = "";
-    if (index == 0)
-      title = '我的群组';
-    else
-      title = data.orgValue;
+    let title = data.orgValue;
     return (
       <Text
         numberOfLines={1}
@@ -102,36 +100,41 @@ let Contacts = React.createClass({
 
   //渲染组成员
   itemRender: function(data, index) {
-    if(index == 0){
-      return (
-        <TouchableOpacity key={data.groupId}
-                            onPress={() => this.toGroup(data)}
-                            style={{backgroundColor:DictStyle.colorSet.extenListGroundCol,paddingHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
-          <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
-            <Image style={{height: 46,width: 46,borderRadius: 23}} source={DictIcon.imMyGroup} />
-            <Text  numberOfLines={1} style={[{flex:1,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10},FontSize.realName]}>{data.groupName}</Text>
-          </View>
-        </TouchableOpacity>
 
-      );
-    }else {
       return (
-        <TouchableOpacity key={data.userId}
-                            onPress={() => this.toUser(data)}
+        <TouchableOpacity key={data.type=='group'?data.groupId:data.userId}
+                            onPress={() => data.type=='group'?this.toGroup(data):this.toUser(data)}
                             style={{backgroundColor:DictStyle.colorSet.extenListGroundCol,paddingHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row', paddingVertical:5,alignItems:'center'}}>
-            <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-            <Text  numberOfLines={1} style={[{flex:1,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10},FontSize.realName]}>{data.realName+'哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈'}</Text>
+            {(()=>{
+              if(data.type=='group'){
+                return (
+                  <Image style={{height: 46,width: 46,borderRadius: 23}} source={DictIcon.imMyGroup} />
+                );
+              }else{
+                return (
+                  <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
+                );
+              }
+            })()}
+            <Text  numberOfLines={1} style={[{flex:1,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10},FontSize.realName]}>{data.realName}</Text>
           </View>
         </TouchableOpacity>
 
       );
-    }
+    //}
   },
   //*********************
 
   textChange: function(text) {
-    this.setState({keyWord:text});
+    //this.setState({keyWord:text});
+    if(text == ''){
+      isOpen = false;
+      this.setState({keyWord:text,isOpen:false});
+    }else{
+      isOpen = true;
+      this.setState({keyWord:text,isOpen:true});
+    }
   },
 
   addMore: function() {
@@ -224,19 +227,9 @@ let Contacts = React.createClass({
 
         {(()=>{
 
+          //let dataSource =  groupFilter(this.state.dataSource,'orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
           let  dataSource = contactFilter(this.state.dataSource,'orgMembers','groupName','orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
           if(dataSource && dataSource.length > 0){
-            if(dataSource.length == 1 && dataSource[0].length == 0){
-              if(!!~PLATFORMNAME.indexOf(this.state.keyWord) || this.state.keyWord=='') {
-                return (
-                  <View style={{backgroundColor:'transparent', alignItems:'center', marginTop:20}}>
-                    <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>
-                  </View>
-                );
-              }else{
-                return null;
-              }
-            }else
             return (
               <ExtenList itemHeight={57}
                          groundColor={DictStyle.colorSet.extenListGroupTitleColor}
@@ -247,18 +240,16 @@ let Contacts = React.createClass({
                          dataSource={dataSource}
                          groupDataName={'orgMembers'}
                          groupItemRender={this.itemRender}
-                         groupTitleRender={this.titleRender} />
+                         groupTitleRender={this.titleRender}
+                         isOpen={this.state.isOpen}
+              />
             );
           }else{
-            if(!!~PLATFORMNAME.indexOf(this.state.keyWord) || this.state.keyWord=='') {
               return (
                 <View style={{backgroundColor:'transparent', alignItems:'center', marginTop:20}}>
-                  <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>
+                  <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户/机构'}</Text>
                 </View>
               );
-            }else{
-              return null;
-            }
           }
 
         })()}

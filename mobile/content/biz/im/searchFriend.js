@@ -151,7 +151,8 @@ let SearchFriend = React.createClass({
            <View style={{flex:8,height:40,backgroundColor:'#ffffff',marginHorizontal:10,borderRadius:6,
           justifyContent:'center', alignItems:'center',alignItems:'stretch'}}>
               <TextInput
-                keyboardType="web-search"
+                returnKeyType="search"
+                onSubmitEditing={()=>{this.state.justTop=true;this.searchFriend()}}
                 selectionColor={DictStyle.colorSet.textInputColor}
                 onChangeText={(text) => this.textChange(text)}
                 style={{flex:1,alignSelf:'stretch',color: DictStyle.colorSet.searchBarColor, height:(Platform.OS === 'ios')?30:60,backgroundColor:'#ffffff',marginTop:0,marginLeft:10,marginRight:10}}>

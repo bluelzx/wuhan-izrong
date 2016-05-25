@@ -26,11 +26,18 @@ let AddMember = React.createClass({
       memberList:{},
       existMembers:this.props.param.existMembers,
       keyWord:'',
+      isOpen:false
     }
   },
 
   textChange: function(text) {
-    this.setState({keyWord:text});
+    if(text == ''){
+      isOpen = false;
+      this.setState({keyWord:text,isOpen:false});
+    }else{
+      isOpen = true;
+      this.setState({keyWord:text,isOpen:true});
+    }
   },
 
   addUser: function( groupId, members) {
@@ -136,7 +143,9 @@ let AddMember = React.createClass({
                          dataSource={dataSource}
                          groupDataName={'orgMembers'}
                          groupItemRender={this.itemRender}
-                         groupTitleRender={this.titleRender} />
+                         groupTitleRender={this.titleRender}
+                         isOpen={this.state.isOpen}
+              />
             );
           }else{
             return (
