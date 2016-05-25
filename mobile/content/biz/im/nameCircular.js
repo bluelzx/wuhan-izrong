@@ -27,7 +27,7 @@ let NameCircular = React.createClass({
     if(showBadge) {
       if (badge > 0) {
         return (
-          <View style={[{position:'absolute',marginLeft:25,top:0,width:18,height:18,borderRadius:9,backgroundColor:'red',
+          <View style={[{position:'absolute',right:0,top:0,width:18,height:18,borderRadius:9,backgroundColor:'red',
                 flexDirection:'row',justifyContent:'center',alignItems:'center'},badge>=99&&{height:20,width:(Platform.OS === 'ios')?24:22,marginLeft:18}]}>
             <Text style={{color:'white',fontSize:11}}>{badge >= 99 ? "99+" : badge}</Text>
           </View>
@@ -41,7 +41,7 @@ let NameCircular = React.createClass({
   renderV: function(isV) {
     if(isV){
       return (
-        <Image style={[{ width: 15, height: 15}, {position: 'absolute',bottom:0,marginLeft:40}]}
+        <Image style={[{ width: 15, height: 15}, {position: 'absolute',bottom:0,right:0}]}
              resizeMode="cover" source={require('../../image/user/certificated.png')}/>
       );
     }else{
@@ -50,7 +50,7 @@ let NameCircular = React.createClass({
   },
 
   render: function() {
-    let {name, badge, isV = true} = this.props;
+    let {name, badge, isV = false} = this.props;
     let f = !name?'?':name[0];
     return (
       <View>

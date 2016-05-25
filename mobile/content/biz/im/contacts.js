@@ -215,7 +215,7 @@ let Contacts = React.createClass({
   render: function() {
     let {title}  = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} title='通讯录' actionButton={this.renderAdd}>
+      <NavBarView navigator={this.props.navigator} title='通讯录' actionButton={this.renderAdd} >
         <SearchBar textChange={this.textChange}/>
 
         {this.renderGlobal()}
@@ -237,7 +237,7 @@ let Contacts = React.createClass({
             }else
             return (
               <ExtenList itemHeight={57}
-                         groundColor={DictStyle.colorSet.extenListGroundCol}
+                         groundColor={DictStyle.colorSet.extenListGroupTitleColor}
                          groupBorderColor={DictStyle.colorSet.demarcationColor}
                          arrowColor={DictStyle.colorSet.extenListArrowColor}
                          groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}

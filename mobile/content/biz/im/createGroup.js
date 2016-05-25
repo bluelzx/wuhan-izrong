@@ -176,7 +176,7 @@ let CreateGroup = React.createClass({
           if(dataSource && dataSource.length > 0) {
             return (
               <ExtenList itemHeight={57}
-                         groundColor={DictStyle.colorSet.extenListGroundCol}
+                         groundColor={DictStyle.colorSet.extenListGroupTitleColor}
                          groupBorderColor={DictStyle.colorSet.demarcationColor}
                          arrowColor={DictStyle.colorSet.extenListArrowColor}
                          groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}

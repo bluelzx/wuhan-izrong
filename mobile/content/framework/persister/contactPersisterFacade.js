@@ -372,7 +372,7 @@ let _deleteContactInfo = function (userId) {
 let _getUserInfoByUserId = function (id) {
   let users = _realm.objects(IMUSERINFO).filtered('userId = ' + id)[0];
   if(!users){
-    throw 'userinfo is null';
+    throw 'userInfo is null';
   }
   let orgs = _realm.objects(ORGBEAN);
   if (!users.orgId) {
