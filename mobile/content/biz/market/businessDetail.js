@@ -37,18 +37,9 @@ let MarketAction = require('../../framework/action/marketAction');
 let BusinessDetail = React.createClass({
   getInitialState(){
     let marketInfo = this.props.param.marketInfo;
-    let loginUserInfo = AppStore.getLoginUserInfo();
-    let userInfo = MarketStore.getUserInfoByUserId(marketInfo.userId);
-
-    if (loginUserInfo.userId == marketInfo.userId) {
-      userInfo = loginUserInfo;
-    }
-
     let t = new Date(marketInfo.lastModifyDate);
 
     return {
-      userId: loginUserInfo.userId,
-      detailData: '',
       fileUrlList: marketInfo.fileUrlList,
       marketInfo: marketInfo,
       orderUserId: marketInfo.userId,
@@ -157,8 +148,8 @@ let BusinessDetail = React.createClass({
         {this.returnInfoItem(require('../../image/market/email.png'), this.state.bizOrderOwnerBean.userName, true)}
         {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber == null || this.state.bizOrderOwnerBean.phoneNumber == '' ? '--' : this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone != false ? true : false)}
         {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber == null || this.state.bizOrderOwnerBean.mobileNumber == '' ? '--' : this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile != false ? true : false)}
-        {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo == null || this.state.bizOrderOwnerBean.qqNo == '' ? '--' : this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQ != false ? true : false)}
-        {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo == null || this.state.bizOrderOwnerBean.weChatNo == '' ? '--' : this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChat != false ? true : false)}
+        {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo == null || this.state.bizOrderOwnerBean.qqNo == '' ? '--' : this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo != false ? true : false)}
+        {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo == null || this.state.bizOrderOwnerBean.weChatNo == '' ? '--' : this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo != false ? true : false)}
       </View>
     );
   },
