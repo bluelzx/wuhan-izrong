@@ -140,7 +140,7 @@ let _addFriend = function(userInfo) {
 
 let _syncReq = function(data){
   //TODO:....
-  AppStore.updateLastSyncTime(data);
+ AppStore.updateLastSyncTime(data);
 }
 
 
@@ -157,7 +157,7 @@ let _newFriendNotic = function(param, userId) {
     lastTime: new Date(),
     contentType: MSG_CONTENT_TYPE.NULL
   };
-  PersisterFacade.updateSession(p, true,null, userId);
+  PersisterFacade.updateSession(p, false,null, userId);
   PersisterFacade.updateContactInfo(param);
   AppStore.emitChange(IM_SESSION_LIST);
 }

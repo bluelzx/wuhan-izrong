@@ -9,7 +9,7 @@ let SessionAction = require('../action/sessionAction');
 let AppStore = require('./appStore');
 let ContactStore = require('./contactStore');
 let NoticeAction = require('../action/noticeAction');
-let ContactAction = require('../action/appAction');
+let ContactAction = require('../action/contactAction');
 let _info = {
   initLoadingState: true,
   netWorkState: false,
@@ -196,12 +196,15 @@ let _saveMsg = (message, userId) => {
     }
 
 
-    //let user = {};
-    //try{
-    let user = ContactStore.getUserInfoByUserId(message.toId || message.fromUId);
-    //}catch(err){
-    //  user = {};
-    //}
+    let user = {};
+    try{
+      user = ContactStore.getUserInfoByUserId(message.toId || message.fromUId);
+    }catch(err){
+      ContactAction.getUserInfoFromServer(message.toId || message.fromUId).then(()=>{
+        _saveMsg(message, userId);
+      });
+      return;
+    }
     SessionAction.updateSession(message.type, message.sessionId,user.realName ,message.content,message.revTime,message.contentType, userId, {notAdd:notAdd});
   }else if(message.type == SESSION_TYPE.GROUP){
 
