@@ -225,7 +225,7 @@ let BusinessDetail = React.createClass({
                         springConfig={{tension: 35, friction: 6}}
               >
                 <Image
-                  style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
+                  style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#cccccc'}}
                   source={{uri:item, isStatic: true}}
                 />
               </Lightbox>
