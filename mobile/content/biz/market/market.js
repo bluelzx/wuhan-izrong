@@ -36,7 +36,6 @@ let {Alert, GiftedListView} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
 let numeral = require('numeral');
 let DictStyle = require('../../constants/dictStyle');
-
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Market = React.createClass({
   getStateFromStores: function () {
@@ -47,6 +46,7 @@ let Market = React.createClass({
     let term = MarketStore.getFilterOptions(filterItems, 'term').options;
     let amount = MarketStore.getFilterOptions(filterItems, 'amount').options;
     let orderItems = AppStore.getFilters().orderItems;
+    let marketInfo = AppStore.getMarketInfo();
 
     let myCategory = AppStore.getCategory();
 
@@ -80,7 +80,7 @@ let Market = React.createClass({
       bizOrientationID: '',
       termID: '',
       amountID: '',
-      marketData: []
+      marketData: marketInfo
     };
   },
   getInitialState(){
