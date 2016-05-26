@@ -171,12 +171,14 @@ export default class Bubble extends React.Component {
       let data = JSON.parse(this.props.content);
       let amount = data.amount == '' ? '--' : (data.amount > 99999999 ? data.amount / 100000000 + '亿' : data.amount / 10000 + '万');
       let dayNum;
-      if (data.term == '') {
+      if (data.term == '' || data.term == 0) {
         dayNum = '--'
       } else if (data.term % 365 == 0) {
         dayNum = parseInt(data.term / 365) + '年';
       } else if (data.term % 30 == 0) {
         dayNum = parseInt(data.term / 30) + '月';
+      } else if (data.term == 1) {
+        dayNum = '隔夜';
       }else {
         dayNum = data.term + '日';
       }

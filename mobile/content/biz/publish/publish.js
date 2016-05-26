@@ -186,7 +186,7 @@ let Publish = React.createClass({
     let isFromIM = param && param.isFromIM;
     let isFromMyBusiness = param ? param.isFromMyBusiness : false;
     return (
-      <NavBarView navigator={this.props.navigator} title='发布新业务'
+      <NavBarView navigator={this.props.navigator} title={isFromIM ? '业务信息' : '发布新业务'}
                   actionButton={isFromIM || isFromMyBusiness ? null : this.renderToMyBiz}>
         <View style={{height: screenHeight - 64 ,backgroundColor:DictStyle.colorSet.content}}>
           <View style={{flex:1}}>
@@ -445,7 +445,7 @@ let Publish = React.createClass({
           disabled={this.state.disabled}
           onPress={() => this._pressPublish()}
         >
-          {isFromIM ? '发送' : '发布'}
+          {'发布'}
         </Button>
       </View>
     )
