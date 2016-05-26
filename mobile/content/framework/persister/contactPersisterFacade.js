@@ -5,6 +5,7 @@ let _realm = require('./realmManager');
 const DEFAULT_GROUP_IMAGE = "";
 const _ = require('lodash');
 let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
+let ErrorMsg = require('../../constants/errorMsg');
 let {SESSION_TYPE} = require('../../constants/dictIm');
 const {
   GROUP,
@@ -392,11 +393,11 @@ let _deleteContactInfo = function (userId) {
 let _getUserInfoByUserId = function (id) {
   let users = _realm.objects(IMUSERINFO).filtered('userId = ' + id)[0];
   if(!users){
-    throw 'userInfo is null';
+    throw ErrorMsg.USERINFONULL;
   }
   let orgs = _realm.objects(ORGBEAN);
   if (!users.orgId) {
-    throw '_getUserInfoByUserId users.orgId == null';
+    throw ErrorMsg.USERINFOORGIDNULL;
   }
   let org = orgs.filtered('id = ' + users.orgId);
   let ret = {
