@@ -67,7 +67,7 @@ let _saveIMUserInfo = function(item) {
       publicAddress: !!(item.publicAddress == true || item.publicAddress === null),
       publicWeChat: !!(item.publicWeChat == true || item.publicWeChat === null),
       publicQQ: !!(item.publicQQ == true || item.publicQQ === null),
-      certificated: item.isCertificated || false
+      certified: item.isCertificated || false
     }
     _realm.create(IMUSERINFO, param, true);
   })
@@ -155,7 +155,7 @@ let _getGroupInfoByGroupId = function (groupId) {
             photoFileUrl: user[0].photoFileUrl,
             publicQQ: user[0].publicQQ,
             orgId: user[0].orgId,
-            certificated: user[0].certificated,
+            certified: user[0].certified,
             mute: user[0].mute
           };
           orgName[0] && (param.orgValue = orgName[0].orgValue);
@@ -358,7 +358,7 @@ let _updateContactInfo = function (message) {
     photoFileUrl: message.photoStoredFileUrl,
     publicQQ: message.isPublicQq,
     orgId: message.orgId,
-    certificated: message.isCertificated,
+    certified: message.isCertificated,
     mute: message.isMute?message.isMute:false
   };
   let ret = {};
@@ -425,7 +425,7 @@ let _getUserInfoByUserId = function (id) {
     lastLoginTime: users.lastLoginTime,  //本地增加,用于多用户登陆排序
     token: users.token,
     mute: users.mute,
-    certificated: users.certificated
+    certified: users.certified
   };
   if (org.length > 0)
     ret.orgValue = org[0].orgValue;
@@ -545,7 +545,7 @@ let _addFriend = function (userInfo) {
     publicQQ: userInfo.publicQQ,
     orgId: userInfo.orgId,
     mute: userInfo.mute,
-    certificated: userInfo.isCertificated,
+    certified: userInfo.isCertificated,
   };
 
   _realm.write(()=> {

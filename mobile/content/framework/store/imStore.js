@@ -90,7 +90,8 @@ let _resovleMessages = (bInit = false) => {
         image: userInfo.photoFileUrl,
         position: 'left',
         date: object.revTime,
-        certified:userInfo.certificated,
+        certified:userInfo.certified,
+        messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       };
     } else { // Sent
@@ -107,6 +108,7 @@ let _resovleMessages = (bInit = false) => {
         date: object.revTime,
         status: object.status,
         certified:userInfo.certified,
+        messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       };
     }
@@ -131,6 +133,7 @@ let _sessionInit = (data) => {
   _data.myName=data.myName,
     _data.certified = data.certified,
   _data.userPhotoFileUrl = data.photoFileUrl;
+  _data.messageType = data.messageType;
   _resovleMessages(true);
   ImStore.emitChange(DictEvent.IM_SESSION);
 };
@@ -262,7 +265,8 @@ let _saveMsg = (message, userId) => {
         image: userInfo.photoFileUrl,
         position: 'left',
         date: message.revTime,
-        certified:userInfo.certificated,
+        certified:userInfo.certified,
+        messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       });
     } else if (message.fromUId == -1) {
@@ -286,6 +290,7 @@ let _saveMsg = (message, userId) => {
         date: message.revTime,
         status: message.status,
         certified:_data.certified,
+        messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       });
     }

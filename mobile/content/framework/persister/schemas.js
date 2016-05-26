@@ -102,7 +102,7 @@ let ImUserInfoSchema = {
     publicQQ: {type: 'bool', optional: true},
     orgId: {type: 'int', optional: true},
     mute: {type: 'bool', optional: true},  //是否屏蔽该用户
-    certificated: {type: 'bool', optional: true} //用户是否认证
+    certified: {type: 'bool', optional: true} //用户是否认证
   }
 };
 
