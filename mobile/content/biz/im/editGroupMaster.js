@@ -37,15 +37,19 @@ let EditGroupMaster = React.createClass({
     let groupInfo = null;
     try {
       groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
-      let masterInfo = ContactStore.getUserInfoByUserId(groupInfo.groupMasterUid);
+      let masterInfo = null;
+      let userInfo = ContactStore.getUserInfo();
+      if (groupInfo.groupMasterUid == userInfo.userId)
+        masterInfo = userInfo;
+      else
+        masterInfo = ContactStore.getUserInfoByUserId(groupInfo.groupMasterUid);
       groupInfo.masterName = masterInfo.realName;
       groupInfo.orgValue = ContactStore.getOrgValueByOrgId(masterInfo.orgId);
+
     } catch (err) {
-      this.props.navigator.popToTop();
       return {}
     };
     if (!groupInfo) {
-      this.props.navigator.popToTop();
       return {}
     }
 
@@ -112,63 +116,84 @@ let EditGroupMaster = React.createClass({
 
   },
 
-  render: function() {
+  renderBody: function () {
     return (
-      <NavBarView navigator={this.props.navigator} title='群设置'>
+      <View style={{flexDirection:'column'}}>
         <View style={{flexDirection:'column'}}>
-          <View style={{flexDirection:'column'}}>
-            {this.renderMember()}
-            <TouchableOpacity onPress={() => this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}})}
-              style={{backgroundColor: DictStyle.groupManage.memberListBackgroundColor, paddingHorizontal:10}}>
-              <View
-                style={{
+          {this.renderMember()}
+          <TouchableOpacity
+            onPress={() => this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}})}
+            style={{backgroundColor: DictStyle.groupManage.memberListBackgroundColor, paddingHorizontal:10}}>
+            <View
+              style={{
                 borderTopColor:DictStyle.colorSet.demarcationColor,
                 paddingVertical:10,
                 borderTopWidth:0.5,flexDirection:'row',
                 justifyContent:'space-between',
                 marginTop:5,alignItems:'center'}}>
-                <Text style={{color:DictStyle.groupManage.memberNameColor}}>{'全部群成员(' + this.state.groupInfo.memberNum + ')'}</Text>
-                <Icon name="ios-arrow-right" size={20} color={DictStyle.groupManage.buttonArrowColor}/>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => this.props.navigator.push({comp:ModifyGroupName,param:{groupId:this.props.param.groupId,groupName:this.state.groupInfo.groupName}})}
-              style={{height:50,marginTop: 10,backgroundColor: DictStyle.groupManage.memberListBackgroundColor}}>
-              <View
-                style={{height:50,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center'}}>
-                <Text style={{color:DictStyle.groupManage.memberNameColor}}>群名称</Text>
-                <View style={{flexDirection:'row', alignItems:'center', flex:1,justifyContent:'flex-end'}}>
-                  <Text style={{textAlign:'right', color:'#6B849C', flex:25, marginRight:5, flexWrap:'wrap'}}>{ this.state.groupInfo.groupName }</Text>
-                  <Icon style={{flex:1}} name="ios-arrow-right" size={20} color={DictStyle.groupManage.buttonArrowColor}/>
-                </View>
-              </View>
-            </TouchableOpacity>
-
-            <View
-              style={{height:50,backgroundColor: DictStyle.groupManage.memberListBackgroundColor,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
-              <Text style={{color:DictStyle.groupManage.memberNameColor}}>群主</Text>
-              <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
+              <Text
+                style={{color:DictStyle.groupManage.memberNameColor}}>{'全部群成员(' + this.state.groupInfo.memberNum + ')'}</Text>
+              <Icon name="ios-arrow-right" size={20} color={DictStyle.groupManage.buttonArrowColor}/>
             </View>
+          </TouchableOpacity>
 
+          <TouchableOpacity
+            onPress={() => this.props.navigator.push({comp:ModifyGroupName,param:{groupId:this.props.param.groupId,groupName:this.state.groupInfo.groupName}})}
+            style={{height:50,marginTop: 10,backgroundColor: DictStyle.groupManage.memberListBackgroundColor}}>
             <View
-              style={{height:50,backgroundColor: DictStyle.groupManage.memberListBackgroundColor,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
-              <Text style={{color:DictStyle.groupManage.memberNameColor}}>屏蔽群消息提醒</Text>
-              <Switch
-                onValueChange={(value) => this.setMute(value)}
-                style={{height:30}}
-                value={this.state.falseSwitchIsOn}/>
+              style={{height:50,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center'}}>
+              <Text style={{color:DictStyle.groupManage.memberNameColor}}>群名称</Text>
+              <View style={{flexDirection:'row', alignItems:'center', flex:1,justifyContent:'flex-end'}}>
+                <Text
+                  style={{textAlign:'right', color:'#6B849C', flex:25, marginRight:5, flexWrap:'wrap'}}>{ this.state.groupInfo.groupName }</Text>
+                <Icon style={{flex:1}} name="ios-arrow-right" size={20} color={DictStyle.groupManage.buttonArrowColor}/>
+              </View>
             </View>
+          </TouchableOpacity>
 
+          <View
+            style={{height:50,backgroundColor: DictStyle.groupManage.memberListBackgroundColor,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
+            <Text style={{color:DictStyle.groupManage.memberNameColor}}>群主</Text>
+            <Text
+              style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
           </View>
-          <View >
-            <Button onPress={this.dismissGroup}  containerStyle={{padding:10, height:45,borderRadius:0, overflow:'hidden', backgroundColor: '#E8004D'}}
-                    style={{fontSize: 18, color: '#ffffff'}}
-            >
-              解散该群
-            </Button>
 
+          <View
+            style={{height:50,backgroundColor: DictStyle.groupManage.memberListBackgroundColor,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
+            <Text style={{color:DictStyle.groupManage.memberNameColor}}>屏蔽群消息提醒</Text>
+            <Switch
+              onValueChange={(value) => this.setMute(value)}
+              style={{height:30}}
+              value={this.state.falseSwitchIsOn}/>
           </View>
+
         </View>
+        <View >
+          <Button onPress={this.dismissGroup}
+                  containerStyle={{padding:10, height:45,borderRadius:0, overflow:'hidden', backgroundColor: '#E8004D'}}
+                  style={{fontSize: 18, color: '#ffffff'}}
+          >
+            解散该群
+          </Button>
+
+        </View>
+      </View>
+    );
+  },
+
+  render: function() {
+
+
+    return (
+      <NavBarView navigator={this.props.navigator} title='群设置'>
+        {(()=>{
+          if(this.state.groupInfo==undefined){
+
+            return <Text style={{flex:1, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>{'数据异常,请联系管理员,groupId:' + this.props.param.groupId}</Text>
+          }else{
+            return this.renderBody();
+          }
+        })()}
       </NavBarView>
       );
   }

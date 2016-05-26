@@ -106,34 +106,44 @@ let _deleteGroup = function () {
 };
 
 let _saveLoginUserInfo = function (loginUserInfo, token) {
-  _realm.create(LOGINUSERINFO, {
-    userId: loginUserInfo.userId,
-    address: loginUserInfo.address,
-    realName: loginUserInfo.realName,
-    weChatNo: loginUserInfo.weChatNo,
-    email: loginUserInfo.email,
-    nameCardFileUrl: loginUserInfo.nameCardFileUrl,
-    qqNo: loginUserInfo.qqNo,
-    department: loginUserInfo.department,
-    mobileNumber: loginUserInfo.mobileNumber,
-    jobTitle: loginUserInfo.jobTitle,
-    phoneNumber: loginUserInfo.phoneNumber,
-    photoFileUrl: loginUserInfo.photoFileUrl,
-    orgId: loginUserInfo.orgId,
-    token: token,
-    lastLoginTime: new Date(),
-    publicTitle: !!(loginUserInfo.publicTitle == true || loginUserInfo.publicTitle === null),
-    publicMobile: !!(loginUserInfo.publicMobile == true || loginUserInfo.publicMobile === null),
-    publicDepart: !!(loginUserInfo.publicDepart == true || loginUserInfo.publicDepart === null),
-    publicPhone: !!(loginUserInfo.publicPhone == true || loginUserInfo.publicPhone === null),
-    publicEmail: !!(loginUserInfo.publicEmail == true || loginUserInfo.publicEmail === null),
-    publicAddress: !!(loginUserInfo.publicAddress == true || loginUserInfo.publicAddress === null),
-    publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat === null),
-    publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
-    lastSyncTime: null,
-    friendList: loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList),
-    certified: loginUserInfo.certificated || false
-  }, true);
+
+    let param =  {
+      userId: loginUserInfo.userId,
+      address: loginUserInfo.address,
+      realName: loginUserInfo.realName,
+      weChatNo: loginUserInfo.weChatNo,
+      email: loginUserInfo.email,
+      nameCardFileUrl: loginUserInfo.nameCardFileUrl,
+      qqNo: loginUserInfo.qqNo,
+      department: loginUserInfo.department,
+      mobileNumber: loginUserInfo.mobileNumber,
+      jobTitle: loginUserInfo.jobTitle,
+      phoneNumber: loginUserInfo.phoneNumber,
+      photoFileUrl: loginUserInfo.photoFileUrl,
+      orgId: loginUserInfo.orgId,
+      token: token,
+      lastLoginTime: new Date(),
+      publicTitle: !!(loginUserInfo.publicTitle == true || loginUserInfo.publicTitle === null),
+      publicMobile: !!(loginUserInfo.publicMobile == true || loginUserInfo.publicMobile === null),
+      publicDepart: !!(loginUserInfo.publicDepart == true || loginUserInfo.publicDepart === null),
+      publicPhone: !!(loginUserInfo.publicPhone == true || loginUserInfo.publicPhone === null),
+      publicEmail: !!(loginUserInfo.publicEmail == true || loginUserInfo.publicEmail === null),
+      publicAddress: !!(loginUserInfo.publicAddress == true || loginUserInfo.publicAddress === null),
+      publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat === null),
+      publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
+      lastSyncTime: null,
+      friendList: loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList),
+      certified: loginUserInfo.certificated || false
+    };
+
+    let t = _realm.objects(LOGINUSERINFO).filtered('userId = $0',loginUserInfo.userId);
+    if(t.length > 0){
+      param.lastSyncTime = t.lastSyncTime;
+    }else{
+      param.lastSyncTime = new Date();
+    }
+    _realm.create(LOGINUSERINFO,param, true);
+
 };
 
 let _saveImUsersOpen = function (imUserBeanList) {

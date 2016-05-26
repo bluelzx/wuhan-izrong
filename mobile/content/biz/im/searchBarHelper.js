@@ -120,7 +120,7 @@ let sessionFilter = function(data,title,content,orgValue,keyWord){
 let userFilter = function(data,f1,f2,keyWord){
   let ret = [];
   data && data.forEach((item)=>{
-    if(!!~item[f1].indexOf(keyWord)){
+    if(item[f1] && !!~item[f1].indexOf(keyWord)){
       ret.push(item);
     }else if(!!~item[f2].indexOf(keyWord)){
       ret.push(item);

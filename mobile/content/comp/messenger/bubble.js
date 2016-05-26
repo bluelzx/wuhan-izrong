@@ -111,7 +111,7 @@ export default class Bubble extends React.Component {
     if (this.props.contentType === MSG_CONTENT_TYPE.NAMECARD) {
       let data = JSON.parse(this.props.content);
       let nameCardStyle = this.props.position === 'left' ? styles.textLeft : styles.textRight;
-
+      let nullDesc = '--';
       return (
         <View style={[styles.bubble, customStyle, {flex:1},
          this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
@@ -125,43 +125,48 @@ export default class Bubble extends React.Component {
             <Text
               style={[styles.text, nameCardStyle]}>手机:</Text>
             <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.mobileNumber?data.mobileNumber:'未填写'}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.mobileNumber?data.mobileNumber:nullDesc}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text,nameCardStyle]}>座机:</Text>
             <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.phoneNumber?data.phoneNumber:'未填写'}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.phoneNumber?data.phoneNumber:nullDesc}</Text>
           </View>
+          {
+            /*
+
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>微信:</Text>
             <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.weChatNo?data.weChatNo:'未填写'}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.weChatNo?data.weChatNo:nullDesc}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>QQ:</Text>
             <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.qqNo?data.qqNo:'未填写'}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.qqNo?data.qqNo:nullDesc}</Text>
           </View>
+          */
+            }
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>邮箱:</Text>
             <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.email?data.email:'未填写'}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.email?data.email:nullDesc}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>部门:</Text>
             <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.department?data.department:'未填写'}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.department?data.department:nullDesc}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>职位:</Text>
             <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.jobTitle?data.jobTitle:'未填写'}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.jobTitle?data.jobTitle:nullDesc}</Text>
           </View>
         </View>
       )

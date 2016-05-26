@@ -33,7 +33,6 @@ import  Angle  from '../../comp/messenger/angle';
 const {ExtenList, Device,Alert } = require('mx-artifacts');
 
 const PLATFORMNAME = '爱资融同业平台';
-let isOpen = false;
 
 let Contacts = React.createClass({
 
@@ -104,6 +103,7 @@ let Contacts = React.createClass({
       return (
         <TouchableOpacity key={data.type=='group'?data.groupId:data.userId}
                             onPress={() => data.type=='group'?this.toGroup(data):this.toUser(data)}
+                          activeOpacity={0.8}
                             style={{backgroundColor:DictStyle.colorSet.extenListGroundCol,paddingHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row', paddingVertical:5,alignItems:'center'}}>
             {(()=>{
@@ -129,12 +129,15 @@ let Contacts = React.createClass({
   textChange: function(text) {
     //this.setState({keyWord:text});
     if(text == ''){
-      isOpen = false;
       this.setState({keyWord:text,isOpen:false});
     }else{
-      isOpen = true;
       this.setState({keyWord:text,isOpen:true});
     }
+  },
+
+  textOnBlur:function(){
+    if(this.state.keyWord==='')
+    this.setState({isOpen:false});
   },
 
   addMore: function() {
@@ -221,7 +224,7 @@ let Contacts = React.createClass({
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} title='通讯录' actionButton={this.renderAdd} >
-        <SearchBar textChange={this.textChange}/>
+        <SearchBar textChange={this.textChange} textOnBlur={this.textOnBlur}/>
 
         {this.renderGlobal()}
 

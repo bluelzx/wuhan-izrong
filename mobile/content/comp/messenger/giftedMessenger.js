@@ -648,18 +648,17 @@ let GiftedMessenger = React.createClass({
           //onAccessibilityTap={this._onAccessibilityTap}
           onResponderMove={this._onAccessibilityTap}
 
-          //refreshControl={
-          //  <RefreshControl
-          //    refreshing={this.state.isRefreshing}
-          //    onRefresh={this._onRefresh}
-          //    tintColor="#ff0000"
-          //    title="Loading..."
-          //    colors={['#ff0000', '#00ff00', '#0000ff']}
-          //    progressBackgroundColor="#ffff00"
-          //  />
-          //}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isRefreshing}
+              onRefresh={this._onRefresh}
+              tintColor={'#ECECEC'}
+              colors={['#ECECEC', '#ECECEC', '#ECECEC']}
+              //progressBackgroundColor="#ffff00"
+            />
+          }
 
-          renderHeader={this.renderLoadEarlierMessages}
+          //renderHeader={this.renderLoadEarlierMessages}
           onLayout={(event) => {
             let layout = event.nativeEvent.layout;
             this.listHeight = layout.height;
