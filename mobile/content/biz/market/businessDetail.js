@@ -162,7 +162,7 @@ let BusinessDetail = React.createClass({
           <View style={{flexDirection:'row',alignItems:'flex-end'}}>
             <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
                   numberOfLines={1}>{this.state.marketInfo.userName}</Text>
-            <TouchableHighlight style={{height:36, marginLeft: 5, justifyContent: 'flex-end'}} onPress={()=>this.gotoIM()} underlayColor='#f0f0f0' activeOpacity={0.8}>
+            <TouchableHighlight style={{height:36, paddingRight:20 ,marginLeft: 5, justifyContent: 'flex-end'}} onPress={()=>this.gotoIM()} underlayColor='#f0f0f0' activeOpacity={0.8}>
               <Text style={{fontSize:12,color:'#49cfae',alignSelf:'flex-end'}}>{'(点击洽谈)'}</Text>
             </TouchableHighlight>
           </View>
