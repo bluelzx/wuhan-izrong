@@ -40,7 +40,7 @@ let Cell = React.createClass({
             style={{backgroundColor:'#FEFEFE',borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor,alignItems:'center'}}>
         <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
         <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
-          <View style={{flex:1}}>
+          <View style={{flex:1,paddingLeft:10}}>
             <Text numberOfLines={1}
                   style={{fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName }</Text>
             <Text numberOfLines={1}

@@ -2,6 +2,7 @@ import React, {View, Text, StyleSheet, TouchableHighlight, Image} from 'react-na
 import Bubble from './bubble';
 import ErrorButton from './errorButton';
 import Angle from './angle';
+let { MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 //import {NameCircular} from '../../biz/im/nameCircular';
 let HeaderPic = require('../../biz/im/headerPic');
 let DictStyle = require('../../constants/dictStyle');
@@ -212,12 +213,24 @@ export default class Message extends React.Component {
           {position === 'left' ? this.renderImage(rowData, rowID, diffMessage, forceRenderImage, onImagePress) : null}
           <View style={[{paddingLeft:10,flex:1,backgroundColor:'transparent',alignItems:position === 'right'?'flex-end':'flex-start'},position === 'right'&&{paddingRight:10}]}>
 
-            {/*
-              <Text numberOfLines={1}
-                    style={{alignSelf:'stretch',color:'#555C5F', textAlign:position,fontSize:12}}>{rowData.name + '-' + rowData.orgValue}</Text>
-*/            }
+            {(()=>{
+            if(rowData.messageType == SESSION_TYPE.USER){
+              return (
+                <Text numberOfLines={1}
+                      style={{alignSelf:'stretch',color:'#555C5F', textAlign:position,fontSize:12}}>{''}</Text>
 
-            <View style={{marginTop:20,alignSelf:'stretch',flexDirection:'row',backgroundColor:'transparent',justifyContent:position === 'right'?'flex-end':'flex-start'}}>
+              );
+            }else{
+              return (
+                <Text numberOfLines={1}
+                      style={{alignSelf:'stretch',color:'#555C5F', textAlign:position,fontSize:12}}>{rowData.name + '-' + rowData.orgValue}</Text>
+
+              );
+            }
+
+            })()}
+
+            <View style={{marginTop:5,alignSelf:'stretch',flexDirection:'row',backgroundColor:'transparent',justifyContent:position === 'right'?'flex-end':'flex-start'}}>
               {position === 'right' ? this.renderErrorButton(rowData, rowID, onErrorButtonPress) : null}
               {position === 'left' ? this._renderAngle(rowData) : null}
               <RowView
