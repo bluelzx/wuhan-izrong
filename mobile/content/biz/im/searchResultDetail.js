@@ -27,7 +27,7 @@ let Chat = require('./chat');
 
 let { SESSION_TYPE } = require('../../constants/dictIm');
 
-let ImUserInfo = React.createClass({
+let SearchResultDetail = React.createClass({
 
 
   getStateFromStores: function() {
@@ -132,27 +132,29 @@ let ImUserInfo = React.createClass({
     //</TouchableOpacity>
 
       return (
-        <View style={{paddingHorizontal:10,position:'absolute',left:0,bottom:5,right:0}}>
+        <View style={{position:'absolute',left:0,bottom:0,right:0}}>
           {(()=>{
             if(!this.props.param.isStranger){
               return (
-                <Button
-                  containerStyle={{marginTop: 20, backgroundColor: '#4fb9fc'}}
-                  style={{fontSize: 20, color: '#ffffff'}}
+                <TouchableOpacity
+                  style={{flex:1,marginTop: 20, backgroundColor: '#4fb9fc',justifyContent:'center',alignItems:'center',paddingVertical:15}}
                   onPress={()=>this.toChat()}
                 >
+                  <Text style={{fontSize: 20, color: '#ffffff',textAlign:'center'}}>
                   去聊天
-                </Button>
+                    </Text>
+                </TouchableOpacity>
               );
             }else {
               return (
-                <Button
-                  containerStyle={{marginTop: 20, backgroundColor: '#4fb9fc'}}
-                  style={{fontSize: 20, color: '#ffffff'}}
+                <TouchableOpacity
+                  style={{flex:1,marginTop: 20, backgroundColor: '#4fb9fc',justifyContent:'center',alignItems:'center',paddingVertical:15}}
                   onPress={()=>this.addFriend()}
                 >
+                  <Text style={{fontSize: 20, color: '#ffffff',textAlign:'center'}}>
                   加为好友
-                </Button>
+                    </Text>
+                </TouchableOpacity>
               );
             }
 
@@ -227,4 +229,4 @@ let styles = StyleSheet.create({
   }
 });
 
-module.exports = ImUserInfo;
+module.exports = SearchResultDetail;

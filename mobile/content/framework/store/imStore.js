@@ -90,6 +90,7 @@ let _resovleMessages = (bInit = false) => {
         image: userInfo.photoFileUrl,
         position: 'left',
         date: object.revTime,
+        certified:userInfo.certificated,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       };
     } else { // Sent
@@ -105,6 +106,7 @@ let _resovleMessages = (bInit = false) => {
         position: 'right',
         date: object.revTime,
         status: object.status,
+        certified:userInfo.certified,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       };
     }
@@ -260,7 +262,7 @@ let _saveMsg = (message, userId) => {
         image: userInfo.photoFileUrl,
         position: 'left',
         date: message.revTime,
-        certified:userInfo.certified,
+        certified:userInfo.certificated,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       });
     } else if (message.fromUId == -1) {
