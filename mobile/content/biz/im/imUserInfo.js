@@ -32,7 +32,10 @@ let ImUserInfo = React.createClass({
   getStateFromStores: function() {
     ////// 是否已经是好友
     let userInfo;
-    if(!this.props.param.isStranger){
+    let user = ContactStore.getUserInfo();
+    if(user.userId == this.props.param.userId){
+      userInfo = user;
+    }else if(!this.props.param.isStranger){
       userInfo = ContactStore.getUserInfoByUserId(this.props.param.userId);
     }else{
       userInfo = this.props.param;
@@ -131,28 +134,20 @@ let ImUserInfo = React.createClass({
     //</TouchableOpacity>
 
       return (
-        <View style={{paddingHorizontal:10,position:'absolute',left:0,bottom:5,right:0}}>
+        <View style={{position:'absolute',left:0,bottom:0,right:0}}>
           {(()=>{
             if(!this.props.param.isStranger){
               return null;
-              //return (
-              //  <Button
-              //    containerStyle={{marginTop: 20, backgroundColor: '#4fb9fc'}}
-              //    style={{fontSize: 20, color: '#ffffff'}}
-              //    onPress={()=>this.toChat()}
-              //  >
-              //    去聊天
-              //  </Button>
-              //);
             }else {
               return (
-                <Button
-                  containerStyle={{marginTop: 20, backgroundColor: '#4fb9fc'}}
-                  style={{fontSize: 20, color: '#ffffff'}}
+                <TouchableOpacity
+                  style={{flex:1,marginTop: 20, backgroundColor: '#4fb9fc',justifyContent:'center',alignItems:'center',paddingVertical:15}}
                   onPress={()=>this.addFriend()}
                 >
+                  <Text style={{fontSize: 20, color: '#ffffff',textAlign:'center'}}>
                   加为好友
-                </Button>
+                    </Text>
+                </TouchableOpacity>
               );
             }
 
