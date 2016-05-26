@@ -23,6 +23,7 @@ let ContactAction = require('../../framework/action/contactAction');
 let HeaderPic = require('./headerPic');
 let DictStyle = require('../../constants/dictStyle');
 let { Button} = require('mx-artifacts');
+let Chat = require('./chat');
 
 let { SESSION_TYPE } = require('../../constants/dictIm');
 
@@ -113,12 +114,12 @@ let ImUserInfo = React.createClass({
   },
 
   toChat: function() {
-    //let param = {};
-    //param.chatType = SESSION_TYPE.USER;
-    //param.title = this.state.data.realName;
-    //param.userId = this.state.data.userId;
-    ////this.props.navigator.popToTop();
-    //this.props.navigator.push({comp:Chat, param:param});
+    let param = {};
+    param.chatType = SESSION_TYPE.USER;
+    param.title = this.state.data.realName;
+    param.userId = this.state.data.userId;
+    //this.props.navigator.popToTop();
+    this.props.navigator.push({comp:Chat, param:param});
   },
 
   renderAdd: function() {
@@ -134,16 +135,15 @@ let ImUserInfo = React.createClass({
         <View style={{paddingHorizontal:10,position:'absolute',left:0,bottom:5,right:0}}>
           {(()=>{
             if(!this.props.param.isStranger){
-              return null;
-              //return (
-              //  <Button
-              //    containerStyle={{marginTop: 20, backgroundColor: '#4fb9fc'}}
-              //    style={{fontSize: 20, color: '#ffffff'}}
-              //    onPress={()=>this.toChat()}
-              //  >
-              //    去聊天
-              //  </Button>
-              //);
+              return (
+                <Button
+                  containerStyle={{marginTop: 20, backgroundColor: '#4fb9fc'}}
+                  style={{fontSize: 20, color: '#ffffff'}}
+                  onPress={()=>this.toChat()}
+                >
+                  去聊天
+                </Button>
+              );
             }else {
               return (
                 <Button
@@ -177,17 +177,17 @@ let ImUserInfo = React.createClass({
               <Text numberOfLines={2} style={{textAlign:'right',flex:3,color:'#979fa2',fontSize:18, marginRight:20}}>{this.state.data.realName}</Text>
             </View>
           </View>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.data.publicMobile!==false?this.descValue(this.state.data.mobileNumber):privateDesc}/>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.data.publicPhone!==false?this.descValue(this.state.data.phoneNumber):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={(this.props.param.friendInvite || this.state.data.publicMobile!==false)?this.descValue(this.state.data.mobileNumber):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={(this.props.param.friendInvite || this.state.data.publicPhone!==false)?this.descValue(this.state.data.phoneNumber):privateDesc}/>
 
           {/* <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.data.publicQQ!==false?this.descValue(this.state.data.qqNo):privateDesc}/>
           <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.data.publicWeChat!==false?this.descValue(this.state.data.weChatNo):privateDesc}/>
           */}
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.data.publicEmail!==false?this.descValue(this.state.data.email):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={(this.props.param.friendInvite || this.state.data.publicEmail!==false)?this.descValue(this.state.data.email):privateDesc}/>
           <View style={{marginTop:5,backgroundColor:'transparent',borderBottomWidth:0.5,borderBottomColor:'#F4F4F4'}}></View>
           <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.data.orgValue}/>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicDepart!==false?this.descValue(this.state.data.department):privateDesc}/>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicTitle!==false?this.descValue(this.state.data.jobTitle):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={(this.props.param.friendInvite || this.state.data.publicDepart!==false)?this.descValue(this.state.data.department):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={(this.props.param.friendInvite || this.state.data.publicTitle!==false)?this.descValue(this.state.data.jobTitle):privateDesc}/>
           {this.renderMute()}
           <View style={{height:20}}></View>
         </ScrollView>

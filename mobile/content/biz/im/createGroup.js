@@ -26,12 +26,15 @@ let CreateGroup = React.createClass({
 
   textChange: function(text) {
     if(text == ''){
-      isOpen = false;
       this.setState({keyWord:text,isOpen:false});
     }else{
-      isOpen = true;
       this.setState({keyWord:text,isOpen:true});
     }
+  },
+
+  textOnBlur:function(){
+    if(this.state.keyWord==='')
+    this.setState({isOpen:false});
   },
 
   //******************** 扩展列表
@@ -175,7 +178,7 @@ let CreateGroup = React.createClass({
 
         <ChooseList  memberList={this.state.memberList}/>
 
-        <SearchBar textChange={this.textChange}/>
+        <SearchBar textChange={this.textChange} textOnBlur={this.textOnBlur}/>
 
         {(()=>{
 

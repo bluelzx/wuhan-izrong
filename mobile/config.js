@@ -45,7 +45,7 @@ var qaConfig = {
 
 var productConfig = {
   Dev: true, // Switch for log. true means print.
-  Host: 'http://114.55.16.46:80/fas',
+  Host: 'http://114.55.16.46',
   ImHost: '114.55.16.46:3000'
 };
 

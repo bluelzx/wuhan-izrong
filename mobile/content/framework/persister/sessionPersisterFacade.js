@@ -18,7 +18,7 @@ let SessionPersisterFacade = {
   querySessionById: (id, type) => _querySessionById(id, type),
   setBadgeZero: (sessionId) => _setBadgeZero(sessionId),
   updateInViteSession:(sessionId) => _updateInViteSession(sessionId),
-  getSessionBadge:() => _getSessionBadge(),
+  getSessionBadge:(userId) => _getSessionBadge(userId),
 }
 
 let _deleteSession = function(sessionId) {

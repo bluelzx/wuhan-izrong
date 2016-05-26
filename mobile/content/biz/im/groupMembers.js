@@ -40,11 +40,11 @@ let Cell = React.createClass({
             style={{backgroundColor:'#FEFEFE',borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor,alignItems:'center'}}>
         <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
         <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
-          <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'flex-start'}}>
-            <Text
-              style={{fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName }</Text>
-            <Text
-              style={{flex:1,fontSize:15,color:'#B7C0C7', marginLeft: 2,flexWrap:'wrap'}}>{'-'+ data.orgValue }</Text>
+          <View style={{flex:1}}>
+            <Text numberOfLines={1}
+                  style={{fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName }</Text>
+            <Text numberOfLines={1}
+                  style={{flex:1,fontSize:15,color:'#B7C0C7', marginLeft: 2,flexWrap:'wrap'}}>{data.orgValue }</Text>
           </View>
         </View>
       </View>
@@ -135,7 +135,7 @@ let GroupMembers = React.createClass({
             );
           }else{
             return (
-              <View style={{backgroundColor:'transparent', alignItems:'center'}}>
+              <View style={{backgroundColor:'transparent', marginTop:20, alignItems:'center', color:DictStyle.searchFriend.nullUnitColor}}>
                 <Text>{'无符合条件的用户'}</Text>
               </View>
             );
