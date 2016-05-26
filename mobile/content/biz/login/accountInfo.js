@@ -82,7 +82,7 @@ let Register_accountInfo = React.createClass({
 
   next: function (name, param) {
     if (!Validation.realName(this.state.realName)) {
-      Alert('请输入20个字符内的中文或英文');
+      Alert('姓名只可输入20个字符内的英文或中文');
     } else if (!Validation.isEmail(this.state.userName)) {
       Alert('请输入60个字符内的有效的邮箱地址');
     } else if (this.state.orgValue == '选择机构') {
