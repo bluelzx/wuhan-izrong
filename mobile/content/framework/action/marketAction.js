@@ -23,7 +23,8 @@ let MarketActions = {
   addBizOrder: (p) => _bfetchWithUrlAndP(AppLinks.addBizOrder, p),
   downselfBizOrder: (p) => _pfetchWithUrlAndP(AppLinks.downselfBizOrder, p),
   updateBizOrder: (p) => _bfetchWithUrlAndP(AppLinks.updateBizOrder, p),
-  getBizOrderCategoryAndItem: () => _pfetch1WithUrl(AppLinks.getBizOrderCategoryAndItem)
+  getBizOrderCategoryAndItem: () => _pfetch1WithUrl(AppLinks.getBizOrderCategoryAndItem),
+  getTop15BizOrderListByCategory: (p) => _getTop15BizOrderListByCategory(AppLinks.getTop15BizOrderListByCategory,p)
 };
 
 let _bfetchWithUrl = function (url) {
@@ -57,6 +58,16 @@ let _pfetchWithUrl = function (url) {
 };
 
 let _pfetchWithUrlAndP = function (url, p) {
+  return new Promise((resolve, reject) => {
+    PFetch(url, p).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _getTop15BizOrderListByCategory = function(url,p){
   return new Promise((resolve, reject) => {
     PFetch(url, p).then((response) => {
       resolve(response);

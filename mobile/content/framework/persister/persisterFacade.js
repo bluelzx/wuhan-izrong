@@ -168,7 +168,7 @@ let _saveImUsers = function (imUserBeanList) {
       publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
       publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
       certificated: imUserBeanList[i].isCertificated || false
-    }
+    };
     _realm.create(IMUSERINFO, param, true);
   }
 };

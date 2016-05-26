@@ -34,7 +34,7 @@ let Item = React.createClass({
   renderArrow: function (hiddenArrow) {
     if (!hiddenArrow) {
       return (
-        <Icon style={{marginRight: 20}} name="ios-arrow-right" size={30} color={PlainStyle.colorSet.arrowColor}/>
+        <Icon style={{marginRight: 20}} name="ios-arrow-right" size={20} color={PlainStyle.colorSet.arrowColor}/>
       );
     }
     return (
@@ -74,7 +74,7 @@ let styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 51,
+    height: 49,
     paddingLeft: 16,
     backgroundColor: PlainStyle.colorSet.personalItemColor
   },

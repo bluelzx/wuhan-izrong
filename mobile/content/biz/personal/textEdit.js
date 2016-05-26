@@ -30,7 +30,7 @@ let TextEdit = React.createClass({
       oldPublicValue: this.props.param.publicValue,
       publicName: this.props.param.publicName,
       oldValue: (value === null || value == '' || value == '未填写') ? '' : this.props.param.value.toString(),
-      newValue: this.props.param.value == '未填写' ? ''  :this.props.param.value,
+      newValue: this.props.param.value == '未填写' ? '' : this.props.param.value,
       newPublicValue: this.props.param.publicValue,
       type: type,
       tele: this.props.param.name == 'phoneNumber' ? (_.isEmpty(this.props.param.value) ? '' : this.props.param.value.split('-')[0] ) : '',
@@ -54,44 +54,44 @@ let TextEdit = React.createClass({
   },
 
   textChange(text){
-     if(text.length > 0) {
-        this.setState({valueDisabled:true});
-     }else {
-         this.setState({valueDisabled:false});
-     }
+    if (text.length > 0) {
+      this.setState({valueDisabled: true});
+    } else {
+      this.setState({valueDisabled: false});
+    }
   },
 
   validate: function () {
 
     switch (this.props.param.name) {
       case 'realName':
-        if(this.state.newValue.length == 0){
+        if (this.state.newValue.length == 0) {
           Alert('姓名不能为空');
-        }else if (this.state.newValue.length <= 20) {
+        } else if (this.state.newValue.length <= 20) {
           this.updateUserInfo();
         } else {
           Alert('请输入20个字符内的中文或英文');
         }
         break;
       case 'phoneNumber':
-          if (this.state.tele == '' && this.state.phone == '') {
-              this.setState({
-                  newValue: ''
-              });
-          } else {
-              this.setState({
-                  newValue: this.state.tele + '-' + this.state.phone
-              });
-          }
-          if (Validation.isTelephone(this.state.newValue) || (this.state.tele == '' && this.state.phone == '')) {
-          this.updateUserInfo();
-          } else if ((this.state.newValue == '未填写-undefined')) {
-            const { navigator } = this.props;
-            if (navigator) {
-                navigator.pop();
-            }
+        if (this.state.tele == '' && this.state.phone == '') {
+          this.setState({
+            newValue: ''
+          });
         } else {
-            Alert('请输入13个字符内的有效的座机号');
+          this.setState({
+            newValue: this.state.tele + '-' + this.state.phone
+          });
+        }
+        if (Validation.isTelephone(this.state.newValue) || (this.state.tele == '' && this.state.phone == '')) {
+          this.updateUserInfo();
+        } else if ((this.state.newValue == '未填写-undefined')) {
+          const { navigator } = this.props;
+          if (navigator) {
+            navigator.pop();
+          }
+        } else {
+          Alert('请输入13个字符内的有效的座机号');
         }
         break;
       case 'qqNo':
@@ -110,18 +110,18 @@ let TextEdit = React.createClass({
         break;
 
       case 'department':
-          if(this.state.newValue.length > 20){
-              Alert('请输入20个字符内的部门信息');
-          }else {
-              this.updateUserInfo();
-          }
+        if (this.state.newValue.length > 20) {
+          Alert('请输入20个字符内的部门信息');
+        } else {
+          this.updateUserInfo();
+        }
         break;
       case 'jobTitle':
-          if(this.state.newValue.length > 20){
-              Alert('请输入20个字符内的职位信息');
-          }else {
-              this.updateUserInfo();
-          }
+        if (this.state.newValue.length > 20) {
+          Alert('请输入20个字符内的职位信息');
+        } else {
+          this.updateUserInfo();
+        }
         break;
       default:
         this.updateUserInfo();
@@ -156,7 +156,7 @@ let TextEdit = React.createClass({
         value: this.state.newPublicValue
       }];
       this.update(data);
-    }else {
+    } else {
       const { navigator } = this.props;
       if (navigator) {
         navigator.pop();
@@ -173,7 +173,7 @@ let TextEdit = React.createClass({
           });
           const { navigator } = this.props;
           if (navigator) {
-              navigator.pop();
+            navigator.pop();
           }
         }).catch((errorData) => {
           throw errorData;
@@ -183,10 +183,8 @@ let TextEdit = React.createClass({
 
   renderUpdate: function () {
     return (
-      <TouchableOpacity activeOpacity={0.5} onPress={()=>this.validate()}>
-        <Text style={{color: '#ffffff',padding:10}}>
-          完成
-        </Text>
+      <TouchableOpacity style={{marginLeft: -20,padding:10}} onPress={()=>this.logout()}>
+        <Text style={{color: '#ffffff'}}>完成</Text>
       </TouchableOpacity>
     );
   },
@@ -195,7 +193,7 @@ let TextEdit = React.createClass({
     this.setState({newPublicValue: open});
   },
 
-  renderTextInput: function(){
+  renderTextInput: function () {
     if (this.state.oldValue == '') {
       return (
         <TextInput style={styles.text}
@@ -207,12 +205,12 @@ let TextEdit = React.createClass({
                          this.setState({newValue:text});
                          this.textChange(text);
                          }}
-                   //autoFocus={true}
+          //autoFocus={true}
                    autoCapitalize="none"
                    autoCorrect={false}
         />
       );
-    }else{
+    } else {
       return (
         <TextInput style={styles.text} defaultValue={this.state.oldValue}
                    keyboardType={this.props.param.type}
@@ -248,7 +246,7 @@ let TextEdit = React.createClass({
   render: function () {
     if (this.props.param.name == 'phoneNumber') {
       return (
-        <NavBarView navigator={this.props.navigator}title={this.props.param.title} actionButton={this.renderUpdate}>
+        <NavBarView navigator={this.props.navigator} title={this.props.param.title} actionButton={this.renderUpdate}>
           <View
             style={[DictStyle.textEditItem,{marginTop: 20}]}
           >

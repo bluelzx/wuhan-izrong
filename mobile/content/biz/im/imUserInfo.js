@@ -119,7 +119,7 @@ let ImUserInfo = React.createClass({
       return (
         <View style={{paddingHorizontal:10}}>
       <Button
-        containerStyle={{marginTop: 20, backgroundColor: '#4fb9fc'}}
+        containerStyle={{marginTop: 12, backgroundColor: '#4fb9fc'}}
         style={{fontSize: 20, color: '#ffffff'}}
         onPress={()=>this.addFriend()}
       >
@@ -169,7 +169,7 @@ let styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
-    height: 84,
+    height: 74,
     borderBottomWidth: 0.5,
     borderBottomColor: DictStyle.colorSet.demarcationColor
   },

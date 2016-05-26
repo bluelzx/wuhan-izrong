@@ -220,7 +220,7 @@ let UserInfo = React.createClass({
               >
                 {this.state.realName}
               </Text>
-              <Icon style={{marginRight: 20}} name="ios-arrow-right" size={30} color={PlainStyle.colorSet.arrowColor}/>
+              <Icon style={{marginRight: 20}} name="ios-arrow-right" size={20} color={PlainStyle.colorSet.arrowColor}/>
             </TouchableOpacity>
           </View>
 
@@ -302,7 +302,7 @@ let styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
-    height: 84,
+    height: 74,
     borderBottomWidth: 0.5,
     borderBottomColor: '#0a1926',
     backgroundColor: PlainStyle.colorSet.personalItemColor

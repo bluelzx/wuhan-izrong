@@ -76,7 +76,7 @@ public class AppService extends Service {
                                 .setContentTitle("消息通知")
                                 .setContentText(content)
                                 .setWhen(System.currentTimeMillis())
-                                .setTicker("环渤银通")
+                                .setTicker("爱资融")
                                 .setAutoCancel(true)
                                 .setContentIntent(mPendingIntent);
                         manager.notify(121, mBuilder.build());
