@@ -102,7 +102,10 @@ let Market = React.createClass({
   },
 
   _search () {
+    let filterItems = AppStore.getFilters().filterItems;
     let myCategory = AppStore.getCategory();
+    let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
+    let categoryArr = this.deleteFirstObj(category.options);
     this.setState({
       levelOneText: myCategory != null ? myCategory.displayName : categoryArr.length == 0 ? '' : categoryArr[0].displayName,
       bizCategoryID: myCategory != null ? myCategory.id : categoryArr.length == 0 ? 0 : categoryArr[0].id
@@ -477,20 +480,22 @@ let Market = React.createClass({
                                callBack={this.callBack} rowDefault={this.state.amountDefault}
                                isAll={this.state.amountIsAll}/>
             </View>
-            <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
-              <View style={{alignItems: 'center',justifyContent:'center'}}>
-                <View
-                  style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:25,borderColor:'#ed5867',borderWidth:1}}>
-                  <Text style={{color:'#ed5867'}}>{'清空'}</Text>
+            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+              <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
+                <View style={{alignItems: 'center',justifyContent:'center'}}>
+                  <View
+                    style={{alignItems: 'center',justifyContent:'center',marginLeft:10,marginRight:10,marginTop:10,borderRadius:5,width:(screenWidth-30)/2,height:36,borderColor:'#ed5867',borderWidth:1}}>
+                    <Text style={{color:'#ed5867'}}>{'清空'}</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={() => this.confirmBtn()} underlayColor='rgba(129,127,201,0)'>
-              <View
-                style={{borderRadius:5,justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4b76df',marginHorizontal:10}}>
-                <Text style={{fontWeight: 'bold', color:'white'}}>{'确定'}</Text>
-              </View>
-            </TouchableHighlight>
+              </TouchableHighlight>
+              <TouchableHighlight onPress={() => this.confirmBtn()} underlayColor='rgba(129,127,201,0)'>
+                <View
+                  style={{alignItems: 'center',justifyContent:'center',marginRight:10,marginTop:10,borderRadius:5,width:(screenWidth-30)/2,height:36, backgroundColor: '#4b76df'}}>
+                  <Text style={{fontWeight: 'bold', color:'white'}}>{'确定'}</Text>
+                </View>
+              </TouchableHighlight>
+            </View>
           </ScrollView>
         </View>
       );

@@ -24,7 +24,7 @@ let NameCircular = require('../im/nameCircular').NameCircular;
 let DictStyle = require('../../constants/dictStyle');
 let AppStore = require('../../framework/store/appStore');
 let MarketStore = require('../../framework/store/marketStore');
-let { Alert } = require('mx-artifacts');
+let { Alert ,Button } = require('mx-artifacts');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let Chat = require('../im/chat');
 let Lightbox = require('../../comp/lightBox/Lightbox');
@@ -147,32 +147,29 @@ let BusinessDetail = React.createClass({
       <View style={{backgroundColor:'#f0f0f0',borderRadius:2,margin:10}}>
         {this.renderPromulgator()}
         <View style={{marginBottom:14}}>
+          {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber == null || this.state.bizOrderOwnerBean.mobileNumber == '' ? '--' : this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile != false ? true : false)}
           {this.returnInfoItem(require('../../image/market/email.png'), this.state.bizOrderOwnerBean.userName, true)}
           {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber == null || this.state.bizOrderOwnerBean.phoneNumber == '' ? '--' : this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone != false ? true : false)}
-          {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber == null || this.state.bizOrderOwnerBean.mobileNumber == '' ? '--' : this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile != false ? true : false)}
-          {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo == null || this.state.bizOrderOwnerBean.qqNo == '' ? '--' : this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo != false ? true : false)}
-          {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo == null || this.state.bizOrderOwnerBean.weChatNo == '' ? '--' : this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo != false ? true : false)}
         </View>
+        {this.renderChatBtn()}
       </View>
     );
   },
   renderPromulgator: function () {
     return (
-      <TouchableHighlight style={{marginLeft: 5, justifyContent: 'center'}} onPress={()=>this.gotoIM()}
-                          underlayColor='#f0f0f0' activeOpacity={0.8}>
-        <View style={{flexDirection:'row',alignItems:'center',marginBottom:10}}>
-          {this.renderUserPhoto()}
-          <View style={{flexDirection:'column',flex:1,justifyContent:'space-between'}}>
-            <View style={{marginLeft:5,flexDirection:'row',alignItems:'center'}}>
-              <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
-                    numberOfLines={1}>{this.state.marketInfo.userName}</Text>
-              <Text style={{fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
-            </View>
-            <Text style={{marginLeft:5,marginTop: 10,fontSize:12,color:DictStyle.marketSet.fontColor}}
-                  numberOfLines={1}>{this.state.marketInfo.orgName}</Text>
+
+      <View style={{flexDirection:'row',alignItems:'center',marginBottom:10}}>
+        {this.renderUserPhoto()}
+        <View style={{flexDirection:'column',flex:1,justifyContent:'space-between'}}>
+          <View style={{marginLeft:5,flexDirection:'row',alignItems:'center'}}>
+            <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
+                  numberOfLines={1}>{this.state.marketInfo.userName}</Text>
           </View>
+          <Text style={{marginLeft:5,marginTop: 10,fontSize:12,color:DictStyle.marketSet.fontColor}}
+                numberOfLines={1}>{this.state.marketInfo.orgName}</Text>
         </View>
-      </TouchableHighlight>
+      </View>
+
     );
 
   },
@@ -250,6 +247,20 @@ let BusinessDetail = React.createClass({
         }
       </View>
     );
+  },
+  renderChatBtn: function () {
+    return (
+      <View style={{height:44}}>
+        <Button
+          containerStyle={{height:44,borderRadius:0,backgroundColor:"#4b76df"}}
+          style={{fontSize: 15, color: '#ffffff',}}
+          disabled={this.state.disabled}
+          onPress={() => this.gotoIM()}
+        >
+          {'洽谈'}
+        </Button>
+      </View>
+    )
   },
   gotoIM: function () {
     let orderUserId = this.state.orderUserId;

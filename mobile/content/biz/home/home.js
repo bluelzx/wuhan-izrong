@@ -60,14 +60,14 @@ let Home = React.createClass({
 
   componentDidMount() {
     //AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
-    AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
+    //AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
     AppStore.addChangeListener(this._onChange,HOMEPAGE_CHANGE);
     this.bizOrderMarketSearch();
   },
 
   componentWillUnmount: function () {
     //AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
-    AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
+    //AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
     AppStore.addChangeListener(this._onChange,HOMEPAGE_CHANGE);
   },
   _onChange: function () {
