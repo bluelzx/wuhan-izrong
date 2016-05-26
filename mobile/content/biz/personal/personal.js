@@ -102,17 +102,17 @@ let Personal = React.createClass({
             <View style={[styles.layout,DictStyle.userInfoBorderBottom,DictStyle.userInfoBorderTop]}>
               {this.returnImage()}
               <View>
-                <Text style={{fontSize: 16, color: PlainStyle.colorSet.personalRealName,width: 150}}
+                <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalRealName,width: 150}}
                       numberOfLines={1}>
                   {this.state.realName}
                 </Text>
-                <Text style={{fontSize: 16, color: PlainStyle.colorSet.personalOrgName, marginTop: 10, width: 150}}
+                <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalOrgName, marginTop: 10, width: 150}}
                       numberOfLines={1}
                 >
                   {this.state.orgName}
                 </Text>
               </View>
-              <Icon style={{marginRight:20}} name="ios-arrow-right" size={20} color={PlainStyle.colorSet.arrowColor}/>
+              <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={PlainStyle.colorSet.arrowColor}/>
             </View>
           </TouchableHighlight>
           <View style={{backgroundColor: PlainStyle.colorSet.content, height: 10}}/>
@@ -132,7 +132,7 @@ let styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
-    height: 74,
+    height: 84,
     backgroundColor: PlainStyle.colorSet.personalItemColor
   },
   head: {

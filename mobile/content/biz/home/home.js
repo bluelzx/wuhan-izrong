@@ -33,7 +33,7 @@ let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Home = React.createClass({
   getStateFromStores: function () {
     let filterItems = AppStore.getFilters().filterItems;
-    let category = MarketStore.getFilterOptions(filterItems,'bizCategory');
+    let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
     let categoryArr = this.deleteFirstObj(category.options);
     let dataSource = new ViewPager.DataSource({
       pageHasChanged: (p1, p2) => p1 !== p2
@@ -47,7 +47,7 @@ let Home = React.createClass({
     ];
     return {
       categoryArr: categoryArr,
-      dataSource: PAGES.length?dataSource.cloneWithPages(PAGES):dataSource.cloneWithPages(DEFAULTPAGES),
+      dataSource: PAGES.length ? dataSource.cloneWithPages(PAGES) : dataSource.cloneWithPages(DEFAULTPAGES),
       category: '资金业务',
       contentList: [],
       bizCategoryID: categoryArr.length == 0 ? 0 : categoryArr[0].id
@@ -97,19 +97,28 @@ let Home = React.createClass({
         }).catch((errorData) => {
           throw errorData;
         });
+        //return MarketAction.getTop15BizOrderListByCategory('MIB')
+        //  .then((response)=> {
+        //     console.log(response);
+        //  })
+        //  .catch((errorData)=> {
+        //    throw errorData;
+        //  })
       }
     );
   },
 
   renderMenuItem(url, text, toPage){
-    return(
-      <TouchableHighlight  activeOpacity={0.8} underlayColor={PlainStyle.colorSet.homeBorderColor} onPress={()=>this.toPage(toPage)}>
-        <View style={[styles.menuItem,{width:Device.width/2, flexDirection: 'column',borderLeftColor:'#e6e7ee',borderLeftWidth:0.5}]}>
+    return (
+      <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.homeBorderColor}
+                          onPress={()=>this.toPage(toPage)}>
+        <View
+          style={[styles.menuItem,{width:Device.width/2, flexDirection: 'column',borderLeftColor:'#e6e7ee',borderLeftWidth:0.5}]}>
           <Image style={styles.menuImage} resizeMode='cover' source={url}/>
           <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop:20}]}>{text}</Text>
         </View>
       </TouchableHighlight>
-      )
+    )
   },
 
 
@@ -139,10 +148,10 @@ let Home = React.createClass({
     if (data.url) {
       if (data.url.includes('http')) {
         return (
-            <Image
-                style={styles.page}
-                source={{uri:data.url}}
-            />
+          <Image
+            style={styles.page}
+            source={{uri:data.url}}
+          />
         );
       }
     } else {
@@ -281,14 +290,14 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     flex: 1,
-    width:Device.width/2,
+    width: Device.width / 2,
     justifyContent: 'center'
   },
   listHead: {
     height: 50,
     backgroundColor: PlainStyle.colorSet.content,
     borderBottomWidth: 1,
-    borderTopWidth:1,
+    borderTopWidth: 1,
     borderBottomColor: PlainStyle.colorSet.homeBorderColor,
     borderTopColor: PlainStyle.colorSet.homeBorderColor,
     justifyContent: 'center'
