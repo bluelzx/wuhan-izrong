@@ -86,15 +86,14 @@ let Home = React.createClass({
         this.state.bizCategoryID
       ]
     };
-    this.props.exec(
-      ()=> {
-        return MarketAction.bizOrderMarketSearch(requestBody
-        ).then((response)=> {
-          let contentList = _.slice(response.contentList, 0, 5);
-          this.setState({
-            contentList: contentList
-          });
-          AppStore.saveMarketInfo(response.contentList);
+    this.props.exec(()=> {
+        return MarketAction.bizOrderMarketSearch(requestBody)
+          .then((response)=> {
+            let contentList = _.slice(response.contentList, 0, 5);
+            this.setState({
+              contentList: contentList
+            });
+            AppStore.saveMarketInfo(response.contentList);
         }).catch((errorData) => {
           throw errorData;
         });
@@ -165,15 +164,7 @@ let Home = React.createClass({
           renderPage={this._renderPage}
           isLoop={true}
           autoPlay={true}
-          animation={(animatedValue, toValue, gestureState) => {
-            var duration = 1000;
-            return Animated.timing(animatedValue,
-            {
-              toValue: toValue,
-              duration: duration
-            });
-          }
-        }/>
+        />
       </View>
     );
   },

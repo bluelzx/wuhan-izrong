@@ -146,27 +146,30 @@ let BusinessDetail = React.createClass({
     return (
       <View style={{backgroundColor:'#f0f0f0',borderRadius:2,margin:10}}>
         {this.renderPromulgator()}
-        {this.returnInfoItem(require('../../image/market/email.png'), this.state.bizOrderOwnerBean.userName, true)}
-        {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber == null || this.state.bizOrderOwnerBean.phoneNumber == '' ? '--' : this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone != false ? true : false)}
-        {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber == null || this.state.bizOrderOwnerBean.mobileNumber == '' ? '--' : this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile != false ? true : false)}
-        {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo == null || this.state.bizOrderOwnerBean.qqNo == '' ? '--' : this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo != false ? true : false)}
-        {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo == null || this.state.bizOrderOwnerBean.weChatNo == '' ? '--' : this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo != false ? true : false)}
+        <View style={{marginBottom:14}}>
+          {this.returnInfoItem(require('../../image/market/email.png'), this.state.bizOrderOwnerBean.userName, true)}
+          {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber == null || this.state.bizOrderOwnerBean.phoneNumber == '' ? '--' : this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone != false ? true : false)}
+          {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber == null || this.state.bizOrderOwnerBean.mobileNumber == '' ? '--' : this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile != false ? true : false)}
+          {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo == null || this.state.bizOrderOwnerBean.qqNo == '' ? '--' : this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo != false ? true : false)}
+          {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo == null || this.state.bizOrderOwnerBean.weChatNo == '' ? '--' : this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo != false ? true : false)}
+        </View>
       </View>
     );
   },
   renderPromulgator: function () {
     return (
-      <View style={{flexDirection:'row',alignItems:'center'}}>
+      <View style={{flexDirection:'row',alignItems:'center',marginBottom:10}}>
         {this.renderUserPhoto()}
-        <View>
-          <View style={{flexDirection:'row',alignItems:'flex-end'}}>
+        <View style={{flexDirection:'column',flex:1,justifyContent:'space-between'}}>
+          <View style={{flexDirection:'row',alignItems:'center',marginTop:-10}}>
             <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
                   numberOfLines={1}>{this.state.marketInfo.userName}</Text>
-            <TouchableHighlight style={{height:36, marginLeft: 5, justifyContent: 'flex-end'}} onPress={()=>this.gotoIM()} underlayColor='#f0f0f0' activeOpacity={0.8}>
-              <Text style={{fontSize:12,color:'#49cfae',alignSelf:'flex-end'}}>{'(点击洽谈)'}</Text>
+            <TouchableHighlight style={{height:36, marginLeft: 5, justifyContent: 'center'}} onPress={()=>this.gotoIM()}
+                                underlayColor='#f0f0f0' activeOpacity={0.8}>
+              <Text style={{fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
             </TouchableHighlight>
           </View>
-          <Text style={{marginTop:10,fontSize:12,color:DictStyle.marketSet.fontColor}}
+          <Text style={{fontSize:12,color:DictStyle.marketSet.fontColor}}
                 numberOfLines={1}>{this.state.marketInfo.orgName}</Text>
         </View>
       </View>

@@ -456,7 +456,8 @@ let Market = React.createClass({
           <ScrollView>
             <TouchableOpacity onPress={()=>this.toSelectOrg(SelectOrg)} activeOpacity={0.8} underlayColor="#f0f0f0">
               <View
-                style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4b76df',alignItems: 'center',justifyContent:'space-between',flexDirection: 'row'}}>
+                style={{width: screenWidth-20,margin:10,borderRadius:5,height:36,backgroundColor:'#4b76df',alignItems: 'center',
+                     justifyContent:'space-between',flexDirection: 'row',marginBottom:-2}}>
                 <Text
                   style={{fontSize:16,marginLeft:10,width: screenWidth-66,color:'white'}}
                   numberOfLines={1}>{this.state.orgValue == '' ? '全部发布机构' : this.state.orgValue}</Text>
@@ -479,14 +480,14 @@ let Market = React.createClass({
             <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
               <View style={{alignItems: 'center',justifyContent:'center'}}>
                 <View
-                  style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:30,borderColor:'#ed5867',borderWidth:1}}>
+                  style={{alignItems: 'center',justifyContent:'center',margin:10,borderRadius:5,width:100,height:25,borderColor:'#ed5867',borderWidth:1}}>
                   <Text style={{color:'#ed5867'}}>{'清空'}</Text>
                 </View>
               </View>
             </TouchableHighlight>
             <TouchableHighlight onPress={() => this.confirmBtn()} underlayColor='rgba(129,127,201,0)'>
               <View
-                style={{margin:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4b76df'}}>
+                style={{borderRadius:5,justifyContent:'center',alignItems:'center',height:44, backgroundColor: '#4b76df',marginHorizontal:10}}>
                 <Text style={{fontWeight: 'bold', color:'white'}}>{'确定'}</Text>
               </View>
             </TouchableHighlight>
