@@ -470,7 +470,7 @@ let MyBizDetail = React.createClass({
                     this.setState({fileUrlList: arr});
                     }}
         >
-          <CustomImage
+          <Image
             style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
             source={{uri:rowData}}
           />

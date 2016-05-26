@@ -65,7 +65,7 @@ let _saveMarketInfo = function (marketInfoList) {
           bizOrientation: marketInfo.bizOrientation,
           bizOrientationDesc: marketInfo.bizOrientationDesc,
           fileUrlList: JSON.stringify(marketInfo.fileUrlList),
-          lastModifyDate: marketInfo.lastModifyDate,
+          lastModifyDate: new Date(marketInfo.lastModifyDate),
           orgId: marketInfo.orgId,
           orgName: marketInfo.orgName,
           photoStoredFileUrl:marketInfo.photoStoredFileUrl,
