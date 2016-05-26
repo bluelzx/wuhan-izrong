@@ -414,7 +414,6 @@ let MyBizDetail = React.createClass({
             {this.renderAdd()}
           </View>
         </View>
-
       )
     }
   },
@@ -434,6 +433,7 @@ let MyBizDetail = React.createClass({
           <Image
             style={{width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
             source={require('../../image/market/addImage.png')}
+            resize-mode = 'cover'
           />
         </ImagePicker>
       );

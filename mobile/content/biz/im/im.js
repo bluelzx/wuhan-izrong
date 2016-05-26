@@ -421,7 +421,7 @@ let WhitePage = React.createClass({
 
   renderNull: function () {
     return (
-      <Text style={{flex:1, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>没有记录</Text>
+      <Text style={{flex:1, marginTop:20, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>没有记录</Text>
     );
   },
 
