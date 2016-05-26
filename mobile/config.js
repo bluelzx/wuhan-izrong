@@ -44,7 +44,7 @@ var qaConfig = {
 };
 
 var productConfig = {
-  Dev: true, // Switch for log. true means print.
+  Dev: false, // Switch for log. true means print.
   Host: 'http://114.55.16.46:80',
   ImHost: '114.55.16.46:3000',
   //ImgHost: 'http://img.izirong.com/'
