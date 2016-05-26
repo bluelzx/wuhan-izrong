@@ -74,6 +74,8 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   queryAllPlatFormInfo: ()=>_queryAllPlatFormInfo(),
   getBadge: ()=>_getBadge(),
   startJavaServer: () => ServiceModule.startAppService(_data.token, 0, ImHost),
+  saveMarketInfo: (marketInfoList) => _saveMarketInfo(marketInfoList),
+  getMarketInfo: () => _getMarketInfo()
   //stopJavaServer:() => ServiceModule.stopMyAppService()
 
 });
@@ -172,9 +174,9 @@ let _logout = (userId) => {
 };
 
 let _forceLogout = () => {
-  if(_info.isForceLogout && _info.isLogout){
+  if (_info.isForceLogout && _info.isLogout) {
 
-  }else{
+  } else {
     Persister.logout(_getUserId());
     _data.token = '';
     _info.isForceLogout = true;
@@ -185,9 +187,9 @@ let _forceLogout = () => {
 
 let _deleteLoginUser = () => {
   //清空token,isLogout = true
-  if(_info.isLogout && _info.isDelete){
+  if (_info.isLogout && _info.isDelete) {
 
-  }else{
+  } else {
     Persister.logout(_getUserId());
     _data.token = '';
     _info.isLogout = true;
@@ -197,9 +199,9 @@ let _deleteLoginUser = () => {
 };
 
 let _freezAccount = () => {
-  if(_info.isLogout && _info.isFreezing){
+  if (_info.isLogout && _info.isFreezing) {
 
-  }else {
+  } else {
     //清空token
     Persister.logout(_getUserId());
     _data.token = '';
@@ -270,7 +272,7 @@ let _updateUserInfo = (column, value)=> {
   AppStore.emitChange(USER_CHANGE);
 };
 
-let _updateUserInfoByPush = (data)=>{
+let _updateUserInfoByPush = (data)=> {
   Persister.updateUserInfoByPush(data);
 };
 
@@ -298,4 +300,13 @@ let _getBadge = () => {
 let _queryAllHomePageInfo = ()=> {
   return Persister.queryAllHomePageInfo()
 };
+
+let _saveMarketInfo = (marketInfoList) => {
+  Persister.saveMarketInfo(marketInfoList);
+};
+
+let _getMarketInfo = ()=> {
+  return Persister.getMarketInfo();
+};
+
 module.exports = AppStore;

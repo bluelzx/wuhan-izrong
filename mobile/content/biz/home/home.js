@@ -84,17 +84,18 @@ let Home = React.createClass({
       pageIndex: 1,
       filterList: [
         this.state.bizCategoryID
+
       ]
     };
     this.props.exec(
       ()=> {
         return MarketAction.bizOrderMarketSearch(requestBody
         ).then((response)=> {
-          console.log(response);
           let contentList = _.slice(response.contentList, 0, 5);
           this.setState({
             contentList: contentList
           });
+          AppStore.saveMarketInfo(response.contentList);
         }).catch((errorData) => {
           throw errorData;
         });

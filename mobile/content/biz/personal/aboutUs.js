@@ -23,27 +23,18 @@ let deviceInfo = require('react-native-device-info');
 var AboutUs = React.createClass({
   getInitialState(){
     return {
-      email: 'zr@izirong.com',
       versionName: deviceInfo.getVersion(),
       buildNumber: deviceInfo.getBuildNumber(),
-      content: '     爱资融APP是武汉安硕织信为广大银行同业交易从业人员推出的银行同业业务撮合及社交类软件。爱资融秉承“透明公开，服务为先” ' +
-      '的原则，立志为广大的银行同业交易员提供一个纯净高效的同业交流环境。'
     };
   },
 
-  componentDidMount() {
-    //if(Platform.OS == 'ios'){
-    //  this.setState({
-    //    versionName: 'V 0.1.1'
-    //  })
-    //}else{
-    //  AppInfoModule.getAppVersion((version)=> {
-    //    this.setState({
-    //      versionName: 'V '+ version
-    //    })
-    //  });
-    //}
+  statics: {
+    email: 'zr@izirong.com',
+    content: '     爱资融APP是武汉安硕织信为广大银行同业交易从业人员推出的银行同业业务撮合及社交类软件。爱资融秉承“透明公开，服务为先” ' +
+    '的原则，立志为广大的银行同业交易员提供一个纯净高效的同业交流环境。'
+  },
 
+  componentDidMount() {
   },
 
   render(){
@@ -59,11 +50,11 @@ var AboutUs = React.createClass({
               <Text style={styles.title}>爱资融同业平台</Text>
             </View>
             <Text style={styles.content}>
-              {this.state.content}
+              {this.statics.content}
             </Text>
           </View>
           <View>
-            <Item desc="网站邮箱:" img={false} icon={false} hiddenArrow={true} value={this.state.email}/>
+            <Item desc="网站邮箱:" img={false} icon={false} hiddenArrow={true} value={this.statics.email}/>
             <Item desc="版本号:" img={false} icon={false} hiddenArrow={true} value={Platform.OS === 'ios' ? this.state.versionName + '.' + this.state.buildNumber : this.state.versionName}/>
           </View>
 

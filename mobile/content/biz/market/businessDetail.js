@@ -31,6 +31,7 @@ let Lightbox = require('../../comp/lightBox/Lightbox');
 let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
+let CustomImage = require('../../comp/utils/CustomImage');
 
 let MarketAction = require('../../framework/action/marketAction');
 
@@ -223,7 +224,7 @@ let BusinessDetail = React.createClass({
                         navigator={this.props.navigator}
                         springConfig={{tension: 35, friction: 6}}
               >
-                <Image
+                <CustomImage
                   style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
                   source={{uri:item, isStatic: true}}
                 />

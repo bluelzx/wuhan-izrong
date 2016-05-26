@@ -75,7 +75,6 @@ let _saveAppData = function (data) {
       _saveOrgBeanList(orgBeanList);
       _saveFilters(appOrderSearchResult);
       _saveAppUserGroupBeanList(appUserGroupBeanList, resolve);
-
     });
   })
 };

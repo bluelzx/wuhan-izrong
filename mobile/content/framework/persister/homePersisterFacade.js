@@ -12,7 +12,8 @@ let {SESSION_TYPE } = require('../../constants/dictIm');
 let HomePersisterFacade = {
     createHomePageInfo: (msgList)=>_createHomePageInfo(msgList),
     queryAllHomePageInfo: () => _queryAll(),
-    saveNewMarketInfo: (marketInfoList)=> _saveNewMarketInfo(marketInfoList)
+    saveMarketInfo: (marketInfoList)=> _saveMarketInfo(marketInfoList),
+    getMarketInfo: ()=> _getMarketInfo()
   };
 
 let _createHomePageInfo = function (msgList) {
@@ -49,7 +50,7 @@ let _queryAll = function () {
   return ret;
 };
 
-let _saveNewMarketInfo = function (marketInfoList) {
+let _saveMarketInfo = function (marketInfoList) {
   _realm.write(() => {
     marketInfoList.forEach((marketInfo)=> {
       _realm.create(
@@ -77,9 +78,14 @@ let _saveNewMarketInfo = function (marketInfoList) {
           userName: marketInfo.userName
         }, true);
     })
-
   });
 };
+
+let _getMarketInfo = function(){
+  let marketInfo = _realm.objects(MARKETINFO);
+  return marketInfo;
+};
+
 
 
 module.exports = HomePersisterFacade;

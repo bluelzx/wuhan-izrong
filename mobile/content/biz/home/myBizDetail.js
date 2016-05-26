@@ -52,7 +52,7 @@ let {MYBIZ_CHANGE} = require('../../constants/dictEvent');
 let bizOrientationUnit = ['收', '出'];
 let termUnit = ['日', '月', '年'];
 let amountUnit = ['万', '亿'];
-
+let CustomImage = require('../../comp/utils/CustomImage');
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 let MyBizDetail = React.createClass({
@@ -470,7 +470,7 @@ let MyBizDetail = React.createClass({
                     this.setState({fileUrlList: arr});
                     }}
         >
-          <Image
+          <CustomImage
             style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
             source={{uri:rowData}}
           />
