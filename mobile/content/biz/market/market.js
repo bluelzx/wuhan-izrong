@@ -37,8 +37,6 @@ let Adjust = require('../../comp/utils/adjust');
 let numeral = require('numeral');
 let DictStyle = require('../../constants/dictStyle');
 
-var marketData = {contentList: []};
-
 let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Market = React.createClass({
   getStateFromStores: function () {
@@ -82,52 +80,33 @@ let Market = React.createClass({
       bizOrientationID: '',
       termID: '',
       amountID: '',
-      marketData: marketData
+      marketData: []
     };
   },
   getInitialState(){
     return this.getStateFromStores();
-    this.bizOrderMarketSearch();
-  },
-
-  bizOrderMarketSearch: function () {
-    let requestBody = {
-      orderField: 'lastModifyDate',
-      orderType: 'desc',
-      pageIndex: 1,
-      filterList: [
-        this.state.bizCategoryID
-      ]
-    };
-    this.props.exec(
-      ()=> {
-        return MarketAction.bizOrderMarketSearch(requestBody
-        ).then((response)=> {
-          console.log(response);
-          this.setState({
-            contentList: response.contentList
-          });
-        }).catch(
-          (errorData) => {
-            throw errorData;
-          }
-        );
-      }
-    );
   },
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
-    AppStore.addChangeListener(this._onChange, MYBIZ_CHANGE);
+    AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
   },
 
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
-    AppStore.removeChangeListener(this._onChange, MYBIZ_CHANGE);
+    AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
   },
 
   _onChange () {
     this.setState(this.getStateFromStores());
+  },
+
+  _search () {
+    let myCategory = AppStore.getCategory();
+    this.setState({
+      levelOneText: myCategory != null ? myCategory.displayName : categoryArr.length == 0 ? '' : categoryArr[0].displayName,
+      bizCategoryID: myCategory != null ? myCategory.id : categoryArr.length == 0 ? 0 : categoryArr[0].id
+    });
     this.refs.marketGiftedListView._refresh();
   },
 
@@ -138,7 +117,7 @@ let Market = React.createClass({
    * @param {function} callback Should pass the rows
    * @param {object} options Inform if first load
    */
-  _onFetch(page = 1, callback, options) {
+  _onFetch(page, callback, options) {
     let requestBody = {
       orderField: this.state.orderField,
       orderType: this.state.orderType,
@@ -163,6 +142,7 @@ let Market = React.createClass({
           }
         })
     }
+
     MarketAction.bizOrderMarketSearch(requestBody
     ).then((response)=> {
       console.log(response);
@@ -187,11 +167,11 @@ let Market = React.createClass({
             allLoaded: true // the end of the list is reached
           });
         }, 1000); // simulating network fetching
-        if(errorData.msgCode == 'APP_SYS_TOKEN_INVALID'){
+        if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
           AppStore.forceLogout();
-        }else if(errorData.message.includes('Network request failed')){
+        } else if (errorData.message.includes('Network request failed')) {
           Alert('网络异常');
-        }else{
+        } else {
           Alert(errorData.msgContent || errorData.message);
         }
       }
@@ -236,7 +216,8 @@ let Market = React.createClass({
           <Image style={{width:30,height:30,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
-          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:DictStyle.marketSet.fontColor}}>
+          <Text
+            style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:DictStyle.marketSet.fontColor}}>
             {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
@@ -268,13 +249,16 @@ let Market = React.createClass({
           <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
             {'方向'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
+          <Text
+            style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
             {'期限'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(120),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
+          <Text
+            style={{position:"absolute",left:Adjust.width(120),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
             {'金额'}
           </Text>
-          <Text style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
+          <Text
+            style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:DictStyle.marketSet.fontColor}}>
             {'发布方'}
           </Text>
         </View>
@@ -518,7 +502,8 @@ let Market = React.createClass({
         onPress={()=>this.pressTypeRow1(rowID)} activeOpacity={1}
         underlayColor="#f0f0f0">
         <View style={{width:screenWidth}}>
-          <Text style={{fontSize:DictStyle.marketSet.filterFontSize,marginLeft:10,color:DictStyle.marketSet.fontColor}}>{rowData.displayName}</Text>
+          <Text
+            style={{fontSize:DictStyle.marketSet.filterFontSize,marginLeft:10,color:DictStyle.marketSet.fontColor}}>{rowData.displayName}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -530,7 +515,8 @@ let Market = React.createClass({
         onPress={()=>this.pressTimeRow(rowID)} activeOpacity={1}
         underlayColor="#f0f0f0">
         <View style={{width:screenWidth}}>
-          <Text style={{fontSize:DictStyle.marketSet.filterFontSize,marginLeft:10,color:DictStyle.marketSet.fontColor}}>{rowData.fieldDisplayName}</Text>
+          <Text
+            style={{fontSize:DictStyle.marketSet.filterFontSize,marginLeft:10,color:DictStyle.marketSet.fontColor}}>{rowData.fieldDisplayName}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -572,7 +558,7 @@ let Market = React.createClass({
       navigator.push({
         comp: name,
         callBack: this.callback,
-        param: {needAll: true , isFromMarket: true}
+        param: {needAll: true, isFromMarket: true}
       })
     }
   },

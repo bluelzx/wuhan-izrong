@@ -293,7 +293,7 @@ let _getCategory = () => {
 
 
 let _getBadge = () => {
-  let badge = Persister.getSessionBadge();
+  let badge = Persister.getSessionBadge(_getUserId());
   return badge;
 };
 
