@@ -177,7 +177,7 @@ let _saveImUsers = function (imUserBeanList) {
       publicAddress: !!(imUserBeanList[i].publicAddress == true || imUserBeanList[i].publicAddress === null),
       publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
       publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
-      certificated: imUserBeanList[i].isCertificated || false
+      certified: imUserBeanList[i].isCertificated || false
     };
     _realm.create(IMUSERINFO, param, true);
   }

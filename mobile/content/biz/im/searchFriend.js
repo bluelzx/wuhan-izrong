@@ -88,7 +88,7 @@ let SearchFriend = React.createClass({
               if (userInfo.userId == item.userId) {
                 nIndex = index;
               } else {
-                item.certificated = item.isCertificated;
+                item.certified = item.isCertificated;
                 item.orgValue = ContactStore.getOrgValueByOrgId(item.orgId);
               }
             });
@@ -111,7 +111,7 @@ let SearchFriend = React.createClass({
               if (userInfo.userId == item.userId) {
                 nIndex = index;
               } else {
-                item.certificated = item.isCertificated;
+                item.certified = item.isCertificated;
                 item.orgValue = ContactStore.getOrgValueByOrgId(item.orgId);
               }
             });

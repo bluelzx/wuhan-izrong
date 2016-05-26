@@ -173,7 +173,7 @@ let SearchResultDetail = React.createClass({
 
           <View style={styles.itemBackColor} >
             <View style={[styles.layout,{flex:1}]}>
-              <View style={{flex:1,paddingLeft:16}}>
+              <View style={{paddingLeft:16}}>
                 <HeaderPic  photoFileUrl={this.state.data.photoFileUrl}  certified={this.state.data.certified} name={this.state.data.realName}/>
               </View>
               <Text numberOfLines={2} style={{textAlign:'right',flex:3,color:'#979fa2',fontSize:18, marginRight:20}}>{this.state.data.realName}</Text>

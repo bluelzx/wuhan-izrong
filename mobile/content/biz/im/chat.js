@@ -35,7 +35,8 @@ let Chat = React.createClass({
       userId:user.userId,
       myName:user.realName,
       photoFileUrl:user.photoFileUrl,
-      certified:user.certified
+      certified:user.certified,
+      messageType:param.chatType
     });
     if (this.props.param.isFromBizDetail) {
       this.refs['BIZ_Message']._sendMessage(MSG_CONTENT_TYPE.BIZINFO, this.props.param.content);
