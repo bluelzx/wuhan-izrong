@@ -178,6 +178,7 @@ let BusinessDetail = React.createClass({
       return (
         <View style={{margin:10}}>
           <NameCircular name={this.state.marketInfo.userName}/>
+          {this.renderIsCertificated()}
         </View>
       );
     } else {
@@ -187,6 +188,17 @@ let BusinessDetail = React.createClass({
             style={{height:46,width:46,borderRadius:23}}
             source={{uri:this.state.bizOrderOwnerBean.photoStoredFileUrl}}
           />
+          {this.renderIsCertificated()}
+        </View>
+      );
+    }
+  },
+  renderIsCertificated: function () {
+    if (this.state.bizOrderOwnerBean.isCertificated){
+      return (
+        <View>
+          <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40}]}
+                 resizeMode="cover" source={require('../../image/user/certificated.png')}/>
         </View>
       );
     }
@@ -301,6 +313,11 @@ let BusinessDetail = React.createClass({
 
 });
 
-let styles = StyleSheet.create({});
+let styles = StyleSheet.create({
+  certified: {
+    width: 15,
+    height: 15
+  }
+});
 
 module.exports = BusinessDetail;
