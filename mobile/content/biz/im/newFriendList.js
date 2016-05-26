@@ -20,7 +20,7 @@ let AppStore = require('../../framework/store/appStore');
 let { Device,Alert } = require('mx-artifacts');
 let DictStyle = require('../../constants/dictStyle');
 let HeaderPic = require('./headerPic');
-let ImUserInfo = require('./imUserInfo');
+let ImUserInfo = require('./searchResultDetail');
 
 let NewFriendList = React.createClass({
 
@@ -88,7 +88,7 @@ let NewFriendList = React.createClass({
         }
         this.props.navigator.push({
           comp:ImUserInfo,
-          param:Object.assign(data,opt)
+          param:Object.assign(data,opt,{friendInvite:true})
         });
       });
     });

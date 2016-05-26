@@ -17,7 +17,8 @@ let SearchBar = React.createClass({
   },
 
   propTypes:{
-    textChange:React.PropTypes.func.isRequired
+    textChange:React.PropTypes.func.isRequired,
+    textOnBlur:React.PropTypes.func.isRequired,
   },
 
   textChange: function(text){
@@ -30,7 +31,11 @@ let SearchBar = React.createClass({
       return (
         <TextInput
           autoFocus={this.state.editAble}
-          onBlur={() => this.setState({editAble:false}) }
+          onBlur={() => {
+          this.setState({editAble:false});
+          this.props.textOnBlur && this.props.textOnBlur();
+          }
+          }
           onFocus={() => this.setState({editAble:true}) }
           onChangeText={(text) => this.textChange(text)}
           returnKeyType={'search'}

@@ -34,7 +34,7 @@ let CheckBox = React.createClass({
   render: function() {
     let {style} = this.props;
     return (
-      <TouchableOpacity style={style} onPress={this.changeAgree}>
+      <TouchableOpacity style={style} onPress={this.changeAgree} activeOpacity={0.8}>
         <View style={{flexDirection:'row', alignItems:'center'}}>
           <Icon name={this.state.agree?'ios-checkmark':'ios-circle-outline'} size={24} color='#44ABFD' />
 

@@ -8,6 +8,7 @@ let Icon = require('react-native-vector-icons/Ionicons');
 let AppStore = require('../../framework/store/appStore');
 let DateHelper = require('../../comp/utils/dateHelper');
 let SpreadDetail = require('./spreadDetail');
+let DictStyle = require('../../constants/dictStyle');
 
 let Spread = React.createClass({
 
@@ -56,6 +57,13 @@ let Spread = React.createClass({
   },
 
   renderBody : function(){
+
+    if(this.state.data && this.state.data.length ==0){
+      return (
+        <Text style={{flex:1, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>没有记录</Text>
+      );
+    }
+
     let ret = [];
 
     this.state.data.forEach((item)=>{

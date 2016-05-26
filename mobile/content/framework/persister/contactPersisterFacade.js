@@ -163,6 +163,12 @@ let _getGroupInfoByGroupId = function (groupId) {
       }
     );
 
+   let myInfo = _getLoginUserInfo();
+
+    let myOrgName = _realm.objects(ORGBEAN).filtered('id = $0', myInfo.orgId);
+    myInfo.orgValue = myOrgName.length>0?myOrgName[0].orgValue:'';
+    members.push(myInfo);
+
     //result[0].members = members;
     let ret = {
       groupId: result[0].groupId,
@@ -552,4 +558,43 @@ let _addFriend = function (userInfo) {
 
 }
 
+
+
+//********************
+let _getLoginUserInfo = function () {
+  let loginUsers = _realm.objects(LOGINUSERINFO);
+  if (loginUsers.length != 0) {
+    let sortedUsers = loginUsers.sorted('lastLoginTime', [true]);
+    let user = {
+      userId: sortedUsers[0].userId,
+      address: sortedUsers[0].address,
+      realName: sortedUsers[0].realName,
+      weChatNo: sortedUsers[0].weChatNo,
+      email: sortedUsers[0].email,
+      nameCardFileUrl: sortedUsers[0].nameCardFileUrl,
+      qqNo: sortedUsers[0].qqNo,
+      department: sortedUsers[0].department,
+      mobileNumber: sortedUsers[0].mobileNumber,
+      jobTitle: sortedUsers[0].jobTitle,
+      phoneNumber: sortedUsers[0].phoneNumber,
+      photoFileUrl: sortedUsers[0].photoFileUrl,
+      publicTitle: sortedUsers[0].publicTitle,
+      publicMobile: sortedUsers[0].publicMobile,
+      publicDepart: sortedUsers[0].publicDepart,
+      publicPhone: sortedUsers[0].publicPhone,
+      publicEmail: sortedUsers[0].publicEmail,
+      publicAddress: sortedUsers[0].publicAddress,
+      publicWeChat: sortedUsers[0].publicWeChat,
+      publicQQ: sortedUsers[0].publicQQ,
+      orgId: sortedUsers[0].orgId,
+      lastLoginTime: sortedUsers[0].lastLoginTime,
+      token: sortedUsers[0].token,
+      lastSyncTime: sortedUsers[0].lastSyncTime,
+      certified: sortedUsers[0].certified,
+      friendList: sortedUsers[0].friendList
+    }
+    return user;
+  }
+  return '';
+};
 module.exports = ContactPersisterFacade;

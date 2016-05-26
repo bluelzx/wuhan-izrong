@@ -40,6 +40,11 @@ let AddMember = React.createClass({
     }
   },
 
+  textOnBlur:function(){
+    if(this.state.keyWord==='')
+      this.setState({isOpen:false});
+  },
+
   addUser: function( groupId, members) {
     if(Object.keys(members).length + this.state.existMembers > Setting.groupMemberUpperLimit){
       Alert('群组成员人数不能超过' + Setting.groupMemberUpperLimit);
@@ -127,7 +132,7 @@ let AddMember = React.createClass({
       <NavBarView navigator={this.props.navigator} title='添加群成员' actionButton={this.renderState}>
         <ChooseList  memberList={this.state.memberList}/>
 
-        <SearchBar textChange={this.textChange}/>
+        <SearchBar textChange={this.textChange}  textOnBlur={this.textOnBlur}/>
 
         {(()=>{
 
@@ -149,7 +154,7 @@ let AddMember = React.createClass({
             );
           }else{
             return (
-              <View style={{backgroundColor:'transparent', alignItems:'center',marginTop:10}}>
+              <View style={{backgroundColor:'transparent', alignItems:'center',marginTop:20}}>
                 <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>
               </View>
             );
