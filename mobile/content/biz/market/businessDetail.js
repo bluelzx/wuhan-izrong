@@ -158,21 +158,21 @@ let BusinessDetail = React.createClass({
   },
   renderPromulgator: function () {
     return (
-      <View style={{flexDirection:'row',alignItems:'center',marginBottom:10}}>
-        {this.renderUserPhoto()}
-        <View style={{flexDirection:'column',flex:1,justifyContent:'space-between'}}>
-          <View style={{flexDirection:'row',alignItems:'center',marginTop:-10}}>
-            <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
-                  numberOfLines={1}>{this.state.marketInfo.userName}</Text>
-            <TouchableHighlight style={{height:36, marginLeft: 5, justifyContent: 'center'}} onPress={()=>this.gotoIM()}
-                                underlayColor='#f0f0f0' activeOpacity={0.8}>
+      <TouchableHighlight style={{marginLeft: 5, justifyContent: 'center'}} onPress={()=>this.gotoIM()}
+                          underlayColor='#f0f0f0' activeOpacity={0.8}>
+        <View style={{flexDirection:'row',alignItems:'center',marginBottom:10}}>
+          {this.renderUserPhoto()}
+          <View style={{flexDirection:'column',flex:1,justifyContent:'space-between'}}>
+            <View style={{marginLeft:5,flexDirection:'row',alignItems:'center'}}>
+              <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
+                    numberOfLines={1}>{this.state.marketInfo.userName}</Text>
               <Text style={{fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
-            </TouchableHighlight>
+            </View>
+            <Text style={{marginLeft:5,marginTop: 10,fontSize:12,color:DictStyle.marketSet.fontColor}}
+                  numberOfLines={1}>{this.state.marketInfo.orgName}</Text>
           </View>
-          <Text style={{fontSize:12,color:DictStyle.marketSet.fontColor}}
-                numberOfLines={1}>{this.state.marketInfo.orgName}</Text>
         </View>
-      </View>
+      </TouchableHighlight>
     );
 
   },
@@ -197,7 +197,7 @@ let BusinessDetail = React.createClass({
     }
   },
   renderIsCertificated: function () {
-    if (this.state.bizOrderOwnerBean.isCertificated){
+    if (this.state.bizOrderOwnerBean.isCertificated) {
       return (
         <View>
           <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40}]}
@@ -223,7 +223,8 @@ let BusinessDetail = React.createClass({
   renderImageTitle(){
     if (this.state.fileUrlList.length > 0) {
       return (
-        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:DictStyle.marketSet.fontColor}}>{'附\u3000\u3000件:'}</Text>
+        <Text
+          style={{marginLeft:10,marginTop:5,fontSize:16, color:DictStyle.marketSet.fontColor}}>{'附\u3000\u3000件:'}</Text>
       );
     }
   },
@@ -254,19 +255,19 @@ let BusinessDetail = React.createClass({
     let orderUserId = this.state.orderUserId;
     let myInfo = ContactStore.getUserInfo();
     let self = this;
-    this.props.exec(()=>{
-      return new Promise((resolve, reject)=>{
+    this.props.exec(()=> {
+      return new Promise((resolve, reject)=> {
         let user = ContactStore.getUserInfoByUserId(orderUserId);
         resolve(user);
-      }).catch((err)=>{
+      }).catch((err)=> {
         //
-        if(err == 'userinfo is null') {
+        if (err == 'userinfo is null') {
           return ContactAction.getUserInfoFromServer(orderUserId);
-        }else {
+        } else {
           throw err;
         }
-      }).then((user)=>{
-        let sessionId = KeyGenerator.getSessionKey(SESSION_TYPE.USER,user.userId,myInfo.userId);//'user:' + this.state.orderUserId.toString();
+      }).then((user)=> {
+        let sessionId = KeyGenerator.getSessionKey(SESSION_TYPE.USER, user.userId, myInfo.userId);//'user:' + this.state.orderUserId.toString();
         let content = {
           "bizCategory": this.state.marketInfo.bizCategoryDesc,
           "bizOrientation": this.state.marketInfo.bizOrientation,
