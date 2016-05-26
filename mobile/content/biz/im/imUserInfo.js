@@ -203,7 +203,7 @@ let styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
-    height: 84,
+    height: 74,
     borderBottomWidth: 0.5,
     borderBottomColor: DictStyle.colorSet.demarcationColor
   },

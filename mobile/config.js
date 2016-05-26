@@ -24,7 +24,7 @@ var developConfig = {
 
 var uncleConfig = {
   Dev: true, // Switch for log. true means print.
-  Host: 'http://192.168.64.245:9081/fas',   //dev
+  Host: 'http://192.168.64.245:9081',   //dev
   //Host: 'http://192.168.64.205:9102/fas',   //dev
   ImHost:'192.168.64.224:3000'//dev
 };
@@ -45,7 +45,7 @@ var qaConfig = {
 
 var productConfig = {
   Dev: true, // Switch for log. true means print.
-  Host: 'http://114.55.16.46',
+  Host: 'http://114.55.16.46:80',
   ImHost: '114.55.16.46:3000'
 };
 

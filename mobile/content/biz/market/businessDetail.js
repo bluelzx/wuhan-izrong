@@ -31,6 +31,7 @@ let Lightbox = require('../../comp/lightBox/Lightbox');
 let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
+let CustomImage = require('../../comp/utils/CustomImage');
 
 let MarketAction = require('../../framework/action/marketAction');
 
@@ -145,30 +146,33 @@ let BusinessDetail = React.createClass({
     return (
       <View style={{backgroundColor:'#f0f0f0',borderRadius:2,margin:10}}>
         {this.renderPromulgator()}
-        {this.returnInfoItem(require('../../image/market/email.png'), this.state.bizOrderOwnerBean.userName, true)}
-        {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber == null || this.state.bizOrderOwnerBean.phoneNumber == '' ? '--' : this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone != false ? true : false)}
-        {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber == null || this.state.bizOrderOwnerBean.mobileNumber == '' ? '--' : this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile != false ? true : false)}
-        {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo == null || this.state.bizOrderOwnerBean.qqNo == '' ? '--' : this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo != false ? true : false)}
-        {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo == null || this.state.bizOrderOwnerBean.weChatNo == '' ? '--' : this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo != false ? true : false)}
+        <View style={{marginBottom:14}}>
+          {this.returnInfoItem(require('../../image/market/email.png'), this.state.bizOrderOwnerBean.userName, true)}
+          {this.returnInfoItem(require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber == null || this.state.bizOrderOwnerBean.phoneNumber == '' ? '--' : this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone != false ? true : false)}
+          {this.returnInfoItem(require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber == null || this.state.bizOrderOwnerBean.mobileNumber == '' ? '--' : this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile != false ? true : false)}
+          {this.returnInfoItem(require('../../image/market/QQ.png'), this.state.bizOrderOwnerBean.qqNo == null || this.state.bizOrderOwnerBean.qqNo == '' ? '--' : this.state.bizOrderOwnerBean.qqNo, this.state.bizOrderOwnerBean.isPublicQQNo != false ? true : false)}
+          {this.returnInfoItem(require('../../image/market/weChat.png'), this.state.bizOrderOwnerBean.weChatNo == null || this.state.bizOrderOwnerBean.weChatNo == '' ? '--' : this.state.bizOrderOwnerBean.weChatNo, this.state.bizOrderOwnerBean.isPublicWeChatNo != false ? true : false)}
+        </View>
       </View>
     );
   },
   renderPromulgator: function () {
     return (
-      <View style={{flexDirection:'row',alignItems:'center'}}>
-        {this.renderUserPhoto()}
-        <View>
-          <View style={{flexDirection:'row',alignItems:'flex-end'}}>
-            <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
-                  numberOfLines={1}>{this.state.marketInfo.userName}</Text>
-            <TouchableHighlight style={{height:36, marginLeft: 5, justifyContent: 'flex-end'}} onPress={()=>this.gotoIM()} underlayColor='#f0f0f0' activeOpacity={0.8}>
-              <Text style={{fontSize:12,color:'#49cfae',alignSelf:'flex-end'}}>{'(点击洽谈)'}</Text>
-            </TouchableHighlight>
+      <TouchableHighlight style={{marginLeft: 5, justifyContent: 'center'}} onPress={()=>this.gotoIM()}
+                          underlayColor='#f0f0f0' activeOpacity={0.8}>
+        <View style={{flexDirection:'row',alignItems:'center',marginBottom:10}}>
+          {this.renderUserPhoto()}
+          <View style={{flexDirection:'column',flex:1,justifyContent:'space-between'}}>
+            <View style={{marginLeft:5,flexDirection:'row',alignItems:'center'}}>
+              <Text style={{fontSize:16,color:DictStyle.marketSet.fontColor}}
+                    numberOfLines={1}>{this.state.marketInfo.userName}</Text>
+              <Text style={{fontSize:12,color:'#49cfae'}}>{'(点击洽谈)'}</Text>
+            </View>
+            <Text style={{marginLeft:5,marginTop: 10,fontSize:12,color:DictStyle.marketSet.fontColor}}
+                  numberOfLines={1}>{this.state.marketInfo.orgName}</Text>
           </View>
-          <Text style={{marginTop:10,fontSize:12,color:DictStyle.marketSet.fontColor}}
-                numberOfLines={1}>{this.state.marketInfo.orgName}</Text>
         </View>
-      </View>
+      </TouchableHighlight>
     );
 
   },
@@ -177,6 +181,7 @@ let BusinessDetail = React.createClass({
       return (
         <View style={{margin:10}}>
           <NameCircular name={this.state.marketInfo.userName}/>
+          {this.renderIsCertificated()}
         </View>
       );
     } else {
@@ -186,6 +191,17 @@ let BusinessDetail = React.createClass({
             style={{height:46,width:46,borderRadius:23}}
             source={{uri:this.state.bizOrderOwnerBean.photoStoredFileUrl}}
           />
+          {this.renderIsCertificated()}
+        </View>
+      );
+    }
+  },
+  renderIsCertificated: function () {
+    if (this.state.bizOrderOwnerBean.isCertificated) {
+      return (
+        <View>
+          <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40}]}
+                 resizeMode="cover" source={require('../../image/user/certificated.png')}/>
         </View>
       );
     }
@@ -207,7 +223,8 @@ let BusinessDetail = React.createClass({
   renderImageTitle(){
     if (this.state.fileUrlList.length > 0) {
       return (
-        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:DictStyle.marketSet.fontColor}}>{'附\u3000\u3000件:'}</Text>
+        <Text
+          style={{marginLeft:10,marginTop:5,fontSize:16, color:DictStyle.marketSet.fontColor}}>{'附\u3000\u3000件:'}</Text>
       );
     }
   },
@@ -224,7 +241,7 @@ let BusinessDetail = React.createClass({
                         springConfig={{tension: 35, friction: 6}}
               >
                 <Image
-                  style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
+                  style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#cccccc'}}
                   source={{uri:item, isStatic: true}}
                 />
               </Lightbox>
@@ -238,19 +255,19 @@ let BusinessDetail = React.createClass({
     let orderUserId = this.state.orderUserId;
     let myInfo = ContactStore.getUserInfo();
     let self = this;
-    this.props.exec(()=>{
-      return new Promise((resolve, reject)=>{
+    this.props.exec(()=> {
+      return new Promise((resolve, reject)=> {
         let user = ContactStore.getUserInfoByUserId(orderUserId);
         resolve(user);
-      }).catch((err)=>{
+      }).catch((err)=> {
         //
-        if(err == 'userinfo is null') {
+        if (err == 'userinfo is null') {
           return ContactAction.getUserInfoFromServer(orderUserId);
-        }else {
+        } else {
           throw err;
         }
-      }).then((user)=>{
-        let sessionId = KeyGenerator.getSessionKey(SESSION_TYPE.USER,user.userId,myInfo.userId);//'user:' + this.state.orderUserId.toString();
+      }).then((user)=> {
+        let sessionId = KeyGenerator.getSessionKey(SESSION_TYPE.USER, user.userId, myInfo.userId);//'user:' + this.state.orderUserId.toString();
         let content = {
           "bizCategory": this.state.marketInfo.bizCategoryDesc,
           "bizOrientation": this.state.marketInfo.bizOrientation,
@@ -300,6 +317,11 @@ let BusinessDetail = React.createClass({
 
 });
 
-let styles = StyleSheet.create({});
+let styles = StyleSheet.create({
+  certified: {
+    width: 15,
+    height: 15
+  }
+});
 
 module.exports = BusinessDetail;

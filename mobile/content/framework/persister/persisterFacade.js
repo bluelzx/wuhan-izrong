@@ -75,7 +75,6 @@ let _saveAppData = function (data) {
       _saveOrgBeanList(orgBeanList);
       _saveFilters(appOrderSearchResult);
       _saveAppUserGroupBeanList(appUserGroupBeanList, resolve);
-
     });
   })
 };
@@ -179,7 +178,7 @@ let _saveImUsers = function (imUserBeanList) {
       publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
       publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
       certificated: imUserBeanList[i].isCertificated || false
-    }
+    };
     _realm.create(IMUSERINFO, param, true);
   }
 };
@@ -318,7 +317,7 @@ let _getLoginUserInfo = function () {
       lastSyncTime: sortedUsers[0].lastSyncTime,
       certified: sortedUsers[0].certified,
       friendList: sortedUsers[0].friendList
-    }
+    };
     return user;
   }
   return '';

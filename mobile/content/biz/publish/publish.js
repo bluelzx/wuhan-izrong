@@ -374,12 +374,14 @@ let Publish = React.createClass({
           title="选择图片"
           fileId="publish1"
           allowsEditing={true}
-          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
+          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df',backgroundColor: 'white'}}
         >
-          <Image
-            style={{width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-            source={require('../../image/market/addImage.png')}
-          />
+          <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+            <Image
+              style={{width:(screenWidth-60)/5-20,height:(screenWidth-60)/5-20,borderRadius:5}}
+              source={require('../../image/market/addImage.png')}
+            />
+          </View>
         </ImagePicker>
       );
     }
