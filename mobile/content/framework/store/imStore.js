@@ -163,7 +163,7 @@ let _saveMsg = (message, userId) => {
       content = '群主已将群名称修改为' + message.groupName;
     }else {
       title = message.groupInviterName + '-' + message.groupInviterOrgValue;
-      content = '邀请您加入'+ message.groupName +'群聊';
+      content = '邀请您加入'+ message.groupName;
     }
 
     NoticeAction.updateNotice(message.noticeType, message.sessionId, message.groupName, message.revTime, title, content,  message.groupId, message.groupOwnerId);
