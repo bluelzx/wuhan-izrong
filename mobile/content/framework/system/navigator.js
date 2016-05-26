@@ -176,7 +176,6 @@ var Main = React.createClass({
         isLoadingVisible: true
       });
     }
-
     co(function* () {
       yield func()
         .then((response) => {
@@ -189,20 +188,24 @@ var Main = React.createClass({
             });
           }
           console.log(errorData);
-          if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
-            AppStore.forceLogout();
-          } if (errorData.msgCode == 'USER_HAS_BEEN_FROZEN') {
-            AppStore.freezAccount();
-          } if (errorData.msgCode == 'USER_HAS_BEEN_DELETED') {
-            AppStore.isDelete();
-          } else if (errorData.message) {
+          if(errorData.errMsg){
+            Alert(errorData.errMsg);
+          }else if (errorData.message) {
             if (errorData.message.includes('Network request failed')) {
               Alert('网络请求失败');
             } else {
               Alert(errorData.message);
             }
-          } else if (errorData.msgContent || errorData.errMsg) {
-            Alert(errorData.msgContent || errorData.errMsg);
+          }else if(errorData.msgContent){
+            if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
+              AppStore.forceLogout();
+            }else if (errorData.msgCode == 'USER_HAS_BEEN_FROZEN') {
+              AppStore.freezAccount();
+            }else if (errorData.msgCode == 'USER_HAS_BEEN_DELETED') {
+              AppStore.isDelete();
+            }  else {
+              Alert(errorData.msgContent);
+            }
           }
         });
       if (showLoading) {
