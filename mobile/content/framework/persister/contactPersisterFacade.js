@@ -162,12 +162,12 @@ let _getGroupInfoByGroupId = function (groupId) {
         }
       }
     );
-
-   let myInfo = _getLoginUserInfo();
-
-    let myOrgName = _realm.objects(ORGBEAN).filtered('id = $0', myInfo.orgId);
-    myInfo.orgValue = myOrgName.length>0?myOrgName[0].orgValue:'';
-    members.push(myInfo);
+   //
+   //let myInfo = _getLoginUserInfo();
+   //
+   // let myOrgName = _realm.objects(ORGBEAN).filtered('id = $0', myInfo.orgId);
+   // myInfo.orgValue = myOrgName.length>0?myOrgName[0].orgValue:'';
+   // members.push(myInfo);
 
     //result[0].members = members;
     let ret = {
@@ -423,7 +423,8 @@ let _getUserInfoByUserId = function (id) {
     orgId: users.orgId,
     lastLoginTime: users.lastLoginTime,  //本地增加,用于多用户登陆排序
     token: users.token,
-    mute: users.mute
+    mute: users.mute,
+    certificated: users.certificated
   };
   if (org.length > 0)
     ret.orgValue = org[0].orgValue;
@@ -592,6 +593,10 @@ let _getLoginUserInfo = function () {
       lastSyncTime: sortedUsers[0].lastSyncTime,
       certified: sortedUsers[0].certified,
       friendList: sortedUsers[0].friendList
+    }
+    let org = _realm.objects(ORGBEAN).filtered('id = ' + user.orgId);
+    if(org.length > 0){
+      user.orgValue = org[0].orgValue;
     }
     return user;
   }

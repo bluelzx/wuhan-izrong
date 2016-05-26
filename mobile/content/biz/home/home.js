@@ -60,15 +60,15 @@ let Home = React.createClass({
 
   componentDidMount() {
     //AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
-    AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
-    AppStore.addChangeListener(this._onChange, HOMEPAGE_CHANGE);
+    //AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
+    AppStore.addChangeListener(this._onChange,HOMEPAGE_CHANGE);
     this.bizOrderMarketSearch();
   },
 
   componentWillUnmount: function () {
     //AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
-    AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
-    AppStore.addChangeListener(this._onChange, HOMEPAGE_CHANGE);
+    //AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
+    AppStore.addChangeListener(this._onChange,HOMEPAGE_CHANGE);
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
@@ -206,16 +206,13 @@ let Home = React.createClass({
           <Text style={{position:"absolute",left:0,top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
             {'方向'}
           </Text>
-          <Text
-            style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
+          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
             {'期限'}
           </Text>
-          <Text
-            style={{position:"absolute",left:Adjust.width(130),top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
+          <Text style={{position:"absolute",left:Adjust.width(130),top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
             {'金额'}
           </Text>
-          <Text
-            style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
+          <Text style={{position:"absolute",left:Adjust.width(220),top:0,marginLeft:10, color:PlainStyle.colorSet.homeListTextColor}}>
             {'发布方'}
           </Text>
         </View>
@@ -237,8 +234,7 @@ let Home = React.createClass({
           <Image style={{width:30,height:30,marginLeft:15,borderRadius:5}}
                  source={rowData.bizOrientationDesc == '出'?require('../../image/market/issue.png'):require('../../image/market/receive.png')}
           />
-          <Text
-            style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor}}>
+          <Text style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor}}>
             {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天'}
           </Text>
           <Text
@@ -268,8 +264,8 @@ let Home = React.createClass({
   },
 
   //处理viewpager左右滑动和scrollView上下滑动冲突问题
-  scrollViewMove: function (e:Event) {
-    console.log('move');
+  scrollViewMove: function(e: Event){
+     console.log('move');
     //if(e.nativeEvent.locationY <= 50){
     //  this.refs.scrollView.scrollTo({x:0,y:0,animated:true});
     //}

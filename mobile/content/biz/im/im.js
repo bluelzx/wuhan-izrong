@@ -289,7 +289,7 @@ let WhitePage = React.createClass({
             marginHorizontal:10,
             alignItems:'center',flex:1}}
           >
-              <HeaderPic badge={item.badge} showBadge={true} photoFileUrl={tagUser.photoFileUrl}  certified={tagUser.certified} name={tagUser.realName}/>
+              <HeaderPic badge={item.badge} showBadge={true} photoFileUrl={tagUser.photoFileUrl}  certified={tagUser.certificated} name={tagUser.realName}/>
              <View
               style={{ flex:1,paddingHorizontal:10}}
              >

@@ -176,17 +176,21 @@ export default class Bubble extends React.Component {
       let data = JSON.parse(this.props.content);
       let amount = data.amount == '' ? '--' : (data.amount > 99999999 ? data.amount / 100000000 + '亿' : data.amount / 10000 + '万');
       let dayNum;
-      if (data.term == '') {
+      if (data.term == '' || data.term == 0) {
         dayNum = '--'
       } else if (data.term % 365 == 0) {
         dayNum = parseInt(data.term / 365) + '年';
       } else if (data.term % 30 == 0) {
         dayNum = parseInt(data.term / 30) + '月';
+      } else if (data.term == 1) {
+        dayNum = '隔夜';
       }else {
         dayNum = data.term + '日';
       }
       let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
-      let shareContent = '我利用[渤海银通]分享了一个业务信息给您：' + data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate;
+      //let shareContent = '我利用[渤海银通]分享了一个业务信息给您：' + data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate;
+      let shareContent = data.bizCategory + '  ' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出')  + '\n'
+        + '金额:' + amount  + '\n' + '期限:' + dayNum + '\n'  + '利率:' + rate + '\n' + '——来自爱资融APP';
       return (
         <TouchableOpacity onLongPress={() => this._onLongPress(shareContent)} activeOpacity={0.7}>
           <View style={[styles.bubble, customStyle,

@@ -230,11 +230,11 @@ let UserInfo = React.createClass({
           {this.renderRow('座机号', require('../../image/user/telephoneNo.png'), 'phoneNumber', this.state.phoneNumber, 'isPublicPhone',
             this.state.publicPhone, 'number-pad', 11, true, true, false)}
 
-          {this.renderRow('QQ', require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'isPublicQq',
-            this.state.publicQQ, 'number-pad', 20, true, true, false)}
+          {/*this.renderRow('QQ', require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'isPublicQq',
+            this.state.publicQQ, 'number-pad', 20, true, true, false)*/}
 
-          {this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'isPublicWeChat',
-            this.state.publicWeChat, 'default', 40, true, true, false)}
+          {/*this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'isPublicWeChat',
+            this.state.publicWeChat, 'default', 40, true, true, false)*/}
 
           <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
             <View style={[styles.listLayout,DictStyle.userInfoBorderBottom]}>
