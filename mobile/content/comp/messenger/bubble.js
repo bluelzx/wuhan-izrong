@@ -188,7 +188,9 @@ export default class Bubble extends React.Component {
         dayNum = data.term + '日';
       }
       let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
-      let shareContent = '我利用[渤海银通]分享了一个业务信息给您：' + data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate;
+      //let shareContent = '我利用[渤海银通]分享了一个业务信息给您：' + data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate;
+      let shareContent = data.bizCategory + '  ' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出')  + '\n'
+        + '金额:' + amount  + '\n' + '期限:' + dayNum + '\n'  + '利率:' + rate + '\n' + '——来自爱资融APP';
       return (
         <TouchableOpacity onLongPress={() => this._onLongPress(shareContent)} activeOpacity={0.7}>
           <View style={[styles.bubble, customStyle,
