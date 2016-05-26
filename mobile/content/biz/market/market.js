@@ -102,7 +102,10 @@ let Market = React.createClass({
   },
 
   _search () {
+    let filterItems = AppStore.getFilters().filterItems;
     let myCategory = AppStore.getCategory();
+    let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
+    let categoryArr = this.deleteFirstObj(category.options);
     this.setState({
       levelOneText: myCategory != null ? myCategory.displayName : categoryArr.length == 0 ? '' : categoryArr[0].displayName,
       bizCategoryID: myCategory != null ? myCategory.id : categoryArr.length == 0 ? 0 : categoryArr[0].id

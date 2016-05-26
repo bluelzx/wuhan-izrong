@@ -261,7 +261,7 @@ let MyBizDetail = React.createClass({
       return (
         <TouchableOpacity
           onPress={()=>this.shutDownBiz()}>
-          <Text style={{color:'#ffffff'}}>{'下架'}</Text>
+          <Text style={{padding:10,color:'#ffffff'}}>{'下架'}</Text>
         </TouchableOpacity>
       );
     } else {
