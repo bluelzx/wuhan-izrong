@@ -259,9 +259,9 @@ let MyBizDetail = React.createClass({
   renderShutDownBiz: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
-        <TouchableOpacity
+        <TouchableOpacity style={{marginLeft: -20,padding:10}}
           onPress={()=>this.shutDownBiz()}>
-          <Text style={{padding:10,color:'#ffffff'}}>{'下架'}</Text>
+          <Text style={{color:'#ffffff'}}>{'下架'}</Text>
         </TouchableOpacity>
       );
     } else {
