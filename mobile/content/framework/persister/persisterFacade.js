@@ -75,7 +75,6 @@ let _saveAppData = function (data) {
       _saveOrgBeanList(orgBeanList);
       _saveFilters(appOrderSearchResult);
       _saveAppUserGroupBeanList(appUserGroupBeanList, resolve);
-
     });
   })
 };
@@ -308,7 +307,7 @@ let _getLoginUserInfo = function () {
       lastSyncTime: sortedUsers[0].lastSyncTime,
       certified: sortedUsers[0].certified,
       friendList: sortedUsers[0].friendList
-    }
+    };
     return user;
   }
   return '';
@@ -421,4 +420,4 @@ let _getOrgByOrgName = function (orgName) {
 };
 module.exports = Object.assign(PersisterFacade, require('./contactPersisterFacade'), require('./sessionPersisterFacade'),
   require('./userPersisterFacade'), require('./imPersister'), require('./platFormInfoPersisterFacade'),
-  require('./homePagePersisterFacade'), require('./noticePersisterFacade'), require('./orgPersisterFacade'), require('./newFriendNoticPersisterFacade'));
+  require('./homePersisterFacade'), require('./noticePersisterFacade'), require('./orgPersisterFacade'), require('./newFriendNoticPersisterFacade'));

@@ -35,13 +35,13 @@ let SearchBar = React.createClass({
           onChangeText={(text) => this.textChange(text)}
           returnKeyType={'search'}
           selectionColor={DictStyle.colorSet.searchBarColor}
-          style={{color: DictStyle.colorSet.searchBarColor, height:(Platform.OS === 'ios')?30:60,backgroundColor:'#ffffff',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10}}>
+          style={{color: DictStyle.colorSet.searchBarColor, height:(Platform.OS === 'ios')?30:60,backgroundColor:'#ffffff',marginTop:0,marginLeft:10,marginRight:10}}>
         </TextInput>
       );
     } else {
       return (
         <TouchableOpacity onPress={() => {this.setState({editAble:true})}}
-          style={{height:(Platform.OS === 'ios')?30:60,justifyContent:'center', alignItems:'center',backgroundColor:'#ffffff',marginTop:(Platform.OS === 'ios')?0:-15,marginLeft:10,marginRight:10,alignSelf:'stretch'}}
+          style={{height:(Platform.OS === 'ios')?30:60,justifyContent:'center', alignItems:'center',backgroundColor:'#ffffff',marginTop:0,marginLeft:10,marginRight:10,alignSelf:'stretch'}}
         >
           <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
             <Icon name="ios-search-strong" size={22} color={DictStyle.colorSet.searchBarColor} />

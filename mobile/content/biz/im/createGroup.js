@@ -25,7 +25,13 @@ let DictStyle = require('../../constants/dictStyle');
 let CreateGroup = React.createClass({
 
   textChange: function(text) {
-    this.setState({keyWord:text});
+    if(text == ''){
+      isOpen = false;
+      this.setState({keyWord:text,isOpen:false});
+    }else{
+      isOpen = true;
+      this.setState({keyWord:text,isOpen:true});
+    }
   },
 
   //******************** 扩展列表
@@ -75,7 +81,7 @@ let CreateGroup = React.createClass({
           style={{backgroundColor:DictStyle.colorSet.extenListGroundCol,width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
           <View style={{flexDirection:'row',alignItems:'center'}}>
             <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-            <Text style={{fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
+            <Text numberOfLines={1} style={{flex:1,fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
           </View>
         </CheckBox>
       );
@@ -142,6 +148,7 @@ let CreateGroup = React.createClass({
       groupName:'',
       userInfo:ContactStore.getUserInfo(), // 用户信息
       keyWord:'',
+      isOpen:false
     };
   },
 
@@ -184,7 +191,9 @@ let CreateGroup = React.createClass({
                          dataSource={dataSource}
                          groupDataName={'orgMembers'}
                          groupItemRender={this.itemRender}
-                         groupTitleRender={this.titleRender}/>
+                         groupTitleRender={this.titleRender}
+                         isOpen={this.state.isOpen}
+              />
 
             );
           }else{

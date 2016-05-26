@@ -186,11 +186,11 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.FORCE_LOGOUT:
       //强制登出
-      ImStore.forceLogOut();
+      AppStore.forceLogout();
       break;
     case MSG_TYPE.SYNC_RES:
 
-      message.msgArray&&message.msgArray.reverse().forEach((item)=> {
+      message.msgArray&&message.msgArray.forEach((item)=> {
         _dealMsg(JSON.parse(item), socket);
       });
       ContactSotre.syncReq(new Date());

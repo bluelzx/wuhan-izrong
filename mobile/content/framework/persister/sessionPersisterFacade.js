@@ -145,8 +145,8 @@ let _updateInViteSession = function(sessionId) {
   })
 }
 
-let _getSessionBadge = function(){
-  let result = _realm.objects(SESSION);
+let _getSessionBadge = function(userId){
+  let result = _realm.objects(SESSION).filtered('sessionId ENDSWITH $0',userId+'');
   let ret = 0;
   result.forEach((item)=>{
     if(item && item.badge){

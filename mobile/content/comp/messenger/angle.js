@@ -1,4 +1,5 @@
 import React, {Text, View, Animated, Image, StyleSheet, Platform} from 'react-native';
+let Icon = require('react-native-vector-icons/Ionicons');
 
 export default class Angle extends React.Component {
 
@@ -49,9 +50,13 @@ export default class Angle extends React.Component {
         />
       );
     }else{
-      return (
-        <View style={{marginTop:10}}></View>
-      );
+      if (this.props.direction == 'up') {
+        return (
+            <Icon name={'android-arrow-dropup'} size={30} color={this.props.color}/>
+        );
+      } else {
+        return null;
+      }
     }
   }
 }

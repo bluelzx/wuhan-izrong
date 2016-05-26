@@ -59,7 +59,6 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
     Persister.updateContactInfo(message);
     AppStore.emitChange(IM_CONTACT);
   },
-  forceLogOut:()=>{AppStore.forceLogout()},
   isInGroupById: (id) => _isInGroupById(id)
 });
 

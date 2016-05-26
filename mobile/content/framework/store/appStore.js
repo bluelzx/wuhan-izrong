@@ -74,6 +74,8 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   queryAllPlatFormInfo: ()=>_queryAllPlatFormInfo(),
   getBadge: ()=>_getBadge(),
   startJavaServer: () => ServiceModule.startAppService(_data.token, 0, ImHost),
+  saveMarketInfo: (marketInfoList) => _saveMarketInfo(marketInfoList),
+  getMarketInfo: () => _getMarketInfo()
   //stopJavaServer:() => ServiceModule.stopMyAppService()
 
 });
@@ -172,34 +174,38 @@ let _logout = (userId) => {
 };
 
 let _forceLogout = () => {
-  if(_info.isForceLogout && _info.isLogout){
+  if (_info.isForceLogout && _info.isLogout) {
 
-  }else{
-    //TODO:'强制登出'
+  } else {
+    Persister.logout(_getUserId());
+    _data.token = '';
     _info.isForceLogout = true;
-    //清空token,isLogout = true
-    _logout(_getUserId());
+    _info.isLogout = true;
     AppStore.emitChange();
   }
 };
 
 let _deleteLoginUser = () => {
   //清空token,isLogout = true
-  if(_info.isLogout && _info.isDelete){
+  if (_info.isLogout && _info.isDelete) {
 
-  }else{
-    _logout(_getUserId());
+  } else {
+    Persister.logout(_getUserId());
+    _data.token = '';
+    _info.isLogout = true;
     _info.isDelete = true;
     AppStore.emitChange();
   }
 };
 
 let _freezAccount = () => {
-  if(_info.isLogout && _info.isFreezing){
+  if (_info.isLogout && _info.isFreezing) {
 
-  }else {
+  } else {
     //清空token
-    _logout(_getUserId());
+    Persister.logout(_getUserId());
+    _data.token = '';
+    _info.isLogout = true;
     _info.isFreezing = true;
     AppStore.emitChange();
   }
@@ -266,7 +272,7 @@ let _updateUserInfo = (column, value)=> {
   AppStore.emitChange(USER_CHANGE);
 };
 
-let _updateUserInfoByPush = (data)=>{
+let _updateUserInfoByPush = (data)=> {
   Persister.updateUserInfoByPush(data);
 };
 
@@ -287,11 +293,20 @@ let _getCategory = () => {
 
 
 let _getBadge = () => {
-  let badge = Persister.getSessionBadge();
+  let badge = Persister.getSessionBadge(_getUserId());
   return badge;
 };
 
 let _queryAllHomePageInfo = ()=> {
   return Persister.queryAllHomePageInfo()
 };
+
+let _saveMarketInfo = (marketInfoList) => {
+  Persister.saveMarketInfo(marketInfoList);
+};
+
+let _getMarketInfo = ()=> {
+  return Persister.getMarketInfo();
+};
+
 module.exports = AppStore;

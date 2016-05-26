@@ -59,14 +59,14 @@ let Home = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
+    //AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
     AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
     AppStore.addChangeListener(this._onChange,HOMEPAGE_CHANGE);
     this.bizOrderMarketSearch();
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
+    //AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
     AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
     AppStore.addChangeListener(this._onChange,HOMEPAGE_CHANGE);
   },
@@ -86,20 +86,17 @@ let Home = React.createClass({
         this.state.bizCategoryID
       ]
     };
-    this.props.exec(
-      ()=> {
-        return MarketAction.bizOrderMarketSearch(requestBody
-        ).then((response)=> {
-          console.log(response);
-          let contentList = _.slice(response.contentList, 0, 5);
-          this.setState({
-            contentList: contentList
-          });
-        }).catch(
-          (errorData) => {
-            throw errorData;
-          }
-        );
+    this.props.exec(()=> {
+        return MarketAction.bizOrderMarketSearch(requestBody)
+          .then((response)=> {
+            let contentList = _.slice(response.contentList, 0, 5);
+            this.setState({
+              contentList: contentList
+            });
+            AppStore.saveMarketInfo(response.contentList);
+        }).catch((errorData) => {
+          throw errorData;
+        });
       }
     );
   },
@@ -167,15 +164,7 @@ let Home = React.createClass({
           renderPage={this._renderPage}
           isLoop={true}
           autoPlay={true}
-          animation={(animatedValue, toValue, gestureState) => {
-            var duration = 1000;
-            return Animated.timing(animatedValue,
-            {
-              toValue: toValue,
-              duration: duration
-            });
-          }
-        }/>
+        />
       </View>
     );
   },

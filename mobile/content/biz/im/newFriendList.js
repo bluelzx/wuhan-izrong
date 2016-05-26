@@ -140,7 +140,7 @@ let NewFriendList = React.createClass({
               if(item.isAccept){
                 return (
                   <Text
-                    style={{textAlign:'right',flex:1,justifyContent:'flex-end',borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'已接受'}</Text>
+                    style={{textAlign:'right',flex:1,justifyContent:'flex-end',borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'已添加'}</Text>
 
                 );
               }else{

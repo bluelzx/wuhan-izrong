@@ -64,7 +64,7 @@ let GroupNoticeSchema = {
   primaryKey: 'noticeId',
   properties: {
     noticeId: {type: 'string', optional: true},
-    title:{type: 'string', optional: true},
+    title: {type: 'string', optional: true},
     content: {type: 'string', optional: true},
     groupName: {type: 'string', optional: true},
     groupId: {type: 'int', optional: true},
@@ -134,9 +134,9 @@ let LoginUserInfoSchema = {
     orgId: {type: 'int', optional: true},
     lastLoginTime: {type: 'date', optional: true},  //本地增加,用于多用户登陆排序
     token: {type: 'string', optional: true},
-    lastSyncTime:{type:'date', optional:true},
-    certified:{type:'bool', optional:true},
-    friendList:{type:'string', optional:true}
+    lastSyncTime: {type: 'date', optional: true},
+    certified: {type: 'bool', optional: true},
+    friendList: {type: 'string', optional: true}
   }
 };
 
@@ -164,24 +164,30 @@ let OrgBeanSchema = {
   }
 };
 
-let BizOrderCategorySchema = {
-  name: "bizOrderCategory",
-  primaryKey: 'displaySeq',
+let MarketInfoSchema = {
+  name: "marketInfo",
+  primaryKey: 'id',
   properties: {
-    displaySeq: {type: 'string', optional: true},
+    amount: {type: 'int', optional: true},
     bizCategory: {type: 'string', optional: true},
     bizCategoryDesc: {type: 'string', optional: true},
-    bizOrderItemBeans: {type: 'list', objectType: 'bizOrderItem'}
-  }
-};
-
-let BizOrderItemSchema = {
-  name: "bizOrderItem",
-  primaryKey: 'displaySeq',
-  properties: {
-    displaySeq: {type: 'string', optional: true},
     bizItem: {type: 'string', optional: true},
-    bizItemDesc: {type: 'string', optional: true}
+    bizItemDesc: {type: 'string', optional: true},
+    bizOrientation: {type: 'string', optional: true},
+    bizOrientationDesc: {type: 'string', optional: true},
+    fileUrlList: {type: 'string', optional: true},
+    id: {type: 'int', optional: true},
+    lastModifyDate: {type: 'date', optional: true},
+    orgId: {type: 'int', optional: true},
+    orgName: {type: 'string', optional: true},
+    photoStoredFileUrl: {type: 'string', optional: true},
+    rate: {type: 'int', optional: true},
+    remark: {type: 'string', optional: true},
+    status: {type: 'string', optional: true},
+    statusDesc: {type: 'string', optional: true},
+    term: {type: 'int', optional: true},
+    userId: {type: 'int', optional: true},
+    userName: {type: 'string', optional: true}
   }
 };
 
@@ -253,19 +259,19 @@ let PlatFormInfo = {
 
 //新好友通知
 let NewFriendNotic = {
-  name:"newFriendNotic",
-  primaryKey:'noticId',
+  name: "newFriendNotic",
+  primaryKey: 'noticId',
   properties: {
-    noticId: {type:'string', optional: true},
-    userId:{type:'int', optional: true},
-    realName:{type:'string', optional: true},
-    orgName:{type:'string', optional: true},
-    photoFileUrl:{type:'string', optional: true},
-    ownerId:{type:'int', optional: true},
-    isAccept:{type:'bool', optional:true},
-    certified:{type:'bool', optional:true}
+    noticId: {type: 'string', optional: true},
+    userId: {type: 'int', optional: true},
+    realName: {type: 'string', optional: true},
+    orgName: {type: 'string', optional: true},
+    photoFileUrl: {type: 'string', optional: true},
+    ownerId: {type: 'int', optional: true},
+    isAccept: {type: 'bool', optional: true},
+    certified: {type: 'bool', optional: true}
   }
-}
+};
 
 
 module.exports = {
@@ -275,30 +281,28 @@ module.exports = {
   ImUserInfoSchema: ImUserInfoSchema,
   LoginUserInfoSchema: LoginUserInfoSchema,
   OrgBeanSchema: OrgBeanSchema,
-  BizOrderCategorySchema: BizOrderCategorySchema,
-  BizOrderItemSchema: BizOrderItemSchema,
-  FilterItemSchema:FilterItemSchema,
-  FilterItemsSchema:FilterItemsSchema,
-  OrderItemSchema:OrderItemSchema,
-  SessionSchema:SessionSchema,
-  HomePageSchema:HomePageSchema,
-  PlatFormInfoSchema:PlatFormInfo,
+  FilterItemSchema: FilterItemSchema,
+  FilterItemsSchema: FilterItemsSchema,
+  OrderItemSchema: OrderItemSchema,
+  SessionSchema: SessionSchema,
+  HomePageSchema: HomePageSchema,
+  PlatFormInfoSchema: PlatFormInfo,
   NoticeSchema: GroupNoticeSchema,
-  NewFriendNoticSchema:NewFriendNotic,
+  NewFriendNoticSchema: NewFriendNotic,
+  MarketInfoSchema: MarketInfoSchema,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
   IMUSERINFO: 'imUserInfo',
   LOGINUSERINFO: 'loginUserInfo',
   ORGBEAN: 'orgBean',
-  BIZORDERCATEGORY: 'bizOrderCategory',
-  BIZORDERITEM: 'bizOrderItem',
-  FILTERITEMS:'filterItems',
-  FILTERITEM:'filterItem',
-  ORDERITEM:'orderItem',
-  SESSION:'session',
-  HOMEPAGE:'homePage',
-  PLATFORMINFO:'platFormInfo',
+  FILTERITEMS: 'filterItems',
+  FILTERITEM: 'filterItem',
+  ORDERITEM: 'orderItem',
+  SESSION: 'session',
+  HOMEPAGE: 'homePage',
+  PLATFORMINFO: 'platFormInfo',
   NOTICE: 'groupNotice',
-  NEWFRIENDNOTIC:'newFriendNotic'
+  NEWFRIENDNOTIC: 'newFriendNotic',
+  MARKETINFO: 'marketInfo'
 };

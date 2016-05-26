@@ -21,7 +21,6 @@
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		175DAE7D1CF3FD3F00734E9E /* metadata.json in Resources */ = {isa = PBXBuildFile; fileRef = 175DAE7C1CF3FD3F00734E9E /* metadata.json */; };
 		3D0EB874CA0E45CEAE9FEC2F /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD1CB31887804B749696A715 /* libRealmReact.a */; };
@@ -873,7 +872,6 @@
 				583992A11CD842F000025A6B /* zip.c in Sources */,
 				5839929F1CD842F000025A6B /* mztools.c in Sources */,
 				583992AA1CD8430A00025A6B /* FRCTTabBar.m in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				583992B31CD8432200025A6B /* StatusBarNotification.m in Sources */,
 				583992B21CD8432200025A6B /* ReactNativeAutoUpdater.m in Sources */,
 				583992B41CD8432200025A6B /* UIImagePickerManager.m in Sources */,

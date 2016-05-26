@@ -115,7 +115,6 @@ var Main = React.createClass({
       //  this._navigator.pop();
       //  return true;
       //}
-
       const nav = this._navigator;
       const routers = nav.getCurrentRoutes();
       if (routers.length > 1) {
@@ -138,7 +137,6 @@ var Main = React.createClass({
       });
       return true;
     }
-
     return false;
   },
 

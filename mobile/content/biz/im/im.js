@@ -429,12 +429,15 @@ let WhitePage = React.createClass({
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} title='聊天' showBack={false} actionButton={this.renderContact}>
+
+
         <SearchBar textChange={this.textChange}/>
         <ScrollView
           automaticallyAdjustContentInsets={false}
           style={{flexDirection: 'column',marginTop:0,backgroundColor:'#F4F4F4'}}>
           {this.renderMessage()}
         </ScrollView>
+
       </NavBarView>
     );
   }
