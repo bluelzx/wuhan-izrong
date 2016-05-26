@@ -84,7 +84,6 @@ let Home = React.createClass({
       pageIndex: 1,
       filterList: [
         this.state.bizCategoryID
-
       ]
     };
     this.props.exec(

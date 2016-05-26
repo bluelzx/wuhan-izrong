@@ -470,8 +470,8 @@ let MyBizDetail = React.createClass({
                     this.setState({fileUrlList: arr});
                     }}
         >
-          <CustomImage
-            style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+          <Image
+            style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5,borderWidth:1,borderColor:'#cccccc'}}
             source={{uri:rowData}}
           />
         </Lightbox>

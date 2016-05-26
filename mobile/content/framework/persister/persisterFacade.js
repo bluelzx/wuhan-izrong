@@ -307,7 +307,7 @@ let _getLoginUserInfo = function () {
       lastSyncTime: sortedUsers[0].lastSyncTime,
       certified: sortedUsers[0].certified,
       friendList: sortedUsers[0].friendList
-    }
+    };
     return user;
   }
   return '';
