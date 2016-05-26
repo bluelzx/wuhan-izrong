@@ -170,7 +170,7 @@ let CreateGroup = React.createClass({
       <NavBarView navigator={this.props.navigator} title='创建群组' actionButton={this.renderLabel}>
         <View style={{backgroundColor:DictStyle.colorSet.content, paddingTop:10}}>
           <TextInput
-            placeholder="创建群名称"
+            placeholder={this.state.userInfo.realName + "创建的群"}
             placeholderTextColor="#44B5E6"
             onChangeText={(text) => this.setGroupName(text)}
             style={{color: '#44B5E6',height:50, width: Device.width,backgroundColor:DictStyle.colorSet.textEditBackground, paddingHorizontal:20}}></TextInput>
