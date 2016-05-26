@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.fasapp.R;
 import com.fasapp.SplashActivity;
+import com.squareup.okhttp.OkHttpClient;
 
 import org.json.JSONObject;
 
@@ -21,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipFile;
@@ -299,8 +301,10 @@ public class ReactNativeAutoUpdater {
             JSONObject metadata = null;
             try {
                 URL url = new URL(params[0]);
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setConnectTimeout(5000);
+                InputStream inputStream = urlConnection.getInputStream();
+                BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
                 StringBuilder total = new StringBuilder();
                 String line;
                 while ((line = in.readLine()) != null) {
@@ -314,7 +318,8 @@ public class ReactNativeAutoUpdater {
 //                    ReactNativeAutoUpdater.this.showProgressToast(R.string.auto_updater_no_metadata);
 //                }
             } catch (Exception e) {
-                ReactNativeAutoUpdater.this.showProgressToast(R.string.auto_updater_invalid_metadata);
+//                ReactNativeAutoUpdater.this.showProgressToast(R.string.auto_updater_invalid_metadata);
+                LogUtils.i("连接失败");
                 e.printStackTrace();
             }
             return metadata;
