@@ -373,7 +373,7 @@ let Publish = React.createClass({
           onError={(error) => this.handleImageError(error)}
           title="选择图片"
           fileId="publish1"
-          allowsEditing={true}
+          allowsEditing={false}
           style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df',backgroundColor: 'white'}}
         >
           <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
@@ -387,6 +387,7 @@ let Publish = React.createClass({
     }
   },
   renderImgItem: function (rowData, sectionID, rowID) {
+    let uri = rowData + '?imageView2/1/w/100/h/100';
     return (
       <ImagePicker
         longPress={() => this._longPress(rowID)}
@@ -395,7 +396,7 @@ let Publish = React.createClass({
         onError={(error) => this.handleImageError(error)}
         title="选择图片"
         fileId="publish1"
-        allowsEditing={true}
+        allowsEditing={false}
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
       >
         <Lightbox imageSource={{uri:rowData}}
@@ -409,7 +410,7 @@ let Publish = React.createClass({
         >
           <Image
             style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-            source={{uri:rowData}}
+            source={{uri:uri}}
           />
         </Lightbox>
       </ImagePicker>
