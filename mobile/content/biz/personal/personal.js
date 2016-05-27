@@ -26,7 +26,6 @@ let NameCircular = require('../im/nameCircular').NameCircular;
 let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
 let PlainStyle = require('../../constants/dictStyle');
 let DictStyle = require('../../constants/dictStyle');
-let AppInfoModule = require('NativeModules').AppInfoModule;
 
 let Personal = React.createClass({
   getStateFromStores: function () {
@@ -67,17 +66,18 @@ let Personal = React.createClass({
 
   returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
+      let uri = this.state.photoFileUrl + '?imageView2/1/w/100/h/100';
       if (this.state.certificated) {
         return (
           <View>
-            <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+            <Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
             <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
                    resizeMode="cover" source={require('../../image/user/certificated.png')}/>
           </View>
         );
       }
       return (
-        <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+        <Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
       );
     } else {
 

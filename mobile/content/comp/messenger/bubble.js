@@ -84,6 +84,7 @@ export default class Bubble extends React.Component {
     }
 
     if (this.props.contentType === MSG_CONTENT_TYPE.IMAGE) {
+      let uri = this.props.content + '?imageView2/1/w/100/h/100';
       return (
         <View style={[styles.bubble, customStyle,
                this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
@@ -93,12 +94,12 @@ export default class Bubble extends React.Component {
                     navigator={AppStore.getNavigator()} >
 
                   <Image
-                      style={{
+                    style={{
                 flex: 1,
                 width: 100,
                 height: 100,
                 }}
-                      source={{uri: this.props.content}}
+                    source={{uri: uri}}
                   ></Image>
 
           </Lightbox>

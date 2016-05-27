@@ -4,5 +4,6 @@
 
 module.exports = {
   USERINFONULL:'userInfo is null',
-  USERINFOORGIDNULL:'_getUserInfoByUserId users.orgId == null'
+  USERINFOORGIDNULL:'_getUserInfoByUserId users.orgId == null',
+  GETUSERINFOFROMIMSERVER:'getUserInfobyId from im server is null',
 }

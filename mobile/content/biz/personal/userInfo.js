@@ -112,8 +112,9 @@ let UserInfo = React.createClass({
           </View>
         );
       }
+      let uri = this.state.photoFileUrl + '?imageView2/1/w/100/h/100';
       return (
-        <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+        <Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
       );
     } else {
       return (

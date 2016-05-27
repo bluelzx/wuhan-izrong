@@ -73,6 +73,8 @@ let _isInGroupById = function(id) {
 
 let _resovleMessages = (bInit = false) => {
   let savedMessages = Persister.getMessageBySessionId(_data.sessionId, _data.page, _data.userId);
+  // sort
+ //savedMessages.reverse();
   let tmpMessages = [];
   let tmpMessage = {};
   let name = _data.hisName;
@@ -120,7 +122,7 @@ let _resovleMessages = (bInit = false) => {
   if (bInit) {
     ImStore.emitChange(DictEvent.IM_SESSION);
   } else {
-    return tmpMessages;
+    return tmpMessages.reverse();
   }
 };
 
@@ -207,6 +209,8 @@ let _saveMsg = (message, userId) => {
     }catch(err){
       ContactAction.getUserInfoFromServer(message.toId || message.fromUId).then(()=>{
         _saveMsg(message, userId);
+      }).catch((err)=>{
+        console.log('##########getUsrInfoByUserId is null##############');
       });
       return;
     }
