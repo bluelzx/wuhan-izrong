@@ -44,9 +44,14 @@ var qaConfig = {
 };
 
 var productConfig = {
-  Dev: true, // Switch for log. true means print.
+  Dev: false, // Switch for log. true means print.
   Host: 'http://114.55.16.46:80',
-  ImHost: '114.55.16.46:3000'
+  ImHost: '114.55.16.46:3000',
+  //ImgHost: 'http://img.izirong.com/'
+  ImgHost: 'http://o7ilsjg54.bkt.clouddn.com/',
+  ImgBkt: 'fas-app',
+  ImgAk: 'QD8R1dmBccAQkXu7iyTbEbPjwbjbpEcK2-ifIqEp',
+  ImgSk: 'sGdLU6jk8LNuw9gQrOmjV-KV9Kae-KF8HrW3zHf7'
 };
 
 var lyuConfig = {

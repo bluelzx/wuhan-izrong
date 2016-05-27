@@ -34,7 +34,7 @@ let AppLinks = {
   updateUserInfo: Host + api + '/Account/updateUserInfoList',
   getOrgList: Host + pub + '/getOrgList/',
 
-  getTop15BizOrderListByCategory:  Host + api + 'BizOrderManage',
+  getTop15BizOrderListByCategory:  Host + api + '/BizOrderManage',
   bizOrderMarketSearchDefaultSearch: Host + api + '/BizOrderMarketSearch/defaultSearch',
   bizOrderMarketSearch:Host + api + '/BizOrderMarketSearch/search',
   bizOrderAdminSearch:Host + api + '/BizOrderAdminSearch/search',

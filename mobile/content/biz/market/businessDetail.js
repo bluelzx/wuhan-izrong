@@ -34,6 +34,7 @@ let KeyGenerator = require('../../comp/utils/keyGenerator');
 let CustomImage = require('../../comp/utils/CustomImage');
 
 let MarketAction = require('../../framework/action/marketAction');
+let ErrorMsg = require('../../constants/errorMsg');
 
 let BusinessDetail = React.createClass({
   getInitialState(){
@@ -272,7 +273,7 @@ let BusinessDetail = React.createClass({
         resolve(user);
       }).catch((err)=> {
         //
-        if (err == 'userinfo is null') {
+        if (err == ErrorMsg.USERINFONULL) {
           return ContactAction.getUserInfoFromServer(orderUserId);
         } else {
           throw err;
