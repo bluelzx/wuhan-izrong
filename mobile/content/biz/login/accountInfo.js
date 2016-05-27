@@ -25,6 +25,8 @@ let Validation = require('../../comp/utils/validation');
 let LoginAction = require('../../framework/action/loginAction');
 let DictStyle = require('../../constants/dictStyle');
 let CallPhone = require('../../comp/utils/callPhone');
+let PlainStyle = require('../../constants/dictStyle');
+
 
 let Register_accountInfo = React.createClass({
   getStateFromStores() {
@@ -136,6 +138,7 @@ let Register_accountInfo = React.createClass({
           <Input placeholder='邮箱' maxLength={60} field='userName'
                  onChangeText={this._onChangeText} icon='email' inputType='email-address'
           />
+
           <TouchableHighlight activeOpacity={0.8} underlayColor='#4fb9fc'
                               onPress={()=>this.toPage(Register_selectOrg,{needAll:false},this.callback)}
                               style={{marginTop: 12, borderRadius: 6}}
@@ -147,25 +150,21 @@ let Register_accountInfo = React.createClass({
                   source={require('../../image/user/comp.png')}
                 />
               </View>
-
-              <Text style={{color: '#ffffff', fontSize: 18, flex: 5}}
-                    numberOfLines={1}
-              >
-                {this.state.orgValue}
+              <Text style={{color: '#3b4549', fontSize: 18,marginLeft:20,flex: 5}} numberOfLines={1}>
+                选择机构
               </Text>
 
               <Icon
                 style={{flex: 1}}
-                name="ios-arrow-right" size={28} color={'#ffffff'}
+                name="ios-arrow-right" size={28} color={'#4074e6'}
               />
             </View>
           </TouchableHighlight>
-
           <Button
             containerStyle={{marginTop: 40}}
             style={{fontSize: 20, color: '#ffffff'}}
-            disabledBackgroundColor = '#b3c7f5'
-            enabledBackgroundColor = '#4b76df'
+            disabledBackgroundColor='#b3c7f5'
+            enabledBackgroundColor='#4b76df'
             disabled={this.state.disabled}
             onPress={()=>this.next(Register_uploadNameCard,
                  {
@@ -199,15 +198,35 @@ let styles = StyleSheet.create({
     paddingLeft: 12,
     paddingRight: 12
   },
+
   selectOrg: {
     flex: 1,
     height: 47,
-    backgroundColor: '#1151B1',
+    backgroundColor: '#ffffff',
     borderRadius: 6,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
-  }
+    justifyContent: 'space-between',
+    borderColor: '#5d9bec',
+    borderWidth: 1
+  },
+
+  containerStyle: {
+    height: 47,
+    borderColor: '#5d9bec',
+    borderWidth: 1,
+    marginTop: 12,
+    backgroundColor: PlainStyle.colorSet.inputBackgroundColor,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 6
+  },
+
+  iconStyle: {
+    width: 16,
+    height: 16,
+    marginLeft: 9
+  },
 });
 
 module.exports = Register_accountInfo;

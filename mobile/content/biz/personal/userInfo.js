@@ -257,7 +257,7 @@ let UserInfo = React.createClass({
             </View>
           </TouchableHighlight>
 
-          <View style={[{marginTop: 5},DictStyle.userInfoBorderTop,DictStyle.userInfoBorderBottom]}>
+          <View style={[{marginTop: 10},DictStyle.userInfoBorderTop]}>
             <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
               <View>
                 <View style={styles.listLayout}>
@@ -271,7 +271,7 @@ let UserInfo = React.createClass({
                     backgroundColor:PlainStyle.colorSet.personalItemColor,justifyContent: 'space-between'}}>
                     <Text style={[DictStyle.userInfoValueItem,{flex:1}]}
                           numberOfLines={2}>
-                      {this.state.orgBeanName + this.state.certificatedValue}
+                      {this.state.orgBeanName}
                     </Text>
                   </View>
                 </View>

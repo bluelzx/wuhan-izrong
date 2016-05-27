@@ -92,7 +92,7 @@ var rawFetch = function (url, param, callback, failure, option) {
   //  setTimeout(() => reject(new Error('链接超时')), 2000000);
   //})]);
  // process(fetch(url, param) ,callback,failure,option);
-  var _promise = MxFetch.fetch(url, param, 15000);
+  var _promise = MxFetch.fetch(url, param, 1000);
   return process(_promise, option);
 };
 
