@@ -76,6 +76,7 @@ let Messenger = React.createClass({
         revTime: new Date(),
         isRead: true,
         status: 'ErrorButton',
+        //status: 'isMute',
 
       };
       if (this.props.param.chatType === SESSION_TYPE.USER) {

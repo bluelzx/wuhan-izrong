@@ -117,7 +117,7 @@ let Personal = React.createClass({
             </View>
           </TouchableHighlight>
           <View style={{backgroundColor: PlainStyle.colorSet.content, height: 10}}/>
-          <View style={[DictStyle.userInfoBorderBottom,DictStyle.userInfoBorderTop]}>
+          <View style={DictStyle.userInfoBorderTop}>
             <Item desc="用户指导" img={false} func={() => this.toPage(UserGuide)}/>
             <Item desc="关于我们" img={false} func={() => this.toPage(AboutUs)}/>
           </View>

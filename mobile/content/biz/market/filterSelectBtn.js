@@ -68,8 +68,8 @@ let FilterSelectBtn = React.createClass({
         <TouchableHighlight onPress={() => this._pressAll()} underlayColor='transparent'>
           <View>
             <View
-              style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:Adjust.width(80), height: 40, backgroundColor: this.state.isAll ? '#817fc9':'#e1e3e6', alignItems: 'center', borderRadius: 5 }}>
-              <Text style={{flex: 1, marginTop: 5, color:this.state.isAll ?'white' : DictStyle.marketSet.fontColor}}>
+              style={{flex: 1, justifyContent: 'center', marginLeft: 10, marginTop:10, width:Adjust.width(80), height: 33, backgroundColor: this.state.isAll ? '#817fc9':'#e1e3e6', alignItems: 'center', borderRadius: 5,paddingHorizontal:5}}>
+              <Text style={{color:this.state.isAll ?'white' : DictStyle.marketSet.fontColor}}>
                 {this.props.dataList[0].displayName}
               </Text>
             </View>
@@ -82,16 +82,14 @@ let FilterSelectBtn = React.createClass({
     return (
       <TouchableHighlight onPress={this.state.rowDefault == rowID ? null : () => this._pressRow(rowID)}
                           underlayColor='transparent'>
-        <View>
           <View
-            style={{justifyContent: 'center', padding: 5, marginLeft: 10, marginTop:10, width:(this.props.section == 3)?Adjust.width(80):Adjust.width(125.5), height: 40, backgroundColor: this.state.isAll ? '#e1e3e6' : (this.state.rowDefault == rowID ? '#817fc9':'#e1e3e6'), alignItems: 'center', borderRadius: 5 }}>
+            style={{flex: 1,justifyContent: 'center', marginLeft: 10, marginTop:10, width:(this.props.section == 3)?Adjust.width(80):Adjust.width(125.5), height: 33, backgroundColor: this.state.isAll ? '#e1e3e6' : (this.state.rowDefault == rowID ? '#817fc9':'#e1e3e6'), alignItems: 'center', borderRadius: 5 ,paddingHorizontal:5}}>
             <Text
-              style={{flex: 1, marginTop: 8, fontSize:12, color:(this.state.rowDefault == rowID)? 'white' : DictStyle.marketSet.fontColor}}
+              style={{ fontSize:12, color:(this.state.rowDefault == rowID)? 'white' : DictStyle.marketSet.fontColor}}
               numberOfLines={1}>
               {rowData.displayName}
             </Text>
           </View>
-        </View>
       </TouchableHighlight>
     );
   },

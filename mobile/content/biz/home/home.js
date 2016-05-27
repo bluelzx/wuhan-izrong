@@ -9,12 +9,13 @@ let {
   Dimensions,
   Image,
   TouchableHighlight,
+  TouchableOpacity,
   Platform,
   Animated,
   ListView
   } = React;
 
-const { Device } = require('mx-artifacts');
+const { Device,Spinner } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
 let ViewPager = require('react-native-viewpager');
 let BusinessDetail = require('../market/businessDetail');
@@ -49,7 +50,8 @@ let Home = React.createClass({
       dataSource: PAGES.length ? dataSource.cloneWithPages(PAGES) : dataSource.cloneWithPages(DEFAULTPAGES),
       category: '资金业务',
       contentList: [],
-      bizCategoryID: categoryArr.length == 0 ? 0 : categoryArr[0].id
+      bizCategoryID: categoryArr.length == 0 ? 0 : categoryArr[0].id,
+      requestState: 'loading'
     };
   },
 
@@ -86,25 +88,28 @@ let Home = React.createClass({
       ]
     };
     this.props.exec(()=> {
-        return MarketAction.bizOrderMarketSearch(requestBody)
-          .then((response)=> {
-            let contentList = _.slice(response.contentList, 0, 5);
-            this.setState({
-              contentList: contentList
-            });
-            AppStore.saveMarketInfo(response.contentList);
-          }).catch((errorData) => {
-            throw errorData;
+      return MarketAction.bizOrderMarketSearch(requestBody)
+        .then((response)=> {
+          let contentList = _.slice(response.contentList, 0, 5);
+          this.setState({
+            contentList: contentList,
+            requestState: 'success'
           });
-        //return MarketAction.getTop15BizOrderListByCategory('MIB')
-        //  .then((response)=> {
-        //     console.log(response);
-        //  })
-        //  .catch((errorData)=> {
-        //    throw errorData;
-        //  })
-      }
-    );
+          AppStore.saveMarketInfo(response.contentList);
+        }).catch((errorData) => {
+          this.setState({
+            requestState: 'failtrue'
+          });
+          throw errorData;
+        });
+      //return MarketAction.getTop15BizOrderListByCategory('MIB')
+      //  .then((response)=> {
+      //    console.log(response);
+      //  })
+      //  .catch((errorData)=> {
+      //    throw errorData;
+      //  })
+    }, false);
   },
 
   renderMenuItem(url, text, toPage){
@@ -112,7 +117,8 @@ let Home = React.createClass({
       <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.homeBorderColor}
                           onPress={()=>this.toPage(toPage)}>
         <View
-          style={[styles.menuItem,{width:Device.width/2, flexDirection: 'column',borderLeftColor:'#e6e7ee',borderLeftWidth:0.5}]}>
+          style={[styles.menuItem,{width:Device.width/2, flexDirection: 'column',borderLeftColor:'#e6e7ee',
+          borderLeftWidth:0.5,backgroundColor:'#ffffff'}]}>
           <Image style={styles.menuImage} resizeMode='cover' source={url}/>
           <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop:20}]}>{text}</Text>
         </View>
@@ -175,7 +181,7 @@ let Home = React.createClass({
     //    />
     //  </View>
     //);
-    return( <View style={styles.page}>
+    return ( <View style={styles.page}>
       <Image
         style={styles.page}
         source={require('../../image/home/launch-01.png')}
@@ -224,15 +230,42 @@ let Home = React.createClass({
             {'发布方'}
           </Text>
         </View>
-        <ListView
-          dataSource={data.cloneWithRows(this.state.contentList)}
-          renderRow={this._renderRow}
-          automaticallyAdjustContentInsets={false}
-          enableEmptySections={true}
-        />
+        {this._renderContent()}
       </View>
     );
   },
+
+  _renderContent: function () {
+    if (this.state.requestState == 'loading') {
+      return (
+        <View style={{marginTop:30,alignItems:'center'}}>
+          <Spinner color='#000000' size='small'/>
+        </View>
+      )
+    } else if (this.state.requestState == 'failtrue') {
+      return (
+        <TouchableOpacity style={this.props.style} underlayColor="#ebf1f2"
+                          activeOpacity={0.6} onPress={()=>{
+                           this.setState({
+                              requestState: 'loading'
+                           });
+                          this.bizOrderMarketSearch()}}>
+          <View style={{marginTop:20,alignItems:'center'}}>
+            <Text>加载失败,请点击重试</Text>
+          </View>
+        </TouchableOpacity>
+      )
+    } else if (this.state.requestState == 'success') {
+      return ( <ListView
+        dataSource={data.cloneWithRows(this.state.contentList)}
+        renderRow={this._renderRow}
+        automaticallyAdjustContentInsets={false}
+        enableEmptySections={true}
+      />);
+    }
+  },
+
+
   _renderRow: function (rowData, sectionID, rowID) {
     return (
       <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>

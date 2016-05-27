@@ -511,11 +511,10 @@ let Market = React.createClass({
                                callBack={this.callBack} rowDefault={this.state.amountDefault}
                                isAll={this.state.amountIsAll}/>
             </View>
-            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+            <View style={{flexDirection:'row',justifyContent:'space-between',paddingBottom:20}}>
               <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
                 <View style={{alignItems: 'center',justifyContent:'center'}}>
-                  <View
-                    style={{alignItems: 'center',justifyContent:'center',marginLeft:10,marginRight:10,marginTop:10,borderRadius:5,width:(screenWidth-30)/2,height:36,borderColor:'#ed5867',borderWidth:1}}>
+                  <View style={{alignItems: 'center',justifyContent:'center',marginLeft:10,marginRight:10,marginTop:10,borderRadius:5,width:(screenWidth-30)/2,height:36,borderColor:'#ed5867',borderWidth:1}}>
                     <Text style={{color:'#ed5867'}}>{'清空'}</Text>
                   </View>
                 </View>

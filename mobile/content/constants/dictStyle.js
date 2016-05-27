@@ -44,6 +44,7 @@ const PlainStyle = {
     extenListArrowColor:'#A3AAAE',
     extenListGroupTitleColor:'#F4F4F4',
     sessionDetailColor:'#687886',
+    reminderColor:'#c6d1d9' //搜索为空时提示
   },
 
   heightSet: {
@@ -52,7 +53,7 @@ const PlainStyle = {
     content: Device.height - Device.navBarHeight,
     tabBar: TABBAR_HEIGHT,
     tabContent: Device.height - Device.navBarHeight - TABBAR_HEIGHT,
-    filter: 44,
+    filter: 44
   },
 
   tabBar: {

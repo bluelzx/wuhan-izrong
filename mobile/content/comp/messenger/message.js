@@ -150,6 +150,14 @@ export default class Message extends React.Component {
     return <View></View>;
   }
 
+  renderMute(rowData){
+    return (
+      <View style={{justifyContent:'center',marginTop:-5}}>
+        <Text style={{textAlign:'center', color:'#aaaaaa'}}>消息已发出,但被对方拒收了!</Text>
+      </View>
+    );
+  }
+
   renderStatus(status){
     if (this.props.renderStatus && status !== 'ErrorButton' && typeof status === 'string') {
       if (status.length > 0) {
@@ -247,6 +255,7 @@ export default class Message extends React.Component {
           {rowData.position === 'right' ? this.renderImage(rowData, rowID, diffMessage, forceRenderImage, onImagePress) : null}
         </View>
         {rowData.position === 'right' ? this.renderStatus(rowData.status) : null}
+        {rowData.status === 'isMute' ? this.renderMute(rowData) : null}
       </View>
     );
 

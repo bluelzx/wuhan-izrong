@@ -88,6 +88,18 @@ module.exports = {
     return true;
   },
 
+  //是否包含emoji
+  isEnableEmoji: function (data) {
+    if (!_.isEmpty(data)) {
+      let reg = /^[\w\u4e00-\u9fa5\u0000-\u00FF\uFF00-\uFFFF。、“”……——【】《》]+$/g;
+      if (!reg.test(data)) {
+        return false;
+      }
+      return true;
+    }
+    return true;
+  },
+
   isRealName: function (data) {
     if (!_.isEmpty(data)) {
       let reg = /^[\u4e00-\u9fa5_a-zA-Z]{1,10}$/;

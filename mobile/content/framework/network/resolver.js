@@ -4,11 +4,12 @@ let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE, UPDATE_GROUP_TYPE, NOTICE_TYPE, DELE
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
 let AppStore = require('../store/appStore');
-let NotificationModule = require('NativeModules').NotificationModule;
-let {
-  Platform
-  }=require('react-native');
+
+//let NotificationModule = require('NativeModules').NotificationModule;
+//let { Platform }=require('react-native');
+
 //let {Alert} = require('mx-artifacts');
+
 let _dealMsg = function (message, socket) {
   let userInfo = ContactSotre.getUserInfo();
   let userId = userInfo.userId;
@@ -38,6 +39,9 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.SERVER_REC_CONFIRM:
       ImStore.ackMsg(message.msgId, message.toUid);
+      break;
+    case MSG_TYPE.MSG_IS_MUTE:
+      ImStore.ackMsg(message.msgId, message.toUid,true);
       break;
     case MSG_TYPE.GROUP_JOIN_INVITE:
       ImStore.saveMsg({
@@ -229,11 +233,21 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.FRIEND_INVITE:
       ContactSotre.newFriendNotic(Object.assign({
-        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, 'new', userId)
+        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND,message.userInfo.userId, userId),
+        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND,'new', userId)
       }, message.userInfo), userId);
       break;
     case MSG_TYPE.FRIEND_PROMISE:
-      console.log(message.uid + '同意加你为好友');
+    {
+      //ContactSotre.updateFriendList({userId:message.uid},userId);
+      let userInfo = ContactSotre.getUserInfoByUserId(message.uid);
+      ContactSotre.acceptNewFriendInvite({
+        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.ACCEPTNEWFRIEND, userInfo.userId, userId),
+        userId:userInfo.userId,
+        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND,'new', userId)
+      } ,userId);
+      //console.log(message.uid + '同意加你为好友');
+    }
       break;
     case MSG_TYPE.ORG_INFO_UPDATE:
       AppStore.updateOrgInfo(message);

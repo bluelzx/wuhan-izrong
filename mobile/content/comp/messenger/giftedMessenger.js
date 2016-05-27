@@ -380,7 +380,7 @@ let GiftedMessenger = React.createClass({
     if (this.listHeight && this.footerY && this.footerY > this.listHeight) {
       let scrollDistance = this.listHeight - this.footerY;
       this.scrollResponder.scrollTo({
-        y: -scrollDistance,
+        y: -scrollDistance+20,
         x: 0,
         animated: false
       });
@@ -890,7 +890,7 @@ let GiftedMessenger = React.createClass({
             onError={(error) => this.props.handleImageError(error)}
             title="选择图片"
             fileId="selectImage"
-            allowsEditing={true}
+            allowsEditing={false}
             style={this.styles.panelItem}
           >
             <Image
