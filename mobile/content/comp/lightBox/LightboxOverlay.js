@@ -325,6 +325,8 @@ var LightboxOverlay = React.createClass({
 
       </Animated.View>
     );
+
+    //var uri = this.props.param.imageSource.uri + '?imageView2/1/w/200/h/200/interlace/1'
     var content = (
       <Animated.Image style={[openStyle,dragStyle,{justifyContent:'center',alignItems:'center'}]} {...handlers}
                       resizeMode='contain'

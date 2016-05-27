@@ -231,6 +231,9 @@ let BusinessDetail = React.createClass({
       <View style={{flexDirection:'row',marginTop:10}}>
         {
           this.state.fileUrlList.map((item, index) => {
+
+            let uri = item + '?imageView2/1/w/100/h/100';
+
             return (
               <Lightbox key={index}
                         imageSource={{uri:item, isStatic: true}}
@@ -240,7 +243,7 @@ let BusinessDetail = React.createClass({
               >
                 <Image
                   style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#cccccc'}}
-                  source={{uri:item, isStatic: true}}
+                  source={{uri:uri}}
                 />
               </Lightbox>
             )
