@@ -30,6 +30,7 @@ let {ORG_CHANGE,USER_CHANGE,MYBIZ_CHANGE} = require('../../constants/dictEvent')
 let PlainStyle = require('../../constants/dictStyle');
 let DictStyle = require('../../constants/dictStyle');
 let Login = require('../../biz/login/login');
+let {ImageSize50} = require('../../../config');
 
 let UserInfo = React.createClass({
   getStateFromStores: function () {
@@ -113,7 +114,7 @@ let UserInfo = React.createClass({
           </View>
         );
       }
-      let uri = this.state.photoFileUrl + '?imageView2/1/w/100/h/100';
+      let uri = this.state.photoFileUrl + ImageSize50;
       return (
         <Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
       );

@@ -22,7 +22,7 @@ module.exports = {
   },
   realName: function (data) {
     if (!_.isEmpty(data)) {
-      let reg = /^[\u4e00-\u9fa5a-zA-Z]{0,20}$/;
+      let reg = /^[\u4e00-\u9fa5a-zA-Z]{1,10}$/;
       if (!reg.test(data)) {
         return false;
       }
