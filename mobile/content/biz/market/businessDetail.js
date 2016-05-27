@@ -183,11 +183,12 @@ let BusinessDetail = React.createClass({
         </View>
       );
     } else {
+      let uri = this.state.bizOrderOwnerBean.photoStoredFileUrl + '?imageView2/1/w/100/h/100';
       return (
         <View style={{margin:10}}>
           <Image
             style={{height:46,width:46,borderRadius:23}}
-            source={{uri:this.state.bizOrderOwnerBean.photoStoredFileUrl}}
+            source={{uri:uri}}
           />
           {this.renderIsCertificated()}
         </View>
@@ -205,7 +206,6 @@ let BusinessDetail = React.createClass({
     }
   },
   returnInfoItem: function (url, value, isPublic) {
-
     return (
       <View style={{flexDirection:'row',alignItems:'center',paddingVertical:5,marginLeft:10}}>
         <Image style={{width:16,height:16}}
