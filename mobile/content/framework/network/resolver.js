@@ -93,7 +93,7 @@ let _dealMsg = function (message, socket) {
     //已测
     case MSG_TYPE.CONTANCT_INFO_DELETE:
       if (message.userId == AppStore.getUserId()) {
-        AppStore.deleteLoginUser(message.userId);
+        AppStore.deleteLoginUser();
       } else {
         ImStore.deleteContactInfo(message.userId);
       }

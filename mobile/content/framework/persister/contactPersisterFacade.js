@@ -6,6 +6,7 @@ let _realm = require('./realmManager');
 const DEFAULT_GROUP_IMAGE = "";
 const _ = require('lodash');
 let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
+let ErrorMsg = require('../../constants/errorMsg');
 let {SESSION_TYPE} = require('../../constants/dictIm');
 const {
   GROUP,
@@ -35,7 +36,7 @@ let ContactPersisterFacade = {
   leaveGroup: (groupId, userId) => _leaveGroup(groupId, userId),
   deleteContactInfo: (userId) => _deleteContactInfo(userId),
   updateContactInfo: (message) => _updateContactInfo(message),
-  addFriend: (userInfo) => _addFriend(userInfo),
+  addFriend: (userInfo,notFriend) => _addFriend(userInfo,notFriend),
   isStranger: (userId) => _isStranger(userId),
   getOrgValueByOrgId: (orgId) => _getOrgValueByOrgId(orgId),
   saveIMUserInfo: (item) => _saveIMUserInfo(item),
@@ -83,7 +84,7 @@ let _saveIMUserInfo = function(item) {
       publicAddress: !!(item.publicAddress == true || item.publicAddress === null),
       publicWeChat: !!(item.publicWeChat == true || item.publicWeChat === null),
       publicQQ: !!(item.publicQQ == true || item.publicQQ === null),
-      certificated: item.isCertificated || false
+      certified: item.isCertificated || false
     }
     _realm.create(IMUSERINFO, param, true);
   })
@@ -171,7 +172,7 @@ let _getGroupInfoByGroupId = function (groupId) {
             photoFileUrl: user[0].photoFileUrl,
             publicQQ: user[0].publicQQ,
             orgId: user[0].orgId,
-            certificated: user[0].certificated,
+            certified: user[0].certified,
             mute: user[0].mute
           };
           orgName[0] && (param.orgValue = orgName[0].orgValue);
@@ -374,8 +375,9 @@ let _updateContactInfo = function (message) {
     photoFileUrl: message.photoStoredFileUrl,
     publicQQ: message.isPublicQq,
     orgId: message.orgId,
-    certificated: message.isCertificated,
+    certified: message.isCertificated,
     mute: message.isMute?message.isMute:false
+
   };
   let ret = {};
   for (let k in param) {
@@ -409,11 +411,11 @@ let _deleteContactInfo = function (userId) {
 let _getUserInfoByUserId = function (id) {
   let users = _realm.objects(IMUSERINFO).filtered('userId = ' + id)[0];
   if(!users){
-    throw 'userInfo is null';
+    throw ErrorMsg.USERINFONULL;
   }
   let orgs = _realm.objects(ORGBEAN);
   if (!users.orgId) {
-    throw '_getUserInfoByUserId users.orgId == null';
+    throw ErrorMsg.USERINFOORGIDNULL;
   }
   let org = orgs.filtered('id = ' + users.orgId);
   let ret = {
@@ -441,7 +443,7 @@ let _getUserInfoByUserId = function (id) {
     lastLoginTime: users.lastLoginTime,  //本地增加,用于多用户登陆排序
     token: users.token,
     mute: users.mute,
-    certificated: users.certificated
+    certified: users.certified
   };
   if (org.length > 0)
     ret.orgValue = org[0].orgValue;
@@ -537,7 +539,7 @@ let _setGroupMute = function (groupId, value) {
   });
 }
 
-let _addFriend = function (userInfo) {
+let _addFriend = function (userInfo, notFriend) {
   let param = {
     userId: userInfo.userId,
     address: userInfo.address,
@@ -561,17 +563,19 @@ let _addFriend = function (userInfo) {
     publicQQ: userInfo.publicQQ,
     orgId: userInfo.orgId,
     mute: userInfo.mute,
-    certificated: userInfo.isCertificated,
+    certified: userInfo.isCertificated,
   };
 
   _realm.write(()=> {
     _realm.create(IMUSERINFO, param, true);
-    let user = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true])[0];
-    let friendList = user.friendList;
-    friendList = JSON.parse(friendList || '[]');
+    if(notFriend) {
+      let user = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true])[0];
+      let friendList = user.friendList;
+      friendList = JSON.parse(friendList || '[]');
 
-    friendList.push(param.userId);
-    _realm.create(LOGINUSERINFO, {userId: user.userId, friendList: JSON.stringify(friendList)}, true);
+      friendList.push(param.userId);
+      _realm.create(LOGINUSERINFO, {userId: user.userId, friendList: JSON.stringify(friendList)}, true);
+    }
   });
 
 }

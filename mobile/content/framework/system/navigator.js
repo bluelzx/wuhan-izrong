@@ -37,7 +37,9 @@ let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
 let Publish = require('../../biz/publish/publish');
-let Account = require('../../biz/login/accountInfo');
+let QiniuTest = require('../../test/qiniuTest');
+let Upload = require('../../biz/login/uploadNameCard');
+
 
 const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');
@@ -52,7 +54,7 @@ var Main = React.createClass({
   },
   getInitialState: function () {
     return _.assign(this._getStateFromStores(), {
-      isLoadingVisible: false,
+      isLoadingVisible: false
     });
   },
   componentDidMount: function () {
@@ -91,11 +93,7 @@ var Main = React.createClass({
         AppAction.emitActiveApp();
         break;
       default:
-      {
         ImSocket.disconnect();
-
-      }
-        ;
     }
   },
 
@@ -176,7 +174,6 @@ var Main = React.createClass({
         isLoadingVisible: true
       });
     }
-
     co(function* () {
       yield func()
         .then((response) => {
@@ -189,20 +186,24 @@ var Main = React.createClass({
             });
           }
           console.log(errorData);
-          if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
-            AppStore.forceLogout();
-          } if (errorData.msgCode == 'USER_HAS_BEEN_FROZEN') {
-            AppStore.freezAccount();
-          } if (errorData.msgCode == 'USER_HAS_BEEN_DELETED') {
-            AppStore.isDelete();
-          } else if (errorData.message) {
+          if(errorData.errMsg){
+            Alert(errorData.errMsg);
+          }else if (errorData.message) {
             if (errorData.message.includes('Network request failed')) {
               Alert('网络请求失败');
             } else {
               Alert(errorData.message);
             }
-          } else if (errorData.msgContent || errorData.errMsg) {
-            Alert(errorData.msgContent || errorData.errMsg);
+          }else if(errorData.msgCode){
+            if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
+              AppStore.forceLogout();
+            }else if (errorData.msgCode == 'USER_HAS_BEEN_FROZEN') {
+              AppStore.freezAccount();
+            }else if (errorData.msgCode == 'USER_HAS_BEEN_DELETED') {
+              AppStore.deleteLoginUser()
+            }  else {
+              Alert(errorData.msgContent);
+            }
           }
         });
       if (showLoading) {

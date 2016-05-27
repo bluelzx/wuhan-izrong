@@ -26,7 +26,7 @@ let NameCircular = require('../im/nameCircular').NameCircular;
 let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
 let PlainStyle = require('../../constants/dictStyle');
 let DictStyle = require('../../constants/dictStyle');
-let AppInfoModule = require('NativeModules').AppInfoModule;
+let {ImageSize50} = require('../../../config');
 
 let Personal = React.createClass({
   getStateFromStores: function () {
@@ -67,17 +67,18 @@ let Personal = React.createClass({
 
   returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
+      let uri = this.state.photoFileUrl + ImageSize50;
       if (this.state.certificated) {
         return (
           <View>
-            <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+            <Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
             <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
                    resizeMode="cover" source={require('../../image/user/certificated.png')}/>
           </View>
         );
       }
       return (
-        <Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
+        <Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
       );
     } else {
 
@@ -102,21 +103,21 @@ let Personal = React.createClass({
             <View style={[styles.layout,DictStyle.userInfoBorderBottom,DictStyle.userInfoBorderTop]}>
               {this.returnImage()}
               <View>
-                <Text style={{fontSize: 16, color: PlainStyle.colorSet.personalRealName,width: 150}}
+                <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalRealName,width: 150}}
                       numberOfLines={1}>
                   {this.state.realName}
                 </Text>
-                <Text style={{fontSize: 16, color: PlainStyle.colorSet.personalOrgName, marginTop: 10, width: 150}}
+                <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalOrgName, marginTop: 10, width: 150}}
                       numberOfLines={1}
                 >
                   {this.state.orgName}
                 </Text>
               </View>
-              <Icon style={{marginRight:20}} name="ios-arrow-right" size={20} color={PlainStyle.colorSet.arrowColor}/>
+              <Icon style={{marginRight:20}} name="ios-arrow-right" size={30} color={PlainStyle.colorSet.arrowColor}/>
             </View>
           </TouchableHighlight>
           <View style={{backgroundColor: PlainStyle.colorSet.content, height: 10}}/>
-          <View style={[DictStyle.userInfoBorderBottom,DictStyle.userInfoBorderTop]}>
+          <View style={DictStyle.userInfoBorderTop}>
             <Item desc="用户指导" img={false} func={() => this.toPage(UserGuide)}/>
             <Item desc="关于我们" img={false} func={() => this.toPage(AboutUs)}/>
           </View>
@@ -132,7 +133,7 @@ let styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
-    height: 74,
+    height: 84,
     backgroundColor: PlainStyle.colorSet.personalItemColor
   },
   head: {

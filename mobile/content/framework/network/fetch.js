@@ -1,8 +1,10 @@
 var Qs = require('qs');
 var { Alert } = require('mx-artifacts');
 var AppStore = require('../store/appStore');
-
+var qiniu = require('./qiniu/index');
 var MxFetch = require('./mxFetch');
+var KeyGenerator = require('../../comp/utils/keyGenerator');
+const { ImageHost, ImageBkt, ImageAk, ImageSk } = require('../../../config');
 
 var BFetch = function (url, param, callback, failure, options) {
   var headers = {
@@ -44,7 +46,27 @@ var PFetch = function (url, param, callback, failure, options) {
   }, options);
 };
 
-var UFetch = function (url, param, callback, failure, options) {
+var UFetch = function (url, param) {
+  return new Promise((resolve, reject) => {
+    qiniu.conf.ACCESS_KEY = ImageAk;
+    qiniu.conf.SECRET_KEY = ImageSk;
+    let fileName = KeyGenerator.getImgKey(AppStore.getUserId());
+    var putPolicy = new qiniu.auth.PutPolicy2(
+      {scope: ImageBkt + ':' + fileName}
+    );
+    var uptoken = putPolicy.token();
+    qiniu.rpc.uploadImage(param.uri, fileName, uptoken, function (resp) {
+      if (resp.status === 200) {
+        resolve({fileUrl: ImageHost + fileName});
+      } else {
+        reject(resp.status);
+      }
+      //console.log(JSON.stringify(resp));
+    });
+  });
+};
+
+var UFetchBak = function (url, param, callback, failure, options) {
   var headers = {
     'Accept': 'application/json',
     'Content-Type': 'multipart/form-data; boundary=6ff46e0b6b5148d984f148b6542e5a5d',
@@ -65,13 +87,12 @@ var rawFetch = function (url, param, callback, failure, option) {
   console.log('以下打印一次传出去的param:');
   console.log(param);
   console.log('请求地址:'+url);
-  //Alert(param);
   if (!option) option = {};
   //var _promise = Promise.race([fetch(url, param), new Promise(function (resolve, reject) {
   //  setTimeout(() => reject(new Error('链接超时')), 2000000);
   //})]);
  // process(fetch(url, param) ,callback,failure,option);
-  var _promise = MxFetch.fetch(url, param, 15000);
+  var _promise = MxFetch.fetch(url, param, 1000);
   return process(_promise, option);
 };
 
@@ -84,17 +105,7 @@ var process = function (_promise, option) {
             resolve({});
           } else {
             var json = JSON.parse(response);
-            if (json.msgContent) {
-              if (json.msgCode == 'SYS_TOKEN_INVALID') {
-                if (option.isLogout) {
-                  AppStore.logout();
-                } else {
-                  AppStore.forceLogout();
-                }
-              } else {
-                reject(json);
-              }
-            }else if(json.errMsg){
+            if (json.msgContent || json.errMsg){
               reject(json);
             } else {
               resolve(json);

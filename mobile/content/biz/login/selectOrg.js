@@ -17,6 +17,7 @@ let {ORG_CHANGE} = require('../../constants/dictEvent');
 let SearchBar = require('../im/searchBar');
 var that;
 let DictStyle = require('../../constants/dictStyle');
+let PlainStyle = require('../../constants/dictStyle');
 
 let Register_selectOrg = React.createClass({
 
@@ -64,7 +65,7 @@ let Register_selectOrg = React.createClass({
                              }>
           <View
             style={{height: 40,  backgroundColor: '#f7f7f7',justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#ebeef7'}}>
-            <Text style={{marginLeft: 20, color: '#3b4549', textAlign: 'left'}}>全部发布机构</Text>
+            <Text style={{marginLeft: 20, color: '#3b4549', textAlign: 'left'}}>全部机构</Text>
           </View>
         </TouchableHighlight>
       );
@@ -74,8 +75,8 @@ let Register_selectOrg = React.createClass({
   renderList: function () {
     if (this.state.data == '') {
       return (
-        <View style={{marginTop:20,marginHorizontal:16,alignItems:'center',flex:1,justifyContent:'center',flexDirection:'column'}}>
-          <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>
+        <View style={{marginTop:35,marginHorizontal:16,alignItems:'center',flex:1,flexDirection:'column'}}>
+          <Text style={[DictStyle.fontSize,{color:PlainStyle.colorSet.reminderColor}]}>
             无符合条件的机构
           </Text>
         </View>

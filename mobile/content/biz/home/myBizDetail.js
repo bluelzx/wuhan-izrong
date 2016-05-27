@@ -54,6 +54,7 @@ let termUnit = ['日', '月', '年'];
 let amountUnit = ['万', '亿'];
 let CustomImage = require('../../comp/utils/CustomImage');
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+let {ImageSize50,ImageSize100} = require('../../../config');
 
 let MyBizDetail = React.createClass({
   getInitialState(){
@@ -427,14 +428,16 @@ let MyBizDetail = React.createClass({
           onError={(error) => this.handleImageError(error)}
           title="选择图片"
           fileId="publish1"
-          allowsEditing={true}
+          allowsEditing={false}
           style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
         >
-          <Image
-            style={{width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-            source={require('../../image/market/addImage.png')}
-            resize-mode = 'cover'
-          />
+          <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+            <Image
+              style={{width:(screenWidth-60)/5-20,height:(screenWidth-60)/5-20,borderRadius:5}}
+              source={require('../../image/market/addImage.png')}
+              resize-mode = 'cover'
+            />
+          </View>
         </ImagePicker>
       );
     }
@@ -451,6 +454,9 @@ let MyBizDetail = React.createClass({
     }
   },
   renderImgItem: function (rowData, sectionID, rowID) {
+
+    let uri = rowData + ImageSize50;
+
     return (
       <ImagePicker
         longPress={() => this._longPress(rowID)}
@@ -458,7 +464,7 @@ let MyBizDetail = React.createClass({
         onSelected={(response) => {this.handleSendImage(response, rowID)}}
         onError={(error) => this.handleImageError(error)}
         title="选择图片"
-        allowsEditing={true}
+        allowsEditing={false}
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
       >
         <Lightbox imageSource={{uri:rowData}}
@@ -472,7 +478,7 @@ let MyBizDetail = React.createClass({
         >
           <Image
             style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5,borderWidth:1,borderColor:'#cccccc'}}
-            source={{uri:rowData}}
+            source={{uri:uri}}
           />
         </Lightbox>
       </ImagePicker>
@@ -484,12 +490,19 @@ let MyBizDetail = React.createClass({
       <View style={{flexDirection:'row',marginTop:10}}>
         {
           this.state.fileUrlList.map((item, index) => {
+            let uri = item + ImageSize100;
+
             return (
-              <Image
-                key={index}
-                style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
-                source={{uri:item, isStatic: true}}
-              />
+              <Lightbox imageSource={{uri:item}}
+                        navigator={this.props.navigator}
+                        underlayColor="#f7f7f7"
+                        key={index}
+              >
+                <Image
+                  style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
+                  source={{uri:uri, isStatic: true}}
+                />
+              </Lightbox>
             )
           })
         }

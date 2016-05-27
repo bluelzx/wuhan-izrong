@@ -56,7 +56,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   logout: (userId) => _logout(userId),
   forceLogout: () => _forceLogout(),
   freezAccount: () => _freezAccount(),
-  deleteLoginUser: (userId) => _deleteLoginUser(userId),
+  deleteLoginUser: () => _deleteLoginUser(),
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
   getOrgByOrgId: (orgId) => _getOrgByOrgId(orgId),
@@ -174,41 +174,29 @@ let _logout = (userId) => {
 };
 
 let _forceLogout = () => {
-  if (_info.isForceLogout && _info.isLogout) {
-
-  } else {
     Persister.logout(_getUserId());
     _data.token = '';
     _info.isForceLogout = true;
     _info.isLogout = true;
     AppStore.emitChange();
-  }
 };
 
 let _deleteLoginUser = () => {
   //清空token,isLogout = true
-  if (_info.isLogout && _info.isDelete) {
-
-  } else {
     Persister.logout(_getUserId());
     _data.token = '';
     _info.isLogout = true;
     _info.isDelete = true;
     AppStore.emitChange();
-  }
 };
 
 let _freezAccount = () => {
-  if (_info.isLogout && _info.isFreezing) {
-
-  } else {
     //清空token
     Persister.logout(_getUserId());
     _data.token = '';
     _info.isLogout = true;
     _info.isFreezing = true;
     AppStore.emitChange();
-  }
 };
 
 let _save_apns_token = (apnsToken) => {

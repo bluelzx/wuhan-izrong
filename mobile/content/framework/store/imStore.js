@@ -73,6 +73,8 @@ let _isInGroupById = function(id) {
 
 let _resovleMessages = (bInit = false) => {
   let savedMessages = Persister.getMessageBySessionId(_data.sessionId, _data.page, _data.userId);
+  // sort
+ //savedMessages.reverse();
   let tmpMessages = [];
   let tmpMessage = {};
   let name = _data.hisName;
@@ -90,7 +92,8 @@ let _resovleMessages = (bInit = false) => {
         image: userInfo.photoFileUrl,
         position: 'left',
         date: object.revTime,
-        certified:userInfo.certificated,
+        certified:userInfo.certified,
+        messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       };
     } else { // Sent
@@ -107,6 +110,7 @@ let _resovleMessages = (bInit = false) => {
         date: object.revTime,
         status: object.status,
         certified:userInfo.certified,
+        messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       };
     }
@@ -118,7 +122,7 @@ let _resovleMessages = (bInit = false) => {
   if (bInit) {
     ImStore.emitChange(DictEvent.IM_SESSION);
   } else {
-    return tmpMessages;
+    return tmpMessages.reverse();
   }
 };
 
@@ -131,6 +135,7 @@ let _sessionInit = (data) => {
   _data.myName=data.myName,
     _data.certified = data.certified,
   _data.userPhotoFileUrl = data.photoFileUrl;
+  _data.messageType = data.messageType;
   _resovleMessages(true);
   ImStore.emitChange(DictEvent.IM_SESSION);
 };
@@ -204,6 +209,8 @@ let _saveMsg = (message, userId) => {
     }catch(err){
       ContactAction.getUserInfoFromServer(message.toId || message.fromUId).then(()=>{
         _saveMsg(message, userId);
+      }).catch((err)=>{
+        console.log('##########getUsrInfoByUserId is null##############');
       });
       return;
     }
@@ -262,7 +269,8 @@ let _saveMsg = (message, userId) => {
         image: userInfo.photoFileUrl,
         position: 'left',
         date: message.revTime,
-        certified:userInfo.certificated,
+        certified:userInfo.certified,
+        messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       });
     } else if (message.fromUId == -1) {
@@ -286,6 +294,7 @@ let _saveMsg = (message, userId) => {
         date: message.revTime,
         status: message.status,
         certified:_data.certified,
+        messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
       });
     }

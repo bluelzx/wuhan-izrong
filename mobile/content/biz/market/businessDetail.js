@@ -32,8 +32,9 @@ let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let CustomImage = require('../../comp/utils/CustomImage');
-
+let {ImageSize50,ImageSize100} = require('../../../config');
 let MarketAction = require('../../framework/action/marketAction');
+let ErrorMsg = require('../../constants/errorMsg');
 
 let BusinessDetail = React.createClass({
   getInitialState(){
@@ -182,11 +183,12 @@ let BusinessDetail = React.createClass({
         </View>
       );
     } else {
+      let uri = this.state.bizOrderOwnerBean.photoStoredFileUrl + ImageSize50;
       return (
         <View style={{margin:10}}>
           <Image
             style={{height:46,width:46,borderRadius:23}}
-            source={{uri:this.state.bizOrderOwnerBean.photoStoredFileUrl}}
+            source={{uri:uri}}
           />
           {this.renderIsCertificated()}
         </View>
@@ -204,7 +206,6 @@ let BusinessDetail = React.createClass({
     }
   },
   returnInfoItem: function (url, value, isPublic) {
-
     return (
       <View style={{flexDirection:'row',alignItems:'center',paddingVertical:5,marginLeft:10}}>
         <Image style={{width:16,height:16}}
@@ -230,6 +231,9 @@ let BusinessDetail = React.createClass({
       <View style={{flexDirection:'row',marginTop:10}}>
         {
           this.state.fileUrlList.map((item, index) => {
+
+            let uri = item + ImageSize50;
+
             return (
               <Lightbox key={index}
                         imageSource={{uri:item, isStatic: true}}
@@ -239,7 +243,7 @@ let BusinessDetail = React.createClass({
               >
                 <Image
                   style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#cccccc'}}
-                  source={{uri:item, isStatic: true}}
+                  source={{uri:uri}}
                 />
               </Lightbox>
             )
@@ -272,7 +276,7 @@ let BusinessDetail = React.createClass({
         resolve(user);
       }).catch((err)=> {
         //
-        if (err == 'userinfo is null') {
+        if (err == ErrorMsg.USERINFONULL) {
           return ContactAction.getUserInfoFromServer(orderUserId);
         } else {
           throw err;

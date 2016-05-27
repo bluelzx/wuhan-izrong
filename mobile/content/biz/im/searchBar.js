@@ -18,7 +18,7 @@ let SearchBar = React.createClass({
 
   propTypes:{
     textChange:React.PropTypes.func.isRequired,
-    textOnBlur:React.PropTypes.func.isRequired,
+    textOnBlur:React.PropTypes.func,
   },
 
   textChange: function(text){

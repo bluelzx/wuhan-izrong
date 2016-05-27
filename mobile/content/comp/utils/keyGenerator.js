@@ -17,12 +17,17 @@ let _getMessageKey = (s, id) => {
 
 let _getNewFriendKey = (t, id) => {
   return t + ':' + id;
-}
+};
+
+let _getImgKey = (userId) => {
+  return userId + '-' + new Date().getTime() + '-' + _device_id;
+};
 
 let KeyGenerator = {
   getSessionKey: (t, id, userId, targetId) => _getSessionKey(t, id, userId, targetId),
   getMessageKey: (s, id) => _getMessageKey(s, id),
-  getNewFriendKey: (t, id) => _getNewFriendKey(t, id)
+  getNewFriendKey: (t, id) => _getNewFriendKey(t, id),
+  getImgKey: (userId) => _getImgKey(userId)
 };
 
 module.exports = KeyGenerator;

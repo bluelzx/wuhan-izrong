@@ -29,6 +29,7 @@ var STATUS_BAR_OFFSET = (Platform.OS === 'android' ? -25 : 0);
 var { Alert } = require('mx-artifacts');
 var UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 var SaveFileModule = require('NativeModules').SaveFileModule;
+let {ImageSizeOrigin} = require('../../../config');
 
 
 var LightboxOverlay = React.createClass({
@@ -325,10 +326,12 @@ var LightboxOverlay = React.createClass({
 
       </Animated.View>
     );
+
+    var uri = this.props.param.imageSource.uri + ImageSizeOrigin
     var content = (
       <Animated.Image style={[openStyle,dragStyle,{justifyContent:'center',alignItems:'center'}]} {...handlers}
                       resizeMode='contain'
-                      source={this.props.param.imageSource}
+                      source={{uri:uri}}
       >
       </Animated.Image>
     );
