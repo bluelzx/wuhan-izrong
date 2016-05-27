@@ -248,7 +248,7 @@ let WhitePage = React.createClass({
       } else if(MSG_CONTENT_TYPE.NAMECARD == item.contentType){
         return '[名片]';
       }else if(MSG_CONTENT_TYPE.BIZINFO){
-        return '[业务信息]';
+        return '[发布业务信息]1条';
       }else {
         return '点击查看详情'
       }

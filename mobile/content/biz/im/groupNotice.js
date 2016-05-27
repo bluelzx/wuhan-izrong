@@ -107,18 +107,30 @@ let GroupNotice = React.createClass({
   },
 
   acceptInvite: function (item) {
-    this.props.exec(
-      ()=> {
-        return ContactAction.acceptInvitation(item.groupId).then(()=> {
-          NoticeStore.updateInViteNotice(item.noticeId);
-        }).then(() => {
-            this.toChat(item)
-          }
-        ).catch((err)=> {
-          Alert(err);
-        });
-      }
-    );
+    //TODO:判断本地是否有该群,再判断用户是否在群中 judge
+    let user = ContactStore.getUserInfo();
+    let judge = ContactStore.judgeGroup(item.groupId, user.userId);
+    if (judge) {
+      NoticeStore.updateInViteNotice(item.noticeId);
+      Alert('你已加入该群');
+    } else {
+      this.props.exec(
+        ()=> {
+          return ContactAction.acceptInvitation(item.groupId).then(()=> {
+            NoticeStore.updateInViteNotice(item.noticeId);
+          }).then(() => {
+              this.toChat(item)
+            }
+          ).catch((err)=> {
+            if (err.errCode && err.errCode == 'GROUP_NOT_EXIST') {
+              NoticeStore.updateInViteNotice(item.noticeId);
+              Alert('该群已被解散')
+            }
+            //Alert(err);
+          });
+        }
+      );
+    }
   },
 
   deleteSession: function (sessionId) {
@@ -149,16 +161,19 @@ let GroupNotice = React.createClass({
   },
 
   toChat(item) {
-    let param = {
-      chatType: SESSION_TYPE.GROUP,
-      title: item.groupName,
-      groupId: item.groupId,
-      groupMasterUid: item.groupOwnerId
-    };
-    this.props.navigator.push({
-      comp: Chat,
-      param: param
-    })
+    let judge = ContactStore.judgeGroup(item.groupId, user.userId);
+    if (judge) {
+      let param = {
+        chatType: SESSION_TYPE.GROUP,
+        title: item.groupName,
+        groupId: item.groupId,
+        groupMasterUid: item.groupOwnerId
+      };
+      this.props.navigator.push({
+        comp: Chat,
+        param: param
+      })
+    }
   },
 
   renderRow (item) {

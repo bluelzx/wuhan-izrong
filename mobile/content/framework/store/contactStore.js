@@ -1,7 +1,7 @@
 /**
  * Created by baoyinghai on 16/4/12.
  */
-
+"use strict";
 let { SESSION_TYPE, MSG_CONTENT_TYPE } = require('../../constants/dictIm');
 let PersisterFacade = require('../persister/persisterFacade');
 let AppStore = require('./appStore');
@@ -186,6 +186,10 @@ let _saveMembersDetails = function (membersDetails) {
   PersisterFacade.saveImUsers(membersDetails)
 }
 
+let _judgeGroup = function (groupId, userId) {
+  return PersisterFacade.judgeGroup(groupId, userId);
+}
+
 let ContactStore = {
   getGroupInfoBySessionId:_getGroupInfoBySessionId,  //根据会话Id获得群组信息
   getUserInfoBySessionId:_getUserInfoBySessionId,       //根据会话Id获得用户信息
@@ -214,7 +218,8 @@ let ContactStore = {
   isStranger:_isStranger,
   getOrgValueByOrgId:_getOrgValueByOrgId,
   saveIMUserInfo: _saveIMUserInfo,
-  saveMembersDetails: _saveMembersDetails
+  saveMembersDetails: _saveMembersDetails,
+  judgeGroup: _judgeGroup
 };
 
 
