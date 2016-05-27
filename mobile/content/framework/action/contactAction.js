@@ -278,6 +278,9 @@ let _getUserInfoFromServer = function(userId){
 let param = {uid:userId};
   return new Promise((resolve,reject) => {
     BFetch(AppLinks.getUserInfoById, param).then((response) => {
+      if(_.isEmpty(response)){
+        throw 'getUserInfobyId from im server is null';
+      }
       contactStore.addFriend(response);
       resolve(response);
     }).catch((err)=>{

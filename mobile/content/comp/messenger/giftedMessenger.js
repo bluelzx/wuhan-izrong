@@ -550,6 +550,7 @@ let GiftedMessenger = React.createClass({
   _onRefresh() {
     this.setState({isRefreshing: true});
     this.props.onLoadEarlierMessages(this._data[this._rowIds[this._rowIds.length - 1]], this._postLoadEarlierMessages);
+    //this.props.onLoadEarlierMessages(this._data[this._rowIds[this._rowIds.length - 1]], this._postLoadEarlierMessages);
   },
 
   prependMessages(messages = []) {
