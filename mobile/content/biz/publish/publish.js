@@ -267,7 +267,7 @@ let Publish = React.createClass({
   renderBusinessType: function () {
     return (
       <View style={{flexDirection:'column',marginTop:10}}>
-        <View style={{flexDirection:'row'}}>
+        <View style={{flexDirection:'row',alignItems:'center'}}>
           <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'方向'}</Text>
           <Text style={{color:'#dd656c'}}>{'*'}</Text>
 
@@ -653,7 +653,7 @@ let Publish = React.createClass({
 
     Share.open({
       share_text: shareContent,
-      share_URL: Platform.OS === 'android' ? shareContent : 'http://www.izirong.com/fas',
+      share_URL: Platform.OS === 'android' ? shareContent : 'http://www.izirong.com',
       title: "Share Link"
     }, (e) => {
       console.log(e);

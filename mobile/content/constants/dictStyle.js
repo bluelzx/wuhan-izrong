@@ -65,7 +65,7 @@ const PlainStyle = {
     fontColor: '#3b4549',
     filterSelectColor: '#4fc1e9',
     amountColor: '#4074e6',
-    modifyDateColor: '#f33b1e',
+    modifyDateColor: '#4d6699',
     filterBorder: '#c9cacf',
     filterFontSize: 15,
   },

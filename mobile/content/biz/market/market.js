@@ -30,7 +30,7 @@ let BusinessDetail = require('./businessDetail');
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
-let { MARKET_CHANGE,MYBIZ_CHANGE } = require('../../constants/dictEvent');
+let { MARKET_CHANGE, MYBIZ_CHANGE , FILTER_CHANGE} = require('../../constants/dictEvent');
 let _ = require('lodash');
 let {Alert, GiftedListView} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
@@ -62,7 +62,7 @@ let Market = React.createClass({
       clickFilterOther: 0,
       levelOneText: myCategory != null ? myCategory.displayName : categoryArr.length == 0 ? '' : categoryArr[0].displayName,
       optionTwoText: '最新发布',
-      pickTypeRow1: 0,
+      pickTypeRow: 0,
       pickTimeRow: 0,
       orientionDefault: 10000,
       orientionIsAll: true,
@@ -72,6 +72,7 @@ let Market = React.createClass({
       amountIsAll: true,
       orgValue: '',
       orgId: 0,
+      isOtherNull: true,
       //network
       orderField: 'lastModifyDate',
       orderType: 'desc',
@@ -88,12 +89,12 @@ let Market = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
+    AppStore.addChangeListener(this._search, MARKET_CHANGE);
     AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
+    AppStore.removeChangeListener(this._search, MARKET_CHANGE);
     AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
   },
 
@@ -239,8 +240,8 @@ let Market = React.createClass({
 
   _emptyView: function () {
     return (
-      <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-        <Text style={{fontSize:15, color:'#cad2d1'}}>暂无业务</Text>
+      <View style={{flex:1,justifyContent:'center',alignItems:'center',marginTop:50}}>
+        <Text style={{fontSize:15, color:'#cad2d1'}}>未找到符合条件的业务记录</Text>
       </View>
     );
   },
@@ -318,6 +319,16 @@ let Market = React.createClass({
       clickFilterOther: 0,
       clickFilterType: (this.state.clickFilterType == 0) ? 1 : 0,
     });
+    if (this.state.isOtherNull) {
+      this.setState({
+        orientionDefault: 10000,
+        orientionIsAll: true,
+        termDefault: 10000,
+        termIsAll: true,
+        amountDefault: 10000,
+        amountIsAll: true
+      });
+    }
   },
   pressFilterTime(){
     this.setState({
@@ -325,6 +336,16 @@ let Market = React.createClass({
       clickFilterOther: 0,
       clickFilterTime: (this.state.clickFilterTime == 0) ? 1 : 0,
     });
+    if (this.state.isOtherNull) {
+      this.setState({
+        orientionDefault: 10000,
+        orientionIsAll: true,
+        termDefault: 10000,
+        termIsAll: true,
+        amountDefault: 10000,
+        amountIsAll: true
+      });
+    }
   },
   pressFilterOther(){
     this.setState({
@@ -332,11 +353,21 @@ let Market = React.createClass({
       clickFilterTime: 0,
       clickFilterOther: (this.state.clickFilterOther == 0) ? 1 : 0,
     });
+    if (this.state.isOtherNull) {
+      this.setState({
+        orientionDefault: 10000,
+        orientionIsAll: true,
+        termDefault: 10000,
+        termIsAll: true,
+        amountDefault: 10000,
+        amountIsAll: true
+      });
+    }
   },
-  pressTypeRow1(rowId){
+  pressTypeRow(rowId){
     this.setState({
       clickFilterType: 0,
-      pickTypeRow1: rowId,
+      pickTypeRow: rowId,
       levelOneText: this.state.categorySource[rowId].displayName,
       bizCategoryID: this.state.categorySource[rowId].id
     });
@@ -386,10 +417,10 @@ let Market = React.createClass({
           <View
             style={{width: screenWidth / 3,height:DictStyle.heightSet.filter,backgroundColor:'white',alignItems: 'center',justifyContent: 'center',flexDirection: 'row',borderBottomWidth:0.5,borderBottomColor:DictStyle.marketSet.filterBorder}}>
             <Text
-              style={{width:screenWidth/3 - 30,textAlign:'center',fontSize:DictStyle.marketSet.filterFontSize,color:(this.state.clickFilterOther == 1)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}}
+              style={{width:screenWidth/3 - 30,textAlign:'center',fontSize:DictStyle.marketSet.filterFontSize,color:(!this.state.isOtherNull)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}}
               numberOfLines={1}>{'筛选'}</Text>
             <Icon name={(this.state.clickFilterOther == 1)?'chevron-up':'chevron-down'} size={15}
-                  color={(this.state.clickFilterOther == 1)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}/>
+                  color={(!this.state.isOtherNull)?DictStyle.marketSet.filterSelectColor:DictStyle.marketSet.fontColor}/>
           </View>
         </TouchableOpacity>
 
@@ -416,7 +447,7 @@ let Market = React.createClass({
             style={{backgroundColor:'white',height:DictStyle.heightSet.filter*5,position:"absolute",left:0,top:0,opacity:this.state.clickFilterType}}
             dataSource={data.cloneWithRows(this.state.categorySource)}
             enableEmptySections={true}
-            renderRow={this.renderTypeRow1}/>
+            renderRow={this.renderTypeRow}/>
         </View>
       )
     }
@@ -455,7 +486,7 @@ let Market = React.createClass({
     } else {
       return (
         <View
-          style={{backgroundColor:'white',width:screenWidth,height:screenHeight - 149,position:"absolute",left:0,top:DictStyle.heightSet.filter}}>
+          style={{backgroundColor:'white',width:screenWidth,height:screenHeight - 157,position:"absolute",left:0,top:DictStyle.heightSet.filter}}>
           <ScrollView>
             <TouchableOpacity onPress={()=>this.toSelectOrg(SelectOrg)} activeOpacity={0.8} underlayColor="#f0f0f0">
               <View
@@ -501,11 +532,11 @@ let Market = React.createClass({
       );
     }
   },
-  renderTypeRow1(rowData, sectionID, rowID){
+  renderTypeRow(rowData, sectionID, rowID){
     return (
       <TouchableOpacity
-        style={{height:DictStyle.heightSet.filter,backgroundColor:(this.state.pickTypeRow1 == rowID)?'#f4fdfc':'white',alignItems: "center",justifyContent: "center",borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}
-        onPress={()=>this.pressTypeRow1(rowID)} activeOpacity={1}
+        style={{height:DictStyle.heightSet.filter,backgroundColor:(this.state.pickTypeRow == rowID)?'#f4fdfc':'white',alignItems: "center",justifyContent: "center",borderBottomWidth:0.5,borderBottomColor:'#edeef4'}}
+        onPress={()=>this.pressTypeRow(rowID)} activeOpacity={1}
         underlayColor="#f0f0f0">
         <View style={{width:screenWidth}}>
           <Text
@@ -569,6 +600,22 @@ let Market = React.createClass({
     }
   },
 
+  setIsOtherNull: function () {
+    this.setState({
+      isOtherNull: true
+    });
+  },
+
+  setIsOtherNotNull: function () {
+    if (this.state.orientionIsAll && this.state.termIsAll && this.state.amountIsAll && this.state.orgId == 0) {
+
+    } else {
+      this.setState({
+        isOtherNull: false
+      });
+    }
+  },
+
   clearOptions: function () {
     this.refs["ORIENTATION"].setDefaultState();
     this.refs["TERM"].setDefaultState();
@@ -577,10 +624,11 @@ let Market = React.createClass({
       orgValue: '',
       orgId: 0
     });
+    this.setIsOtherNull();
   },
 
   confirmBtn: function () {
-
+    this.setIsOtherNotNull();
     this.pressFilterOther();
     this.refs.marketGiftedListView._refresh();
 
