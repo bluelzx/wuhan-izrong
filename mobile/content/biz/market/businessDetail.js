@@ -32,7 +32,7 @@ let ContactStore = require('../../framework/store/contactStore');
 let ContactAction = require('../../framework/action/contactAction');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let CustomImage = require('../../comp/utils/CustomImage');
-
+let {ImageSize50,ImageSize100} = require('../../../config');
 let MarketAction = require('../../framework/action/marketAction');
 let ErrorMsg = require('../../constants/errorMsg');
 
@@ -183,7 +183,7 @@ let BusinessDetail = React.createClass({
         </View>
       );
     } else {
-      let uri = this.state.bizOrderOwnerBean.photoStoredFileUrl + '?imageView2/1/w/100/h/100';
+      let uri = this.state.bizOrderOwnerBean.photoStoredFileUrl + ImageSize50;
       return (
         <View style={{margin:10}}>
           <Image
@@ -232,7 +232,7 @@ let BusinessDetail = React.createClass({
         {
           this.state.fileUrlList.map((item, index) => {
 
-            let uri = item + '?imageView2/1/w/100/h/100';
+            let uri = item + ImageSize50;
 
             return (
               <Lightbox key={index}

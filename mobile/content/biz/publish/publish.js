@@ -52,6 +52,7 @@ let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 let Lightbox = require('../../comp/lightBox/Lightbox');
 let Icon = require('react-native-vector-icons/Ionicons');
 let { MARKET_CHANGE } = require('../../constants/dictEvent');
+let {ImageSize50,ImageSize100} = require('../../../config');
 
 let Publish = React.createClass({
   getInitialState(){
@@ -387,7 +388,7 @@ let Publish = React.createClass({
     }
   },
   renderImgItem: function (rowData, sectionID, rowID) {
-    let uri = rowData + '?imageView2/1/w/100/h/100';
+    let uri = rowData + ImageSize50;
     return (
       <ImagePicker
         longPress={() => this._longPress(rowID)}

@@ -26,6 +26,7 @@ let NameCircular = require('../im/nameCircular').NameCircular;
 let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
 let PlainStyle = require('../../constants/dictStyle');
 let DictStyle = require('../../constants/dictStyle');
+let {ImageSize50} = require('../../../config');
 
 let Personal = React.createClass({
   getStateFromStores: function () {
@@ -66,7 +67,7 @@ let Personal = React.createClass({
 
   returnImage: function () {
     if (!_.isEmpty(this.state.photoFileUrl)) {
-      let uri = this.state.photoFileUrl + '?imageView2/1/w/100/h/100';
+      let uri = this.state.photoFileUrl + ImageSize50;
       if (this.state.certificated) {
         return (
           <View>
@@ -116,7 +117,7 @@ let Personal = React.createClass({
             </View>
           </TouchableHighlight>
           <View style={{backgroundColor: PlainStyle.colorSet.content, height: 10}}/>
-          <View style={[DictStyle.userInfoBorderBottom,DictStyle.userInfoBorderTop]}>
+          <View style={DictStyle.userInfoBorderTop}>
             <Item desc="用户指导" img={false} func={() => this.toPage(UserGuide)}/>
             <Item desc="关于我们" img={false} func={() => this.toPage(AboutUs)}/>
           </View>

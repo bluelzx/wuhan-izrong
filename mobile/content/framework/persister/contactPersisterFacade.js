@@ -1,6 +1,7 @@
 /**
  * Created by baoyinghai on 4/19/16.
  */
+"use strict";
 let _realm = require('./realmManager');
 const DEFAULT_GROUP_IMAGE = "";
 const _ = require('lodash');
@@ -39,9 +40,25 @@ let ContactPersisterFacade = {
   isStranger: (userId) => _isStranger(userId),
   getOrgValueByOrgId: (orgId) => _getOrgValueByOrgId(orgId),
   saveIMUserInfo: (item) => _saveIMUserInfo(item),
+  judgeGroup: (groupId, userId) => _judgeGroup(groupId, userId)
   updateFriendList: (param, userId) => _updateFriendList
 }
 
+let _judgeGroup = function(groupId, userId) {
+  let judge = false;
+  _realm.write(() => {
+    let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
+    if (group.length > 0) {
+      let members = JSON.parse(group.members);
+      members.forEach((id)=> {
+        if (id == userId) {
+          judge = true;
+        }
+      })
+    }
+  });
+  return judge;
+};
 
 let _saveIMUserInfo = function(item) {
   _realm.write(()=>{

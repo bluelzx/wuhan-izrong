@@ -54,6 +54,7 @@ let termUnit = ['日', '月', '年'];
 let amountUnit = ['万', '亿'];
 let CustomImage = require('../../comp/utils/CustomImage');
 let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+let {ImageSize50,ImageSize100} = require('../../../config');
 
 let MyBizDetail = React.createClass({
   getInitialState(){
@@ -454,7 +455,7 @@ let MyBizDetail = React.createClass({
   },
   renderImgItem: function (rowData, sectionID, rowID) {
 
-    let uri = rowData + '?imageView2/1/w/100/h/100';
+    let uri = rowData + ImageSize50;
 
     return (
       <ImagePicker
@@ -489,7 +490,7 @@ let MyBizDetail = React.createClass({
       <View style={{flexDirection:'row',marginTop:10}}>
         {
           this.state.fileUrlList.map((item, index) => {
-            let uri = item + '?imageView2/1/w/100/h/100';
+            let uri = item + ImageSize100;
 
             return (
               <Lightbox imageSource={{uri:item}}

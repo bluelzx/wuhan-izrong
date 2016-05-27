@@ -890,7 +890,7 @@ let GiftedMessenger = React.createClass({
             onError={(error) => this.props.handleImageError(error)}
             title="选择图片"
             fileId="selectImage"
-            allowsEditing={true}
+            allowsEditing={false}
             style={this.styles.panelItem}
           >
             <Image

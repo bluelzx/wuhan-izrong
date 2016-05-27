@@ -19,27 +19,27 @@ let { SESSION_TYPE } = require('../../constants/dictIm');
 let HeaderPic = require('./headerPic');
 let Setting = require('../../constants/setting');
 let {groupFilter} = require('./searchBarHelper');
-let DEFAULT_GROUP_NAME='创建的群+';
+let DEFAULT_GROUP_NAME = '创建的群+';
 let DictStyle = require('../../constants/dictStyle');
 
 let CreateGroup = React.createClass({
 
-  textChange: function(text) {
-    if(text == ''){
-      this.setState({keyWord:text,isOpen:false});
-    }else{
-      this.setState({keyWord:text,isOpen:true});
+  textChange: function (text) {
+    if (text == '') {
+      this.setState({keyWord: text, isOpen: false});
+    } else {
+      this.setState({keyWord: text, isOpen: true});
     }
   },
 
-  textOnBlur:function(){
-    if(this.state.keyWord==='')
-    this.setState({isOpen:false});
+  textOnBlur: function () {
+    if (this.state.keyWord === '')
+      this.setState({isOpen: false});
   },
 
   //******************** 扩展列表
   //渲染组标题
-  titleRender: function(data) {
+  titleRender: function (data) {
     return (
       <Text
         numberOfLines={1}
@@ -50,121 +50,128 @@ let CreateGroup = React.createClass({
     );
   },
 
-  getMemberList: function(item) {
+  getMemberList: function (item) {
     let r = 0;
-    Object.keys(item).forEach((k)=>{
+    Object.keys(item).forEach((k)=> {
       if (!!item[k])
         r++;
     })
     return r;
   },
 
-  checkBoxChoice: function(item) {
+  checkBoxChoice: function (item) {
     let memberList = this.state.memberList;
     memberList[item.userId] = item;
     this.setState({memberList: memberList});
 
   },
 
-  unCheckBoxChoice: function(item) {
+  unCheckBoxChoice: function (item) {
     let memberList = this.state.memberList;
     memberList[item.userId] = null;
-    this.setState({memberList:memberList});
+    this.setState({memberList: memberList});
   },
 
   //渲染组成员
-  itemRender: function(data) {
-      return (
-        <CheckBox
-          init={this.state.memberList[data.userId]}
-          item={data}
-          key={data.userId}
-          choice={this.checkBoxChoice}
-          unChoice={this.unCheckBoxChoice}
-          style={{backgroundColor:DictStyle.colorSet.extenListGroundCol,width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
-          <View style={{flexDirection:'row',alignItems:'center'}}>
-            <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-            <Text numberOfLines={1} style={{flex:1,fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
-          </View>
-        </CheckBox>
-      );
+  itemRender: function (data) {
+    return (
+      <CheckBox
+        init={this.state.memberList[data.userId]}
+        item={data}
+        key={data.userId}
+        choice={this.checkBoxChoice}
+        unChoice={this.unCheckBoxChoice}
+        style={{backgroundColor:DictStyle.colorSet.extenListGroundCol,width:Device.width,borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
+        <View style={{flexDirection:'row',alignItems:'center'}}>
+          <HeaderPic photoFileUrl={data.photoFileUrl} certified={data.certified} name={data.realName}/>
+          <Text numberOfLines={1}
+                style={{flex:1,fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}}>{data.realName}</Text>
+        </View>
+      </CheckBox>
+    );
   },
   //*********************
 
-  createGroup: function(members) {
+  createGroup: function (members) {
 
-    if(this.state.groupName.length > Setting.groupNameLengt){
+    if (this.state.groupName.length > Setting.groupNameLengt) {
       Alert('群名称不能超过20个字符');
-      return ;
+      return;
     }
-    if(this.state.groupName.trim() == ''){
+    if (this.state.groupName.trim() == '') {
       this.state.groupName = this.state.userInfo.realName + DEFAULT_GROUP_NAME + this.getMemberList(members);
     }
-    if(this.getMemberList(members) > Setting.groupMemberUpperLimit){
+    if (this.getMemberList(members) > Setting.groupMemberUpperLimit) {
       Alert('群组成员人数不能超过' + Setting.groupMemberUpperLimit);
       return;
     }
-    if(0 == Object.keys(members).length)
+    if (0 == Object.keys(members).length)
       return;
-    else{
+    else {
       dismissKeyboard();
       this.props.exec(() => {
           return ContactAction.createGroup(members, this.state.groupName, this.state.userInfo.userId)
-            .then((response)=>{
-               return response.gid
-            }).then((gid)=>{
-              //setp2: 跳转到群聊页面
+            .then((response)=> {
+              return response.gid
+            }).then((gid)=> {
+              //step2: 跳转到群聊页面
               this.props.navigator.replacePreviousAndPop(
                 {
                   comp: Chat,
-                  param: {groupId:gid,title: this.state.groupName, chatType: SESSION_TYPE.GROUP, groupMasterUid: this.state.userInfo.userId}
+                  param: {
+                    groupId: gid,
+                    title: this.state.groupName,
+                    chatType: SESSION_TYPE.GROUP,
+                    groupMasterUid: this.state.userInfo.userId
+                  }
                 }
               );
             }).catch((errorData) => {
-            Alert(errorData.toLocaleString());
-          });
+              Alert(errorData.toLocaleString());
+            });
         }
       );
     }
   },
 
-  renderLabel: function() {
+  renderLabel: function () {
     let memberList = this.state.memberList;
     let count = 0;
-    for(let userId in memberList){
-      if(!!memberList[userId]){
-        count ++ ;
+    for (let userId in memberList) {
+      if (!!memberList[userId]) {
+        count++;
       }
     }
     return (
       <TouchableOpacity onPress={() => count > 0 && this.createGroup(memberList)}>
-        <Text style={{ marginLeft:Platform.OS==='ios'?-40:0,color:(this.getMemberList(memberList) > Setting.groupMemberUpperLimit||this.state.groupName.length > Setting.groupNameLengt || count==0)?'#9FB3F3':'white'}}>{'创建(' + count + '/' + Setting.groupMemberUpperLimit + ')'}</Text>
+        <Text
+          style={{ marginLeft:Platform.OS==='ios'?-40:0,color:(this.getMemberList(memberList) > Setting.groupMemberUpperLimit||this.state.groupName.length > Setting.groupNameLengt || count==0)?'#9FB3F3':'white'}}>{'创建(' + count + '/' + Setting.groupMemberUpperLimit + ')'}</Text>
       </TouchableOpacity>
     );
   },
 
-  getInitialState: function() {
+  getInitialState: function () {
     return {
-      searchBarWidth:Device.width - 15,
-      memberList:{},
+      searchBarWidth: Device.width - 15,
+      memberList: {},
       userData: ContactStore.getUsers(),
-      groupName:'',
-      userInfo:ContactStore.getUserInfo(), // 用户信息
-      keyWord:'',
-      isOpen:false
+      groupName: '',
+      userInfo: ContactStore.getUserInfo(), // 用户信息
+      keyWord: '',
+      isOpen: false
     };
   },
 
-  setGroupName: function(text) {
+  setGroupName: function (text) {
     this.setState({groupName: text});
   },
 
-  getDataSource: function() {
-    let ret =  groupFilter(this.state.userData,'orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
+  getDataSource: function () {
+    let ret = groupFilter(this.state.userData, 'orgValue', 'orgMembers', 'realName', this.state.keyWord, this.state.userInfo.userId);
 
     return ret;
   },
-  render: function() {
+  render: function () {
 
     return (
       <NavBarView navigator={this.props.navigator} title='创建群组' actionButton={this.renderLabel}>
@@ -176,13 +183,13 @@ let CreateGroup = React.createClass({
             style={{color: '#44B5E6',height:50, width: Device.width,backgroundColor:DictStyle.colorSet.textEditBackground, paddingHorizontal:20}}></TextInput>
         </View>
 
-        <ChooseList  memberList={this.state.memberList}/>
+        <ChooseList memberList={this.state.memberList}/>
 
 
-        {(()=>{
+        {(()=> {
 
           let dataSource = this.getDataSource();
-          if(dataSource && dataSource.length > 0) {
+          if (dataSource && dataSource.length > 0) {
             return (
               <ExtenList itemHeight={57}
                          groundColor={DictStyle.colorSet.extenListGroupTitleColor}
@@ -197,7 +204,7 @@ let CreateGroup = React.createClass({
               />
 
             );
-          }else{
+          } else {
             return (
               <View style={{backgroundColor:'transparent', alignItems:'center', marginTop:20}}>
                 <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>

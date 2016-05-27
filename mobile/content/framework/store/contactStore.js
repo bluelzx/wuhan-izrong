@@ -1,7 +1,7 @@
 /**
  * Created by baoyinghai on 16/4/12.
  */
-
+"use strict";
 let { SESSION_TYPE, MSG_CONTENT_TYPE ,FRIENDNOTIC_TYPE} = require('../../constants/dictIm');
 let PersisterFacade = require('../persister/persisterFacade');
 let AppStore = require('./appStore');
@@ -186,6 +186,10 @@ let _saveMembersDetails = function (membersDetails) {
   PersisterFacade.saveImUsers(membersDetails)
 }
 
+let _judgeGroup = function (groupId, userId) {
+  return PersisterFacade.judgeGroup(groupId, userId);
+}
+
 let _updateFriendList = function(param, userId) {
   PersisterFacade.updateFriendList(param, userId);
 }
@@ -245,6 +249,7 @@ let ContactStore = {
   getOrgValueByOrgId:_getOrgValueByOrgId,
   saveIMUserInfo: _saveIMUserInfo,
   saveMembersDetails: _saveMembersDetails,
+  judgeGroup: _judgeGroup
   updateFriendList:_updateFriendList,
   acceptNewFriendInvite:_acceptNewFriendInvite,
   acceptFriendInvite:_acceptFriendInvite

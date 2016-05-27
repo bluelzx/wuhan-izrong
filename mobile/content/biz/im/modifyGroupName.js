@@ -25,9 +25,13 @@ let ModifyGroupName = React.createClass({
       Alert('群名称不能为空');
       return;
     }
+
     this.props.exec(()=>{
       return ContactAction.modifyGroupName(this.props.param.groupId, this.state.groupName).then((response)=>{
-        this.props.navigator.pop();
+        Alert('修改成功', () => {
+          this.props.navigator.pop();
+        })
+
       });
     });
 
@@ -53,6 +57,7 @@ let ModifyGroupName = React.createClass({
       <NavBarView navigator={this.props.navigator} title='群名称' actionButton={this.renderRight}>
         <View style={{backgroundColor:DictStyle.colorSet.content, paddingTop:10}}>
           <TextInput
+            maxLength={20}
             placeholder="创建群名称"
             placeholderTextColor="44B5E6"
             value={this.state.groupName}

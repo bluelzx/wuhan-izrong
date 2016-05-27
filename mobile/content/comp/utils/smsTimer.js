@@ -25,7 +25,7 @@ let SMSTimer = React.createClass({
       active: '',
       click: false,
       disabled: this.props.disabled,
-      deepColor: false,
+      deepColor: false
     };
   },
 

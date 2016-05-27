@@ -30,6 +30,7 @@ let {ORG_CHANGE,USER_CHANGE,MYBIZ_CHANGE} = require('../../constants/dictEvent')
 let PlainStyle = require('../../constants/dictStyle');
 let DictStyle = require('../../constants/dictStyle');
 let Login = require('../../biz/login/login');
+let {ImageSize50} = require('../../../config');
 
 let UserInfo = React.createClass({
   getStateFromStores: function () {
@@ -113,7 +114,7 @@ let UserInfo = React.createClass({
           </View>
         );
       }
-      let uri = this.state.photoFileUrl + '?imageView2/1/w/100/h/100';
+      let uri = this.state.photoFileUrl + ImageSize50;
       return (
         <Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
       );
@@ -256,7 +257,7 @@ let UserInfo = React.createClass({
             </View>
           </TouchableHighlight>
 
-          <View style={[{marginTop: 5},DictStyle.userInfoBorderTop,DictStyle.userInfoBorderBottom]}>
+          <View style={[{marginTop: 10},DictStyle.userInfoBorderTop]}>
             <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
               <View>
                 <View style={styles.listLayout}>
@@ -270,7 +271,7 @@ let UserInfo = React.createClass({
                     backgroundColor:PlainStyle.colorSet.personalItemColor,justifyContent: 'space-between'}}>
                     <Text style={[DictStyle.userInfoValueItem,{flex:1}]}
                           numberOfLines={2}>
-                      {this.state.orgBeanName + this.state.certificatedValue}
+                      {this.state.orgBeanName}
                     </Text>
                   </View>
                 </View>

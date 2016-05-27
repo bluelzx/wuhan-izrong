@@ -7,7 +7,8 @@
 let React = require('react-native');
 let {
   StyleSheet,
-  WebView
+  WebView,
+  View
   } = React;
 let lodash = require('lodash');
 let AppStore = require('../../framework/store/appStore');
@@ -17,9 +18,7 @@ let AppLinks = require('../../constants/appLinks');
 let RegisterPotocol = React.createClass({
 
   getInitialState: function () {
-    return {
-
-    }
+    return {}
   },
   componentDidMount() {
     AppStore.addChangeListener(this._onChange);
@@ -35,23 +34,25 @@ let RegisterPotocol = React.createClass({
 
   render: function () {
     return (
-      <NavBarView navigator={this.props.navigator} title='用户协议'>
-        <WebView
-          style={styles.webView}
-          source={{uri: AppLinks.registerProtocol}}
-          javaScriptEnabled={true}
-          domStorageEnabled={true}
-          decelerationRate="normal"
-          startInLoadingState={true}
-        />
+      <NavBarView navigator={this.props.navigator} title='用户协议' contentBackgroundColor = '#ffffff'>
+
+          <WebView
+            style={styles.webView}
+            source={{uri: AppLinks.registerProtocol}}
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+            decelerationRate="normal"
+            startInLoadingState={true}
+          />
       </NavBarView>
     )
   }
 });
 
 let styles = StyleSheet.create({
-  webView:{
-    flex:1
+  webView: {
+    flex: 1,
+    marginHorizontal: 5
   }
 
 });

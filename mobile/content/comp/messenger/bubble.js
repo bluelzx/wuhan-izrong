@@ -8,22 +8,22 @@ let screenWidth = Dimensions.get('window').width;
 let Lightbox = require('../lightBox/Lightbox');
 let AppStore = require('../../framework/store/appStore');
 let { Spinner, Button, Alert, Device } = require('mx-artifacts');
+let {ImageSize50,ImageSize100} = require('../../../config');
 
 let styles = StyleSheet.create({
   bubble: {
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
-    paddingHorizontal:14,
-    paddingVertical:10,
-    borderTopWidth:0.5,
-    borderBottomWidth:0.5,
-    borderColor:'#E9E9E9'
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderTopWidth: 0.5,
+    borderBottomWidth: 0.5,
+    borderColor: '#E9E9E9'
   },
   text: {
     color: '#000',
   },
-  textLeft: {
-  },
+  textLeft: {},
   textRight: {
     color: '#fff',
   }
@@ -84,24 +84,21 @@ export default class Bubble extends React.Component {
     }
 
     if (this.props.contentType === MSG_CONTENT_TYPE.IMAGE) {
-      let uri = this.props.content + '?imageView2/1/w/100/h/100';
+      let uri = this.props.content + ImageSize100;
       return (
         <View style={[styles.bubble, customStyle,
                this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
       this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
-      <Lightbox underlayColor='#44B5E6'
+          <Lightbox underlayColor='#44B5E6'
                     imageSource={{uri:this.props.content}}
-                    navigator={AppStore.getNavigator()} >
-
-                  <Image
-                    style={{
+                    navigator={AppStore.getNavigator()}>
+            <Image style={{
                 flex: 1,
                 width: 100,
-                height: 100,
+                height: 100
                 }}
-                    source={{uri: uri}}
-                  ></Image>
-
+                   source={{uri: uri}}
+            />
           </Lightbox>
         </View>
 
@@ -126,48 +123,48 @@ export default class Bubble extends React.Component {
             <Text
               style={[styles.text, nameCardStyle]}>手机:</Text>
             <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.mobileNumber?data.mobileNumber:nullDesc}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.mobileNumber ? data.mobileNumber : nullDesc}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text,nameCardStyle]}>座机:</Text>
             <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.phoneNumber?data.phoneNumber:nullDesc}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.phoneNumber ? data.phoneNumber : nullDesc}</Text>
           </View>
           {
             /*
 
-          <View style={{flexDirection:'row'}}>
-            <Text
-              style={[styles.text, nameCardStyle]}>微信:</Text>
-            <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.weChatNo?data.weChatNo:nullDesc}</Text>
-          </View>
-          <View style={{flexDirection:'row'}}>
-            <Text
-              style={[styles.text, nameCardStyle]}>QQ:</Text>
-            <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.qqNo?data.qqNo:nullDesc}</Text>
-          </View>
-          */
-            }
+             <View style={{flexDirection:'row'}}>
+             <Text
+             style={[styles.text, nameCardStyle]}>微信:</Text>
+             <Text
+             style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.weChatNo?data.weChatNo:nullDesc}</Text>
+             </View>
+             <View style={{flexDirection:'row'}}>
+             <Text
+             style={[styles.text, nameCardStyle]}>QQ:</Text>
+             <Text
+             style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.qqNo?data.qqNo:nullDesc}</Text>
+             </View>
+             */
+          }
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>邮箱:</Text>
             <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.email?data.email:nullDesc}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.email ? data.email : nullDesc}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>部门:</Text>
             <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.department?data.department:nullDesc}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.department ? data.department : nullDesc}</Text>
           </View>
           <View style={{flexDirection:'row'}}>
             <Text
               style={[styles.text, nameCardStyle]}>职位:</Text>
             <Text
-              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.jobTitle?data.jobTitle:nullDesc}</Text>
+              style={[{flexWrap:'wrap',flex:5},styles.text, nameCardStyle]}>{data.jobTitle ? data.jobTitle : nullDesc}</Text>
           </View>
         </View>
       )
@@ -185,13 +182,13 @@ export default class Bubble extends React.Component {
         dayNum = parseInt(data.term / 30) + '月';
       } else if (data.term == 1) {
         dayNum = '隔夜';
-      }else {
+      } else {
         dayNum = data.term + '日';
       }
       let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
       //let shareContent = '我利用[渤海银通]分享了一个业务信息给您：' + data.bizCategory + '  ' + (data.bizOrientation == 'IN' ? '入' : '出') + '  ' + dayNum + '  ' + amount + '  ' + rate;
-      let shareContent = data.bizCategory + '  ' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出')  + '\n'
-        + '金额:' + amount  + '\n' + '期限:' + dayNum + '\n'  + '利率:' + rate + '\n' + '——来自爱资融APP';
+      let shareContent = data.bizCategory + '  ' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出') + '\n'
+        + '金额:' + amount + '\n' + '期限:' + dayNum + '\n' + '利率:' + rate + '\n' + '——来自爱资融APP';
       return (
         <TouchableOpacity onLongPress={() => this._onLongPress(shareContent)} activeOpacity={0.7}>
           <View style={[styles.bubble, customStyle,
