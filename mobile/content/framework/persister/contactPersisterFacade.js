@@ -35,7 +35,7 @@ let ContactPersisterFacade = {
   leaveGroup: (groupId, userId) => _leaveGroup(groupId, userId),
   deleteContactInfo: (userId) => _deleteContactInfo(userId),
   updateContactInfo: (message) => _updateContactInfo(message),
-  addFriend: (userInfo) => _addFriend(userInfo),
+  addFriend: (userInfo,notFriend) => _addFriend(userInfo,notFriend),
   isStranger: (userId) => _isStranger(userId),
   getOrgValueByOrgId: (orgId) => _getOrgValueByOrgId(orgId),
   saveIMUserInfo: (item) => _saveIMUserInfo(item)
@@ -360,6 +360,7 @@ let _updateContactInfo = function (message) {
     orgId: message.orgId,
     certified: message.isCertificated,
     mute: message.isMute?message.isMute:false
+
   };
   let ret = {};
   for (let k in param) {
@@ -521,7 +522,7 @@ let _setGroupMute = function (groupId, value) {
   });
 }
 
-let _addFriend = function (userInfo) {
+let _addFriend = function (userInfo, notFriend) {
   let param = {
     userId: userInfo.userId,
     address: userInfo.address,
@@ -550,12 +551,14 @@ let _addFriend = function (userInfo) {
 
   _realm.write(()=> {
     _realm.create(IMUSERINFO, param, true);
-    let user = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true])[0];
-    let friendList = user.friendList;
-    friendList = JSON.parse(friendList || '[]');
+    if(notFriend) {
+      let user = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true])[0];
+      let friendList = user.friendList;
+      friendList = JSON.parse(friendList || '[]');
 
-    friendList.push(param.userId);
-    _realm.create(LOGINUSERINFO, {userId: user.userId, friendList: JSON.stringify(friendList)}, true);
+      friendList.push(param.userId);
+      _realm.create(LOGINUSERINFO, {userId: user.userId, friendList: JSON.stringify(friendList)}, true);
+    }
   });
 
 }

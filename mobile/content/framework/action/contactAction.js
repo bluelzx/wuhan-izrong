@@ -282,7 +282,7 @@ let param = {uid:userId};
       if(_.isEmpty(response)){
         throw ErrorMsg.GETUSERINFOFROMIMSERVER;
       }
-      contactStore.addFriend(response);
+      contactStore.addFriend(response,true);
       resolve(response);
     }).catch((err)=>{
       reject(err);
