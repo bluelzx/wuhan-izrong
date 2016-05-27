@@ -17,11 +17,11 @@ let ImagePicker = require('../comp/utils/imagePicker');
 let QiniuTest = React.createClass({
 
   uploadUserPoto: function (response) {
-    qiniu.conf.ACCESS_KEY = 'QD8R1dmBccAQkXu7iyTbEbPjwbjbpEcK2-ifIqEp';
-    qiniu.conf.SECRET_KEY = 'sGdLU6jk8LNuw9gQrOmjV-KV9Kae-KF8HrW3zHf7';
+    qiniu.conf.ACCESS_KEY = 'iCduUao0AIuRdTqd3_4oqwzU8doDU3vh0sMF1CzD';
+    qiniu.conf.SECRET_KEY = 'UtrtzaV8CAXgRkajynOnghX24NrS70Qs0RJozPcZ';
 
     var putPolicy = new qiniu.auth.PutPolicy2(
-      {scope: "fas-app:ios.jpg"}
+      {scope: "wuhan-fas-img:ios.jpg"}
     );
     var uptoken = putPolicy.token();
     qiniu.rpc.uploadImage(response, 'ios.jpg', uptoken, function (resp) {

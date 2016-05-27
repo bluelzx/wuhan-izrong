@@ -37,7 +37,7 @@ let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
 let Publish = require('../../biz/publish/publish');
-let Account = require('../../biz/login/accountInfo');
+let QiniuTest = require('../../test/qiniuTest');
 
 const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');
@@ -52,7 +52,7 @@ var Main = React.createClass({
   },
   getInitialState: function () {
     return _.assign(this._getStateFromStores(), {
-      isLoadingVisible: false,
+      isLoadingVisible: false
     });
   },
   componentDidMount: function () {
@@ -196,13 +196,13 @@ var Main = React.createClass({
             } else {
               Alert(errorData.message);
             }
-          }else if(errorData.msgContent){
+          }else if(errorData.msgCode){
             if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
               AppStore.forceLogout();
             }else if (errorData.msgCode == 'USER_HAS_BEEN_FROZEN') {
               AppStore.freezAccount();
             }else if (errorData.msgCode == 'USER_HAS_BEEN_DELETED') {
-              AppStore.isDelete();
+              AppStore.deleteLoginUser()
             }  else {
               Alert(errorData.msgContent);
             }
