@@ -73,7 +73,10 @@ let _shouldUpdate = function () {
 
 let _getMarketInfo = function () {
   let marketInfo = _realm.objects(MARKETINFO);
-  return JSON.parse(marketInfo[0].homeMarketList);
+  if(marketInfo && marketInfo[0]){
+    return JSON.parse(marketInfo[0].homeMarketList);
+  }
+  return []
 };
 
 
