@@ -102,11 +102,14 @@ let Register_uploadNameCard = React.createClass({
           aspectY = {3}
           style={[styles.imageArea, styles.nameCard]}
         >
-          <Image
-            resizeMode='cover'
-            source={require('../../image/login/nameCard.png')}
+          <Image style={{height:Platform.OS === 'android' ? 90 : 120,width:Platform.OS === 'android' ? 90 : 120,
+                        marginTop:Platform.OS === 'android' ? 1 : 20
+          }}
+                 resizeMode='cover'
+                 source={require('../../image/login/nameCard.png')}
           />
-          <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>点击上传名片</Text>
+          <Text
+            style={[DictStyle.fontSize,DictStyle.fontColor,{marginBottom:Platform.OS === 'android' ? 1:30}]}>点击上传名片</Text>
         </ImagePicker>
       );
     }
@@ -122,8 +125,9 @@ let Register_uploadNameCard = React.createClass({
         aspectY = {3}
       >
         <Image
-          style={{flexDirection: 'column',borderWidth: 1,borderColor: '#d4d6e0',borderRadius: 6, width: Device.width-40,
-          height: (Device.width-40)*3/5, justifyContent: 'space-around', marginTop: 20}}
+          style={{flexDirection: 'column',borderWidth: 1,borderColor: '#d4d6e0',borderRadius: 6,justifyContent: 'space-around', marginTop: 20,
+           width: Platform.OS === 'android' ? Device.width-40:(Device.width-80),
+          height:Platform.OS === 'android' ? (Device.width-40)*3/5:(Device.width-80) }}
           resizeMode='cover'
           source={{uri: this.state.uri, isStatic: true}}
         />
@@ -173,8 +177,8 @@ let styles = StyleSheet.create({
   nameCard: {
     borderWidth: 1,
     borderColor: '#d4d6e0',
-    width: Device.width-24,
-    height: (Device.width-24)*3/5,
+    width: Platform.OS === 'android' ? Device.width - 24 : Device.width - 80,
+    height: Platform.OS === 'android' ? (Device.width - 24) * 3 / 5 : Device.width - 80,
     marginTop: 20,
     borderRadius: 6
   },
