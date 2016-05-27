@@ -29,6 +29,7 @@ let NameCircular = require('../im/nameCircular').NameCircular;
 let {ORG_CHANGE,USER_CHANGE,MYBIZ_CHANGE} = require('../../constants/dictEvent');
 let PlainStyle = require('../../constants/dictStyle');
 let DictStyle = require('../../constants/dictStyle');
+let Login = require('../../biz/login/login');
 
 let UserInfo = React.createClass({
   getStateFromStores: function () {
@@ -151,8 +152,8 @@ let UserInfo = React.createClass({
       this.props.exec(() => {
         return LoginAction.logout(this.state.userId)
           .then((response) => {
-            // const { navigator } = this.props;
-            // navigator.resetTo({comp: Login});
+             const { navigator } = this.props;
+             navigator.resetTo({comp: Login});
           }).catch((errorData) => {
             throw errorData;
           });

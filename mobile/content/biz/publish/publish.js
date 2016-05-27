@@ -373,7 +373,7 @@ let Publish = React.createClass({
           onError={(error) => this.handleImageError(error)}
           title="选择图片"
           fileId="publish1"
-          allowsEditing={true}
+          allowsEditing={false}
           style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df',backgroundColor: 'white'}}
         >
           <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
@@ -396,7 +396,7 @@ let Publish = React.createClass({
         onError={(error) => this.handleImageError(error)}
         title="选择图片"
         fileId="publish1"
-        allowsEditing={true}
+        allowsEditing={false}
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
       >
         <Lightbox imageSource={{uri:rowData}}

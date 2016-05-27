@@ -48,10 +48,10 @@ var productConfig = {
   Host: 'http://114.55.16.46:80',
   ImHost: '114.55.16.46:3000',
   //ImgHost: 'http://img.izirong.com/'
-  ImgHost: 'http://o7ilsjg54.bkt.clouddn.com/',
-  ImgBkt: 'fas-app',
-  ImgAk: 'QD8R1dmBccAQkXu7iyTbEbPjwbjbpEcK2-ifIqEp',
-  ImgSk: 'sGdLU6jk8LNuw9gQrOmjV-KV9Kae-KF8HrW3zHf7'
+  ImageHost: 'http://img.izirong.com/',
+  ImageBkt: 'wuhan-fas-img',
+  ImageAk: 'iCduUao0AIuRdTqd3_4oqwzU8doDU3vh0sMF1CzD',
+  ImageSk: 'UtrtzaV8CAXgRkajynOnghX24NrS70Qs0RJozPcZ'
 };
 
 var lyuConfig = {

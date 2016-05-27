@@ -427,14 +427,16 @@ let MyBizDetail = React.createClass({
           onError={(error) => this.handleImageError(error)}
           title="选择图片"
           fileId="publish1"
-          allowsEditing={true}
+          allowsEditing={false}
           style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
         >
-          <Image
-            style={{width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-            source={require('../../image/market/addImage.png')}
-            resize-mode = 'cover'
-          />
+          <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+            <Image
+              style={{width:(screenWidth-60)/5-20,height:(screenWidth-60)/5-20,borderRadius:5}}
+              source={require('../../image/market/addImage.png')}
+              resize-mode = 'cover'
+            />
+          </View>
         </ImagePicker>
       );
     }
@@ -461,7 +463,7 @@ let MyBizDetail = React.createClass({
         onSelected={(response) => {this.handleSendImage(response, rowID)}}
         onError={(error) => this.handleImageError(error)}
         title="选择图片"
-        allowsEditing={true}
+        allowsEditing={false}
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
       >
         <Lightbox imageSource={{uri:rowData}}

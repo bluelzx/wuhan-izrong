@@ -4,7 +4,7 @@ var AppStore = require('../store/appStore');
 var qiniu = require('react-native-qiniu');
 var MxFetch = require('./mxFetch');
 var KeyGenerator = require('../../comp/utils/keyGenerator');
-const { ImgHost, ImgBkt, ImgAk, ImgSk } = require('../../../config');
+const { ImageHost, ImageBkt, ImageAk, ImageSk } = require('../../../config');
 
 var BFetch = function (url, param, callback, failure, options) {
   var headers = {
@@ -48,16 +48,16 @@ var PFetch = function (url, param, callback, failure, options) {
 
 var UFetch = function (url, param) {
   return new Promise((resolve, reject) => {
-    qiniu.conf.ACCESS_KEY = ImgAk;
-    qiniu.conf.SECRET_KEY = ImgSk;
+    qiniu.conf.ACCESS_KEY = ImageAk;
+    qiniu.conf.SECRET_KEY = ImageSk;
     let fileName = KeyGenerator.getImgKey(AppStore.getUserId());
     var putPolicy = new qiniu.auth.PutPolicy2(
-      {scope: ImgBkt + ':' + fileName}
+      {scope: ImageBkt + ':' + fileName}
     );
     var uptoken = putPolicy.token();
     qiniu.rpc.uploadImage(param.uri, fileName, uptoken, function (resp) {
       if (resp.status === 200) {
-        resolve({fileUrl: ImgHost + fileName});
+        resolve({fileUrl: ImageHost + fileName});
       } else {
         reject(resp.status);
       }
