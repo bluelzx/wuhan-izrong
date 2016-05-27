@@ -1,7 +1,7 @@
 var Qs = require('qs');
 var { Alert } = require('mx-artifacts');
 var AppStore = require('../store/appStore');
-var qiniu = require('react-native-qiniu');
+var qiniu = require('./qiniu/index');
 var MxFetch = require('./mxFetch');
 var KeyGenerator = require('../../comp/utils/keyGenerator');
 const { ImageHost, ImageBkt, ImageAk, ImageSk } = require('../../../config');
@@ -87,7 +87,6 @@ var rawFetch = function (url, param, callback, failure, option) {
   console.log('以下打印一次传出去的param:');
   console.log(param);
   console.log('请求地址:'+url);
-  //Alert(param);
   if (!option) option = {};
   //var _promise = Promise.race([fetch(url, param), new Promise(function (resolve, reject) {
   //  setTimeout(() => reject(new Error('链接超时')), 2000000);

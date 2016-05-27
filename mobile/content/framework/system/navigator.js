@@ -38,6 +38,7 @@ let co = require('co');
 let NotificationManager = require('./notificationManager');
 let Publish = require('../../biz/publish/publish');
 let QiniuTest = require('../../test/qiniuTest');
+let Upload = require('../../biz/login/uploadNameCard');
 
 const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');

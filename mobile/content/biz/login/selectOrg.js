@@ -74,8 +74,8 @@ let Register_selectOrg = React.createClass({
   renderList: function () {
     if (this.state.data == '') {
       return (
-        <View style={{marginTop:20,marginHorizontal:16,alignItems:'center',flex:1,justifyContent:'center',flexDirection:'column'}}>
-          <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>
+        <View style={{marginTop:35,marginHorizontal:16,alignItems:'center',flex:1,flexDirection:'column'}}>
+          <Text style={[DictStyle.fontSize,{color:'#c6d1d9'}]}>
             无符合条件的机构
           </Text>
         </View>

@@ -137,6 +137,7 @@ let Register_uploadNameCard = React.createClass({
         <View style={{alignItems:'center'}}>
           {this.returnImage()}
         </View>
+
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop: 20}]} >
             注: 名片信息将辅助我们验证您的身份
@@ -181,7 +182,9 @@ let styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    backgroundColor:'#ffffff'
+
   }
 });
 
