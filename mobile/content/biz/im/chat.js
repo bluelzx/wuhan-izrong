@@ -24,6 +24,11 @@ let Chat = React.createClass({
   componentDidMount() {
     let user = ContactStore.getUserInfo();
     let { param } = this.props;
+
+    if( param.chatType == SESSION_TYPE.USER && user.userId == param.userId){
+      return ;
+    }
+
     param.myId = user.userId;
     param.sessionId = SessionStore.querySessionById(this.props.param.userId || this.props.param.groupId,this.props.param.chatType);
     param.sessionId || (param.sessionId=KeyGenerator.getSessionKey(param.chatType, this.props.param.userId || this.props.param.groupId, user.userId));
@@ -133,6 +138,21 @@ let Chat = React.createClass({
   render: function () {
     let item = this.props.param;
     let title = item.title;
+
+    let user = ContactStore.getUserInfo();
+    let { param } = this.props;
+    if( param.chatType == SESSION_TYPE.USER && user.userId == param.userId){
+      return (
+        <NavBarView
+          navigator={this.props.navigator}
+          title={this.state.title}
+          actionButton={this.renderEdit}
+        >
+          <Text>自己不能和自己聊天</Text>
+        </NavBarView>
+      );
+    }
+
     return (
       <NavBarView
         navigator={this.props.navigator}

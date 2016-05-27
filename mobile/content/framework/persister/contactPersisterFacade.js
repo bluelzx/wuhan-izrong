@@ -38,7 +38,8 @@ let ContactPersisterFacade = {
   addFriend: (userInfo,notFriend) => _addFriend(userInfo,notFriend),
   isStranger: (userId) => _isStranger(userId),
   getOrgValueByOrgId: (orgId) => _getOrgValueByOrgId(orgId),
-  saveIMUserInfo: (item) => _saveIMUserInfo(item)
+  saveIMUserInfo: (item) => _saveIMUserInfo(item),
+  updateFriendList: (param, userId) => _updateFriendList
 }
 
 
@@ -350,13 +351,13 @@ let _updateContactInfo = function (message) {
     publicDepart: message.isPublicDepart,
     publicTitle: message.isPublicTitle,
     publicMobile: message.isPublicMobile,
-    phoneNumber: message.phoneNumber,
+    phoneNumber: message.phoneNumber||message.mobileNumber,
     publicPhone: message.isPublicPhone,
     publicEmail: message.isPublicEmail,
     publicAddress: message.isPublicAddress,
     publicWeChat: message.isPublicWeChat,
     photoFileUrl: message.photoStoredFileUrl,
-    publicQQ: message.isPublicQq,
+    publicQQ: message.isPublicQq || message.isPublicQQ,
     orgId: message.orgId,
     certified: message.isCertificated,
     mute: message.isMute?message.isMute:false
@@ -551,7 +552,7 @@ let _addFriend = function (userInfo, notFriend) {
 
   _realm.write(()=> {
     _realm.create(IMUSERINFO, param, true);
-    if(notFriend) {
+    if(!notFriend) {
       let user = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true])[0];
       let friendList = user.friendList;
       friendList = JSON.parse(friendList || '[]');
@@ -606,4 +607,15 @@ let _getLoginUserInfo = function () {
   }
   return '';
 };
+
+let _updateFriendList = function(param, userId) {
+  _realm.write(()=> {
+      let user = _realm.objects(LOGINUSERINFO).sorted('lastLoginTime', [true])[0];
+      let friendList = user.friendList;
+      friendList = JSON.parse(friendList || '[]');
+      friendList.push(param.userId);
+      _realm.create(LOGINUSERINFO, {userId: user.userId, friendList: JSON.stringify(friendList)}, true);
+  });
+
+}
 module.exports = ContactPersisterFacade;

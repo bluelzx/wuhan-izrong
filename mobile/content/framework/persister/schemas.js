@@ -40,7 +40,7 @@ let MessageSchema = {
     msgType: {type: 'string', optional: true},
     revTime: {type: 'date', optional: true},
     isRead: {type: 'bool', option: true},
-    status: {type: 'string', optional: true},//状态: 是否发送成功
+    status: {type: 'string', optional: true},//状态: 是否发送成功  屏蔽
     ownerId: {type: 'int', optional: true}
   }
 };
@@ -269,7 +269,8 @@ let NewFriendNotic = {
     photoFileUrl: {type: 'string', optional: true},
     ownerId: {type: 'int', optional: true},
     isAccept: {type: 'bool', optional: true},
-    certified: {type: 'bool', optional: true}
+    certified: {type: 'bool', optional: true},
+    msgType:{type:'string',optional:true}
   }
 };
 

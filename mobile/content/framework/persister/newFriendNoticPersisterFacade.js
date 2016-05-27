@@ -9,7 +9,7 @@ const {
 
 
 let NewFriendNoticPersisterFacade = {
-  createNewNotic:( noticId, userId, realName, orgName, photoFileUrl, certified, ownerId) => _createNewNotic( noticId, userId, realName, orgName, photoFileUrl,certified,  ownerId),
+  createNewNotic:( noticId, userId, realName, orgName, photoFileUrl, certified,msgType, ownerId) => _createNewNotic( noticId, userId, realName, orgName, photoFileUrl,certified, msgType, ownerId),
   acceptNewNotic:(noticId, ownerId) => _acceptNewNotic(noticId, ownerId),
   deleteNewNotic:(noticId, ownerId)=>_deleteNewNotic(noticId, ownerId),
   queryAllNewNotic:(ownerId)=>_queryAllNewNotic(ownerId)
@@ -37,7 +37,7 @@ let _acceptNewNotic = function(noticId, ownerId){
   });
 }
 
-let _createNewNotic = function( noticId, userId, realName, orgName, photoFileUrl,certified, ownerId) {
+let _createNewNotic = function( noticId, userId, realName, orgName, photoFileUrl,certified, msgType, ownerId) {
   let param = {
     noticId: noticId,
     userId: userId,
@@ -46,7 +46,8 @@ let _createNewNotic = function( noticId, userId, realName, orgName, photoFileUrl
     photoFileUrl: photoFileUrl,
     ownerId: ownerId,
     certified:certified,
-    isAccept:false
+    isAccept:false,
+    msgType:msgType
   };
 
   _realm.write(()=>{

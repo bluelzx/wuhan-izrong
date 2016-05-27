@@ -41,7 +41,7 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
   sessionInit: (data) => _sessionInit(data),
   getMessages: () => _data.messages,
   saveMsg: (message, userId) => _saveMsg(message, userId),
-  ackMsg: (msgId, toUid) => _ackMsg(msgId, toUid),
+  ackMsg: (msgId, toUid, isMute) => _ackMsg(msgId, toUid, isMute),
   getEarlier: () => _getEarlier(),
   createHomePageInfo:(msgList)=>{
     Persister.createHomePageInfo(msgList);
@@ -305,11 +305,15 @@ let _saveMsg = (message, userId) => {
   Persister.saveMessage(message, userId);
 };
 
-let _ackMsg = (msgId, toUid) => {
+let _ackMsg = (msgId, toUid, isMute) => {
   if (_data.toId === toUid) {
     _data.messages.find((value, index, arr) => {
       if (value.msgId === msgId) {
-        value.status = 'Seen';
+        if(isMute){
+         value.status = 'isMute';
+        }else {
+          value.status = 'Seen';
+        }
         return true;
       }
       return false;
@@ -319,7 +323,7 @@ let _ackMsg = (msgId, toUid) => {
   }
 
   // TODO. Update realm of the status for message.
-  Persister.resetMessageStatus(msgId);
+  Persister.resetMessageStatus(msgId, isMute);
   // ImStore.emitChange(CHANGE_EVENT.UPDATE, message);
 };
 
