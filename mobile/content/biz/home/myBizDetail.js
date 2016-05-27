@@ -451,6 +451,9 @@ let MyBizDetail = React.createClass({
     }
   },
   renderImgItem: function (rowData, sectionID, rowID) {
+
+    let uri = rowData + '?imageView2/1/w/100/h/100';
+
     return (
       <ImagePicker
         longPress={() => this._longPress(rowID)}
@@ -472,7 +475,7 @@ let MyBizDetail = React.createClass({
         >
           <Image
             style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5,borderWidth:1,borderColor:'#cccccc'}}
-            source={{uri:rowData}}
+            source={{uri:uri}}
           />
         </Lightbox>
       </ImagePicker>
@@ -484,12 +487,19 @@ let MyBizDetail = React.createClass({
       <View style={{flexDirection:'row',marginTop:10}}>
         {
           this.state.fileUrlList.map((item, index) => {
+            let uri = item + '?imageView2/1/w/100/h/100';
+
             return (
-              <Image
-                key={index}
-                style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
-                source={{uri:item, isStatic: true}}
-              />
+              <Lightbox imageSource={{uri:item}}
+                        navigator={this.props.navigator}
+                        underlayColor="#f7f7f7"
+                        key={index}
+              >
+                <Image
+                  style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
+                  source={{uri:uri, isStatic: true}}
+                />
+              </Lightbox>
             )
           })
         }

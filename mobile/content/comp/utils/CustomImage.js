@@ -13,7 +13,7 @@ var GiftedSpinner = require('./GiftedSpinner');
 var CustomImage = React.createClass({
 
   propTypes: {
-    source: React.PropTypes.string.isRequired,
+    source: React.PropTypes.object.isRequired,
     loadView: React.PropTypes.func,
     centerText: React.PropTypes.string
   },
@@ -83,7 +83,8 @@ var CustomImage = React.createClass({
           onLoadEnd={() => this.setState({ loading: false})}
           onError={() => this.setState({ loading: false, loadError: true })}
           //defaultSource={require('image!loading')}
-          source={{uri: this.props.source.indexOf("_userId") > -1 ? this.props.source + '&ts=' + this.state.ts : this.props.source}}
+          //source={{uri: this.props.source.indexOf("_userId") > -1 ? this.props.source + '&ts=' + this.state.ts : this.props.source}}
+          source={this.props.source ? this.state.ts : this.props.source}
         >
           {this._renderPrompt()}
         </Image>

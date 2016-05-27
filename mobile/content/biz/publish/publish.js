@@ -387,6 +387,7 @@ let Publish = React.createClass({
     }
   },
   renderImgItem: function (rowData, sectionID, rowID) {
+    let uri = rowData + '?imageView2/1/w/100/h/100';
     return (
       <ImagePicker
         longPress={() => this._longPress(rowID)}
@@ -409,7 +410,7 @@ let Publish = React.createClass({
         >
           <Image
             style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-            source={{uri:rowData}}
+            source={{uri:uri}}
           />
         </Lightbox>
       </ImagePicker>
