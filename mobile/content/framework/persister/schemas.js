@@ -270,7 +270,8 @@ let NewFriendNotic = {
     ownerId: {type: 'int', optional: true},
     isAccept: {type: 'bool', optional: true},
     certified: {type: 'bool', optional: true},
-    msgType:{type:'string',optional:true}
+    msgType:{type:'string',optional:true},
+    recTime:{type:'date', optional:true}
   }
 };
 

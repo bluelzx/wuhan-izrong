@@ -249,7 +249,7 @@ let ContactStore = {
   getOrgValueByOrgId:_getOrgValueByOrgId,
   saveIMUserInfo: _saveIMUserInfo,
   saveMembersDetails: _saveMembersDetails,
-  judgeGroup: _judgeGroup
+  judgeGroup: _judgeGroup,
   updateFriendList:_updateFriendList,
   acceptNewFriendInvite:_acceptNewFriendInvite,
   acceptFriendInvite:_acceptFriendInvite

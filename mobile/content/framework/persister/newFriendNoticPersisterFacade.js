@@ -17,7 +17,7 @@ let NewFriendNoticPersisterFacade = {
 };
 
 let _queryAllNewNotic = function(ownerId){
-  let ret = _realm.objects(NEWFRIENDNOTIC).filtered('ownerId =' + ownerId );
+  let ret = _realm.objects(NEWFRIENDNOTIC).filtered('ownerId =' + ownerId ).sorted('recTime',false);
   return ret;
 }
 
@@ -47,7 +47,8 @@ let _createNewNotic = function( noticId, userId, realName, orgName, photoFileUrl
     ownerId: ownerId,
     certified:certified,
     isAccept:false,
-    msgType:msgType
+    msgType:msgType,
+    recTime:new Date()
   };
 
   _realm.write(()=>{

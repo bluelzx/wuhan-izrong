@@ -40,7 +40,7 @@ let ContactPersisterFacade = {
   isStranger: (userId) => _isStranger(userId),
   getOrgValueByOrgId: (orgId) => _getOrgValueByOrgId(orgId),
   saveIMUserInfo: (item) => _saveIMUserInfo(item),
-  judgeGroup: (groupId, userId) => _judgeGroup(groupId, userId)
+  judgeGroup: (groupId, userId) => _judgeGroup(groupId, userId),
   updateFriendList: (param, userId) => _updateFriendList
 }
 

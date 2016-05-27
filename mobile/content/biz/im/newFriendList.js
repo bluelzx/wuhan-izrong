@@ -163,7 +163,7 @@ let NewFriendList = React.createClass({
               else if(item.msgType == FRIENDNOTIC_TYPE.ACCEPT){
                 return (
                   <Text
-                    style={{textAlign:'right',flex:1,justifyContent:'flex-end',borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'已同意'}</Text>
+                    style={{textAlign:'right',flex:1,justifyContent:'flex-end',borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'对方同意'}</Text>
                 );
               }
 
