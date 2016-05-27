@@ -209,6 +209,8 @@ let _saveMsg = (message, userId) => {
     }catch(err){
       ContactAction.getUserInfoFromServer(message.toId || message.fromUId).then(()=>{
         _saveMsg(message, userId);
+      }).catch((err)=>{
+        console.log('##########getUsrInfoByUserId is null##############');
       });
       return;
     }
