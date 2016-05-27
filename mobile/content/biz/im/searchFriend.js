@@ -10,8 +10,9 @@ let ImUserInfo = require('./searchResultDetail');
 let { Alert } = require('mx-artifacts');
 let ContactAction = require('../../framework/action/contactAction');
 let ContactStore = require('../../framework/store/contactStore');
-let initS = '输入姓名以搜索好友';
+let initS = '输入姓名以搜索好友/手机号';
 let nullRes = '无符合条件的用户';
+let Validation = require('../../comp/utils/validation');
 
 let SearchFriend = React.createClass({
 
@@ -29,7 +30,7 @@ let SearchFriend = React.createClass({
   toOther: function(data) {
     this.props.navigator.push({
       comp:ImUserInfo,
-      param:Object.assign(data,{isStranger:ContactStore.isStranger(data.userId)})
+      param:Object.assign(data,{isStranger:ContactStore.isStranger(data.userId),friendInvite:false})
     });
   },
 
@@ -53,10 +54,19 @@ let SearchFriend = React.createClass({
     return (
     <TouchableOpacity key={data.userId}
                       onPress={() => this.toOther(data)}
-                      style={{marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
-      <View style={{flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
+                      style={{flex:1,marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
+      <View style={{flex:1,flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
         <HeaderPic photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-        <Text style={{flex:1,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 10}} numberOfLines={1}>{data.realName + '-'+data.orgValue}</Text>
+        <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
+          <View style={{flex:1,paddingLeft:10}}>
+            <Text
+              numberOfLines={1}
+              style={{flex:1,fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 2}}>{data.realName + '-' +data.orgValue}</Text>
+            <Text
+              numberOfLines={1}
+              style={{flex:1,fontSize:15,color:'#B7C0C7', marginLeft: 2,flexWrap:'wrap'}}>{data.mobileNumber }</Text>
+          </View>
+        </View>
       </View>
     </TouchableOpacity>
     );
@@ -77,7 +87,12 @@ let SearchFriend = React.createClass({
     if(!this.state.keyWord || this.state.keyWord.length == 0){
       Alert('请输入关键字');
       return;
-    }else{
+    }
+    //else if(!Validation.isMobile(this.state.keyWord)){
+    //    Alert('请输入11位数字的手机号码');
+    //  return;
+    //}
+    else{
       this.props.exec(()=>{
 
         if(this.state.justTop == true) {
