@@ -1,5 +1,6 @@
 let contactStore = require('../store/contactStore');
 let AppLinks = require('../../constants/appLinks');
+let ErrorMsg = require('../../constants/errorMsg');
 let _ = require('lodash');
 
 let {
@@ -279,7 +280,7 @@ let param = {uid:userId};
   return new Promise((resolve,reject) => {
     BFetch(AppLinks.getUserInfoById, param).then((response) => {
       if(_.isEmpty(response)){
-        throw 'getUserInfobyId from im server is null';
+        throw ErrorMsg.GETUSERINFOFROMIMSERVER;
       }
       contactStore.addFriend(response);
       resolve(response);
