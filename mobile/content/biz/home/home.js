@@ -63,7 +63,14 @@ let Home = React.createClass({
     //AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
     //AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
     AppStore.addChangeListener(this._onChange, HOMEPAGE_CHANGE);
-    this.bizOrderMarketSearch();
+    if(AppStore.shouldUpdate()){
+      this.bizOrderMarketSearch();
+    }else{
+      this.setState({
+        contentList: AppStore.getMarketInfo(),
+        requestState:'success'
+      })
+    }
   },
 
   componentWillUnmount: function () {
@@ -73,9 +80,6 @@ let Home = React.createClass({
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
-  },
-  _search: function () {
-    this.bizOrderMarketSearch();
   },
 
   bizOrderMarketSearch: function () {
@@ -88,27 +92,27 @@ let Home = React.createClass({
       ]
     };
     this.props.exec(()=> {
-      return MarketAction.bizOrderMarketSearch(requestBody)
-        .then((response)=> {
-          let contentList = _.slice(response.contentList, 0, 5);
-          this.setState({
-            contentList: contentList,
-            requestState: 'success'
-          });
-          AppStore.saveMarketInfo(response.contentList);
-        }).catch((errorData) => {
-          this.setState({
-            requestState: 'failtrue'
-          });
-          throw errorData;
-        });
-      //return MarketAction.getTop15BizOrderListByCategory('MIB')
+      //return MarketAction.bizOrderMarketSearch(requestBody)
       //  .then((response)=> {
-      //    console.log(response);
-      //  })
-      //  .catch((errorData)=> {
+      //    let contentList = _.slice(response.contentList, 0, 5);
+      //    this.setState({
+      //      contentList: contentList,
+      //      requestState: 'success'
+      //    });
+      //    AppStore.saveMarketInfo(response.contentList);
+      //  }).catch((errorData) => {
+      //    this.setState({
+      //      requestState: 'failtrue'
+      //    });
       //    throw errorData;
-      //  })
+      //  });
+      return MarketAction.getTop15BizOrderListByCategory({category:'MIB'})
+        .then((response)=> {
+          AppStore.saveHomeMarketList(_.slice(response.appOrder,0,5));
+        })
+        .catch((errorData)=> {
+          throw errorData;
+        })
     }, false);
   },
 
@@ -286,7 +290,7 @@ let Home = React.createClass({
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor,width:Adjust.width(135)}}
             numberOfLines={1}>
-            {rowData.userName != null ? rowData.userName + '-' + rowData.orgName : rowData.orgName}
+            {rowData.bizOrderOwnerBean.realName != null ? rowData.bizOrderOwnerBean.realName + '-' + rowData.bizOrderOwnerBean.orgName : rowData.bizOrderOwnerBean.orgName}
           </Text>
         </View>
       </TouchableHighlight>
