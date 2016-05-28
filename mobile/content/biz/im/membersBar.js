@@ -59,19 +59,21 @@ let MembersBar = React.createClass({
       }
     }
 
-   m =  m.concat(this.renderCircularButton());
-   let index =  Device.width/61;
+    m = m.concat(this.renderCircularButton());
+    let index = Device.width / 61;
 
     //if(m.length/index > 2){
     //  let start = m.length - index*2;
     //  m = m.slice(start + 1,m.length);
     //}
     return (
-      <View style={{backgroundColor:DictStyle.groupManage.memberListBackgroundColor, flex:1,justifyContent:'center',alignSelf:'stretch',alignItems:'center'}}>
+      <View
+        style={{backgroundColor:DictStyle.groupManage.memberListBackgroundColor, flex:1,justifyContent:'center',alignSelf:'stretch',alignItems:'center'}}>
         <View
           style={{width:parseInt(index) * 61,flexDirection:'row', flexWrap:'wrap'}}>
           {m}
         </View>
+      </View>
     );
   }
 });
