@@ -9,6 +9,7 @@ let ImUserInfo = require('./imUserInfo');
 let DictStyle = require('../../constants/dictStyle');
 let HeaderPic = require('./headerPic');
 let ContactStore = require('../../framework/store/contactStore');
+let {Device} = require('mx-artifacts');
 
 //let NameCircular = require('./nameCircular').NameCircular;
 
@@ -67,11 +68,13 @@ let MembersBar = React.createClass({
     //  m = m.slice(start + 1,m.length);
     //}
     return (
-      <View style={{backgroundColor:DictStyle.groupManage.memberListBackgroundColor, flex:1,justifyContent:'center',alignSelf:'stretch',alignItems:'center'}}>
+      <View
+        style={{backgroundColor:DictStyle.groupManage.memberListBackgroundColor, flex:1,justifyContent:'center',alignSelf:'stretch',alignItems:'center'}}>
         <View
           style={{width:parseInt(index) * 61,flexDirection:'row', flexWrap:'wrap'}}>
           {m}
         </View>
+      </View>
     );
   }
 });
