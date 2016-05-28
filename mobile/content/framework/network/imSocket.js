@@ -18,12 +18,12 @@ let _send = function (message) {
       }
     });
   });
-}
+};
 
 
 let _getUrl = function(token){
   return 'ws://' + ImHost + '/' + token;
-}
+};
 
 let ImSocket = {
 

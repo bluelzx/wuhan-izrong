@@ -37,6 +37,7 @@ let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
 let Publish = require('../../biz/publish/publish');
+ImSocket = require('../../framework/network/imSocket');
 let QiniuTest = require('../../test/qiniuTest');
 let Upload = require('../../biz/login/uploadNameCard');
 let Account = require('../../biz/login/accountInfo');
@@ -149,6 +150,7 @@ var Main = React.createClass({
           Alert('系统异常');
         });
       } else if (AppStore.isForceLogout()) {
+        ImSocket.disconnect();
         Alert(
           '    您的账号已经在其他设备上登录了，您将被强制登出，请确认您的账号密码没有被泄露',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
