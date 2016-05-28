@@ -1,22 +1,16 @@
 const _ = require('lodash');
 let React = require('react-native');
-let TestData = require('./testData');
 let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 let _realm = require('./realmManager');
 let co = require('co');
-let nextFrame = require('next-frame');
-var { Alert } = require('mx-artifacts');
 const {
   DEVICE,
   GROUP,
-  MESSAGE,
   IMUSERINFO,
   LOGINUSERINFO,
   ORGBEAN,
   FILTERITEMS,
-  FILTERITEM,
-  ORDERITEM,
-  SESSION
+  ORDERITEM
   } = require('./schemas');
 let {Platform} = React;
 
@@ -143,6 +137,34 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
       param.lastSyncTime = new Date();
     }
     _realm.create(LOGINUSERINFO,param, true);
+
+  //方便查询  将登录者的信息存入imuser表
+  let loginImUser =  {
+    userId: loginUserInfo.userId,
+    address: loginUserInfo.address,
+    realName: loginUserInfo.realName,
+    nameCardFileUrl: loginUserInfo.nameCardFileUrl,
+    department: loginUserInfo.department,
+    jobTitle: loginUserInfo.jobTitle,
+    qqNo: loginUserInfo.qqNo,
+    email: loginUserInfo.email,
+    weChatNo: loginUserInfo.weChatNo,
+    mute:false,
+    mobileNumber: loginUserInfo.mobileNumber,
+    photoFileUrl: loginUserInfo.photoFileUrl,
+    orgId: loginUserInfo.orgId,
+    phoneNumber: loginUserInfo.phoneNumber,
+    publicTitle: !!(loginUserInfo.publicTitle == true || loginUserInfo.publicTitle === null),
+    publicMobile: !!(loginUserInfo.publicMobile == true || loginUserInfo.publicMobile === null),
+    publicDepart: !!(loginUserInfo.publicDepart == true || loginUserInfo.publicDepart === null),
+    publicPhone: !!(loginUserInfo.publicPhone == true || loginUserInfo.publicPhone === null),
+    publicEmail: !!(loginUserInfo.publicEmail == true || loginUserInfo.publicEmail === null),
+    publicAddress: !!(loginUserInfo.publicAddress == true || loginUserInfo.publicAddress === null),
+    publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat === null),
+    publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
+    certified: loginUserInfo.certificated || false
+  };
+  _realm.create(IMUSERINFO,loginImUser,true);
 
 };
 
