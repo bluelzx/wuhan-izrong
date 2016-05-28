@@ -70,10 +70,6 @@ let Home = React.createClass({
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
-    this.setState({
-      contentList: AppStore.getMarketInfo(),
-      requestState: 'success'
-    })
   },
 
   bizOrderMarketSearch: function () {
