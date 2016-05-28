@@ -5,6 +5,7 @@ var qiniu = require('./qiniu/index');
 var MxFetch = require('./mxFetch');
 var KeyGenerator = require('../../comp/utils/keyGenerator');
 const { ImageHost, ImageBkt, ImageAk, ImageSk } = require('../../../config');
+let {FINISH_LOADING} = require('../../constants/dictEvent');
 
 var BFetch = function (url, param, callback, failure, options) {
   var headers = {
@@ -119,6 +120,7 @@ var process = function (_promise, option) {
           reject(errorData);
         });
     } else {
+      AppStore.emitChange(FINISH_LOADING);
       throw {message:'请检查网络链接'};
     }
   });
