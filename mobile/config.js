@@ -26,7 +26,14 @@ var uncleConfig = {
   Dev: true, // Switch for log. true means print.
   Host: 'http://192.168.64.245:9081',   //dev
   //Host: 'http://192.168.64.205:9102/fas',   //dev
-  ImHost:'192.168.64.224:3000'//dev
+  ImHost:'192.168.64.224:3000',//dev
+  ImageHost: 'http://img.izirong.com/',
+  ImageBkt: 'wuhan-fas-img',
+  ImageAk: 'iCduUao0AIuRdTqd3_4oqwzU8doDU3vh0sMF1CzD',
+  ImageSk: 'UtrtzaV8CAXgRkajynOnghX24NrS70Qs0RJozPcZ',
+  ImageSize50:'?imageView2/1/w/50/h/50/interlace/1',
+  ImageSize100:'?imageView2/1/w/100/h/100/interlace/1',
+  ImageSizeOrigin:'?imageView2/1/interlace/1'
 };
 
 var shuaiConfig = {
