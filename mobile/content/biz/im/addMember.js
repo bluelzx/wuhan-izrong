@@ -61,7 +61,9 @@ let AddMember = React.createClass({
            //step2: 回退
            this.props.navigator.pop();
          }
-       );
+       ).catch((err)=>{
+         throw err;
+       });
       }
     );
   },
