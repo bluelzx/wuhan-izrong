@@ -10,7 +10,7 @@ let ImUserInfo = require('./searchResultDetail');
 let { Alert } = require('mx-artifacts');
 let ContactAction = require('../../framework/action/contactAction');
 let ContactStore = require('../../framework/store/contactStore');
-let initS = '输入姓名/手机号以搜索好友';
+let initS = '姓名/手机号';
 let nullRes = '无符合条件的用户';
 let Icon = require('react-native-vector-icons/Ionicons');
 let Validation = require('../../comp/utils/validation');
@@ -168,6 +168,7 @@ let SearchFriend = React.createClass({
            <View style={{flex:1,height:(Platform.OS === 'ios')?30:40,backgroundColor:'#ffffff',marginHorizontal:10,borderRadius:6,
           justifyContent:'center', alignItems:'center',alignItems:'stretch'}}>
               <TextInput
+                placeholderTextColor={'#B6C1CB'}
                 placeholder={this.state.desc}
                 autoFocus={true}
                 returnKeyType="search"
