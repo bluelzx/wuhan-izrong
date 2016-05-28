@@ -26,7 +26,7 @@ let _createGroup = function(members, groupName, groupMasterUid) {
     members:[]
   };
   for(let i in members){
-    param.members.push(members[i].userId);
+    members[i]&&param.members.push(members[i].userId);
   }
   return new Promise((resolve, reject) => {
     BFetch(AppLinks.createGroup, param).then((response)=> {
@@ -140,7 +140,7 @@ let _addGroupMembers = function(groupId, members) {
     members:[]
   }
   for(let i in members){
-    param.members.push(members[i].userId);
+    members[i]&&param.members.push(members[i].userId);
   }
   return new Promise((resolve, reject) => {
     BFetch(AppLinks.inviteMember,param).then((response) => {
@@ -163,7 +163,7 @@ let _deleteGroupMembers = function(groupId, members) {
     uid:[]
   };
   for(let i in members){
-    param.uid.push(members[i].userId);
+    members[i]&&param.uid.push(members[i].userId);
   }
   return new Promise((resolve, reject) => {
     BFetch(AppLinks.kickOutMember, param).then((response)=>{
