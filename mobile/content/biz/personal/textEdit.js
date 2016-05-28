@@ -112,7 +112,7 @@ let TextEdit = React.createClass({
       case 'department':
         if (this.state.newValue.length > 20) {
           Alert('请输入20个字符内的部门信息');
-        } else if (Validation.isEnableEmoji(this.state.newValue)) {
+        } else if (!Validation.isEnableEmoji(this.state.newValue)) {
           Alert('部门信息不可包含特殊符号');
         } else {
           this.updateUserInfo();
@@ -121,7 +121,7 @@ let TextEdit = React.createClass({
       case 'jobTitle':
         if (this.state.newValue.length > 20) {
           Alert('请输入20个字符内的职位信息');
-        } else if (Validation.isEnableEmoji(this.state.newValue)) {
+        } else if (!Validation.isEnableEmoji(this.state.newValue)) {
           Alert('职位信息不可包含特殊符号');
         } else {
           this.updateUserInfo();

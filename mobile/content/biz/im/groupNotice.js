@@ -161,6 +161,7 @@ let GroupNotice = React.createClass({
   },
 
   toChat(item) {
+    let user = ContactStore.getUserInfo();
     let judge = ContactStore.judgeGroup(item.groupId, user.userId);
     if (judge) {
       let param = {

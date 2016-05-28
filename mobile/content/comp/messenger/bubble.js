@@ -84,26 +84,41 @@ export default class Bubble extends React.Component {
     }
 
     if (this.props.contentType === MSG_CONTENT_TYPE.IMAGE) {
+      //if(this.props.content == 'UUUU'){
+      //  return (
+      //    <View style={[styles.bubble, customStyle,
+      //         this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
+      //this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
+      //      <View style={{
+      //          flex: 1,
+      //          width: 100,
+      //          height: 100
+      //          }}>
+      //            <Text>图片加载中...</Text>
+      //      </View>
+      //    </View>
+      //  );
+      //}else {
+      let flag = (this.props.content.substring(0, 5) === 'UUUUU');
       let uri = this.props.content + ImageSize100;
-      return (
-        <View style={[styles.bubble, customStyle,
+        return (
+          <View style={[styles.bubble, customStyle,
                this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
       this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
-          <Lightbox underlayColor='#44B5E6'
-                    imageSource={{uri:this.props.content}}
-                    navigator={AppStore.getNavigator()}>
-            <Image style={{
+            <Lightbox underlayColor='#44B5E6'
+                      imageSource={{uri:this.props.content}}
+                      navigator={AppStore.getNavigator()}>
+              <Image style={{
                 flex: 1,
                 width: 100,
                 height: 100
                 }}
-                   source={{uri: uri}}
-            />
-          </Lightbox>
-        </View>
-
-
-      );
+                     source={{uri: flag?this.props.content.substring(5,this.props.content.length):uri}}
+              />
+            </Lightbox>
+          </View>
+        );
+      //}
     }
 
     if (this.props.contentType === MSG_CONTENT_TYPE.NAMECARD) {
