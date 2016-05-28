@@ -103,19 +103,19 @@ let WhitePage = React.createClass({
 
   toOther: function (item) {
     // TODO:  事务
-    let userinfo = ContactStore.getUserInfo();
+    let userInfo = ContactStore.getUserInfo();
     SessionStore.setBadgeZero(item.sessionId);
 
     let option = null;
     let param = {};
     if (SESSION_TYPE.GROUP == item.type) { // 区分聊天窗口类型
-      let g = SessionStore.getGroupInfoBySessionId(item.sessionId, userinfo.userId)
+      let g = SessionStore.getGroupInfoBySessionId(item.sessionId, userInfo.userId)
       param.chatType = SESSION_TYPE.GROUP;
       param.title = item.title;
       param.groupId = g.groupId; //query
       param.groupMasterUid = g.groupMasterUid; //query
     }else{
-      //let u = SessionStore.getUserInfoBySessionId(item.sessionId,userinfo.userId)
+      //let u = SessionStore.getUserInfoBySessionId(item.sessionId,userInfo.userId)
       param.chatType = SESSION_TYPE.USER;
       param.title = item.title;
       param.userId = this.getIdFromSessionId(item.sessionId);  //query

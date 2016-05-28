@@ -99,7 +99,7 @@ let GroupMembers = React.createClass({
 
   render: function() {
     return (
-      <NavBarView navigator={this.props.navigator} title='全部成员'>
+      <NavBarView navigator={this.props.navigator} title='全部群成员'>
 
 
         {(()=>{

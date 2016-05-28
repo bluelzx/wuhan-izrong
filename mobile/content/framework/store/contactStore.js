@@ -220,6 +220,10 @@ let _acceptFriendInvite = function(userInfo) {
   AppStore.emitChange(IM_SESSION_LIST);
 }
 
+let _deleteMemberFromGroup = function(groupId, userId) {
+  PersisterFacade.deleteMemberFromGroup(groupId, userId);
+}
+
 let ContactStore = {
   getGroupInfoBySessionId:_getGroupInfoBySessionId,  //根据会话Id获得群组信息
   getUserInfoBySessionId:_getUserInfoBySessionId,       //根据会话Id获得用户信息
@@ -252,7 +256,8 @@ let ContactStore = {
   judgeGroup: _judgeGroup,
   updateFriendList:_updateFriendList,
   acceptNewFriendInvite:_acceptNewFriendInvite,
-  acceptFriendInvite:_acceptFriendInvite
+  acceptFriendInvite:_acceptFriendInvite,
+  deleteMemberFromGroup: _deleteMemberFromGroup
 };
 
 

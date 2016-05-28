@@ -45,7 +45,7 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.GROUP_JOIN_INVITE:
       ImStore.saveMsg({
-        sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.INVITE, message.groupId, userId),
+        sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.INVITE, message.groupId, userId, message.inviterId),
         groupId: message.groupId,
         groupName: message.groupName,
         groupOwnerId: message.groupOwnerId,
@@ -143,16 +143,18 @@ let _dealMsg = function (message, socket) {
         case UPDATE_GROUP_TYPE.KICK_OUT_GROUP_MEMBER:
         case UPDATE_GROUP_TYPE.LEAVE_GROUP:
           //TODO 退出群组的处理...
-          ImStore.saveMsg({
-            sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.LEAVE_GROUP, message.groupId, userId, message.userInfo.userId),
-            groupId: message.groupId,
-            groupName: message.groupName,
-            groupOwnerId: message.groupOwnerId,
-            msgType: SESSION_TYPE.GROUP_NOTICE,
-            revTime: new Date(),
-            noticeType: NOTICE_TYPE.LEAVE_GROUP,
-            userId: message.userInfo.userId
-          }, userId);
+          if (message.action == UPDATE_GROUP_TYPE.LEAVE_GROUP || userId != message.groupOwnerId) {
+            ImStore.saveMsg({
+              sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.LEAVE_GROUP, message.groupId, userId, message.userInfo.userId),
+              groupId: message.groupId,
+              groupName: message.groupName,
+              groupOwnerId: message.groupOwnerId,
+              msgType: SESSION_TYPE.GROUP_NOTICE,
+              revTime: new Date(),
+              noticeType: NOTICE_TYPE.LEAVE_GROUP,
+              userId: message.userInfo.userId
+            }, userId);
+          }
           break;
         default:
           console.log('None message type matched! [%s]', message.msgType);
@@ -179,6 +181,8 @@ let _dealMsg = function (message, socket) {
           userId: group.groupMasterUid
         }, userId);
         ContactSotre.leaveGroup(message.groupId);
+      } else {
+        ContactSotre.deleteMemberFromGroup(message.groupId, userId)
       }
       break;
     case MSG_TYPE.SYNC_REQ:

@@ -64,12 +64,13 @@ let Messenger = React.createClass({
   },
 
   _sendMessage(contentType, content, isReSend = false, msgId = '') {
-    if (this.props.param.chatType === SESSION_TYPE.GROUP && !ImAction.isInGroupById(this.props.param.groupId)) {
+    if (this.props.param.chatType === SESSION_TYPE.GROUP && !ImAction.isInGroupById(this.props.param.groupId, this.props.param.myId)) {
       //TODO: 用户已不在群组....
+      Alert('您已不在该群组');
     } else {
       let msgToSend = {
         sessionId: this.props.param.sessionId,
-        msgId: isReSend ? msgId : KeyGenerator.getMessageKey(this.props.param.sessionId, this.props.param.userId),
+        msgId: isReSend ? msgId : KeyGenerator.getMessageKey(this.props.param.sessionId, this.props.param.myId),
         fromUId: null,
         contentType: contentType,
         content: content,
