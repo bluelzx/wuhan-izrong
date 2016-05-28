@@ -88,7 +88,7 @@ let EditGroupMaster = React.createClass({
     };
 
     return (
-      <MembersBar {...initData}/>
+        <MembersBar {...initData}/>
     );
   },
 
