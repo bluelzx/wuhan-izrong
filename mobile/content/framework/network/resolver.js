@@ -17,134 +17,135 @@ let _dealMsg = function (message, socket) {
     let userId = userInfo.userId;
     let lastSyncTime = userInfo.lastSyncTime ? userInfo.lastSyncTime.getTime() : new Date().getTime();
 
-    //console.log(message);
-    switch (message.msgType) {
-      case MSG_TYPE.EXCEPTION:
-        console.log('[error] %s', message.errMsg);
-        break;
-      case MSG_TYPE.REC_P2P_MSG:
-        ImStore.saveMsg({
-          sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.fromUid, userId),
-          // sessionId: 'user:3',
-          msgId: message.msgId,
-          fromUId: message.fromUid,
-          groupId: null,
-          toId: null,
-          type: SESSION_TYPE.USER,
-          contentType: message.contentType,
-          content: message.content,
-          msgType: message.msgType,
-          revTime: new Date(message.sendDate),
-          isRead: Boolean(false),
-          status: 'Seen'
-        }, userId);
-        break;
-      case MSG_TYPE.SERVER_REC_CONFIRM:
-        ImStore.ackMsg(message.msgId, message.toUid);
-        break;
-      case MSG_TYPE.MSG_IS_MUTE:
-        ImStore.ackMsg(message.msgId, message.toUid, true);
-        break;
-      case MSG_TYPE.GROUP_JOIN_INVITE:
-        ImStore.saveMsg({
-          sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.INVITE, message.groupId, userId),
-          groupId: message.groupId,
-          groupName: message.groupName,
-          groupOwnerId: message.groupOwnerId,
-          msgType: SESSION_TYPE.GROUP_NOTICE,
-          revTime: new Date(),
-          noticeType: NOTICE_TYPE.INVITE,
-          groupInviterName: message.groupInviterName,
-          groupInviterOrgValue: message.groupInviterOrgValue
-        }, userId);
-        break;
-      case MSG_TYPE.REC_GROUP_MSG:
-        ImStore.saveMsg({
-          sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.GROUP, message.gid, userId),
-          msgId: message.msgId,
-          fromUId: message.fromUid,
-          groupId: message.gid,
-          toId: null,
-          type: SESSION_TYPE.GROUP,
-          content: message.content,
-          contentType: message.contentType,
-          msgType: message.msgType,
-          revTime: new Date(message.sendDate),
-          isRead: Boolean(false),
-          status: 'Sean'
-        }, userId);
-        break;
-      //已测,小红点及数字不消失
-      case MSG_TYPE.PLATFORM_INFO:
-        if (lastSyncTime < message.createDate) {
-          ImStore.createPlatFormInfo(message.infoId,
-            message.title, message.content,
-            new Date(message.createDate), userId);
-          ContactSotre.syncReq(new Date(message.createDate));
-          lastSyncTime = message.createDate;
-        }
-        break;
-      //已测 weisen
-      case MSG_TYPE.HOME_PAGE:
-        message.homePageList && ImStore.createHomePageInfo(message.homePageList);
-        break;
-      //已测  weisen
-      case MSG_TYPE.CONTANCT_INFO_UPDATE:
-        if (message.userId == AppStore.getUserId()) {
-          AppStore.updateUserInfoByPush(message);
-        } else {
-          ImStore.updateContactInfo(message);
-        }
-        break;
-      //已测
-      case MSG_TYPE.CONTANCT_INFO_DELETE:
-        if (message.userId == AppStore.getUserId()) {
-          AppStore.deleteLoginUser();
-        } else {
-          ImStore.deleteContactInfo(message.userId);
-        }
-        break;
-      case MSG_TYPE.GROUP_INFO_UPDATE:
-        ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
-        switch (message.action) {
-          case UPDATE_GROUP_TYPE.CREATE_GROUP:
-            ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
-            break;
-          case UPDATE_GROUP_TYPE.UPDATE_GROUP_NAME:
-            if (message.groupOwnerId != userId) {
-              ImStore.saveMsg({
-                sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.UPDATE_GROUP_NAME, message.groupId, userId),
-                groupId: message.groupId,
-                groupName: message.groupName,
-                groupOwnerId: message.groupOwnerId,
-                msgType: SESSION_TYPE.GROUP_NOTICE,
-                revTime: new Date(),
-                noticeType: NOTICE_TYPE.UPDATE_GROUP_NAME
-              }, userId);
-            }
-            break;
-          case UPDATE_GROUP_TYPE.UPDATE_GROUP_IMAGE_URL:
-            break;
-          case UPDATE_GROUP_TYPE.ADD_GROUP_MEMBER:
-            //TODO: 把userInfo加入到IMUserInfo表中
-            if (userId != message.userInfo.fulfillmentValue.userId) {
-              ImStore.saveMsg({
-                sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.INVITED, message.groupId, userId, message.userInfo.fulfillmentValue.userId),
-                groupId: message.groupId,
-                groupName: message.groupName,
-                groupOwnerId: message.groupOwnerId,
-                msgType: SESSION_TYPE.GROUP_NOTICE,
-                revTime: new Date(),
-                noticeType: NOTICE_TYPE.INVITED,
-                realName: message.userInfo.fulfillmentValue.realName,
-                orgValue: message.userInfo.fulfillmentValue.orgName
-              }, userId);
-              ContactSotre.saveIMUserInfo(message.userInfo.fulfillmentValue);
-            }
-            break;
-          case UPDATE_GROUP_TYPE.KICK_OUT_GROUP_MEMBER:
-          case UPDATE_GROUP_TYPE.LEAVE_GROUP:
-            //TODO 退出群组的处理...
+  //console.log(message);
+  switch (message.msgType) {
+    case MSG_TYPE.EXCEPTION:
+      console.log('[error] %s', message.errMsg);
+      break;
+    case MSG_TYPE.REC_P2P_MSG:
+      ImStore.saveMsg({
+        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.USER, message.fromUid, userId),
+        // sessionId: 'user:3',
+        msgId: message.msgId,
+        fromUId: message.fromUid,
+        groupId: null,
+        toId: null,
+        type: SESSION_TYPE.USER,
+        contentType: message.contentType,
+        content: message.content,
+        msgType: message.msgType,
+        revTime: new Date(message.sendDate),
+        isRead: Boolean(false),
+        status: 'Seen'
+      }, userId);
+      break;
+    case MSG_TYPE.SERVER_REC_CONFIRM:
+      ImStore.ackMsg(message.msgId, message.toUid);
+      break;
+    case MSG_TYPE.MSG_IS_MUTE:
+      ImStore.ackMsg(message.msgId, message.toUid,true);
+      break;
+    case MSG_TYPE.GROUP_JOIN_INVITE:
+      ImStore.saveMsg({
+        sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.INVITE, message.groupId, userId, message.inviterId),
+        groupId: message.groupId,
+        groupName: message.groupName,
+        groupOwnerId: message.groupOwnerId,
+        msgType: SESSION_TYPE.GROUP_NOTICE,
+        revTime: new Date(),
+        noticeType: NOTICE_TYPE.INVITE,
+        groupInviterName: message.groupInviterName,
+        groupInviterOrgValue: message.groupInviterOrgValue
+      }, userId);
+      break;
+    case MSG_TYPE.REC_GROUP_MSG:
+      ImStore.saveMsg({
+        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.GROUP, message.gid, userId),
+        msgId: message.msgId,
+        fromUId: message.fromUid,
+        groupId: message.gid,
+        toId: null,
+        type: SESSION_TYPE.GROUP,
+        content: message.content,
+        contentType: message.contentType,
+        msgType: message.msgType,
+        revTime: new Date(message.sendDate),
+        isRead: Boolean(false),
+        status: 'Sean'
+      }, userId);
+      break;
+    //已测,小红点及数字不消失
+    case MSG_TYPE.PLATFORM_INFO:
+      if (lastSyncTime < message.createDate) {
+        ImStore.createPlatFormInfo(message.infoId,
+          message.title, message.content,
+          new Date(message.createDate), userId);
+        ContactSotre.syncReq(new Date(message.createDate));
+        lastSyncTime = message.createDate;
+      }
+      break;
+    //已测 weisen
+    case MSG_TYPE.HOME_PAGE:
+      message.homePageList && ImStore.createHomePageInfo(message.homePageList);
+      break;
+    //已测  weisen
+    case MSG_TYPE.CONTANCT_INFO_UPDATE:
+      if(message.userId == AppStore.getUserId()){
+        AppStore.updateUserInfoByPush(message);
+      }else{
+        ImStore.updateContactInfo(message);
+      }
+      break;
+    //已测
+    case MSG_TYPE.CONTANCT_INFO_DELETE:
+      if (message.userId == AppStore.getUserId()) {
+        AppStore.deleteLoginUser();
+      } else {
+        ImStore.deleteContactInfo(message.userId);
+      }
+      break;
+    case MSG_TYPE.GROUP_INFO_UPDATE:
+      ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
+      switch (message.action) {
+        case UPDATE_GROUP_TYPE.CREATE_GROUP:
+          ContactSotre.createGroup(message.groupId, message.groupName, message.groupOwnerId, message.members, false);
+          break;
+        case UPDATE_GROUP_TYPE.UPDATE_GROUP_NAME:
+          if (message.groupOwnerId != userId) {
+            ImStore.saveMsg({
+              sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.UPDATE_GROUP_NAME, message.groupId, userId),
+              groupId: message.groupId,
+              groupName: message.groupName,
+              groupOwnerId: message.groupOwnerId,
+              msgType: SESSION_TYPE.GROUP_NOTICE,
+              revTime: new Date(),
+              noticeType: NOTICE_TYPE.UPDATE_GROUP_NAME
+            }, userId);
+          }
+          break;
+        case UPDATE_GROUP_TYPE.UPDATE_GROUP_IMAGE_URL:
+          break;
+        case UPDATE_GROUP_TYPE.ADD_GROUP_MEMBER:
+          //TODO: 把userInfo加入到IMUserInfo表中
+          if (userId != message.userInfo.fulfillmentValue.userId) {
+            ImStore.saveMsg({
+              sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.INVITED, message.groupId, userId, message.userInfo.fulfillmentValue.userId),
+              groupId: message.groupId,
+              groupName: message.groupName,
+              groupOwnerId: message.groupOwnerId,
+              msgType: SESSION_TYPE.GROUP_NOTICE,
+              revTime: new Date(),
+              noticeType: NOTICE_TYPE.INVITED,
+              realName: message.userInfo.fulfillmentValue.realName,
+              orgValue: message.userInfo.fulfillmentValue.orgName
+            }, userId);
+            ContactSotre.saveIMUserInfo(message.userInfo.fulfillmentValue);
+          }
+          break;
+        case UPDATE_GROUP_TYPE.KICK_OUT_GROUP_MEMBER:
+        case UPDATE_GROUP_TYPE.LEAVE_GROUP:
+          //TODO 退出群组的处理...
+          if (message.action == UPDATE_GROUP_TYPE.LEAVE_GROUP || userId != message.groupOwnerId) {
             ImStore.saveMsg({
               sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.LEAVE_GROUP, message.groupId, userId, message.userInfo.userId),
               groupId: message.groupId,
@@ -155,46 +156,49 @@ let _dealMsg = function (message, socket) {
               noticeType: NOTICE_TYPE.LEAVE_GROUP,
               userId: message.userInfo.userId
             }, userId);
-            break;
-          default:
-            console.log('None message type matched! [%s]', message.msgType);
-            console.log(message);
-            break;
-        }
-        break;
-      case MSG_TYPE.GROUP_INFO_DELETE:
-        //TODO 区分被踢和解散
-        let noticeType = DELETE_TYPE.KICK_OUT;
-        if (message.action == DELETE_TYPE.DELETE_GROUP) {
-          noticeType = DELETE_TYPE.DELETE_GROUP;
-        }
-        let group = ContactSotre.getGroupDetailById(message.groupId);
-        if (message.action == DELETE_TYPE.DELETE_GROUP && userId != group.groupMasterUid) {
-          ImStore.saveMsg({
-            sessionId: KeyGenerator.getSessionKey(noticeType, message.groupId, userId),
-            groupId: message.groupId,
-            groupName: group.groupName,
-            groupOwnerId: group.groupMasterUid,
-            msgType: SESSION_TYPE.GROUP_NOTICE,
-            revTime: new Date(),
-            noticeType: noticeType,
-            userId: group.groupMasterUid
-          }, userId);
-          ContactSotre.leaveGroup(message.groupId);
-        }
-        break;
-      case MSG_TYPE.SYNC_REQ:
-        //message.msgArray.forEach((item)=>{
-        //  // console.log(JSON.parse(item));
-        //  _dealMsg(JSON.parse(item), socket);
-        //});
-        socket.send({command: COMMAND_TYPE.SYNC_REQ, lastSyncTime: lastSyncTime});
-        break;
-      case MSG_TYPE.FORCE_LOGOUT:
-        //强制登出
-        AppStore.forceLogout();
-        break;
-      case MSG_TYPE.SYNC_RES:
+          }
+          break;
+        default:
+          console.log('None message type matched! [%s]', message.msgType);
+          console.log(message);
+          break;
+      }
+      break;
+    case MSG_TYPE.GROUP_INFO_DELETE:
+      //TODO 区分被踢和解散
+      let noticeType = DELETE_TYPE.KICK_OUT;
+      if (message.action == DELETE_TYPE.DELETE_GROUP) {
+        noticeType = DELETE_TYPE.DELETE_GROUP;
+      }
+      let group = ContactSotre.getGroupDetailById(message.groupId);
+      if (message.action == DELETE_TYPE.DELETE_GROUP && userId != group.groupMasterUid) {
+        ImStore.saveMsg({
+          sessionId: KeyGenerator.getSessionKey(noticeType, message.groupId, userId),
+          groupId: message.groupId,
+          groupName: group.groupName,
+          groupOwnerId: group.groupMasterUid,
+          msgType: SESSION_TYPE.GROUP_NOTICE,
+          revTime: new Date(),
+          noticeType: noticeType,
+          userId: group.groupMasterUid
+        }, userId);
+        ContactSotre.leaveGroup(message.groupId);
+      } else {
+        ContactSotre.deleteMemberFromGroup(message.groupId, userId)
+      }
+      break;
+    case MSG_TYPE.SYNC_REQ:
+      //message.msgArray.forEach((item)=>{
+      //  // console.log(JSON.parse(item));
+      //  _dealMsg(JSON.parse(item), socket);
+      //});
+      socket.send({command: COMMAND_TYPE.SYNC_REQ, lastSyncTime: lastSyncTime});
+      break;
+    case MSG_TYPE.FORCE_LOGOUT:
+      //强制登出
+      AppStore.forceLogout();
+      break;
+    case MSG_TYPE.SYNC_RES:
 
         message.msgArray && message.msgArray.forEach((item)=> {
           _dealMsg(JSON.parse(item), socket);

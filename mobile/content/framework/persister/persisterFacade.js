@@ -34,13 +34,24 @@ let PersisterFacade = {
   getOrgByOrgName: (orgName)=> _getOrgByOrgName(orgName),
   deleteDevice: ()=> _deleteDevice(),
   updateLastSyncTime: (t)=>_updateLastSyncTime(t),
-  isInGroupById: (id) => _isInGroupById(id),
+  isInGroupById: (id, userId) => _isInGroupById(id, userId),
   saveImUsers: (membersDetail) => _saveImUsersOpen(membersDetail)
 };
 
-let _isInGroupById = function (id) {
-  let ret = _realm.objects(GROUP).filtered('groupId = \'' + id + '\'');
-  return ret.length > 0;
+let _isInGroupById = function (id, userId) {
+  let res = false;
+  _realm.write(()=>{
+    let ret = _realm.objects(GROUP).filtered('groupId = \'' + id + '\'');
+    if (ret.length >0 && ret[0]) {
+      let members = JSON.parse(ret[0].members);
+      members.forEach((item)=>{
+        if (item == userId) {
+          res = true;
+        }
+      });
+    }
+  });
+  return res;
 };
 
 //test method

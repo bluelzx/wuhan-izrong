@@ -1,5 +1,5 @@
 let Manager = require('./manager');
-let { Alert, Device, Loading } = require('mx-artifacts');
+//let { Alert, Device, Loading } = require('mx-artifacts');
 let Resolver = require('./resolver');
 let { ImHost } = require('../../../config');
 let { COMMAND_TYPE } = require('../../constants/dictIm');
@@ -70,6 +70,13 @@ let ImSocket = {
 
     _socket.on('reconnect', function (attempt) {
       console.log('###### reconnect after %d attempt', attempt);
+    });
+
+    _socket.on('error', function (attempt) {
+      console.log('###### reconnect after %d attempt', attempt);
+      //setTimeout(()=>{
+      //  _socket&&_socket.open();
+      //},10000);
     });
 
   },

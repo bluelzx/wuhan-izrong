@@ -78,7 +78,7 @@ const NOTICE_TYPE = {
 }
 
 const DELETE_TYPE = {
-  KICK_OUT: 'kickOut',
+  KICK_OUT: 'kickOutMember',
   DELETE_GROUP: 'dismissGroup'
 }
 

@@ -59,7 +59,9 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
     Persister.updateContactInfo(message);
     AppStore.emitChange(IM_CONTACT);
   },
-  isInGroupById: (id) => _isInGroupById(id),
+  isInGroupById: (id, userId) => {
+    return Persister.isInGroupById(id, userId);
+  },
   modifyImgUrl:(msgId, url) => _modifyImgUrl(msgId, url)
 });
 
@@ -79,8 +81,8 @@ let _imInit = () => {
 
 };
 
-let _isInGroupById = function(id) {
-  return Persister.isInGroupById(id);
+let _isInGroupById = function(id, userId) {
+  return Persister.isInGroupById(id, userId);
 }
 
 let _resovleMessages = (bInit = false) => {

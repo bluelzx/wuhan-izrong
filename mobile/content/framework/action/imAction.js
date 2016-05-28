@@ -36,8 +36,8 @@ let _uploadImage = function (url, fileFieldName) {
   });
 };
 
-let _isInGroupById = function (id) {
-  return ImStore.isInGroupById(id);
+let _isInGroupById = function (id, userId) {
+  return ImStore.isInGroupById(id, userId);
 }
 
 let ImAction = {
@@ -55,7 +55,7 @@ let ImAction = {
   initSend:() => {
     _send();
   },
-  isInGroupById: (id) => _isInGroupById(id)
+  isInGroupById: (id, userId) => _isInGroupById(id, userId)
 };
 
 module.exports = ImAction;
