@@ -136,8 +136,8 @@ let _resovleMessages = (bInit = false) => {
   if (bInit) {
     ImStore.emitChange(DictEvent.IM_SESSION);
   } else {
-    return tmpMessages.reverse();
-  }
+  return tmpMessages.reverse();
+}
 };
 
 let _sessionInit = (data) => {

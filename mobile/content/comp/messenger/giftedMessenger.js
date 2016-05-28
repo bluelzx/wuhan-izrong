@@ -380,7 +380,7 @@ let GiftedMessenger = React.createClass({
     if (this.listHeight && this.footerY && this.footerY > this.listHeight) {
       let scrollDistance = this.listHeight - this.footerY;
       this.scrollResponder.scrollTo({
-        y: -scrollDistance + 20,
+        y: -scrollDistance,
         x: 0,
         animated: false
       });
@@ -648,7 +648,6 @@ let GiftedMessenger = React.createClass({
           //accessible={true}
           //onAccessibilityTap={this._onAccessibilityTap}
           onResponderMove={this._onAccessibilityTap}
-
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}

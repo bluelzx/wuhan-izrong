@@ -9,6 +9,7 @@ let ImUserInfo = require('./imUserInfo');
 let DictStyle = require('../../constants/dictStyle');
 let HeaderPic = require('./headerPic');
 let ContactStore = require('../../framework/store/contactStore');
+let {Device} = require('mx-artifacts');
 
 //let NameCircular = require('./nameCircular').NameCircular;
 

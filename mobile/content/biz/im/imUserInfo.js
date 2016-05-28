@@ -33,12 +33,11 @@ let ImUserInfo = React.createClass({
     ////// 是否已经是好友
     let userInfo;
     let user = ContactStore.getUserInfo();
+    this.props.param.isStranger = ContactStore.isStranger(user.userId);
     if(user.userId == this.props.param.userId){
       userInfo = user;
-    }else if(!this.props.param.isStranger){
+    }else {
       userInfo = ContactStore.getUserInfoByUserId(this.props.param.userId);
-    }else{
-      userInfo = this.props.param;
     }
 
     console.log(userInfo.mute);
