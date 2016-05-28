@@ -9,7 +9,6 @@ let ImUserInfo = require('./imUserInfo');
 let DictStyle = require('../../constants/dictStyle');
 let HeaderPic = require('./headerPic');
 let ContactStore = require('../../framework/store/contactStore');
-let {Device} = require('mx-artifacts');
 
 //let NameCircular = require('./nameCircular').NameCircular;
 
@@ -20,7 +19,7 @@ let MembersBar = React.createClass({
     btns.push(<CircularButton key="cir1" onPress={this.props.addMember}>
       <Text style={{fontSize:25, color:'#F3AD2C',fontWeight:'bold'}}>+</Text>
     </CircularButton>);
-    if(this.props.showDelete){
+    if (this.props.showDelete) {
       btns.push(<CircularButton key="cir2" onPress={this.props.deleteMember}>
         <Text style={{fontSize:25, color:'#F3AD2C',fontWeight:'bold'}}>-</Text>
       </CircularButton>);
@@ -28,28 +27,32 @@ let MembersBar = React.createClass({
     return btns;
   },
 
-  renderMember: function(member) {
+  renderMember: function (member) {
     return (
       <TouchableOpacity onPress={()=>this.props.navigator.push({
         comp:ImUserInfo,
         param:Object.assign(member,{isStranger:ContactStore.isStranger(member.userId)})
         })} key={member.userId} style={{alignItems:'center',padding:5,alignSelf:'flex-start'}}>
         <View style={{marginTop:5,height: 51,width: 51}}>
-          <HeaderPic photoFileUrl={member.photoFileUrl}  certified={member.certified} name={member.realName}/>
+          <HeaderPic photoFileUrl={member.photoFileUrl} certified={member.certified} name={member.realName}/>
         </View>
-        <Text numberOfLines={1} style={{color:DictStyle.groupManage.memberNameColor,marginTop:4, width:40}}>{member.realName}</Text>
+        <Text numberOfLines={1}
+              style={{color:DictStyle.groupManage.memberNameColor,marginTop:4, width:40}}>{member.realName}</Text>
       </TouchableOpacity>
     );
   },
 
-  render: function() {
+  render: function () {
     let {members, imgSource, groupMasterUid} = this.props;
+    let currUser = ContactStore.getUserInfo();
     let m = [];
-    for(let i = 0 ; !!members && i < members.length; i++){
+    for (let i = 0; !!members && i < members.length; i++) {
       let member = members[i];
-      if(member.userId == groupMasterUid){
-        m.unshift(this.renderMember(member));
-      }else {
+      if (member.userId == groupMasterUid) {
+        if (currUser.userId != groupMasterUid) {
+          m.unshift(this.renderMember(member));
+        }
+      } else {
         m.push(
           this.renderMember(member)
         );
@@ -69,7 +72,6 @@ let MembersBar = React.createClass({
           style={{width:parseInt(index) * 61,flexDirection:'row', flexWrap:'wrap'}}>
           {m}
         </View>
-      </View>
     );
   }
 });

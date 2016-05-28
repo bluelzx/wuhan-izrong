@@ -82,6 +82,7 @@ var UFetchBak = function (url, param, callback, failure, options) {
   }, options);
 };
 
+
 var rawFetch = function (url, param, callback, failure, option) {
   console.log('以下打印一次传出去的param:');
   console.log(param);
@@ -118,7 +119,7 @@ var process = function (_promise, option) {
           reject(errorData);
         });
     } else {
-      Alert('网络异常')
+      throw {message:'请检查网络链接'};
     }
   });
 

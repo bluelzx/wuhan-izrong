@@ -216,7 +216,7 @@ let UserInfo = React.createClass({
 
             <TouchableOpacity
               style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}
-              onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'isPublicRealName', true, 'default', 20, true, false)}
+              onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'isPublicRealName', true, 'default', 10, true, false)}
             >
               <Text style={[DictStyle.userInfoValueItem,{ marginRight: 20,width: 150}]}
                     numberOfLines={1}
