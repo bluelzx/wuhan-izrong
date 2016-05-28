@@ -131,11 +131,13 @@ let ImUserInfo = React.createClass({
     //    <Text style={{color:'#ffffff',textAlign:'center'}}>加为好友</Text>
     //  </View>
     //</TouchableOpacity>
-
+    if(ContactStore.getUserInfo().userId == this.props.param.userId){
+      return null;
+    }else {
       return (
         <View style={{position:'absolute',left:0,bottom:0,right:0}}>
-          {(()=>{
-            if(this.props.param.isStranger){
+          {(()=> {
+            if (this.props.param.isStranger) {
               return (
                 <TouchableOpacity
                   style={{flex:1,marginTop: 20, backgroundColor: '#4fb9fc',justifyContent:'center',alignItems:'center',paddingVertical:15}}
@@ -146,13 +148,14 @@ let ImUserInfo = React.createClass({
                   </Text>
                 </TouchableOpacity>
               );
-            }else {
-             return null;
+            } else {
+              return null;
             }
 
           })()}
-          </View>
+        </View>
       );
+    }
 
   },
 
