@@ -63,7 +63,7 @@ let Messenger = React.createClass({
     this.setState(this._getStateFromStores());
   },
 
-  _sendMessage(contentType, content, isReSend = false, msgId = '', isSend) {
+  _sendMessage(contentType, content, isReSend = false, msgId = '', isNotSend, localUri) {
     if (this.props.param.chatType === SESSION_TYPE.GROUP && !ImAction.isInGroupById(this.props.param.groupId)) {
       //TODO: 用户已不在群组....
     } else {
@@ -77,7 +77,7 @@ let Messenger = React.createClass({
         isRead: true,
         status: 'Sending',//'ErrorButton',
         //status: 'isMute',
-
+        localUri:localUri
       };
       if (this.props.param.chatType === SESSION_TYPE.USER) {
         _.assign(msgToSend, {
@@ -96,7 +96,7 @@ let Messenger = React.createClass({
         });
       }
 
-      ImAction.send(msgToSend, isReSend, this.props.param.myId, isSend);
+      ImAction.send(msgToSend, isReSend, this.props.param.myId, isNotSend);
       return msgToSend.msgId;
     }
   },
@@ -120,7 +120,7 @@ let Messenger = React.createClass({
 
   handleSendImage(uri) {
     let p = new Promise((resolve,reject)=>{
-      resolve( this._sendMessage(MSG_CONTENT_TYPE.IMAGE, 'UUUUU'+uri, false, false, true))
+      resolve( this._sendMessage(MSG_CONTENT_TYPE.IMAGE, '' , false, '', true, uri))
     }).catch((err)=>{
       throw err;
     });
@@ -129,7 +129,7 @@ let Messenger = React.createClass({
     p.then((msgId)=>{
       ImAction.uploadImage(uri).then((response)=>{
         ImStore.modifyImgUrl(msgId,response.fileUrl)
-        self._sendMessage(MSG_CONTENT_TYPE.IMAGE, uri, true, msgId);
+        self._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl, true,msgId,false, uri);
       });
     }).catch((err)=>{
       Alert('图片上传失败');

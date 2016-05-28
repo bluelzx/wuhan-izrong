@@ -89,6 +89,9 @@ let _queryAllPlatFormInfo = function () {
 // Private Functions
 let _handleConnectivityChange = (isConnected) => {
   _info.netWorkState = isConnected;
+  if(isConnected){
+    AppStore.emitChange('NETINFO_CONNECTED');
+  }
 };
 
 let _appInit = () => {

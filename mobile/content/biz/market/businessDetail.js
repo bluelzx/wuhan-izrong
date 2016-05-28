@@ -118,7 +118,7 @@ let BusinessDetail = React.createClass({
                 : this.state.amount < 100000000 ? (this.state.amount / 10000) + '万' : (this.state.amount / 100000000) + '亿')}
               {this.returnItem('利\u3000\u3000率:', this.state.rate == null || this.state.rate == 0 ? '--' : numeral(this.state.rate * 100).format('0,0.00') + '%')}
               {this.returnItem('备\u3000\u3000注:', this.state.remark == null || this.state.remark == 0 ? '--' : this.state.remark)}
-              {this.returnItem('更新时间:', this.state.lastModifyDate)}
+              {this.returnItem('更新时间:', DateHelper.descDate(new Date(this.state.lastModifyDate)))}
             </View>
             {this.renderAdjunct()}
             {this.renderUserInfo()}
@@ -142,7 +142,7 @@ let BusinessDetail = React.createClass({
       <View style={{flexDirection:'row',alignItems:'center',paddingVertical:8}}>
         <Text style={{alignSelf:'stretch',fontSize:16,color:DictStyle.marketSet.fontColor,flex:1}}>{desc}</Text>
         <Text
-          style={{alignSelf:'stretch',fontSize:16,color:(desc == '更新时间:')?DictStyle.marketSet.modifyDateColor : DictStyle.marketSet.fontColor,width:235/375*screenWidth}}>{value}</Text>
+          style={{marginTop:1,alignSelf:'stretch',fontSize:16,color:(desc == '更新时间:')?DictStyle.marketSet.modifyDateColor : DictStyle.marketSet.fontColor,width:235/375*screenWidth}}>{value}</Text>
       </View>
     );
   },

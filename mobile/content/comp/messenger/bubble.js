@@ -99,7 +99,6 @@ export default class Bubble extends React.Component {
       //    </View>
       //  );
       //}else {
-      let flag = (this.props.content.substring(0, 5) === 'UUUUU');
       let uri = this.props.content + ImageSize100;
         return (
           <View style={[styles.bubble, customStyle,
@@ -113,7 +112,7 @@ export default class Bubble extends React.Component {
                 width: 100,
                 height: 100
                 }}
-                     source={{uri: flag?this.props.content.substring(5,this.props.content.length):uri}}
+                     source={{uri: (this.props.content == '' || !this.props.content)?this.props.localUri:uri}}
               />
             </Lightbox>
           </View>
