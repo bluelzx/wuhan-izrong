@@ -32,7 +32,7 @@ let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
 
 let {Alert, GiftedListView, Button} = require('mx-artifacts');
-let {MYBIZ_CHANGE} = require('../../constants/dictEvent');
+let {MYBIZ_CHANGE, FINISH_LOADING} = require('../../constants/dictEvent');
 let Adjust = require('../../comp/utils/adjust');
 let DictStyle = require('../../constants/dictStyle');
 
@@ -82,20 +82,29 @@ let Market = React.createClass({
       bizOrientationID: '',
       termID: '',
       amountID: '',
-      marketData: []
+      marketData: [],
+      listReminder: '未找到符合条件的业务记录'
     }
   },
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, MYBIZ_CHANGE);
+    AppStore.addChangeListener(this._finishLoading, FINISH_LOADING);
   },
 
   componentWillUnmount () {
     AppStore.removeChangeListener(this._onChange, MYBIZ_CHANGE);
+    AppStore.removeChangeListener(this._finishLoading, FINISH_LOADING);
   },
 
   _onChange () {
     this.refs.marketGiftedListView._refreshWithoutSpinner();
+  },
+
+  _finishLoading () {
+    this.setState({
+      listReminder: '请检查网络连接'
+    });
   },
 
   /**
@@ -306,7 +315,7 @@ let Market = React.createClass({
   _emptyView: function () {
     return (
       <View style={{flex:1,justifyContent:'center',alignItems:'center',marginTop:50}}>
-        <Text style={{fontSize:15, color:'#cad2d1'}}>未找到符合条件的业务记录</Text>
+        <Text style={{fontSize:15, color:'#cad2d1'}}>{this.state.listReminder}</Text>
       </View>
     );
   },

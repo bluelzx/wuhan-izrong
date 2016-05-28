@@ -80,7 +80,8 @@ let Market = React.createClass({
       bizOrientationID: '',
       termID: '',
       amountID: '',
-      marketData: []
+      marketData: [],
+      listReminder: '未找到符合条件的业务记录'
     };
   },
   getInitialState(){
@@ -117,11 +118,9 @@ let Market = React.createClass({
   },
 
   _finishLoading () {
-    setTimeout(() => {
-      callback([], {
-        allLoaded: true // the end of the list is reached
-      });
-    }, 1000); // simulating network fetching
+    this.setState({
+      listReminder: '请检查网络连接'
+    });
   },
 
   /**
@@ -156,42 +155,40 @@ let Market = React.createClass({
           }
         })
     }
-    this.props.exec(()=> {
-      return MarketAction.bizOrderMarketSearch(requestBody
-      ).then((response)=> {
-        console.log(response);
-        if (response.totalPages === page) {
-          setTimeout(() => {
-            callback(response.contentList, {
-              allLoaded: true // the end of the list is reached
-            });
-          }, 1000); // simulating network fetching
+
+    MarketAction.bizOrderMarketSearch(requestBody
+    ).then((response)=> {
+      console.log(response);
+      if (response.totalPages === page) {
+        setTimeout(() => {
+          callback(response.contentList, {
+            allLoaded: true // the end of the list is reached
+          });
+        }, 1000); // simulating network fetching
+      } else {
+        setTimeout(() => {
+          callback(response.contentList, {
+            allLoaded: false // the end of the list is reached
+          });
+        }, 1000); // simulating network fetching
+      }
+
+    }).catch(
+      (errorData) => {
+        setTimeout(() => {
+          callback([], {
+            allLoaded: true // the end of the list is reached
+          });
+        }, 1000); // simulating network fetching
+        if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
+          AppStore.forceLogout();
+        } else if (errorData.message.includes('Network request failed')) {
+          Alert('网络异常');
         } else {
-          setTimeout(() => {
-            callback(response.contentList, {
-              allLoaded: false // the end of the list is reached
-            });
-          }, 1000); // simulating network fetching
+          Alert(errorData.msgContent || errorData.message);
         }
-
-      }).catch(
-        (errorData) => {
-          setTimeout(() => {
-            callback([], {
-              allLoaded: true // the end of the list is reached
-            });
-          }, 1000); // simulating network fetching
-          if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
-            AppStore.forceLogout();
-          } else if (errorData.message.includes('Network request failed')) {
-            Alert('网络异常');
-          } else {
-            Alert(errorData.msgContent || errorData.message);
-          }
-        }
-      );
-    }, false);
-
+      }
+    );
   },
   toDetail: function (name, rowData) {
     const { navigator } = this.props;
@@ -253,7 +250,7 @@ let Market = React.createClass({
   _emptyView: function () {
     return (
       <View style={{flex:1,justifyContent:'center',alignItems:'center',marginTop:50}}>
-        <Text style={{fontSize:15, color:'#cad2d1'}}>未找到符合条件的业务记录</Text>
+        <Text style={{fontSize:15, color:'#cad2d1'}}>{this.state.listReminder}</Text>
       </View>
     );
   },
