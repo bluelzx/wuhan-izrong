@@ -265,7 +265,7 @@ let Home = React.createClass({
           />
           <Text
             style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor}}>
-            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天'}
+            {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:rowData.amount == null || rowData.amount == 0 ? DictStyle.marketSet.fontColor :DictStyle.marketSet.amountColor}}>
@@ -290,6 +290,21 @@ let Home = React.createClass({
           marketInfo: rowData
         }
       })
+    }
+  },
+
+  termChangeHelp(term){
+    if (term == null || term == 0) {
+      return '--';
+    } else if (term % 365 == 0) {
+      return term / 365 + '年';
+    } else if (term % 30 == 0) {
+      return term / 30 + '月';
+    } else if (term == 1) {
+      return '隔夜';
+    }
+    else {
+      return term + '天';
     }
   },
 
