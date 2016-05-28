@@ -93,8 +93,13 @@ let EditGroup = React.createClass({
           }
         ).then((groupId)=>{
           ContactAction.storeLeaveGroup(groupId);
-        }).catch((errData)=>{
-          Alert(errData.toLocaleString());
+        }).catch((err)=>{
+          if (err.errCode && err.errCode == 'NOT_GROUP_MEMBER') {
+            Alert('你已不在该群组,确定删除该群组吗?', ()=>{
+              this.props.navigator.popToTop();
+              ContactAction.storeLeaveGroup(this.props.param.groupId);
+            }, ()=>{})
+          }
         });
       }
     );

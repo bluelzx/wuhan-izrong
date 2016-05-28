@@ -1,6 +1,7 @@
 /**
  * Created by baoyinghai on 4/20/16.
  */
+"use strict";
 let _realm = require('./realmManager');
 const _ = require('lodash');
 const {
@@ -17,27 +18,45 @@ let SessionPersisterFacade = {
   updateSession: (param, notAdd, noticeType, currUserId)=>_updateSession(param, notAdd, noticeType, currUserId),
   querySessionById: (id, type) => _querySessionById(id, type),
   setBadgeZero: (sessionId) => _setBadgeZero(sessionId),
-  updateInViteSession:(sessionId) => _updateInViteSession(sessionId),
-  getSessionBadge:(userId) => _getSessionBadge(userId)
-};
+  updateInViteSession: (sessionId) => _updateInViteSession(sessionId),
+  getSessionBadge: (userId) => _getSessionBadge(userId),
+  getSessionIdByUserId: (userId) => _getSessionIdByUserId(userId)
+}
 
-let _deleteSession = function(sessionId) {
+let _getSessionIdByUserId = function (currUserId) {
+  let currSessionId;
+  _realm.write(()=> {
+    let d = _realm.objects(SESSION).filtered('type = \'' + SESSION_TYPE.GROUP_NOTICE + '\'');
+    let groupSession = [];
+    d.forEach((item) => {
+      if (item && !_.isEmpty(item)) {
+        let userId = SessionIdSplit.getUserIdFromSessionId(item.sessionId);
+        if (currUserId == userId) {
+          currSessionId = item.sessionId;
+        }
+      }
+    });
+  });
+  return currSessionId;
+}
+
+let _deleteSession = function (sessionId) {
   _realm.write(() => {
     let session = _realm.objects(SESSION).filtered('sessionId = \'' + sessionId + '\'');
     _realm.delete(session);
   });
 };
 
-let _queryAllSession = function(currUserId) {
+let _queryAllSession = function (currUserId) {
   let ret = [];
-  _realm.objects(SESSION).sorted('lastTime',[true]).forEach((item)=>{
-    if(currUserId == SessionIdSplit.getUserIdFromSessionId(item.sessionId)) {
+  _realm.objects(SESSION).sorted('lastTime', [true]).forEach((item)=> {
+    if (currUserId == SessionIdSplit.getUserIdFromSessionId(item.sessionId)) {
       let p = {
         sessionId: item.sessionId,
         type: item.type,
-        badge:item.badge,
+        badge: item.badge,
         title: item.title,
-        content:item.content,
+        content: item.content,
         lastTime: item.lastTime,
         contentType: item.contentType
       };
@@ -47,21 +66,21 @@ let _queryAllSession = function(currUserId) {
   return ret;
 };
 
-let _getGroupIdBySessionId = function(sid, cuid) {
+let _getGroupIdBySessionId = function (sid, cuid) {
   let l = _realm.objects(MESSAGE).filtered('sessionId = \'' + sid + '\'')[0];
   let tagId = l.groupId;
-  return  tagId ;
-};
+  return tagId;
+}
 
-let _getUserIdBySessionId = function(sid, cuid) {
+let _getUserIdBySessionId = function (sid, cuid) {
   let l = _realm.objects(MESSAGE).filtered('sessionId = \'' + sid + '\'')[0];
   let tagId = l.fromUId;
-  if(!tagId || tagId == cuid)
+  if (!tagId || tagId == cuid)
     tagId = l.toId;
-  return  tagId ;
-};
+  return tagId;
+}
 
-let _updateSession = function (param, notAdd, noticeType, currUserId){
+let _updateSession = function (param, notAdd, noticeType, currUserId) {
   if (param.type == SESSION_TYPE.GROUP_NOTICE) {
     param.contentType = SESSION_TYPE.GROUP_NOTICE;
     let d = _realm.objects(SESSION).filtered('type = \'' + SESSION_TYPE.GROUP_NOTICE + '\'');
@@ -103,22 +122,22 @@ let _updateSession = function (param, notAdd, noticeType, currUserId){
     }
   } else {
     let p = _realm.objects(SESSION).filtered("sessionId = '" + param.sessionId + "'");
-    if(p.length > 0){
-      if(p[0].lastTime > param.lastTime){
+    if (p.length > 0) {
+      if (p[0].lastTime > param.lastTime) {
         return;
       }
-      if(param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER || param.type == SESSION_TYPE.NEWFRIEND){
-        if(!notAdd){
+      if (param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER || param.type == SESSION_TYPE.NEWFRIEND) {
+        if (!notAdd) {
           param.badge = p[0].badge + 1;
         }
       }
-    }else{
-      if(!notAdd){
-        param.badge =  1;
+    } else {
+      if (!notAdd) {
+        param.badge = 1;
       }
     }
   }
-  _realm.write(()=>{
+  _realm.write(()=> {
     _realm.create(SESSION, param, true);
   });
 }
@@ -129,33 +148,31 @@ let _setBadgeZero = function (sessionId) {
   });
 }
 
-let _querySessionById = function(id, type){
+let _querySessionById = function (id, type) {
   let r = "";
-  if(type == SESSION_TYPE.USER) {
-    r =  _realm.objects(MESSAGE).filtered('type == $0 ', type).filtered('toId == $0 || fromUId == $0', id);
-  }else{
-    r =  _realm.objects(MESSAGE).filtered('type == $0 ', type).filtered('groupId == $0', id);
+  if (type == SESSION_TYPE.USER) {
+    r = _realm.objects(MESSAGE).filtered('type == $0 ', type).filtered('toId == $0 || fromUId == $0', id);
+  } else {
+    r = _realm.objects(MESSAGE).filtered('type == $0 ', type).filtered('groupId == $0', id);
   }
-  return (!!r &&  !!r[0] )? r[0].sessionId:null;
+  return (!!r && !!r[0] ) ? r[0].sessionId : null;
 }
 
-let _updateInViteSession = function(sessionId) {
-  _realm.write(()=>{
-    _realm.create(SESSION,{sessionId:sessionId, type:SESSION_TYPE.INVITED}, true);
+let _updateInViteSession = function (sessionId) {
+  _realm.write(()=> {
+    _realm.create(SESSION, {sessionId: sessionId, type: SESSION_TYPE.INVITED}, true);
   })
 }
 
-let _getSessionBadge = function(userId){
-  let result = _realm.objects(SESSION).filtered('sessionId ENDSWITH $0',userId+'');
+let _getSessionBadge = function (userId) {
+  let result = _realm.objects(SESSION);
   let ret = 0;
-  result.forEach((item)=>{
-    if(item && item.badge){
-      if(item.type == SESSION_TYPE.USER ||item.type == SESSION_TYPE.GROUP || item.type == SESSION_TYPE.PLATFORMINFO){
-        ret += item.badge;
-      }
+  result.forEach((item) => {
+    if (SessionIdSplit.getUserIdFromSessionId(item.sessionId) == userId) {
+      ret += item.badge;
     }
   });
-  return ret;
+  return ret % 100000;
 }
 
 module.exports = SessionPersisterFacade;

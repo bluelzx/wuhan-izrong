@@ -63,8 +63,8 @@ var AboutUs = React.createClass({
             </Text>
           </View>
           <View>
-            <Item desc="网站邮箱:" img={false} icon={false} hiddenArrow={true} value={this.state.email}/>
-            <Item desc="版本号:" img={false} icon={false} hiddenArrow={true} value={Platform.OS === 'ios' ? this.state.versionName + '.' + this.state.buildNumber : this.state.versionName}/>
+            <Item desc="网站邮箱" img={false} icon={false} hiddenArrow={true} value={this.state.email}/>
+            <Item desc="版本号" img={false} icon={false} hiddenArrow={true} value={Platform.OS === 'ios' ? this.state.versionName + '.' + this.state.buildNumber : this.state.versionName}/>
           </View>
 
           <View style={{marginTop:60,flexDirection: 'column'}}>

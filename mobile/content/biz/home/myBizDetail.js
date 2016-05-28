@@ -289,8 +289,10 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:5}}>
           <View style={{flexDirection:'row',alignItems:'center'}}>
-            <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'方向'}</Text>
-            <Text style={{color:'#dd656c'}}>{'*'}</Text>
+            <View style={{marginLeft:20,width:Adjust.width(100),flexDirection:'row',alignItems:'center'}}>
+              <Text style={{color:DictStyle.marketSet.fontColor}}>{'方向'}</Text>
+              <Text style={{color:'#dd656c'}}>{'*'}</Text>
+            </View>
             <View style={{marginTop:5,flexDirection:'row'}}>
               <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
                          change={this._bizOrientationDataChange}/>
