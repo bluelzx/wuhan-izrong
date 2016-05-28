@@ -2,7 +2,7 @@
  * Created by baoyinghai on 16/4/5.
  */
 let React = require('react-native');
-let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch} = React;
+let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch, ScrollView} = React;
 var Icon  = require('react-native-vector-icons/Ionicons');
 let { Device,Alert, Button } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
@@ -118,7 +118,7 @@ let EditGroupMaster = React.createClass({
 
   renderBody: function () {
     return (
-      <View style={{flexDirection:'column'}}>
+      <ScrollView style={{flexDirection:'column'}}>
         <View style={{flexDirection:'column'}}>
           {this.renderMember()}
           <TouchableOpacity
@@ -177,7 +177,7 @@ let EditGroupMaster = React.createClass({
           </Button>
 
         </View>
-      </View>
+      </ScrollView>
     );
   },
 
