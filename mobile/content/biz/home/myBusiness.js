@@ -216,7 +216,7 @@ let Market = React.createClass({
       return (
         <View>
           <Button
-            containerStyle={{flexDirection:'row',justifyContent:'center',alignItems:'center',borderRadius:5,position:"absolute",left:Adjust.width(240),top:0,marginTop:-15,backgroundColor: '#6ebfe5',height:30,width:Adjust.width(85)}}
+            containerStyle={{flexDirection:'row',justifyContent:'center',alignItems:'center',borderRadius:5,position:"absolute",left:Adjust.width(240),top:0,marginTop:-15,backgroundColor: '#6ebfe5',height:30,width:Adjust.width(75)}}
             style={{fontSize: 15, color: 'white'}}
             disabled={this.state.disabled}
             onPress={() => this.freshBiz(rowData)}
