@@ -99,6 +99,7 @@ var CountedTextInput = React.createClass({
               height: 80
           }}
                     autoCorrect={false}
+                    autoFocus={true}
                     placeholder={this.props.placeholder}
                     placeholderTextColor="grey"
                     multiline={true}
