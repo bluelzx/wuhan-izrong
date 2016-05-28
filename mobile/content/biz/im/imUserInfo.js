@@ -33,7 +33,7 @@ let ImUserInfo = React.createClass({
     ////// 是否已经是好友
     let userInfo;
     let user = ContactStore.getUserInfo();
-    this.props.param.isStranger = ContactStore.isStranger(user.userId);
+    this.props.param.isStranger = ContactStore.isStranger(this.props.param.userId);
     if(user.userId == this.props.param.userId){
       userInfo = user;
     }else {
@@ -135,19 +135,19 @@ let ImUserInfo = React.createClass({
       return (
         <View style={{position:'absolute',left:0,bottom:0,right:0}}>
           {(()=>{
-            if(!this.props.param.isStranger){
-              return null;
-            }else {
+            if(this.props.param.isStranger){
               return (
                 <TouchableOpacity
                   style={{flex:1,marginTop: 20, backgroundColor: '#4fb9fc',justifyContent:'center',alignItems:'center',paddingVertical:15}}
                   onPress={()=>this.addFriend()}
                 >
                   <Text style={{fontSize: 20, color: '#ffffff',textAlign:'center'}}>
-                  加为好友
-                    </Text>
+                    加为好友
+                  </Text>
                 </TouchableOpacity>
               );
+            }else {
+             return null;
             }
 
           })()}

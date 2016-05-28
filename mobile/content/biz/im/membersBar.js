@@ -60,8 +60,8 @@ let MembersBar = React.createClass({
       }
     }
 
-   m =  m.concat(this.renderCircularButton());
-   let index =  Device.width/61;
+    m = m.concat(this.renderCircularButton());
+    let index = Device.width / 61;
 
     //if(m.length/index > 2){
     //  let start = m.length - index*2;
