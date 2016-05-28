@@ -41,15 +41,36 @@ let ContactPersisterFacade = {
   getOrgValueByOrgId: (orgId) => _getOrgValueByOrgId(orgId),
   saveIMUserInfo: (item) => _saveIMUserInfo(item),
   judgeGroup: (groupId, userId) => _judgeGroup(groupId, userId),
-  updateFriendList: (param, userId) => _updateFriendList
+  updateFriendList: (param, userId) => _updateFriendList(param, userId),
+  deleteMemberFromGroup: (groupId, userId) => _deleteMemberFromGroup(groupId, userId)
 }
+
+let _deleteMemberFromGroup = function(groupId, userId) {
+  _realm.write(()=>{
+    let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
+    if (group.length > 0 && group[0]) {
+      let members = JSON.parse(group[0].members);
+      let arr = [];
+      members.forEach((id)=> {
+        if (id != userId) {
+          arr.push(id);
+        }
+      });
+      let param = {
+        groupId: groupId,
+        members: JSON.stringify(arr)
+      }
+      _realm.create(GROUP, param, true);
+    }
+  });
+};
 
 let _judgeGroup = function(groupId, userId) {
   let judge = false;
   _realm.write(() => {
     let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
     if (group.length > 0) {
-      let members = JSON.parse(group.members);
+      let members = JSON.parse(group[0].members);
       members.forEach((id)=> {
         if (id == userId) {
           judge = true;

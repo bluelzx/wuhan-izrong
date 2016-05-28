@@ -23,6 +23,7 @@ let NavBarView =
     fontColor: React.PropTypes.string,
     contentBackgroundColor: React.PropTypes.string,
     actionButton: React.PropTypes.func,
+    backAction: React.PropTypes.func,
     navBarBottomWidth: React.PropTypes.string
   },
   getDefaultProps: function () {
@@ -34,6 +35,7 @@ let NavBarView =
       fontColor: DictStyle.colorSet.navBarFont,
       contentBackgroundColor: DictStyle.colorSet.content,
       actionButton: null,
+      backAction: null,
       navBarBottomWidth: 0
     };
   },
@@ -42,7 +44,7 @@ let NavBarView =
       return (
         <TouchableOpacity
           style={{ paddingLeft: 10 }}
-          onPress={() => this.props.navigator.pop()}
+          onPress={this.props.backAction ? () => this.props.backAction() : () => this.props.navigator.pop()}
         >
           <Icon name="ios-arrow-left" size={30} color={this.props.fontColor} />
         </TouchableOpacity>

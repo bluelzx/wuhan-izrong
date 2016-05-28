@@ -23,7 +23,7 @@ var AppStore = require('../store/appStore');
 //var Alert = require('../../comp/utils/alert');
 //var Login = require('../../biz/login/login')
 let {Alert} = require('mx-artifacts');
-
+let _ = require('lodash');
 const DictStyle = require('../../constants/dictStyle');
 
 let MarketAction = require('../action/marketAction');

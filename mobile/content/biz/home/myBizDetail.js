@@ -69,7 +69,7 @@ let MyBizDetail = React.createClass({
       termText: this.termChangeHelp(marketInfo.term).toString(),
       amountText: marketInfo.amount == null || marketInfo.amount == 0 ? '' : (marketInfo.amount < 100000000) ? (marketInfo.amount / 10000).toString() : (marketInfo.amount / 100000000).toString(),
       rateText: marketInfo.rate == null || marketInfo.rate == 0 ? '' : numeral((marketInfo.rate * 100)).format('0,0.00'),
-      remarkText: marketInfo.remark,
+      remarkText: '',
       lastModifyDate: DateHelper.descDate(t),
       //networt
       id: marketInfo.id,
@@ -289,8 +289,10 @@ let MyBizDetail = React.createClass({
       return (
         <View style={{flexDirection:'column',marginTop:5}}>
           <View style={{flexDirection:'row',alignItems:'center'}}>
-            <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'方向'}</Text>
-            <Text style={{color:'#dd656c'}}>{'*'}</Text>
+            <View style={{marginLeft:20,width:Adjust.width(100),flexDirection:'row',alignItems:'center'}}>
+              <Text style={{color:DictStyle.marketSet.fontColor}}>{'方向'}</Text>
+              <Text style={{color:'#dd656c'}}>{'*'}</Text>
+            </View>
             <View style={{marginTop:5,flexDirection:'row'}}>
               <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
                          change={this._bizOrientationDataChange}/>
@@ -693,6 +695,7 @@ let MyBizDetail = React.createClass({
         ).then((response)=> {
           this.setState({
             remark: response.remark,
+            remarkText: response.remark,
             fileUrlList: response.fileUrlList
           });
         }).catch(
