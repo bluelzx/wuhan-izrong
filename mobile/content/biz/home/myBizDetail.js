@@ -69,7 +69,7 @@ let MyBizDetail = React.createClass({
       termText: this.termChangeHelp(marketInfo.term).toString(),
       amountText: marketInfo.amount == null || marketInfo.amount == 0 ? '' : (marketInfo.amount < 100000000) ? (marketInfo.amount / 10000).toString() : (marketInfo.amount / 100000000).toString(),
       rateText: marketInfo.rate == null || marketInfo.rate == 0 ? '' : numeral((marketInfo.rate * 100)).format('0,0.00'),
-      remarkText: marketInfo.remark,
+      remarkText: '',
       lastModifyDate: DateHelper.descDate(t),
       //networt
       id: marketInfo.id,
@@ -695,6 +695,7 @@ let MyBizDetail = React.createClass({
         ).then((response)=> {
           this.setState({
             remark: response.remark,
+            remarkText: response.remark,
             fileUrlList: response.fileUrlList
           });
         }).catch(
