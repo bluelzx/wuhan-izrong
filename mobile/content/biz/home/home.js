@@ -190,7 +190,7 @@ let Home = React.createClass({
           </View>
           <View style={styles.listHead}>
             <Text
-              style={{marginLeft: 20, fontSize: 15, color: PlainStyle.colorSet.commonTextColor}}>
+              style={{marginLeft: 15, fontSize: 15, color: PlainStyle.colorSet.commonTextColor}}>
               资金业务
             </Text>
           </View>

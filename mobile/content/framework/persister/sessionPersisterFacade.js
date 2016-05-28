@@ -18,15 +18,15 @@ let SessionPersisterFacade = {
   querySessionById: (id, type) => _querySessionById(id, type),
   setBadgeZero: (sessionId) => _setBadgeZero(sessionId),
   updateInViteSession:(sessionId) => _updateInViteSession(sessionId),
-  getSessionBadge:(userId) => _getSessionBadge(userId),
-}
+  getSessionBadge:(userId) => _getSessionBadge(userId)
+};
 
 let _deleteSession = function(sessionId) {
   _realm.write(() => {
     let session = _realm.objects(SESSION).filtered('sessionId = \'' + sessionId + '\'');
     _realm.delete(session);
   });
-}
+};
 
 let _queryAllSession = function(currUserId) {
   let ret = [];
@@ -45,13 +45,13 @@ let _queryAllSession = function(currUserId) {
     }
   });
   return ret;
-}
+};
 
 let _getGroupIdBySessionId = function(sid, cuid) {
   let l = _realm.objects(MESSAGE).filtered('sessionId = \'' + sid + '\'')[0];
   let tagId = l.groupId;
   return  tagId ;
-}
+};
 
 let _getUserIdBySessionId = function(sid, cuid) {
   let l = _realm.objects(MESSAGE).filtered('sessionId = \'' + sid + '\'')[0];
@@ -59,7 +59,7 @@ let _getUserIdBySessionId = function(sid, cuid) {
   if(!tagId || tagId == cuid)
     tagId = l.toId;
   return  tagId ;
-}
+};
 
 let _updateSession = function (param, notAdd, noticeType, currUserId){
   if (param.type == SESSION_TYPE.GROUP_NOTICE) {
