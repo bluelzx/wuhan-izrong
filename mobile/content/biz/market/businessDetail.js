@@ -142,7 +142,7 @@ let BusinessDetail = React.createClass({
       <View style={{flexDirection:'row',alignItems:'center',paddingVertical:8}}>
         <Text style={{alignSelf:'stretch',fontSize:16,color:DictStyle.marketSet.fontColor,flex:1}}>{desc}</Text>
         <Text
-          style={{alignSelf:'stretch',fontSize:16,color:(desc == '更新时间:')?DictStyle.marketSet.modifyDateColor : DictStyle.marketSet.fontColor,width:235/375*screenWidth}}>{value}</Text>
+          style={{marginTop:1,alignSelf:'stretch',fontSize:16,color:(desc == '更新时间:')?DictStyle.marketSet.modifyDateColor : DictStyle.marketSet.fontColor,width:235/375*screenWidth}}>{value}</Text>
       </View>
     );
   },

@@ -75,11 +75,11 @@ let MyBizDetail = React.createClass({
       id: marketInfo.id,
       term: marketInfo.term,
       rate: marketInfo.rate * 100,
-      remark: marketInfo.remark,
       bizOrientation: marketInfo.bizOrientation,
       bizCategory: marketInfo.bizCategory,
       amount: marketInfo.amount,
-      fileUrlList: marketInfo.fileUrlList,
+      remark: null,
+      fileUrlList: [],
 
       keyboardSpace: 0,
       scrollHeight: screenHeight - 108
@@ -95,6 +95,9 @@ let MyBizDetail = React.createClass({
       DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
       DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
     }
+    InteractionManager.runAfterInteractions(() => {
+      this.getBizOrderByCreator(this.state.id);
+    });
 
   },
 
@@ -579,7 +582,7 @@ let MyBizDetail = React.createClass({
         <Text
           style={{alignSelf:'stretch',fontSize:16,color:DictStyle.marketSet.fontColor,width:Adjust.width(120)}}>{desc}</Text>
         <Text
-          style={{alignSelf:'stretch',marginLeft:10,fontSize:16,color:(desc == '更新时间:')?
+          style={{alignSelf:'stretch',marginTop:1,marginLeft:10,fontSize:16,color:(desc == '更新时间:')?
           DictStyle.marketSet.modifyDateColor : DictStyle.marketSet.fontColor,
           width:225/375*screenWidth}}>{value}</Text>
       </View>
@@ -688,7 +691,10 @@ let MyBizDetail = React.createClass({
             orderId: id
           }
         ).then((response)=> {
-          let detail = (JSON.stringify(response));
+          this.setState({
+            remark: response.remark,
+            fileUrlList: response.fileUrlList
+          });
         }).catch(
           (errorData) => {
             throw errorData;
