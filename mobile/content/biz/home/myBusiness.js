@@ -306,7 +306,7 @@ let Market = React.createClass({
   _emptyView: function () {
     return (
       <View style={{flex:1,justifyContent:'center',alignItems:'center',marginTop:50}}>
-        <Text style={{fontSize:15, color:'#355d81'}}>未找到符合条件的业务记录</Text>
+        <Text style={{fontSize:15, color:'#cad2d1'}}>未找到符合条件的业务记录</Text>
       </View>
     );
   },

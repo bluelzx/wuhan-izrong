@@ -169,7 +169,7 @@ var TabView = React.createClass({
 
           <TabBarIOS.Item
             title="聊天"
-            badge={(this.state.badge || null) > 99 ? '99+':(this.state.badge || null)}
+            badge={this.state.badge > 99 ? '99+':(this.state.badge || null)}
             icon={require('../../image/tab/IM.png')}
             selectedIcon={require('../../image/tab/IM-selected2.png')}
             selected={this.state.selectedTab === 'IM'}

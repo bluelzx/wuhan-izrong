@@ -183,9 +183,9 @@ let Contacts = React.createClass({
       <View style={{position:'absolute',top:Platform.OS === 'ios'?Device.navBarHeight:0,right:5,width:150}}>
         <View>
           <View style={{ alignItems: 'flex-end',paddingRight:10}}>
-            <Angle direction="up" color='#375EE4'/>
+            <Angle direction="up" color='#4074E6'/>
           </View>
-          <View style={{backgroundColor:'#375EE4', borderRadius:5,paddingHorizontal:5,paddingVertical:10, marginTop:Platform.OS==='ios'?0:-12}}>
+          <View style={{backgroundColor:'#4074E6', borderRadius:5,paddingHorizontal:5,paddingVertical:10, marginTop:Platform.OS==='ios'?0:-12}}>
             <TouchableOpacity
               onPress={
                 () => {

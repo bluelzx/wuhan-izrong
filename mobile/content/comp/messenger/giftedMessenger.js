@@ -762,7 +762,7 @@ let GiftedMessenger = React.createClass({
           containerStyle={{
             justifyContent: 'center',
             borderRadius: 6,
-            backgroundColor: '#375EE4',
+            backgroundColor: '#4074E6',
             paddingHorizontal: 10,
             height: this.props.defaultTextInputHeight - 20,
           }}
