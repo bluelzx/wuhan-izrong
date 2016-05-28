@@ -9,6 +9,7 @@ let ImUserInfo = require('./imUserInfo');
 let DictStyle = require('../../constants/dictStyle');
 let HeaderPic = require('./headerPic');
 let ContactStore = require('../../framework/store/contactStore');
+let {Device} = require('mx-artifacts');
 
 //let NameCircular = require('./nameCircular').NameCircular;
 
@@ -32,7 +33,7 @@ let MembersBar = React.createClass({
       <TouchableOpacity onPress={()=>this.props.navigator.push({
         comp:ImUserInfo,
         param:Object.assign(member,{isStranger:ContactStore.isStranger(member.userId)})
-        })} key={member.userId} style={{alignItems:'center',padding:5}}>
+        })} key={member.userId} style={{alignItems:'center',padding:5,alignSelf:'flex-start'}}>
         <View style={{marginTop:5,height: 51,width: 51}}>
           <HeaderPic photoFileUrl={member.photoFileUrl}  certified={member.certified} name={member.realName}/>
         </View>
@@ -54,10 +55,20 @@ let MembersBar = React.createClass({
         );
       }
     }
+
+   m =  m.concat(this.renderCircularButton());
+   let index =  Device.width/61;
+
+    //if(m.length/index > 2){
+    //  let start = m.length - index*2;
+    //  m = m.slice(start + 1,m.length);
+    //}
     return (
-      <View style={{flexDirection:'row', flexWrap:'wrap', backgroundColor:DictStyle.groupManage.memberListBackgroundColor}}>
-        {m}
-        {this.renderCircularButton()}
+      <View style={{backgroundColor:DictStyle.groupManage.memberListBackgroundColor, flex:1,justifyContent:'center',alignSelf:'stretch',alignItems:'center'}}>
+        <View
+          style={{width:parseInt(index) * 61,flexDirection:'row', flexWrap:'wrap'}}>
+          {m}
+        </View>
       </View>
     );
   }

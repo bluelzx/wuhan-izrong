@@ -17,7 +17,7 @@ let NewFriendNoticPersisterFacade = {
 };
 
 let _queryAllNewNotic = function(ownerId){
-  let ret = _realm.objects(NEWFRIENDNOTIC).filtered('ownerId =' + ownerId ).sorted('recTime',false);
+  let ret = _realm.objects(NEWFRIENDNOTIC).filtered('ownerId =' + ownerId ).sorted('recTime',true);
   return ret;
 }
 
