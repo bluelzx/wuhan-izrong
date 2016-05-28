@@ -225,6 +225,7 @@ let BusinessDetail = React.createClass({
             />
             <Text
               style={{marginLeft:10,fontSize:DictStyle.marketSet.fontSize,color:DictStyle.marketSet.fontColor}}
+              numberOfLines={isCallPhone ? 1:2}
             >{isPublic ? value : '--'}</Text>
           </View>
         );
@@ -236,7 +237,8 @@ let BusinessDetail = React.createClass({
             />
             <TouchableOpacity onPress={()=>{CallPhone.callPhone(value)}}>
               <Text
-                style={{marginLeft:10,fontSize:DictStyle.marketSet.fontSize,color:DictStyle.marketSet.fontColor,textDecorationLine: 'underline'}}>{value}</Text>
+                style={{marginLeft:10,fontSize:DictStyle.marketSet.fontSize,color:DictStyle.marketSet.fontColor,textDecorationLine: 'underline'}}
+                numberOfLines={isCallPhone ? 1:2}>{value}</Text>
             </TouchableOpacity>
           </View>
         );
@@ -263,7 +265,7 @@ let BusinessDetail = React.createClass({
     }
   },
   renderImageItem: function () {
-    if (this.state.marketDetail == null || this.state.marketDetail == ''){
+    if (this.state.fileUrlList == null || this.state.fileUrlList == ''){
       return (
         <View>
         </View>
