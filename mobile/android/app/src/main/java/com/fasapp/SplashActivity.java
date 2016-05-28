@@ -20,7 +20,7 @@ import com.fasapp.utils.ReactNativeAutoUpdater;
 
 import java.io.File;
 
-public class SplashActivity extends Activity implements Animation.AnimationListener,ReactNativeAutoUpdater.Interface{
+public class SplashActivity extends Activity implements Animation.AnimationListener{
     private ImageView mImageView;
     private TextView tvUpdate;
     private ReactNativeAutoUpdater updater;
@@ -51,15 +51,8 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        updater = ReactNativeAutoUpdater.getInstance(this);
-        updater.setUpdateMetadataUrl(this.getUpdateMetadataUrl())
-                .setMetadataAssetName(this.getMetadataAssetName())
-                .setUpdateFrequency(this.getUpdateFrequency())
-                .setUpdateTypesToDownload(this.getAllowedUpdateType())
-                .setHostnameForRelativeDownloadURLs(this.getHostnameForRelativeDownloadURLs())
-                .showProgress(this.getShowProgress())
-                .setParentActivity(this)
-                .checkForUpdates();
+        finish();
+        startActivity(new Intent(SplashActivity.this, MainActivity.class));
     }
 
     public void setTvUpdateVisible () {
@@ -97,40 +90,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     @Override
     public void onAnimationRepeat(Animation animation) {
 
-    }
-
-    @Override
-    public void updateFinished() {
-//        try {
-//            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(SplashActivity.this);
-//            alertDialogBuilder.setTitle(R.string.auto_updater_downloaded_title);
-//            alertDialogBuilder
-//                    .setMessage(R.string.auto_updater_downloaded_message)
-//                    .setCancelable(false)
-//                    .setPositiveButton(
-//                            R.string.auto_updater_downloaded_now,
-//                            new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//                                    SplashActivity.this.recreate();
-//                                }
-//                            }
-//                    )
-//                    .setNegativeButton(
-//                            R.string.auto_updater_downloaded_later,
-//                            new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//                                    dialog.cancel();
-//                                    finishAct();
-//                                }
-//                            }
-//                    );
-//
-//            AlertDialog alertDialog = alertDialogBuilder.create();
-//            alertDialog.show();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        finishAct();
     }
 
     public void finishAct() {
