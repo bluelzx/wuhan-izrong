@@ -26,7 +26,6 @@ const DictEvent = keyMirror({
    */
   MARKET_CHANGE: null,
   MYBIZ_CHANGE: null,
-  FILTER_CHANGE: null,
   /**
    * User events.
    */
@@ -46,7 +45,10 @@ const DictEvent = keyMirror({
   /**
    * new Friend
    * */
-  NEW_FRIEND: null
+  NEW_FRIEND: null,
+
+  FINISH_LOADING: null
+
 });
 
 module.exports = DictEvent;

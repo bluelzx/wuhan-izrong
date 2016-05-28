@@ -30,7 +30,7 @@ let BusinessDetail = require('./businessDetail');
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
 let AppStore = require('../../framework/store/appStore');
-let { MARKET_CHANGE, MYBIZ_CHANGE , FILTER_CHANGE} = require('../../constants/dictEvent');
+let { MARKET_CHANGE, MYBIZ_CHANGE ,FINISH_LOADING} = require('../../constants/dictEvent');
 let _ = require('lodash');
 let {Alert, GiftedListView} = require('mx-artifacts');
 let Adjust = require('../../comp/utils/adjust');
@@ -90,11 +90,13 @@ let Market = React.createClass({
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
     AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
+    AppStore.addChangeListener(this._finishLoading, FINISH_LOADING);
   },
 
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
     AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
+    AppStore.removeChangeListener(this._finishLoading, FINISH_LOADING);
   },
 
   _onChange () {
@@ -112,6 +114,14 @@ let Market = React.createClass({
       pickTypeRow: filterType != null ? filterType.rowId : 0
     });
     this.refs.marketGiftedListView._refresh();
+  },
+
+  _finishLoading () {
+    setTimeout(() => {
+      callback([], {
+        allLoaded: true // the end of the list is reached
+      });
+    }, 1000); // simulating network fetching
   },
 
   /**
@@ -146,40 +156,42 @@ let Market = React.createClass({
           }
         })
     }
-
-    MarketAction.bizOrderMarketSearch(requestBody
-    ).then((response)=> {
-      console.log(response);
-      if (response.totalPages === page) {
-        setTimeout(() => {
-          callback(response.contentList, {
-            allLoaded: true // the end of the list is reached
-          });
-        }, 1000); // simulating network fetching
-      } else {
-        setTimeout(() => {
-          callback(response.contentList, {
-            allLoaded: false // the end of the list is reached
-          });
-        }, 1000); // simulating network fetching
-      }
-
-    }).catch(
-      (errorData) => {
-        setTimeout(() => {
-          callback([], {
-            allLoaded: true // the end of the list is reached
-          });
-        }, 1000); // simulating network fetching
-        if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
-          AppStore.forceLogout();
-        } else if (errorData.message.includes('Network request failed')) {
-          Alert('网络异常');
+    this.props.exec(()=> {
+      return MarketAction.bizOrderMarketSearch(requestBody
+      ).then((response)=> {
+        console.log(response);
+        if (response.totalPages === page) {
+          setTimeout(() => {
+            callback(response.contentList, {
+              allLoaded: true // the end of the list is reached
+            });
+          }, 1000); // simulating network fetching
         } else {
-          Alert(errorData.msgContent || errorData.message);
+          setTimeout(() => {
+            callback(response.contentList, {
+              allLoaded: false // the end of the list is reached
+            });
+          }, 1000); // simulating network fetching
         }
-      }
-    );
+
+      }).catch(
+        (errorData) => {
+          setTimeout(() => {
+            callback([], {
+              allLoaded: true // the end of the list is reached
+            });
+          }, 1000); // simulating network fetching
+          if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
+            AppStore.forceLogout();
+          } else if (errorData.message.includes('Network request failed')) {
+            Alert('网络异常');
+          } else {
+            Alert(errorData.msgContent || errorData.message);
+          }
+        }
+      );
+    }, false);
+
   },
   toDetail: function (name, rowData) {
     const { navigator } = this.props;
@@ -518,7 +530,8 @@ let Market = React.createClass({
             <View style={{flexDirection:'row',justifyContent:'space-between',paddingBottom:20}}>
               <TouchableHighlight onPress={() => this.clearOptions()} underlayColor='rgba(129,127,201,0)'>
                 <View style={{alignItems: 'center',justifyContent:'center'}}>
-                  <View style={{alignItems: 'center',justifyContent:'center',marginLeft:10,marginRight:10,marginTop:10,borderRadius:5,width:(screenWidth-30)/2,height:36,borderColor:'#ed5867',borderWidth:1}}>
+                  <View
+                    style={{alignItems: 'center',justifyContent:'center',marginLeft:10,marginRight:10,marginTop:10,borderRadius:5,width:(screenWidth-30)/2,height:36,borderColor:'#ed5867',borderWidth:1}}>
                     <Text style={{color:'#ed5867'}}>{'清空'}</Text>
                   </View>
                 </View>
