@@ -164,8 +164,8 @@ let SearchFriend = React.createClass({
         title='搜索好友'
       >
        <View style={{paddingTop:5}}>
-         <View style={{flexDirection:'row',justifyContent:'space-between', alignItems:'center',marginRight:10}}>
-           <View style={{flex:1,height:30,backgroundColor:'#ffffff',marginHorizontal:10,borderRadius:6,
+         <View style={{flexDirection:'row',justifyContent:'center', alignItems:'center',marginRight:10}}>
+           <View style={{flex:1,height:(Platform.OS === 'ios')?30:40,backgroundColor:'#ffffff',marginHorizontal:10,borderRadius:6,
           justifyContent:'center', alignItems:'center',alignItems:'stretch'}}>
               <TextInput
                 placeholder={this.state.desc}
@@ -174,7 +174,7 @@ let SearchFriend = React.createClass({
                 onSubmitEditing={()=>{this.state.justTop=true;this.searchFriend()}}
                 selectionColor={DictStyle.colorSet.textInputColor}
                 onChangeText={(text) => this.textChange(text)}
-                style={{flex:1,alignSelf:'stretch',color: DictStyle.colorSet.searchBarColor, height:(Platform.OS === 'ios')?20:60,backgroundColor:'#ffffff',marginTop:0,marginLeft:10,marginRight:10}}>
+                style={{flex:1,alignSelf:'stretch',color: '#3C62E4', height:(Platform.OS === 'ios')?20:35,backgroundColor:'#ffffff',marginTop:0,marginLeft:10,marginRight:10}}>
               </TextInput>
            </View>
          </View>
@@ -205,7 +205,7 @@ let SearchFriend = React.createClass({
              if (this.state.keyWord && this.state.keyWord.length > 0 && this.state.showSearchBtn) {
                return (
                  <TouchableOpacity
-                   style={{left:0,right:0,top:(Platform.OS === 'ios')?38:60,backgroundColor:'#ffffff',position:'absolute',height:(Platform.OS === 'ios')?50:60,justifyContent:'center',alignItems:'flex-start'}}
+                   style={{left:0,right:0,top:(Platform.OS === 'ios')?38:50,backgroundColor:'#ffffff',position:'absolute',height:(Platform.OS === 'ios')?50:60,justifyContent:'center',alignItems:'flex-start'}}
                    onPress={()=>{this.state.justTop=true;this.searchFriend()}}>
                    <View style={{paddingHorizontal:10,flexDirection:'row',alignItems:'center'}}>
                      <View style={{flexDirection:'row', alignItems:'center'}}>
