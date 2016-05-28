@@ -103,7 +103,7 @@ let ImUserInfo = React.createClass({
     }else {
       this.props.exec(()=> {
         return ContactAction.addFriend(this.props.param.userId).then((response)=> {
-          ContactStore.addFriend(this.props.param);
+          ContactStore.addFriend(this.state.data);
         }).then((response)=> {
           this.props.navigator.popToTop();
         }).catch((err)=> {

@@ -436,7 +436,7 @@ let WhitePage = React.createClass({
 
         <ScrollView
           automaticallyAdjustContentInsets={false}
-          style={{flexDirection: 'column',marginTop:0,backgroundColor:'#F4F4F4'}}>
+          style={{flexDirection: 'column',marginTop:0,backgroundColor:'#F4F4F4',marginBottom:50}}>
           {this.renderMessage()}
         </ScrollView>
 

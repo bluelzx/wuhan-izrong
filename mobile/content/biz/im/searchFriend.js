@@ -185,7 +185,7 @@ let SearchFriend = React.createClass({
              return (
                <ScrollView
                  automaticallyAdjustContentInsets={false}
-                 style={{flexDirection: 'column',backgroundColor:'#FEFEFE', marginTop:5}}>
+                 style={{flexDirection: 'column',backgroundColor:'#FEFEFE', marginTop:5, marginBottom:50}}>
                  {this.renderSearchResult()}
                </ScrollView>
              );
