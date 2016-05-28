@@ -40,7 +40,7 @@ let MessageSchema = {
     msgType: {type: 'string', optional: true},
     revTime: {type: 'date', optional: true},
     isRead: {type: 'bool', option: true},
-    status: {type: 'string', optional: true},//状态: 是否发送成功
+    status: {type: 'string', optional: true},//状态: 是否发送成功  屏蔽
     ownerId: {type: 'int', optional: true}
   }
 };
@@ -168,26 +168,9 @@ let MarketInfoSchema = {
   name: "marketInfo",
   primaryKey: 'id',
   properties: {
-    amount: {type: 'int', optional: true},
-    bizCategory: {type: 'string', optional: true},
-    bizCategoryDesc: {type: 'string', optional: true},
-    bizItem: {type: 'string', optional: true},
-    bizItemDesc: {type: 'string', optional: true},
-    bizOrientation: {type: 'string', optional: true},
-    bizOrientationDesc: {type: 'string', optional: true},
-    fileUrlList: {type: 'string', optional: true},
-    id: {type: 'int', optional: true},
-    lastModifyDate: {type: 'date', optional: true},
-    orgId: {type: 'int', optional: true},
-    orgName: {type: 'string', optional: true},
-    photoStoredFileUrl: {type: 'string', optional: true},
-    rate: {type: 'int', optional: true},
-    remark: {type: 'string', optional: true},
-    status: {type: 'string', optional: true},
-    statusDesc: {type: 'string', optional: true},
-    term: {type: 'int', optional: true},
-    userId: {type: 'int', optional: true},
-    userName: {type: 'string', optional: true}
+    id: {type: 'string'},
+    syncTime: {type: 'int', optional: true},
+    homeMarketList: {type: 'string', optional: true}
   }
 };
 
@@ -269,7 +252,9 @@ let NewFriendNotic = {
     photoFileUrl: {type: 'string', optional: true},
     ownerId: {type: 'int', optional: true},
     isAccept: {type: 'bool', optional: true},
-    certified: {type: 'bool', optional: true}
+    certified: {type: 'bool', optional: true},
+    msgType:{type:'string',optional:true},
+    recTime:{type:'date', optional:true}
   }
 };
 

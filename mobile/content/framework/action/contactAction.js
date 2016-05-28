@@ -266,7 +266,7 @@ let _acceptFriend = function(userId) {
       if(_.isEmpty(response)){
         resolve();
       }
-      contactStore.addFriend(response);
+      contactStore.acceptFriendInvite(response);
       resolve(response);
     }).catch((err) => {
       reject(err);

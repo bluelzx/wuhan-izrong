@@ -60,7 +60,7 @@ let Spread = React.createClass({
 
     if(this.state.data && this.state.data.length ==0){
       return (
-        <Text style={{flex:1, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>没有记录</Text>
+        <Text style={{flex:1, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor, marginTop:20}}>没有记录</Text>
       );
     }
 

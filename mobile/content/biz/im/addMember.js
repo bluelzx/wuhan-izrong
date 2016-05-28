@@ -132,7 +132,6 @@ let AddMember = React.createClass({
       <NavBarView navigator={this.props.navigator} title='添加群成员' actionButton={this.renderState}>
         <ChooseList  memberList={this.state.memberList}/>
 
-        <SearchBar textChange={this.textChange}  textOnBlur={this.textOnBlur}/>
 
         {(()=>{
 
@@ -149,7 +148,6 @@ let AddMember = React.createClass({
                          groupDataName={'orgMembers'}
                          groupItemRender={this.itemRender}
                          groupTitleRender={this.titleRender}
-                         isOpen={this.state.isOpen}
               />
             );
           }else{

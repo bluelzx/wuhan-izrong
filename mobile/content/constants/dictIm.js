@@ -20,6 +20,7 @@ const KPI_TYPE = {
 };
 
 const MSG_TYPE = {
+  MSG_IS_MUTE: 'MESSAGE_BLOCKED',
   SERVER_REC_CONFIRM: 'SERVER_REC_CONFIRM',
   REC_P2P_MSG: 'REC_P2P_MSG',
   REC_GROUP_MSG: 'REC_GROUP_MSG',
@@ -61,6 +62,7 @@ const SESSION_TYPE = {
   INVITED:'invited',
   PLATFORMINFO:'platforminfo',
   NEWFRIEND:'newfriend',
+  ACCEPTNEWFRIEND:'acceptnewfriend',
   LEAVE_GROUP: 'leave',
   ADD_FRIEND: 'addFriend',
   GROUP_NOTICE: 'groupNotice'
@@ -80,6 +82,11 @@ const DELETE_TYPE = {
   DELETE_GROUP: 'dismissGroup'
 }
 
+const FRIENDNOTIC_TYPE = {
+  INVITE:'friendnotic_invite',
+  ACCEPT:'friendnotic_accept'
+}
+
 module.exports = {
   MSG_CONTENT_TYPE: MSG_CONTENT_TYPE,
   COMMAND_TYPE: COMMAND_TYPE,
@@ -88,5 +95,6 @@ module.exports = {
   SESSION_TYPE: SESSION_TYPE,
   NOTICE_TYPE: NOTICE_TYPE,
   UPDATE_GROUP_TYPE: UPDATE_GROUP_TYPE,
-  DELETE_TYPE: DELETE_TYPE
+  DELETE_TYPE: DELETE_TYPE,
+  FRIENDNOTIC_TYPE: FRIENDNOTIC_TYPE
 };

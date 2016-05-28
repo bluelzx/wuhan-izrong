@@ -17,7 +17,7 @@ let _send = (data, bFlag = false, userId) => {
     .then(() => {
       // ImStore.send();
     }).catch(() => {
-      Alert('IM服务器异常,请稍后再试');
+      Alert('网络异常');
     });
 };
 

@@ -2,7 +2,7 @@
  * Created by baoyinghai on 16/4/12.
  */
 "use strict";
-let { SESSION_TYPE, MSG_CONTENT_TYPE } = require('../../constants/dictIm');
+let { SESSION_TYPE, MSG_CONTENT_TYPE ,FRIENDNOTIC_TYPE} = require('../../constants/dictIm');
 let PersisterFacade = require('../persister/persisterFacade');
 let AppStore = require('./appStore');
 //let SessionStore = require('./sessionStore');
@@ -141,7 +141,7 @@ let _leaveGroup = function(groupId){
 }
 
 let _addFriend = function(userInfo) {
-  PersisterFacade.addFriend(userInfo);
+  PersisterFacade.addFriend(userInfo,true);
   AppStore.emitChange(IM_CONTACT);
 }
 
@@ -153,10 +153,10 @@ let _syncReq = function(data){
 
 let _newFriendNotic = function(param, userId) {
   let orgValue = PersisterFacade.getOrgValueByOrgId(param.orgId);
-  PersisterFacade.createNewNotic(param.noticId, param.userId, param.realName, orgValue, param.photoFileUrl,param.certificated, userId);
+  PersisterFacade.createNewNotic(param.noticId, param.userId, param.realName, orgValue, param.photoFileUrl,param.certificated,FRIENDNOTIC_TYPE.INVITE, userId);
   //updateSession
   let p = {
-    sessionId: param.noticId,
+    sessionId: param.sessionId,
     type: SESSION_TYPE.NEWFRIEND,
     badge:0,
     title: '',
@@ -190,6 +190,36 @@ let _judgeGroup = function (groupId, userId) {
   return PersisterFacade.judgeGroup(groupId, userId);
 }
 
+let _updateFriendList = function(param, userId) {
+  PersisterFacade.updateFriendList(param, userId);
+}
+
+//收到添加好友回复
+let _acceptNewFriendInvite = function(param, userId){
+ let userInfo =  _getUserInfoByUserId(param.userId);
+  PersisterFacade.createNewNotic(param.noticId, param.userId, userInfo.realName, userInfo.orgValue, userInfo.photoFileUrl,userInfo.certificated,FRIENDNOTIC_TYPE.ACCEPT, userId);
+  PersisterFacade.addFriend(userInfo);
+  let p = {
+    sessionId: param.sessionId,
+    type: SESSION_TYPE.NEWFRIEND,
+    badge:0,
+    title: '',
+    content:'',
+    lastTime: new Date(),
+    contentType: MSG_CONTENT_TYPE.NULL
+  };
+  PersisterFacade.updateSession(p, false,null, userId);
+  //AppStore.emitChange(IM_CONTACT);
+  AppStore.emitChange(IM_SESSION_LIST);
+}
+
+//接受添加好友
+let _acceptFriendInvite = function(userInfo) {
+  PersisterFacade.addFriend(userInfo);
+ // AppStore.emitChange(IM_CONTACT);
+  AppStore.emitChange(IM_SESSION_LIST);
+}
+
 let ContactStore = {
   getGroupInfoBySessionId:_getGroupInfoBySessionId,  //根据会话Id获得群组信息
   getUserInfoBySessionId:_getUserInfoBySessionId,       //根据会话Id获得用户信息
@@ -219,7 +249,10 @@ let ContactStore = {
   getOrgValueByOrgId:_getOrgValueByOrgId,
   saveIMUserInfo: _saveIMUserInfo,
   saveMembersDetails: _saveMembersDetails,
-  judgeGroup: _judgeGroup
+  judgeGroup: _judgeGroup,
+  updateFriendList:_updateFriendList,
+  acceptNewFriendInvite:_acceptNewFriendInvite,
+  acceptFriendInvite:_acceptFriendInvite
 };
 
 

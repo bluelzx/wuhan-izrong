@@ -206,6 +206,8 @@ var TabView = React.createClass({
                   icon={require('../../image/tab/market.png')}
                   selectedIcon={require('../../image/tab/market-selected2.png')}
                   exec={this.props.exec}
+                  delay={true}
+                  page={1}
           >
           </Market>
 
@@ -229,6 +231,8 @@ var TabView = React.createClass({
               icon={require('../../image/tab/IM.png')}
               selectedIcon={require('../../image/tab/IM-selected2.png')}
               exec={this.props.exec}
+              delay={true}
+              page={3}
           >
           </IM>
 
