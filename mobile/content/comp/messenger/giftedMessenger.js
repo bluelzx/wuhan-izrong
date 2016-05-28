@@ -905,7 +905,7 @@ let GiftedMessenger = React.createClass({
             onSelected={(response) => { this.props.handleSendImage(response);this._hidePanel();}}
             title="选择图片"
             fileId="selectCamera"
-            allowsEditing={true}
+            allowsEditing={false}
             style={this.styles.panelItem}
           >
             <Image
