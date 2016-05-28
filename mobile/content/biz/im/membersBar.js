@@ -8,6 +8,7 @@ let CircularButton = require('./circularButton');
 let ImUserInfo = require('./imUserInfo');
 let DictStyle = require('../../constants/dictStyle');
 let HeaderPic = require('./headerPic');
+let ContactStore = require('../../framework/store/contactStore');
 
 //let NameCircular = require('./nameCircular').NameCircular;
 
@@ -30,7 +31,7 @@ let MembersBar = React.createClass({
     return (
       <TouchableOpacity onPress={()=>this.props.navigator.push({
         comp:ImUserInfo,
-        param:member
+        param:Object.assign(member,{isStranger:ContactStore.isStranger(member.userId)})
         })} key={member.userId} style={{alignItems:'center',padding:5}}>
         <View style={{marginTop:5,height: 51,width: 51}}>
           <HeaderPic photoFileUrl={member.photoFileUrl}  certified={member.certified} name={member.realName}/>

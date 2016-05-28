@@ -137,17 +137,19 @@ export default class Message extends React.Component {
   }
 
   renderErrorButton(rowData, rowID, onErrorButtonPress){
-    if (rowData.status === 'ErrorButton') {
+    if (rowData.status === 'ErrorButton' || rowData.status === 'Sending') {
       return (
         <ErrorButton
           onErrorButtonPress={onErrorButtonPress}
           rowData={rowData}
           rowID={rowID}
           styles={styles}
+          isLoading={rowData.status === 'Sending'?true:false}
         />
       );
+    }else {
+      return <View></View>;
     }
-    return <View></View>;
   }
 
   renderMute(rowData){

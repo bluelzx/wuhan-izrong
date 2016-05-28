@@ -63,7 +63,7 @@ let Messenger = React.createClass({
     this.setState(this._getStateFromStores());
   },
 
-  _sendMessage(contentType, content, isReSend = false, msgId = '') {
+  _sendMessage(contentType, content, isReSend = false, msgId = '', isSend) {
     if (this.props.param.chatType === SESSION_TYPE.GROUP && !ImAction.isInGroupById(this.props.param.groupId)) {
       //TODO: 用户已不在群组....
     } else {
@@ -75,7 +75,7 @@ let Messenger = React.createClass({
         content: content,
         revTime: new Date(),
         isRead: true,
-        status: 'ErrorButton',
+        status: 'Sending',//'ErrorButton',
         //status: 'isMute',
 
       };
@@ -96,7 +96,8 @@ let Messenger = React.createClass({
         });
       }
 
-      ImAction.send(msgToSend, isReSend, this.props.param.myId);
+      ImAction.send(msgToSend, isReSend, this.props.param.myId, isSend);
+      return msgToSend.msgId;
     }
   },
 
@@ -118,13 +119,29 @@ let Messenger = React.createClass({
   },
 
   handleSendImage(uri) {
-    ImAction.uploadImage(uri)
-      .then((response) => {
-        this._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl);
-      }).catch((errorData) => {
-        console.log('Image upload error ' + JSON.stringify(errorData));
-        Alert('图片上传失败');
+    let p = new Promise((resolve,reject)=>{
+      resolve( this._sendMessage(MSG_CONTENT_TYPE.IMAGE, 'UUUUU'+uri, false, false, true))
+    }).catch((err)=>{
+      throw err;
+    });
+
+    let self = this;
+    p.then((msgId)=>{
+      ImAction.uploadImage(uri).then((response)=>{
+        ImStore.modifyImgUrl(msgId,response.fileUrl)
+        self._sendMessage(MSG_CONTENT_TYPE.IMAGE, uri, true, msgId);
       });
+    }).catch((err)=>{
+      Alert('图片上传失败');
+    });
+
+    //ImAction.uploadImage(uri)
+    //  .then((response) => {
+    //    this._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl);
+    //  }).catch((errorData) => {
+    //    console.log('Image upload error ' + JSON.stringify(errorData));
+    //    Alert('图片上传失败');
+    //  });
   },
 
   handleImageError(error) {

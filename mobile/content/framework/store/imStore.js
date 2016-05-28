@@ -59,8 +59,20 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
     Persister.updateContactInfo(message);
     AppStore.emitChange(IM_CONTACT);
   },
-  isInGroupById: (id) => _isInGroupById(id)
+  isInGroupById: (id) => _isInGroupById(id),
+  modifyImgUrl:(msgId, url) => _modifyImgUrl(msgId, url)
 });
+
+let _modifyImgUrl = function(msgId, url) {
+  Persister.modifyImgUrl(msgId, url);
+  _data.messages.forEach((obj)=>{
+    if(obj.msgId == msgId){
+      obj.content = url;
+    }
+  });
+  ImStore.emitChange(DictEvent.IM_SESSION);
+}
+
 
 // Private Functions
 let _imInit = () => {
@@ -108,7 +120,7 @@ let _resovleMessages = (bInit = false) => {
         image: _data.userPhotoFileUrl,
         position: 'right',
         date: object.revTime,
-        status: object.status,
+        status: object.status === 'Sending'?'ErrorButton':object.status,
         certified:userInfo.certified,
         messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
