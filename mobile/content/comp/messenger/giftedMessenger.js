@@ -298,10 +298,10 @@ let GiftedMessenger = React.createClass({
       ];
     }
     //this.scrollToBottom();
-    //this.setTimeout(() => {
-    //  // inspired by http://stackoverflow.com/a/34838513/1385109
-    //  this.scrollToBottom();
-    //}, (Platform.OS === 'android' ? 500 : 400));
+    this.setTimeout(() => {
+      // inspired by http://stackoverflow.com/a/34838513/1385109
+      this.scrollToBottom();
+    }, (Platform.OS === 'android' ? 500 : 400));
   },
 
   componentWillUnmount() {

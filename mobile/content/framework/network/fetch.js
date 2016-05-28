@@ -82,7 +82,6 @@ var UFetchBak = function (url, param, callback, failure, options) {
   }, options);
 };
 
-
 var rawFetch = function (url, param, callback, failure, option) {
   console.log('以下打印一次传出去的param:');
   console.log(param);
@@ -92,7 +91,7 @@ var rawFetch = function (url, param, callback, failure, option) {
   //  setTimeout(() => reject(new Error('链接超时')), 2000000);
   //})]);
  // process(fetch(url, param) ,callback,failure,option);
-  var _promise = MxFetch.fetch(url, param, 1000);
+  var _promise = MxFetch.fetch(url, param, 6180);
   return process(_promise, option);
 };
 
