@@ -244,12 +244,27 @@ let Home = React.createClass({
         </TouchableOpacity>
       )
     } else if (this.state.requestState == 'success') {
-      return ( <ListView
-        dataSource={data.cloneWithRows(this.state.contentList)}
-        renderRow={this._renderRow}
-        automaticallyAdjustContentInsets={false}
-        enableEmptySections={true}
-      />);
+      if(this.state.contentList == []){
+        return(
+          <TouchableOpacity style={this.props.style} underlayColor="#ebf1f2"
+                            activeOpacity={0.6} onPress={()=>{
+                           this.setState({
+                              requestState: 'loading'
+                           });
+                          this.bizOrderMarketSearch()}}>
+            <View style={{marginTop:20,alignItems:'center'}}>
+              <Text>推荐业务为空,请点击重试</Text>
+            </View>
+          </TouchableOpacity>
+        )
+      }else{
+        return ( <ListView
+          dataSource={data.cloneWithRows(this.state.contentList)}
+          renderRow={this._renderRow}
+          automaticallyAdjustContentInsets={false}
+          enableEmptySections={true}
+        />);
+      }
     }
   },
 
