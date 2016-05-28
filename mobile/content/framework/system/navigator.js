@@ -39,7 +39,7 @@ let NotificationManager = require('./notificationManager');
 let Publish = require('../../biz/publish/publish');
 let QiniuTest = require('../../test/qiniuTest');
 let Upload = require('../../biz/login/uploadNameCard');
-
+let Account = require('../../biz/login/accountInfo');
 
 const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');

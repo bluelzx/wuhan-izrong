@@ -21,7 +21,7 @@ import com.fasapp.utils.ReactNativeAutoUpdater;
 
 import java.io.File;
 
-public class SplashActivity extends Activity implements Animation.AnimationListener,ReactNativeAutoUpdater.Interface{
+public class SplashActivity extends Activity implements ReactNativeAutoUpdater.Interface{
     private ImageView mImageView;
     private TextView tvUpdate;
     private ReactNativeAutoUpdater updater;
@@ -38,17 +38,21 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
 
     public void initData() {
-        AnimationSet set = new AnimationSet(false);
-        AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1f);
-        set.addAnimation(alphaAnimation);
-        set.setAnimationListener(this);
-        set.setDuration(500);
-        mImageView.setAnimation(set);
-        set.start();
-    }
-
-    @Override
-    public void onAnimationStart(Animation animation) {
+//        if (checkNetworkState()) {
+//            updater = ReactNativeAutoUpdater.getInstance(this);
+//            updater.setUpdateMetadataUrl(this.getUpdateMetadataUrl())
+//                    .setMetadataAssetName(this.getMetadataAssetName())
+//                    .setUpdateFrequency(this.getUpdateFrequency())
+//                    .setUpdateTypesToDownload(this.getAllowedUpdateType())
+//                    .setHostnameForRelativeDownloadURLs(this.getHostnameForRelativeDownloadURLs())
+//                    .showProgress(this.getShowProgress())
+//                    .setParentActivity(this)
+//                    .checkForUpdates();
+//        } else {
+//            finishAct();
+//        }
+        finish();
+        startActivity(new Intent(SplashActivity.this, MainActivity.class));
     }
 
     private boolean checkNetworkState() {
@@ -60,23 +64,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
             flag = manager.getActiveNetworkInfo().isAvailable();
         }
         return flag;
-    }
-
-    @Override
-    public void onAnimationEnd(Animation animation) {
-        if (checkNetworkState()) {
-            updater = ReactNativeAutoUpdater.getInstance(this);
-            updater.setUpdateMetadataUrl(this.getUpdateMetadataUrl())
-                    .setMetadataAssetName(this.getMetadataAssetName())
-                    .setUpdateFrequency(this.getUpdateFrequency())
-                    .setUpdateTypesToDownload(this.getAllowedUpdateType())
-                    .setHostnameForRelativeDownloadURLs(this.getHostnameForRelativeDownloadURLs())
-                    .showProgress(this.getShowProgress())
-                    .setParentActivity(this)
-                    .checkForUpdates();
-        } else {
-            finishAct();
-        }
     }
 
     public void setTvUpdateVisible () {
@@ -109,11 +96,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
     protected boolean getShowProgress() {
         return true;
-    }
-
-    @Override
-    public void onAnimationRepeat(Animation animation) {
-
     }
 
     @Override
