@@ -41,7 +41,7 @@ var styles = StyleSheet.create({
     right: 12,
     position: 'absolute',
     width: 20,
-    height: 24,
+    height: 18,
     borderRadius: 10,
     borderWidth: 1,
     alignItems: 'center',
