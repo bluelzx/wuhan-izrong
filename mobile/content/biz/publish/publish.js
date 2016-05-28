@@ -60,7 +60,7 @@ let Publish = React.createClass({
     let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
     let categoryArr = this.deleteFirstObj(category.options);
 
-    let myCategory = AppStore.getCategory();
+    let filterType = AppStore.getCategory();
 
     return {
       filterItems: filterItems,
@@ -73,12 +73,13 @@ let Publish = React.createClass({
       rateText: '',
       remarkText: '',
       disabled: false,
+      pickTypeRow: filterType != null ? filterType.rowId : 0,
       //networt
       term: '',
       rate: '',
       remark: '',
       bizOrientation: 'IN',
-      bizCategory: myCategory != null ? myCategory : categoryArr.length == 0 ? [] : categoryArr[0],
+      bizCategory: filterType != null ? filterType.category : categoryArr.length == 0 ? [] : categoryArr[0],
       amount: 0,
       fileUrlList: [],
 
@@ -125,9 +126,12 @@ let Publish = React.createClass({
   },
 
   _onChange () {
-    let myCategory = AppStore.getCategory();
+    let filterItems = AppStore.getFilters().filterItems;
+    let filterType = AppStore.getCategory();
+    let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
+    let categoryArr = this.deleteFirstObj(category.options);
     this.setState({
-      bizCategory: myCategory != null ? myCategory : categoryArr.length == 0 ? [] : categoryArr[0]
+      bizCategory: filterType != null ? filterType.category : categoryArr.length == 0 ? [] : categoryArr[0]
     })
   },
 
@@ -480,11 +484,16 @@ let Publish = React.createClass({
     }
   },
 
-  callBackCategory: function (category) {
+  callBackCategory: function (category, rowId) {
     this.setState({
       bizCategory: category,
+      pickTypeRow: rowId
     });
-    AppStore.saveCategory(category);
+    let filterType = {
+      category: category,
+      rowId: rowId
+    };
+    AppStore.saveCategory(filterType);
   },
 
   callBackRemarks: function (remarkText) {
@@ -502,6 +511,7 @@ let Publish = React.createClass({
           comp: name,
           param: {
             filterItems: this.state.filterItems,
+            pickTypeRow:  this.state.pickTypeRow,
             callBackCategory: this.callBackCategory
           }
         })
