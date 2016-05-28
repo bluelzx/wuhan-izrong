@@ -163,8 +163,8 @@ let SearchFriend = React.createClass({
         navigator={this.props.navigator}
         title='搜索好友'
       >
-       <View style={{paddingTop:5}}>
-         <View style={{flexDirection:'row',justifyContent:'center', alignItems:'center',marginRight:10}}>
+
+         <View style={{paddingTop:5,flexDirection:'row',justifyContent:'center', alignItems:'center',marginRight:10}}>
            <View style={{flex:1,height:(Platform.OS === 'ios')?30:40,backgroundColor:'#ffffff',marginHorizontal:10,borderRadius:6,
           justifyContent:'center', alignItems:'center',alignItems:'stretch'}}>
               <TextInput
@@ -174,7 +174,7 @@ let SearchFriend = React.createClass({
                 onSubmitEditing={()=>{this.state.justTop=true;this.searchFriend()}}
                 selectionColor={DictStyle.colorSet.textInputColor}
                 onChangeText={(text) => this.textChange(text)}
-                style={{flex:1,alignSelf:'stretch',color: '#3C62E4', height:(Platform.OS === 'ios')?20:35,backgroundColor:'#ffffff',marginTop:0,marginLeft:10,marginRight:10}}>
+                style={{fontSize:14,flex:1,alignSelf:'stretch',color: '#3C62E4', height:(Platform.OS === 'ios')?20:35,backgroundColor:'#ffffff',marginTop:0,marginLeft:10,marginRight:10}}>
               </TextInput>
            </View>
          </View>
@@ -182,7 +182,9 @@ let SearchFriend = React.createClass({
 
            if(this.state.dataSource && this.state.dataSource.length > 0){
              return (
-               <ScrollView style={{flexDirection: 'column',backgroundColor:'#FEFEFE', marginTop:5}}>
+               <ScrollView
+                 automaticallyAdjustContentInsets={false}
+                 style={{flexDirection: 'column',backgroundColor:'#FEFEFE', marginTop:5}}>
                  {this.renderSearchResult()}
                </ScrollView>
              );
@@ -223,8 +225,6 @@ let SearchFriend = React.createClass({
            }
          })()}
 
-
-       </View>
       </NavBarView>
     );
   }
