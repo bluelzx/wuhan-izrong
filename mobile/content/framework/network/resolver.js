@@ -4,6 +4,7 @@ let { MSG_TYPE, SESSION_TYPE, COMMAND_TYPE, UPDATE_GROUP_TYPE, NOTICE_TYPE, DELE
 let KeyGenerator = require('../../comp/utils/keyGenerator');
 let ContactSotre = require('../store/contactStore');
 let AppStore = require('../store/appStore');
+let {Alert} = require('mx-artifacts');
 
 //let NotificationModule = require('NativeModules').NotificationModule;
 //let { Platform }=require('react-native');
@@ -11,9 +12,10 @@ let AppStore = require('../store/appStore');
 //let {Alert} = require('mx-artifacts');
 
 let _dealMsg = function (message, socket) {
-  let userInfo = ContactSotre.getUserInfo();
-  let userId = userInfo.userId;
-  let lastSyncTime = userInfo.lastSyncTime ? userInfo.lastSyncTime.getTime() : new Date().getTime();
+  try {
+    let userInfo = ContactSotre.getUserInfo();
+    let userId = userInfo.userId;
+    let lastSyncTime = userInfo.lastSyncTime ? userInfo.lastSyncTime.getTime() : new Date().getTime();
 
   //console.log(message);
   switch (message.msgType) {
@@ -198,67 +200,70 @@ let _dealMsg = function (message, socket) {
       break;
     case MSG_TYPE.SYNC_RES:
 
-      message.msgArray&&message.msgArray.forEach((item)=> {
-        _dealMsg(JSON.parse(item), socket);
-      });
-      ContactSotre.syncReq(new Date());
-      break;
-    //已测
-    case MSG_TYPE.CONTANCT_INFO_CERTIFY:
-      if (message.userId == AppStore.getUserId()) {
-        AppStore.updateUserInfo('isCertificated', message.isCertificated);
-        //if (Platform.OS == 'android') {
-        //  NotificationModule.showNotification("系统提示", "爱资融", "您已通过系统管理员的认证");
-        //}
-      } else {
-        ImStore.updateContactInfo(message);
-      }
-      break;
-    //已测
-    case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
-      if (message.userId == AppStore.getUserId()) {
-        AppStore.updateUserInfo('isCertificated', message.isCertificated);
+        message.msgArray && message.msgArray.forEach((item)=> {
+          _dealMsg(JSON.parse(item), socket);
+        });
+        ContactSotre.syncReq(new Date());
+        break;
+      //已测
+      case MSG_TYPE.CONTANCT_INFO_CERTIFY:
+        if (message.userId == AppStore.getUserId()) {
+          AppStore.updateUserInfo('isCertificated', message.isCertificated);
+          //if (Platform.OS == 'android') {
+          //  NotificationModule.showNotification("系统提示", "爱资融", "您已通过系统管理员的认证");
+          //}
+        } else {
+          ImStore.updateContactInfo(message);
+        }
+        break;
+      //已测
+      case MSG_TYPE.CONTANCT_INFO_UNCERTIFY:
+        if (message.userId == AppStore.getUserId()) {
+          AppStore.updateUserInfo('isCertificated', message.isCertificated);
 
-        //if (Platform.OS == 'android') {
-        //  NotificationModule.showNotification("系统提示", "爱资融", "您已被系统管理员取消认证");
+          //if (Platform.OS == 'android') {
+          //  NotificationModule.showNotification("系统提示", "爱资融", "您已被系统管理员取消认证");
+          //}
+        } else {
+          ImStore.updateContactInfo(message);
+        }
+        break;
+      //已测
+      case MSG_TYPE.CONTANCT_INFO_FREEZE:
+        //if (message.userId == AppStore.getUserId()) {
+        //  if (Platform.OS == 'android') {
+        //    NotificationModule.showNotification("系统提示", "爱资融", "您的帐户已被冻结,请联系系统管理员");
+        //  }
+        //  AppStore.freezAccount();
         //}
-      } else {
-        ImStore.updateContactInfo(message);
+        break;
+      case MSG_TYPE.FRIEND_INVITE:
+        ContactSotre.newFriendNotic(Object.assign({
+          noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, message.userInfo.userId, userId),
+          sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, 'new', userId)
+        }, message.userInfo), userId);
+        break;
+      case MSG_TYPE.FRIEND_PROMISE:
+      {
+        //ContactSotre.updateFriendList({userId:message.uid},userId);
+        let userInfo = ContactSotre.getUserInfoByUserId(message.uid);
+        ContactSotre.acceptNewFriendInvite({
+          noticId: KeyGenerator.getSessionKey(SESSION_TYPE.ACCEPTNEWFRIEND, userInfo.userId, userId),
+          userId: userInfo.userId,
+          sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND, 'new', userId)
+        }, userId);
+        //console.log(message.uid + '同意加你为好友');
       }
-      break;
-    //已测
-    case MSG_TYPE.CONTANCT_INFO_FREEZE:
-      //if (message.userId == AppStore.getUserId()) {
-      //  if (Platform.OS == 'android') {
-      //    NotificationModule.showNotification("系统提示", "爱资融", "您的帐户已被冻结,请联系系统管理员");
-      //  }
-      //  AppStore.freezAccount();
-      //}
-      break;
-    case MSG_TYPE.FRIEND_INVITE:
-      ContactSotre.newFriendNotic(Object.assign({
-        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND,message.userInfo.userId, userId),
-        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND,'new', userId)
-      }, message.userInfo), userId);
-      break;
-    case MSG_TYPE.FRIEND_PROMISE:
-    {
-      //ContactSotre.updateFriendList({userId:message.uid},userId);
-      let userInfo = ContactSotre.getUserInfoByUserId(message.uid);
-      ContactSotre.acceptNewFriendInvite({
-        noticId: KeyGenerator.getSessionKey(SESSION_TYPE.ACCEPTNEWFRIEND, userInfo.userId, userId),
-        userId:userInfo.userId,
-        sessionId: KeyGenerator.getSessionKey(SESSION_TYPE.NEWFRIEND,'new', userId)
-      } ,userId);
-      //console.log(message.uid + '同意加你为好友');
+        break;
+      case MSG_TYPE.ORG_INFO_UPDATE:
+        AppStore.updateOrgInfo(message);
+        break;
+      default:
+        console.log('None message type matched! [%s]', message.msgType);
+        console.log(message);
     }
-      break;
-    case MSG_TYPE.ORG_INFO_UPDATE:
-      AppStore.updateOrgInfo(message);
-      break;
-    default:
-      console.log('None message type matched! [%s]', message.msgType);
-      console.log(message);
+  }catch(err){
+    Alert('推送异常,请联系管理员['+ message.msgType+']');
   }
 };
 

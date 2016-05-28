@@ -151,7 +151,7 @@ let Register_accountInfo = React.createClass({
                 />
               </View>
               <Text style={{color: '#3b4549', fontSize: 18,marginLeft:20,flex: 5}} numberOfLines={1}>
-                选择机构
+                {this.state.orgValue}
               </Text>
 
               <Icon

@@ -40,23 +40,40 @@ let CallPhone = require('../../comp/utils/callPhone');
 
 let BusinessDetail = React.createClass({
   getInitialState(){
-    let marketInfo = this.props.param.marketInfo;
-    let t = new Date(marketInfo.lastModifyDate);
+    let id = this.props.param.marketInfo.id;
     let myUserInfo = AppStore.getLoginUserInfo();
 
     return {
-      fileUrlList: marketInfo.fileUrlList,
-      marketInfo: marketInfo,
-      orderUserId: marketInfo.userId,
+      id: id,
       myUserId: myUserInfo.userId,
-      lastModifyDate: DateHelper.descDate(t),
-      bizOrderOwnerBean: []
+
+      bizCategoryDesc: '',
+      bizOrientation: '',
+      bizOrientationDesc: '',
+      term: 0,
+      amount: 0,
+      rate: 0,
+      remark: null,
+      modifyTimes: 0,
+      fileUrlList: [],
+      lastModifyDate: 0,
+      userId: 0,
+      userName: 0,
+      realName: 0,
+      orgId: 0,
+      orgName: 0,
+      mobileNumber: 0,
+      isPublicMobile: null,
+      phoneNumber: null,
+      isPublicPhone: null,
+      photoStoredFileUrl: null,
+      isCertificated: null
     }
   },
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.getBizOrderInMarket(this.state.marketInfo.id);
+      this.getBizOrderInMarket(this.state.id);
     });
   },
 
@@ -80,7 +97,7 @@ let BusinessDetail = React.createClass({
   },
 
   _renderContent: function () {
-    if (!this.state.marketInfo) {
+    if (this.state.bizCategoryDesc == '') {
       return (
         <View>
         </View>
@@ -94,14 +111,14 @@ let BusinessDetail = React.createClass({
             <View style={{backgroundColor:'#f7f7f7',height:10}}>
             </View>
             <View style={{marginLeft:10}}>
-              {this.returnItem('业务类型:', (this.state.marketInfo.bizCategoryDesc))}
-              {this.returnItem('方\u3000\u3000向:', this.state.marketInfo.bizOrientationDesc)}
-              {this.returnItem('期\u3000\u3000限:', this.termChangeHelp(this.state.marketInfo.term))}
-              {this.returnItem('金\u3000\u3000额:', this.state.marketInfo.amount == null || this.state.marketInfo.amount == 0 ? '--'
-                : this.state.marketInfo.amount < 100000000 ? (this.state.marketInfo.amount / 10000) + '万' : (this.state.marketInfo.amount / 100000000) + '亿')}
-              {this.returnItem('利\u3000\u3000率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : numeral(this.state.marketInfo.rate * 100).format('0,0.00') + '%')}
-              {this.returnItem('备\u3000\u3000注:', this.state.marketInfo.remark == null || this.state.marketInfo.remark == 0 ? '--' : this.state.marketInfo.remark)}
-              {this.returnItem('更新时间:', this.state.lastModifyDate)}
+              {this.returnItem('业务类型:', (this.state.bizCategoryDesc))}
+              {this.returnItem('方\u3000\u3000向:', this.state.bizOrientationDesc)}
+              {this.returnItem('期\u3000\u3000限:', this.termChangeHelp(this.state.term))}
+              {this.returnItem('金\u3000\u3000额:', this.state.amount == null || this.state.amount == 0 ? '--'
+                : this.state.amount < 100000000 ? (this.state.amount / 10000) + '万' : (this.state.amount / 100000000) + '亿')}
+              {this.returnItem('利\u3000\u3000率:', this.state.rate == null || this.state.rate == 0 ? '--' : numeral(this.state.rate * 100).format('0,0.00') + '%')}
+              {this.returnItem('备\u3000\u3000注:', this.state.remark == null || this.state.remark == 0 ? '--' : this.state.remark)}
+              {this.returnItem('更新时间:', DateHelper.descDate(new Date(this.state.lastModifyDate)))}
             </View>
             {this.renderAdjunct()}
             {this.renderUserInfo()}
@@ -113,12 +130,6 @@ let BusinessDetail = React.createClass({
   },
 
   render: function () {
-    if (this.state.bizOrderOwnerBean.length == 0) {
-      return (
-        <NavBarView navigator={this.props.navigator} title='业务详情'>
-        </NavBarView>
-      );
-    }
     return (
       <NavBarView navigator={this.props.navigator} title='业务详情'>
         {this._renderContent()}
@@ -131,7 +142,7 @@ let BusinessDetail = React.createClass({
       <View style={{flexDirection:'row',alignItems:'center',paddingVertical:8}}>
         <Text style={{alignSelf:'stretch',fontSize:16,color:DictStyle.marketSet.fontColor,flex:1}}>{desc}</Text>
         <Text
-          style={{alignSelf:'stretch',fontSize:16,color:(desc == '更新时间:')?DictStyle.marketSet.modifyDateColor : DictStyle.marketSet.fontColor,width:235/375*screenWidth}}>{value}</Text>
+          style={{marginTop:1,alignSelf:'stretch',fontSize:16,color:(desc == '更新时间:')?DictStyle.marketSet.modifyDateColor : DictStyle.marketSet.fontColor,width:235/375*screenWidth}}>{value}</Text>
       </View>
     );
   },
@@ -144,19 +155,13 @@ let BusinessDetail = React.createClass({
     );
   },
   renderUserInfo: function () {
-    if (this.state.marketInfo == null) {
-      return (
-        <View>
-        </View>
-      );
-    }
     return (
       <View style={{backgroundColor:'#f0f0f0',borderRadius:2,margin:10}}>
         {this.renderPromulgator()}
         <View style={{marginBottom:14}}>
-          {this.returnInfoItem(true, require('../../image/market/mobile.png'), this.state.bizOrderOwnerBean.mobileNumber == null || this.state.bizOrderOwnerBean.mobileNumber == '' ? '--' : this.state.bizOrderOwnerBean.mobileNumber, this.state.bizOrderOwnerBean.isPublicMobile != false ? true : false)}
-          {this.returnInfoItem(true, require('../../image/market/tel.png'), this.state.bizOrderOwnerBean.phoneNumber == null || this.state.bizOrderOwnerBean.phoneNumber == '' ? '--' : this.state.bizOrderOwnerBean.phoneNumber, this.state.bizOrderOwnerBean.isPublicPhone != false ? true : false)}
-          {this.returnInfoItem(false, require('../../image/market/email.png'), this.state.bizOrderOwnerBean.userName, true)}
+          {this.returnInfoItem(true, require('../../image/market/mobile.png'), this.state.mobileNumber == null || this.state.mobileNumber == '' ? '--' : this.state.mobileNumber, this.state.isPublicMobile != false ? true : false)}
+          {this.returnInfoItem(true, require('../../image/market/tel.png'), this.state.phoneNumber == null || this.state.phoneNumber == '' ? '--' : this.state.phoneNumber, this.state.isPublicPhone != false ? true : false)}
+          {this.returnInfoItem(false, require('../../image/market/email.png'), this.state.userName, true)}
         </View>
       </View>
     );
@@ -169,10 +174,10 @@ let BusinessDetail = React.createClass({
         <View style={{flexDirection:'column',flex:1,justifyContent:'space-between'}}>
           <View style={{marginLeft:5,flexDirection:'row',alignItems:'center'}}>
             <Text style={{width:screenWidth - 106,fontSize:16,color:DictStyle.marketSet.fontColor}}
-                  numberOfLines={1}>{this.state.marketInfo.userName}</Text>
+                  numberOfLines={1}>{this.state.realName}</Text>
           </View>
           <Text style={{marginLeft:5,marginTop: 10,fontSize:12,color:DictStyle.marketSet.fontColor}}
-                numberOfLines={1}>{this.state.marketInfo.orgName}</Text>
+                numberOfLines={1}>{this.state.orgName}</Text>
         </View>
       </View>
 
@@ -180,15 +185,15 @@ let BusinessDetail = React.createClass({
 
   },
   renderUserPhoto: function () {
-    if (this.state.bizOrderOwnerBean.photoStoredFileUrl == null) {
+    if (this.state.photoStoredFileUrl == null) {
       return (
         <View style={{margin:10}}>
-          <NameCircular name={this.state.marketInfo.userName}/>
+          <NameCircular name={this.state.realName}/>
           {this.renderIsCertificated()}
         </View>
       );
     } else {
-      let uri = this.state.bizOrderOwnerBean.photoStoredFileUrl + ImageSize50;
+      let uri = this.state.photoStoredFileUrl + ImageSize50;
       return (
         <View style={{margin:10}}>
           <Image
@@ -201,7 +206,7 @@ let BusinessDetail = React.createClass({
     }
   },
   renderIsCertificated: function () {
-    if (this.state.bizOrderOwnerBean.isCertificated) {
+    if (this.state.isCertificated) {
       return (
         <View>
           <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40}]}
@@ -258,6 +263,13 @@ let BusinessDetail = React.createClass({
     }
   },
   renderImageItem: function () {
+    if (this.state.marketDetail == null || this.state.marketDetail == ''){
+      return (
+        <View>
+        </View>
+      );
+
+    }
     return (
       <View style={{flexDirection:'row',marginTop:10}}>
         {
@@ -284,7 +296,7 @@ let BusinessDetail = React.createClass({
     );
   },
   renderChatBtn: function () {
-    if (this.state.orderUserId == this.state.myUserId) {
+    if (this.state.userId == this.state.myUserId) {
       return (
         <View>
         </View>
@@ -304,29 +316,29 @@ let BusinessDetail = React.createClass({
     )
   },
   gotoIM: function () {
-    let orderUserId = this.state.orderUserId;
+    let userId = this.state.userId;
     let myInfo = ContactStore.getUserInfo();
     let self = this;
     this.props.exec(()=> {
       return new Promise((resolve, reject)=> {
-        let user = ContactStore.getUserInfoByUserId(orderUserId);
+        let user = ContactStore.getUserInfoByUserId(userId);
         resolve(user);
       }).catch((err)=> {
         //
         if (err == ErrorMsg.USERINFONULL) {
-          return ContactAction.getUserInfoFromServer(orderUserId);
+          return ContactAction.getUserInfoFromServer(userId);
         } else {
           throw err;
         }
       }).then((user)=> {
         let sessionId = KeyGenerator.getSessionKey(SESSION_TYPE.USER, user.userId, myInfo.userId);
         let content = {
-          "bizCategory": this.state.marketInfo.bizCategoryDesc,
-          "bizOrientation": this.state.marketInfo.bizOrientation,
-          "term": this.state.marketInfo.term,
-          "amount": this.state.marketInfo.amount,
-          "rate": this.state.marketInfo.rate,
-          "remark": this.state.marketInfo.remark
+          "bizCategory": this.state.bizCategoryDesc,
+          "bizOrientation": this.state.bizOrientation,
+          "term": this.state.term,
+          "amount": this.state.amount,
+          "rate": this.state.rate,
+          "remark": this.state.remark
         };
         const { navigator } = self.props;
         if (navigator) {
@@ -334,7 +346,7 @@ let BusinessDetail = React.createClass({
             comp: Chat,
             param: {
               chatType: SESSION_TYPE.USER,
-              userId: orderUserId,
+              userId: userId,
               sessionId: sessionId,
               content: JSON.stringify(content),
               isFromBizDetail: true
@@ -356,7 +368,27 @@ let BusinessDetail = React.createClass({
           }
         ).then((response)=> {
           this.setState({
-            bizOrderOwnerBean: response.bizOrderOwnerBean
+            bizCategoryDesc: response.bizCategoryDesc,
+            bizOrientation: response.bizOrientation,
+            bizOrientationDesc: response.bizOrientationDesc,
+            term: response.term,
+            amount: response.amount,
+            rate: response.rate,
+            remark: response.remark,
+            modifyTimes: response.modifyTimes,
+            fileUrlList: response.fileUrlList,
+            lastModifyDate: response.lastModifyDate,
+            userId: response.userId,
+            userName: response.userName,
+            realName: response.realName,
+            orgId: response.orgId,
+            orgName: response.orgName,
+            mobileNumber: response.mobileNumber,
+            isPublicMobile: response.isPublicMobile,
+            phoneNumber: response.phoneNumber,
+            isPublicPhone: response.isPublicPhone,
+            photoStoredFileUrl: response.photoStoredFileUrl,
+            isCertificated: response.isCertificated
           });
         }).catch(
           (errorData) => {

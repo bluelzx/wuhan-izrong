@@ -10,8 +10,9 @@ let ImUserInfo = require('./searchResultDetail');
 let { Alert } = require('mx-artifacts');
 let ContactAction = require('../../framework/action/contactAction');
 let ContactStore = require('../../framework/store/contactStore');
-let initS = '输入姓名以搜索好友/手机号';
+let initS = '姓名/手机号';
 let nullRes = '无符合条件的用户';
+let Icon = require('react-native-vector-icons/Ionicons');
 let Validation = require('../../comp/utils/validation');
 
 let SearchFriend = React.createClass({
@@ -23,7 +24,8 @@ let SearchFriend = React.createClass({
       keyWord:'',
       justTop:true,
       totalUserAmount:0,
-      desc: initS
+      desc: initS,
+      showSearchBtn:false
     }
   },
 
@@ -114,7 +116,7 @@ let SearchFriend = React.createClass({
             return response;
           }).then((response)=> {
 
-            this.setState({dataSource: response.imSearchUsers, totalUserAmount: response.totalUserAmount,desc:nullRes});
+            this.setState({dataSource: response.imSearchUsers, totalUserAmount: response.totalUserAmount,desc:nullRes,showSearchBtn:false});
           }).catch((err)=> {
             throw err;
           });
@@ -137,7 +139,7 @@ let SearchFriend = React.createClass({
             return response;
           }).then((response)=> {
 
-            this.setState({dataSource: response.imSearchUsers, totalUserAmount: response.totalUserAmount,desc:nullRes});
+            this.setState({dataSource: response.imSearchUsers, totalUserAmount: response.totalUserAmount,desc:nullRes,showSearchBtn:false});
           }).catch((err)=> {
             throw err;
           });
@@ -151,7 +153,7 @@ let SearchFriend = React.createClass({
 
 
   textChange: function(keyWord){
-    this.setState({keyWord:keyWord,dataSource:[],desc:initS});
+    this.setState({keyWord:keyWord,dataSource:[],desc:initS,showSearchBtn:keyWord&&keyWord.length>0});
   },
 
   render: function() {
@@ -161,44 +163,69 @@ let SearchFriend = React.createClass({
         navigator={this.props.navigator}
         title='搜索好友'
       >
-       <View style={{paddingTop:5}}>
-         <View style={{flexDirection:'row',justifyContent:'space-between', alignItems:'center',marginRight:10}}>
-           <View style={{flex:8,height:40,backgroundColor:'#ffffff',marginHorizontal:10,borderRadius:6,
+
+         <View style={{paddingTop:5,flexDirection:'row',justifyContent:'center', alignItems:'center',marginRight:10}}>
+           <View style={{flex:1,height:(Platform.OS === 'ios')?30:40,backgroundColor:'#ffffff',marginHorizontal:10,borderRadius:6,
           justifyContent:'center', alignItems:'center',alignItems:'stretch'}}>
               <TextInput
+                placeholderTextColor={'#B6C1CB'}
+                placeholder={this.state.desc}
+                autoFocus={true}
                 returnKeyType="search"
                 onSubmitEditing={()=>{this.state.justTop=true;this.searchFriend()}}
                 selectionColor={DictStyle.colorSet.textInputColor}
                 onChangeText={(text) => this.textChange(text)}
-                style={{flex:1,alignSelf:'stretch',color: DictStyle.colorSet.searchBarColor, height:(Platform.OS === 'ios')?30:60,backgroundColor:'#ffffff',marginTop:0,marginLeft:10,marginRight:10}}>
+                style={{fontSize:14,flex:1,alignSelf:'stretch',color: '#3C62E4', height:(Platform.OS === 'ios')?20:35,backgroundColor:'#ffffff',marginTop:0,marginLeft:10,marginRight:10}}>
               </TextInput>
            </View>
-           <TouchableOpacity style={{flex:1,height:(Platform.OS === 'ios')?30:60,justifyContent:'center',alignItems:'center'}}
-                             onPress={()=>{this.state.justTop=true;this.searchFriend()}}>
-             <Text style={{color:'#3C62E4',fontSize:16}}>搜索</Text>
-           </TouchableOpacity>
          </View>
-
          {(()=>{
 
            if(this.state.dataSource && this.state.dataSource.length > 0){
              return (
-               <ScrollView style={{flexDirection: 'column',backgroundColor:'#FEFEFE', marginTop:5}}>
+               <ScrollView
+                 automaticallyAdjustContentInsets={false}
+                 style={{flexDirection: 'column',backgroundColor:'#FEFEFE', marginTop:5}}>
                  {this.renderSearchResult()}
                </ScrollView>
              );
 
            }else{
-             return (
-               <View style={{flex:1,justifyContent:'center',marginTop:10}}>
-                 <Text style={{textAlign:'center',color:DictStyle.searchFriend.nullUnitColor}}>{this.state.desc}</Text>
-               </View>
-             );
+             return null;
+             //return (
+             //  <View style={{flex:1,justifyContent:'center',marginTop:10}}>
+             //    <Text style={{textAlign:'center',color:DictStyle.searchFriend.nullUnitColor}}>{this.state.desc}</Text>
+             //  </View>
+             //);
            }
 
          })()}
 
-         </View>
+         {(()=>{
+           if(this.state.dataSource && this.state.dataSource.length > 0){
+
+           }else {
+             if (this.state.keyWord && this.state.keyWord.length > 0 && this.state.showSearchBtn) {
+               return (
+                 <TouchableOpacity
+                   style={{left:0,right:0,top:(Platform.OS === 'ios')?38:50,backgroundColor:'#ffffff',position:'absolute',height:(Platform.OS === 'ios')?50:60,justifyContent:'center',alignItems:'flex-start'}}
+                   onPress={()=>{this.state.justTop=true;this.searchFriend()}}>
+                   <View style={{paddingHorizontal:10,flexDirection:'row',alignItems:'center'}}>
+                     <View style={{flexDirection:'row', alignItems:'center'}}>
+                       <View style={{borderRadius:5,backgroundColor:DictStyle.colorSet.searchBarColor,paddingHorizontal:10,paddingVertical:5}}>
+                         <Icon name="ios-search-strong" size={22} color={'#ffffff'}/>
+                       </View>
+                       <Text style={{color:DictStyle.colorSet.searchBarColor,fontSize:16,marginLeft:5}}>{'搜索: '}</Text>
+                     </View>
+                     <Text style={{color:'#3C62E4',fontSize:16}}>{this.state.keyWord}</Text>
+                   </View>
+
+                 </TouchableOpacity>
+               );
+             }
+           }
+         })()}
+
       </NavBarView>
     );
   }

@@ -6,13 +6,14 @@ let ImSocket = require('../network/imSocket');
 let AppLinks = require('../../constants/appLinks');
 let { UFetch } = require('../network/fetch');
 // Private Functions
-let _send = (data, bFlag = false, userId) => {
+let _send = (data, bFlag = false, userId, notSend = false) => {
   if (bFlag) {
     console.log('Message sent again!');
   } else {
     ImStore.saveMsg(data, userId);
   }
 
+  if(!notSend)
   ImSocket.send(data)
     .then(() => {
       // ImStore.send();
@@ -45,7 +46,7 @@ let ImAction = {
     ImStore.sessionInit(data);
     //ImSocket.init();
   },
-  send: (data, bFlag, userId) => _send(data, bFlag, userId),
+  send: (data, bFlag, userId, isSend) => _send(data, bFlag, userId, isSend),
   //receive: (data) => ImStore.saveMsg(data),
   uploadImage: (fileFieldName) => _uploadImage(AppLinks.uploadFile, fileFieldName),
   notificationRegister: (token) => _notificationRegister(token),

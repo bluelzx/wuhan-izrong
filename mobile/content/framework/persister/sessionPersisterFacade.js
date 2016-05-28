@@ -45,7 +45,7 @@ let _deleteSession = function (sessionId) {
     let session = _realm.objects(SESSION).filtered('sessionId = \'' + sessionId + '\'');
     _realm.delete(session);
   });
-}
+};
 
 let _queryAllSession = function (currUserId) {
   let ret = [];
@@ -64,7 +64,7 @@ let _queryAllSession = function (currUserId) {
     }
   });
   return ret;
-}
+};
 
 let _getGroupIdBySessionId = function (sid, cuid) {
   let l = _realm.objects(MESSAGE).filtered('sessionId = \'' + sid + '\'')[0];

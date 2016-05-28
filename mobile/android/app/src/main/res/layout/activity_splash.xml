@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.fasapp.SplashActivity">
-
-  <ImageView
-    android:id="@+id/iv_splash"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scaleType="fitXY"
-    android:src="@drawable/ic_splash" />
-  <TextView
-    android:visibility="gone"
-    android:id="@+id/tvUpdate"
-    android:layout_alignParentBottom="true"
-    android:layout_centerHorizontal="true"
-    android:layout_marginBottom="12dp"
-    android:text="正在检查更新..."
-    android:textColor="#fff"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+    tools:context="com.fasapp.SplashActivity">
+
+    <ImageView
+        android:id="@+id/iv_splash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_splash" />
+
+    <TextView
+        android:id="@+id/tvUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:text="正在检查更新..."
+        android:textColor="#fff"
+        android:visibility="gone" />
 </RelativeLayout>

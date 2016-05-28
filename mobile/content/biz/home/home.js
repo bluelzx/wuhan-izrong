@@ -21,7 +21,7 @@ let ViewPager = require('react-native-viewpager');
 let BusinessDetail = require('../market/businessDetail');
 let MyBusiness = require('./myBusiness');
 let AppStore = require('../../framework/store/appStore');
-let {MARKET_CHANGE,MYBIZ_CHANGE,HOMEPAGE_CHANGE} = require('../../constants/dictEvent');
+let {HOMELIST_CHANGE,HOMEPAGE_CHANGE} = require('../../constants/dictEvent');
 let MarketStore = require('../../framework/store/marketStore');
 let MarketAction = require('../../framework/action/marketAction');
 let Adjust = require('../../comp/utils/adjust');
@@ -33,9 +33,6 @@ let data = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 let Home = React.createClass({
   getStateFromStores: function () {
-    let filterItems = AppStore.getFilters().filterItems;
-    let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
-    let categoryArr = this.deleteFirstObj(category.options);
     let dataSource = new ViewPager.DataSource({
       pageHasChanged: (p1, p2) => p1 !== p2
     });
@@ -45,13 +42,16 @@ let Home = React.createClass({
       require('../../image/home/launch-02.png'),
       require('../../image/home/launch-03.png')
     ];
+    let marketList = [];
+    if (AppStore.shouldUpdate()) {
+      this.bizOrderMarketSearch();
+    }else{
+      marketList = AppStore.getMarketInfo();
+    }
     return {
-      categoryArr: categoryArr,
       dataSource: PAGES.length ? dataSource.cloneWithPages(PAGES) : dataSource.cloneWithPages(DEFAULTPAGES),
-      category: '资金业务',
-      contentList: [],
-      bizCategoryID: categoryArr.length == 0 ? 0 : categoryArr[0].id,
-      requestState: 'loading'
+      contentList: marketList,
+      requestState: marketList == [] ? 'loading':'success'
     };
   },
 
@@ -60,37 +60,19 @@ let Home = React.createClass({
   },
 
   componentDidMount() {
-    //AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
-    //AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
     AppStore.addChangeListener(this._onChange, HOMEPAGE_CHANGE);
-    if(AppStore.shouldUpdate()){
-      this.bizOrderMarketSearch();
-    }else{
-      this.setState({
-        contentList: AppStore.getMarketInfo(),
-        requestState:'success'
-      })
-    }
+    AppStore.addChangeListener(this._onChange, HOMELIST_CHANGE);
   },
 
   componentWillUnmount: function () {
-    //AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
-    //AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
     AppStore.addChangeListener(this._onChange, HOMEPAGE_CHANGE);
+    AppStore.addChangeListener(this._onChange, HOMELIST_CHANGE);
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
   },
 
   bizOrderMarketSearch: function () {
-    let requestBody = {
-      orderField: 'lastModifyDate',
-      orderType: 'desc',
-      pageIndex: 1,
-      filterList: [
-        this.state.bizCategoryID
-      ]
-    };
     this.props.exec(()=> {
       //return MarketAction.bizOrderMarketSearch(requestBody)
       //  .then((response)=> {
@@ -106,9 +88,9 @@ let Home = React.createClass({
       //    });
       //    throw errorData;
       //  });
-      return MarketAction.getTop15BizOrderListByCategory({category:'MIB'})
+      return MarketAction.getTop15BizOrderListByCategory({category: 'MIB'})
         .then((response)=> {
-          AppStore.saveHomeMarketList(_.slice(response.appOrder,0,5));
+          AppStore.saveHomeMarketList(_.slice(response.appOrder, 0, 5));
         })
         .catch((errorData)=> {
           throw errorData;
@@ -204,7 +186,9 @@ let Home = React.createClass({
           </View>
           <View style={styles.listHead}>
             <Text
-              style={{marginLeft: 20, fontSize: 15, color: PlainStyle.colorSet.commonTextColor}}>{this.state.category}</Text>
+              style={{marginLeft: 15, fontSize: 15, color: PlainStyle.colorSet.commonTextColor}}>
+              资金业务
+            </Text>
           </View>
           {this.renderMarketList()}
         </ScrollView>
@@ -270,9 +254,9 @@ let Home = React.createClass({
   },
 
 
-  _renderRow: function (rowData, sectionID, rowID) {
+  _renderRow: function (rowData) {
     return (
-      <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,rowData)} underlayColor='#000'>
+      <TouchableHighlight onPress={() => this.toDetail(BusinessDetail,{id:rowData.id})} underlayColor='#000'>
         <View
           style={{flexDirection:'row',height: 50, backgroundColor: PlainStyle.colorSet.homeListItemColor,alignItems:'center',
               borderBottomWidth:1,borderBottomColor:PlainStyle.colorSet.homeBorderColor}}>
@@ -281,7 +265,7 @@ let Home = React.createClass({
           />
           <Text
             style={{position:"absolute",left:Adjust.width(60),top:0,marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor}}>
-            {rowData.term == null || rowData.term == 0 ? '--' : rowData.term + '天'}
+            {this.termChangeHelp(rowData.term)}
           </Text>
           <Text
             style={{position:"absolute",left:Adjust.width(130),top:0, marginLeft:15,marginTop:15,color:rowData.amount == null || rowData.amount == 0 ? DictStyle.marketSet.fontColor :DictStyle.marketSet.amountColor}}>
@@ -290,7 +274,7 @@ let Home = React.createClass({
           <Text
             style={{position:"absolute",left:Adjust.width(220),top:0, marginLeft:15, marginTop:15,color:PlainStyle.colorSet.homeListTextColor,width:Adjust.width(135)}}
             numberOfLines={1}>
-            {rowData.bizOrderOwnerBean.realName != null ? rowData.bizOrderOwnerBean.realName + '-' + rowData.bizOrderOwnerBean.orgName : rowData.bizOrderOwnerBean.orgName}
+            {rowData.realName != null ? rowData.realName + '-' + rowData.orgName : rowData.orgName}
           </Text>
         </View>
       </TouchableHighlight>
@@ -306,6 +290,21 @@ let Home = React.createClass({
           marketInfo: rowData
         }
       })
+    }
+  },
+
+  termChangeHelp(term){
+    if (term == null || term == 0) {
+      return '--';
+    } else if (term % 365 == 0) {
+      return term / 365 + '年';
+    } else if (term % 30 == 0) {
+      return term / 30 + '月';
+    } else if (term == 1) {
+      return '隔夜';
+    }
+    else {
+      return term + '天';
     }
   },
 

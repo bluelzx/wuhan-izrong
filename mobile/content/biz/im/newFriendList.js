@@ -82,7 +82,7 @@ let NewFriendList = React.createClass({
         }
       }).then((data)=>{
         let opt = {};
-        if(item.isAccept){
+        if(!ContactSotre.isStranger(item.userId)){
           opt = {isStringer:false};
         }else{
           opt={isStranger:true,callBack:()=>self.acceptInvite(item)};

@@ -46,9 +46,8 @@ let Market = React.createClass({
     let term = MarketStore.getFilterOptions(filterItems, 'term').options;
     let amount = MarketStore.getFilterOptions(filterItems, 'amount').options;
     let orderItems = AppStore.getFilters().orderItems;
-    let marketInfo = AppStore.getMarketInfo();
 
-    let myCategory = AppStore.getCategory();
+    let filterType = AppStore.getCategory();
 
     return {
       filterItems: filterItems,
@@ -60,9 +59,9 @@ let Market = React.createClass({
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: myCategory != null ? myCategory.displayName : categoryArr.length == 0 ? '' : categoryArr[0].displayName,
+      levelOneText: filterType != null ? filterType.category.displayName : categoryArr.length == 0 ? '' : categoryArr[0].displayName,
       optionTwoText: '最新发布',
-      pickTypeRow: 0,
+      pickTypeRow: filterType != null ? filterType.rowId : 0,
       pickTimeRow: 0,
       orientionDefault: 10000,
       orientionIsAll: true,
@@ -77,11 +76,11 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: myCategory != null ? myCategory.id : categoryArr.length == 0 ? 0 : categoryArr[0].id,
+      bizCategoryID: filterType != null ? filterType.category.id : categoryArr.length == 0 ? 0 : categoryArr[0].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
-      marketData: marketInfo
+      marketData: []
     };
   },
   getInitialState(){
@@ -89,12 +88,12 @@ let Market = React.createClass({
   },
 
   componentDidMount() {
-    AppStore.addChangeListener(this._search, MARKET_CHANGE);
+    AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
     AppStore.addChangeListener(this._search, MYBIZ_CHANGE);
   },
 
   componentWillUnmount: function () {
-    AppStore.removeChangeListener(this._search, MARKET_CHANGE);
+    AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
     AppStore.removeChangeListener(this._search, MYBIZ_CHANGE);
   },
 
@@ -104,12 +103,13 @@ let Market = React.createClass({
 
   _search () {
     let filterItems = AppStore.getFilters().filterItems;
-    let myCategory = AppStore.getCategory();
+    let filterType = AppStore.getCategory();
     let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
     let categoryArr = this.deleteFirstObj(category.options);
     this.setState({
-      levelOneText: myCategory != null ? myCategory.displayName : categoryArr.length == 0 ? '' : categoryArr[0].displayName,
-      bizCategoryID: myCategory != null ? myCategory.id : categoryArr.length == 0 ? 0 : categoryArr[0].id
+      levelOneText: filterType != null ? filterType.category.displayName : categoryArr.length == 0 ? '' : categoryArr[0].displayName,
+      bizCategoryID: filterType != null ? filterType.category.id : categoryArr.length == 0 ? 0 : categoryArr[0].id,
+      pickTypeRow: filterType != null ? filterType.rowId : 0
     });
     this.refs.marketGiftedListView._refresh();
   },
@@ -371,8 +371,12 @@ let Market = React.createClass({
       levelOneText: this.state.categorySource[rowId].displayName,
       bizCategoryID: this.state.categorySource[rowId].id
     });
+    let filterType = {
+      category: this.state.categorySource[rowId],
+      rowId: rowId
+    };
     this.refs.marketGiftedListView._refresh();
-    AppStore.saveCategory(this.state.categorySource[rowId]);
+    AppStore.saveCategory(filterType);
   },
   pressTimeRow(rowId){
     this.setState({

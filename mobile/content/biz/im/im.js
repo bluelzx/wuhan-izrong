@@ -407,7 +407,7 @@ let WhitePage = React.createClass({
         item.orgValue = ContactStore.getOrgValueByOrgId(tagUser.orgId);
       }
     });
-    let listData = sessionFilter(this.state.data.msg, 'title', 'content','orgValue', this.state.keyWord);
+    let listData = this.state.data.msg;//sessionFilter(this.state.data.msg, 'title', 'content','orgValue', this.state.keyWord);
     if (_.isEmpty(listData) || listData.length == 0) {
       return this.renderNull();
     } else {
@@ -421,7 +421,7 @@ let WhitePage = React.createClass({
 
   renderNull: function () {
     return (
-      <Text style={{flex:1, marginTop:20, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>没有记录</Text>
+      <Text style={{flex:1, marginTop:20, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>您当前没有新好友通知</Text>
     );
   },
 
@@ -430,8 +430,10 @@ let WhitePage = React.createClass({
     return (
       <NavBarView navigator={this.props.navigator} title='聊天' showBack={false} actionButton={this.renderContact}>
 
+        {/*
+         <SearchBar textChange={this.textChange}/>
+         */}
 
-        <SearchBar textChange={this.textChange}/>
         <ScrollView
           automaticallyAdjustContentInsets={false}
           style={{flexDirection: 'column',marginTop:0,backgroundColor:'#F4F4F4'}}>

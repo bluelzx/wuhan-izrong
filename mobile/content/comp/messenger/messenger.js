@@ -63,7 +63,7 @@ let Messenger = React.createClass({
     this.setState(this._getStateFromStores());
   },
 
-  _sendMessage(contentType, content, isReSend = false, msgId = '') {
+  _sendMessage(contentType, content, isReSend = false, msgId = '', isNotSend, localUri) {
     if (this.props.param.chatType === SESSION_TYPE.GROUP && !ImAction.isInGroupById(this.props.param.groupId, this.props.param.myId)) {
       //TODO: 用户已不在群组....
       Alert('您已不在该群组');
@@ -76,9 +76,9 @@ let Messenger = React.createClass({
         content: content,
         revTime: new Date(),
         isRead: true,
-        status: 'ErrorButton',
+        status: 'Sending',//'ErrorButton',
         //status: 'isMute',
-
+        localUri:localUri
       };
       if (this.props.param.chatType === SESSION_TYPE.USER) {
         _.assign(msgToSend, {
@@ -97,7 +97,8 @@ let Messenger = React.createClass({
         });
       }
 
-      ImAction.send(msgToSend, isReSend, this.props.param.myId);
+      ImAction.send(msgToSend, isReSend, this.props.param.myId, isNotSend);
+      return msgToSend.msgId;
     }
   },
 
@@ -119,13 +120,29 @@ let Messenger = React.createClass({
   },
 
   handleSendImage(uri) {
-    ImAction.uploadImage(uri)
-      .then((response) => {
-        this._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl);
-      }).catch((errorData) => {
-        console.log('Image upload error ' + JSON.stringify(errorData));
-        Alert('图片上传失败');
+    let p = new Promise((resolve,reject)=>{
+      resolve( this._sendMessage(MSG_CONTENT_TYPE.IMAGE, '' , false, '', true, uri))
+    }).catch((err)=>{
+      throw err;
+    });
+
+    let self = this;
+    p.then((msgId)=>{
+      ImAction.uploadImage(uri).then((response)=>{
+        ImStore.modifyImgUrl(msgId,response.fileUrl)
+        self._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl, true,msgId,false, uri);
       });
+    }).catch((err)=>{
+      Alert('图片上传失败');
+    });
+
+    //ImAction.uploadImage(uri)
+    //  .then((response) => {
+    //    this._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl);
+    //  }).catch((errorData) => {
+    //    console.log('Image upload error ' + JSON.stringify(errorData));
+    //    Alert('图片上传失败');
+    //  });
   },
 
   handleImageError(error) {

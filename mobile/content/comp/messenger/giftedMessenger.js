@@ -297,7 +297,7 @@ let GiftedMessenger = React.createClass({
         DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardWillHide)
       ];
     }
-
+    //this.scrollToBottom();
     this.setTimeout(() => {
       // inspired by http://stackoverflow.com/a/34838513/1385109
       this.scrollToBottom();
@@ -380,7 +380,7 @@ let GiftedMessenger = React.createClass({
     if (this.listHeight && this.footerY && this.footerY > this.listHeight) {
       let scrollDistance = this.listHeight - this.footerY;
       this.scrollResponder.scrollTo({
-        y: -scrollDistance+20,
+        y: -scrollDistance + 20,
         x: 0,
         animated: false
       });
@@ -905,7 +905,7 @@ let GiftedMessenger = React.createClass({
             onSelected={(response) => { this.props.handleSendImage(response);this._hidePanel();}}
             title="选择图片"
             fileId="selectCamera"
-            allowsEditing={true}
+            allowsEditing={false}
             style={this.styles.panelItem}
           >
             <Image

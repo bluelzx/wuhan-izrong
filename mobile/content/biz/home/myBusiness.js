@@ -48,7 +48,7 @@ let Market = React.createClass({
     let term = MarketStore.getFilterOptions(filterItems, 'term').options;
     let amount = MarketStore.getFilterOptions(filterItems, 'amount').options;
 
-    let myCategory = AppStore.getCategory();
+    let filterType = AppStore.getCategory();
 
     return {
       filterItems: filterItems,
@@ -60,9 +60,9 @@ let Market = React.createClass({
       clickFilterType: 0,
       clickFilterTime: 0,
       clickFilterOther: 0,
-      levelOneText: myCategory != null ? myCategory.displayName : categoryArr.length == 0 ? '' : categoryArr[0].displayName,
+      levelOneText: filterType != null ? filterType.category.displayName : categoryArr.length == 0 ? '' : categoryArr[0].displayName,
       optionTwoText: '最新发布',
-      pickTypeRow: 0,
+      pickTypeRow: filterType != null ? filterType.rowId : 0,
       pickTimeRow: 0,
       pickRowColor: '#244266',
       orientionDefault: 10000,
@@ -78,7 +78,7 @@ let Market = React.createClass({
       orderField: 'lastModifyDate',
       orderType: 'desc',
       pageIndex: 1,
-      bizCategoryID: myCategory != null ? myCategory.id : categoryArr.length == 0 ? [] : categoryArr[0].id,
+      bizCategoryID: filterType != null ? filterType.category.id : categoryArr.length == 0 ? [] : categoryArr[0].id,
       bizOrientationID: '',
       termID: '',
       amountID: '',
@@ -383,8 +383,12 @@ let Market = React.createClass({
       levelOneText: this.state.categorySource[rowId].displayName,
       bizCategoryID: this.state.categorySource[rowId].id
     });
+    let filterType = {
+      category: this.state.categorySource[rowId],
+      rowId: rowId
+    };
     this.refs.marketGiftedListView._refresh();
-    AppStore.saveCategory(this.state.categorySource[rowId]);
+    AppStore.saveCategory(filterType);
   },
   pressTimeRow(rowId){
     this.setState({

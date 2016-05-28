@@ -10,7 +10,7 @@ let { ImHost } = require('../../../config');
 let Persister = require('../persister/persisterFacade');
 
 //let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
-let { Default_EVENT, MARKET_CHANGE ,ORG_CHANGE ,USER_CHANGE} = require('../../constants/dictEvent');
+let { Default_EVENT, MARKET_CHANGE ,ORG_CHANGE ,USER_CHANGE,HOMELIST_CHANGE} = require('../../constants/dictEvent');
 
 let _info = {
   initLoadingState: true,
@@ -89,6 +89,9 @@ let _queryAllPlatFormInfo = function () {
 // Private Functions
 let _handleConnectivityChange = (isConnected) => {
   _info.netWorkState = isConnected;
+  if(isConnected){
+    AppStore.emitChange('NETINFO_CONNECTED');
+  }
 };
 
 let _appInit = () => {
@@ -297,6 +300,7 @@ let _saveMarketInfo = (marketInfoList) => {
 
 let _saveHomeMarketList = (homeMarketList)=>{
   Persister.saveHomeMarketList(homeMarketList);
+  AppStore.emitChange(HOMELIST_CHANGE);
 };
 
 let _getMarketInfo = ()=> {
