@@ -40,7 +40,7 @@ module.exports = {
         var tag = new Date(time);
         // var t = now - time;
         if (now.getFullYear() == tag.getFullYear() && now.getMonth() == tag.getMonth() && now.getDate() == tag.getDate()) {
-            return dateFormat(new Date(time), 'HH:MM');
+            return '今天 ' + dateFormat(new Date(time), 'HH:MM');
         } else {
             var h = now.getHours();
             var m = now.getMinutes();
@@ -50,11 +50,11 @@ module.exports = {
             var twoD = today - 1 * 24 * 60 * 60 * 1000;
 
             if (now.getFullYear() == tag.getFullYear() && tag.getTime() >= twoD) {
-                return "昨天";
+                return '昨天 ' + dateFormat(new Date(time), 'HH:MM');
             } else if (now.getFullYear() == tag.getFullYear() && tag.getTime() >= twoD - 1 * 24 * 60 * 60 * 1000) {
-                return "前天";
+                return '前天 ' + dateFormat(new Date(time), 'HH:MM');
             } else {
-                return dateFormat(new Date(time), 'yyyy-mm-dd');
+                return dateFormat(new Date(time), 'yyyy年mm月dd日 HH:MM');
             }
         }
     },

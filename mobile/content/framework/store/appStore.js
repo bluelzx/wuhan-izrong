@@ -75,8 +75,10 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getBadge: ()=>_getBadge(),
   startJavaServer: () => ServiceModule.startAppService(_data.token, 0, ImHost),
   saveMarketInfo: (marketInfoList) => _saveMarketInfo(marketInfoList),
-  getMarketInfo: () => _getMarketInfo()
+  getMarketInfo: () => _getMarketInfo(),
   //stopJavaServer:() => ServiceModule.stopMyAppService()
+  saveHomeMarketList: (homeMarketList)=> _saveHomeMarketList(homeMarketList),
+  shouldUpdate: ()=> Persister.shouldUpdate()
 
 });
 
@@ -291,6 +293,10 @@ let _queryAllHomePageInfo = ()=> {
 
 let _saveMarketInfo = (marketInfoList) => {
   Persister.saveMarketInfo(marketInfoList);
+};
+
+let _saveHomeMarketList = (homeMarketList)=>{
+  Persister.saveHomeMarketList(homeMarketList);
 };
 
 let _getMarketInfo = ()=> {
