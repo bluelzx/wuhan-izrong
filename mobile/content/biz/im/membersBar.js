@@ -45,28 +45,32 @@ let MembersBar = React.createClass({
 
   render: function () {
     let {members, imgSource, groupMasterUid} = this.props;
-    let currUser = ContactStore.getUserInfo();
+    //let currUser = ContactStore.getUserInfo();
+    let Master = null;
     let m = [];
     for (let i = 0; !!members && i < members.length; i++) {
       let member = members[i];
       if (member.userId == groupMasterUid) {
-        if (currUser.userId != groupMasterUid) {
-          m.unshift(this.renderMember(member));
-        }
-      } else {
+        //if (currUser.userId != groupMasterUid) {
+        Master = this.renderMember(member);
+          m.unshift(Master);
+        //}
+      }else {
         m.push(
           this.renderMember(member)
         );
+
       }
     }
 
     m = m.concat(this.renderCircularButton());
     let index = Device.width / 61;
 
-    //if(m.length/index > 2){
-    //  let start = m.length - index*2;
-    //  m = m.slice(start + 1,m.length);
-    //}
+    if(m.length/index > 2){
+      let start = m.length - index*2;
+      m = m.slice(start + 2,m.length);
+      m.unshift(Master);
+    }
     return (
       <View
         style={{backgroundColor:DictStyle.groupManage.memberListBackgroundColor, flex:1,justifyContent:'center',alignSelf:'stretch',alignItems:'center'}}>

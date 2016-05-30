@@ -33,6 +33,7 @@ let SearchResultDetail = React.createClass({
   getStateFromStores: function() {
     ////// 是否已经是好友
     let userInfo;
+    //this.props.param.isStranger = ContactStore.isStranger(this.props.param.userId);
     if(!this.props.param.isStranger){
       userInfo = ContactStore.getUserInfoByUserId(this.props.param.userId);
     }else{
@@ -179,17 +180,17 @@ let SearchResultDetail = React.createClass({
               <Text numberOfLines={2} style={{textAlign:'right',flex:3,color:'#979fa2',fontSize:18, marginRight:20}}>{this.state.data.realName}</Text>
             </View>
           </View>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={(this.props.param.friendInvite || this.state.data.publicMobile)?this.descValue(this.state.data.mobileNumber):privateDesc}/>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={(this.props.param.friendInvite || this.state.data.publicPhone)?this.descValue(this.state.data.phoneNumber):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="手机号" imgPath={require('../../image/user/mobileNo.png')} value={this.state.data.publicMobile || !this.props.param.isStranger?this.descValue(this.state.data.mobileNumber):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="座机号" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.data.publicPhone|| !this.props.param.isStranger?this.descValue(this.state.data.phoneNumber):privateDesc}/>
 
           {/* <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.data.publicQQ!==false?this.descValue(this.state.data.qqNo):privateDesc}/>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.data.publicWeChat!==false?this.descValue(this.state.data.weChatNo):privateDesc}/>
-          */}
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={(this.props.param.friendInvite || this.state.data.publicEmail)?this.descValue(this.state.data.email):privateDesc}/>
+           <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.data.publicWeChat!==false?this.descValue(this.state.data.weChatNo):privateDesc}/>
+           */}
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="邮箱" imgPath={require('../../image/user/email.png')} value={this.state.data.publicEmail|| !this.props.param.isStranger?this.descValue(this.state.data.email):privateDesc}/>
           <View style={{marginTop:5,backgroundColor:'transparent',borderBottomWidth:0.5,borderBottomColor:'#F4F4F4'}}></View>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.data.orgValue}/>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="部门:" imgPath={require('../../image/user/department.png')} value={(this.props.param.friendInvite || this.state.data.publicDepart)?this.descValue(this.state.data.department):privateDesc}/>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={(this.props.param.friendInvite || this.state.data.publicTitle)?this.descValue(this.state.data.jobTitle):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="机构" imgPath={require('../../image/user/comp.png')} value={this.state.data.orgValue}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="部门" imgPath={require('../../image/user/department.png')} value={this.state.data.publicDepart|| !this.props.param.isStranger?this.descValue(this.state.data.department):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="职位" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicTitle|| !this.props.param.isStranger?this.descValue(this.state.data.jobTitle):privateDesc}/>
           {this.renderMute()}
           <View style={{height:20}}></View>
         </ScrollView>

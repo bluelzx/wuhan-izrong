@@ -19,8 +19,8 @@ let {
   } = React;
 
 let dismissKeyboard = require('react-native-dismiss-keyboard');
-let moment = require('moment');
-moment.locale('zh-cn');
+let {Moment} = require('mx-artifacts');
+Moment.locale('zh-cn');
 let Icon = require('react-native-vector-icons/Ionicons');
 let TimerMixin = require('react-timer-mixin');
 let Publish = require('../../biz/publish/publish');
@@ -201,15 +201,15 @@ let GiftedMessenger = React.createClass({
       if (diffMessage === null) {
         return (
           <Text style={[this.styles.date]}>
-            {'--  '+ moment(rowData.date).calendar() + '  --'}
+            {'--  '+ Moment(rowData.date).calendar() + '  --'}
           </Text>
         );
       } else if (diffMessage.date instanceof Date) {
-        let diff = moment(rowData.date).diff(moment(diffMessage.date), 'minutes');
+        let diff = Moment(rowData.date).diff(Moment(diffMessage.date), 'minutes');
         if (diff > 5) {
           return (
             <Text style={[this.styles.date]}>
-              {'--  '+moment(rowData.date).calendar()+ '  --'}
+              {'--  '+Moment(rowData.date).calendar()+ '  --'}
             </Text>
           );
         }
@@ -658,7 +658,7 @@ let GiftedMessenger = React.createClass({
             />
           }
 
-          //renderHeader={this.renderLoadEarlierMessages}
+         // renderHeader={this.renderLoadEarlierMessages}
           onLayout={(event) => {
             let layout = event.nativeEvent.layout;
             this.listHeight = layout.height;
