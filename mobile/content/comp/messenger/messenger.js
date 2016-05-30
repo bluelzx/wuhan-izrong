@@ -128,7 +128,7 @@ let Messenger = React.createClass({
 
     let self = this;
     p.then((msgId)=>{
-      ImAction.uploadImage(uri).then((response)=>{
+      ImAction.(uri).then((response)=>{
         ImStore.modifyImgUrl(msgId,response.fileUrl)
         self._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl, true,msgId,false, uri);
       });
