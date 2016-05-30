@@ -48,7 +48,7 @@ let ImAction = {
   },
   send: (data, bFlag, userId, isSend) => _send(data, bFlag, userId, isSend),
   //receive: (data) => ImStore.saveMsg(data),
-  uploadImageuploadImage: (fileFieldName) => _uploadImage(AppLinks.uploadFile, fileFieldName),
+  uploadImage: (fileFieldName) => _uploadImage(AppLinks.uploadFile, fileFieldName),
   notificationRegister: (token) => _notificationRegister(token),
   onNotification: (notification) => _onNotification(notification),
   freshNotification: (notification) => _onNotification(notification),
