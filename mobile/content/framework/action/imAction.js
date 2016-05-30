@@ -6,18 +6,19 @@ let ImSocket = require('../network/imSocket');
 let AppLinks = require('../../constants/appLinks');
 let { UFetch } = require('../network/fetch');
 // Private Functions
-let _send = (data, bFlag = false, userId) => {
+let _send = (data, bFlag = false, userId, notSend = false) => {
   if (bFlag) {
     console.log('Message sent again!');
   } else {
     ImStore.saveMsg(data, userId);
   }
 
+  if(!notSend)
   ImSocket.send(data)
     .then(() => {
       // ImStore.send();
     }).catch(() => {
-      Alert('IM服务器异常,请稍后再试');
+      Alert('网络异常');
     });
 };
 
@@ -35,8 +36,8 @@ let _uploadImage = function (url, fileFieldName) {
   });
 };
 
-let _isInGroupById = function (id) {
-  return ImStore.isInGroupById(id);
+let _isInGroupById = function (id, userId) {
+  return ImStore.isInGroupById(id, userId);
 }
 
 let ImAction = {
@@ -45,7 +46,7 @@ let ImAction = {
     ImStore.sessionInit(data);
     //ImSocket.init();
   },
-  send: (data, bFlag, userId) => _send(data, bFlag, userId),
+  send: (data, bFlag, userId, isSend) => _send(data, bFlag, userId, isSend),
   //receive: (data) => ImStore.saveMsg(data),
   uploadImage: (fileFieldName) => _uploadImage(AppLinks.uploadFile, fileFieldName),
   notificationRegister: (token) => _notificationRegister(token),
@@ -54,7 +55,7 @@ let ImAction = {
   initSend:() => {
     _send();
   },
-  isInGroupById: (id) => _isInGroupById(id)
+  isInGroupById: (id, userId) => _isInGroupById(id, userId)
 };
 
 module.exports = ImAction;

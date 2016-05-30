@@ -48,6 +48,10 @@ let DeleteMember = React.createClass({
 
   delUser: function( groupId, members) {
     dismissKeyboard();
+    if(Object.keys(members).length == 0){
+      //this.props.navigator.pop();
+      return;
+    }
     this.props.exec(() => {
       return ContactAction.deleteGroupMembers(this.props.param.groupId, members).then(()=>{
         this.props.navigator.pop();

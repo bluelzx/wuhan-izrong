@@ -33,12 +33,11 @@ let ImUserInfo = React.createClass({
     ////// 是否已经是好友
     let userInfo;
     let user = ContactStore.getUserInfo();
+    this.props.param.isStranger = ContactStore.isStranger(this.props.param.userId);
     if(user.userId == this.props.param.userId){
       userInfo = user;
-    }else if(!this.props.param.isStranger){
+    }else {
       userInfo = ContactStore.getUserInfoByUserId(this.props.param.userId);
-    }else{
-      userInfo = this.props.param;
     }
 
     console.log(userInfo.mute);
@@ -104,7 +103,7 @@ let ImUserInfo = React.createClass({
     }else {
       this.props.exec(()=> {
         return ContactAction.addFriend(this.props.param.userId).then((response)=> {
-          ContactStore.addFriend(this.props.param);
+          ContactStore.addFriend(this.state.data);
         }).then((response)=> {
           this.props.navigator.popToTop();
         }).catch((err)=> {
@@ -132,28 +131,31 @@ let ImUserInfo = React.createClass({
     //    <Text style={{color:'#ffffff',textAlign:'center'}}>加为好友</Text>
     //  </View>
     //</TouchableOpacity>
-
+    if(ContactStore.getUserInfo().userId == this.props.param.userId){
+      return null;
+    }else {
       return (
         <View style={{position:'absolute',left:0,bottom:0,right:0}}>
-          {(()=>{
-            if(!this.props.param.isStranger){
-              return null;
-            }else {
+          {(()=> {
+            if (this.props.param.isStranger) {
               return (
                 <TouchableOpacity
                   style={{flex:1,marginTop: 20, backgroundColor: '#4fb9fc',justifyContent:'center',alignItems:'center',paddingVertical:15}}
                   onPress={()=>this.addFriend()}
                 >
                   <Text style={{fontSize: 20, color: '#ffffff',textAlign:'center'}}>
-                  加为好友
-                    </Text>
+                    加为好友
+                  </Text>
                 </TouchableOpacity>
               );
+            } else {
+              return null;
             }
 
           })()}
-          </View>
+        </View>
       );
+    }
 
   },
 
@@ -172,17 +174,17 @@ let ImUserInfo = React.createClass({
               <Text numberOfLines={2} style={{textAlign:'right',flex:3,color:'#979fa2',fontSize:18, marginRight:20}}>{this.state.data.realName}</Text>
             </View>
           </View>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.data.publicMobile!==false?this.descValue(this.state.data.mobileNumber):privateDesc}/>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.data.publicPhone!==false?this.descValue(this.state.data.phoneNumber):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="手机号:" imgPath={require('../../image/user/mobileNo.png')} value={this.state.data.publicMobile || !this.props.param.isStranger?this.descValue(this.state.data.mobileNumber):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="座机号:" imgPath={require('../../image/user/telephoneNo.png')} value={this.state.data.publicPhone|| !this.props.param.isStranger?this.descValue(this.state.data.phoneNumber):privateDesc}/>
 
           {/* <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="QQ:" imgPath={require('../../image/user/qqNo.png')} value={this.state.data.publicQQ!==false?this.descValue(this.state.data.qqNo):privateDesc}/>
           <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="微信:" imgPath={require('../../image/user/wechatNo.png')} value={this.state.data.publicWeChat!==false?this.descValue(this.state.data.weChatNo):privateDesc}/>
           */}
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.data.publicEmail!==false?this.descValue(this.state.data.email):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="电子邮箱:" imgPath={require('../../image/user/email.png')} value={this.state.data.publicEmail|| !this.props.param.isStranger?this.descValue(this.state.data.email):privateDesc}/>
           <View style={{marginTop:5,backgroundColor:'transparent',borderBottomWidth:0.5,borderBottomColor:'#F4F4F4'}}></View>
           <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="机构:" imgPath={require('../../image/user/comp.png')} value={this.state.data.orgValue}/>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="部门:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicDepart!==false?this.descValue(this.state.data.department):privateDesc}/>
-          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicTitle!==false?this.descValue(this.state.data.jobTitle):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="部门:" imgPath={require('../../image/user/department.png')} value={this.state.data.publicDepart|| !this.props.param.isStranger?this.descValue(this.state.data.department):privateDesc}/>
+          <Item itemStyle={styles.itemBackColor} hiddenArrow={true} wrap={true} desc="职位:" imgPath={require('../../image/user/jobTitle.png')} value={this.state.data.publicTitle|| !this.props.param.isStranger?this.descValue(this.state.data.jobTitle):privateDesc}/>
           {this.renderMute()}
           <View style={{height:20}}></View>
         </ScrollView>

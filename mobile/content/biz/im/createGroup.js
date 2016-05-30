@@ -178,14 +178,13 @@ let CreateGroup = React.createClass({
         <View style={{backgroundColor:DictStyle.colorSet.content, paddingTop:10}}>
           <TextInput
             placeholder={this.state.userInfo.realName + "创建的群"}
-            placeholderTextColor="#44B5E6"
+            placeholderTextColor="#aaaaaa"
             onChangeText={(text) => this.setGroupName(text)}
             style={{color: '#44B5E6',height:50, width: Device.width,backgroundColor:DictStyle.colorSet.textEditBackground, paddingHorizontal:20}}></TextInput>
         </View>
 
         <ChooseList memberList={this.state.memberList}/>
 
-        <SearchBar textChange={this.textChange} textOnBlur={this.textOnBlur}/>
 
         {(()=> {
 
@@ -202,7 +201,6 @@ let CreateGroup = React.createClass({
                          groupDataName={'orgMembers'}
                          groupItemRender={this.itemRender}
                          groupTitleRender={this.titleRender}
-                         isOpen={this.state.isOpen}
               />
 
             );

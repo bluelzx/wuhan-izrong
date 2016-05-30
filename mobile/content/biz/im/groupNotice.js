@@ -161,6 +161,7 @@ let GroupNotice = React.createClass({
   },
 
   toChat(item) {
+    let user = ContactStore.getUserInfo();
     let judge = ContactStore.judgeGroup(item.groupId, user.userId);
     if (judge) {
       let param = {
@@ -246,10 +247,17 @@ let GroupNotice = React.createClass({
     }
   },
 
+  backAction: function () {
+    let user = ContactStore.getUserInfo();
+    let sessionId = SessionStore.getSessionIdByUserId(user.userId);
+    SessionStore.setBadgeZero(sessionId);
+    this.props.navigator.pop();
+  },
+
   render: function () {
     let {title}  = this.props;
     return (
-      <NavBarView navigator={this.props.navigator} title='群通知' showBack={true}>
+      <NavBarView navigator={this.props.navigator} title='群通知' showBack={true} backAction={() => {this.backAction()}}>
         {this.state.data && <ListView renderRow={this.renderRow} dataSource={this.state.dataSource}/>}
       </NavBarView>
     );

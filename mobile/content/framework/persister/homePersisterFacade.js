@@ -10,11 +10,12 @@ const {
 let {SESSION_TYPE } = require('../../constants/dictIm');
 
 let HomePersisterFacade = {
-    createHomePageInfo: (msgList)=>_createHomePageInfo(msgList),
-    queryAllHomePageInfo: () => _queryAll(),
-    saveMarketInfo: (marketInfoList)=> _saveMarketInfo(marketInfoList),
-    getMarketInfo: ()=> _getMarketInfo()
-  };
+  createHomePageInfo: (msgList)=>_createHomePageInfo(msgList),
+  queryAllHomePageInfo: () => _queryAll(),
+  saveHomeMarketList: (marketInfoList)=> _saveHomeMarketList(marketInfoList),
+  getMarketInfo: ()=> _getMarketInfo(),
+  shouldUpdate: ()=> _shouldUpdate()
+};
 
 let _createHomePageInfo = function (msgList) {
   _realm.write(() => {
@@ -50,42 +51,33 @@ let _queryAll = function () {
   return ret;
 };
 
-let _saveMarketInfo = function (marketInfoList) {
+let _saveHomeMarketList = function (marketInfoList) {
   _realm.write(() => {
-    marketInfoList.forEach((marketInfo)=> {
-      _realm.create(
-        MARKETINFO,
-        {
-          id: marketInfo.id,
-          amount: marketInfo.amount,
-          bizCategory: marketInfo.bizCategory,
-          bizCategoryDesc: marketInfo.bizCategory,
-          bizItem: marketInfo.bizItem,
-          bizItemDesc: marketInfo.bizItemDesc,
-          bizOrientation: marketInfo.bizOrientation,
-          bizOrientationDesc: marketInfo.bizOrientationDesc,
-          fileUrlList: JSON.stringify(marketInfo.fileUrlList),
-          lastModifyDate: new Date(marketInfo.lastModifyDate),
-          orgId: marketInfo.orgId,
-          orgName: marketInfo.orgName,
-          photoStoredFileUrl:marketInfo.photoStoredFileUrl,
-          rate: marketInfo.rate,
-          remark: marketInfo.remark,
-          status: marketInfo.status,
-          statusDesc: marketInfo.statusDesc,
-          term: marketInfo.term,
-          userId: marketInfo.userId,
-          userName: marketInfo.userName
-        }, true);
-    })
+    _realm.create(
+      MARKETINFO,
+      {
+        id: 'homeList',
+        syncTime: new Date().getDate(),
+        homeMarketList: JSON.stringify(marketInfoList)
+      }, true);
   });
 };
 
-let _getMarketInfo = function(){
+let _shouldUpdate = function () {
   let marketInfo = _realm.objects(MARKETINFO);
-  return marketInfo;
+  if (marketInfo && marketInfo[0] && (new Date().getDate() === marketInfo[0].syncTime)) {
+    return false;
+  }
+  return true;
 };
 
+let _getMarketInfo = function () {
+  let marketInfo = _realm.objects(MARKETINFO);
+  if(marketInfo && marketInfo[0]){
+    return JSON.parse(marketInfo[0].homeMarketList);
+  }
+  return []
+};
 
 
 module.exports = HomePersisterFacade;

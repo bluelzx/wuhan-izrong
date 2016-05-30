@@ -23,7 +23,7 @@ var AppStore = require('../store/appStore');
 //var Alert = require('../../comp/utils/alert');
 //var Login = require('../../biz/login/login')
 let {Alert} = require('mx-artifacts');
-
+let _ = require('lodash');
 const DictStyle = require('../../constants/dictStyle');
 
 let MarketAction = require('../action/marketAction');
@@ -169,7 +169,7 @@ var TabView = React.createClass({
 
           <TabBarIOS.Item
             title="聊天"
-            badge={(this.state.badge || null) > 99 ? '99+':(this.state.badge || null)}
+            badge={this.state.badge > 99 ? '99+':(this.state.badge || null)}
             icon={require('../../image/tab/IM.png')}
             selectedIcon={require('../../image/tab/IM-selected2.png')}
             selected={this.state.selectedTab === 'IM'}
@@ -206,6 +206,8 @@ var TabView = React.createClass({
                   icon={require('../../image/tab/market.png')}
                   selectedIcon={require('../../image/tab/market-selected2.png')}
                   exec={this.props.exec}
+                  delay={true}
+                  page={1}
           >
           </Market>
 
@@ -229,6 +231,8 @@ var TabView = React.createClass({
               icon={require('../../image/tab/IM.png')}
               selectedIcon={require('../../image/tab/IM-selected2.png')}
               exec={this.props.exec}
+              delay={true}
+              page={3}
           >
           </IM>
 

@@ -90,7 +90,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 0
-        versionName "0.1.4"
+        versionName "0.1.7"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -127,7 +127,7 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def outputFile = output.outputFile
-                                def fileName = "tj_fas_app_v${defaultConfig.versionName}_${releaseTime()}.apk"
+                                def fileName = "wuhan_fas_app_v${defaultConfig.versionName}_${releaseTime()}.apk"
                                 output.outputFile = new File(outputFile.parent, fileName)
         }
     }

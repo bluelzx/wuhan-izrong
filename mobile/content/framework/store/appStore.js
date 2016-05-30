@@ -10,7 +10,7 @@ let { ImHost } = require('../../../config');
 let Persister = require('../persister/persisterFacade');
 
 //let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
-let { Default_EVENT, MARKET_CHANGE ,ORG_CHANGE ,USER_CHANGE} = require('../../constants/dictEvent');
+let { Default_EVENT, MARKET_CHANGE ,ORG_CHANGE ,USER_CHANGE,HOMELIST_CHANGE} = require('../../constants/dictEvent');
 
 let _info = {
   initLoadingState: true,
@@ -75,8 +75,10 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getBadge: ()=>_getBadge(),
   startJavaServer: () => ServiceModule.startAppService(_data.token, 0, ImHost),
   saveMarketInfo: (marketInfoList) => _saveMarketInfo(marketInfoList),
-  getMarketInfo: () => _getMarketInfo()
+  getMarketInfo: () => _getMarketInfo(),
   //stopJavaServer:() => ServiceModule.stopMyAppService()
+  saveHomeMarketList: (homeMarketList)=> _saveHomeMarketList(homeMarketList),
+  shouldUpdate: ()=> Persister.shouldUpdate()
 
 });
 
@@ -87,6 +89,9 @@ let _queryAllPlatFormInfo = function () {
 // Private Functions
 let _handleConnectivityChange = (isConnected) => {
   _info.netWorkState = isConnected;
+  if(isConnected){
+    AppStore.emitChange('NETINFO_CONNECTED');
+  }
 };
 
 let _appInit = () => {
@@ -291,6 +296,11 @@ let _queryAllHomePageInfo = ()=> {
 
 let _saveMarketInfo = (marketInfoList) => {
   Persister.saveMarketInfo(marketInfoList);
+};
+
+let _saveHomeMarketList = (homeMarketList)=>{
+  Persister.saveHomeMarketList(homeMarketList);
+  AppStore.emitChange(HOMELIST_CHANGE);
 };
 
 let _getMarketInfo = ()=> {

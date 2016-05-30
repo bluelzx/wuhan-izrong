@@ -69,17 +69,17 @@ let MyBizDetail = React.createClass({
       termText: this.termChangeHelp(marketInfo.term).toString(),
       amountText: marketInfo.amount == null || marketInfo.amount == 0 ? '' : (marketInfo.amount < 100000000) ? (marketInfo.amount / 10000).toString() : (marketInfo.amount / 100000000).toString(),
       rateText: marketInfo.rate == null || marketInfo.rate == 0 ? '' : numeral((marketInfo.rate * 100)).format('0,0.00'),
-      remarkText: marketInfo.remark,
-      lastModifyDate: DateHelper.formatBillDetail(t),
+      remarkText: '',
+      lastModifyDate: DateHelper.descDate(t),
       //networt
       id: marketInfo.id,
       term: marketInfo.term,
       rate: marketInfo.rate * 100,
-      remark: marketInfo.remark,
       bizOrientation: marketInfo.bizOrientation,
       bizCategory: marketInfo.bizCategory,
       amount: marketInfo.amount,
-      fileUrlList: marketInfo.fileUrlList,
+      remark: null,
+      fileUrlList: [],
 
       keyboardSpace: 0,
       scrollHeight: screenHeight - 108
@@ -95,6 +95,9 @@ let MyBizDetail = React.createClass({
       DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
       DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
     }
+    InteractionManager.runAfterInteractions(() => {
+      this.getBizOrderByCreator(this.state.id);
+    });
 
   },
 
@@ -261,7 +264,7 @@ let MyBizDetail = React.createClass({
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
         <TouchableOpacity style={{marginLeft: -20,padding:10}}
-          onPress={()=>this.shutDownBiz()}>
+                          onPress={()=>this.shutDownBiz()}>
           <Text style={{color:'#ffffff'}}>{'下架'}</Text>
         </TouchableOpacity>
       );
@@ -284,10 +287,12 @@ let MyBizDetail = React.createClass({
   renderBusinessType: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
-          <View style={{flexDirection:'column',marginTop:5}}>
-          <View style={{flexDirection:'row'}}>
-            <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'方向'}</Text>
-            <Text style={{color:'#dd656c'}}>{'*'}</Text>
+        <View style={{flexDirection:'column',marginTop:5}}>
+          <View style={{flexDirection:'row',alignItems:'center'}}>
+            <View style={{marginLeft:20,width:Adjust.width(100),flexDirection:'row',alignItems:'center'}}>
+              <Text style={{color:DictStyle.marketSet.fontColor}}>{'方向'}</Text>
+              <Text style={{color:'#dd656c'}}>{'*'}</Text>
+            </View>
             <View style={{marginTop:5,flexDirection:'row'}}>
               <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
                          change={this._bizOrientationDataChange}/>
@@ -297,10 +302,8 @@ let MyBizDetail = React.createClass({
       );
     } else {
       return (
-        <View style={{flexDirection:'column',marginTop:10}}>
-          <View style={{flexDirection:'row'}}>
-            {this.returnItem('方\u3000\u3000向:', this.state.marketInfo.bizOrientationDesc)}
-          </View>
+        <View style={{flexDirection:'row'}}>
+          {this.returnItem('方\u3000\u3000向:', this.state.marketInfo.bizOrientationDesc)}
         </View>
       );
     }
@@ -308,8 +311,8 @@ let MyBizDetail = React.createClass({
   renderTimeLimit: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
-          <View style={{flexDirection:'column',marginTop:5}}>
-            <View style={{marginTop:5,flexDirection:'row'}}
+        <View style={{flexDirection:'column',marginTop:5}}>
+          <View style={{marginTop:5,flexDirection:'row'}}
                 ref="timeLimitInputView"
                 onLayout={() => {}}
           >
@@ -330,7 +333,7 @@ let MyBizDetail = React.createClass({
       );
     } else {
       return (
-        <View style={{flexDirection:'row',marginTop:10}}>
+        <View>
           {this.returnItem('期\u3000\u3000限:', this.termLimitChangeHelp(this.state.marketInfo.term))}
         </View>
       );
@@ -339,8 +342,8 @@ let MyBizDetail = React.createClass({
   renderAmount: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
-          <View style={{flexDirection:'column',marginTop:5}}>
-            <View style={{marginTop:5,flexDirection:'row'}}
+        <View style={{flexDirection:'column',marginTop:5}}>
+          <View style={{marginTop:5,flexDirection:'row'}}
                 ref="amountInputView"
                 onLayout={() => {}}
           >
@@ -361,7 +364,7 @@ let MyBizDetail = React.createClass({
       );
     } else {
       return (
-        <View style={{flexDirection:'row',marginTop:10}}>
+        <View>
           {this.returnItem('金\u3000\u3000额:',
             this.state.marketInfo.amount == null || this.state.marketInfo.amount == 0 ? '--' :
               this.state.marketInfo.amount < 100000000 ? this.state.marketInfo.amount / 10000 + '万' :
@@ -374,8 +377,8 @@ let MyBizDetail = React.createClass({
   renderRate: function () {
     if (this.state.marketInfo.status == 'ACTIVE') {
       return (
-          <View style={{flexDirection:'column',marginTop:5}}>
-            <View style={{alignItems:'center',marginTop:5,flexDirection:'row'}
+        <View style={{flexDirection:'column',marginTop:5}}>
+          <View style={{alignItems:'center',marginTop:5,flexDirection:'row'}
             } ref="rateInputView"
                 onLayout={() => {}}
           >
@@ -396,8 +399,9 @@ let MyBizDetail = React.createClass({
       );
     } else {
       return (
-        <View style={{flexDirection:'row',marginTop:10}}>
-          {this.returnItem('利\u3000\u3000率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ? '--' : numeral(this.state.marketInfo.rate * 100).format('0,0.00') + '%')}
+        <View>
+          {this.returnItem('利\u3000\u3000率:', this.state.marketInfo.rate == null || this.state.marketInfo.rate == 0 ?
+            '--' : numeral(this.state.marketInfo.rate * 100).format('0,0.00') + '%')}
         </View>
       );
     }
@@ -435,7 +439,7 @@ let MyBizDetail = React.createClass({
             <Image
               style={{width:(screenWidth-60)/5-20,height:(screenWidth-60)/5-20,borderRadius:5}}
               source={require('../../image/market/addImage.png')}
-              resize-mode = 'cover'
+              resize-mode='cover'
             />
           </View>
         </ImagePicker>
@@ -446,7 +450,8 @@ let MyBizDetail = React.createClass({
   renderImageTitle(){
     if (this.state.fileUrlList.length > 0) {
       return (
-        <Text style={{marginLeft:10,marginTop:5,fontSize:16, color:DictStyle.marketSet.fontColor}}>{'附件:'}</Text>
+        <Text
+          style={{marginLeft:10,marginTop:5,fontSize:16, color:DictStyle.marketSet.fontColor}}>{'图\u3000\u3000片:'}</Text>
       );
     } else {
       return <View>
@@ -532,7 +537,7 @@ let MyBizDetail = React.createClass({
       );
     } else {
       return (
-        <View style={{flexDirection:'row'}}>
+        <View>
           {this.returnItem('备\u3000\u3000注:', this.state.remarkText == null || this.state.remarkText.length == 0 ? '--' : this.state.remarkText)}
         </View>
       );
@@ -540,7 +545,7 @@ let MyBizDetail = React.createClass({
   },
   renderModifyData: function () {
     return (
-      <View style={{flexDirection:'row',alignItems:'center',marginTop:10}}>
+      <View>
         {this.returnItem('更新时间:', this.state.lastModifyDate)}
       </View>
 
@@ -579,8 +584,8 @@ let MyBizDetail = React.createClass({
         <Text
           style={{alignSelf:'stretch',fontSize:16,color:DictStyle.marketSet.fontColor,width:Adjust.width(120)}}>{desc}</Text>
         <Text
-          style={{alignSelf:'stretch',marginLeft:10,fontSize:16,color:(desc == '更新时间:')?
-          DictStyle.marketSet.modifyDateColor:(desc == '备\u3000\u3000注:')?DictStyle.marketSet.amountColor:DictStyle.marketSet.fontColor,
+          style={{alignSelf:'stretch',marginTop:1,marginLeft:10,fontSize:16,color:(desc == '更新时间:')?
+          DictStyle.marketSet.modifyDateColor : DictStyle.marketSet.fontColor,
           width:225/375*screenWidth}}>{value}</Text>
       </View>
     )
@@ -688,7 +693,11 @@ let MyBizDetail = React.createClass({
             orderId: id
           }
         ).then((response)=> {
-          let detail = (JSON.stringify(response));
+          this.setState({
+            remark: response.remark,
+            remarkText: response.remark,
+            fileUrlList: response.fileUrlList
+          });
         }).catch(
           (errorData) => {
             throw errorData;
@@ -764,7 +773,7 @@ let MyBizDetail = React.createClass({
 
     Share.open({
       share_text: shareContent,
-      share_URL: Platform.OS === 'android' ? shareContent : 'http://www.izirong.com/fas',
+      share_URL: Platform.OS === 'android' ? shareContent : 'http://www.izirong.com',
       title: "Share Link"
     }, (e) => {
       console.log(e);
@@ -793,22 +802,22 @@ let MyBizDetail = React.createClass({
   handleSendImage(uri, index) {
     this.props.exec(() => {
       return ImAction.uploadImage(uri)
-          .then((response) => {
-            let arr = this.state.fileUrlList;
-            if (index > 5) {
-              arr.push(response.fileUrl);
-            } else {
-              arr[index] = response.fileUrl;
-            }
-            this.setState({
-              fileUrlList: arr
-            });
-          }).catch((errorData) => {
-            console.log('Image upload error ' + JSON.stringify(errorData));
-            throw errorData;
-          }).catch((errorData) => {
-            throw errorData;
+        .then((response) => {
+          let arr = this.state.fileUrlList;
+          if (index > 5) {
+            arr.push(response.fileUrl);
+          } else {
+            arr[index] = response.fileUrl;
+          }
+          this.setState({
+            fileUrlList: arr
           });
+        }).catch((errorData) => {
+          console.log('Image upload error ' + JSON.stringify(errorData));
+          throw errorData;
+        }).catch((errorData) => {
+          throw errorData;
+        });
     });
   },
 

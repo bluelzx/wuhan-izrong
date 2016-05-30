@@ -297,7 +297,7 @@ let GiftedMessenger = React.createClass({
         DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardWillHide)
       ];
     }
-
+    //this.scrollToBottom();
     this.setTimeout(() => {
       // inspired by http://stackoverflow.com/a/34838513/1385109
       this.scrollToBottom();
@@ -648,7 +648,6 @@ let GiftedMessenger = React.createClass({
           //accessible={true}
           //onAccessibilityTap={this._onAccessibilityTap}
           onResponderMove={this._onAccessibilityTap}
-
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}
@@ -689,7 +688,7 @@ let GiftedMessenger = React.createClass({
 
           style={this.styles.listView}
           enableEmptySections={true}
-
+          //scrollRenderAheadDistance={5}
           keyboardShouldPersistTaps={this.props.keyboardShouldPersistTaps} // @issue keyboardShouldPersistTaps={false} + textInput focused = 2 taps are needed to trigger the ParsedText links
           keyboardDismissMode={this.props.keyboardDismissMode}
 
@@ -762,7 +761,7 @@ let GiftedMessenger = React.createClass({
           containerStyle={{
             justifyContent: 'center',
             borderRadius: 6,
-            backgroundColor: '#375EE4',
+            backgroundColor: '#4074E6',
             paddingHorizontal: 10,
             height: this.props.defaultTextInputHeight - 20,
           }}
@@ -905,7 +904,7 @@ let GiftedMessenger = React.createClass({
             onSelected={(response) => { this.props.handleSendImage(response);this._hidePanel();}}
             title="选择图片"
             fileId="selectCamera"
-            allowsEditing={true}
+            allowsEditing={false}
             style={this.styles.panelItem}
           >
             <Image

@@ -2,7 +2,7 @@
  * Created by baoyinghai on 16/4/5.
  */
 let React = require('react-native');
-let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch} = React;
+let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch, ScrollView} = React;
 var Icon  = require('react-native-vector-icons/Ionicons');
 let { Device,Alert, Button } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
@@ -88,7 +88,7 @@ let EditGroupMaster = React.createClass({
     };
 
     return (
-      <MembersBar {...initData}/>
+        <MembersBar {...initData}/>
     );
   },
 
@@ -118,7 +118,7 @@ let EditGroupMaster = React.createClass({
 
   renderBody: function () {
     return (
-      <View style={{flexDirection:'column'}}>
+      <ScrollView style={{flexDirection:'column'}}>
         <View style={{flexDirection:'column'}}>
           {this.renderMember()}
           <TouchableOpacity
@@ -154,8 +154,11 @@ let EditGroupMaster = React.createClass({
           <View
             style={{height:50,backgroundColor: DictStyle.groupManage.memberListBackgroundColor,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
             <Text style={{color:DictStyle.groupManage.memberNameColor}}>群主</Text>
+            <View style={{flex:1,marginRight:5}}>
             <Text
-              style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
+              numberOfLines={2}
+              style={{flex:1,color:'#6B849C', textAlign:'right'}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
+              </View>
           </View>
 
           <View
@@ -177,7 +180,7 @@ let EditGroupMaster = React.createClass({
           </Button>
 
         </View>
-      </View>
+      </ScrollView>
     );
   },
 

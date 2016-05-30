@@ -1,6 +1,6 @@
 let DeviceInfoDetail = require('./deviceInfo');
 const _device_id = DeviceInfoDetail.getDeviceId();
-
+let _ = require('lodash');
 let _getSessionKey = (t, id, userId, targetId) => {
   // return (f > t ? f + ':' + t : t + ':' + f) + ':' + new Date().getTime() + ':' + _device_id;
   let s = t + ':' + id + ':' + userId;

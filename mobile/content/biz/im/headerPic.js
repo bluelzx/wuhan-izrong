@@ -15,11 +15,11 @@ let HeaderPic = React.createClass({
 
   unReadIcon: function(badge, showBadge){
     if(showBadge) {
-      if (badge < 100000 && badge > 0) {
+      if ((badge < 100000 && badge > 0) || badge % 100000 > 0) {
         return (
           <View style={[{position:'absolute',top:0,right:0,width:18,height:18,borderRadius:9,backgroundColor:'red',
-                flexDirection:'row',justifyContent:'center',alignItems:'center'},badge > 99 && {height:20,width:(Platform.OS === 'ios')?24:22,marginLeft:18}]}>
-            <Text style={{color:'white',fontSize:11}}>{badge > 99 ? "99+" : badge}</Text>
+                flexDirection:'row',justifyContent:'center',alignItems:'center'},badge % 100000 > 99 && {height:20,width:(Platform.OS === 'ios')?24:22,marginLeft:18}]}>
+            <Text style={{color:'white',fontSize:11}}>{badge % 100000 > 99 ? "99+" : badge % 100000}</Text>
           </View>
         )
       }else if (badge / 100000 > 0) {

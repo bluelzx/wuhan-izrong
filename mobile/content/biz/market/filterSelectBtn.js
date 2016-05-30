@@ -46,7 +46,7 @@ let FilterSelectBtn = React.createClass({
   render: function () {
     return (
       <View>
-        <Text style={{marginTop:10,marginLeft:10,color:'#3b4549'}}>{this.props.typeTitle}</Text>
+        <Text style={{marginTop:5,marginLeft:10,color:'#3b4549'}}>{this.props.typeTitle}</Text>
         <View style={{flexDirection:'row'}}>
           {this.returnAllBtn()}
           <ListView
@@ -68,7 +68,7 @@ let FilterSelectBtn = React.createClass({
         <TouchableHighlight onPress={() => this._pressAll()} underlayColor='transparent'>
           <View>
             <View
-              style={{flex: 1, justifyContent: 'center', marginLeft: 10, marginTop:10, width:Adjust.width(80), height: 33, backgroundColor: this.state.isAll ? '#817fc9':'#e1e3e6', alignItems: 'center', borderRadius: 5,paddingHorizontal:5}}>
+              style={{flex: 1, justifyContent: 'center', marginLeft: 10, marginTop:5, width:Adjust.width(80), height: 33, backgroundColor: this.state.isAll ? '#817fc9':'#e1e3e6', alignItems: 'center', borderRadius: 5,paddingHorizontal:5}}>
               <Text style={{color:this.state.isAll ?'white' : DictStyle.marketSet.fontColor}}>
                 {this.props.dataList[0].displayName}
               </Text>

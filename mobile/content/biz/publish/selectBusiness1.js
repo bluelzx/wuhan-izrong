@@ -30,6 +30,7 @@ let SelectBusiness1 = React.createClass({
     let categoryArr = this.removeDisplayCodeIsAllObj(category);
     return {
       dataSource: categoryArr == null ? [] : categoryArr,
+      pickTypeRow: this.props.param.pickTypeRow
     }
   },
   render: function () {
@@ -49,9 +50,9 @@ let SelectBusiness1 = React.createClass({
   renderRow(rowData, sectionID, rowID){
     return (
       <TouchableHighlight
-        onPress={()=>this.pressRow(rowData)} underlayColor='#f4f7fc'>
+        onPress={()=>this.pressRow(rowData , rowID)} underlayColor='#f4fdfc'>
         <View
-          style={{width:screenWidth,height:50,flexDirection:'row',alignItems: "center",justifyContent: "space-between",backgroundColor:'white',borderBottomColor:"#edeef4",borderBottomWidth:0.5}}>
+          style={{width:screenWidth,height:50,flexDirection:'row',alignItems: "center",justifyContent: "space-between",backgroundColor:(this.state.pickTypeRow == rowID)?'#f4fdfc':'white',borderBottomColor:"#edeef4",borderBottomWidth:0.5}}>
           <Text style={{marginLeft:10,fontSize:16,color:'#495154'}}>{rowData.displayName}</Text>
           <Image style={{margin:10,width:16,height:16}}
                  source={require('../../image/market/next.png')}
@@ -60,8 +61,11 @@ let SelectBusiness1 = React.createClass({
       </TouchableHighlight>
     )
   },
-  pressRow: function (rowData) {
-    this.props.param.callBackCategory(rowData);
+  pressRow: function (rowData ,rowId) {
+    this.setState({
+      pickTypeRow: rowId
+    });
+    this.props.param.callBackCategory(rowData ,rowId);
     this.props.navigator._popN(1);
   },
 

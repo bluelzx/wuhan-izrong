@@ -46,6 +46,10 @@ let _updateInViteSession = function(sessionId) {
   AppStore.emitChange(IM_SESSION_LIST);
 }
 
+let _getSessionIdByUserId = function(userId) {
+  return PersisterFacade.getSessionIdByUserId(userId);
+}
+
 let sessionStore = {
   deleteSession:_deleteSession,
   queryAllSession:_queryAllSession,
@@ -55,6 +59,7 @@ let sessionStore = {
   updateSession:_updateSession,
   setBadgeZero: (sessionId) => _setBadgeZero(sessionId),
   updateInViteSession:(sessionId) => _updateInViteSession(sessionId),
+  getSessionIdByUserId: (userId) => _getSessionIdByUserId(userId)
 }
 
 module.exports = sessionStore;

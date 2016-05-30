@@ -16,11 +16,11 @@ const DictEvent = keyMirror({
   IM_ADD: null,
   IM_UPDATE: null,
 
-  IM_SESSION_LIST:null,
+  IM_SESSION_LIST: null,
 
-  IM_GROUP:null,
+  IM_GROUP: null,
 
-  IM_CONTACT:null,
+  IM_CONTACT: null,
   /**
    * Market events.
    */
@@ -40,11 +40,15 @@ const DictEvent = keyMirror({
    * homePage
    */
   HOMEPAGE_CHANGE: null,
+  HOMELIST_CHANGE: null,
 
   /**
    * new Friend
    * */
-  NEW_FRIEND:null
+  NEW_FRIEND: null,
+
+  FINISH_LOADING: null
+
 });
 
 module.exports = DictEvent;

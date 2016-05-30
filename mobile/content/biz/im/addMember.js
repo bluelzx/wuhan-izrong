@@ -46,11 +46,15 @@ let AddMember = React.createClass({
   },
 
   addUser: function( groupId, members) {
+    if (Object.keys(members).length == 0) {
+      return;
+    }
     if(Object.keys(members).length + this.state.existMembers > Setting.groupMemberUpperLimit){
       Alert('群组成员人数不能超过' + Setting.groupMemberUpperLimit);
       return;
-    }else{
-
+    }else if(Object.keys(members).length == 0){
+        //this.props.navigator.pop();
+        return;
     }
     this.props.exec(
       ()=>{
@@ -60,7 +64,9 @@ let AddMember = React.createClass({
            //step2: 回退
            this.props.navigator.pop();
          }
-       );
+       ).catch((err)=>{
+         throw err;
+       });
       }
     );
   },
@@ -132,7 +138,6 @@ let AddMember = React.createClass({
       <NavBarView navigator={this.props.navigator} title='添加群成员' actionButton={this.renderState}>
         <ChooseList  memberList={this.state.memberList}/>
 
-        <SearchBar textChange={this.textChange}  textOnBlur={this.textOnBlur}/>
 
         {(()=>{
 
@@ -149,7 +154,6 @@ let AddMember = React.createClass({
                          groupDataName={'orgMembers'}
                          groupItemRender={this.itemRender}
                          groupTitleRender={this.titleRender}
-                         isOpen={this.state.isOpen}
               />
             );
           }else{

@@ -41,7 +41,7 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
   sessionInit: (data) => _sessionInit(data),
   getMessages: () => _data.messages,
   saveMsg: (message, userId) => _saveMsg(message, userId),
-  ackMsg: (msgId, toUid) => _ackMsg(msgId, toUid),
+  ackMsg: (msgId, toUid, isMute) => _ackMsg(msgId, toUid, isMute),
   getEarlier: () => _getEarlier(),
   createHomePageInfo:(msgList)=>{
     Persister.createHomePageInfo(msgList);
@@ -59,16 +59,30 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
     Persister.updateContactInfo(message);
     AppStore.emitChange(IM_CONTACT);
   },
-  isInGroupById: (id) => _isInGroupById(id)
+  isInGroupById: (id, userId) => {
+    return Persister.isInGroupById(id, userId);
+  },
+  modifyImgUrl:(msgId, url) => _modifyImgUrl(msgId, url)
 });
+
+let _modifyImgUrl = function(msgId, url) {
+  Persister.modifyImgUrl(msgId, url);
+  _data.messages.forEach((obj)=>{
+    if(obj.msgId == msgId){
+      obj.content = url;
+    }
+  });
+  ImStore.emitChange(DictEvent.IM_SESSION);
+}
+
 
 // Private Functions
 let _imInit = () => {
 
 };
 
-let _isInGroupById = function(id) {
-  return Persister.isInGroupById(id);
+let _isInGroupById = function(id, userId) {
+  return Persister.isInGroupById(id, userId);
 }
 
 let _resovleMessages = (bInit = false) => {
@@ -108,7 +122,7 @@ let _resovleMessages = (bInit = false) => {
         image: _data.userPhotoFileUrl,
         position: 'right',
         date: object.revTime,
-        status: object.status,
+        status: object.status === 'Sending'?'ErrorButton':object.status,
         certified:userInfo.certified,
         messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
@@ -122,8 +136,8 @@ let _resovleMessages = (bInit = false) => {
   if (bInit) {
     ImStore.emitChange(DictEvent.IM_SESSION);
   } else {
-    return tmpMessages.reverse();
-  }
+  return tmpMessages.reverse();
+}
 };
 
 let _sessionInit = (data) => {
@@ -296,6 +310,7 @@ let _saveMsg = (message, userId) => {
         certified:_data.certified,
         messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
+        localUri:message.localUri
       });
     }
 
@@ -305,11 +320,15 @@ let _saveMsg = (message, userId) => {
   Persister.saveMessage(message, userId);
 };
 
-let _ackMsg = (msgId, toUid) => {
+let _ackMsg = (msgId, toUid, isMute) => {
   if (_data.toId === toUid) {
     _data.messages.find((value, index, arr) => {
       if (value.msgId === msgId) {
-        value.status = 'Seen';
+        if(isMute){
+         value.status = 'isMute';
+        }else {
+          value.status = 'Seen';
+        }
         return true;
       }
       return false;
@@ -319,7 +338,7 @@ let _ackMsg = (msgId, toUid) => {
   }
 
   // TODO. Update realm of the status for message.
-  Persister.resetMessageStatus(msgId);
+  Persister.resetMessageStatus(msgId, isMute);
   // ImStore.emitChange(CHANGE_EVENT.UPDATE, message);
 };
 

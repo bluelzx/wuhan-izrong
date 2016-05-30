@@ -129,14 +129,14 @@ let Contacts = React.createClass({
   textChange: function(text) {
     //this.setState({keyWord:text});
     if(text == ''){
-      this.setState({keyWord:text,isOpen:false});
+      this.setState({keyWord:text});
     }else{
       this.setState({keyWord:text,isOpen:true});
     }
   },
 
   textOnBlur:function(){
-    if(this.state.keyWord==='')
+    if(this.state.keyWord=='')
     this.setState({isOpen:false});
   },
 
@@ -183,9 +183,9 @@ let Contacts = React.createClass({
       <View style={{position:'absolute',top:Platform.OS === 'ios'?Device.navBarHeight:0,right:5,width:150}}>
         <View>
           <View style={{ alignItems: 'flex-end',paddingRight:10}}>
-            <Angle direction="up" color='#375EE4'/>
+            <Angle direction="up" color='#4074E6'/>
           </View>
-          <View style={{backgroundColor:'#375EE4', borderRadius:5,paddingHorizontal:5,paddingVertical:10, marginTop:Platform.OS==='ios'?0:-12}}>
+          <View style={{backgroundColor:'#4074E6', borderRadius:5,paddingHorizontal:5,paddingVertical:10, marginTop:Platform.OS==='ios'?0:-12}}>
             <TouchableOpacity
               onPress={
                 () => {
@@ -224,7 +224,9 @@ let Contacts = React.createClass({
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} title='通讯录' actionButton={this.renderAdd} >
-        <SearchBar textChange={this.textChange} textOnBlur={this.textOnBlur}/>
+        {
+          /*<SearchBar textChange={this.textChange} textOnBlur={this.textOnBlur}/>*/
+        }
 
         {this.renderGlobal()}
 
@@ -244,7 +246,6 @@ let Contacts = React.createClass({
                          groupDataName={'orgMembers'}
                          groupItemRender={this.itemRender}
                          groupTitleRender={this.titleRender}
-                         isOpen={this.state.isOpen}
               />
             );
           }else{

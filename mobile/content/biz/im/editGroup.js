@@ -2,7 +2,7 @@
  * Created by baoyinghai on 16/4/5.
  */
 let React = require('react-native');
-let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch} = React;
+let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch, ScrollView} = React;
 var Icon  = require('react-native-vector-icons/Ionicons');
 let { Device,Alert, Button } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
@@ -43,9 +43,8 @@ let EditGroup = React.createClass({
       groupInfo.orgValue = ContactStore.getOrgValueByOrgId(masterInfo.orgId);
 
     } catch (err) {
-
       return {}
-    };
+    }
     if (!groupInfo) {
       return {}
     }
@@ -93,8 +92,13 @@ let EditGroup = React.createClass({
           }
         ).then((groupId)=>{
           ContactAction.storeLeaveGroup(groupId);
-        }).catch((errData)=>{
-          Alert(errData.toLocaleString());
+        }).catch((err)=>{
+          if (err.errCode && err.errCode == 'NOT_GROUP_MEMBER') {
+            Alert('你已不在该群组,确定删除该群组吗?', ()=>{
+              this.props.navigator.popToTop();
+              ContactAction.storeLeaveGroup(this.props.param.groupId);
+            }, ()=>{})
+          }
         });
       }
     );
@@ -102,7 +106,7 @@ let EditGroup = React.createClass({
 
   renderBody: function(){
     return (
-      <View style={{flexDirection:'column'}}>
+      <ScrollView style={{flexDirection:'column'}}>
         <View style={{flexDirection:'column'}}>
           {this.renderMember()}
           <TouchableOpacity onPress={() => this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}})}
@@ -156,7 +160,7 @@ let EditGroup = React.createClass({
           </Button>
 
         </View>
-      </View>
+      </ScrollView>
     );
   },
 

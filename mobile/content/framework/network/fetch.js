@@ -5,6 +5,7 @@ var qiniu = require('./qiniu/index');
 var MxFetch = require('./mxFetch');
 var KeyGenerator = require('../../comp/utils/keyGenerator');
 const { ImageHost, ImageBkt, ImageAk, ImageSk } = require('../../../config');
+let {FINISH_LOADING} = require('../../constants/dictEvent');
 
 var BFetch = function (url, param, callback, failure, options) {
   var headers = {
@@ -92,7 +93,7 @@ var rawFetch = function (url, param, callback, failure, option) {
   //  setTimeout(() => reject(new Error('链接超时')), 2000000);
   //})]);
  // process(fetch(url, param) ,callback,failure,option);
-  var _promise = MxFetch.fetch(url, param, 1000);
+  var _promise = MxFetch.fetch(url, param, 6180);
   return process(_promise, option);
 };
 
@@ -119,7 +120,8 @@ var process = function (_promise, option) {
           reject(errorData);
         });
     } else {
-      Alert('网络异常')
+      AppStore.emitChange(FINISH_LOADING);
+      throw {message:'请检查网络链接'};
     }
   });
 
