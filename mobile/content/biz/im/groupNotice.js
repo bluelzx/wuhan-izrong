@@ -125,6 +125,11 @@ let GroupNotice = React.createClass({
             if (err.errCode && err.errCode == 'GROUP_NOT_EXIST') {
               NoticeStore.updateInViteNotice(item.noticeId);
               Alert('该群已被解散')
+            } else if (err.errCode && err.errCode == 'MEMBER_ALREADY_IN_GROUP') {
+              NoticeStore.updateInViteNotice(item.noticeId);
+              Alert('你已在该群组');
+            } else {
+              Alert(err.errCode);
             }
             //Alert(err);
           });
