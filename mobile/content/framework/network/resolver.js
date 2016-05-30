@@ -263,7 +263,7 @@ let _dealMsg = function (message, socket) {
         console.log(message);
     }
   }catch(err){
-    Alert('推送异常,请联系管理员['+ message.msgType+']');
+    Alert('推送异常,请联系管理员['+ message.msgType+'],' + err);
   }
 };
 
