@@ -53,6 +53,7 @@ function Manager (uri, opts) {
   this.readyState = 'closed';
   this.uri = uri;
   this.connecting = [];
+  this.lastPing = null;
   this.autoConnect = opts.autoConnect !== false;
   if (this.autoConnect) this.open();
 }
@@ -273,9 +274,32 @@ Manager.prototype.onopen = function () {
 
   // add new subs
   var socket = this.engine;
+  socket.onping = bind(this, 'onping');
+  socket.onpong = bind(this, 'onpong');
   socket.onmessage = bind(this, 'onmessage');
   socket.onerror = bind(this, 'onerror');
   socket.onclose = bind(this, 'onclose');
+};
+
+/**
+ * Called upon a ping.
+ *
+ * @api private
+ */
+
+Manager.prototype.onping = function () {
+  this.lastPing = new Date();
+  this.emitAll('ping');
+};
+
+/**
+ * Called upon a packet.
+ *
+ * @api private
+ */
+
+Manager.prototype.onpong = function () {
+  this.emitAll('pong', new Date() - this.lastPing);
 };
 
 /**
@@ -328,6 +352,8 @@ Manager.prototype.cleanup = function () {
     var sub = this.subs.shift();
     sub.destroy();
   }
+
+  this.lastPing = null;
 };
 
 /**
