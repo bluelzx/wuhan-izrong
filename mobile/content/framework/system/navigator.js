@@ -119,7 +119,7 @@ var Main = React.createClass({
       const routers = nav.getCurrentRoutes();
       if (routers.length > 1) {
         const top = routers[routers.length - 1];
-        if (top.ignoreBack || top.comp.ignoreBack) {
+        if (top.ignoreBack || top.comp.ignoreBack || this.state.isLoadingVisible) {
           // 路由或组件上决定这个界面忽略back键
           return true;
         }
