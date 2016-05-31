@@ -83,7 +83,7 @@ let FilterSelectBtn = React.createClass({
       <TouchableHighlight onPress={this.state.rowDefault == rowID ? null : () => this._pressRow(rowID)}
                           underlayColor='transparent'>
           <View
-            style={{flex: 1,justifyContent: 'center', marginLeft: 10, marginTop:10, width:(this.props.section == 3)?Adjust.width(80):Adjust.width(125.5), height: 33, backgroundColor: this.state.isAll ? '#e1e3e6' : (this.state.rowDefault == rowID ? '#817fc9':'#e1e3e6'), alignItems: 'center', borderRadius: 5 ,paddingHorizontal:5}}>
+            style={{flex: 1,justifyContent: 'center', marginLeft: 10, marginTop:5, width:(this.props.section == 3)?Adjust.width(80):Adjust.width(125.5), height: 33, backgroundColor: this.state.isAll ? '#e1e3e6' : (this.state.rowDefault == rowID ? '#817fc9':'#e1e3e6'), alignItems: 'center', borderRadius: 5 ,paddingHorizontal:5}}>
             <Text
               style={{ fontSize:12, color:(this.state.rowDefault == rowID)? 'white' : DictStyle.marketSet.fontColor}}
               numberOfLines={1}>

@@ -38,7 +38,7 @@ let Remarks = React.createClass({
   },
   renderFinish: function () {
     return (
-      <TouchableOpacity onPress={()=>this.finish()}>
+      <TouchableOpacity style={{marginLeft: -20,padding:10}} onPress={()=>this.finish()}>
         <Text style={{color:'white'}}>{'完成'}</Text>
       </TouchableOpacity>
     );
