@@ -57,7 +57,8 @@ let Register_uploadNameCard = React.createClass({
         return LoginAction.register({
           mobileNo: this.props.param.mobileNo,
           realName: this.props.param.realName,
-          userName: this.props.param.userName,
+          userName: this.props.param.email,
+          referenceMobileNo: this.props.param.referenceMobileNo,
           orgId: this.props.param.orgId,
           nameCardFileUrl: this.state.nameCardFileUrl,
           deviceToken: this.state.APNSToken,

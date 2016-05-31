@@ -357,7 +357,6 @@ let WhitePage = React.createClass({
           marginHorizontal:10}}>
 
           <HeadPic badge={item.badge} source={DictIcon.imNewFriendNotic} showBadge={true}/>
-
             <View
               style={{  flex:1,paddingHorizontal:10}}
             >
@@ -366,8 +365,6 @@ let WhitePage = React.createClass({
                 <Icon name="ios-arrow-right" size={20} color={DictStyle.colorSet.arrowColor}/>
               </View>
             </View>
-
-
         </View>
       </TouchableOpacity>
     );

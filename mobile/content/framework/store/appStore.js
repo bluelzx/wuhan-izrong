@@ -89,7 +89,7 @@ let _queryAllPlatFormInfo = function () {
 // Private Functions
 let _handleConnectivityChange = (isConnected) => {
   _info.netWorkState = isConnected;
-  if(isConnected){
+  if (isConnected) {
     AppStore.emitChange('NETINFO_CONNECTED');
   }
 };
@@ -122,7 +122,8 @@ let _register = (data) => {
   Persister.saveAppData(data);
   _saveFilters(data.appOrderSearchResult);
   _.assign(_data, {
-    token: _getToken()
+    token: _getToken(),
+    loginUserInfo: data.appUserInfoOutBean
   });
   _.assign(_info, {
     isLogout: false,
@@ -138,7 +139,8 @@ let _login = (data) => {
   return Persister.saveAppData(data).then(()=> {
     _.assign(_data, {
       token: _getToken(),
-      filters: data.appOrderSearchResult
+      filters: data.appOrderSearchResult,
+      loginUserInfo: data.appUserInfoOutBean
     });
     _.assign(_info, {
       isLogout: false,
@@ -179,29 +181,29 @@ let _logout = (userId) => {
 };
 
 let _forceLogout = () => {
-    Persister.logout(_getUserId());
-    _data.token = '';
-    _info.isForceLogout = true;
-    _info.isLogout = true;
-    AppStore.emitChange();
+  Persister.logout(_getUserId());
+  _data.token = '';
+  _info.isForceLogout = true;
+  _info.isLogout = true;
+  AppStore.emitChange();
 };
 
 let _deleteLoginUser = () => {
   //清空token,isLogout = true
-    Persister.logout(_getUserId());
-    _data.token = '';
-    _info.isLogout = true;
-    _info.isDelete = true;
-    AppStore.emitChange();
+  Persister.logout(_getUserId());
+  _data.token = '';
+  _info.isLogout = true;
+  _info.isDelete = true;
+  AppStore.emitChange();
 };
 
 let _freezAccount = () => {
-    //清空token
-    Persister.logout(_getUserId());
-    _data.token = '';
-    _info.isLogout = true;
-    _info.isFreezing = true;
-    AppStore.emitChange();
+  //清空token
+  Persister.logout(_getUserId());
+  _data.token = '';
+  _info.isLogout = true;
+  _info.isFreezing = true;
+  AppStore.emitChange();
 };
 
 let _save_apns_token = (apnsToken) => {
@@ -225,7 +227,15 @@ let _getUserId = ()=> {
 };
 
 let _getLoginUserInfo = () => {
-  return Persister.getLoginUserInfo();
+  if (_data.loginUserInfo) {
+    return _data.loginUserInfo;
+  } else {
+    _.assign(_data, {
+      loginUserInfo: Persister.getLoginUserInfo()
+    });
+    return _data.loginUserInfo;
+  }
+
 };
 
 let _saveFilters = function (filters) {
@@ -298,7 +308,7 @@ let _saveMarketInfo = (marketInfoList) => {
   Persister.saveMarketInfo(marketInfoList);
 };
 
-let _saveHomeMarketList = (homeMarketList)=>{
+let _saveHomeMarketList = (homeMarketList)=> {
   Persister.saveHomeMarketList(homeMarketList);
   AppStore.emitChange(HOMELIST_CHANGE);
 };
