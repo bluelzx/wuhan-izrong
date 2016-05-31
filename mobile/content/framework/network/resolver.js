@@ -182,10 +182,11 @@ let _dealMsg = function (message, socket) {
           noticeType: noticeType,
           userId: group.groupMasterUid
         }, userId);
-        ContactSotre.leaveGroup(message.groupId);
+        //ContactSotre.leaveGroup(message.groupId);
       } else {
-        ContactSotre.deleteMemberFromGroup(message.groupId, userId)
+        //ContactSotre.deleteMemberFromGroup(message.groupId, userId)
       }
+      ContactSotre.leaveGroup(message.groupId);
       break;
     case MSG_TYPE.SYNC_REQ:
       //message.msgArray.forEach((item)=>{
@@ -263,7 +264,7 @@ let _dealMsg = function (message, socket) {
         console.log(message);
     }
   }catch(err){
-    Alert('推送异常,请联系管理员['+ message.msgType+']');
+    Alert('推送异常,请联系管理员['+ message.msgType+'],' + err);
   }
 };
 

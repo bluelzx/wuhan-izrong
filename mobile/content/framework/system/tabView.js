@@ -13,6 +13,7 @@ var Home = require('../../biz/home/home');
 var Market = require ('../../biz/market/market');
 var Publish = require('../../biz/publish/publish');
 var IM = require('../../biz/im/im');
+//var IM = require('../../biz/im/whitePage2');
 var Personal = require('../../biz/personal/personal');
 //var Message = require("../../biz/message/messageList")
 //var PersonCenter = require("../../biz/personalCenter/personalCenter")
