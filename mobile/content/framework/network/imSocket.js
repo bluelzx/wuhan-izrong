@@ -79,6 +79,7 @@ let ImSocket = {
       //},10000);
     });
 
+   // _socket.sendPing();
   },
 
   sendSyncReq: () => {

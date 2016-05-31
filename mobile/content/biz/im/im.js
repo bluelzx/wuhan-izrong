@@ -72,7 +72,7 @@ let WhitePage = React.createClass({
   renderContact: function () {
     return (
       <TouchableOpacity onPress={()=>{
-       // AppStore.updateLastSyncTime(new Date());
+      //ContactStore.testDelete();
       this.props.navigator.push({
             comp: Contacts
       });

@@ -112,7 +112,7 @@ export default class Bubble extends React.Component {
                 width: 100,
                 height: 100
                 }}
-                     source={{uri: (this.props.content == '' || !this.props.content)?this.props.localUri:uri}}
+                     source={{uri: !this.props.localUri?uri:this.props.localUri}}
               />
             </Lightbox>
           </View>

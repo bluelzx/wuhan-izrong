@@ -117,7 +117,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
 
     @ReactMethod
     public void showImagePic(String type, boolean needCrop, String name, int aspectX, int aspectY, Callback callback) {
-        showImagePicBySize(type, needCrop, name, aspectX, aspectY, callback, 100);
+        showImagePicBySize(type, needCrop, name, aspectX, aspectY, callback, 2000);
     }
 
     @ReactMethod
@@ -331,7 +331,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             int i = baos.toByteArray().length / 1024;
-            System.out.println("aaaabbbb" + i);
+            System.out.println("aaaabbbb1" + i);
         } catch (IOException e) {
             e.printStackTrace();
         }
