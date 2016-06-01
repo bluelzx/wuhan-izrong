@@ -50,6 +50,7 @@
 		EDBD11FD1CD9883700F99E0A /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58F67D961CD887FA0087C8B8 /* libRCTActionSheet.a */; };
 		EDBD12121CD9887700F99E0A /* libRCTCameraRoll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EDBD12111CD9886900F99E0A /* libRCTCameraRoll.a */; };
 		EE4869974D304090A6DD9312 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 81AC94FD04784B36992B4408 /* Ionicons.ttf */; };
+		2A7212F38D0C49BFB2CC6975 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7588560E08104E19AF8A9A80 /* libRCTActionSheet.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -261,6 +262,8 @@
 		F4099FB5D7724FC695F2F1C9 /* libRNFS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFS.a; sourceTree = "<group>"; };
 		F4AC5DDF06F545F890A0C5A8 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		F778A978DD49456B8107254A /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		63D4C6C2DD0F4B16994F2D15 /* MxArtifacts.xcodeproj */ = {isa = PBXFileReference; name = "MxArtifacts.xcodeproj"; path = "../node_modules/mx-artifacts/ios/MxArtifacts.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		7588560E08104E19AF8A9A80 /* libRCTActionSheet.a */ = {isa = PBXFileReference; name = "libRCTActionSheet.a"; path = "libRCTActionSheet.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -296,6 +299,7 @@
 				9645F9C4F02C43668DEA7708 /* libRNVectorIcons.a in Frameworks */,
 				3D0EB874CA0E45CEAE9FEC2F /* libRealmReact.a in Frameworks */,
 				BEDBD1FA294B444586EEC4C0 /* libRNFS.a in Frameworks */,
+				2A7212F38D0C49BFB2CC6975 /* libRCTActionSheet.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,6 +525,7 @@
 				F4AC5DDF06F545F890A0C5A8 /* RNVectorIcons.xcodeproj */,
 				7D6417809B974D61AA6053D7 /* RealmReact.xcodeproj */,
 				E164D08437484179BF11D5D2 /* RNFS.xcodeproj */,
+				63D4C6C2DD0F4B16994F2D15 /* MxArtifacts.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1032,6 +1037,7 @@
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/CameraRoll",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
+					"$(SRCROOT)/../node_modules/mx-artifacts/ios/MxArtifacts",
 				);
 				INFOPLIST_FILE = FasApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1068,6 +1074,7 @@
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/CameraRoll",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
+					"$(SRCROOT)/../node_modules/mx-artifacts/ios/MxArtifacts",
 				);
 				INFOPLIST_FILE = FasApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1122,6 +1129,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
+					"$(SRCROOT)/../node_modules/mx-artifacts/ios/MxArtifacts",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -1169,6 +1177,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
+					"$(SRCROOT)/../node_modules/mx-artifacts/ios/MxArtifacts",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;

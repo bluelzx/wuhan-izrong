@@ -4,7 +4,8 @@
   "description": "App for FAS project.",
   "private": true,
   "dependencies": {
-    "next-frame": "^0.2.3"
+    "next-frame": "^0.2.3",
+    "react-native-browser": "^0.5.2"
   },
   "devDependencies": {
     "babel-eslint": "^5.0.0",

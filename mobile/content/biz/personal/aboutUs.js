@@ -10,7 +10,8 @@ var {
   ScrollView,
   Text,
   View,
-  Dimensions
+  Dimensions,
+  Linking
   } = React;
 var Item = require('../../comp/utils/item');
 var NavBarView = require('../../framework/system/navBarView');
@@ -19,7 +20,6 @@ let DictStyle = require('../../constants/dictStyle');
 let PrivacyPolicy = require('../../biz/personal/privacyPolicy');
 let AppInfoModule = require('NativeModules').AppInfoModule;
 let deviceInfo = require('react-native-device-info');
-let Browser = require('react-native-browser');
 
 
 var AboutUs = React.createClass({
@@ -54,6 +54,11 @@ var AboutUs = React.createClass({
 
   updateApp(){
     console.log("update");
+    if(Platform.OS == 'ios'){
+      Linking.openURL('itms-apps://itunes.apple.com/app/id 1113856020');
+    }else{
+      Linking.openURL('http://file.izirong.com/android/izirong.apk');
+    }
   },
 
   render(){
