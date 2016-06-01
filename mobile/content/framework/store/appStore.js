@@ -267,7 +267,7 @@ let _updateOrgInfo = (orgInfo)=> {
 };
 
 let _getOrgByOrgId = (orgId)=> {
-  Persister.getOrgByOrgId(orgId);
+  return Persister.getOrgByOrgId(orgId);
 };
 
 let _getOrgByOrgName = (orgName)=> {
