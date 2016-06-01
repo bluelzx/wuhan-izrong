@@ -15,9 +15,10 @@ let AppStore = require('../../framework/store/appStore');
 let MembersBar = require('./membersBar');
 let { IM_GROUP } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
+var TimerMixin = require('react-timer-mixin');
 
 let EditGroup = React.createClass({
-
+  mixins: [TimerMixin],
 
   componentDidMount:function() {
     let handle = new Promise((resolve, reject) => {
@@ -123,7 +124,7 @@ let EditGroup = React.createClass({
         showDelete: false,
         imgSource: DictIcon.imSpread,
         groupMasterUid:this.state.groupInfo.groupMasterUid,
-        addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId,existMembers:this.state.groupInfo.memberNum}}),
+        addMember: ()=>this.goToGroupMembers(()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId,existMembers:this.state.groupInfo.memberNum}})),
       };
 
       return (
@@ -163,12 +164,17 @@ let EditGroup = React.createClass({
     );
   },
 
+  goToGroupMembers: function(cb){
+    this.requestAnimationFrame(cb);
+  },
+
+
   renderBody: function(){
     return (
       <ScrollView style={{flexDirection:'column'}}>
         <View style={{flexDirection:'column'}}>
           {this.renderMember()}
-          <TouchableOpacity onPress={() => this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}})}
+          <TouchableOpacity onPress={()=>this.goToGroupMembers(()=>this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}}))}
                             style={{backgroundColor: DictStyle.groupManage.memberListBackgroundColor, paddingHorizontal:10}}>
             <View
               style={{

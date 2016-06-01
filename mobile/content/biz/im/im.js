@@ -42,7 +42,12 @@ let NewFriendList = require('./newFriendList');
 
 let PlainStyle = require('../../constants/dictStyle');
 let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
+var TimerMixin = require('react-timer-mixin');
+
+
 let WhitePage = React.createClass({
+
+  mixins: [TimerMixin],
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, IM_SESSION_LIST);
@@ -69,16 +74,20 @@ let WhitePage = React.createClass({
     this.setState({keyWord: text});
   },
 
+  toContact: function(){
+    this.requestAnimationFrame(() => {
+      this.props.navigator.push({
+        comp: Contacts
+      });
+    });
+
+  },
+
   renderContact: function () {
     return (
       <TouchableOpacity
         style={{padding:50,marginRight:-50}}
-        onPress={()=>{
-       // AppStore.updateLastSyncTime(new Date());
-      this.props.navigator.push({
-            comp: Contacts
-      });
-      }}>
+        onPress={this.toContact}>
         <Image style={{width:25,height:25}} source={DictIcon.imContact}/>
       </TouchableOpacity>
     );

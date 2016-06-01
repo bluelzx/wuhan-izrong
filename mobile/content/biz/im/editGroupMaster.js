@@ -19,8 +19,12 @@ let ContactAction = require('../../framework/action/contactAction');
 let AppStore = require('../../framework/store/appStore');
 let { IM_GROUP } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
+var TimerMixin = require('react-timer-mixin');
 
 let EditGroupMaster = React.createClass({
+
+
+  mixins: [TimerMixin],
 
   //componentDidMount() {
   //  AppStore.addChangeListener(this._onChange, IM_GROUP);
@@ -138,6 +142,10 @@ let EditGroupMaster = React.createClass({
     return btns;
   },
 
+  goToGroupMembers: function(cb){
+    this.requestAnimationFrame(cb);
+  },
+
   renderMember: function() {
 
     let initData = {
@@ -146,8 +154,8 @@ let EditGroupMaster = React.createClass({
       showDelete: true,
       imgSource: DictIcon.imSpread,
       groupMasterUid:this.state.groupInfo.groupMasterUid,
-      addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId,existMembers:this.state.groupInfo.memberNum}}),
-      deleteMember: ()=>this.props.navigator.push({comp: DeleteMember, param:{groupId:this.props.param.groupId}})
+      addMember: ()=>this.goToGroupMembers(()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId,existMembers:this.state.groupInfo.memberNum}})),
+      deleteMember: ()=>this.goToGroupMembers(()=>this.props.navigator.push({comp: DeleteMember, param:{groupId:this.props.param.groupId}}))
     };
 
     return (
@@ -179,13 +187,16 @@ let EditGroupMaster = React.createClass({
 
   },
 
+
   renderBody: function () {
     return (
       <ScrollView style={{flexDirection:'column'}}>
         <View style={{flexDirection:'column'}}>
           {this.renderMember()}
           <TouchableOpacity
-            onPress={() => this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}})}
+            onPress={()=>this.goToGroupMembers(() => {
+      this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}})
+    })}
             style={{backgroundColor: DictStyle.groupManage.memberListBackgroundColor, paddingHorizontal:10}}>
             <View
               style={{
