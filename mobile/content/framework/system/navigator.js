@@ -308,7 +308,9 @@ var Main = React.createClass({
           onDidFocus={(route) => {
             // console.log('### onDidFocus ### ' + route.comp.displayName || route.comp);
             // ImSocket.trace(KPI_TYPE.PAGE, route);
-            ImSocket.trace(KPI_TYPE.PAGE, route.comp.displayName || route.comp);
+            if (AppStore.getNetWorkState()) {
+              ImSocket.trace(KPI_TYPE.PAGE, route.comp.displayName || route.comp);
+            }
           }}
         />
         <Loading
