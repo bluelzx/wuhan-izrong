@@ -30,9 +30,7 @@ let _info = {
   isDelete: false
 };
 
-
 let _data = {};
-
 let AppStore = _.assign({}, EventEmitter.prototype, {
   saveNavigator: (nv)=> {
     _data.navigator = nv
@@ -125,17 +123,18 @@ let _appInit = () => {
 };
 
 let _register = (data) => {
-  Persister.saveAppData(data);
-  _saveFilters(data.appOrderSearchResult);
-  _.assign(_data, {
-    token: _getToken()
-  });
   _.assign(_info, {
     isLogout: false,
     isForceLogout: false,
     isFreezing: false,
     isDelete: false
   });
+  _.assign(_data, {
+    token: _getToken(),
+    userId: data.appUserInfoOutBean.userId
+  });
+  Persister.saveAppData(data);
+  _saveFilters(data.appOrderSearchResult);
   AppStore.emitChange();
 };
 
@@ -144,7 +143,8 @@ let _login = (data) => {
   return Persister.saveAppData(data).then(()=> {
     _.assign(_data, {
       token: _getToken(),
-      filters: data.appOrderSearchResult
+      filters: data.appOrderSearchResult,
+      userId: data.appUserInfoOutBean.userId
     });
     _.assign(_info, {
       isLogout: false,
@@ -185,29 +185,29 @@ let _logout = (userId) => {
 };
 
 let _forceLogout = () => {
-    Persister.logout(_getUserId());
-    _data.token = '';
-    _info.isForceLogout = true;
-    _info.isLogout = true;
-    AppStore.emitChange();
+  Persister.logout(_getUserId());
+  _data.token = '';
+  _info.isForceLogout = true;
+  _info.isLogout = true;
+  AppStore.emitChange();
 };
 
 let _deleteLoginUser = () => {
   //清空token,isLogout = true
-    Persister.logout(_getUserId());
-    _data.token = '';
-    _info.isLogout = true;
-    _info.isDelete = true;
-    AppStore.emitChange();
+  Persister.logout(_getUserId());
+  _data.token = '';
+  _info.isLogout = true;
+  _info.isDelete = true;
+  AppStore.emitChange();
 };
 
 let _freezAccount = () => {
-    //清空token
-    Persister.logout(_getUserId());
-    _data.token = '';
-    _info.isLogout = true;
-    _info.isFreezing = true;
-    AppStore.emitChange();
+  //清空token
+  Persister.logout(_getUserId());
+  _data.token = '';
+  _info.isLogout = true;
+  _info.isFreezing = true;
+  AppStore.emitChange();
 };
 
 let _save_apns_token = (apnsToken) => {
@@ -218,16 +218,24 @@ let _save_apns_token = (apnsToken) => {
 };
 
 let _get_apns_token = () => {
-  //return Persister.getAPNSToken();
   return _info.apnTokens || '';
 };
 
 let _getToken = () => {
-  return Persister.getToken();
+  if(_data.token){
+    return _data.token;
+  }
+  _data.token = Persister.getToken();
+  return _data.token;
 };
 
 let _getUserId = ()=> {
-  return Persister.getUserId();
+  if (_data.userId) {
+    return _data.userId;
+  } else {
+    _data.userId = Persister.getUserId();
+    return _data.userId;
+  }
 };
 
 let _getLoginUserInfo = () => {
@@ -241,21 +249,33 @@ let _saveFilters = function (filters) {
 };
 
 let _getFilters = ()=> {
-  return _data.filters;
+  if (_data.filters) {
+    return _data.filters;
+  } else {
+    _data.filters = Persister.getFilters();
+    return _data.filters;
+  }
 };
 
 let _saveOrgList = (orgList)=> {
   _data.orgList = orgList;
-  AppStore.emitChange(ORG_CHANGE);
   Persister.saveOrgList(orgList);
+  AppStore.emitChange(ORG_CHANGE);
 };
 
 let _getOrgList = ()=> {
-  return Persister.getOrgList();
+  if (_data.orgList) {
+    return _data.orgList;
+  } else {
+    _data.orgList = Persister.getOrgList();
+    return _data.orgList;
+  }
 };
 
 let _updateOrgInfo = (orgInfo)=> {
   Persister.updateOrgInfo(orgInfo);
+  _data.orgList = Persister.getOrgList();
+  AppStore.emitChange(ORG_CHANGE);
 };
 
 let _getOrgByOrgId = (orgId)=> {
@@ -269,6 +289,7 @@ let _getOrgByOrgName = (orgName)=> {
 let _updateUserInfo = (column, value)=> {
   Persister.updateUserInfo(column, value);
   AppStore.emitChange(USER_CHANGE);
+
 };
 
 let _updateUserInfoByPush = (data)=> {
@@ -304,7 +325,7 @@ let _saveMarketInfo = (marketInfoList) => {
   Persister.saveMarketInfo(marketInfoList);
 };
 
-let _saveHomeMarketList = (homeMarketList)=>{
+let _saveHomeMarketList = (homeMarketList)=> {
   Persister.saveHomeMarketList(homeMarketList);
   AppStore.emitChange(HOMELIST_CHANGE);
 };

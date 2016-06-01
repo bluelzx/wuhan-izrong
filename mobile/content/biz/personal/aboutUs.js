@@ -67,7 +67,7 @@ var AboutUs = React.createClass({
             <Item desc="版本号" img={false} icon={false} hiddenArrow={true} value={Platform.OS === 'ios' ? this.state.versionName + '.' + this.state.buildNumber : this.state.versionName}/>
           </View>
 
-          <View style={{marginTop:60,flexDirection: 'column'}}>
+          <View style={{marginTop:40,flexDirection: 'column'}}>
             <View style={{paddingTop:32, alignItems: 'center'}}>
               <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content}
                                   onPress={()=>{
@@ -82,7 +82,7 @@ var AboutUs = React.createClass({
               <Text style={[styles.font,{marginTop:10}]}>武汉安硕织信网络科技有限公司 版权所有</Text>
               <Text style={styles.font}>Copyright © 2016 All Rights Reserved.</Text>
             </View>
-            <View style={[styles.borderBottom, {marginTop:6, marginHorizontal:12}]}/>
+            <View style={[styles.borderBottom, {marginVertical:6, marginHorizontal:12}]}/>
           </View>
         </ScrollView>
       </NavBarView>

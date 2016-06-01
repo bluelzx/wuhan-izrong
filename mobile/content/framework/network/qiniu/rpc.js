@@ -16,22 +16,26 @@ exports.uploadImage = function (uri, key, token, onresp) {
   //return fetch(conf.UP_HOST, options).then((response) => {
   //  onresp(response);
   //});
-   return MxFetch.fetch(conf.UP_HOST, options, 15000).then((response) => {
+  // return MxFetch.fetch(conf.UP_HOST, options, 15000).then((response) => {
+  //  onresp(response);
+  //});
+  return Promise.race([MxFetch.fetch(conf.UP_HOST, options, 15000).then((response) => {
     onresp(response);
-  });
-
-}
+  }), new Promise(function (resolve, reject) {
+    setTimeout(() => reject(new Error('链接超时')), 20000);
+  })]);
+};
 
 //发送管理和fop命令,总之就是不上传文件
 exports.post = function (uri, adminToken,content) {
   var headers = {
-    'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Type': 'application/x-www-form-urlencoded'
   };
   let payload = {
     headers: headers,
     method: 'POST',
     dataType: 'json',
-    timeout: conf.RPC_TIMEOUT,
+    timeout: conf.RPC_TIMEOUT
   };
   if(typeof content === 'undefined'){
     payload.headers['Content-Length'] = 0;
@@ -39,10 +43,8 @@ exports.post = function (uri, adminToken,content) {
     //carry data
     payload.body = content;
   }
-
   if (adminToken) {
     headers['Authorization'] = adminToken;
   }
-
   return fetch(uri, payload);
-}
+};

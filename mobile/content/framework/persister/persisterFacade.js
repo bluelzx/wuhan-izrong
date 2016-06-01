@@ -202,14 +202,14 @@ let _saveImUsers = function (imUserBeanList) {
       photoFileUrl: !_.isEmpty(imUserBeanList[i].photoFileUrl) ? imUserBeanList[i].photoFileUrl : '',
       orgId: imUserBeanList[i].orgId ? imUserBeanList[i].orgId : '',
       phoneNumber: !_.isEmpty(imUserBeanList[i].phoneNumber) ? imUserBeanList[i].phoneNumber : '',
-      publicTitle: !!(imUserBeanList[i].publicTitle == true || imUserBeanList[i].publicTitle === null),
-      publicMobile: !!(imUserBeanList[i].publicMobile == true || imUserBeanList[i].publicMobile === null),
-      publicDepart: !!(imUserBeanList[i].publicDepart == true || imUserBeanList[i].publicDepart === null),
-      publicPhone: !!(imUserBeanList[i].publicPhone == true || imUserBeanList[i].publicPhone === null),
-      publicEmail: !!(imUserBeanList[i].publicEmail == true || imUserBeanList[i].publicEmail === null),
-      publicAddress: !!(imUserBeanList[i].publicAddress == true || imUserBeanList[i].publicAddress === null),
-      publicWeChat: !!(imUserBeanList[i].publicWeChat == true || imUserBeanList[i].publicWeChat === null),
-      publicQQ: !!(imUserBeanList[i].publicQQ == true || imUserBeanList[i].publicQQ === null),
+      publicTitle: !!(imUserBeanList[i].isPublicTitle == true || imUserBeanList[i].isPublicTitle === null),
+      publicMobile: !!(imUserBeanList[i].isPublicMobile == true || imUserBeanList[i].isPublicMobile === null),
+      publicDepart: !!(imUserBeanList[i].isPublicDepart == true || imUserBeanList[i].isPublicDepart === null),
+      publicPhone: !!(imUserBeanList[i].isPublicPhone == true || imUserBeanList[i].isPublicPhone === null),
+      publicEmail: !!(imUserBeanList[i].isPublicEmail == true || imUserBeanList[i].isPublicEmail === null),
+      publicAddress: !!(imUserBeanList[i].isPublicAddress == true || imUserBeanList[i].isPublicAddress === null),
+      publicWeChat: !!(imUserBeanList[i].isPublicWeChat == true || imUserBeanList[i].isPublicWeChat === null),
+      publicQQ: !!(imUserBeanList[i].isPublicQQ == true || imUserBeanList[i].isPublicQQ === null),
       certified: imUserBeanList[i].isCertificated || false
     };
     _realm.create(IMUSERINFO, param, true);

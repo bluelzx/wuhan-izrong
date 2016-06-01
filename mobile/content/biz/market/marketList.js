@@ -5,17 +5,12 @@
 let React = require('react-native');
 let {
   ListView,
-  ScrollView,
   TouchableHighlight,
   Text,
   View,
-  Platform,
   Dimensions,
   Image,
   StyleSheet,
-  TouchableOpacity,
-  InteractionManager,
-  AppRegistry,
   } = React;
 
 let screenWidth = Dimensions.get('window').width;

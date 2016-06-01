@@ -152,19 +152,19 @@ var Main = React.createClass({
       if (AppStore.isFreezing()) {
         Promise.resolve().then((resolve) => {
           this.refs.navigator.resetTo({comp: Login});
-          Alert('  您的帐户已被冻结,请联系系统管理员')
+          Alert('   您的帐户已被冻结,请联系管理员')
         }).catch((e) => {
           Alert('系统异常');
         });
       } else if (AppStore.isForceLogout()) {
         ImSocket.disconnect();
         Alert(
-          '    您的账号已经在其他设备上登录了，您将被强制登出，请确认您的账号密码没有被泄露',
+          '    您的账号已经在其他设备上登录了，您将被强制登出，请确认您的账号密码没有泄露',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
         );
       } else if (AppStore.isDelete()) {
         Alert(
-          '    您的账户已被删除,请联系系统管理员',
+          '    您的帐户已被停用,请联系管理员',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
         );
       } else {
@@ -232,7 +232,6 @@ var Main = React.createClass({
       if (route.tabName) tabName = route.tabName;
       Comp = TabView;
     }
-
     if (Comp == 'publish') {
       Comp = Publish;
     }
@@ -279,14 +278,14 @@ var Main = React.createClass({
 
 
     var modalBackgroundStyle = {
-      backgroundColor: '#000000',
+      backgroundColor: '#000000'
     };
     var innerContainerTransparentStyle = null;
     var activeButtonStyle = {
       backgroundColor: '#ddd'
     };
     var colorStyle = {
-      color: '#000',
+      color: '#000'
     };
 
 
