@@ -23,7 +23,6 @@ let Register_selectOrg = React.createClass({
 
   getStateFromStores() {
     that = this;
-    let orgBuildList = AppStore.getOrgList();
     return {
       data: orgBuildList,
       text: ''

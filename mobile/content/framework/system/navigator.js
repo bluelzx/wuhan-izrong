@@ -264,7 +264,7 @@ var Main = React.createClass({
     var initComp = Login;
     //var initComp = Chat;
     if (this.state.token) {
-      initComp = Login;
+      initComp = TabView;
       this.initSocket(this.state.token);
     } else {
       ImSocket.disconnect();

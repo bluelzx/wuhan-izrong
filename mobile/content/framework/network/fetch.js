@@ -89,11 +89,11 @@ var rawFetch = function (url, param, callback, failure, option) {
   console.log(param);
   console.log('请求地址:'+url);
   if (!option) option = {};
-  //var _promise = Promise.race([fetch(url, param), new Promise(function (resolve, reject) {
-  //  setTimeout(() => reject(new Error('链接超时')), 2000000);
-  //})]);
+  var _promise = Promise.race([MxFetch.fetch(url, param, 6180), new Promise(function (resolve, reject) {
+    setTimeout(() => reject(new Error('链接超时')), 15000);
+  })]);
  // process(fetch(url, param) ,callback,failure,option);
-  var _promise = MxFetch.fetch(url, param, 6180);
+
   return process(_promise, option);
 };
 

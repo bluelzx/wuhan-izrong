@@ -3,13 +3,7 @@ let _ = require('lodash');
 let EventEmitter = require('events').EventEmitter;
 let ServiceModule = require('NativeModules').ServiceModule;
 let { ImHost } = require('../../../config');
-//let ImSocket = require('../network/imSocket');
-
-//let { MsgTypes } = require('../../constants/notification');
-
 let Persister = require('../persister/persisterFacade');
-
-//let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 let { Default_EVENT, MARKET_CHANGE ,ORG_CHANGE ,USER_CHANGE,HOMELIST_CHANGE} = require('../../constants/dictEvent');
 
 let _info = {
@@ -22,9 +16,7 @@ let _info = {
   isDelete: false
 };
 
-
 let _data = {};
-
 let AppStore = _.assign({}, EventEmitter.prototype, {
   saveNavigator: (nv)=> {
     _data.navigator = nv
@@ -119,18 +111,18 @@ let _appInit = () => {
 };
 
 let _register = (data) => {
-  Persister.saveAppData(data);
-  _saveFilters(data.appOrderSearchResult);
-  _.assign(_data, {
-    token: _getToken(),
-    loginUserInfo: data.appUserInfoOutBean
-  });
   _.assign(_info, {
     isLogout: false,
     isForceLogout: false,
     isFreezing: false,
     isDelete: false
   });
+  _.assign(_data, {
+    token: _getToken(),
+    userId: data.appUserInfoOutBean.userId
+  });
+  Persister.saveAppData(data);
+  _saveFilters(data.appOrderSearchResult);
   AppStore.emitChange();
 };
 
@@ -140,7 +132,7 @@ let _login = (data) => {
     _.assign(_data, {
       token: _getToken(),
       filters: data.appOrderSearchResult,
-      loginUserInfo: data.appUserInfoOutBean
+      userId: data.appUserInfoOutBean.userId
     });
     _.assign(_info, {
       isLogout: false,
@@ -214,28 +206,28 @@ let _save_apns_token = (apnsToken) => {
 };
 
 let _get_apns_token = () => {
-  //return Persister.getAPNSToken();
   return _info.apnTokens || '';
 };
 
 let _getToken = () => {
-  return Persister.getToken();
+  if(_data.token){
+    return _data.token;
+  }
+  _data.token = Persister.getToken();
+  return _data.token;
 };
 
 let _getUserId = ()=> {
-  return Persister.getUserId();
+  if (_data.userId) {
+    return _data.userId;
+  } else {
+    _data.userId = Persister.getUserId();
+    return _data.userId;
+  }
 };
 
 let _getLoginUserInfo = () => {
-  if (_data.loginUserInfo) {
-    return _data.loginUserInfo;
-  } else {
-    _.assign(_data, {
-      loginUserInfo: Persister.getLoginUserInfo()
-    });
-    return _data.loginUserInfo;
-  }
-
+  return Persister.getLoginUserInfo();
 };
 
 let _saveFilters = function (filters) {
@@ -245,25 +237,37 @@ let _saveFilters = function (filters) {
 };
 
 let _getFilters = ()=> {
-  return _data.filters;
+  if (_data.filters) {
+    return _data.filters;
+  } else {
+    _data.filters = Persister.getFilters();
+    return _data.filters;
+  }
 };
 
 let _saveOrgList = (orgList)=> {
   _data.orgList = orgList;
-  AppStore.emitChange(ORG_CHANGE);
   Persister.saveOrgList(orgList);
+  AppStore.emitChange(ORG_CHANGE);
 };
 
 let _getOrgList = ()=> {
-  return Persister.getOrgList();
+  if (_data.orgList) {
+    return _data.orgList;
+  } else {
+    _data.orgList = Persister.getOrgList();
+    return _data.orgList;
+  }
 };
 
 let _updateOrgInfo = (orgInfo)=> {
   Persister.updateOrgInfo(orgInfo);
+  _data.orgList = Persister.getOrgList();
+  AppStore.emitChange(ORG_CHANGE);
 };
 
 let _getOrgByOrgId = (orgId)=> {
-  return Persister.getOrgByOrgId(orgId);
+  Persister.getOrgByOrgId(orgId);
 };
 
 let _getOrgByOrgName = (orgName)=> {
@@ -273,6 +277,7 @@ let _getOrgByOrgName = (orgName)=> {
 let _updateUserInfo = (column, value)=> {
   Persister.updateUserInfo(column, value);
   AppStore.emitChange(USER_CHANGE);
+
 };
 
 let _updateUserInfoByPush = (data)=> {
