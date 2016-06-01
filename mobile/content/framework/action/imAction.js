@@ -18,7 +18,7 @@ let _send = (data, bFlag = false, userId, notSend = false) => {
     .then(() => {
       // ImStore.send();
     }).catch(() => {
-      Alert('网络异常');
+      Alert('请检查网络连接');
     });
 };
 

@@ -15,9 +15,10 @@ let AppStore = require('../../framework/store/appStore');
 let MembersBar = require('./membersBar');
 let { IM_GROUP } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
+var TimerMixin = require('react-timer-mixin');
 
 let EditGroup = React.createClass({
-
+  mixins: [TimerMixin],
 
   componentDidMount:function() {
     let handle = new Promise((resolve, reject) => {
@@ -123,7 +124,7 @@ let EditGroup = React.createClass({
         showDelete: false,
         imgSource: DictIcon.imSpread,
         groupMasterUid:this.state.groupInfo.groupMasterUid,
-        addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId,existMembers:this.state.groupInfo.memberNum}}),
+        addMember: ()=>this.goToGroupMembers(()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId,existMembers:this.state.groupInfo.memberNum}})),
       };
 
       return (
@@ -155,18 +156,25 @@ let EditGroup = React.createClass({
               this.props.navigator.popToTop();
               ContactAction.storeLeaveGroup(this.props.param.groupId);
             }, ()=>{})
+          }else{
+            throw err;
           }
         });
       }
     );
   },
 
+  goToGroupMembers: function(cb){
+    this.requestAnimationFrame(cb);
+  },
+
+
   renderBody: function(){
     return (
       <ScrollView style={{flexDirection:'column'}}>
         <View style={{flexDirection:'column'}}>
           {this.renderMember()}
-          <TouchableOpacity onPress={() => this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}})}
+          <TouchableOpacity onPress={()=>this.goToGroupMembers(()=>this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}}))}
                             style={{backgroundColor: DictStyle.groupManage.memberListBackgroundColor, paddingHorizontal:10}}>
             <View
               style={{
@@ -196,7 +204,11 @@ let EditGroup = React.createClass({
           <View
             style={{height:50,backgroundColor: DictStyle.groupManage.memberListBackgroundColor,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
             <Text style={{color:DictStyle.groupManage.memberNameColor}}>群主</Text>
-            <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
+            <View style={{flex:1,marginRight:5}}>
+              <Text
+                numberOfLines={2}
+                style={{flex:1,color:'#6B849C', textAlign:'right'}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
+            </View>
           </View>
 
           <View

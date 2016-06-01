@@ -129,7 +129,7 @@ let NewFriendList = React.createClass({
           >
           <View
             style={{
-            flexDirection:'row', justifyContent:'space-between',flex:1}}
+            flexDirection:'row', justifyContent:'space-between',flex:1,alignItems:'center'}}
           >
             <View style={{flex:2}}>
               <Text numberOfLines={1} style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.realName + '-' + item.orgName}</Text>
@@ -150,7 +150,7 @@ let NewFriendList = React.createClass({
                   );
                 } else {
                   return (
-                    <TouchableOpacity style={{flex:1,marginRight:10}} onPress={()=>this.acceptInvite(item)}>
+                    <TouchableOpacity style={{flex:1}} onPress={()=>this.acceptInvite(item)}>
                       <View
                         style={{justifyContent:'flex-end',borderRadius: 5, backgroundColor: '#23ABF3',paddingHorizontal:10,paddingVertical:5}}>
                         <Text
