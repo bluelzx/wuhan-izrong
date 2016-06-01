@@ -109,7 +109,12 @@ let _updateSession = function (param, notAdd, noticeType, currUserId) {
     });
     if (groupSession.length > 0) {
       if (noticeType == SESSION_TYPE.INVITE) {
-        param.badge = groupSession[0].badge + 1;
+        let wd = _realm.objects(SESSION).filtered('sessionId = \'' + param.sessionId + '\'');
+        if (wd.length > 0 && wd) {
+          param.badge = groupSession[0].badge;
+        } else {
+          param.badge = groupSession[0].badge + 1;
+        }
       } else {
         param.badge = groupSession[0].badge + 100000;
       }

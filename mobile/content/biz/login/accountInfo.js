@@ -33,7 +33,8 @@ let Register_accountInfo = React.createClass({
     return {
       disabled: true,
       realName: '',
-      userName: '',
+      email: '',
+      referenceMobileNo: '',
       orgValue: '选择机构',
       orgId: ''
     };
@@ -48,7 +49,7 @@ let Register_accountInfo = React.createClass({
         }).catch((errorData) => {
           throw errorData;
         });
-    });
+    }, false);
   },
 
   getInitialState: function () {
@@ -86,14 +87,16 @@ let Register_accountInfo = React.createClass({
     dismissKeyboard();
     if (!Validation.realName(this.state.realName)) {
       Alert('姓名只可输入10个字符内的英文或中文');
-    } else if (!Validation.isEmail(this.state.userName)) {
+    } else if (!Validation.isEmail(this.state.email)) {
       Alert('请输入60个字符内的有效的邮箱地址');
     } else if (this.state.orgValue == '选择机构') {
       Alert('请选择机构');
+    } else if (this.state.referenceMobileNo != '' && !Validation.isMobile(this.state.referenceMobileNo)) {
+      Alert('请输入正确的推荐人手机号码');
     } else {
       this.props.exec(()=> {
         return LoginAction.validateEmail({
-          email: this.state.userName
+          email: this.state.email
         }).then((response) => {
           this.toPage(name, param);
         }).catch((errorData) => {
@@ -104,7 +107,7 @@ let Register_accountInfo = React.createClass({
   },
 
   callback: function (item) {
-    if (this.state.realName.length == 0 || this.state.userName.length == 0) {
+    if (this.state.realName.length == 0 || this.state.email.length == 0) {
       this.setState({
         orgValue: item.orgValue,
         orgId: item.id,
@@ -121,7 +124,7 @@ let Register_accountInfo = React.createClass({
 
   _onChangeText(key, value){
     this.setState({[key]: value});
-    if (this.state.realName.length == 0 || this.state.userName.length == 0 || this.state.orgValue == '选择机构') {
+    if (this.state.realName.length == 0 || this.state.email.length == 0 || this.state.orgValue == '选择机构') {
       this.setState({disabled: true});
     } else {
       this.setState({disabled: false});
@@ -135,8 +138,11 @@ let Register_accountInfo = React.createClass({
           <Input placeholder='真实姓名' maxLength={20} field='realName'
                  onChangeText={this._onChangeText} icon='realName' inputType='default'
           />
-          <Input placeholder='邮箱' maxLength={60} field='userName'
+          <Input placeholder='邮箱' maxLength={60} field='email'
                  onChangeText={this._onChangeText} icon='email' inputType='email-address'
+          />
+          <Input placeholder='推荐人手机号,赢取神秘大奖~' maxLength={11} field='referenceMobileNo'
+                 onChangeText={this._onChangeText} icon='phone' inputType='number-pad'
           />
 
           <TouchableHighlight activeOpacity={0.8} underlayColor='#4fb9fc'
@@ -170,7 +176,8 @@ let Register_accountInfo = React.createClass({
                  {
                     mobileNo: this.props.param.mobileNo,
                     realName: this.state.realName,
-                    userName: this.state.userName,
+                    email: this.state.email,
+                    referenceMobileNo:this.state.referenceMobileNo,
                     orgId: this.state.orgId
                  })}
           >
@@ -180,18 +187,6 @@ let Register_accountInfo = React.createClass({
       </NavBarView>
     );
   }
-//<View style={{position: 'absolute',bottom:20,left:50,right:50,flexDirection: 'column'}}>
-//  <View style={{flexDirection: 'row', justifyContent: 'center',marginBottom:10}}>
-//    <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>如未找到您所在的机构</Text>
-//  </View>
-//  <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30}}>
-//    <Text style={[DictStyle.fontSize,DictStyle.fontColor]}>联系客服: </Text>
-//    <TouchableOpacity onPress={()=>{CallPhone.callPhone('022-28405347')}}>
-//      <Text
-//        style={[DictStyle.fontSize,DictStyle.fontColor,{textDecorationLine: 'underline'}]}>022-28405347</Text>
-//    </TouchableOpacity>
-//  </View>
-//</View>
 });
 let styles = StyleSheet.create({
   paddingLR: {
@@ -226,7 +221,7 @@ let styles = StyleSheet.create({
     width: 16,
     height: 16,
     marginLeft: 9
-  },
+  }
 });
 
 module.exports = Register_accountInfo;
