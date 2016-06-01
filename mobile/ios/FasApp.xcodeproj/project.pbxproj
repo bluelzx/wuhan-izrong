@@ -47,6 +47,7 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		9645F9C4F02C43668DEA7708 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA7B12D7D080425FAAEE4BC3 /* libRNVectorIcons.a */; };
 		B60E2CE2AF5949E29390DAC7 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5015CBD51F594CADA2A9A158 /* Entypo.ttf */; };
+		BEDBD1FA294B444586EEC4C0 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4099FB5D7724FC695F2F1C9 /* libRNFS.a */; };
 		EDBD11FD1CD9883700F99E0A /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58F67D961CD887FA0087C8B8 /* libRCTActionSheet.a */; };
 		EDBD12121CD9887700F99E0A /* libRCTCameraRoll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EDBD12111CD9886900F99E0A /* libRCTCameraRoll.a */; };
 		EE4869974D304090A6DD9312 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 81AC94FD04784B36992B4408 /* Ionicons.ttf */; };
@@ -108,6 +109,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
+		};
+		17A96E851CFD835900F37C27 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E164D08437484179BF11D5D2 /* RNFS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F12AFB9B1ADAF8F800E0535D;
+			remoteInfo = RNFS;
 		};
 		5839924D1CD83FF500025A6B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -235,7 +243,9 @@
 		AD1CB31887804B749696A715 /* libRealmReact.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRealmReact.a; sourceTree = "<group>"; };
 		C813A8A349DA43ACAFA27506 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		CA7B12D7D080425FAAEE4BC3 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
+		E164D08437484179BF11D5D2 /* RNFS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 		EDBD120C1CD9886800F99E0A /* RCTCameraRoll.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCameraRoll.xcodeproj; path = "../node_modules/react-native/Libraries/CameraRoll/RCTCameraRoll.xcodeproj"; sourceTree = "<group>"; };
+		F4099FB5D7724FC695F2F1C9 /* libRNFS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFS.a; sourceTree = "<group>"; };
 		F4AC5DDF06F545F890A0C5A8 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		F778A978DD49456B8107254A /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -272,6 +282,7 @@
 				6B87953B131F460EBCB068C4 /* libRNShare.a in Frameworks */,
 				9645F9C4F02C43668DEA7708 /* libRNVectorIcons.a in Frameworks */,
 				3D0EB874CA0E45CEAE9FEC2F /* libRealmReact.a in Frameworks */,
+				BEDBD1FA294B444586EEC4C0 /* libRNFS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,6 +394,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		17A96E741CFD835900F37C27 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				17A96E861CFD835900F37C27 /* libRNFS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		5839924A1CD83FF500025A6B /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -488,6 +507,7 @@
 				931780F2E8F542F2AD7DCAC7 /* RNShare.xcodeproj */,
 				F4AC5DDF06F545F890A0C5A8 /* RNVectorIcons.xcodeproj */,
 				7D6417809B974D61AA6053D7 /* RealmReact.xcodeproj */,
+				E164D08437484179BF11D5D2 /* RNFS.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -677,6 +697,10 @@
 					ProjectRef = A881F7238EF948C89560A411 /* RNDeviceInfo.xcodeproj */;
 				},
 				{
+					ProductGroup = 17A96E741CFD835900F37C27 /* Products */;
+					ProjectRef = E164D08437484179BF11D5D2 /* RNFS.xcodeproj */;
+				},
+				{
 					ProductGroup = 583993471CD84B6200025A6B /* Products */;
 					ProjectRef = 931780F2E8F542F2AD7DCAC7 /* RNShare.xcodeproj */;
 				},
@@ -741,6 +765,13 @@
 			fileType = archive.ar;
 			path = libReact.a;
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		17A96E861CFD835900F37C27 /* libRNFS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFS.a;
+			remoteRef = 17A96E851CFD835900F37C27 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		5839924E1CD83FF500025A6B /* libRCTPushNotification.a */ = {
@@ -906,7 +937,10 @@
 				INFOPLIST_FILE = FasAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FasApp.app/FasApp";
 			};
@@ -924,7 +958,10 @@
 				INFOPLIST_FILE = FasAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FasApp.app/FasApp";
 			};
@@ -956,6 +993,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/CameraRoll",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
 				);
 				INFOPLIST_FILE = FasApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -991,6 +1029,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/CameraRoll",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
 				);
 				INFOPLIST_FILE = FasApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1044,6 +1083,7 @@
 					"$(SRCROOT)/../node_modules/react-native-share/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -1090,6 +1130,7 @@
 					"$(SRCROOT)/../node_modules/react-native-share/ios",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;

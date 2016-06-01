@@ -11,7 +11,8 @@ let {
   Image,
   Modal,
   StyleSheet,
-  Platform
+  Platform,
+  InteractionManager
   }=React;
 let NavBarView = require('../../framework/system/navBarView');
 let CreateGroup = require('./createGroup');
@@ -36,8 +37,32 @@ const PLATFORMNAME = '爱资融同业平台';
 
 let Contacts = React.createClass({
 
+
   componentDidMount() {
+    let self = this;
+    let handle =  new Promise((resolve, reject) => {
+      resolve(self.getStateFromStores());
+    }).catch((err)=>{
+      reject(err);
+    }).then((resp)=>{
+      self.setState(resp);
+    }).catch((err)=>{
+      throw err;
+    });
     AppStore.addChangeListener(this._onChange,IM_CONTACT);
+
+    if(Platform.OS !== 'ios') {
+      this.props.exec(()=> {
+        return handle
+      });
+    }else{
+      InteractionManager.runAfterInteractions(() => {
+        this.props.exec(()=> {
+          return handle
+        });
+      });
+    }
+
   },
 
   componentWillUnmount: function () {
@@ -141,14 +166,14 @@ let Contacts = React.createClass({
   },
 
   addMore: function() {
-   this.setState({showView:true});
+   this.setState({showView:!this.state.showView});
   },
 
   //创建组群
   renderAdd: function() {
     return (
       <TouchableOpacity
-        style={{padding:25,marginRight:-25}}
+        style={{padding:50,marginRight:-50}}
         onPress={()=>{
       this.addMore();
       }}>
@@ -232,23 +257,25 @@ let Contacts = React.createClass({
 
         {(()=>{
 
-          //let dataSource =  groupFilter(this.state.dataSource,'orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
-          let  dataSource = contactFilter(this.state.dataSource,'orgMembers','groupName','orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
-          if(dataSource && dataSource.length > 0){
-            return (
-              <ExtenList itemHeight={57}
-                         groundColor={DictStyle.colorSet.extenListGroupTitleColor}
-                         groupBorderColor={DictStyle.colorSet.demarcationColor}
-                         arrowColor={DictStyle.colorSet.extenListArrowColor}
-                         groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
-                         titleBorderColor={DictStyle.colorSet.demarcationColor}
-                         dataSource={dataSource}
-                         groupDataName={'orgMembers'}
-                         groupItemRender={this.itemRender}
-                         groupTitleRender={this.titleRender}
-              />
-            );
-          }else{
+
+            //let dataSource =  groupFilter(this.state.dataSource,'orgValue','orgMembers','realName',this.state.keyWord, this.state.userInfo.userId);
+            let dataSource = contactFilter(this.state.dataSource, 'orgMembers', 'groupName', 'orgValue', 'orgMembers', 'realName', this.state.keyWord, this.state.userInfo.userId);
+            if (dataSource && dataSource.length > 0) {
+              return (
+                <ExtenList itemHeight={57}
+                           groundColor={DictStyle.colorSet.extenListGroupTitleColor}
+                           groupBorderColor={DictStyle.colorSet.demarcationColor}
+                           arrowColor={DictStyle.colorSet.extenListArrowColor}
+                           groupTitleColor={DictStyle.colorSet.extenListGroupTitleColor}
+                           titleBorderColor={DictStyle.colorSet.demarcationColor}
+                           dataSource={dataSource}
+                           groupDataName={'orgMembers'}
+                           groupItemRender={this.itemRender}
+                           groupTitleRender={this.titleRender}
+                />
+              );
+            }
+          else{
               return (
                 <View style={{backgroundColor:'transparent', alignItems:'center', marginTop:20}}>
                   <Text style={{color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户/机构'}</Text>
@@ -276,8 +303,17 @@ let Contacts = React.createClass({
               </Modal>
             );
           }else{
-            if (this.state.showView)
-              return this.renderMenu();
+            if (this.state.showView){
+            return (
+              <View
+                pointerEvents="auto"
+                onStartShouldSetResponder={(evt) => true}
+                onResponderRelease={()=>this.setState({showView:false})}
+                style={{position:'absolute',left:0,right:0,top:0,bottom:0,backgroundColor:'transparent'}}>
+                {this.renderMenu()}
+              </View>
+            );
+            }
             else
               return null;
           }

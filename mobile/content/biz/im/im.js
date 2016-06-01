@@ -71,8 +71,10 @@ let WhitePage = React.createClass({
 
   renderContact: function () {
     return (
-      <TouchableOpacity onPress={()=>{
-      //ContactStore.testDelete();
+      <TouchableOpacity
+        style={{padding:50,marginRight:-50}}
+        onPress={()=>{
+       // AppStore.updateLastSyncTime(new Date());
       this.props.navigator.push({
             comp: Contacts
       });
@@ -436,7 +438,7 @@ let WhitePage = React.createClass({
 
         <ScrollView
           automaticallyAdjustContentInsets={false}
-          style={{flexDirection: 'column',marginTop:0,backgroundColor:'#F4F4F4',marginBottom:50}}>
+          style={{flexDirection: 'column',marginTop:0,backgroundColor:'#F4F4F4',marginBottom:Platform.OS == 'ios'?50:0}}>
           {this.renderMessage()}
         </ScrollView>
 
