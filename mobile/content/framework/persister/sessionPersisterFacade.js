@@ -133,7 +133,8 @@ let _updateSession = function (param, notAdd, noticeType, currUserId) {
       }
       if (param.type == SESSION_TYPE.GROUP || param.type == SESSION_TYPE.USER || param.type == SESSION_TYPE.NEWFRIEND) {
         if (!notAdd) {
-          param.badge = p[0].badge + 1;
+            param.badge = p[0].badge + 1;
+
         }
       }
     } else {
@@ -174,6 +175,7 @@ let _getSessionBadge = function (userId) {
   let ret = 0;
   result.forEach((item) => {
     if (SessionIdSplit.getUserIdFromSessionId(item.sessionId) == userId) {
+     // if(item.type == SESSION_TYPE.GROUP || item.type == SESSION_TYPE.USER ||item.type == SESSION_TYPE.PLATFORMINFO)
       ret += item.badge;
     }
   });

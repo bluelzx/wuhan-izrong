@@ -388,14 +388,7 @@ let WhitePage = React.createClass({
       return this.renderUser(item, index);
     }else if(item.type == SESSION_TYPE.GROUP ){
       return this.renderGroup(item, index);
-    }
-    //else if(item.type == SESSION_TYPE.INVITE ){
-    //  return this.renderInvite(item, index);
-    //}
-    //else if(item.type == SESSION_TYPE.INVITED ){
-    //  return this.renderInvited(item, index);
-    //}
-    else if(item.type == SESSION_TYPE.PLATFORMINFO ){
+    }else if(item.type == SESSION_TYPE.PLATFORMINFO ){
       return this.renderSpread(item);
     }else if(item.type == SESSION_TYPE.NEWFRIEND ){
       return this.renderNewFriend(item);

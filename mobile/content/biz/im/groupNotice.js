@@ -129,7 +129,7 @@ let GroupNotice = React.createClass({
               NoticeStore.updateInViteNotice(item.noticeId);
               Alert('你已在该群组');
             } else {
-              Alert(err.errCode);
+              Alert(err);
             }
             //Alert(err);
           });
