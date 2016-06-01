@@ -19,13 +19,20 @@ let DictStyle = require('../../constants/dictStyle');
 let PrivacyPolicy = require('../../biz/personal/privacyPolicy');
 let AppInfoModule = require('NativeModules').AppInfoModule;
 let deviceInfo = require('react-native-device-info');
+let Browser = require('react-native-browser');
+
 
 var AboutUs = React.createClass({
   getInitialState(){
+    let versionName = '';
+    if(Platform.OS === 'ios'){
+      versionName = deviceInfo.getVersion() + '.' + deviceInfo.getBuildNumber()
+    }else{
+      versionName =  deviceInfo.getVersion();
+    }
     return {
       email: 'zr@izirong.com',
-      versionName: deviceInfo.getVersion(),
-      buildNumber: deviceInfo.getBuildNumber(),
+      versionName: versionName,
       content: '     爱资融APP是武汉安硕织信为广大银行同业交易从业人员推出的银行同业业务撮合及社交类软件。爱资融秉承“透明公开，服务为先” ' +
       '的原则，立志为广大的银行同业交易员提供一个纯净高效的同业交流环境。'
     };
@@ -43,7 +50,10 @@ var AboutUs = React.createClass({
     //    })
     //  });
     //}
+  },
 
+  updateApp(){
+    console.log("update");
   },
 
   render(){
@@ -56,7 +66,7 @@ var AboutUs = React.createClass({
           <View style={{paddingBottom: 24, backgroundColor: PlainStyle.colorSet.content}}>
             <View style={{marginTop: 20, flexDirection: 'column', alignItems: 'center', paddingHorizontal: 16}}>
               <Image style={styles.logo} source={require('../../image/login/logo.png')}/>
-              <Text style={styles.title}>爱资融同业平台</Text>
+              <Text style={styles.title}>{"爱资融 " + this.state.versionName}</Text>
             </View>
             <Text style={styles.content}>
               {this.state.content}
@@ -64,7 +74,8 @@ var AboutUs = React.createClass({
           </View>
           <View>
             <Item desc="网站邮箱" img={false} icon={false} hiddenArrow={true} value={this.state.email}/>
-            <Item desc="版本号" img={false} icon={false} hiddenArrow={true} value={Platform.OS === 'ios' ? this.state.versionName + '.' + this.state.buildNumber : this.state.versionName}/>
+            <Item desc="检查更新" img={false} icon={false} hiddenArrow={true} value={"当前版本("+this.state.versionName+")"}
+                  func={() => this.updateApp()}/>
           </View>
 
           <View style={{marginTop:40,flexDirection: 'column'}}>
