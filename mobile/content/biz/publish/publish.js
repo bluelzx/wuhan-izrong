@@ -435,6 +435,7 @@ let Publish = React.createClass({
               <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                 <Text
                   style={{marginRight:10,color:(this.state.remarkText == '') ? '#d3d5df' : DictStyle.marketSet.fontColor,flex:1,width:screenWidth-120}}
+                  numberOfLines={3}
                 >{(this.state.remarkText == '') ? '50字以内' : this.state.remarkText}
                 </Text>
                 <Icon style={{marginRight: 10}} name="ios-arrow-right" size={30} color='#a8afb3'/>
@@ -462,7 +463,7 @@ let Publish = React.createClass({
 
   renderToMyBiz: function () {
     return (
-      <TouchableOpacity style={{marginLeft: -20}} onPress={()=>this.toMyBiz()}>
+      <TouchableOpacity style={{marginLeft: -20,paddingTop:10,paddingBottom:10}} onPress={()=>this.toMyBiz()}>
         <Text style={{color: '#ffffff'}}>我的业务</Text>
       </TouchableOpacity>
     );

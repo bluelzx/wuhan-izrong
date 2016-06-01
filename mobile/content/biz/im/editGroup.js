@@ -2,7 +2,7 @@
  * Created by baoyinghai on 16/4/5.
  */
 let React = require('react-native');
-let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch, ScrollView} = React;
+let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch, ScrollView, InteractionManager} = React;
 var Icon  = require('react-native-vector-icons/Ionicons');
 let { Device,Alert, Button } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
@@ -18,8 +18,62 @@ let DictStyle = require('../../constants/dictStyle');
 
 let EditGroup = React.createClass({
 
-  componentDidMount() {
+
+  componentDidMount:function() {
+    let handle = new Promise((resolve, reject) => {
+      let groupInfo = null;
+      try {
+        groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
+        let masterInfo = null;
+        let userInfo = ContactStore.getUserInfo();
+        if (groupInfo.groupMasterUid == userInfo.userId)
+          masterInfo = userInfo;
+        else
+          masterInfo = ContactStore.getUserInfoByUserId(groupInfo.groupMasterUid);
+        groupInfo.masterName = masterInfo.realName;
+        groupInfo.orgValue = ContactStore.getOrgValueByOrgId(masterInfo.orgId);
+
+      } catch (err) {
+        resolve({
+          falseSwitchIsOn:false,
+          groupInfo:null
+        }) ;
+      };
+      if (!groupInfo) {
+        resolve({
+          falseSwitchIsOn:false,
+          groupInfo:null
+        }) ;
+      }
+
+      resolve({
+        falseSwitchIsOn:groupInfo.mute,
+        groupInfo:groupInfo
+      }) ;
+    }).catch((err)=> {
+      reject(err);
+    }).then((resp)=> {
+      self.setState(resp);
+    }).catch((err)=> {
+      throw err;
+    });
     AppStore.addChangeListener(this._onChange, IM_GROUP);
+
+    let self = this;
+
+
+    if(Platform.OS !== 'ios') {
+      this.props.exec(()=> {
+        return handle
+      });
+    }else{
+      InteractionManager.runAfterInteractions(() => {
+        this.props.exec(()=> {
+          return handle
+        });
+      });
+    }
+
   },
 
   componentWillUnmount: function () {
@@ -55,14 +109,17 @@ let EditGroup = React.createClass({
   },
 
   getInitialState: function(){
-    return this.getStateFromStores();
+    return {
+      falseSwitchIsOn:false,
+      groupInfo:null
+    };
   },
 
   renderMember: function() {
 
       let initData = {
         navigator: this.props.navigator,
-        members: this.state.groupInfo.members,
+        members:this.state.groupInfo&&this.state.groupInfo.members,
         showDelete: false,
         imgSource: DictIcon.imSpread,
         groupMasterUid:this.state.groupInfo.groupMasterUid,
@@ -172,7 +229,7 @@ let EditGroup = React.createClass({
       <NavBarView navigator={this.props.navigator} title='群设置'>
         {(()=>{
           if(this.state.groupInfo==undefined){
-            return <Text style={{flex:1, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>数据异常,请联系管理员</Text>
+            return <Text style={{flex:1, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>数据加载中</Text>
           }else{
             return this.renderBody();
           }

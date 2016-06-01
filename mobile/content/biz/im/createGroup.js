@@ -3,7 +3,7 @@
  */
 
 let React = require('react-native');
-let {Text, View, TextInput, Platform, TouchableOpacity, Image} = React;
+let {Text, View, TextInput, Platform, TouchableOpacity, Image, InteractionManager} = React;
 let { Device, Alert } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
 let { ExtenList } = require('mx-artifacts');
@@ -150,16 +150,48 @@ let CreateGroup = React.createClass({
     );
   },
 
+
+  componentDidMount:function() {
+
+    var handle= new Promise((resolve, reject) => {
+      resolve({
+        userData: ContactStore.getUsers(),
+        userInfo: ContactStore.getUserInfo(), // 用户信息
+      });
+    }).catch((err)=> {
+      reject(err);
+    }).then((resp)=> {
+      self.setState(resp);
+    }).catch((err)=> {
+      throw err;
+    });
+    let self = this;
+    if(Platform.OS !== 'ios') {
+      this.props.exec(()=> {
+        return handle
+      });
+    }else{
+      InteractionManager.runAfterInteractions(() => {
+        this.props.exec(()=> {
+          return handle
+        });
+      });
+    }
+
+  },
+
   getInitialState: function () {
-    return {
-      searchBarWidth: Device.width - 15,
-      memberList: {},
-      userData: ContactStore.getUsers(),
-      groupName: '',
-      userInfo: ContactStore.getUserInfo(), // 用户信息
-      keyWord: '',
-      isOpen: false
-    };
+
+      return {
+        searchBarWidth: Device.width - 15,
+        memberList: {},
+        userData: null,
+        groupName: '',
+        userInfo: null, // 用户信息
+        keyWord: '',
+        isOpen: false
+      };
+
   },
 
   setGroupName: function (text) {
@@ -167,6 +199,8 @@ let CreateGroup = React.createClass({
   },
 
   getDataSource: function () {
+    if(!this.state.userInfo)
+    return [];
     let ret = groupFilter(this.state.userData, 'orgValue', 'orgMembers', 'realName', this.state.keyWord, this.state.userInfo.userId);
 
     return ret;
@@ -177,7 +211,7 @@ let CreateGroup = React.createClass({
       <NavBarView navigator={this.props.navigator} title='创建群组' actionButton={this.renderLabel}>
         <View style={{backgroundColor:DictStyle.colorSet.content, paddingTop:10}}>
           <TextInput
-            placeholder={this.state.userInfo.realName + "创建的群"}
+            placeholder={(this.state.userInfo&&this.state.userInfo.realName || '我') + "创建的群"}
             placeholderTextColor="#aaaaaa"
             onChangeText={(text) => this.setGroupName(text)}
             style={{color: '#44B5E6',height:50, width: Device.width,backgroundColor:DictStyle.colorSet.textEditBackground, paddingHorizontal:20}}></TextInput>
