@@ -527,6 +527,7 @@ let MyBizDetail = React.createClass({
               </Text>
               <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                 <Text style={{marginRight:10,color:'#d3d5df',flex:1,width:screenWidth-120}}
+                      numberOfLines={3}
                 >{(this.state.remarkText == '' || this.state.remarkText == null) ? '50字以内' : this.state.remarkText}
                 </Text>
                 <Icon style={{marginRight: 10}} name="ios-arrow-right" size={30} color='#a8afb3'/>

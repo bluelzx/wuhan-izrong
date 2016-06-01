@@ -81,11 +81,13 @@ var Main = React.createClass({
     AppStore.saveNavigator(this.refs['navigator']);
 
     AppStore.addChangeListener(this._activeApp, 'active_app');
-    AppStore.addChangeListener(this._activeApp,'NETINFO_CONNECTED');
+    AppStore.addChangeListener(this._activeApp, 'NETINFO_CONNECTED');
   },
 
   _activeApp: function () {
-    ImSocket.reconnect();
+    if (AppStore.getNetWorkState()) {
+      ImSocket.reconnect();
+    }
   },
 
   _handleAppStateChange: (currentAppState) => {

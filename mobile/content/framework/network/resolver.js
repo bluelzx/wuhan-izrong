@@ -182,10 +182,11 @@ let _dealMsg = function (message, socket) {
           noticeType: noticeType,
           userId: group.groupMasterUid
         }, userId);
-        ContactSotre.leaveGroup(message.groupId);
+        //ContactSotre.leaveGroup(message.groupId);
       } else {
-        ContactSotre.deleteMemberFromGroup(message.groupId, userId)
+        //ContactSotre.deleteMemberFromGroup(message.groupId, userId)
       }
+      ContactSotre.leaveGroup(message.groupId);
       break;
     case MSG_TYPE.SYNC_REQ:
       //message.msgArray.forEach((item)=>{

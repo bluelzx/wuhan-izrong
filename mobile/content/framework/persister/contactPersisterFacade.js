@@ -42,7 +42,16 @@ let ContactPersisterFacade = {
   saveIMUserInfo: (item) => _saveIMUserInfo(item),
   judgeGroup: (groupId, userId) => _judgeGroup(groupId, userId),
   updateFriendList: (param, userId) => _updateFriendList(param, userId),
-  deleteMemberFromGroup: (groupId, userId) => _deleteMemberFromGroup(groupId, userId)
+  deleteMemberFromGroup: (groupId, userId) => _deleteMemberFromGroup(groupId, userId),
+  testDelete: ()=>_testDelete()
+}
+
+let _testDelete = function () {
+  _realm.write(()=>{
+    let group = _realm.objects(GROUP).filtered('groupId = 10000')
+    _realm.delete(group);
+    console.log('delete group test')
+  })
 }
 
 let _deleteMemberFromGroup = function(groupId, userId) {
@@ -521,7 +530,7 @@ let _selfDeleteNotice = function (groupId, userId) {
         if (SessionIdSplit.getIdFromSessionId(item.noticeId) == groupId) {
           deleteNum = deleteNum + 1;
           let ret = _realm.objects(NOTICE).filtered('\'' + item.noticeId + '\' =  noticeId');
-          _realm.delete(ret)
+          _realm.delete(ret);
         }
       }
     }

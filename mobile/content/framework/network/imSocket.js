@@ -34,7 +34,7 @@ let ImSocket = {
 
   reconnect:function(){
     //Alert('reconnect');
-    _socket&&_socket.open();
+    _socket && _socket.reconnect();
   },
 
   init: function (token,lastSyncTime) {
