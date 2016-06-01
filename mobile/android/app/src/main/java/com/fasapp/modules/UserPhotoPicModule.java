@@ -117,7 +117,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
 
     @ReactMethod
     public void showImagePic(String type, boolean needCrop, String name, int aspectX, int aspectY, Callback callback) {
-        showImagePicBySize(type, needCrop, name, aspectX, aspectY, callback, 2000);
+        showImagePicBySize(type, needCrop, name, aspectX, aspectY, callback, 300);
     }
 
     @ReactMethod
@@ -127,7 +127,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         getFiles(jsCode.getPath());
         this.size = size;
         crop = needCrop;
-        fileName = new Date().getTime() + ".jpg";
+        fileName = new Date().getTime() + ".png";
         mCallback = callback;
         this.aspectX = aspectX;
         this.aspectY = aspectY;
@@ -292,19 +292,19 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                 // 保存图片
                 FileOutputStream fos = null;
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                System.out.println("aaaabbbb" + baos.toByteArray().length / 1024);
-                int per = 100;
-                while (baos.toByteArray().length / 1024 > size) {
-                    System.out.println("bbbb " + baos.toByteArray().length / 1024);
-                    baos.reset();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, per, baos);
-                    per -= 10;
-                    System.out.println("aaaabbbb " + baos.toByteArray().length / 1024 + " 9999 " + per);
-                }
-                System.out.println("aaaabbbb" + per);
+                bitmap.compress(Bitmap.CompressFormat.WEBP, 100, baos);
+                System.out.println("aaaabbbbm" + baos.toByteArray().length / 1024);
+//                int per = 100;
+//                while (baos.toByteArray().length / 1024 > size && per > 20) {
+//                    System.out.println("bbbbn " + baos.toByteArray().length / 1024);
+//                    baos.reset();
+//                    bitmap.compress(Bitmap.CompressFormat.WEBP, per, baos);
+//                    per -= 10;
+//                    System.out.println("aaaabbbbv " + baos.toByteArray().length / 1024 + " 9999 " + per);
+//                }
+//                System.out.println("aaaabbbbc" + per);
                 fos = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, per, fos);
+                bitmap.compress(Bitmap.CompressFormat.WEBP, 75, fos);
                 fos.flush();
                 fos.close();
             }
@@ -331,7 +331,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             int i = baos.toByteArray().length / 1024;
-            System.out.println("aaaabbbb1" + i);
+            System.out.println("aaaabbbbx" + i);
         } catch (IOException e) {
             e.printStackTrace();
         }
