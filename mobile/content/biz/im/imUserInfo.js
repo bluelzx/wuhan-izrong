@@ -35,7 +35,9 @@ let ImUserInfo = React.createClass({
     let user = ContactStore.getUserInfo();
     this.props.param.isStranger = ContactStore.isStranger(this.props.param.userId);
     if(user.userId == this.props.param.userId){
+      user.orgValue = ContactStore.getOrgValueByOrgId(user.orgId);
       userInfo = user;
+
     }else {
       userInfo = ContactStore.getUserInfoByUserId(this.props.param.userId);
     }

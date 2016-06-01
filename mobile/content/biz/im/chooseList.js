@@ -53,7 +53,7 @@ let ChooseList = React.createClass({
         x: 52 * (self.state.memberView.length + 1 - index),
         animated: true
       });
-      delayTime = 500;
+      delayTime = 300;
     }
     setTimeout(()=>{
       self.state.memberView.push(item);

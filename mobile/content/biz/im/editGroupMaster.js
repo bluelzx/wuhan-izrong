@@ -173,8 +173,8 @@ let EditGroupMaster = React.createClass({
       ).then((groupId)=>{
         ContactAction.storeDeleteGroup(groupId);
       }).catch((errData)=>{
-        Alert(errData.toLocaleString());
-      });;
+        throw errData;
+      });
     });
 
   },
@@ -218,10 +218,10 @@ let EditGroupMaster = React.createClass({
             style={{height:50,backgroundColor: DictStyle.groupManage.memberListBackgroundColor,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
             <Text style={{color:DictStyle.groupManage.memberNameColor}}>群主</Text>
             <View style={{flex:1,marginRight:5}}>
-            <Text
-              numberOfLines={2}
-              style={{flex:1,color:'#6B849C', textAlign:'right'}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue+'hahahahahahahahahahahahahahahahahahahahhahahahahahahaha'}</Text>
-              </View>
+              <Text
+                numberOfLines={2}
+                style={{flex:1,color:'#6B849C', textAlign:'right'}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
+            </View>
           </View>
 
           <View

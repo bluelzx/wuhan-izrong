@@ -155,6 +155,8 @@ let EditGroup = React.createClass({
               this.props.navigator.popToTop();
               ContactAction.storeLeaveGroup(this.props.param.groupId);
             }, ()=>{})
+          }else{
+            throw err;
           }
         });
       }
@@ -196,7 +198,11 @@ let EditGroup = React.createClass({
           <View
             style={{height:50,backgroundColor: DictStyle.groupManage.memberListBackgroundColor,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
             <Text style={{color:DictStyle.groupManage.memberNameColor}}>群主</Text>
-            <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
+            <View style={{flex:1,marginRight:5}}>
+              <Text
+                numberOfLines={2}
+                style={{flex:1,color:'#6B849C', textAlign:'right'}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
+            </View>
           </View>
 
           <View

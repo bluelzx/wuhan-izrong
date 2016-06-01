@@ -127,7 +127,7 @@ let CreateGroup = React.createClass({
                 }
               );
             }).catch((errorData) => {
-              Alert(errorData.toLocaleString());
+              throw errorData;
             });
         }
       );

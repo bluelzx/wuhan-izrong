@@ -477,3 +477,20 @@ Manager.prototype.send = function (data, fn) {
   console.log('**websocket** send %s', JSON.stringify(data));
   _socket.send(JSON.stringify(data));
 };
+
+
+/**
+ * Called upon successful sendString.
+ *
+ * @api private
+ */
+
+Manager.prototype.sendStr = function (data, fn) {
+  if (this.readyState !== 'open') {
+    fn && fn(this.readyState);
+    return;
+  }
+  let _socket = this.engine;
+  console.log('**websocket** send string %s', data);
+  _socket.send(data);
+};

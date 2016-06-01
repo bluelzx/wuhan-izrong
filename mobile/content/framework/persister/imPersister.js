@@ -17,9 +17,14 @@ let _saveMessage = (message, ownerId) => {
 
 let _getMessageBySessionId = (sessionId, page, ownerId) => {
   let msgs = _realm.objects(MESSAGE).filtered('sessionId == $0 && ownerId=' + ownerId, sessionId).sorted('revTime', true);
-  // return msgs;
-  let start = (page - 1) * 5;
-  let end = page * 5;
+
+  let pageSize = 5;
+  if(page != 1){
+    pageSize = 15;
+  }
+  //return msgs;
+  let start = (page - 1) * pageSize;
+  let end = page * pageSize;
   return msgs.slice(start, end);
 };
 
