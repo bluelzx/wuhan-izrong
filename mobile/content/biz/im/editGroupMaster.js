@@ -2,7 +2,7 @@
  * Created by baoyinghai on 16/4/5.
  */
 let React = require('react-native');
-let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch, ScrollView} = React;
+let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch, ScrollView, InteractionManager} = React;
 var Icon  = require('react-native-vector-icons/Ionicons');
 let { Device,Alert, Button } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
@@ -22,9 +22,68 @@ let DictStyle = require('../../constants/dictStyle');
 
 let EditGroupMaster = React.createClass({
 
-  componentDidMount() {
+  //componentDidMount() {
+  //  AppStore.addChangeListener(this._onChange, IM_GROUP);
+  //},
+
+  componentDidMount:function() {
+
+    let handle = new Promise((resolve, reject) => {
+      let groupInfo = null;
+      try {
+        groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
+        let masterInfo = null;
+        let userInfo = ContactStore.getUserInfo();
+        if (groupInfo.groupMasterUid == userInfo.userId)
+          masterInfo = userInfo;
+        else
+          masterInfo = ContactStore.getUserInfoByUserId(groupInfo.groupMasterUid);
+        groupInfo.masterName = masterInfo.realName;
+        groupInfo.orgValue = ContactStore.getOrgValueByOrgId(masterInfo.orgId);
+
+      } catch (err) {
+        resolve({
+          falseSwitchIsOn:false,
+          groupInfo:null
+        }) ;
+      };
+      if (!groupInfo) {
+        resolve({
+          falseSwitchIsOn:false,
+          groupInfo:null
+        }) ;
+      }
+
+      resolve({
+        falseSwitchIsOn:groupInfo.mute,
+        groupInfo:groupInfo
+      }) ;
+    }).catch((err)=> {
+      reject(err);
+    }).then((resp)=> {
+      self.setState(resp);
+    }).catch((err)=> {
+      throw err;
+    });
     AppStore.addChangeListener(this._onChange, IM_GROUP);
+
+    let self = this;
+
+
+    if(Platform.OS !== 'ios') {
+      this.props.exec(()=> {
+        return handle
+      });
+    }else{
+      InteractionManager.runAfterInteractions(() => {
+        this.props.exec(()=> {
+          return handle
+        });
+      });
+    }
+
   },
+
 
   componentWillUnmount: function () {
     AppStore.removeChangeListener(this._onChange, IM_GROUP);
@@ -60,7 +119,10 @@ let EditGroupMaster = React.createClass({
   },
 
   getInitialState: function(){
-    return this.getStateFromStores();
+     return {
+      falseSwitchIsOn:false,
+      groupInfo:null
+    };
   },
 
 
@@ -77,9 +139,10 @@ let EditGroupMaster = React.createClass({
   },
 
   renderMember: function() {
+
     let initData = {
       navigator: this.props.navigator,
-      members: this.state.groupInfo.members,
+      members: this.state.groupInfo&&this.state.groupInfo.members,
       showDelete: true,
       imgSource: DictIcon.imSpread,
       groupMasterUid:this.state.groupInfo.groupMasterUid,
@@ -157,7 +220,7 @@ let EditGroupMaster = React.createClass({
             <View style={{flex:1,marginRight:5}}>
             <Text
               numberOfLines={2}
-              style={{flex:1,color:'#6B849C', textAlign:'right'}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
+              style={{flex:1,color:'#6B849C', textAlign:'right'}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue+'hahahahahahahahahahahahahahahahahahahahhahahahahahahaha'}</Text>
               </View>
           </View>
 
@@ -192,7 +255,7 @@ let EditGroupMaster = React.createClass({
         {(()=>{
           if(this.state.groupInfo==undefined){
 
-            return <Text style={{flex:1, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>{'数据异常,请联系管理员,groupId:' + this.props.param.groupId}</Text>
+            return <Text style={{flex:1, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>{'数据加载中'}</Text>
           }else{
             return this.renderBody();
           }

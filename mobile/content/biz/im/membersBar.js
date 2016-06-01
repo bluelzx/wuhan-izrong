@@ -68,7 +68,7 @@ let MembersBar = React.createClass({
 
     if(m.length/index > 2){
       let start = m.length - index*2;
-      m = m.slice(start + 2,m.length);
+      m = m.slice(start + 3,m.length);
       m.unshift(Master);
     }
     return (

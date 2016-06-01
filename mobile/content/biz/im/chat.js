@@ -128,6 +128,7 @@ let Chat = React.createClass({
   renderEdit: function () {
     return (
       <TouchableOpacity
+        style={{padding:50,marginRight:-50}}
         onPress={this.tagDetail}>
        <Image style={{width:25,height:25}} source={this.props.param.chatType==SESSION_TYPE.GROUP?DictIcon.imGroupMore:DictIcon.imUserMore}/>
       </TouchableOpacity>

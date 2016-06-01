@@ -2,7 +2,7 @@
  * Created by baoyinghai on 5/12/16.
  */
 let React = require('react-native');
-const {View, TextInput, Text, TouchableOpacity, Platform, ScrollView} = React;
+const {View, TextInput, Text, TouchableOpacity, Platform, ScrollView, ListView} = React;
 let NavBarView = require('../../framework/system/navBarView');
 let DictStyle = require('../../constants/dictStyle');
 let HeaderPic = require('./headerPic');
@@ -19,13 +19,16 @@ let SearchFriend = React.createClass({
 
 
   getInitialState:function(){
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
     return {
       dataSource: [],
       keyWord:'',
       justTop:true,
       totalUserAmount:0,
       desc: initS,
-      showSearchBtn:false
+      showSearchBtn:false,
+      listData:ds
     }
   },
 
@@ -53,36 +56,40 @@ let SearchFriend = React.createClass({
   },
 
   renderItem: function(data) {
-    return (
-    <TouchableOpacity key={data.userId}
-                      onPress={() => this.toOther(data)}
-                      style={{flex:1,marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
-      <View style={{flex:1,flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
-        <HeaderPic photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-        <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
-          <View style={{flex:1,paddingLeft:10}}>
-            <Text
-              numberOfLines={1}
-              style={{flex:1,fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 2}}>{data.realName + '-' +data.orgValue}</Text>
-            <Text
-              numberOfLines={1}
-              style={{flex:1,fontSize:15,color:'#B7C0C7', marginLeft: 2,flexWrap:'wrap'}}>{data.mobileNumber }</Text>
+    if(data.isMore){
+      return this.renderMore();
+    }else {
+      return (
+        <TouchableOpacity key={data.userId}
+                          onPress={() => this.toOther(data)}
+                          style={{flex:1,marginHorizontal:10,borderTopWidth:0.5,  borderTopColor: DictStyle.colorSet.demarcationColor}}>
+          <View style={{flex:1,flexDirection:'row', paddingVertical:5, alignItems:'center'}}>
+            <HeaderPic photoFileUrl={data.photoFileUrl} certified={data.certified} name={data.realName}/>
+            <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
+              <View style={{flex:1,paddingLeft:10}}>
+                <Text
+                  numberOfLines={1}
+                  style={{flex:1,fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 2}}>{data.realName + '-' + data.orgValue}</Text>
+                <Text
+                  numberOfLines={1}
+                  style={{flex:1,fontSize:15,color:'#B7C0C7', marginLeft: 2,flexWrap:'wrap'}}>{data.mobileNumber }</Text>
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-    );
+        </TouchableOpacity>
+      );
+    }
   },
 
   renderSearchResult: function() {
-    let ret = [];
-    this.state.dataSource.forEach((item)=>{
-      ret.push(this.renderItem(item));
-    });
-    if(this.state.justTop){
-      ret.push(this.renderMore());
-    }
-    return ret;
+    //let ret = [];
+    //this.state.dataSource.forEach((item)=>{
+    //  ret.push(this.renderItem(item));
+    //});
+    //if(this.state.justTop){
+    //  ret.push(this.renderMore());
+    //}
+    //return ret;
   },
 
   searchFriend : function(){
@@ -182,14 +189,25 @@ let SearchFriend = React.createClass({
          {(()=>{
 
            if(this.state.dataSource && this.state.dataSource.length > 0){
+             //return (
+             //  <ListView
+             //    automaticallyAdjustContentInsets={false}
+             //    style={{flexDirection: 'column',backgroundColor:'#FEFEFE', marginTop:5, marginBottom:50}}>
+             //    {this.renderSearchResult()}
+             //  </ListView>
+             //);
+             let dataSource = this.state.dataSource;
+             if(this.state.justTop) {
+               if(!dataSource[dataSource.length - 1].isMore)
+               dataSource.push({isMore:true});
+             }
              return (
-               <ScrollView
-                 automaticallyAdjustContentInsets={false}
-                 style={{flexDirection: 'column',backgroundColor:'#FEFEFE', marginTop:5, marginBottom:50}}>
-                 {this.renderSearchResult()}
-               </ScrollView>
+               <ListView
+                 style={{backgroundColor:'#FEFEFE', marginTop:5}}
+                 dataSource={this.state.listData.cloneWithRows(dataSource)}
+                 renderRow={this.renderItem}
+               />
              );
-
            }else{
              //return null;
              if(!this.state.showSearchBtn && this.state.keyWord && this.state.keyWord.length > 0) {
