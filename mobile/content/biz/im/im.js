@@ -423,7 +423,10 @@ let WhitePage = React.createClass({
 
   renderNull: function () {
     return (
-      <Text style={{flex:1, marginTop:20, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>您当前没有新好友通知</Text>
+      <View style={{flex:1, justifyContent:'center',alignItems:'center',alignSelf:'center'}}>
+        <Text
+          style={{marginTop:20, textAlign:'center', justifyContent:'center',alignItems:'center', color:DictStyle.searchFriend.nullUnitColor}}>您当前没有新好友通知</Text>
+      </View>
     );
   },
 
