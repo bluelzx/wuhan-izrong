@@ -6,7 +6,8 @@ let _realm = require('./realmManager');
 const _ = require('lodash');
 const {
   SESSION,
-  MESSAGE
+  MESSAGE,
+  NOTICE
   } = require('./schemas');
 let { SESSION_TYPE } = require('../../constants/dictIm');
 let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
@@ -109,7 +110,7 @@ let _updateSession = function (param, notAdd, noticeType, currUserId) {
     });
     if (groupSession.length > 0) {
       if (noticeType == SESSION_TYPE.INVITE) {
-        let wd = _realm.objects(SESSION).filtered('sessionId = \'' + param.sessionId + '\'');
+        let wd = _realm.objects(NOTICE).filtered('noticeId = \'' + param.sessionId + '\'');
         if (wd.length > 0 && wd) {
           param.badge = groupSession[0].badge;
         } else {
