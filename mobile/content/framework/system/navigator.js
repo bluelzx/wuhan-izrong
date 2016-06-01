@@ -42,6 +42,7 @@ let QiniuTest = require('../../test/qiniuTest');
 let Upload = require('../../biz/login/uploadNameCard');
 let Account = require('../../biz/login/accountInfo');
 
+const { NETINFO_CONNECTED, NETINFO_DISCONNECTED } = require('../../constants/dictEvent');
 const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');
 
@@ -81,12 +82,15 @@ var Main = React.createClass({
     AppStore.saveNavigator(this.refs['navigator']);
 
     AppStore.addChangeListener(this._activeApp, 'active_app');
-    AppStore.addChangeListener(this._activeApp, 'NETINFO_CONNECTED');
+    AppStore.addChangeListener(this._activeApp, NETINFO_CONNECTED);
+    AppStore.addChangeListener(this._activeApp, NETINFO_DISCONNECTED);
   },
 
   _activeApp: function () {
     if (AppStore.getNetWorkState()) {
       ImSocket.reconnect();
+    } else {
+      ImSocket.disconnect();
     }
   },
 
