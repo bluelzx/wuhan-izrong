@@ -31,7 +31,7 @@ createPath();
 let downloadFile = function(uri,name,cb) {
   var progress = data => {
   };
-
+  name = uri&&uri.split("/").pop();
   let imgPath = cacheDirPath+'/'+name+'.jpeg';
   RNFS.downloadFile(uri, imgPath, progress, progress).then(res => {
     fileUri[uri] = 'file://' + imgPath;
