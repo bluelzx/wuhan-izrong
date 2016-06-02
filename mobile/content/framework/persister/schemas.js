@@ -239,6 +239,16 @@ let PlatFormInfo = {
   }
 };
 
+//头像缓存
+let HeaderPathSchema = {
+  name: "HeaderPath",
+  primaryKey: 'uri',
+  properties: {
+    uri: {type: 'string', optional: true},
+    localUri: {type: 'string', optional: true}
+  }
+}
+
 
 //新好友通知
 let NewFriendNotic = {
@@ -275,6 +285,7 @@ module.exports = {
   NoticeSchema: GroupNoticeSchema,
   NewFriendNoticSchema: NewFriendNotic,
   MarketInfoSchema: MarketInfoSchema,
+  HeaderPathSchema:HeaderPathSchema,
   DEVICE: 'device',
   GROUP: 'group',
   MESSAGE: 'message',
@@ -289,5 +300,6 @@ module.exports = {
   PLATFORMINFO: 'platFormInfo',
   NOTICE: 'groupNotice',
   NEWFRIENDNOTIC: 'newFriendNotic',
-  MARKETINFO: 'marketInfo'
+  MARKETINFO: 'marketInfo',
+  HeaderPath:'HeaderPath'
 };

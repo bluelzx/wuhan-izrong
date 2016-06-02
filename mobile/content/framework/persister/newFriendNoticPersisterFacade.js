@@ -12,7 +12,8 @@ let NewFriendNoticPersisterFacade = {
   createNewNotic:( noticId, userId, realName, orgName, photoFileUrl, certified,msgType, ownerId) => _createNewNotic( noticId, userId, realName, orgName, photoFileUrl,certified, msgType, ownerId),
   acceptNewNotic:(noticId, ownerId) => _acceptNewNotic(noticId, ownerId),
   deleteNewNotic:(noticId, ownerId)=>_deleteNewNotic(noticId, ownerId),
-  queryAllNewNotic:(ownerId)=>_queryAllNewNotic(ownerId)
+  queryAllNewNotic:(ownerId)=>_queryAllNewNotic(ownerId),
+  getNewNoticById:(noticId, ownerId) => _getNewNoticById(noticId, ownerId)
 
 };
 
@@ -35,6 +36,11 @@ let _acceptNewNotic = function(noticId, ownerId){
 
     tag[0] && (tag[0].isAccept = true);
   });
+}
+
+let _getNewNoticById = function(noticId, ownerId){
+  let tag = _realm.objects(NEWFRIENDNOTIC).filtered( '$0==noticId && ownerId==$1',noticId, ownerId);
+  return tag[0];
 }
 
 let _createNewNotic = function( noticId, userId, realName, orgName, photoFileUrl,certified, msgType, ownerId) {
