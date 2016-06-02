@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.facebook.stetho.common.LogUtil;
 import com.fasapp.utils.LogUtils;
+import com.fasapp.utils.RNCacheViewManager;
 import com.fasapp.utils.ReactNativeAutoUpdater;
+import com.fasapp.utils.RnInfo;
 
 import java.io.File;
 
@@ -36,6 +38,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
 
     public void initData() {
+//        RNCacheViewManager.init(SplashActivity.this, new RnInfo("FasApp", null));
         AnimationSet set = new AnimationSet(false);
         AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1f);
         set.addAnimation(alphaAnimation);
