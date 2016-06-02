@@ -122,7 +122,6 @@ let LoadExtendImage = React.createClass({
   },
 
   upLoadFile: function () {
-
     this.props.startUpload();
     let fileName = this.props.localPath.split("/").pop();
 

@@ -66,7 +66,6 @@ let ImagePicker = React.createClass({
 
     let onResponse = (response) => {
       console.log('Response = ', response);
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
