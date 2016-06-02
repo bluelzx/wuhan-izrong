@@ -15,5 +15,7 @@ project(':react-native-device-info').projectDir = new File(rootProject.projectDi
 
 include ':ExtraDimensions', ':app'
 project(':ExtraDimensions').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-extra-dimensions-android/android')
+
 include ':react-native-fs'
-project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')
+project(':react-native-fs').projectDir = new File(settingsDir, '../node_modules/react-native-fs/android')
+
