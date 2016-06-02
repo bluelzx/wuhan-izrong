@@ -24,8 +24,8 @@ let _ = require('lodash');
 let CacheDirPath = Platform.OS === 'android' ? RNFS.ExternalDirectoryPath + '/fasCache/' : RNFS.DocumentDirectoryPath + '/fasCache/';
 let jobId1 = -1, jobId2 = 1;
 
-let LoginAction = require('../../framework/action/loginAction');
 let ImAction = require('../../framework/action/imAction');
+let Lightbox = require('../lightBox/Lightbox');
 
 let LoadExtendImage = React.createClass({
   mixins: [TimerMixin],
@@ -76,11 +76,31 @@ let LoadExtendImage = React.createClass({
     }
   },
 
+  getFileName: function (url) {
+
+    let urlSuffix = url.split("http://img.izirong.com/").pop();
+    let suffixArr = urlSuffix.split('?');
+
+    let imageName = suffixArr[0];
+    let qiniuSuffix = suffixArr[1] ? suffixArr[1] : null;
+
+    return {
+      imageName: imageName,
+      qiniuSuffix: qiniuSuffix
+    }
+  },
+
   loadFunc: function () {
     if (this.props.source) {
 
-      let fileName = this.props.source.uri.split("/").pop();
-      let imagePath = CacheDirPath + fileName;
+      let imageName = this.getFileName(this.props.source.uri).imageName;
+      let imageSuffix = imageName.split('.').pop();
+      let imagePath = null;
+      if (imageSuffix !== 'jpg') {
+        imagePath = CacheDirPath + imageName + '.jpg';
+      } else {
+        imagePath = CacheDirPath + imageName;
+      }
 
       RNFS.exists(imagePath).then((exists) => {
         if (exists) {
@@ -214,6 +234,7 @@ let LoadExtendImage = React.createClass({
 
           <Image style={[styles.imageStyle]}
                  source={this.state.imagePath}
+                 onLayout={() => {}}
           >
             { this.props.isEnableLoading ? (this.state.loadSuccess ? null : this.showLoading()) : null }
           </Image>
