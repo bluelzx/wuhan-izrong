@@ -22,4 +22,5 @@
         android:text="正在检查更新..."
         android:textColor="#fff"
         android:visibility="gone" />
+
 </RelativeLayout>
