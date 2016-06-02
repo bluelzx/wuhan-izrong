@@ -12,6 +12,8 @@ let {
 let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 let dismissKeyboard = require('react-native-dismiss-keyboard');
+let KeyGenerator = require('./keyGenerator');
+let AppStore = require('../../framework/store/appStore');
 
 let ImagePicker = React.createClass({
   propTypes: {
@@ -94,7 +96,12 @@ let ImagePicker = React.createClass({
   },
 
   _selectAndroid: function () {
-    UserPhotoPicModule.showImagePic(this.props.type, this.props.allowsEditing, this.props.fileId, this.props.aspectX, this.props.aspectY,
+    let fileName = KeyGenerator.getImgKey(AppStore.getUserId());
+    let cropSquare = true;
+    if(this.props.aspectX != this.props.aspectY){
+      cropSquare = false
+    }
+    UserPhotoPicModule.showImagePic(this.props.type, this.props.allowsEditing, fileName, cropSquare,
       (response) => {
         console.log('Response = ', response.uri);
         this.props.onSelected(response.uri);

@@ -44,6 +44,7 @@ import java.util.List;
 import cn.finalteam.galleryfinal.FunctionConfig;
 import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
+import cn.finalteam.toolsfinal.ExternalStorage;
 
 /**
  * Created by vison on 16/4/11.
@@ -57,8 +58,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
     private WritableMap mResponse;
     private File file;
     private Uri uri;
-    private int mAspectX;
-    private int mAspectY;
+    private boolean cropSquare;
     private final int REQUEST_CODE_CAMERA = 1000;
     private final int REQUEST_CODE_GALLERY = 1001;
     private final int REQUEST_CODE_CROP = 1002;
@@ -127,27 +127,22 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void showImagePic(String type, boolean needCrop, String name, int aspectX, int aspectY, Callback callback) {
-        showImagePicBySize(type, needCrop, name, aspectX, aspectY, callback);
+    public void showImagePic(String type, boolean needCrop, String fileName, boolean cropSquare, Callback callback) {
+        showImagePicBySize(type, needCrop, fileName, cropSquare, callback);
 
     }
 
     @ReactMethod
-    public void showImagePicBySize(String type, boolean needCrop, String name, int aspectX, int aspectY, Callback callback) {
-        File jsCode = getReactApplicationContext().getDir("JSCode", Context.MODE_PRIVATE);
-        LogUtils.i("jsCode", jsCode.getPath());
-        getFiles(jsCode.getPath());
+    public void showImagePicBySize(String type, boolean needCrop, String name,boolean cropSquare, Callback callback) {
         this.mCrop = needCrop;
         this.mFileName = name;
         this.mCallback = callback;
-        this.mAspectX = aspectX;
-        this.mAspectY = aspectY;
         mCropConfig = new FunctionConfig.Builder()
-                .setEnableCrop(true)
+                .setEnableCrop(needCrop)
                 .setEnableRotate(true)
-                .setCropSquare(false)
+                .setCropSquare(cropSquare)
                 .setEnablePreview(true)
-                .setMutiSelectMaxSize(8)
+                .setMutiSelectMaxSize(5)
                 .build();
         switch (type) {
             case "all":
@@ -236,7 +231,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     }
                     break;
                 case REQUEST_CODE_CROP:
-                    mResponse.putString("uri", path);
+                    mResponse.putString("uri", saveFile(path).toString());
                     mCallback.invoke(mResponse);
                     break;
                 default:
@@ -254,17 +249,20 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
     private Uri saveFile(String path) {
         File image;
         try {
+            FileInputStream is = new FileInputStream(path);
             BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 2;
-            Bitmap tempBitMap = BitmapFactory.decodeFile(path, options);
-            File tmpDir = new File(getReactApplicationContext().getPackageResourcePath() + "/file/fasCache");
-            LogUtils.d("tmpDir",file.getAbsolutePath());
+            options.inSampleSize = 1;
+            Bitmap tempBitMap = BitmapFactory.decodeStream(is, null, options);
+            is.close();
+
+            File tmpDir = new File(this.getReactApplicationContext().getExternalFilesDir(null).getAbsolutePath()+ "/fasCache");
+            //File tmpDir = new File(ExternalStorage.getSdCardPath()+ "/fasCache");
             if (!tmpDir.exists()) {
                 tmpDir.mkdir();
             }
             image = new File(tmpDir + "/" + mFileName + ".jpg");
             FileOutputStream fos = new FileOutputStream(image);
-            tempBitMap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            tempBitMap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
             tempBitMap.recycle();

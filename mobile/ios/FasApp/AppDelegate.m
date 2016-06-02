@@ -32,7 +32,7 @@ typedef enum{
 {
   [NSThread sleepForTimeInterval:1.0];
 
-  AppStarMode startType=Debug;
+  AppStarMode startType=Local;
 
   NSURL* latestJSCodeLocation;
   if(startType==AutoUpdate){
