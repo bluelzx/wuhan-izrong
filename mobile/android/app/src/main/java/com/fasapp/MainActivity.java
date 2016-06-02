@@ -22,6 +22,7 @@ import com.fasapp.pakage.ZXReactPackage;
 import com.fasapp.utils.ReactNativeAutoUpdater;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.rnfs.RNFSPackage;
 
 import java.io.File;
 import java.util.Arrays;

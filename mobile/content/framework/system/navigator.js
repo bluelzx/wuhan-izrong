@@ -117,15 +117,16 @@ var Main = React.createClass({
 
   _onAndroidBackPressed: function () {
     if (this._navigator) {
+      let self = this;
       //if (this._navigator.getCurrentRoutes().length > 1) {
       //  this._navigator.pop();
       //  return true;
       //}
-      const nav = this._navigator;
+      const nav = self._navigator;
       const routers = nav.getCurrentRoutes();
       if (routers.length > 1) {
         const top = routers[routers.length - 1];
-        if (top.ignoreBack || top.comp.ignoreBack || this.state.isLoadingVisible) {
+        if (top.ignoreBack || top.comp.ignoreBack || self.state.isLoadingVisible) {
           // 路由或组件上决定这个界面忽略back键
           return true;
         }
