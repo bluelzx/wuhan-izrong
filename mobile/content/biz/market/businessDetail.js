@@ -37,6 +37,7 @@ let {ImageSize50,ImageSize100} = require('../../../config');
 let MarketAction = require('../../framework/action/marketAction');
 let ErrorMsg = require('../../constants/errorMsg');
 let CallPhone = require('../../comp/utils/callPhone');
+let LoadExtendImage = require('../../comp/utils/loadExtendImage');
 
 let BusinessDetail = React.createClass({
   getInitialState(){
@@ -281,23 +282,32 @@ let BusinessDetail = React.createClass({
             let uri = item + ImageSize50;
 
             return (
-              <Lightbox key={index}
-                        imageSource={{uri:item, isStatic: true}}
-                        underlayColor="#f7f7f7"
-                        navigator={this.props.navigator}
-                        springConfig={{tension: 35, friction: 6}}
+              <LoadExtendImage
+                style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#cccccc'}}
+                source={{uri:uri}}
+                jobMode="load"
+                key={index}
               >
-                <Image
-                  style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#cccccc'}}
-                  source={{uri:uri}}
-                />
-              </Lightbox>
+              </LoadExtendImage>
             )
           })
         }
       </View>
     );
   },
+
+//<Lightbox key={index}
+//          imageSource={{uri:item, isStatic: true}}
+//          underlayColor="#f7f7f7"
+//          navigator={this.props.navigator}
+//          springConfig={{tension: 35, friction: 6}}
+//>
+//  <Image
+//    style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#cccccc'}}
+//    source={{uri:uri}}
+//  />
+//</Lightbox>
+
   renderChatBtn: function () {
     if (this.state.userId == this.state.myUserId) {
       return (

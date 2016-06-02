@@ -94,11 +94,12 @@ public class MainActivity extends ReactActivity {
     @Nullable
     @Override
     protected String getJSBundleFile() {
-        SharedPreferences prefs = this.getApplicationContext().getSharedPreferences(RNAU_SHARED_PREFERENCES, this.getApplicationContext().MODE_PRIVATE);
-        String bundle = prefs.getString(RNAU_STORED_VERSION, "bundle");
-        String jsBundleFile = getDir("jsCode", this.getApplicationContext().MODE_PRIVATE).getAbsolutePath() + "/bundle"+ bundle +"/index.android.bundle";
-        File file = new File(jsBundleFile);
-        return file.exists() ? jsBundleFile : null;
+//        SharedPreferences prefs = this.getApplicationContext().getSharedPreferences(RNAU_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+//        String bundle = prefs.getString(RNAU_STORED_VERSION, "bundle");
+//        String jsBundleFile = getDir("jsCode", Context.MODE_PRIVATE).getAbsolutePath() + "/bundle"+ bundle +"/index.android.bundle";
+//        File file = new File(jsBundleFile);
+//        return file.exists() ? jsBundleFile : null;
+        return null;
     }
 
     @Override

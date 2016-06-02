@@ -39,6 +39,7 @@ let Validation = require('../../comp/utils/validation');
 let MyBusiness = require('../home/myBusiness');
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let DictStyle = require('../../constants/dictStyle');
+let LoadExtendImage = require('../../comp/utils/loadExtendImage');
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
 let MarketStore = require('../../framework/store/marketStore');
@@ -82,6 +83,7 @@ let Publish = React.createClass({
       bizCategory: filterType != null ? filterType.category : categoryArr.length == 0 ? [] : categoryArr[0],
       amount: 0,
       fileUrlList: [],
+      imageUploadUrlList: [],
 
       keyboardSpace: 0,
       scrollHeight: screenHeight - 108
@@ -405,23 +407,44 @@ let Publish = React.createClass({
         allowsEditing={false}
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
       >
-        <Lightbox imageSource={{uri:rowData}}
-                  navigator={this.props.navigator}
-                  underlayColor="#f7f7f7"
-                  deleteHeader={()=>{
-                    let arr = this.state.fileUrlList;
-                    _.pullAt(arr,rowID);
-                    this.setState({fileUrlList: arr});
-                    }}
+        <LoadExtendImage style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+                         localPath={rowData}
+                         uploadSuccess={(res)=>{
+                         let arr = this.state.imageUploadUrlList;
+                            if (rowID > 5) {
+                              arr.push(res.fileUrl);
+                            } else {
+                              arr[rowID] = res.fileUrl;
+                            }
+                            this.setState({
+                              imageUploadUrlList: arr
+                            });
+                            console.log('成功');
+                         }}
+                         uploadfailed={()=> console.log('失败')}
+                         jobMode="upload"
         >
-          <Image
-            style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-            source={{uri:uri}}
-          />
-        </Lightbox>
+        </LoadExtendImage>
+
       </ImagePicker>
     )
   },
+
+//<Lightbox imageSource={{uri:rowData}}
+//          navigator={this.props.navigator}
+//          underlayColor="#f7f7f7"
+//          deleteHeader={()=>{
+//                    let arr = this.state.fileUrlList;
+//                    _.pullAt(arr,rowID);
+//                    this.setState({fileUrlList: arr});
+//                    }}
+//>
+//  <Image
+//    style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+//    source={{uri:uri}}
+//  />
+//</Lightbox>
+
   renderRemarks: function (isFromIM) {
     if (!isFromIM) {
       return (
@@ -560,7 +583,7 @@ let Publish = React.createClass({
       bizOrientation: this.state.bizOrientation,
       bizCategory: this.state.bizCategory.displayCode,
       amount: this.state.amount,
-      fileUrlList: this.state.fileUrlList
+      fileUrlList: this.state.imageUploadUrlList
     };
     let item = {
       bizCategory: (this.state.bizCategory == '') ? '资金业务' : this.state.bizCategory.displayName,
@@ -673,25 +696,28 @@ let Publish = React.createClass({
   },
 
   handleSendImage(uri, index) {
-    this.props.exec(() => {
-      return ImAction.uploadImage(uri)
-        .then((response) => {
-          let arr = this.state.fileUrlList;
-          if (index > 5) {
-            arr.push(response.fileUrl);
-          } else {
-            arr[index] = response.fileUrl;
-          }
-          this.setState({
-            fileUrlList: arr
-          });
-        }).catch((errorData) => {
-        console.log('Image upload error ' + JSON.stringify(errorData));
-        throw errorData;
-        }).catch((errorData) => {
-          throw errorData;
-        });
+
+    let arr = this.state.fileUrlList;
+    if (index > 5) {
+      arr.push(uri);
+    } else {
+      arr[index] = uri;
+    }
+    this.setState({
+      fileUrlList: arr
     });
+
+    //this.props.exec(() => {
+    //  return ImAction.uploadImage(uri)
+    //    .then((response) => {
+    //
+    //    }).catch((errorData) => {
+    //    console.log('Image upload error ' + JSON.stringify(errorData));
+    //    throw errorData;
+    //    }).catch((errorData) => {
+    //      throw errorData;
+    //    });
+    //});
   },
 
   handleImageError(error) {

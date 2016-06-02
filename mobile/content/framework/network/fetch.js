@@ -67,6 +67,25 @@ var UFetch = function (url, param) {
   });
 };
 
+var DPUFetch = function (url, param) {
+  return new Promise((resolve, reject) => {
+    qiniu.conf.ACCESS_KEY = ImageAk;
+    qiniu.conf.SECRET_KEY = ImageSk;
+    let fileName = param.name;
+    var putPolicy = new qiniu.auth.PutPolicy2(
+      {scope: ImageBkt + ':' + fileName}
+    );
+    var uptoken = putPolicy.token();
+    qiniu.rpc.uploadImage(param.uri, fileName, uptoken, function (resp) {
+      if (resp.status === 200) {
+        resolve({fileUrl: ImageHost + fileName});
+      } else {
+        reject(resp.status);
+      }
+    });
+  });
+};
+
 var UFetchBak = function (url, param, callback, failure, options) {
   var headers = {
     'Accept': 'application/json',
@@ -131,5 +150,6 @@ module.exports = {
   BFetch: BFetch,
   PFetch: PFetch,
   UFetch: UFetch,
+  DPUFetch: DPUFetch,
   BFetch1: BFetch1
 };
