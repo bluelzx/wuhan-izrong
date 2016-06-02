@@ -279,7 +279,7 @@ let BusinessDetail = React.createClass({
         {
           this.state.fileUrlList.map((item, index) => {
 
-            let uri = item;
+            let uri = item + ImageSize50;
 
             return (
               <LoadExtendImage
