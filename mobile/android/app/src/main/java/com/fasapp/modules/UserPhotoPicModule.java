@@ -26,7 +26,9 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.fasapp.utils.LogUtils;
+import com.fasapp.utils.PatternUtils;
 import com.fasapp.utils.SDCardUtils;
+import com.fasapp.utils.T;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.ByteArrayOutputStream;
@@ -37,26 +39,35 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
+import java.util.List;
+
+import cn.finalteam.galleryfinal.FunctionConfig;
+import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.model.PhotoInfo;
 
 /**
  * Created by vison on 16/4/11.
  */
-public class UserPhotoPicModule extends ReactContextBaseJavaModule implements ActivityEventListener {
+public class UserPhotoPicModule extends ReactContextBaseJavaModule {
     private static final int USER_IMAGE_REQUEST_CODE = 0x01;
     private static final int USER_CAMERA_REQUEST_CODE = 0x02;
     private Callback mCallback;
-    private boolean crop;
-    private String fileName;
-    private WritableMap response;
+    private boolean mCrop;
+    private String mFileName;
+    private WritableMap mResponse;
     private File file;
     private Uri uri;
-    private int size;
-    private int aspectX;
-    private int aspectY;
+    private int mAspectX;
+    private int mAspectY;
+    private final int REQUEST_CODE_CAMERA = 1000;
+    private final int REQUEST_CODE_GALLERY = 1001;
+    private final int REQUEST_CODE_CROP = 1002;
+    private final FunctionConfig functionConfig = new FunctionConfig.Builder().build();
+    private FunctionConfig mCropConfig;
+
 
     public UserPhotoPicModule(ReactApplicationContext reactContext) {
         super(reactContext);
-        reactContext.addActivityEventListener(this);
     }
 
     @Override
@@ -118,6 +129,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
     @ReactMethod
     public void showImagePic(String type, boolean needCrop, String name, int aspectX, int aspectY, Callback callback) {
         showImagePicBySize(type, needCrop, name, aspectX, aspectY, callback, 300);
+
     }
 
     @ReactMethod
@@ -125,21 +137,27 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         File jsCode = getReactApplicationContext().getDir("JSCode", Context.MODE_PRIVATE);
         LogUtils.i("jsCode", jsCode.getPath());
         getFiles(jsCode.getPath());
-        this.size = size;
-        crop = needCrop;
-        fileName = new Date().getTime() + ".png";
-        mCallback = callback;
-        this.aspectX = aspectX;
-        this.aspectY = aspectY;
+        this.mCrop = needCrop;
+        this.mFileName = name;
+        this.mCallback = callback;
+        this.mAspectX = aspectX;
+        this.mAspectY = aspectY;
+        mCropConfig = new FunctionConfig.Builder()
+                .setEnableCrop(true)
+                .setEnableRotate(true)
+                .setCropSquare(false)
+                .setEnablePreview(true)
+                .setMutiSelectMaxSize(8)
+                .build();
         switch (type) {
             case "all":
-                showSelectDdialog(callback);
+                showSelectDdialog();
                 break;
             case "library":
-                launchImage(callback);
+                launchImage();
                 break;
             case "camera":
-                launchCamera(callback);
+                launchCamera();
                 break;
         }
     }
@@ -157,7 +175,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
         }
     }
 
-    private void showSelectDdialog(final Callback callback) {
+    private void showSelectDdialog() {
         Activity currentActivity = getCurrentActivity();
         String[] items = {"拍照上传", "本地上传"};
         new AlertDialog.Builder(currentActivity)
@@ -166,10 +184,10 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                launchCamera(callback);
+                                launchCamera();
                                 break;
                             case 1:
-                                launchImage(callback);
+                                launchImage();
                                 break;
                         }
                     }
@@ -184,103 +202,91 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void launchCamera(Callback callback) {
-        Activity activity = getCurrentActivity();
-        mCallback = callback;
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // 判断存储卡是否可用，存储照片文件
+    public void launchCamera() {
         if (SDCardUtils.hasSdcard()) {
-            file = new File(Environment.getExternalStorageDirectory(), fileName);
-            uri = Uri.fromFile(file);
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            Log.d("Directory", Environment.getExternalStorageDirectory().toString() + fileName);
-            File file = new File(Environment.getExternalStorageDirectory(), fileName);
-            if (file.exists()) {
-                file.delete();
-            }
-        }
-        if (activity != null) {
-            activity.startActivityForResult(cameraIntent, USER_CAMERA_REQUEST_CODE);
+            GalleryFinal.openCamera(REQUEST_CODE_CAMERA, functionConfig, mOnHanlderResultCallback);
+        } else {
+            Toast.makeText(getCurrentActivity(), "请检查SD卡是否挂载", Toast.LENGTH_SHORT).show();
         }
     }
 
     @ReactMethod
-    public void launchImage(Callback callback) {
-        mCallback = callback;
-        Activity activity = getCurrentActivity();
-        Intent imageIntent;
-        if (Build.VERSION.SDK_INT < 19) {
-            imageIntent = new Intent();
-            imageIntent.setAction(Intent.ACTION_GET_CONTENT);
-            imageIntent.setType("image/*");
-            try {
-                activity.startActivityForResult(imageIntent, USER_IMAGE_REQUEST_CODE);
-            } catch (Exception e) {
-                Log.d("Exception", e.toString());
-            }
+    public void launchImage() {
+        if (SDCardUtils.hasSdcard()) {
+            GalleryFinal.openGallerySingle(REQUEST_CODE_GALLERY, functionConfig, mOnHanlderResultCallback);
         } else {
-            imageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            imageIntent.setType("image/*");
-            try {
-                activity.startActivityForResult(imageIntent, USER_IMAGE_REQUEST_CODE);
-            } catch (Exception e) {
-                Log.d("Exception", e.toString());
+            Toast.makeText(getCurrentActivity(), "请检查SD卡是否挂载", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //选择图片或拍照后回调
+    private GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback = new GalleryFinal.OnHanlderResultCallback() {
+        @Override
+        public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
+            PhotoInfo info = resultList.get(0);
+            String path = info.getPhotoPath();
+            mResponse = Arguments.createMap();
+            switch (reqeustCode) {
+                case REQUEST_CODE_CAMERA:
+                    if (mCrop) {
+                        GalleryFinal.openCrop(REQUEST_CODE_CROP, path, mOnHanlderResultCallback);
+                    } else {
+                        mResponse.putString("uri", path);
+                        mCallback.invoke(mResponse);
+                    }
+                    break;
+                case REQUEST_CODE_GALLERY:
+                    if (mCrop) {
+                        GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
+                    } else {
+                        mResponse.putString("uri", path);
+                        mCallback.invoke(mResponse);
+                    }
+                    break;
+                case REQUEST_CODE_CROP:
+                    mResponse.putString("uri", path);
+                    mCallback.invoke(mResponse);
+                    break;
+                default:
+                    break;
             }
         }
+
+        @Override
+        public void onHanlderFailure(int requestCode, String errorMsg) {
+            Toast.makeText(getCurrentActivity(), errorMsg, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    //将content:  uri的bitMap缓存到本地，转化为file： uri
+    private Uri saveFile(String path) {
+        File image;
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
+            Bitmap tempBitMap = BitmapFactory.decodeFile(path, options);
+
+            File tmpDir = new File(Environment.getExternalStorageDirectory() + "/fas_wuhan");
+            if (!tmpDir.exists()) {
+                tmpDir.mkdir();
+            }
+            image = new File(tmpDir + "/" + mFileName + ".png");
+            FileOutputStream fos = new FileOutputStream(image);
+            tempBitMap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+            tempBitMap.recycle();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return Uri.fromFile(image);
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) {
-            return;
-        }
-        switch (requestCode) {
-            case USER_CAMERA_REQUEST_CODE:
-                if (SDCardUtils.hasSdcard()) {
-                    if (crop) {
-                        beginCrop(uri);
-                    } else {
-                        Uri uri1 = compressImage(file, file.getPath());
-                        response = Arguments.createMap();
-                        if (uri1 != null) {
-                            response.putString("uri", uri1.toString());
-                        }
-                        mCallback.invoke(response);
-                    }
-                }
-                break;
-            case USER_IMAGE_REQUEST_CODE:
-                Uri uri = null;
-                if (data == null) {
-                    return;
-                }
-                uri = data.getData();
-                if (crop) {
-                    beginCrop(uri);
-                } else {
-                    File tempFile = new File(Environment.getExternalStorageDirectory(), fileName);
-                    String[] proj = {MediaStore.Images.Media.DATA};
-                    @SuppressWarnings("deprecation")
-                    Cursor cursor = getCurrentActivity().managedQuery(data.getData(), proj, null, null, null);
-                    int photocolumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    cursor.moveToFirst();
-                    String path = cursor.getString(photocolumn);
-                    Uri uri1 = compressImage(tempFile, path);
-                    response = Arguments.createMap();
-                    if (uri1 != null) {
-                        response.putString("uri", uri1.toString());
-                    }
-                    mCallback.invoke(response);
-                }
-                break;
-            case Crop.REQUEST_CROP:
-                handleCrop(resultCode, data);
-                break;
-        }
-    }
-
-    private Uri compressImage(File file, String path) {
+    public static Uri compressImage(File file, String path, int size) {
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 2;
@@ -292,19 +298,19 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                 // 保存图片
                 FileOutputStream fos = null;
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.WEBP, 100, baos);
-                System.out.println("aaaabbbbm" + baos.toByteArray().length / 1024);
-//                int per = 100;
-//                while (baos.toByteArray().length / 1024 > size && per > 20) {
-//                    System.out.println("bbbbn " + baos.toByteArray().length / 1024);
-//                    baos.reset();
-//                    bitmap.compress(Bitmap.CompressFormat.WEBP, per, baos);
-//                    per -= 10;
-//                    System.out.println("aaaabbbbv " + baos.toByteArray().length / 1024 + " 9999 " + per);
-//                }
-//                System.out.println("aaaabbbbc" + per);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                System.out.println("aaaabbbb" + baos.toByteArray().length / 1024);
+                int per = 100;
+                while (baos.toByteArray().length / 1024 > size) {
+                    System.out.println("bbbb " + baos.toByteArray().length / 1024);
+                    baos.reset();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, per, baos);
+                    per -= 10;
+                    System.out.println("aaaabbbb " + baos.toByteArray().length / 1024 + " 9999 " + per);
+                }
+                System.out.println("aaaabbbb" + per);
                 fos = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.WEBP, 75, fos);
+                bitmap.compress(Bitmap.CompressFormat.PNG, per, fos);
                 fos.flush();
                 fos.close();
             }
@@ -313,85 +319,11 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule implements Ac
                 bitmap = null;
                 System.gc();
             }
-            testFileSize(file);
             return Uri.fromFile(file);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-
-    private void testFileSize(File file) {
-        try {
-            FileInputStream is = new FileInputStream(file.getPath());
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 1;
-            Bitmap image = BitmapFactory.decodeStream(is, null, options);
-            is.close();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            int i = baos.toByteArray().length / 1024;
-            System.out.println("aaaabbbbx" + i);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //发送事件到js代码
-    private void sendEvent(ReactContext reactContext, String eventName, WritableMap params) {
-        try {
-            reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                    .emit(eventName, params);
-        } catch (Exception e) {
-            Log.d("Exception", e.toString());
-        }
-    }
-
-    //开始裁剪，到裁剪界面
-    private void beginCrop(Uri source) {
-        Uri destination = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), new Date().getTime() + ".jpg"));
-        try {
-            //Crop.of(source, destination).asSquare().start(getCurrentActivity());
-            Crop.of(source,destination).withAspect(this.aspectX,this.aspectY).start(getCurrentActivity());
-        } catch (Exception e) {
-            Log.d("Exception", e.toString());
-        }
-    }
-
-    //剪切后回调的方法,返回裁剪后的uri
-    private void handleCrop(int resultCode, Intent result) {
-        if (resultCode == Activity.RESULT_OK) {
-            Log.d("Crop", Crop.getOutput(result) + "00");
-            Uri uri = Crop.getOutput(result);
-            response = Arguments.createMap();
-            response.putString("uri", uri.toString());
-            mCallback.invoke(response);
-        } else if (resultCode == Crop.RESULT_ERROR) {
-            Toast.makeText(getCurrentActivity(), "裁剪出错", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    //将content:  uri的bitMap缓存到本地，转化为file： uri
-    private Uri saveBitMap(Bitmap bm) {
-        File tmpDir = new File(Environment.getExternalStorageDirectory() + "/Zxbill");
-        if (!tmpDir.exists()) {
-            tmpDir.mkdir();
-        }
-        File image = new File(tmpDir.getAbsolutePath() + "/" + fileName + ".png");
-        try {
-            FileOutputStream fos = new FileOutputStream(image);
-            bm.compress(Bitmap.CompressFormat.PNG, 85, fos);
-            fos.flush();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return Uri.fromFile(image);
-    }
-
 }
 

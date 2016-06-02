@@ -57,7 +57,7 @@ let ImagePicker = React.createClass({
       noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
       storageOptions: { // if this key is provided, the image will get saved in the documents directory (rather than a temporary directory)
         skipBackup: true, // image will NOT be backed up to icloud
-        path: 'images' // will save image at /Documents/images rather than the root
+        path: 'fasCache' // will save image at /Documents/images rather than the root
       },
       language: 'Chinese'
     };

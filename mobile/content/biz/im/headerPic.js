@@ -51,10 +51,11 @@ let HeaderPic = React.createClass({
 
   render: function () {
     let {name, photoFileUrl, badge, certified = false, source=false, showBadge=false} = this.props;
+    photoFileUrl = Cache.getCache(photoFileUrl,name);
     if (!_.isEmpty(photoFileUrl)) {
         return (
           <View>
-            <Image style={[styles.head]} resizeMode="cover" source={Cache.getCache({uri: photoFileUrl},name)}/>
+            <Image style={[styles.head]} resizeMode="cover" source={{uri:photoFileUrl}}/>
 
             {this.unReadIcon(badge, showBadge)}
               {(()=>{

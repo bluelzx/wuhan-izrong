@@ -30,6 +30,7 @@
     "qs": "^6.1.0",
     "react-native": "^0.21.0",
     "react-native-alphabetlistview": "^0.1.1",
+    "react-native-browser": "^0.5.2",
     "react-native-device-info": "^0.9.3",
     "react-native-dismiss-keyboard": "0.0.3",
     "react-native-fs": "^1.4.0",
