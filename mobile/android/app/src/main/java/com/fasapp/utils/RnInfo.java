@@ -101,9 +101,7 @@ public class RnInfo {
                 new RealmReactPackage(),
                 new VectorIconsPackage(),
                 new RNSharePackage(),
-                new RNDeviceInfo(),
-                new ZXReactPackage(getActivity()),
-                new ExtraDimensionsPackage(getActivity())
+                new RNDeviceInfo()
         );
     }
 }

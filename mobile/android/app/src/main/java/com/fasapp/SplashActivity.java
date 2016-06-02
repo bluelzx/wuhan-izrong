@@ -38,7 +38,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
 
     public void initData() {
-//        RNCacheViewManager.init(SplashActivity.this, new RnInfo("FasApp", new Bundle()));
+//        RNCacheViewManager.init(SplashActivity.this, new RnInfo("FasApp", null));
         AnimationSet set = new AnimationSet(false);
         AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1f);
         set.addAnimation(alphaAnimation);
@@ -54,7 +54,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
     @Override
     public void onAnimationEnd(Animation animation) {
-//        finish();
+        finish();
         startActivity(new Intent(SplashActivity.this, MainActivity.class));
     }
 
