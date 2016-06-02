@@ -167,6 +167,17 @@ var Main = React.createClass({
           '    您的帐户已被停用,请联系管理员',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
         );
+      }  else if (AppStore.isForceUpdate()) {
+        Alert(
+          '    当前版本不支持，请更新最新版本',
+          {text: '确定', onPress: () => {
+            if(Platform.OS == 'ios'){
+              Linking.openURL('itms-apps://itunes.apple.com/app/id1113856020');
+            }else{
+              Linking.openURL('http://file.izirong.com/android/izirong.apk');
+            }
+          }}
+        );
       } else {
         Promise.resolve().then((resolve) => {
           this.refs.navigator.resetTo({comp: Login});
@@ -209,6 +220,8 @@ var Main = React.createClass({
             }else if (errorData.msgCode == 'USER_HAS_BEEN_FROZEN') {
               AppStore.freezAccount();
             }else if (errorData.msgCode == 'USER_HAS_BEEN_DELETED') {
+              AppStore.deleteLoginUser()
+            } else if (errorData.msgCode == 'APP_VERSION_NOT_SUPPORT') {
               AppStore.deleteLoginUser()
             }  else {
               Alert(errorData.msgContent);

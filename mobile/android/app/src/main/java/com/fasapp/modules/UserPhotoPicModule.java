@@ -128,12 +128,12 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void showImagePic(String type, boolean needCrop, String name, int aspectX, int aspectY, Callback callback) {
-        showImagePicBySize(type, needCrop, name, aspectX, aspectY, callback, 300);
+        showImagePicBySize(type, needCrop, name, aspectX, aspectY, callback);
 
     }
 
     @ReactMethod
-    public void showImagePicBySize(String type, boolean needCrop, String name, int aspectX, int aspectY, Callback callback, int size) {
+    public void showImagePicBySize(String type, boolean needCrop, String name, int aspectX, int aspectY, Callback callback) {
         File jsCode = getReactApplicationContext().getDir("JSCode", Context.MODE_PRIVATE);
         LogUtils.i("jsCode", jsCode.getPath());
         getFiles(jsCode.getPath());
@@ -203,24 +203,16 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void launchCamera() {
-        if (SDCardUtils.hasSdcard()) {
-            GalleryFinal.openCamera(REQUEST_CODE_CAMERA, functionConfig, mOnHanlderResultCallback);
-        } else {
-            Toast.makeText(getCurrentActivity(), "请检查SD卡是否挂载", Toast.LENGTH_SHORT).show();
-        }
+        GalleryFinal.openCamera(REQUEST_CODE_CAMERA, functionConfig, mOnHanlderResultCallback);
     }
 
     @ReactMethod
     public void launchImage() {
-        if (SDCardUtils.hasSdcard()) {
-            GalleryFinal.openGallerySingle(REQUEST_CODE_GALLERY, functionConfig, mOnHanlderResultCallback);
-        } else {
-            Toast.makeText(getCurrentActivity(), "请检查SD卡是否挂载", Toast.LENGTH_SHORT).show();
-        }
+        GalleryFinal.openGallerySingle(REQUEST_CODE_GALLERY, functionConfig, mOnHanlderResultCallback);
     }
 
     //选择图片或拍照后回调
-    private GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback = new GalleryFinal.OnHanlderResultCallback() {
+    public GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback = new GalleryFinal.OnHanlderResultCallback() {
         @Override
         public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
             PhotoInfo info = resultList.get(0);
@@ -229,9 +221,9 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
             switch (reqeustCode) {
                 case REQUEST_CODE_CAMERA:
                     if (mCrop) {
-                        GalleryFinal.openCrop(REQUEST_CODE_CROP, path, mOnHanlderResultCallback);
+                        GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        mResponse.putString("uri", path);
+                        mResponse.putString("uri", saveFile(path).toString());
                         mCallback.invoke(mResponse);
                     }
                     break;
@@ -239,7 +231,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        mResponse.putString("uri", path);
+                        mResponse.putString("uri", saveFile(path).toString());
                         mCallback.invoke(mResponse);
                     }
                     break;
@@ -265,14 +257,14 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 2;
             Bitmap tempBitMap = BitmapFactory.decodeFile(path, options);
-
-            File tmpDir = new File(Environment.getExternalStorageDirectory() + "/fas_wuhan");
+            File tmpDir = new File(getReactApplicationContext().getPackageResourcePath() + "/file/fasCache");
+            LogUtils.d("tmpDir",file.getAbsolutePath());
             if (!tmpDir.exists()) {
                 tmpDir.mkdir();
             }
-            image = new File(tmpDir + "/" + mFileName + ".png");
+            image = new File(tmpDir + "/" + mFileName + ".jpg");
             FileOutputStream fos = new FileOutputStream(image);
-            tempBitMap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            tempBitMap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
             tempBitMap.recycle();
@@ -284,46 +276,6 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
             return null;
         }
         return Uri.fromFile(image);
-    }
-
-    public static Uri compressImage(File file, String path, int size) {
-        try {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 2;
-            Bitmap bitmap = BitmapFactory.decodeFile(path, options);
-            if (bitmap != null) {
-                if (file.exists()) {
-                    file.delete();
-                }
-                // 保存图片
-                FileOutputStream fos = null;
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                System.out.println("aaaabbbb" + baos.toByteArray().length / 1024);
-                int per = 100;
-                while (baos.toByteArray().length / 1024 > size) {
-                    System.out.println("bbbb " + baos.toByteArray().length / 1024);
-                    baos.reset();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, per, baos);
-                    per -= 10;
-                    System.out.println("aaaabbbb " + baos.toByteArray().length / 1024 + " 9999 " + per);
-                }
-                System.out.println("aaaabbbb" + per);
-                fos = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.PNG, per, fos);
-                fos.flush();
-                fos.close();
-            }
-            if (bitmap != null && !bitmap.isRecycled()) {
-                bitmap.recycle();
-                bitmap = null;
-                System.gc();
-            }
-            return Uri.fromFile(file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }
 
