@@ -55,7 +55,7 @@ var AboutUs = React.createClass({
   updateApp(){
     console.log("update");
     if(Platform.OS == 'ios'){
-      Linking.openURL('itms-apps://itunes.apple.com/app/id 1113856020');
+      Linking.openURL('itms-apps://itunes.apple.com/app/id1113856020');
     }else{
       Linking.openURL('http://file.izirong.com/android/izirong.apk');
     }

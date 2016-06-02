@@ -2,8 +2,18 @@ package com.fasapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 
 import com.facebook.react.ReactActivity;
+import com.fasapp.utils.UILImageLoader;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.rnfs.RNFSPackage;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -21,6 +31,10 @@ import javax.annotation.Nullable;
 
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 import cl.json.RNSharePackage;
+import cn.finalteam.galleryfinal.CoreConfig;
+import cn.finalteam.galleryfinal.FunctionConfig;
+import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.ThemeConfig;
 import io.realm.react.RealmReactPackage;
 
 public class MainActivity extends ReactActivity {
@@ -80,10 +94,17 @@ public class MainActivity extends ReactActivity {
     @Nullable
     @Override
     protected String getJSBundleFile() {
-        SharedPreferences prefs = this.getApplicationContext().getSharedPreferences(RNAU_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences prefs = this.getApplicationContext().getSharedPreferences(RNAU_SHARED_PREFERENCES, this.getApplicationContext().MODE_PRIVATE);
         String bundle = prefs.getString(RNAU_STORED_VERSION, "bundle");
-        String jsBundleFile = getDir("jsCode", Context.MODE_PRIVATE).getAbsolutePath() + "/bundle"+ bundle +"/index.android.bundle";
+        String jsBundleFile = getDir("jsCode", this.getApplicationContext().MODE_PRIVATE).getAbsolutePath() + "/bundle"+ bundle +"/index.android.bundle";
         File file = new File(jsBundleFile);
         return file.exists() ? jsBundleFile : null;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+    }
+
+
 }
