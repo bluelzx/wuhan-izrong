@@ -520,7 +520,6 @@
 				00E356EF1AD99517003FC87E /* FasAppTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				C487EE28A0B44E689C0281F7 /* Resources */,
-				583992CD1CD844F000025A6B /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -546,6 +545,7 @@
 		C487EE28A0B44E689C0281F7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				583992CD1CD844F000025A6B /* Frameworks */,
 				5015CBD51F594CADA2A9A158 /* Entypo.ttf */,
 				2EDCC47CDB7C4B298EA53397 /* EvilIcons.ttf */,
 				505A90BCAE64443FAF5EF7F6 /* FontAwesome.ttf */,

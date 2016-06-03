@@ -110,7 +110,7 @@ let _updateSession = function (param, notAdd, noticeType, currUserId) {
     });
     if (groupSession.length > 0) {
       if (noticeType == SESSION_TYPE.INVITE) {
-        let wd = _realm.objects(NOTICE).filtered('noticeId = \'' + param.sessionId + '\'');
+        let wd = _realm.objects(NOTICE).filtered('\'' + param.sessionId + '\' =  noticeId');
         if (wd.length > 0 && wd) {
           param.badge = groupSession[0].badge;
         } else {
