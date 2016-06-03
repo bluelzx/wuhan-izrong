@@ -70,6 +70,7 @@ let Register_accountInfo = React.createClass({
   },
 
   toPage: function (name, param, callback) {
+    dismissKeyboard();
     const {navigator} = this.props;
     if (navigator) {
       navigator.push(
