@@ -208,8 +208,8 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        FileUtils.copyFile(path, cachePath);
-                        mResponse.putString("uri", "file://" + cachePath);
+                        String uri = FileUtils.copyFile1(path, cachePath);
+                        mResponse.putString("uri", "file://" + uri);
                         mCallback.invoke(mResponse);
                     }
                     break;
@@ -217,8 +217,8 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        FileUtils.copyFile(path, cachePath);
-                        mResponse.putString("uri", "file://" + cachePath);
+                        String uri = FileUtils.copyFile1(path, cachePath);
+                        mResponse.putString("uri", "file://" + uri);
                         mCallback.invoke(mResponse);
                     }
                     break;
