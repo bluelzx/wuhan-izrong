@@ -281,7 +281,7 @@ var Main = React.createClass({
       );
     }
 
-    var initComp = Upload;
+    var initComp = Login;
     //var initComp = Chat;
     if (this.state.token) {
       initComp = TabView;

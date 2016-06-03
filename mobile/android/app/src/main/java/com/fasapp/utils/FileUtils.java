@@ -359,6 +359,7 @@ public class FileUtils {
         }
     }
 
+    //将图片从一个路径复制到另一个路径
     public static String copyFile(String oldPath, String newPath) {
         File oldFile = new File(oldPath);
         File newFile = new File(newPath);
