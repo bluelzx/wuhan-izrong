@@ -115,22 +115,22 @@ let ImSocket = {
 
   send: (message)=>_send(message),
   trace: (actionType, content) => {
-    setTimeout(
-      ()=>{_send({
-        msgType: COMMAND_TYPE.KPI_APP,
-        command: COMMAND_TYPE.KPI_APP,
-        // time: new Date(),
-        // userId: 'testUser',
-        actionType: actionType,
-        content: content,
-        deviceType: Platform.OS
-      }).then(() => {
-        //
-      }).catch((error) => {
-        console.log('### KPI ### ' + error);
-      })},
-      0
-    );
+    //setTimeout(
+    //  ()=>{_send({
+    //    msgType: COMMAND_TYPE.KPI_APP,
+    //    command: COMMAND_TYPE.KPI_APP,
+    //    // time: new Date(),
+    //    // userId: 'testUser',
+    //    actionType: actionType,
+    //    content: content,
+    //    deviceType: Platform.OS
+    //  }).then(() => {
+    //    //
+    //  }).catch((error) => {
+    //    console.log('### KPI ### ' + error);
+    //  })},
+    //  0
+    //);
   },
 };
 
