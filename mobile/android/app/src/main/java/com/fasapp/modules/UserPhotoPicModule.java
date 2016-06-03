@@ -25,6 +25,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.fasapp.utils.FileUtils;
 import com.fasapp.utils.LogUtils;
 import com.fasapp.utils.PatternUtils;
 import com.fasapp.utils.SDCardUtils;
@@ -59,6 +60,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
     private File file;
     private Uri uri;
     private boolean cropSquare;
+    private String cachePath;
     private final int REQUEST_CODE_CAMERA = 1000;
     private final int REQUEST_CODE_GALLERY = 1001;
     private final int REQUEST_CODE_CROP = 1002;
@@ -133,10 +135,11 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void showImagePicBySize(String type, boolean needCrop, String name,boolean cropSquare, Callback callback) {
+    public void showImagePicBySize(String type, boolean needCrop, String name, boolean cropSquare, Callback callback) {
         this.mCrop = needCrop;
         this.mFileName = name;
         this.mCallback = callback;
+        cachePath = getReactApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/fasCache/" + mFileName + ".jpg";
         mCropConfig = new FunctionConfig.Builder()
                 .setEnableCrop(needCrop)
                 .setEnableRotate(true)
@@ -154,19 +157,6 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
             case "camera":
                 launchCamera();
                 break;
-        }
-    }
-
-    private void getFiles(String filePath) {
-        File root = new File(filePath);
-        File[] files = root.listFiles();
-        for (File file : files) {
-            if (file.isDirectory()) {
-                getFiles(file.getAbsolutePath());
-                LogUtils.i("jsCode", file.getAbsolutePath());
-            } else {
-                LogUtils.i("jsCode", file.getAbsolutePath());
-            }
         }
     }
 
@@ -218,7 +208,8 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        mResponse.putString("uri", saveFile(path).toString());
+                        FileUtils.copyFile(path, cachePath);
+                        mResponse.putString("uri", "file://" + cachePath);
                         mCallback.invoke(mResponse);
                     }
                     break;
@@ -226,12 +217,14 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        mResponse.putString("uri", saveFile(path).toString());
+                        FileUtils.copyFile(path, cachePath);
+                        mResponse.putString("uri", "file://" + cachePath);
                         mCallback.invoke(mResponse);
                     }
                     break;
                 case REQUEST_CODE_CROP:
-                    mResponse.putString("uri", saveFile(path).toString());
+                    String uri = FileUtils.copyFile1(path, cachePath);
+                    mResponse.putString("uri", "file://" + uri);
                     mCallback.invoke(mResponse);
                     break;
                 default:
@@ -245,6 +238,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
         }
     };
 
+
     //将content:  uri的bitMap缓存到本地，转化为file： uri
     private Uri saveFile(String path) {
         File image;
@@ -255,7 +249,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
             Bitmap tempBitMap = BitmapFactory.decodeStream(is, null, options);
             is.close();
 
-            File tmpDir = new File(this.getReactApplicationContext().getExternalFilesDir(null).getAbsolutePath()+ "/fasCache");
+            File tmpDir = new File(this.getReactApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/fasCache");
             //File tmpDir = new File(ExternalStorage.getSdCardPath()+ "/fasCache");
             if (!tmpDir.exists()) {
                 tmpDir.mkdir();

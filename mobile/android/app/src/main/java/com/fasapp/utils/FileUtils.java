@@ -170,7 +170,7 @@ public class FileUtils {
     /**
      * Deletes a file. If file is a directory, delete it and all
      * sub-directories.
-     * <p>
+     * <p/>
      * The difference between File.delete() and this method are:
      * <ul>
      * <li>A directory to be deleted does not have to be empty.</li>
@@ -202,7 +202,7 @@ public class FileUtils {
     /**
      * Deletes a file, never throwing an exception. If file is a directory,
      * delete it and all sub-directories.
-     * <p>
+     * <p/>
      * The difference between File.delete() and this method are:
      * <ul>
      * <li>A directory to be deleted does not have to be empty.</li>
@@ -360,11 +360,34 @@ public class FileUtils {
     }
 
     //将图片从一个路径复制到另一个路径
-    public static String copyFile(String oldPath, String newPath) {
+    public static String copyFile1(String oldPath, String newPath) {
         File oldFile = new File(oldPath);
         File newFile = new File(newPath);
         oldFile.renameTo(newFile);
-        return newPath;
+        return newFile.getAbsolutePath();
+    }
+
+    public static void copyFile(String oldPath, String newPath) {
+        try {
+            int bytesum = 0;
+            int byteread = 0;
+            File oldfile = new File(oldPath);
+            if (!oldfile.exists()) { //文件不存在时
+                InputStream inStream = new FileInputStream(oldPath); //读入原文件
+                FileOutputStream fs = new FileOutputStream(newPath);
+                byte[] buffer = new byte[1444];
+                int length;
+                while ((byteread = inStream.read(buffer)) != -1) {
+                    bytesum += byteread; //字节数 文件大小
+                    System.out.println(bytesum);
+                    fs.write(buffer, 0, byteread);
+                }
+                inStream.close();
+            }
+        } catch (Exception e) {
+            System.out.println("复制单个文件操作出错");
+            e.printStackTrace();
+        }
     }
 
 }
