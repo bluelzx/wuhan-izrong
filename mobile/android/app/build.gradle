@@ -138,16 +138,15 @@ android {
     }
 
 dependencies {
+    compile project(':react-native-fs')
     compile project(':react-native-share')
     compile project(':realm')
     compile project(':react-native-vector-icons')
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.facebook.react:react-native:+'
     // From node_modules
     compile project(':react-native-device-info')
     compile fileTree(include: ['*.jar'], dir: 'node_modules/react-native-device-info/android/libs')
-    compile 'cn.finalteam:galleryfinal:1.4.8.4'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile project(':lib')
     compile project(':ExtraDimensions')
@@ -155,4 +154,7 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.11'
     compile files('libs/okhttputils-2_4_1.jar')
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile 'cn.finalteam:galleryfinal:1.4.8.7'
+    compile files('libs/universal-image-loader-1.9.5.jar')
+    compile 'com.android.support:support-v4:23.1.1'
 }

@@ -42,6 +42,7 @@ let QiniuTest = require('../../test/qiniuTest');
 let Upload = require('../../biz/login/uploadNameCard');
 let Account = require('../../biz/login/accountInfo');
 
+const { NETINFO_CONNECTED, NETINFO_DISCONNECTED } = require('../../constants/dictEvent');
 const { KPI_TYPE } = require('../../constants/dictIm');
 const DictStyle = require('../../constants/dictStyle');
 
@@ -81,11 +82,16 @@ var Main = React.createClass({
     AppStore.saveNavigator(this.refs['navigator']);
 
     AppStore.addChangeListener(this._activeApp, 'active_app');
-    AppStore.addChangeListener(this._activeApp,'NETINFO_CONNECTED');
+    AppStore.addChangeListener(this._activeApp, NETINFO_CONNECTED);
+    AppStore.addChangeListener(this._activeApp, NETINFO_DISCONNECTED);
   },
 
   _activeApp: function () {
-    ImSocket.reconnect();
+    if (AppStore.getNetWorkState()) {
+      ImSocket.reconnect();
+    } else {
+      ImSocket.disconnect();
+    }
   },
 
   _handleAppStateChange: (currentAppState) => {
@@ -111,15 +117,16 @@ var Main = React.createClass({
 
   _onAndroidBackPressed: function () {
     if (this._navigator) {
+      let self = this;
       //if (this._navigator.getCurrentRoutes().length > 1) {
       //  this._navigator.pop();
       //  return true;
       //}
-      const nav = this._navigator;
+      const nav = self._navigator;
       const routers = nav.getCurrentRoutes();
       if (routers.length > 1) {
         const top = routers[routers.length - 1];
-        if (top.ignoreBack || top.comp.ignoreBack || this.state.isLoadingVisible) {
+        if (top.ignoreBack || top.comp.ignoreBack || self.state.isLoadingVisible) {
           // 路由或组件上决定这个界面忽略back键
           return true;
         }
@@ -146,20 +153,31 @@ var Main = React.createClass({
       if (AppStore.isFreezing()) {
         Promise.resolve().then((resolve) => {
           this.refs.navigator.resetTo({comp: Login});
-          Alert('  您的帐户已被冻结,请联系系统管理员')
+          Alert('   您的帐户已被冻结,请联系管理员')
         }).catch((e) => {
           Alert('系统异常');
         });
       } else if (AppStore.isForceLogout()) {
         ImSocket.disconnect();
         Alert(
-          '    您的账号已经在其他设备上登录了，您将被强制登出，请确认您的账号密码没有被泄露',
+          '    您的账号已经在其他设备上登录了，您将被强制登出，请确认您的账号密码没有泄露',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
         );
       } else if (AppStore.isDelete()) {
         Alert(
-          '    您的账户已被停用,请联系系统管理员',
+          '    您的帐户已被停用,请联系管理员',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
+        );
+      }  else if (AppStore.isForceUpdate()) {
+        Alert(
+          '    当前版本不支持，请更新最新版本',
+          {text: '确定', onPress: () => {
+            if(Platform.OS == 'ios'){
+              Linking.openURL('itms-apps://itunes.apple.com/app/id1113856020');
+            }else{
+              Linking.openURL('http://file.izirong.com/android/izirong.apk');
+            }
+          }}
         );
       } else {
         Promise.resolve().then((resolve) => {
@@ -204,6 +222,8 @@ var Main = React.createClass({
               AppStore.freezAccount();
             }else if (errorData.msgCode == 'USER_HAS_BEEN_DELETED') {
               AppStore.deleteLoginUser()
+            } else if (errorData.msgCode == 'APP_VERSION_NOT_SUPPORT') {
+              AppStore.deleteLoginUser()
             }  else {
               Alert(errorData.msgContent);
             }
@@ -226,7 +246,6 @@ var Main = React.createClass({
       if (route.tabName) tabName = route.tabName;
       Comp = TabView;
     }
-
     if (Comp == 'publish') {
       Comp = Publish;
     }
@@ -273,14 +292,14 @@ var Main = React.createClass({
 
 
     var modalBackgroundStyle = {
-      backgroundColor: '#000000',
+      backgroundColor: '#000000'
     };
     var innerContainerTransparentStyle = null;
     var activeButtonStyle = {
       backgroundColor: '#ddd'
     };
     var colorStyle = {
-      color: '#000',
+      color: '#000'
     };
 
 
@@ -306,7 +325,9 @@ var Main = React.createClass({
           onDidFocus={(route) => {
             // console.log('### onDidFocus ### ' + route.comp.displayName || route.comp);
             // ImSocket.trace(KPI_TYPE.PAGE, route);
-            ImSocket.trace(KPI_TYPE.PAGE, route.comp.displayName || route.comp);
+            if (AppStore.getNetWorkState()) {
+              ImSocket.trace(KPI_TYPE.PAGE, route.comp.displayName || route.comp);
+            }
           }}
         />
         <Loading

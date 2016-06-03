@@ -10,7 +10,6 @@
 #import "AppDelegate.h"
 
 #import "RCTRootView.h"
-#import "RCTUtils.h"
 
 #import "RCTPushNotificationManager.h"
 #import "ReactNativeAutoUpdater.h"
@@ -55,7 +54,7 @@ typedef enum{
 
     latestJSCodeLocation = [updater latestJSCodeLocation];
   }else if(startType==Debug){
-    latestJSCodeLocation=[NSURL URLWithString:@"http://192.168.64.235:8081/index.ios.bundle?platform=ios"];
+    latestJSCodeLocation=[NSURL URLWithString:@"http://192.168.64.244:8081/index.ios.bundle?platform=ios"];
   }else{
     latestJSCodeLocation=[[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   }

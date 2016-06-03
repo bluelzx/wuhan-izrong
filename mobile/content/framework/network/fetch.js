@@ -67,6 +67,25 @@ var UFetch = function (url, param) {
   });
 };
 
+var DPUFetch = function (url, param) {
+  return new Promise((resolve, reject) => {
+    qiniu.conf.ACCESS_KEY = ImageAk;
+    qiniu.conf.SECRET_KEY = ImageSk;
+    let fileName = param.name;
+    var putPolicy = new qiniu.auth.PutPolicy2(
+      {scope: ImageBkt + ':' + fileName}
+    );
+    var uptoken = putPolicy.token();
+    qiniu.rpc.uploadImage(param.uri, fileName, uptoken, function (resp) {
+      if (resp.status === 200) {
+        resolve({fileUrl: ImageHost + fileName});
+      } else {
+        reject(resp.status);
+      }
+    });
+  });
+};
+
 var UFetchBak = function (url, param, callback, failure, options) {
   var headers = {
     'Accept': 'application/json',
@@ -89,11 +108,11 @@ var rawFetch = function (url, param, callback, failure, option) {
   console.log(param);
   console.log('请求地址:'+url);
   if (!option) option = {};
-  //var _promise = Promise.race([fetch(url, param), new Promise(function (resolve, reject) {
-  //  setTimeout(() => reject(new Error('链接超时')), 2000000);
-  //})]);
+  var _promise = Promise.race([MxFetch.fetch(url, param, 6180), new Promise(function (resolve, reject) {
+    setTimeout(() => reject(new Error('链接超时')), 15000);
+  })]);
  // process(fetch(url, param) ,callback,failure,option);
-  var _promise = MxFetch.fetch(url, param, 6180);
+
   return process(_promise, option);
 };
 
@@ -131,5 +150,6 @@ module.exports = {
   BFetch: BFetch,
   PFetch: PFetch,
   UFetch: UFetch,
+  DPUFetch: DPUFetch,
   BFetch1: BFetch1
 };

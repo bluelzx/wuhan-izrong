@@ -4,7 +4,7 @@ let ImStore = require('../store/imStore');
 let ImSocket = require('../network/imSocket');
 
 let AppLinks = require('../../constants/appLinks');
-let { UFetch } = require('../network/fetch');
+let { UFetch, DPUFetch } = require('../network/fetch');
 // Private Functions
 let _send = (data, bFlag = false, userId, notSend = false) => {
   if (bFlag) {
@@ -18,7 +18,7 @@ let _send = (data, bFlag = false, userId, notSend = false) => {
     .then(() => {
       // ImStore.send();
     }).catch(() => {
-      Alert('网络异常');
+      Alert('请检查网络连接');
     });
 };
 
@@ -26,6 +26,20 @@ let _uploadImage = function (url, fileFieldName) {
   return new Promise((resolve, reject) => {
     UFetch(url, {
       uri: fileFieldName,
+      type: 'image/jpeg',
+      name: fileFieldName
+    }).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _uploadImage2 = function (url, uri, fileFieldName) {
+  return new Promise((resolve, reject) => {
+    DPUFetch(url, {
+      uri: uri,
       type: 'image/jpeg',
       name: fileFieldName
     }).then((response) => {
@@ -49,6 +63,7 @@ let ImAction = {
   send: (data, bFlag, userId, isSend) => _send(data, bFlag, userId, isSend),
   //receive: (data) => ImStore.saveMsg(data),
   uploadImage: (fileFieldName) => _uploadImage(AppLinks.uploadFile, fileFieldName),
+  uploadImage2: (uri, fileFieldName) => _uploadImage2(AppLinks.uploadFile, uri, fileFieldName),
   notificationRegister: (token) => _notificationRegister(token),
   onNotification: (notification) => _onNotification(notification),
   freshNotification: (notification) => _onNotification(notification),

@@ -54,7 +54,18 @@ var productConfig = {
   Dev: true, // Switch for log. true means print.
   Host: 'http://114.55.16.46:80',
   ImHost: '114.55.16.46:3000',
-  //ImgHost: 'http://img.izirong.com/'
+  ImageHost: 'http://img.izirong.com/',
+  ImageBkt: 'wuhan-fas-img',
+  ImageAk: 'iCduUao0AIuRdTqd3_4oqwzU8doDU3vh0sMF1CzD',
+  ImageSk: 'UtrtzaV8CAXgRkajynOnghX24NrS70Qs0RJozPcZ',
+  ImageSize50:'?imageView2/1/w/50/h/50/interlace/1',
+  ImageSize100:'?imageView2/1/w/100/h/100/interlace/1',
+  ImageSizeOrigin:'?imageView2/1/interlace/1'
+};
+var ppConfig = {
+  Dev: true, // Switch for log. true means print.
+  Host: 'http://121.40.51.79:8081',
+  ImHost: '121.40.51.79:3000',
   ImageHost: 'http://img.izirong.com/',
   ImageBkt: 'wuhan-fas-img',
   ImageAk: 'iCduUao0AIuRdTqd3_4oqwzU8doDU3vh0sMF1CzD',
@@ -70,7 +81,7 @@ var lyuConfig = {
   ImHost: '192.168.64.205:6379'
 };
 
-var Config = productConfig;
+var Config = ppConfig;
 
 module.exports = Config;
 //module.exports = function () {

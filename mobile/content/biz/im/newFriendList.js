@@ -129,12 +129,12 @@ let NewFriendList = React.createClass({
           >
           <View
             style={{
-            flexDirection:'row', justifyContent:'space-between',flex:1}}
+            flexDirection:'row', justifyContent:'space-between',flex:1,alignItems:'center'}}
           >
             <View style={{flex:2}}>
               <Text numberOfLines={1} style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.realName + '-' + item.orgName}</Text>
               <Text numberOfLines={1}
-                    style={{marginTop:5,color:'#687886'}}>{item.msgType == FRIENDNOTIC_TYPE.ACCEPT?'好友请求答复':'已加你为好友'}</Text>
+                    style={{marginTop:5,color:'#687886'}}>{item.msgType == FRIENDNOTIC_TYPE.ACCEPT?'好友请求答复':'请求加你为好友'}</Text>
             </View>
 
             {(()=>{
@@ -145,16 +145,16 @@ let NewFriendList = React.createClass({
                 if (item.isAccept) {
                   return (
                     <Text
-                      style={{textAlign:'right',flex:1,justifyContent:'flex-end',borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'已添加'}</Text>
+                      style={{textAlign:'right',flex:1,justifyContent:'flex-end',borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'已同意'}</Text>
 
                   );
                 } else {
                   return (
-                    <TouchableOpacity style={{flex:1,marginRight:10}} onPress={()=>this.acceptInvite(item)}>
+                    <TouchableOpacity style={{flex:1}} onPress={()=>this.acceptInvite(item)}>
                       <View
                         style={{justifyContent:'flex-end',borderRadius: 5, backgroundColor: '#23ABF3',paddingHorizontal:10,paddingVertical:5}}>
                         <Text
-                          style={{color: '#EAF7FD', textAlign:'center'}}>{'加好友'}</Text>
+                          style={{color: '#EAF7FD', textAlign:'center'}}>{'同意'}</Text>
                       </View>
                     </TouchableOpacity>
                   );

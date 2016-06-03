@@ -8,6 +8,12 @@ const DictEvent = keyMirror({
   Default_EVENT: null,
 
   /**
+   * Network event.
+   */
+  NETINFO_CONNECTED: null,
+  NETINFO_DISCONNECTED: null,
+
+  /**
    * IM events.
    */
 

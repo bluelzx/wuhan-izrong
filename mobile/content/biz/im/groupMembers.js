@@ -3,19 +3,19 @@
  */
 
 let  React = require('react-native');
-const {View, Text, StyleSheet} = React;
-let NavBarView = require('../../framework/system/navBarView');
-let { ExtenList } = require('mx-artifacts');
-let SearchBar = require('./searchBar');
-let ContactStore = require('../../framework/store/contactStore');
+const {View, Text, TouchableOpacity, StyleSheet} = React;
 //let NameCircular = require('./nameCircular').NameCircular;
-let {groupFilter, userFilter} = require('./searchBarHelper');
+let { userFilter} = require('./searchBarHelper');
 let DictStyle = require('../../constants/dictStyle');
 let HeaderPic = require('./headerPic');
 let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 let AlphabetListView = require('react-native-alphabetlistview');
-
-
+let ImUserInfo = require('./imUserInfo');
+let ContactStore = require('../../framework/store/contactStore');
+let NavBarView = require('../../framework/system/navBarView');
+let { ExtenList } = require('mx-artifacts');
+let SearchBar = require('./searchBar');
+let localNavigator = null;
 let SectionHeader = React.createClass({
   render() {
     return (
@@ -36,18 +36,24 @@ let Cell = React.createClass({
   render() {
     let data = this.props.item;
     return (
-      <View key={data.userId}
-            style={{backgroundColor:'#FEFEFE',borderTopWidth:0.5, flexDirection:'row', paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor,alignItems:'center'}}>
-        <HeaderPic  photoFileUrl={data.photoFileUrl}  certified={data.certified} name={data.realName}/>
-        <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
-          <View style={{flex:1,paddingLeft:10}}>
-            <Text numberOfLines={1}
-                  style={{flex:1,fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 2}}>{data.realName }</Text>
-            <Text numberOfLines={1}
-                  style={{flex:1,fontSize:15,color:'#B7C0C7', marginLeft: 2,flexWrap:'wrap'}}>{data.orgValue }</Text>
+      <TouchableOpacity key={data.userId}
+                        onPress={()=>localNavigator.push({
+        comp:ImUserInfo,
+        param:Object.assign(data,{isStranger:ContactStore.isStranger(data.userId)})
+        })}
+                        style={{backgroundColor:'#FEFEFE',borderTopWidth:0.5,  paddingHorizontal:10, paddingVertical:5, borderTopColor: DictStyle.colorSet.demarcationColor}}>
+        <View style={{flexDirection:'row',flex:1,alignItems:'center'}}>
+          <HeaderPic photoFileUrl={data.photoFileUrl} certified={data.certified} name={data.realName}/>
+          <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'center'}}>
+            <View style={{flex:1,paddingLeft:10}}>
+              <Text numberOfLines={1}
+                    style={{flex:1,fontSize:15,color:DictStyle.colorSet.imTitleTextColor, marginLeft: 2}}>{data.realName }</Text>
+              <Text numberOfLines={1}
+                    style={{flex:1,fontSize:15,color:'#B7C0C7', marginLeft: 2,flexWrap:'wrap'}}>{data.orgValue }</Text>
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   },
 
@@ -57,6 +63,7 @@ let Cell = React.createClass({
 let GroupMembers = React.createClass({
 
   getInitialState: function() {
+    localNavigator = this.props.navigator;
     let groupId = this.props.param.groupId;
     let originalData = ContactStore.getGroupDetailById(groupId).members;
     return {

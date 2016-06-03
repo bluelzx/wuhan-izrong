@@ -17,7 +17,9 @@ let {groupFilter} = require('./searchBarHelper');
 let DictStyle = require('../../constants/dictStyle');
 let HeaderPic = require('./headerPic');
 
+
 let AddMember = React.createClass({
+
 
   getInitialState:function() {
     let groupId = this.props.param.groupId;

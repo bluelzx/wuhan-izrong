@@ -7,8 +7,20 @@ const {Image, View, Platform, Text, StyleSheet} = React;
 let _ = require('lodash');
 let NameCircular = require('./nameCircular').NameCircular;
 
+let Cache = require('../../comp/fileCache/fileCache');
 
 let HeaderPic = React.createClass({
+
+  //imgSrc:{},
+  //
+  //requireImg: function (photoFileUrl) {
+  //  if (!this.imgSrc[photoFileUrl]) {
+  //    this.imgSrc[photoFileUrl] = (
+  //      <Image style={[styles.head]} resizeMode="cover" source={require('../../image/im/groupHeaderPic.png')}/>
+  //    );
+  //  };
+  //  return this.imgSrc[photoFileUrl];
+  //},
 
   returnImage: function () {
   },
@@ -39,10 +51,12 @@ let HeaderPic = React.createClass({
 
   render: function () {
     let {name, photoFileUrl, badge, certified = false, source=false, showBadge=false} = this.props;
+    photoFileUrl = Cache.getCache(photoFileUrl,name);
     if (!_.isEmpty(photoFileUrl)) {
         return (
           <View>
-            <Image style={[styles.head]} resizeMode="cover" source={{uri: photoFileUrl}}/>
+            <Image style={[styles.head]} resizeMode="cover" source={{uri:photoFileUrl}}/>
+
             {this.unReadIcon(badge, showBadge)}
               {(()=>{
               if(certified){

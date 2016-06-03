@@ -6,6 +6,7 @@ const {View, ScrollView} = React;
 //let NameCircular = require('./nameCircular').NameCircular;
 let HeaderPic = require('./headerPic');
 let _ = require('lodash');
+let {Device} = require('mx-artifacts');
 
 let ChooseList = React.createClass({
 
@@ -30,12 +31,35 @@ let ChooseList = React.createClass({
         break;
       }
     }
+    //let self = this;
+    //let index = Device.width / 52;
+    //if(self.state.memberView.length > index) {
+    //  self.state.memberView && self.refs['_chooseListView'].getScrollResponder().scrollTo({
+    //    y: 0,
+    //    x: 52 * (self.state.memberView.length - index),
+    //    animated: true
+    //  });
+    //}
     this.setState({memberView:this.state.memberView});
   },
 
   addMem: function(item) {
-    this.state.memberView.push(item);
-    this.setState({memberView:this.state.memberView});
+    let self = this;
+    let delayTime = 0;
+    let index = Device.width / 52;
+    if(self.state.memberView.length + 1 > index) {
+      self.state.memberView && self.refs['_chooseListView'].getScrollResponder().scrollTo({
+        y: 0,
+        x: 52 * (self.state.memberView.length + 1 - index),
+        animated: true
+      });
+      delayTime = 300;
+    }
+    setTimeout(()=>{
+      self.state.memberView.push(item);
+      self.setState({memberView:self.state.memberView});
+    },delayTime);
+
   },
 
   componentWillReceiveProps:function(nextProps){
@@ -102,7 +126,7 @@ let ChooseList = React.createClass({
       return (
         <View
           style={{backgroundColor:'#F4F4F4',padding:5, borderBottomWidth:0.5, borderBottomColor:'#F4F4F4',overflow:'hidden'}}>
-          <ScrollView horizontal={true} style={{flexDirection:'row', backgroundColor:'#FEFEFE',overflow:'hidden'}}>
+          <ScrollView ref='_chooseListView' showsHorizontalScrollIndicator={false} horizontal={true} scrollsToTop={false} pagingEnabled={true} style={{flexDirection:'row', backgroundColor:'#FEFEFE',overflow:'hidden'}}>
             {this.renderMemberView(this.state.memberView)}
           </ScrollView>
         </View>

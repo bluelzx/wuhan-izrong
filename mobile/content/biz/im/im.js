@@ -42,7 +42,12 @@ let NewFriendList = require('./newFriendList');
 
 let PlainStyle = require('../../constants/dictStyle');
 let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
+var TimerMixin = require('react-timer-mixin');
+
+
 let WhitePage = React.createClass({
+
+  mixins: [TimerMixin],
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, IM_SESSION_LIST);
@@ -69,14 +74,20 @@ let WhitePage = React.createClass({
     this.setState({keyWord: text});
   },
 
+  toContact: function(){
+    this.requestAnimationFrame(() => {
+      this.props.navigator.push({
+        comp: Contacts
+      });
+    });
+
+  },
+
   renderContact: function () {
     return (
-      <TouchableOpacity onPress={()=>{
-      //ContactStore.testDelete();
-      this.props.navigator.push({
-            comp: Contacts
-      });
-      }}>
+      <TouchableOpacity
+        style={{padding:50,marginRight:-50}}
+        onPress={this.toContact}>
         <Image style={{width:25,height:25}} source={DictIcon.imContact}/>
       </TouchableOpacity>
     );
@@ -357,7 +368,6 @@ let WhitePage = React.createClass({
           marginHorizontal:10}}>
 
           <HeadPic badge={item.badge} source={DictIcon.imNewFriendNotic} showBadge={true}/>
-
             <View
               style={{  flex:1,paddingHorizontal:10}}
             >
@@ -366,8 +376,6 @@ let WhitePage = React.createClass({
                 <Icon name="ios-arrow-right" size={20} color={DictStyle.colorSet.arrowColor}/>
               </View>
             </View>
-
-
         </View>
       </TouchableOpacity>
     );
@@ -380,14 +388,7 @@ let WhitePage = React.createClass({
       return this.renderUser(item, index);
     }else if(item.type == SESSION_TYPE.GROUP ){
       return this.renderGroup(item, index);
-    }
-    //else if(item.type == SESSION_TYPE.INVITE ){
-    //  return this.renderInvite(item, index);
-    //}
-    //else if(item.type == SESSION_TYPE.INVITED ){
-    //  return this.renderInvited(item, index);
-    //}
-    else if(item.type == SESSION_TYPE.PLATFORMINFO ){
+    }else if(item.type == SESSION_TYPE.PLATFORMINFO ){
       return this.renderSpread(item);
     }else if(item.type == SESSION_TYPE.NEWFRIEND ){
       return this.renderNewFriend(item);
@@ -421,7 +422,10 @@ let WhitePage = React.createClass({
 
   renderNull: function () {
     return (
-      <Text style={{flex:1, marginTop:20, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>您当前没有新好友通知</Text>
+      <View style={{flex:1, justifyContent:'center',alignItems:'center',alignSelf:'center'}}>
+        <Text
+          style={{marginTop:20, textAlign:'center', justifyContent:'center',alignItems:'center', color:DictStyle.searchFriend.nullUnitColor}}>您当前没有新好友通知</Text>
+      </View>
     );
   },
 
@@ -436,7 +440,7 @@ let WhitePage = React.createClass({
 
         <ScrollView
           automaticallyAdjustContentInsets={false}
-          style={{flexDirection: 'column',marginTop:0,backgroundColor:'#F4F4F4',marginBottom:50}}>
+          style={{flexDirection: 'column',marginTop:0,backgroundColor:'#F4F4F4',marginBottom:Platform.OS == 'ios'?50:0}}>
           {this.renderMessage()}
         </ScrollView>
 

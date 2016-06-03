@@ -153,19 +153,28 @@ let _syncReq = function(data){
 
 let _newFriendNotic = function(param, userId) {
   let orgValue = PersisterFacade.getOrgValueByOrgId(param.orgId);
-  PersisterFacade.createNewNotic(param.noticId, param.userId, param.realName, orgValue, param.photoFileUrl,param.certificated,FRIENDNOTIC_TYPE.INVITE, userId);
-  //updateSession
-  let p = {
-    sessionId: param.sessionId,
-    type: SESSION_TYPE.NEWFRIEND,
-    badge:0,
-    title: '',
-    content:'',
-    lastTime: new Date(),
-    contentType: MSG_CONTENT_TYPE.NULL
-  };
-  PersisterFacade.updateSession(p, false,null, userId);
-  PersisterFacade.updateContactInfo(param);
+  let notic = PersisterFacade.getNewNoticById(param.noticId, userId);
+  if(notic && !notic.isAccept){
+    //  有邀请  不更新session
+    PersisterFacade.createNewNotic(param.noticId, param.userId, param.realName, orgValue, param.photoFileUrl,param.certificated,FRIENDNOTIC_TYPE.INVITE, userId);
+  }else{
+    PersisterFacade.createNewNotic(param.noticId, param.userId, param.realName, orgValue, param.photoFileUrl,param.certificated,FRIENDNOTIC_TYPE.INVITE, userId);
+
+    //updateSession
+    let p = {
+      sessionId: param.sessionId,
+      type: SESSION_TYPE.NEWFRIEND,
+      badge:0,
+      title: '',
+      content:'',
+      lastTime: new Date(),
+      contentType: MSG_CONTENT_TYPE.NULL
+    };
+    PersisterFacade.updateSession(p, false,null, userId);
+    PersisterFacade.updateContactInfo(param);
+  }
+
+
   AppStore.emitChange(IM_SESSION_LIST);
 }
 

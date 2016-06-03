@@ -12,6 +12,8 @@ let {
 let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 let dismissKeyboard = require('react-native-dismiss-keyboard');
+let KeyGenerator = require('./keyGenerator');
+let AppStore = require('../../framework/store/appStore');
 
 let ImagePicker = React.createClass({
   propTypes: {
@@ -21,10 +23,10 @@ let ImagePicker = React.createClass({
     onError: React.PropTypes.func,
     fileId: React.PropTypes.string,
     title: React.PropTypes.string,
-    maxWidth:React.PropTypes.number,
-    maxHeight:React.PropTypes.number,
-    aspectX:React.PropTypes.number,
-    aspectY:React.PropTypes.number
+    maxWidth: React.PropTypes.number,
+    maxHeight: React.PropTypes.number,
+    aspectX: React.PropTypes.number,
+    aspectY: React.PropTypes.number
   },
 
   getDefaultProps() {
@@ -32,8 +34,8 @@ let ImagePicker = React.createClass({
       type: 'all',
       allowsEditing: false,
       title: '',
-      maxWidth:600,
-      maxHeight:300,
+      maxWidth: 600,
+      maxHeight: 300,
       aspectX: 1,
       aspectY: 1
     };
@@ -49,7 +51,7 @@ let ImagePicker = React.createClass({
       mediaType: 'photo', // 'photo' or 'video'
       videoQuality: 'high', // 'low', 'medium', or 'high'
       maxWidth: this.props.maxWidth, // photos only
-      maxHeight:  this.props.maxHeight, // photos only
+      maxHeight: this.props.maxHeight, // photos only
       aspectX: this.props.aspectX, // aspectX:aspectY, the cropping image's ratio of width to height
       aspectY: this.props.aspectY, // aspectX:aspectY, the cropping image's ratio of width to height
       quality: 1, // photos only
@@ -57,14 +59,13 @@ let ImagePicker = React.createClass({
       noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
       storageOptions: { // if this key is provided, the image will get saved in the documents directory (rather than a temporary directory)
         skipBackup: true, // image will NOT be backed up to icloud
-        path: 'images' // will save image at /Documents/images rather than the root
+        path: 'fasCache' // will save image at /Documents/images rather than the root
       },
-      language:'Chinese'
+      language: 'Chinese'
     };
 
     let onResponse = (response) => {
       console.log('Response = ', response);
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -94,7 +95,12 @@ let ImagePicker = React.createClass({
   },
 
   _selectAndroid: function () {
-    UserPhotoPicModule.showImagePic(this.props.type, this.props.allowsEditing, this.props.fileId,this.props.aspectX,this.props.aspectY,
+    let fileName = KeyGenerator.getImgKey(AppStore.getUserId());
+    let cropSquare = true;
+    if(this.props.aspectX != this.props.aspectY){
+      cropSquare = false
+    }
+    UserPhotoPicModule.showImagePic(this.props.type, this.props.allowsEditing, fileName, cropSquare,
       (response) => {
         console.log('Response = ', response.uri);
         this.props.onSelected(response.uri);
@@ -102,7 +108,7 @@ let ImagePicker = React.createClass({
   },
 
   _selectPhoto() {
-      dismissKeyboard();
+    dismissKeyboard();
     if (Platform.OS === 'android') {
       this._selectAndroid();
     } else {

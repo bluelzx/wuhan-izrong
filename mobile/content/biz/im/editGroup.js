@@ -2,7 +2,7 @@
  * Created by baoyinghai on 16/4/5.
  */
 let React = require('react-native');
-let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch, ScrollView} = React;
+let {Text, View, TextInput, Platform, TouchableOpacity, Image, Switch, ScrollView, InteractionManager} = React;
 var Icon  = require('react-native-vector-icons/Ionicons');
 let { Device,Alert, Button } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
@@ -15,11 +15,66 @@ let AppStore = require('../../framework/store/appStore');
 let MembersBar = require('./membersBar');
 let { IM_GROUP } = require('../../constants/dictEvent');
 let DictStyle = require('../../constants/dictStyle');
+var TimerMixin = require('react-timer-mixin');
 
 let EditGroup = React.createClass({
+  mixins: [TimerMixin],
 
-  componentDidMount() {
+  componentDidMount:function() {
+    let handle = new Promise((resolve, reject) => {
+      let groupInfo = null;
+      try {
+        groupInfo = ContactStore.getGroupDetailById(this.props.param.groupId);
+        let masterInfo = null;
+        let userInfo = ContactStore.getUserInfo();
+        if (groupInfo.groupMasterUid == userInfo.userId)
+          masterInfo = userInfo;
+        else
+          masterInfo = ContactStore.getUserInfoByUserId(groupInfo.groupMasterUid);
+        groupInfo.masterName = masterInfo.realName;
+        groupInfo.orgValue = ContactStore.getOrgValueByOrgId(masterInfo.orgId);
+
+      } catch (err) {
+        resolve({
+          falseSwitchIsOn:false,
+          groupInfo:null
+        }) ;
+      };
+      if (!groupInfo) {
+        resolve({
+          falseSwitchIsOn:false,
+          groupInfo:null
+        }) ;
+      }
+
+      resolve({
+        falseSwitchIsOn:groupInfo.mute,
+        groupInfo:groupInfo
+      }) ;
+    }).catch((err)=> {
+      reject(err);
+    }).then((resp)=> {
+      self.setState(resp);
+    }).catch((err)=> {
+      throw err;
+    });
     AppStore.addChangeListener(this._onChange, IM_GROUP);
+
+    let self = this;
+
+
+    if(Platform.OS !== 'ios') {
+      this.props.exec(()=> {
+        return handle
+      });
+    }else{
+      InteractionManager.runAfterInteractions(() => {
+        this.props.exec(()=> {
+          return handle
+        });
+      });
+    }
+
   },
 
   componentWillUnmount: function () {
@@ -55,18 +110,21 @@ let EditGroup = React.createClass({
   },
 
   getInitialState: function(){
-    return this.getStateFromStores();
+    return {
+      falseSwitchIsOn:false,
+      groupInfo:null
+    };
   },
 
   renderMember: function() {
 
       let initData = {
         navigator: this.props.navigator,
-        members: this.state.groupInfo.members,
+        members:this.state.groupInfo&&this.state.groupInfo.members,
         showDelete: false,
         imgSource: DictIcon.imSpread,
         groupMasterUid:this.state.groupInfo.groupMasterUid,
-        addMember: ()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId,existMembers:this.state.groupInfo.memberNum}}),
+        addMember: ()=>this.goToGroupMembers(()=>this.props.navigator.push({comp: AddMember, param:{groupId:this.props.param.groupId,existMembers:this.state.groupInfo.memberNum}})),
       };
 
       return (
@@ -98,18 +156,25 @@ let EditGroup = React.createClass({
               this.props.navigator.popToTop();
               ContactAction.storeLeaveGroup(this.props.param.groupId);
             }, ()=>{})
+          }else{
+            throw err;
           }
         });
       }
     );
   },
 
+  goToGroupMembers: function(cb){
+    this.requestAnimationFrame(cb);
+  },
+
+
   renderBody: function(){
     return (
       <ScrollView style={{flexDirection:'column'}}>
         <View style={{flexDirection:'column'}}>
           {this.renderMember()}
-          <TouchableOpacity onPress={() => this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}})}
+          <TouchableOpacity onPress={()=>this.goToGroupMembers(()=>this.props.navigator.push({comp:GroupMembers,param:{groupId:this.props.param.groupId}}))}
                             style={{backgroundColor: DictStyle.groupManage.memberListBackgroundColor, paddingHorizontal:10}}>
             <View
               style={{
@@ -139,7 +204,11 @@ let EditGroup = React.createClass({
           <View
             style={{height:50,backgroundColor: DictStyle.groupManage.memberListBackgroundColor,flexDirection:'row', justifyContent:'space-between',paddingHorizontal:10, alignItems:'center',}}>
             <Text style={{color:DictStyle.groupManage.memberNameColor}}>群主</Text>
-            <Text style={{color:'#6B849C',marginRight:5}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
+            <View style={{flex:1,marginRight:5}}>
+              <Text
+                numberOfLines={2}
+                style={{flex:1,color:'#6B849C', textAlign:'right'}}>{this.state.groupInfo.masterName + '-' + this.state.groupInfo.orgValue}</Text>
+            </View>
           </View>
 
           <View
@@ -172,7 +241,7 @@ let EditGroup = React.createClass({
       <NavBarView navigator={this.props.navigator} title='群设置'>
         {(()=>{
           if(this.state.groupInfo==undefined){
-            return <Text style={{flex:1, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>数据异常,请联系管理员</Text>
+            return <Text style={{flex:1, textAlign:'center', color:DictStyle.searchFriend.nullUnitColor}}>数据加载中</Text>
           }else{
             return this.renderBody();
           }

@@ -8,7 +8,31 @@ let ContactSotre = require('../store/contactStore');
 
 let _socket = null;
 
+let time = null;
+
+let _sendPing = function() {
+  console.log('######################send ping' + time);
+  _socket && _socket.sendStr('IM_SERVER_PING',(error)=>{
+    console.log('######################send ping error!' + error);
+  });
+}
+
+let unit = 5 * 60 * 1000;//5分钟
+let _setPing = function() {
+  time = new Date();
+  setTimeout(()=> {
+    let now = new Date();
+    if (now.getTime() - time.getTime() > unit) {
+      _sendPing();
+    }
+    _setPing();
+  }, 1 * 60 * 1000);  //误差在1分钟左右
+}
+
+_setPing();
+
 let _send = function (message) {
+  time = new Date();
   return new Promise((resolve, reject) => {
     _socket && _socket.send(Resolver.solve(message), (error) => {
       if (error) {
@@ -27,14 +51,14 @@ let _getUrl = function(token){
 
 let ImSocket = {
 
-  disconnect:function(){
+  disconnect: function () {
     //Alert('close');
-    _socket&&_socket.close();
+    _socket && _socket.disconnect();
   },
 
-  reconnect:function(){
+  reconnect: function () {
     //Alert('reconnect');
-    _socket&&_socket.open();
+    _socket && _socket.reconnect();
   },
 
   init: function (token,lastSyncTime) {
@@ -91,22 +115,22 @@ let ImSocket = {
 
   send: (message)=>_send(message),
   trace: (actionType, content) => {
-    setTimeout(
-      ()=>{_send({
-        msgType: COMMAND_TYPE.KPI_APP,
-        command: COMMAND_TYPE.KPI_APP,
-        // time: new Date(),
-        // userId: 'testUser',
-        actionType: actionType,
-        content: content,
-        deviceType: Platform.OS
-      }).then(() => {
-        //
-      }).catch((error) => {
-        console.log('### KPI ### ' + error);
-      })},
-      0
-    );
+    //setTimeout(
+    //  ()=>{_send({
+    //    msgType: COMMAND_TYPE.KPI_APP,
+    //    command: COMMAND_TYPE.KPI_APP,
+    //    // time: new Date(),
+    //    // userId: 'testUser',
+    //    actionType: actionType,
+    //    content: content,
+    //    deviceType: Platform.OS
+    //  }).then(() => {
+    //    //
+    //  }).catch((error) => {
+    //    console.log('### KPI ### ' + error);
+    //  })},
+    //  0
+    //);
   },
 };
 

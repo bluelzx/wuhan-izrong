@@ -18,8 +18,11 @@ let ImAction = require('../../framework/action/imAction');
 let { MSG_CONTENT_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 
 let KeyGenerator = require('../../comp/utils/keyGenerator');
+var TimerMixin = require('react-timer-mixin');
 
 let Chat = React.createClass({
+
+  mixins: [TimerMixin],
 
   componentDidMount() {
     let user = ContactStore.getUserInfo();
@@ -125,10 +128,13 @@ let Chat = React.createClass({
     });
   },
 
+
+
   renderEdit: function () {
     return (
       <TouchableOpacity
-        onPress={this.tagDetail}>
+        style={{padding:50,marginRight:-50}}
+        onPress={ ()=>this.requestAnimationFrame(this.tagDetail)}>
        <Image style={{width:25,height:25}} source={this.props.param.chatType==SESSION_TYPE.GROUP?DictIcon.imGroupMore:DictIcon.imUserMore}/>
       </TouchableOpacity>
 
