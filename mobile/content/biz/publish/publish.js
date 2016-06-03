@@ -397,24 +397,21 @@ let Publish = React.createClass({
   renderImgItem: function (rowData, sectionID, rowID) {
     let uri = rowData + ImageSize50;
     return (
-      <ImagePicker
-        longPress={() => this._longPress(rowID)}
-        type="all"
-        onSelected={(response) => {this.handleSendImage(response, rowID)}}
-        onError={(error) => this.handleImageError(error)}
-        title="选择图片"
-        fileId="publish1"
-        allowsEditing={false}
-        style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
-      >
+      <View
+        style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df',backgroundColor: 'white'}}>
         <LoadExtendImage style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-                         localPath={rowData}
-                         uploadSuccess={(res)=>{
+                         uploadFileUri={rowData}
+                         selectType="all"
+                         onError={(error) => Alert(error)}
+                         title="选择图片"
+                         fileId="userPhoto"
+                         allowsEditing={true}
+                         uploadSuccess={(url)=>{
                          let arr = this.state.imageUploadUrlList;
                             if (rowID > 5) {
-                              arr.push(res.fileUrl);
+                              arr.push(url);
                             } else {
-                              arr[rowID] = res.fileUrl;
+                              arr[rowID] = url;
                             }
                             this.setState({
                               imageUploadUrlList: arr
@@ -422,11 +419,10 @@ let Publish = React.createClass({
                             console.log('成功');
                          }}
                          uploadfailed={()=> console.log('失败')}
-                         jobMode="upload"
+                         jobMode="select"
         >
         </LoadExtendImage>
-
-      </ImagePicker>
+      </View>
     )
   },
 
