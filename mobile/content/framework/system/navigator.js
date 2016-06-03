@@ -158,7 +158,7 @@ var Main = React.createClass({
         );
       } else if (AppStore.isDelete()) {
         Alert(
-          '    您的账户已被删除,请联系系统管理员',
+          '    您的账户已被停用,请联系系统管理员',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
         );
       } else {
