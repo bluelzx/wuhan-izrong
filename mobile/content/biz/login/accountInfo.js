@@ -45,7 +45,6 @@ let Register_accountInfo = React.createClass({
       return LoginAction.getOrgList({})
         .then((response) => {
           AppStore.saveOrgList(response);
-          return response;
         }).catch((errorData) => {
           throw errorData;
         });

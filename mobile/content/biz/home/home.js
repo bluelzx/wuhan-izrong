@@ -43,8 +43,9 @@ let Home = React.createClass({
       require('../../image/home/launch-03.png')
     ];
     let marketList = [];
-    if (AppStore.shouldUpdate()) {
+    if (AppStore.shouldUpdate() || AppStore.getMarketInfo().length != 5) {
       this.bizOrderMarketSearch();
+      marketList = AppStore.getMarketInfo();
     }else{
       marketList = AppStore.getMarketInfo();
     }
@@ -61,12 +62,10 @@ let Home = React.createClass({
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, HOMEPAGE_CHANGE);
-    AppStore.addChangeListener(this._onChange, HOMELIST_CHANGE);
   },
 
   componentWillUnmount: function () {
     AppStore.addChangeListener(this._onChange, HOMEPAGE_CHANGE);
-    AppStore.addChangeListener(this._onChange, HOMELIST_CHANGE);
   },
   _onChange: function () {
     this.setState(this.getStateFromStores());
@@ -74,20 +73,6 @@ let Home = React.createClass({
 
   bizOrderMarketSearch: function () {
     this.props.exec(()=> {
-      //return MarketAction.bizOrderMarketSearch(requestBody)
-      //  .then((response)=> {
-      //    let contentList = _.slice(response.contentList, 0, 5);
-      //    this.setState({
-      //      contentList: contentList,
-      //      requestState: 'success'
-      //    });
-      //    AppStore.saveMarketInfo(response.contentList);
-      //  }).catch((errorData) => {
-      //    this.setState({
-      //      requestState: 'failtrue'
-      //    });
-      //    throw errorData;
-      //  });
       return MarketAction.getTop15BizOrderListByCategory({category: 'MIB'})
         .then((response)=> {
           AppStore.saveHomeMarketList(_.slice(response.appOrder, 0, 5));

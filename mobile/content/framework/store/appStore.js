@@ -63,7 +63,6 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   logout: (userId) => _logout(userId),
   forceLogout: () => _forceLogout(),
   freezAccount: () => _freezAccount(),
-
   forceUpdate: () => _forceUpdate(),
   deleteLoginUser: () => _deleteLoginUser(),
   getUserId: () => _getUserId(),
@@ -133,7 +132,7 @@ let _register = (data) => {
     isDelete: false
   });
   _.assign(_data, {
-    token: _getToken(),
+    token: data.appToken,
     userId: data.appUserInfoOutBean.userId
   });
   Persister.saveAppData(data);
@@ -145,7 +144,7 @@ let _login = (data) => {
   _data.filters = data.appOrderSearchResult;
   return Persister.saveAppData(data).then(()=> {
     _.assign(_data, {
-      token: _getToken(),
+      token: data.appToken,
       filters: data.appOrderSearchResult,
       userId: data.appUserInfoOutBean.userId
     });
@@ -169,7 +168,7 @@ let _simpleLogin = (data) => {
         isDelete: false
       });
       _.assign(_data, {
-        token: _getToken()
+        token: data.appToken
       });
       AppStore.emitChange();
     }).catch((errorData)=> {
@@ -266,7 +265,6 @@ let _getFilters = ()=> {
 };
 
 let _saveOrgList = (orgList)=> {
-  _data.orgList = orgList;
   Persister.saveOrgList(orgList);
   AppStore.emitChange(ORG_CHANGE);
 };
@@ -278,6 +276,7 @@ let _getOrgList = ()=> {
     _data.orgList = Persister.getOrgList();
     return _data.orgList;
   }
+
 };
 
 let _updateOrgInfo = (orgInfo)=> {
