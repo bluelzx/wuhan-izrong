@@ -43,9 +43,8 @@ let Home = React.createClass({
       require('../../image/home/launch-03.png')
     ];
     let marketList = [];
-    if (AppStore.shouldUpdate() || AppStore.getMarketInfo().length != 5) {
+    if (AppStore.shouldUpdate()) {
       this.bizOrderMarketSearch();
-      marketList = AppStore.getMarketInfo();
     }else{
       marketList = AppStore.getMarketInfo();
     }
@@ -62,11 +61,14 @@ let Home = React.createClass({
 
   componentDidMount() {
     AppStore.addChangeListener(this._onChange, HOMEPAGE_CHANGE);
+    AppStore.addChangeListener(this._onChange, HOMELIST_CHANGE);
   },
 
   componentWillUnmount: function () {
     AppStore.addChangeListener(this._onChange, HOMEPAGE_CHANGE);
+    AppStore.addChangeListener(this._onChange, HOMELIST_CHANGE);
   },
+
   _onChange: function () {
     this.setState(this.getStateFromStores());
   },
