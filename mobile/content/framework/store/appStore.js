@@ -180,6 +180,7 @@ let _logout = (userId) => {
   Persister.logout(userId);
   _info.isLogout = true;
   _data.token = '';
+  _data.category = null;
   //if (Platform.OS === 'android' ) {
   //  ServiceModule.stopAppService();
   //}

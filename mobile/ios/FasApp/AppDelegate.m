@@ -31,7 +31,7 @@ typedef enum{
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [NSThread sleepForTimeInterval:1.0];
+//  [NSThread sleepForTimeInterval:1.0];
 
   AppStarMode startType=Debug;
 
