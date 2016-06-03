@@ -1,5 +1,7 @@
 package com.fasapp.utils;
 
+import android.os.Environment;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,6 +16,7 @@ import java.io.OutputStream;
 public class FileUtils {
     /**
      * 创建制定目录下，指定多个文件名文件
+     *
      * @param directory
      * @param names
      * @return
@@ -36,8 +39,7 @@ public class FileUtils {
     /**
      * Construct a file from the set of name elements.
      *
-     * @param names
-     *            the name elements
+     * @param names the name elements
      * @return the file
      */
     public static File getFile(String... names) {
@@ -48,15 +50,14 @@ public class FileUtils {
         for (String name : names) {
             if (file == null) {
                 file = new File(name);
-            }
-            else {
+            } else {
                 file = new File(file, name);
             }
         }
         return file;
     }
 
-   //将文件转换为输入流
+    //将文件转换为输入流
     public static FileInputStream openInputStream(File file) throws IOException {
         if (file.exists()) {
             if (file.isDirectory()) {
@@ -66,8 +67,7 @@ public class FileUtils {
             if (file.canRead() == false) {
                 throw new IOException("File '" + file + "' cannot be read");
             }
-        }
-        else {
+        } else {
             throw new FileNotFoundException("File '" + file
                     + "' does not exist");
         }
@@ -76,6 +76,7 @@ public class FileUtils {
 
     /**
      * 文件转换为输出流
+     *
      * @param file
      * @param append
      * @return
@@ -92,8 +93,7 @@ public class FileUtils {
                 throw new IOException("File '" + file
                         + "' cannot be written to");
             }
-        }
-        else {
+        } else {
             File parent = file.getParentFile();
             if (parent != null) {
                 if (!parent.mkdirs() && !parent.isDirectory()) {
@@ -113,10 +113,8 @@ public class FileUtils {
     /**
      * Cleans a directory without deleting it.
      *
-     * @param directory
-     *            directory to clean
-     * @throws IOException
-     *             in case cleaning is unsuccessful
+     * @param directory directory to clean
+     * @throws IOException in case cleaning is unsuccessful
      */
     public static void cleanDirectory(File directory) throws IOException {
         if (!directory.exists()) {
@@ -138,8 +136,7 @@ public class FileUtils {
         for (File file : files) {
             try {
                 forceDelete(file);
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
                 exception = ioe;
             }
         }
@@ -150,13 +147,12 @@ public class FileUtils {
     }
 
     // -----------------------------------------------------------------------
+
     /**
      * Deletes a directory recursively.
      *
-     * @param directory
-     *            directory to delete
-     * @throws IOException
-     *             in case deletion is unsuccessful
+     * @param directory directory to delete
+     * @throws IOException in case deletion is unsuccessful
      */
     public static void deleteDirectory(File directory) throws IOException {
         if (!directory.exists()) {
@@ -182,20 +178,15 @@ public class FileUtils {
      * (java.io.File methods returns a boolean)</li>
      * </ul>
      *
-     * @param file
-     *            file or directory to delete, must not be {@code null}
-     * @throws NullPointerException
-     *             if the directory is {@code null}
-     * @throws FileNotFoundException
-     *             if the file was not found
-     * @throws IOException
-     *             in case deletion is unsuccessful
+     * @param file file or directory to delete, must not be {@code null}
+     * @throws NullPointerException  if the directory is {@code null}
+     * @throws FileNotFoundException if the file was not found
+     * @throws IOException           in case deletion is unsuccessful
      */
     public static void forceDelete(File file) throws IOException {
         if (file.isDirectory()) {
             deleteDirectory(file);
-        }
-        else {
+        } else {
             boolean filePresent = file.exists();
             if (!file.delete()) {
                 if (!filePresent) {
@@ -218,11 +209,9 @@ public class FileUtils {
      * <li>No exceptions are thrown when a file or directory cannot be deleted.</li>
      * </ul>
      *
-     * @param file
-     *            file or directory to delete, can be {@code null}
+     * @param file file or directory to delete, can be {@code null}
      * @return {@code true} if the file or directory was deleted, otherwise
-     *         {@code false}
-     *
+     * {@code false}
      */
     public static boolean deleteQuietly(File file) {
         if (file == null) {
@@ -232,14 +221,12 @@ public class FileUtils {
             if (file.isDirectory()) {
                 cleanDirectory(file);
             }
-        }
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
         }
 
         try {
             return file.delete();
-        }
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
             return false;
         }
     }
@@ -251,13 +238,10 @@ public class FileUtils {
      * If the directory cannot be created (or does not already exist)
      * then an IOException is thrown.
      *
-     * @param directory
-     *            directory to create, must not be {@code null}
-     * @throws NullPointerException
-     *             if the directory is {@code null}
-     * @throws IOException
-     *             if the directory cannot be created or the file already exists
-     *             but is not a directory
+     * @param directory directory to create, must not be {@code null}
+     * @throws NullPointerException if the directory is {@code null}
+     * @throws IOException          if the directory cannot be created or the file already exists
+     *                              but is not a directory
      */
     public static void forceMkdir(File directory) throws IOException {
         if (directory.exists()) {
@@ -266,8 +250,7 @@ public class FileUtils {
                         + "not a directory. Unable to create directory.";
                 throw new IOException(message);
             }
-        }
-        else {
+        } else {
             if (!directory.mkdirs()) {
                 // Double-check that some other thread or process hasn't made
                 // the directory in the background
@@ -286,18 +269,12 @@ public class FileUtils {
      * calculated recursively. If a directory or subdirectory is security
      * restricted, its size will not be included.
      *
-     * @param file
-     *            the regular file or directory to return the size
-     *            of (must not be {@code null}).
-     *
+     * @param file the regular file or directory to return the size
+     *             of (must not be {@code null}).
      * @return the length of the file, or recursive size of the directory,
-     *         provided (in bytes).
-     *
-     * @throws NullPointerException
-     *             if the file is {@code null}
-     * @throws IllegalArgumentException
-     *             if the file does not exist.
-     *
+     * provided (in bytes).
+     * @throws NullPointerException     if the file is {@code null}
+     * @throws IllegalArgumentException if the file does not exist.
      */
     public static long sizeOf(File file) {
 
@@ -308,8 +285,7 @@ public class FileUtils {
 
         if (file.isDirectory()) {
             return sizeOfDirectory(file);
-        }
-        else {
+        } else {
             return file.length();
         }
 
@@ -319,13 +295,11 @@ public class FileUtils {
      * Counts the size of a directory recursively (sum of the length of all
      * files).
      *
-     * @param directory
-     *            directory to inspect, must not be {@code null}
+     * @param directory directory to inspect, must not be {@code null}
      * @return size of directory in bytes, 0 if directory is security
-     *         restricted, a negative number when the real total
-     *         is greater than {@link Long#MAX_VALUE}.
-     * @throws NullPointerException
-     *             if the directory is {@code null}
+     * restricted, a negative number when the real total
+     * is greater than {@link Long#MAX_VALUE}.
+     * @throws NullPointerException if the directory is {@code null}
      */
     public static long sizeOfDirectory(File directory) {
         checkDirectory(directory);
@@ -352,11 +326,9 @@ public class FileUtils {
     /**
      * Checks that the given {@code File} exists and is a directory.
      *
-     * @param directory
-     *            The {@code File} to check.
-     * @throws IllegalArgumentException
-     *             if the given {@code File} does not exist or is not a
-     *             directory.
+     * @param directory The {@code File} to check.
+     * @throws IllegalArgumentException if the given {@code File} does not exist or is not a
+     *                                  directory.
      */
     private static void checkDirectory(File directory) {
         if (!directory.exists()) {
@@ -367,7 +339,8 @@ public class FileUtils {
                     + " is not a directory");
         }
     }
-    public static void inputStreamToFile(InputStream ins,File file) {
+
+    public static void inputStreamToFile(InputStream ins, File file) {
 
         OutputStream os = null;
         try {
@@ -384,6 +357,14 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
+    //将图片从一个路径复制到另一个路径
+    public static String copyFile(String oldPath, String newPath) {
+        File oldFile = new File(oldPath);
+        File newFile = new File(newPath);
+        oldFile.renameTo(newFile);
+        return newPath;
+    }
+
 }
