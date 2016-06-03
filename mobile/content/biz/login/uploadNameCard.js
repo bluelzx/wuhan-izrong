@@ -66,7 +66,7 @@ let Register_uploadNameCard = React.createClass({
         }).then((response) => {
           const { navigator } = this.props;
           if (navigator) {
-              navigator.resetTo({comp: 'tabView'});
+            navigator.resetTo({comp: 'tabView'});
           }
         }).catch((errorData) => {
           throw errorData;
@@ -99,8 +99,8 @@ let Register_uploadNameCard = React.createClass({
           fileId="nameCard"
           allowsEditing={true}
           title="选择图片"
-          aspectX = {5}
-          aspectY = {3}
+          aspectX={5}
+          aspectY={3}
           style={[styles.imageArea, styles.nameCard]}
         >
           <Image style={{height:Platform.OS === 'android' ? 90 : 120,width:Platform.OS === 'android' ? 90 : 120,
@@ -109,8 +109,9 @@ let Register_uploadNameCard = React.createClass({
                  resizeMode='cover'
                  source={require('../../image/login/nameCard.png')}
           />
-          <Text
-            style={[DictStyle.fontSize,DictStyle.fontColor,{marginBottom:Platform.OS === 'android' ? 1:30}]}>点击上传名片</Text>
+          <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginBottom:Platform.OS === 'android' ? 1:30}]}>
+            点击上传名片
+          </Text>
         </ImagePicker>
       );
     }
@@ -122,8 +123,8 @@ let Register_uploadNameCard = React.createClass({
         fileId="nameCard"
         allowsEditing={true}
         title="选择图片"
-        aspectX = {5}
-        aspectY = {3}
+        aspectX={5}
+        aspectY={3}
       >
         <Image
           style={{flexDirection: 'column',borderWidth: 1,borderColor: '#d4d6e0',borderRadius: 6,justifyContent: 'space-around', marginTop: 20,
@@ -144,14 +145,14 @@ let Register_uploadNameCard = React.createClass({
         </View>
 
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
-          <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop: 20}]} >
+          <Text style={[DictStyle.fontSize,DictStyle.fontColor,{marginTop: 20}]}>
             注: 名片信息将辅助我们验证您的身份
           </Text>
           <Button
             containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
-            disabledBackgroundColor = '#b3c7f5'
-            enabledBackgroundColor = '#4b76df'
+            disabledBackgroundColor='#b3c7f5'
+            enabledBackgroundColor='#4b76df'
             disabled={this.state.disabled}
             onPress={()=>this.register()}
           >
@@ -188,7 +189,7 @@ let styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-around',
-    backgroundColor:'#ffffff'
+    backgroundColor: '#ffffff'
 
   }
 });

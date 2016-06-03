@@ -12,6 +12,7 @@ let {
 let lodash = require('lodash');
 let NavBarView = require('../../framework/system/navBarView');
 let AppLinks = require('../../constants/appLinks');
+let {Alert} = require('mx-artifacts');
 
 let PrivacyPolicy = React.createClass({
 
@@ -25,15 +26,20 @@ let PrivacyPolicy = React.createClass({
           domStorageEnabled={true}
           decelerationRate="normal"
           startInLoadingState={true}
+          onError={this.loadError}
         />
       </NavBarView>
     )
+  },
+
+  loadError: function () {
+    Alert("请检查网络连接")
   }
 });
 
 let styles = StyleSheet.create({
-  webView:{
-    flex:1
+  webView: {
+    flex: 1
   }
 
 });

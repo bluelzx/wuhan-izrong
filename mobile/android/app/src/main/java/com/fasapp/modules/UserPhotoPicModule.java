@@ -25,6 +25,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.fasapp.utils.FileUtils;
 import com.fasapp.utils.LogUtils;
 import com.fasapp.utils.PatternUtils;
 import com.fasapp.utils.SDCardUtils;
@@ -218,7 +219,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        mResponse.putString("uri", saveFile(path).toString());
+                        mResponse.putString("uri", path);
                         mCallback.invoke(mResponse);
                     }
                     break;
@@ -226,12 +227,14 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        mResponse.putString("uri", saveFile(path).toString());
+                        mResponse.putString("uri", path);
                         mCallback.invoke(mResponse);
                     }
                     break;
                 case REQUEST_CODE_CROP:
-                    mResponse.putString("uri", saveFile(path).toString());
+                    String newPath = getReactApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/fasCache/" + mFileName + ".jpg";
+                    FileUtils.copyFile(path,newPath);
+                    mResponse.putString("uri", newPath);
                     mCallback.invoke(mResponse);
                     break;
                 default:
@@ -244,6 +247,8 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
             Toast.makeText(getCurrentActivity(), errorMsg, Toast.LENGTH_SHORT).show();
         }
     };
+
+
 
     //将content:  uri的bitMap缓存到本地，转化为file： uri
     private Uri saveFile(String path) {

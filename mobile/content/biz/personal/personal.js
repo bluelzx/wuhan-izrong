@@ -36,7 +36,7 @@ let Personal = React.createClass({
       realName: userInfo.realName,
       orgName: orgBean.orgValue,
       photoFileUrl: userInfo.photoFileUrl,
-      certificated: userInfo.certified,
+      certificated: userInfo.certified
     };
   },
 
