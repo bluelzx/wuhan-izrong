@@ -68,26 +68,13 @@ let Home = React.createClass({
     AppStore.addChangeListener(this._onChange, HOMEPAGE_CHANGE);
     AppStore.addChangeListener(this._onChange, HOMELIST_CHANGE);
   },
+
   _onChange: function () {
     this.setState(this.getStateFromStores());
   },
 
   bizOrderMarketSearch: function () {
     this.props.exec(()=> {
-      //return MarketAction.bizOrderMarketSearch(requestBody)
-      //  .then((response)=> {
-      //    let contentList = _.slice(response.contentList, 0, 5);
-      //    this.setState({
-      //      contentList: contentList,
-      //      requestState: 'success'
-      //    });
-      //    AppStore.saveMarketInfo(response.contentList);
-      //  }).catch((errorData) => {
-      //    this.setState({
-      //      requestState: 'failtrue'
-      //    });
-      //    throw errorData;
-      //  });
       return MarketAction.getTop15BizOrderListByCategory({category: 'MIB'})
         .then((response)=> {
           AppStore.saveHomeMarketList(_.slice(response.appOrder, 0, 5));

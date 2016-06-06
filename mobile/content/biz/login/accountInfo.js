@@ -45,7 +45,6 @@ let Register_accountInfo = React.createClass({
       return LoginAction.getOrgList({})
         .then((response) => {
           AppStore.saveOrgList(response);
-          return response;
         }).catch((errorData) => {
           throw errorData;
         });
@@ -71,6 +70,7 @@ let Register_accountInfo = React.createClass({
   },
 
   toPage: function (name, param, callback) {
+    dismissKeyboard();
     const {navigator} = this.props;
     if (navigator) {
       navigator.push(

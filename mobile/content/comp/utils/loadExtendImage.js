@@ -122,7 +122,6 @@ let LoadExtendImage = React.createClass({
   },
 
   upLoadFile: function () {
-
     this.props.startUpload();
     let fileName = this.props.localPath.split("/").pop();
 
@@ -228,18 +227,12 @@ let LoadExtendImage = React.createClass({
       <View style={[{backgroundColor:'#eee'},this.props.style]}
             onLayout={() => {}}
       >
-        <TouchableOpacity style={{flex:1}}
-                          onPress={this._onPress()}
-        >
-
           <Image style={[styles.imageStyle]}
                  source={this.state.imagePath}
                  onLayout={() => {}}
           >
             { this.props.isEnableLoading ? (this.state.loadSuccess ? null : this.showLoading()) : null }
           </Image>
-
-        </TouchableOpacity>
       </View>
     );
   }

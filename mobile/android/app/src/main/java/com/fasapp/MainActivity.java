@@ -1,40 +1,24 @@
 package com.fasapp;
 
-import android.content.Context;
+
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-
 import com.facebook.react.ReactActivity;
-import com.fasapp.utils.UILImageLoader;
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.rnfs.RNFSPackage;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.shell.MainReactPackage;
 import com.fasapp.pakage.ZXReactPackage;
-import com.fasapp.utils.ReactNativeAutoUpdater;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.annotation.Nullable;
-
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 import cl.json.RNSharePackage;
-import cn.finalteam.galleryfinal.CoreConfig;
-import cn.finalteam.galleryfinal.FunctionConfig;
-import cn.finalteam.galleryfinal.GalleryFinal;
-import cn.finalteam.galleryfinal.ThemeConfig;
 import io.realm.react.RealmReactPackage;
 
 public class MainActivity extends ReactActivity {

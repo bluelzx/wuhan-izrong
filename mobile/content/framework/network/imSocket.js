@@ -7,7 +7,6 @@ let { Platform } = require('react-native');
 let ContactSotre = require('../store/contactStore');
 
 let _socket = null;
-
 let _token = null;
 let _lastSyncTime = null;
 
@@ -17,7 +16,6 @@ let _sendPing = function() {
   console.log('######################send ping' + time);
   _socket && _socket.sendStr('IM_SERVER_PING',(error)=>{
     console.log('######################send ping error!' + error);
-
   });
 }
 
@@ -62,22 +60,18 @@ let ImSocket = {
 
   reconnect: function () {
     //Alert('reconnect');
-    //_socket && _socket.reconnectForce();
-    //console.log('##### reconnect');
-
+    // _socket && _socket.reconnect();
     this.init(_token, _lastSyncTime);
   },
 
+
   init: function (token,lastSyncTime) {
-
-    //console.log('##### init');
-
     _token = token;
     _lastSyncTime = lastSyncTime;
 
    // Alert('socket:' + _socket);
     let newUrl = _getUrl(token);
-    //if ( newUrl==this.uri && _socket) return;
+    // if ( newUrl==this.uri && _socket) return;
     // this.uri = ImWebSocket + AppStore.getToken();
     this.uri = newUrl;
     //this.uri = 'ws://localhost:3000/t001';

@@ -18,7 +18,7 @@ let {
   ORG_CHANGE,
   USER_CHANGE,
   HOMELIST_CHANGE
-} = require('../../constants/dictEvent');
+  } = require('../../constants/dictEvent');
 
 let _info = {
   initLoadingState: true,
@@ -51,6 +51,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   isFreezing: () => _info.isFreezing,
   isForceLogout: () => _info.isForceLogout,
   isDelete: ()=> _info.isDelete,
+  isForceUpdate: ()=> _info.forceUpdate,
   saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
   getAPNSToken: () => _get_apns_token(),
   updateLastSyncTime: (t)=>_updateLastSyncTime(t),
@@ -62,6 +63,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   logout: (userId) => _logout(userId),
   forceLogout: () => _forceLogout(),
   freezAccount: () => _freezAccount(),
+  forceUpdate: () => _forceUpdate(),
   deleteLoginUser: () => _deleteLoginUser(),
   getUserId: () => _getUserId(),
   getLoginUserInfo: () => _getLoginUserInfo(),
@@ -130,7 +132,7 @@ let _register = (data) => {
     isDelete: false
   });
   _.assign(_data, {
-    token: _getToken(),
+    token: data.appToken,
     userId: data.appUserInfoOutBean.userId
   });
   Persister.saveAppData(data);
@@ -142,7 +144,7 @@ let _login = (data) => {
   _data.filters = data.appOrderSearchResult;
   return Persister.saveAppData(data).then(()=> {
     _.assign(_data, {
-      token: _getToken(),
+      token: data.appToken,
       filters: data.appOrderSearchResult,
       userId: data.appUserInfoOutBean.userId
     });
@@ -166,7 +168,7 @@ let _simpleLogin = (data) => {
         isDelete: false
       });
       _.assign(_data, {
-        token: _getToken()
+        token: data.appToken
       });
       AppStore.emitChange();
     }).catch((errorData)=> {
@@ -178,6 +180,7 @@ let _logout = (userId) => {
   Persister.logout(userId);
   _info.isLogout = true;
   _data.token = '';
+  _data.category = null;
   //if (Platform.OS === 'android' ) {
   //  ServiceModule.stopAppService();
   //}
@@ -210,6 +213,11 @@ let _freezAccount = () => {
   AppStore.emitChange();
 };
 
+let _forceUpdate = () => {
+  _info.forceUpdate = true;
+  AppStore.emitChange();
+};
+
 let _save_apns_token = (apnsToken) => {
   _info.apnTokens = apnsToken;
   Persister.saveAPNSToken(apnsToken);
@@ -222,7 +230,7 @@ let _get_apns_token = () => {
 };
 
 let _getToken = () => {
-  if(_data.token){
+  if (_data.token) {
     return _data.token;
   }
   _data.token = Persister.getToken();
@@ -258,7 +266,6 @@ let _getFilters = ()=> {
 };
 
 let _saveOrgList = (orgList)=> {
-  _data.orgList = orgList;
   Persister.saveOrgList(orgList);
   AppStore.emitChange(ORG_CHANGE);
 };
@@ -270,6 +277,7 @@ let _getOrgList = ()=> {
     _data.orgList = Persister.getOrgList();
     return _data.orgList;
   }
+
 };
 
 let _updateOrgInfo = (orgInfo)=> {
@@ -289,11 +297,11 @@ let _getOrgByOrgName = (orgName)=> {
 let _updateUserInfo = (column, value)=> {
   Persister.updateUserInfo(column, value);
   AppStore.emitChange(USER_CHANGE);
-
 };
 
 let _updateUserInfoByPush = (data)=> {
   Persister.updateUserInfoByPush(data);
+  AppStore.emitChange(USER_CHANGE);
 };
 
 let _updateLastSyncTime = function (t) {
