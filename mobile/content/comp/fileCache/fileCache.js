@@ -29,6 +29,7 @@ let createPath = function() {
 createPath();
 
 let downloadFile = function(uri,name,cb) {
+  fileUri[uri] = 'downloading';
   var progress = data => {
   };
   name = uri&&uri.split("/").pop();
@@ -45,8 +46,14 @@ var RNFSApp = {
 
   getCache:function(opt,id){
     let uri = opt;
+    if(!uri){
+      return null;
+    }
     if(!fileUri[uri]){
       downloadFile(uri,id);
+      return null;
+    }
+    if(fileUri[uri] == 'downloading'){
       return null;
     }
     return fileUri[uri];

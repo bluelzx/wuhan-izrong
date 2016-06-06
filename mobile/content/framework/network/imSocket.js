@@ -7,6 +7,7 @@ let { Platform } = require('react-native');
 let ContactSotre = require('../store/contactStore');
 
 let _socket = null;
+
 let _token = null;
 let _lastSyncTime = null;
 
