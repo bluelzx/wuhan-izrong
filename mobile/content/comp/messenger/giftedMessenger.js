@@ -21,14 +21,13 @@ let {
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let {Moment} = require('mx-artifacts');
 Moment.locale('zh-cn');
-let Icon = require('react-native-vector-icons/Ionicons');
 let TimerMixin = require('react-timer-mixin');
 let Publish = require('../../biz/publish/publish');
 
 let { Spinner, Button, Alert, Device } = require('mx-artifacts');
 
 let AutoExpandingTextInput = require('./autoExpandingTextInput');
-//let Message = require('./Message');
+
 import Message from './message';
 
 let DictIcon = require('../../constants/dictIcon');
@@ -37,9 +36,6 @@ let ImagePicker = require('../utils/imagePicker');
 
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let DictStyle = require('../../constants/dictStyle');
-
-//let BizAction  = require('');
-
 
 let GiftedMessenger = React.createClass({
   mixins: [TimerMixin],

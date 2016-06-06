@@ -3,9 +3,6 @@
  */
 'use strict';
 
-var React = require('react-native');
-
-
 var RNFS = require('react-native-fs');
 
 var cacheDirPath =  RNFS.DocumentDirectoryPath + '/cache';
@@ -37,8 +34,6 @@ let downloadFile = function(uri,name,cb) {
   RNFS.downloadFile(uri, imgPath, progress, progress).then(res => {
     fileUri[uri] = 'file://' + imgPath;
     Persister.addPhotoHeader(uri, fileUri[uri]);
-    //console.log();
-   // cb&&cb({ imagePath: { uri: fileUri[uri]} });
   }).catch(err => this.showError(err));
 }
 

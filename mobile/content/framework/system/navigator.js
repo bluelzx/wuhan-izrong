@@ -37,6 +37,7 @@ let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
 let Publish = require('../../biz/publish/publish');
+let Chat = require('../../biz/im/chat');
 ImSocket = require('../../framework/network/imSocket');
 let QiniuTest = require('../../test/qiniuTest');
 let Upload = require('../../biz/login/uploadNameCard');
@@ -248,6 +249,9 @@ var Main = React.createClass({
     }
     if (Comp == 'publish') {
       Comp = Publish;
+    }
+    if(Comp == 'chat') {
+      Comp = Chat;
     }
 
     navigator.cur = Comp;

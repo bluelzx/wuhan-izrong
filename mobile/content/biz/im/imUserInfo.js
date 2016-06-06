@@ -117,12 +117,12 @@ let ImUserInfo = React.createClass({
   },
 
   toChat: function() {
-    //let param = {};
-    //param.chatType = SESSION_TYPE.USER;
-    //param.title = this.state.data.realName;
-    //param.userId = this.state.data.userId;
-    ////this.props.navigator.popToTop();
-    //this.props.navigator.push({comp:Chat, param:param});
+    let param = {};
+    param.chatType = SESSION_TYPE.USER;
+    param.title = this.state.data.realName;
+    param.userId = this.state.data.userId;
+    //this.props.navigator.popToTop();
+    this.props.navigator.push({comp:'chat', param:param});
   },
 
   renderAdd: function() {
@@ -151,7 +151,16 @@ let ImUserInfo = React.createClass({
                 </TouchableOpacity>
               );
             } else {
-              return null;
+              return (
+                <TouchableOpacity
+                  style={{flex:1,marginTop: 20, backgroundColor: '#4fb9fc',justifyContent:'center',alignItems:'center',paddingVertical:15}}
+                  onPress={()=>this.toChat()}
+                >
+                  <Text style={{fontSize: 20, color: '#ffffff',textAlign:'center'}}>
+                    去聊天
+                  </Text>
+                </TouchableOpacity>
+              );
             }
 
           })()}

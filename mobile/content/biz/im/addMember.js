@@ -83,7 +83,7 @@ let AddMember = React.createClass({
     }
     return (
       <TouchableOpacity onPress={() => this.addUser(this.props.param.groupId, memberList)}>
-        <Text style={{ marginLeft:Platform.OS==='ios'?-40:0,color:count==0?'#6B849C':'white'}}>{'完成(' + count + '/'+ (Setting.groupMemberUpperLimit - this.state.existMembers)+')'}</Text>
+        <Text style={{ marginLeft:Platform.OS==='ios'?-40:0,color:'white'}}>{'完成(' + count + '/'+ (Setting.groupMemberUpperLimit - this.state.existMembers)+')'}</Text>
       </TouchableOpacity>
     );
   },
