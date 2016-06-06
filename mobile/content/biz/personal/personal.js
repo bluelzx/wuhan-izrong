@@ -28,6 +28,7 @@ let {ORG_CHANGE,USER_CHANGE} = require('../../constants/dictEvent');
 let PlainStyle = require('../../constants/dictStyle');
 let DictStyle = require('../../constants/dictStyle');
 let {ImageSize50} = require('../../../config');
+let LoadExtendImage = require('../../comp/utils/loadExtendImage');
 
 let Personal = React.createClass({
   getStateFromStores: function () {
@@ -57,6 +58,7 @@ let Personal = React.createClass({
 
   _onChange: function () {
     this.setState(this.getStateFromStores());
+    this.refs['loadImage'].refreshComponent();
   },
 
   toPage: function (name) {
@@ -72,14 +74,24 @@ let Personal = React.createClass({
       if (this.state.certificated) {
         return (
           <View>
-            <Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
+            <LoadExtendImage jobMode="load"
+                             source={{uri: uri}}
+                             style={styles.head}
+                             ref="loadImage"
+            />
             <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
                    resizeMode="cover" source={require('../../image/user/certificated.png')}/>
           </View>
         );
       }
       return (
-        <Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
+        <View style={{marginLeft: 20}}>
+          <LoadExtendImage jobMode="load"
+                           source={{uri: uri}}
+                           style={styles.head}
+                           ref="loadImage"
+          />
+        </View>
       );
     } else {
 
@@ -91,6 +103,14 @@ let Personal = React.createClass({
 
     }
   },
+
+  //<View style={{marginLeft: 20}}>
+  //<LoadExtendImage jobMode="load"
+  //  source={{uri: uri}}
+  //occurError={(error) => Alert(error)}
+  //style={styles.head}
+  ///>
+//</View>
 
   render: function () {
     let {title} = this.props;

@@ -197,9 +197,11 @@ let BusinessDetail = React.createClass({
       let uri = this.state.photoStoredFileUrl + ImageSize50;
       return (
         <View style={{margin:10}}>
-          <Image
-            style={{height:46,width:46,borderRadius:23}}
-            source={{uri:uri}}
+          <LoadExtendImage jobMode="load"
+                           source={{uri: uri}}
+                           occurError={(error) => Alert(error)}
+                           style={{height:46,width:46,borderRadius:23}}
+                           ref="loadImage"
           />
           {this.renderIsCertificated()}
         </View>

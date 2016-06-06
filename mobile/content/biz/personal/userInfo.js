@@ -105,7 +105,7 @@ let UserInfo = React.createClass({
               <LoadExtendImage jobMode="select"
                                source={{uri: this.state.photoFileUrl}}
                                type="all"
-                               onError={(error) => Alert(error)}
+                               occurError={(error) => Alert(error)}
                                title="选择图片"
                                fileId="userPhoto"
                                allowsEditing={true}
@@ -123,11 +123,11 @@ let UserInfo = React.createClass({
             <LoadExtendImage jobMode="select"
                              source={{uri: this.state.photoFileUrl}}
                              selectType="all"
-                             onError={(error) => Alert(error)}
+                             occurError={(error) => Alert(error)}
                              title="选择图片"
                              fileId="userPhoto"
                              allowsEditing={true}
-                             style={[styles.head]}
+                             style={styles.head}
                              uploadSuccess={(url)=>{this.updateUserPoto(url)}}
             />
           </View>

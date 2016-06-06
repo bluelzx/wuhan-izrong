@@ -121,6 +121,7 @@ let Messenger = React.createClass({
   },
 
   handleSendImage(uri) {
+    //this._sendMessage(MSG_CONTENT_TYPE.IMAGE, uri);
     let p = new Promise((resolve,reject)=>{
       resolve( this._sendMessage(MSG_CONTENT_TYPE.IMAGE, '' , false, '', true, uri))
     }).catch((err)=>{
