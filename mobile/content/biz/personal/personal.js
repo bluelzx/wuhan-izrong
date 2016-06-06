@@ -18,6 +18,7 @@ let _ = require('lodash');
 let NavBarView = require('../../framework/system/navBarView');
 let Item = require('../../comp/utils/item');
 let UserInfo = require('../../biz/personal/userInfo');
+let Adjust = require('../../comp/utils/adjust');
 let AboutUs = require('./aboutUs');
 let UserGuide = require('./userGuide');
 let UserInfoAction = require('../../framework/action/userInfoAction');
@@ -36,7 +37,7 @@ let Personal = React.createClass({
       realName: userInfo.realName,
       orgName: orgBean.orgValue,
       photoFileUrl: userInfo.photoFileUrl,
-      certificated: userInfo.certified,
+      certificated: userInfo.certified
     };
   },
 
@@ -103,11 +104,11 @@ let Personal = React.createClass({
             <View style={[styles.layout,DictStyle.userInfoBorderBottom,DictStyle.userInfoBorderTop]}>
               {this.returnImage()}
               <View>
-                <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalRealName,width: 150}}
+                <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalRealName,width: Adjust.width(230)}}
                       numberOfLines={1}>
                   {this.state.realName}
                 </Text>
-                <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalOrgName, marginTop: 10, width: 150}}
+                <Text style={{fontSize: 18, color: PlainStyle.colorSet.personalOrgName, marginTop: 10, width: Adjust.width(230)}}
                       numberOfLines={1}
                 >
                   {this.state.orgName}

@@ -7,6 +7,8 @@ let { Platform } = require('react-native');
 let ContactSotre = require('../store/contactStore');
 
 let _socket = null;
+let _token = null;
+let _lastSyncTime = null;
 
 let time = null;
 
@@ -58,13 +60,18 @@ let ImSocket = {
 
   reconnect: function () {
     //Alert('reconnect');
-    _socket && _socket.reconnect();
+    // _socket && _socket.reconnect();
+    this.init(_token, _lastSyncTime);
   },
 
+
   init: function (token,lastSyncTime) {
+    _token = token;
+    _lastSyncTime = lastSyncTime;
+
    // Alert('socket:' + _socket);
     let newUrl = _getUrl(token);
-    if ( newUrl==this.uri && _socket) return;
+    // if ( newUrl==this.uri && _socket) return;
     // this.uri = ImWebSocket + AppStore.getToken();
     this.uri = newUrl;
     //this.uri = 'ws://localhost:3000/t001';

@@ -11,6 +11,7 @@ let {
 
 let _ = require('lodash');
 let GiftedMessenger = require('./giftedMessenger');
+let ReverseGiftedMessenger = require('./reverseGiftedMessenger');
 let { Alert, Communications, Device } = require('mx-artifacts');
 
 let ImAction = require('../../framework/action/imAction');
@@ -225,50 +226,98 @@ let Messenger = React.createClass({
   },
 
   render() {
-    return (
-      <GiftedMessenger
-        ref={(c) => this._GiftedMessenger = c}
 
-        styles={{
+    if(this.state.messages.length < 10) {
+      return (
+        <GiftedMessenger
+          ref={(c) => this._GiftedMessenger = c}
+
+          styles={{
           bubbleRight: {
             marginLeft: 70,
             backgroundColor: '#007aff',
           },
         }}
 
-        displayNames={false}
-        displayNamesInsideBubble={false}
-        navigator={this.props.navigator}
-        autoFocus={false}
-        messages={this.state.messages}
-        handleSend={this.handleSend}
-        handleNameCard = {this.handleNameCard}
-        handleBizInfo = {this.handleBizInfo}
-        handleSendImage={this.handleSendImage}
-        handleImageError={this.handleImageError}
-        onErrorButtonPress={this.onErrorButtonPress}
-        maxHeight={Device.height - Device.navBarHeight}
-        loadEarlierMessagesButton={true}
-        onLoadEarlierMessages={this.onLoadEarlierMessages}
+          displayNames={false}
+          displayNamesInsideBubble={false}
+          navigator={this.props.navigator}
+          autoFocus={false}
+          messages={this.state.messages}
+          handleSend={this.handleSend}
+          handleNameCard={this.handleNameCard}
+          handleBizInfo={this.handleBizInfo}
+          handleSendImage={this.handleSendImage}
+          handleImageError={this.handleImageError}
+          onErrorButtonPress={this.onErrorButtonPress}
+          maxHeight={Device.height - Device.navBarHeight}
+          loadEarlierMessagesButton={false}
+          onLoadEarlierMessages={this.onLoadEarlierMessages}
+          loadMessagesLater={false}
+          senderName='Developer'
+          senderImage={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
+          onImagePress={this.onImagePress}
+          //displayNames={true}
+          forceRenderImage={true}
+          renderStatus={false}
 
-        senderName='Developer'
-        senderImage={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
-        onImagePress={this.onImagePress}
-        //displayNames={true}
-        forceRenderImage={true}
-        renderStatus={false}
+          parseText={true} // enable handlePhonePress and handleUrlPress
+          handlePhonePress={this.handlePhonePress}
+          handleUrlPress={this.handleUrlPress}
+          handleEmailPress={this.handleEmailPress}
 
-        parseText={true} // enable handlePhonePress and handleUrlPress
-        handlePhonePress={this.handlePhonePress}
-        handleUrlPress={this.handleUrlPress}
-        handleEmailPress={this.handleEmailPress}
+          inverted={true}
+          chatInfo={this.props.param}
+          sessionId={this.props.param.sessionId}
+        />
 
-        inverted={true}
-        chatInfo={this.props.param}
-        sessionId={this.props.param.sessionId}
-      />
+      );
+    }else{
+      return (
+        <ReverseGiftedMessenger
+          ref={(c) => this._GiftedMessenger = c}
 
-    );
+          styles={{
+          bubbleRight: {
+            marginLeft: 70,
+            backgroundColor: '#007aff',
+          },
+        }}
+
+          displayNames={false}
+          displayNamesInsideBubble={false}
+          navigator={this.props.navigator}
+          autoFocus={false}
+          messages={this.state.messages}
+          handleSend={this.handleSend}
+          handleNameCard={this.handleNameCard}
+          handleBizInfo={this.handleBizInfo}
+          handleSendImage={this.handleSendImage}
+          handleImageError={this.handleImageError}
+          onErrorButtonPress={this.onErrorButtonPress}
+          maxHeight={Device.height - Device.navBarHeight}
+          loadEarlierMessagesButton={true}
+          onLoadEarlierMessages={this.onLoadEarlierMessages}
+          loadMessagesLater={true}
+          senderName='Developer'
+          senderImage={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
+          onImagePress={this.onImagePress}
+          //displayNames={true}
+          forceRenderImage={true}
+          renderStatus={false}
+
+          parseText={true} // enable handlePhonePress and handleUrlPress
+          handlePhonePress={this.handlePhonePress}
+          handleUrlPress={this.handleUrlPress}
+          handleEmailPress={this.handleEmailPress}
+
+          inverted={true}
+          chatInfo={this.props.param}
+          sessionId={this.props.param.sessionId}
+        />
+
+      );
+    }
   },
 
   handleUrlPress(url) {

@@ -180,6 +180,7 @@ let _logout = (userId) => {
   Persister.logout(userId);
   _info.isLogout = true;
   _data.token = '';
+  _data.category = null;
   //if (Platform.OS === 'android' ) {
   //  ServiceModule.stopAppService();
   //}
@@ -296,11 +297,11 @@ let _getOrgByOrgName = (orgName)=> {
 let _updateUserInfo = (column, value)=> {
   Persister.updateUserInfo(column, value);
   AppStore.emitChange(USER_CHANGE);
-
 };
 
 let _updateUserInfoByPush = (data)=> {
   Persister.updateUserInfoByPush(data);
+  AppStore.emitChange(USER_CHANGE);
 };
 
 let _updateLastSyncTime = function (t) {

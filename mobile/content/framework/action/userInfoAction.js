@@ -21,6 +21,7 @@ let UserInfoAction = {
   updateUserInfo: (p)=> _updateUserInfo(AppLinks.updateUserInfo, p),
   uploadFile: (p, fileFieldName) => _uploadFile(AppLinks.uploadFile, p, fileFieldName)
 };
+
 _getLoginUserInfo = function () {
   return AppStore.getLoginUserInfo();
 };
