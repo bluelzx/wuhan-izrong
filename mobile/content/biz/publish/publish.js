@@ -334,6 +334,7 @@ let Publish = React.createClass({
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df',backgroundColor: 'white'}}>
         <LoadExtendImage style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
                          uploadFileUri={{uri:rowData}}
+                         longPress={(rowID) => this._longPress(rowID) }
                          selectType="all"
                          title="选择图片"
                          fileId="userPhoto"
@@ -565,9 +566,9 @@ let Publish = React.createClass({
               }
             );
           } else if (buttonIndex == 1) {
-            let arr = this.state.fileUrlList;
-            arr[rowId] = 0;
-            this.setState({fileUrlList: _.compact(arr)})
+            let arr = this.state.imageUploadUrlList;
+            _.pullAt(arr, rowId);
+            this.setState({imageUploadUrlList: arr});
           }
         });
     } else {
@@ -585,9 +586,9 @@ let Publish = React.createClass({
               );
               break;
             case 1:
-              let arr = this.state.fileUrlList;
-              arr[rowId] = 0;
-              this.setState({fileUrlList: _.compact(arr)});
+              let arr = this.state.imageUploadUrlList;
+              _.pullAt(arr, rowId);
+              this.setState({imageUploadUrlList: arr});
               break;
             default:
               break;
