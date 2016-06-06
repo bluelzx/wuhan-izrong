@@ -1,4 +1,4 @@
-import React, {View, Text, TouchableHighlight, StyleSheet, Image} from 'react-native';
+import React, {View, Text, TouchableHighlight, StyleSheet, Image, Platform} from 'react-native';
 import { Spinner } from 'mx-artifacts';
 let DictStyle = require('../../constants/dictStyle');
 
@@ -6,10 +6,9 @@ let styles = StyleSheet.create({
   errorButtonContainer: {
     alignSelf: 'center',
     justifyContent: 'center',
-    backgroundColor: '#e6e6eb',
-    //borderRadius: 15,
-    width: 5,
-    height: 5,
+    backgroundColor: 'transparent',
+    width: Platform.OS==='ios'?5:20,
+    height: Platform.OS==='ios'?5:20,
   },
   errorButton: {
     fontSize: 22,

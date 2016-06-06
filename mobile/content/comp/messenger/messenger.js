@@ -179,7 +179,8 @@ let Messenger = React.createClass({
     // ];
 
     setTimeout(() => {
-      callback(earlierMessages, earlierMessages.length < 5 ? true : false); // when second parameter is true, the "Load earlier messages" button will be hidden
+      callback(earlierMessages, true);
+      //callback(earlierMessages, earlierMessages.length < 10 ? true : false); // when second parameter is true, the "Load earlier messages" button will be hidden
       //callback(earlierMessages, false);
     }, 1000);
   },
