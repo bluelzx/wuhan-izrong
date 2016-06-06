@@ -245,7 +245,7 @@ let GiftedMessenger = React.createClass({
     }
 
     return (
-      <View  onLayout={this.onRowLayout.bind(this)}>
+      <View  onLayout={this.onRowLayout}>
         {this.renderDate(rowData, rowID)}
         <Message
           chatInfo={this.props.chatInfo}
@@ -548,7 +548,7 @@ let GiftedMessenger = React.createClass({
         }
       }
     }
-    return <View></View>;
+    return <View style={{height:47}}></View>;
   },
 
 
@@ -678,14 +678,8 @@ let GiftedMessenger = React.createClass({
           ref='listView'
           dataSource={this.state.dataSource}
           renderRow={this.renderRow}
-
-
           renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
-
-
           onResponderMove={this._onAccessibilityTap}
-         // renderHeader={this.renderLoadEarlierMessages}
-
           //逆反
           renderFooter={this.renderLoadEarlierMessages}
           renderHeader={this.renderFooter}
@@ -695,28 +689,7 @@ let GiftedMessenger = React.createClass({
             let layout = event.nativeEvent.layout;
             this.listHeight = layout.height;
             this.scrollToBottom();
-            //if (this.firstDisplay === true) {
-            //  requestAnimationFrame(() => {
-            //    this.firstDisplay = false;
-            //    this.scrollToBottom();
-            //  });
-            //}
-
           }}
-          //renderFooter={() => {
-          //  return (
-          //    <View
-          //      onLayout={(event) => {
-          //        let layout = event.nativeEvent.layout;
-          //        this.footerY = layout.y;
-          //
-          //        if (this.props.autoScroll) {
-          //          this.scrollToBottom();
-          //        }
-          //      }}
-          //    ></View>
-          //  );
-          //}}
 
           style={this.styles.listView}
           enableEmptySections={true}
