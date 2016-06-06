@@ -21,13 +21,14 @@ let {
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let {Moment} = require('mx-artifacts');
 Moment.locale('zh-cn');
+let Icon = require('react-native-vector-icons/Ionicons');
 let TimerMixin = require('react-timer-mixin');
 let Publish = require('../../biz/publish/publish');
 
 let { Spinner, Button, Alert, Device } = require('mx-artifacts');
 
 let AutoExpandingTextInput = require('./autoExpandingTextInput');
-
+//let Message = require('./Message');
 import Message from './message';
 
 let DictIcon = require('../../constants/dictIcon');
@@ -36,6 +37,9 @@ let ImagePicker = require('../utils/imagePicker');
 
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let DictStyle = require('../../constants/dictStyle');
+
+//let BizAction  = require('');
+import InvertibleScrollView from 'react-native-invertible-scroll-view';
 
 let GiftedMessenger = React.createClass({
   mixins: [TimerMixin],
@@ -53,7 +57,7 @@ let GiftedMessenger = React.createClass({
       styles: {},
       autoFocus: true,
       onErrorButtonPress: (message, rowID) => {},
-      loadEarlierMessagesButton: false,
+      loadEarlierMessagesButton: true,
       loadEarlierMessagesButtonText: '加载历史消息',
       onLoadEarlierMessages: (oldestMessage, callback) => {},
       parseText: false,
@@ -241,7 +245,7 @@ let GiftedMessenger = React.createClass({
     }
 
     return (
-      <View  >
+      <View  onLayout={this.onRowLayout.bind(this)}>
         {this.renderDate(rowData, rowID)}
         <Message
           chatInfo={this.props.chatInfo}
@@ -389,13 +393,13 @@ let GiftedMessenger = React.createClass({
     }
   },
 
-  scrollToBottom(isAnimate = false) {
+  scrollToBottom() {
     if (this.listHeight && this.footerY && this.footerY > this.listHeight) {
       let scrollDistance = this.listHeight - this.footerY;
       this.scrollResponder.scrollTo({
-        y: -scrollDistance,
+        y: 0,
         x: 0,
-        animated: isAnimate
+        animated: false
       });
     }
   },
@@ -567,20 +571,20 @@ let GiftedMessenger = React.createClass({
 
   prependMessages(messages = []) {
     let rowID = null;
-    for (let i = 0; i < messages.length; i++) {
-      this._data.push(messages[i]);
-      this._rowIds.unshift(this._data.length - 1);
-      rowID = this._data.length - 1;
-    }
+    //for (let i = 0; i < messages.length; i++) {
+    //  this._data.push(messages[i]);
+    //  this._rowIds.unshift(this._data.length - 1);
+    //  rowID = this._data.length - 1;
+    //}
 
 
 
     //inever
-    //for (let i = 0; i < messages.length; i++) {
-    //  this._data.push(messages[i]);
-    //  this._rowIds.push(this._data.length - 1);
-    //  rowID = this._data.length - 1;
-    //}
+    for (let i = 0; i < messages.length; i++) {
+      this._data.push(messages[i]);
+      this._rowIds.push(this._data.length - 1);
+      rowID = this._data.length - 1;
+    }
 
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(this._data, this._rowIds),
@@ -595,9 +599,17 @@ let GiftedMessenger = React.createClass({
 
   appendMessages(messages = []) {
     let rowID = null;
+    //for (let i = 0; i < messages.length; i++) {
+    //  messages[i].isOld = true;
+    //  this._data.push(messages[i]);
+    //  this._rowIds.push(this._data.length - 1);
+    //  rowID = this._data.length - 1;
+    //}
+
+    //inever
     for (let i = 0; i < messages.length; i++) {
       messages[i].isOld = true;
-      this._data.push(messages[i]);
+      this._data.unshift(messages[i]);
       this._rowIds.push(this._data.length - 1);
       rowID = this._data.length - 1;
     }
@@ -616,7 +628,7 @@ let GiftedMessenger = React.createClass({
     if (scrollToBottom === true) {
       this.setTimeout(() => {
         // inspired by http://stackoverflow.com/a/34838513/1385109
-        this.scrollToBottom(true);
+        this.scrollToBottom();
       }, (Platform.OS === 'android' ? 200 : 100));
     }
 
@@ -667,10 +679,16 @@ let GiftedMessenger = React.createClass({
           dataSource={this.state.dataSource}
           renderRow={this.renderRow}
 
+
+          renderScrollComponent={props => <InvertibleScrollView {...props} inverted />}
+
+
           onResponderMove={this._onAccessibilityTap}
-          renderHeader={this.renderLoadEarlierMessages}
+         // renderHeader={this.renderLoadEarlierMessages}
 
-
+          //逆反
+          renderFooter={this.renderLoadEarlierMessages}
+          renderHeader={this.renderFooter}
 
 
           onLayout={(event) => {
@@ -685,20 +703,20 @@ let GiftedMessenger = React.createClass({
             //}
 
           }}
-          renderFooter={() => {
-            return (
-              <View
-                onLayout={(event) => {
-                  let layout = event.nativeEvent.layout;
-                  this.footerY = layout.y;
-
-                  if (this.props.autoScroll) {
-                    this.scrollToBottom();
-                  }
-                }}
-              ></View>
-            );
-          }}
+          //renderFooter={() => {
+          //  return (
+          //    <View
+          //      onLayout={(event) => {
+          //        let layout = event.nativeEvent.layout;
+          //        this.footerY = layout.y;
+          //
+          //        if (this.props.autoScroll) {
+          //          this.scrollToBottom();
+          //        }
+          //      }}
+          //    ></View>
+          //  );
+          //}}
 
           style={this.styles.listView}
           enableEmptySections={true}

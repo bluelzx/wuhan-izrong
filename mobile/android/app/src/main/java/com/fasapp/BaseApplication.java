@@ -1,8 +1,11 @@
 package com.fasapp;
 
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.fasapp.utils.CrashHandler;
 import com.fasapp.utils.UILImageLoader;
@@ -11,7 +14,12 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.xiaomi.channel.commonutils.logger.LoggerInterface;
+import com.xiaomi.mipush.sdk.Logger;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
+import java.util.List;
+import android.os.Process;
 import cn.finalteam.galleryfinal.CoreConfig;
 import cn.finalteam.galleryfinal.FunctionConfig;
 import cn.finalteam.galleryfinal.GalleryFinal;
@@ -21,6 +29,10 @@ import cn.finalteam.galleryfinal.ThemeConfig;
  * Created by amarsoft on 16/5/26.
  */
 public class BaseApplication extends Application {
+
+    public static final String APP_ID = "2882303761517477213";
+    public static final String APP_KEY = "5271747743213";
+    public static final String TAG = "com.fasapp123";
     @Override
     public void onCreate() {
         super.onCreate();
@@ -28,6 +40,43 @@ public class BaseApplication extends Application {
         mCrashHandler.init(getApplicationContext());
         initImageLoader();
         initGallery();
+
+        //初始化push推送服务
+        /*if(shouldInit()) {
+            MiPushClient.registerPush(this, APP_ID, APP_KEY);
+        }
+        //打开Log
+        LoggerInterface newLogger = new LoggerInterface() {
+
+            @Override
+            public void setTag(String tag) {
+                // ignore
+            }
+
+            @Override
+            public void log(String content, Throwable t) {
+                Log.d(TAG, content, t);
+            }
+
+            @Override
+            public void log(String content) {
+                Log.d(TAG, content);
+            }
+        };
+        Logger.setLogger(this, newLogger);*/
+    }
+
+    private boolean shouldInit() {
+        ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
+        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+        String mainProcessName = getPackageName();
+        int myPid = Process.myPid();
+        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void initGallery() {

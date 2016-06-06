@@ -378,8 +378,7 @@ let styles = StyleSheet.create({
   },
   bottomStyle: {
     height: 1,
-    backgroundColor: PlainStyle.colorSet.userInfoBorderColor,
-    marginLeft: 20
+    backgroundColor: PlainStyle.colorSet.userInfoBorderColor
   }
 });
 
