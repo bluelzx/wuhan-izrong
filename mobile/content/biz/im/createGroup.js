@@ -94,6 +94,14 @@ let CreateGroup = React.createClass({
 
   createGroup: function (members) {
 
+    var reg =new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5]+$");
+    if (reg.test(this.state.groupName)) {
+      this.setState({
+        groupName: ''
+      });
+      Alert('输入的群名称不合法,请重新输入');
+      return;
+    }
     if (this.state.groupName.length > Setting.groupNameLengt) {
       Alert('群名称不能超过20个字符');
       return;
