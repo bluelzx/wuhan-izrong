@@ -52,6 +52,7 @@ var UFetch = function (url, param) {
     qiniu.conf.ACCESS_KEY = ImageAk;
     qiniu.conf.SECRET_KEY = ImageSk;
     let fileName = KeyGenerator.getImgKey(AppStore.getUserId());
+    fileName='dengpan2';
     var putPolicy = new qiniu.auth.PutPolicy2(
       {scope: ImageBkt + ':' + fileName}
     );
@@ -63,6 +64,8 @@ var UFetch = function (url, param) {
         reject(resp.status);
       }
       //console.log(JSON.stringify(resp));
+    }).catch((err)=>{
+      reject(err);
     });
   });
 };
@@ -76,13 +79,17 @@ var DPUFetch = function (url, param) {
       {scope: ImageBkt + ':' + fileName}
     );
     var uptoken = putPolicy.token();
-    qiniu.rpc.uploadImage(param.uri, fileName, uptoken, function (resp) {
-      if (resp.status === 200) {
-        resolve({fileUrl: ImageHost + fileName});
-      } else {
-        reject(resp.status);
-      }
-    });
+
+      qiniu.rpc.uploadImage(param.uri, fileName, uptoken, function (resp) {
+        if (resp.status === 200) {
+          resolve({fileUrl: ImageHost + fileName});
+        } else {
+          reject(resp.status);
+        }
+      }).catch((err)=>{
+        reject(err);
+      });
+
   });
 };
 

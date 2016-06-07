@@ -26,6 +26,7 @@ let LoginAction = require('../../framework/action/loginAction');
 let DictStyle = require('../../constants/dictStyle');
 let CallPhone = require('../../comp/utils/callPhone');
 let PlainStyle = require('../../constants/dictStyle');
+let Adjust = require('../../comp/utils/adjust');
 
 
 let Register_accountInfo = React.createClass({
@@ -150,18 +151,18 @@ let Register_accountInfo = React.createClass({
                               style={{marginTop: 12, borderRadius: 6}}
           >
             <View style={styles.selectOrg}>
-              <View style={{flex: 1, alignItems: 'center'}}>
+              <View style={{alignItems: 'center'}}>
                 <Image
-                  style={{height: 20, width: 20}}
+                  style={{height: 16, width: 16, marginLeft:10}}
                   source={require('../../image/user/comp.png')}
                 />
               </View>
-              <Text style={{color: '#3b4549', fontSize: 18,marginLeft:20,flex: 5}} numberOfLines={1}>
+              <Text style={{color: '#3b4549', fontSize: 18,marginLeft:10, width:Adjust.width(260)}} numberOfLines={1}>
                 {this.state.orgValue}
               </Text>
 
               <Icon
-                style={{flex: 1}}
+                style={{marginLeft:10}}
                 name="ios-arrow-right" size={28} color={'#4074e6'}
               />
             </View>
@@ -201,7 +202,7 @@ let styles = StyleSheet.create({
     borderRadius: 6,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    //justifyContent: 'space-between',
     borderColor: '#5d9bec',
     borderWidth: 1
   },

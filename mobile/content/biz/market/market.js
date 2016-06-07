@@ -101,7 +101,49 @@ let Market = React.createClass({
   },
 
   _onChange () {
-    this.setState(this.getStateFromStores());
+    let filterItems = AppStore.getFilters().filterItems;
+    let category = MarketStore.getFilterOptions(filterItems, 'bizCategory');
+    let categoryArr = this.deleteFirstObj(category.options);
+    let bizOrientation = MarketStore.getFilterOptions(filterItems, 'bizOrientation').options;
+    let term = MarketStore.getFilterOptions(filterItems, 'term').options;
+    let amount = MarketStore.getFilterOptions(filterItems, 'amount').options;
+    let orderItems = AppStore.getFilters().orderItems;
+
+    let filterType = AppStore.getCategory();
+
+    return {
+      filterItems: filterItems,
+      bizOrientation: bizOrientation,
+      term: term,
+      amount: amount,
+      categorySource: categoryArr,
+      termSource: orderItems,
+      clickFilterType: 0,
+      clickFilterTime: 0,
+      clickFilterOther: 0,
+      levelOneText: filterType != null ? filterType.category.displayName : categoryArr.length == 0 ? '' : categoryArr[0].displayName,
+      optionTwoText: '最新发布',
+      pickTypeRow: filterType != null ? filterType.rowId : 0,
+      pickTimeRow: 0,
+      orientionDefault: 10000,
+      orientionIsAll: true,
+      termDefault: 10000,
+      termIsAll: true,
+      amountDefault: 10000,
+      amountIsAll: true,
+      orgValue: '',
+      orgId: 0,
+      //network
+      orderField: 'lastModifyDate',
+      orderType: 'desc',
+      pageIndex: 1,
+      bizCategoryID: filterType != null ? filterType.category.id : categoryArr.length == 0 ? 0 : categoryArr[0].id,
+      bizOrientationID: '',
+      termID: '',
+      amountID: '',
+      marketData: [],
+      listReminder: '未找到符合条件的业务记录'
+    };
   },
 
   _search () {

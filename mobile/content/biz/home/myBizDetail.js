@@ -62,7 +62,7 @@ let MyBizDetail = React.createClass({
     let t = new Date(marketInfo.lastModifyDate);
 
     return {
-      marketInfo: marketInfo,
+      marketInfo: '',
       bizOrientationDefault: (marketInfo.bizOrientation == 'IN') ? 0 : 1,
       termDefault: marketInfo.term == null || marketInfo.term == 0 ? 0 : (marketInfo.term % 365 == 0) ? 2 : (marketInfo.term % 30 == 0) ? 1 : 0,
       amountDefault: (marketInfo.amount < 100000000) ? 0 : 1,
@@ -191,6 +191,12 @@ let MyBizDetail = React.createClass({
   },
 
   render: function () {
+    if (this.state.marketInfo == ''){
+      return (
+        <NavBarView navigator={this.props.navigator} title='业务详情' actionButton={this.renderShutDownBiz}>
+        </NavBarView>
+      );
+    }
     let {title}  = this.props;
     return (
       <NavBarView navigator={this.props.navigator} title='业务详情' actionButton={this.renderShutDownBiz}>
@@ -695,6 +701,7 @@ let MyBizDetail = React.createClass({
           }
         ).then((response)=> {
           this.setState({
+            marketInfo: response,
             remark: response.remark,
             remarkText: response.remark,
             fileUrlList: response.fileUrlList
