@@ -6,7 +6,8 @@
 let React = require('react-native');
 let {
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
   } = React;
 
 let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
@@ -34,8 +35,8 @@ let ImagePicker = React.createClass({
       type: 'all',
       allowsEditing: false,
       title: '',
-      maxWidth: 600,
-      maxHeight: 300,
+      maxWidth: Platform.OS === 'android' ? 600 : 480,
+      maxHeight: Platform.OS === 'android' ? 300 : 960,
       aspectX: 1,
       aspectY: 1
     };
@@ -54,7 +55,7 @@ let ImagePicker = React.createClass({
       maxHeight: this.props.maxHeight, // photos only
       aspectX: this.props.aspectX, // aspectX:aspectY, the cropping image's ratio of width to height
       aspectY: this.props.aspectY, // aspectX:aspectY, the cropping image's ratio of width to height
-      quality: 1, // photos only
+      quality: 1.0, // photos only
       allowsEditing: this.props.allowsEditing, // Built in iOS functionality to resize/reposition the image
       noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
       storageOptions: { // if this key is provided, the image will get saved in the documents directory (rather than a temporary directory)

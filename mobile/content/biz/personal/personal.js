@@ -85,7 +85,7 @@ let Personal = React.createClass({
         );
       }
       return (
-        <View style={{marginLeft: 20}}>
+        <View >
           <LoadExtendImage jobMode="load"
                            source={{uri: uri}}
                            style={styles.head}

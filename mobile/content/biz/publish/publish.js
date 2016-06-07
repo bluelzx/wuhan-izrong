@@ -566,9 +566,9 @@ let Publish = React.createClass({
               }
             );
           } else if (buttonIndex == 1) {
-            let arr = this.state.imageUploadUrlList;
+            let arr = this.state.fileUrlList;
             _.pullAt(arr, rowId);
-            this.setState({imageUploadUrlList: arr});
+            this.setState({fileUrlList: arr});
           }
         });
     } else {
@@ -586,9 +586,9 @@ let Publish = React.createClass({
               );
               break;
             case 1:
-              let arr = this.state.imageUploadUrlList;
+              let arr = this.state.fileUrlList;
               _.pullAt(arr, rowId);
-              this.setState({imageUploadUrlList: arr});
+              this.setState({fileUrlList: arr});
               break;
             default:
               break;
