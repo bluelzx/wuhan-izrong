@@ -54,14 +54,6 @@ let LoadExtendImage = React.createClass({
   getDefaultProps: function () {
     return {
       isEnableLoading: true,
-      customUpload: () => {
-      },
-      startUpload: () => {
-      },
-      uploadSuccess: () => {
-      },
-      uploadFailed: () => {
-      }
     };
   },
 
@@ -97,11 +89,13 @@ let LoadExtendImage = React.createClass({
         });
       }
 
-    }
-    else if (this.props.jobMode === 'upload') {
+    } else if (this.props.jobMode === 'upload') {
 
       let imagePath = null;
-      if (this.props.source) {
+      if (this.props.uploadFileUri && this.props.uploadFileUri.uri) {
+        imagePath = this.props.uploadFileUri.uri;
+        this.upLoadFile(imagePath);
+      } else if (this.props.source && this.props.source.uri) {
         imagePath = this.getStoragePath(this.props.source.uri).imagePath;
         if (!this.state.fileExisted) {
           RNFS.exists(imagePath).then((exists) => {
@@ -116,20 +110,16 @@ let LoadExtendImage = React.createClass({
             }
           });
         }
-      } else if (this.props.uploadFileUri) {
-        imagePath = this.props.uploadFileUri.uri;
-        this.upLoadFile(imagePath);
       } else {
         this.setState({
           status: 'success'
         })
       }
 
-    }
-    else if (this.props.jobMode === 'select') {
+    } else if (this.props.jobMode === 'select') {
 
       let imagePath = null;
-      if (this.props.source) {
+      if (this.props.source && this.props.source.uri) {
         imagePath = this.getStoragePath(this.props.source.uri).imagePath;
         if (!this.state.fileExisted) {
           RNFS.exists(imagePath).then((exists) => {
@@ -144,7 +134,7 @@ let LoadExtendImage = React.createClass({
             }
           });
         }
-      } else if (this.props.uploadFileUri) {
+      } else if (this.props.uploadFileUri && this.props.uploadFileUri.uri) {
         imagePath = this.props.uploadFileUri.uri;
         this.upLoadFile(imagePath);
       } else {
@@ -195,7 +185,10 @@ let LoadExtendImage = React.createClass({
 
   upLoadFile: function (uploadFileUri) {
 
-    this.props.startUpload(uploadFileUri);
+    if(this.props.startUpload){
+      this.props.startUpload(uploadFileUri);
+    }
+
       let fileName = uploadFileUri.split("/").pop();
 
       this.setState({
@@ -206,7 +199,10 @@ let LoadExtendImage = React.createClass({
 
       ImAction.uploadImage2(uploadFileUri, fileName)
         .then((response) => {
-          this.props.uploadSuccess(response.fileUrl);
+          if(this.props.uploadSuccess){
+            this.props.uploadSuccess(response.fileUrl);
+          }
+
           this.setState({
             status: 'success'
           })
@@ -214,7 +210,10 @@ let LoadExtendImage = React.createClass({
         this.setState({
           status: 'fail'
         });
-        this.props.uploadFailed(error);
+        if(this.props.uploadFailed){
+          this.props.uploadFailed(error);
+        }
+
         this.errorHandle('uploadError:' + error);
       });
 
@@ -255,8 +254,10 @@ let LoadExtendImage = React.createClass({
   },
 
   _onSelected: function (uri) {
-    if (!this.props.source && !this.props.uploadFileUri) {
-      this.props.startUpload(uri);
+    if ((!this.props.source || !this.props.source.uri) && (!this.props.uploadFileUri || !this.props.uploadFileUri.uri)) {
+      if (this.props.startUpload) {
+        this.props.startUpload(uri);
+      }
     } else {
       this.upLoadFile(uri);
     }
@@ -282,7 +283,7 @@ let LoadExtendImage = React.createClass({
 
   render: function () {
 
-    if (!this.props.source && !this.props.uploadFileUri) {
+    if ((!this.props.source || !this.props.source.uri) && (!this.props.uploadFileUri || !this.props.uploadFileUri.uri)) {
       return (
         <ImagePicker style={[styles.imageStyle,this.props.style]}
                      selectType={this.props.selectType}
@@ -308,7 +309,7 @@ let LoadExtendImage = React.createClass({
                resizeMode="cover"
                source={this.state.filePath}
         >
-          { this.renderLoading() }
+          { this.state.isEnableLoading? this.renderLoading():null}
         </Image>
       );
 

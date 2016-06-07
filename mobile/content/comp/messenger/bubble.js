@@ -85,53 +85,43 @@ export default class Bubble extends React.Component {
     }
 
     if (this.props.contentType === MSG_CONTENT_TYPE.IMAGE) {
-      //if(this.props.content == 'UUUU'){
+      //let uri = this.props.content + ImageSize100;
       //  return (
       //    <View style={[styles.bubble, customStyle,
-      //         this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
-      //this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
-      //      <View style={{
-      //          flex: 1,
-      //          width: 100,
-      //          height: 100
-      //          }}>
-      //            <Text>图片加载中...</Text>
-      //      </View>
+      //               this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
+      //                  this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
+      //      <Lightbox underlayColor='#44B5E6'
+      //                imageSource={{uri:this.props.content}}
+      //                navigator={AppStore.getNavigator()}>
+      //        <Image style={{
+      //                flex: 1,
+      //                width: 100,
+      //                height: 100
+      //                }}
+      //               source={{uri: !this.props.localUri?uri:this.props.localUri}}
+      //        />
+      //      </Lightbox>
       //    </View>
       //  );
-      //}else {
-      let uri = this.props.content + ImageSize100;
-        return (
-          <View style={[styles.bubble, customStyle,
-                     this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
-                        this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
-            <Lightbox underlayColor='#44B5E6'
-                      imageSource={{uri:this.props.content}}
-                      navigator={AppStore.getNavigator()}>
-              <Image style={{
-                      flex: 1,
-                      width: 100,
-                      height: 100
-                      }}
-                     source={{uri: !this.props.localUri?uri:this.props.localUri}}
-              />
-            </Lightbox>
-          </View>
-        );
+
+      return (
+        <View style={[styles.bubble, customStyle,
+                 this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
+                    this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
+          <LoadExtendImage style={{flex: 1,width: 100,height: 100}}
+                           uploadFileUri={{uri:this.props.localUri}}
+                           source={{uri:this.props.content}}
+                           isEnableLoading={false}
+                           uploadSuccess={this.props.cb}
+                           uploadfailed={(error) => Alert(error)}
+                           jobMode="upload"
+          >
+          </LoadExtendImage>
+        </View>
+      );
 
     }
-    //<View style={[styles.bubble, customStyle,
-    //           this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
-    //              this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
-    //  <LoadExtendImage style={{flex: 1,width: 100,height: 100}}
-    //                   uploadFileUri={{uri:this.props.localUri}}
-    //                   source={{uri:uri}}
-    //                   uploadSuccess={(url)=>{}}
-    //                   uploadfailed={(error) => Alert(error)}
-    //                   jobMode="upload"
-    //  >
-    //  </LoadExtendImage>
-    //</View>
+
 
 
     if (this.props.contentType === MSG_CONTENT_TYPE.NAMECARD) {

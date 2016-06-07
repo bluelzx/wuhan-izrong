@@ -27,7 +27,7 @@ RCT_EXPORT_MODULE();
             @"cancelButtonTitle": @"Cancel",
             @"takePhotoButtonTitle": @"Take Photo…",
             @"chooseFromLibraryButtonTitle": @"Choose from Library…",
-            @"quality" : @0.2, // 1.0 best to 0.0 worst
+            @"quality" : @1.0, // 1.0 best to 0.0 worst
             @"allowsEditing" : @NO
         };
     }
@@ -356,7 +356,7 @@ RCT_EXPORT_METHOD(showImagePicker:(NSDictionary *)options callback:(RCTResponseS
             maxHeight = [[self.options valueForKey:@"maxHeight"] floatValue];
         }
         image = [self downscaleImageIfNecessary:image maxWidth:maxWidth maxHeight:maxHeight];
-        
+      
         NSData *data;
         if ([[[self.options objectForKey:@"imageFileType"] stringValue] isEqualToString:@"png"]) {
             data = UIImagePNGRepresentation(image);

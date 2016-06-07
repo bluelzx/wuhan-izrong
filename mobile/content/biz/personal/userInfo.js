@@ -98,19 +98,20 @@ let UserInfo = React.createClass({
     },
 
     returnImage: function () {
-      if (!_.isEmpty(this.state.photoFileUrl)) {
         if (this.state.certificated) {
           return (
             <View style={{marginLeft: 20,paddingRight:20}}>
               <LoadExtendImage jobMode="select"
                                source={{uri: this.state.photoFileUrl}}
-                               type="all"
+                               selectType="all"
                                occurError={(error) => Alert(error)}
                                title="选择图片"
                                fileId="userPhoto"
                                allowsEditing={true}
                                style={styles.head}
+                               uploadSuccess={(url)=>{this.updateUserPoto(url)}}
               />
+              <NameCircular name={this.state.realName} isV={this.state.certificated}/>
               <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
                      resizeMode="cover" source={require('../../image/user/certificated.png')}/>
             </View>
@@ -129,16 +130,13 @@ let UserInfo = React.createClass({
                              allowsEditing={true}
                              style={styles.head}
                              uploadSuccess={(url)=>{this.updateUserPoto(url)}}
-            />
+            >
+              <NameCircular name={this.state.realName} isV={this.state.certificated}/>
+            </LoadExtendImage>
           </View>
         );
-      } else {
-        return (
-          <NameCircular name={this.state.realName} isV={this.state.certificated}/>
-        );
-      }
-    }
-    ,
+
+    },
 //<Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
 
 //<ImagePicker
