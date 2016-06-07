@@ -14,9 +14,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.xiaomi.channel.commonutils.logger.LoggerInterface;
-import com.xiaomi.mipush.sdk.Logger;
-import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.List;
 import android.os.Process;

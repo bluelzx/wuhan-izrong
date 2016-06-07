@@ -114,27 +114,32 @@ let GroupNotice = React.createClass({
       NoticeStore.updateInViteNotice(item.noticeId);
       Alert('你已加入该群');
     } else {
-      this.props.exec(
-        ()=> {
-          return ContactAction.acceptInvitation(item.groupId).then(()=> {
-            NoticeStore.updateInViteNotice(item.noticeId);
-          }).then(() => {
-              this.toChat(item)
-            }
-          ).catch((err)=> {
-            if (err.errCode && err.errCode == 'GROUP_NOT_EXIST') {
+      if (AppStore.getNetWorkState()) {
+        this.props.exec(
+          ()=> {
+            return ContactAction.acceptInvitation(item.groupId).then(()=> {
               NoticeStore.updateInViteNotice(item.noticeId);
-              Alert('该群已被解散')
-            } else if (err.errCode && err.errCode == 'MEMBER_ALREADY_IN_GROUP') {
-              NoticeStore.updateInViteNotice(item.noticeId);
-              Alert('你已在该群组');
-            } else {
-              Alert(err);
-            }
-            //Alert(err);
-          });
-        }
-      );
+            }).then(() => {
+                this.toChat(item)
+              }
+            ).catch((err)=> {
+              if (err.errCode && err.errCode == 'GROUP_NOT_EXIST') {
+                NoticeStore.updateInViteNotice(item.noticeId);
+                Alert('该群已被解散')
+              } else if (err.errCode && err.errCode == 'MEMBER_ALREADY_IN_GROUP') {
+                NoticeStore.updateInViteNotice(item.noticeId);
+                Alert('你已在该群组');
+              } else {
+                Alert(err);
+              }
+              //Alert(err);
+            });
+          }
+        );
+      } else {
+        Alert("请检查网络连接")
+      }
+
     }
   },
 
