@@ -98,6 +98,17 @@ let Messenger = React.createClass({
         });
       }
 
+      if(msgToSend.contentType == MSG_CONTENT_TYPE.IMAGE){
+        let self = this;
+        let msgId = msgToSend.msgId;
+        let uri = msgToSend.content;
+        msgToSend.cb = (sucUrl)=> {
+          ImStore.modifyImgUrl(msgId,sucUrl);
+          self._sendMessage(MSG_CONTENT_TYPE.IMAGE, sucUrl, true, msgId, false, uri);
+          console.log('hahahaha 我上传成功了  --登攀');
+        }
+      }
+
       ImAction.send(msgToSend, isReSend, this.props.param.myId, isNotSend);
       return msgToSend.msgId;
     }
@@ -121,30 +132,30 @@ let Messenger = React.createClass({
   },
 
   handleSendImage(uri) {
-    //this._sendMessage(MSG_CONTENT_TYPE.IMAGE, uri);
-    let p = new Promise((resolve,reject)=>{
-      resolve( this._sendMessage(MSG_CONTENT_TYPE.IMAGE, '' , false, '', true, uri))
-    }).catch((err)=>{
-      throw err;
-    });
-
-    let self = this;
-    p.then((msgId)=>{
-      ImAction.uploadImage(uri).then((response)=>{
-        ImStore.modifyImgUrl(msgId,response.fileUrl)
-        self._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl, true,msgId,false, uri);
-      });
-    }).catch((err)=>{
-      Alert('图片上传失败');
-    });
-
-    //ImAction.uploadImage(uri)
-    //  .then((response) => {
-    //    this._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl);
-    //  }).catch((errorData) => {
-    //    console.log('Image upload error ' + JSON.stringify(errorData));
-    //    Alert('图片上传失败');
+    this._sendMessage(MSG_CONTENT_TYPE.IMAGE, '' , false, '', true, uri)
+    //let p = new Promise((resolve,reject)=>{
+    //  resolve( this._sendMessage(MSG_CONTENT_TYPE.IMAGE, '' , false, '', true, uri))
+    //}).catch((err)=>{
+    //  throw err;
+    //});
+    //
+    //let self = this;
+    //p.then((msgId)=>{
+    //  ImAction.uploadImage(uri).then((response)=>{
+    //    ImStore.modifyImgUrl(msgId,response.fileUrl)
+    //    self._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl, true,msgId,false, uri);
     //  });
+    //}).catch((err)=>{
+    //  Alert('图片上传失败');
+    //});
+    //
+    ////ImAction.uploadImage(uri)
+    ////  .then((response) => {
+    ////    this._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl);
+    ////  }).catch((errorData) => {
+    ////    console.log('Image upload error ' + JSON.stringify(errorData));
+    ////    Alert('图片上传失败');
+    ////  });
   },
 
   handleImageError(error) {

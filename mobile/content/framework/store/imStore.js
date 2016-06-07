@@ -286,6 +286,7 @@ let _saveMsg = (message, userId) => {
         certified:userInfo.certified,
         messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
+
       });
     } else if (message.fromUId == -1) {
       _data.messages.push({
@@ -310,7 +311,8 @@ let _saveMsg = (message, userId) => {
         certified:_data.certified,
         messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
-        localUri:message.localUri
+        localUri:message.localUri,
+        cb:message.cb
       });
     }
 
