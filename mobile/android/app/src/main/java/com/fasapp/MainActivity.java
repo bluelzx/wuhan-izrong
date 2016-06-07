@@ -9,7 +9,6 @@ import android.os.PersistableBundle;
 import android.util.Log;
 
 import com.facebook.react.ReactActivity;
-import com.huawei.android.pushagent.PushManager;
 import com.rnfs.RNFSPackage;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -17,8 +16,6 @@ import com.facebook.react.shell.MainReactPackage;
 import com.fasapp.pakage.ZXReactPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.tencent.android.tpush.XGPushManager;
-import com.tencent.android.tpush.service.XGPushService;
 
 import java.io.File;
 import java.util.Arrays;
@@ -98,11 +95,11 @@ public class MainActivity extends ReactActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PushManager.requestToken(MainActivity.this);
-        String sdk=android.os.Build.VERSION.SDK;
-        String model=android.os.Build.MODEL;
-        String release=android.os.Build.VERSION.RELEASE;
-        Log.d("MainActivity", "SDK: " + sdk + "   model: " + model + "   release: " + release);
+//        PushManager.requestToken(MainActivity.this);
+//        String sdk=android.os.Build.VERSION.SDK;
+//        String model=android.os.Build.MODEL;
+//        String release=android.os.Build.VERSION.RELEASE;
+//        Log.d("MainActivity", "SDK: " + sdk + "   model: " + model + "   release: " + release);
         //        PushManager.getInstance().initialize(this.getApplicationContext());
                 // 开启logcat输出，方便debug，发布时请关闭
         // XGPushConfig.enableDebug(this, true);

@@ -6,6 +6,7 @@ let React = require('react-native');
 let {Text, View, TextInput, Platform, TouchableOpacity, Image, InteractionManager} = React;
 let { Device, Alert } = require('mx-artifacts');
 let NavBarView = require('../../framework/system/navBarView');
+let Validation = require('../../comp/utils/validation');
 let { ExtenList } = require('mx-artifacts');
 let SearchBar = require('./searchBar');
 let CheckBox = require('./checkBox');
@@ -95,7 +96,7 @@ let CreateGroup = React.createClass({
   createGroup: function (members) {
 
     var reg =new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5]+$");
-    if (reg.test(this.state.groupName)) {
+    if (!Validation.isEnableEmoji(this.state.groupName)) {
       this.setState({
         groupName: ''
       });

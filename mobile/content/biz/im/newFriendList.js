@@ -150,7 +150,7 @@ let NewFriendList = React.createClass({
                   );
                 } else {
                   return (
-                    <TouchableOpacity style={{flex:1,borderRadius: 5}} onPress={()=>this.acceptInvite(item)}>
+                    <TouchableOpacity style={{flex:1,borderRadius: 5,backgroundColor: 'transparent',}} onPress={()=>this.acceptInvite(item)}>
                       <View
                         style={{justifyContent:'flex-end',borderRadius: 5, backgroundColor: '#23ABF3',paddingHorizontal:10,paddingVertical:5}}>
                         <Text

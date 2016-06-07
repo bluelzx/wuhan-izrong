@@ -58,7 +58,9 @@ let Personal = React.createClass({
 
   _onChange: function () {
     this.setState(this.getStateFromStores());
-    this.refs['loadImage'].refreshComponent();
+    if(this.refs['loadImage']){
+      this.refs['loadImage'].refreshComponent();
+    }
   },
 
   toPage: function (name) {
