@@ -21,6 +21,8 @@ exports.uploadImage = function (uri, key, token, onresp) {
   //});
   return Promise.race([MxFetch.fetch(conf.UP_HOST, options, 15000).then((response) => {
     onresp(response);
+  }).catch((err)=>{
+    throw(err);
   }), new Promise(function (resolve, reject) {
     setTimeout(() => reject(new Error('链接超时')), 20000);
   })]);
