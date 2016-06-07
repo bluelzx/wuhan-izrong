@@ -75,7 +75,7 @@ let DeleteMember = React.createClass({
     }
     return (
       <TouchableOpacity onPress={() => this.delUser(this.props.param.groupId, memberList)}>
-        <Text style={{ marginLeft:Platform.OS==='ios'?-20:0,color:count==0?'#6B849C':'white'}}>{'删除(' + count + ')'}</Text>
+        <Text style={{ marginLeft:Platform.OS==='ios'?-20:0,color:'white'}}>{'删除(' + count + ')'}</Text>
       </TouchableOpacity>
     );
   },

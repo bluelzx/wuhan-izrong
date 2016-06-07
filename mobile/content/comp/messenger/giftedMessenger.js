@@ -21,14 +21,13 @@ let {
 let dismissKeyboard = require('react-native-dismiss-keyboard');
 let {Moment} = require('mx-artifacts');
 Moment.locale('zh-cn');
-let Icon = require('react-native-vector-icons/Ionicons');
 let TimerMixin = require('react-timer-mixin');
 let Publish = require('../../biz/publish/publish');
 
 let { Spinner, Button, Alert, Device } = require('mx-artifacts');
 
 let AutoExpandingTextInput = require('./autoExpandingTextInput');
-//let Message = require('./Message');
+
 import Message from './message';
 
 let DictIcon = require('../../constants/dictIcon');
@@ -37,9 +36,6 @@ let ImagePicker = require('../utils/imagePicker');
 
 let UserInfoAction = require('../../framework/action/userInfoAction');
 let DictStyle = require('../../constants/dictStyle');
-
-//let BizAction  = require('');
-
 
 let GiftedMessenger = React.createClass({
   mixins: [TimerMixin],
@@ -518,37 +514,37 @@ let GiftedMessenger = React.createClass({
   },
 
   renderLoadEarlierMessages() {
-    if (this.props.loadEarlierMessagesButton === true) {
-      if (this.state.allLoaded === false) {
-        if (this.state.isLoadingEarlierMessages === true) {
-          return (
-            <View style={this.styles.loadEarlierMessages}>
-              <Spinner />
-            </View>
-          );
-        } else {
-          return (
-            <View style={this.styles.loadEarlierMessages}>
-              <Button
-                containerStyle={{
-                  borderRadius: 0,
-                  backgroundColor: 'transparent',
-                  paddingHorizontal: 12,
-                  height: 47,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                style={this.styles.loadEarlierMessagesButton}
-                onPress={() => {this.preLoadEarlierMessages()}}
-              >
-                {this.props.loadEarlierMessagesButtonText}
-              </Button>
-            </View>
-          );
-        }
-      }
-    }
-    return <View></View>;
+  //  if (this.props.loadEarlierMessagesButton === true) {
+  //    if (this.state.allLoaded === false) {
+  //      if (this.state.isLoadingEarlierMessages === true) {
+  //        return (
+  //          <View style={this.styles.loadEarlierMessages}>
+  //            <Spinner />
+  //          </View>
+  //        );
+  //      } else {
+  //        return (
+  //          <View style={this.styles.loadEarlierMessages}>
+  //            <Button
+  //              containerStyle={{
+  //                borderRadius: 0,
+  //                backgroundColor: 'transparent',
+  //                paddingHorizontal: 12,
+  //                height: 47,
+  //                alignItems: 'center',
+  //                justifyContent: 'center',
+  //              }}
+  //              style={this.styles.loadEarlierMessagesButton}
+  //              onPress={() => {this.preLoadEarlierMessages()}}
+  //            >
+  //              {this.props.loadEarlierMessagesButtonText}
+  //            </Button>
+  //          </View>
+  //        );
+  //      }
+  //    }
+  //  }
+    return <View style={{height: 47}}></View>;
   },
 
 

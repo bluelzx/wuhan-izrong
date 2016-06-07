@@ -42,7 +42,7 @@ let ModifyGroupName = React.createClass({
       <TouchableOpacity onPress={()=>{
       this.modifyGroupName();
       }}>
-        <Text style={{color:(this.state.groupName.length == 0 || this.state.groupName.length > Setting.groupNameLengt) ?'#9FB3F3':'white'}}>完成</Text>
+        <Text style={{color:'white'}}>完成</Text>
       </TouchableOpacity>
 
     );

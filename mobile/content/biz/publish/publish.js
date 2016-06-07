@@ -103,26 +103,11 @@ let Publish = React.createClass({
   },
 
   componentDidMount: function () {
-    //// Keyboard events监听
-    if (Platform.OS === 'android') {
-      DeviceEventEmitter.addListener('keyboardDidShow', this.updateKeyboardSpace);
-      DeviceEventEmitter.addListener('keyboardDidHide', this.resetKeyboardSpace);
-    } else {
-      DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
-      DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
-    }
 
     AppStore.addChangeListener(this._onChange, MARKET_CHANGE);
   },
 
   componentWillUnmount: function () {
-    if (Platform.OS === 'android') {
-      DeviceEventEmitter.removeAllListeners('keyboardDidShow');
-      DeviceEventEmitter.removeAllListeners('keyboardDidHide');
-    } else {
-      DeviceEventEmitter.removeAllListeners('keyboardWillShow');
-      DeviceEventEmitter.removeAllListeners('keyboardWillHide');
-    }
 
     AppStore.removeChangeListener(this._onChange, MARKET_CHANGE);
   },
@@ -135,57 +120,6 @@ let Publish = React.createClass({
     this.setState({
       bizCategory: filterType != null ? filterType.category : categoryArr.length == 0 ? [] : categoryArr[0]
     })
-  },
-
-  // Keyboard actions
-  updateKeyboardSpace: function (frames) {
-    const keyboardSpace = frames.endCoordinates ? frames.endCoordinates.height : frames.end.height//获取键盘高度
-    this.setState({
-      keyboardSpace: keyboardSpace,
-    });
-
-      //if (Platform.OS === 'android') {
-      //  this.activeInput.measure((ox, oy, width, height, px, py) => {
-      //    let keyBoardTop = screenHeight - this.state.keyboardSpace;
-      //    let activeInputBottom = py + height;
-      //
-      //    //Animated.timing(this.state.scrollHeight, {
-      //    //    toValue: screenHeight - (this.state.keyboardSpace + 64),
-      //    //    duration: 200,
-      //    //}).start(()=> {
-      //    //
-      //    //});
-      //    //this.setState({
-      //    //  scrollHeight: screenHeight - (this.state.keyboardSpace + 80),
-      //    //});
-      //
-      //    //if (activeInputBottom > keyBoardTop + 15) {
-      //    //this.refs['scroll'].scrollTo({y: 200});
-      //    //}
-      //  });
-      //
-      //
-      //} else {
-      //  this.activeInput.measure((ox, oy, width, height, px, py) => {
-      //    let keyBoardTop = screenHeight - this.state.keyboardSpace;
-      //    let activeInputBottom = py + height;
-      //
-      //    if (activeInputBottom > keyBoardTop + 15) {
-      //      this.refs['scroll'].scrollTo({y: activeInputBottom - keyBoardTop + 10});
-      //    }
-      //  });
-      //}
-  },
-
-  resetKeyboardSpace: function () {
-
-    if (Platform.OS === 'android') {
-      this.setState({
-        scrollHeight: screenHeight - 108
-      });
-    }
-
-    this.refs['scroll'].scrollTo({y: 0})
   },
 
   render: function () {
@@ -375,14 +309,13 @@ let Publish = React.createClass({
   renderAdd (){
     if (this.state.fileUrlList.length < 5) {
       return (
-        <ImagePicker
-          type="all"
-          onSelected={(response) => {this.handleSendImage(response, 10)}}
-          onError={(error) => this.handleImageError(error)}
-          title="选择图片"
-          fileId="publish1"
-          allowsEditing={false}
-          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df',backgroundColor: 'white'}}
+        <LoadExtendImage jobMode="select"
+                         type="all"
+                         startUpload={(response) => {this.handleSendImage(response, 10)}}
+                         title="选择图片"
+                         fileId="publish1"
+                         allowsEditing={false}
+                         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df',backgroundColor: 'white'}}
         >
           <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
             <Image
@@ -390,43 +323,39 @@ let Publish = React.createClass({
               source={require('../../image/market/addImage.png')}
             />
           </View>
-        </ImagePicker>
+        </LoadExtendImage>
       );
     }
   },
   renderImgItem: function (rowData, sectionID, rowID) {
     let uri = rowData + ImageSize50;
     return (
-      <ImagePicker
-        longPress={() => this._longPress(rowID)}
-        type="all"
-        onSelected={(response) => {this.handleSendImage(response, rowID)}}
-        onError={(error) => this.handleImageError(error)}
-        title="选择图片"
-        fileId="publish1"
-        allowsEditing={false}
-        style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
-      >
+      <View
+        style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df',backgroundColor: 'white'}}>
         <LoadExtendImage style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
-                         localPath={rowData}
-                         uploadSuccess={(res)=>{
-                         let arr = this.state.imageUploadUrlList;
-                            if (rowID > 5) {
-                              arr.push(res.fileUrl);
-                            } else {
-                              arr[rowID] = res.fileUrl;
-                            }
-                            this.setState({
-                              imageUploadUrlList: arr
-                            });
-                            console.log('成功');
-                         }}
-                         uploadfailed={()=> console.log('失败')}
-                         jobMode="upload"
+                         uploadFileUri={{uri:rowData}}
+                         longPress={(rowID) => this._longPress(rowID) }
+                         selectType="all"
+                         title="选择图片"
+                         fileId="userPhoto"
+                         allowsEditing={true}
+                         uploadSuccess={(url)=>{
+                             let arr = this.state.imageUploadUrlList;
+                                if (rowID > 5) {
+                                  arr.push(url);
+                                } else {
+                                  arr[rowID] = url;
+                                }
+                                this.setState({
+                                  imageUploadUrlList: arr
+                                });
+                                console.log('成功');
+                             }}
+                         uploadfailed={(error) => this.handleImageError(error)}
+                         jobMode="select"
         >
         </LoadExtendImage>
-
-      </ImagePicker>
+      </View>
     )
   },
 
@@ -638,8 +567,8 @@ let Publish = React.createClass({
             );
           } else if (buttonIndex == 1) {
             let arr = this.state.fileUrlList;
-            arr[rowId] = 0;
-            this.setState({fileUrlList: _.compact(arr)})
+            _.pullAt(arr, rowId);
+            this.setState({fileUrlList: arr});
           }
         });
     } else {
@@ -658,8 +587,8 @@ let Publish = React.createClass({
               break;
             case 1:
               let arr = this.state.fileUrlList;
-              arr[rowId] = 0;
-              this.setState({fileUrlList: _.compact(arr)});
+              _.pullAt(arr, rowId);
+              this.setState({fileUrlList: arr});
               break;
             default:
               break;
@@ -722,7 +651,7 @@ let Publish = React.createClass({
 
   handleImageError(error) {
     console.log('Image select error ' + JSON.stringify(error));
-    Alert('图片选择失败');
+    Alert('图片上传失败');
   }
 
 });

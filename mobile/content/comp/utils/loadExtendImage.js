@@ -10,7 +10,6 @@ let {
   PropTypes,
   Text,
   View,
-  TouchableOpacity,
   Image,
   ActivityIndicatorIOS,
   ProgressBarAndroid,
@@ -19,48 +18,51 @@ let {
 
 let RNFS = require('react-native-fs');
 let TimerMixin = require('react-timer-mixin');
-let _ = require('lodash');
 
 let CacheDirPath = Platform.OS === 'android' ? RNFS.ExternalDirectoryPath + '/fasCache/' : RNFS.DocumentDirectoryPath + '/fasCache/';
 let jobId1 = -1, jobId2 = 1;
 
 let ImAction = require('../../framework/action/imAction');
 let Lightbox = require('../lightBox/Lightbox');
+let ImagePicker = require('./imagePicker');
 
 let LoadExtendImage = React.createClass({
   mixins: [TimerMixin],
 
   propTypes: {
-    jobMode: PropTypes.oneOf(['load', 'upload']).isRequired,
+    jobMode: PropTypes.oneOf(['load', 'upload', 'select']).isRequired,
     source: PropTypes.object,
+    uploadFileUri: PropTypes.object,
     isEnableLoading: PropTypes.bool,
-    localPath: PropTypes.string,
-    upLoadURL: PropTypes.string,
-    customUpload: PropTypes.func,
     startUpload: PropTypes.func,
     uploadSuccess: PropTypes.func,
-    uploadFailed: PropTypes.func
+    uploadFailed: PropTypes.func,
+    occurError: PropTypes.func,
+
+    selectType: PropTypes.oneOf(['all', 'camera', 'library']),
+    longPress: PropTypes.func,
+    allowsEditing: PropTypes.bool,
+    fileId: PropTypes.string,
+    title: PropTypes.string,
+    onError: PropTypes.func,
+    maxWidth: PropTypes.number,
+    maxHeight: PropTypes.number,
+    aspectX: PropTypes.number,
+    aspectY: PropTypes.number
   },
 
   getDefaultProps: function () {
     return {
       isEnableLoading: true,
-      customUpload: () => {
-      },
-      startUpload: () => {
-      },
-      uploadSuccess: () => {
-      },
-      uploadFailed: () => {
-      }
     };
   },
 
   getInitialState: function () {
     return {
-      downloadProgress: 0,
-      loadSuccess: false,
-      failed: false
+      fileExisted: false,
+      filePath: {uri: ''},
+      loadEnd: true,
+      status: 'loading'
     };
   },
 
@@ -69,14 +71,97 @@ let LoadExtendImage = React.createClass({
   },
 
   componentDidMount: function () {
+
     if (this.props.jobMode === 'load') {
-      this.loadFunc();
-    } else {
-      this.upLoadFile();
+
+      if (!this.state.fileExisted) {
+        let imagePath = this.getStoragePath(this.props.source.uri).imagePath;
+        RNFS.exists(imagePath).then((exists) => {
+          if (!exists) {
+            this.downloadFile(this.props.source.uri, imagePath);
+          } else {
+            this.setState({
+              fileExisted: true,
+              filePath: {uri: 'file://' + imagePath},
+              status: 'success'
+            })
+          }
+        });
+      }
+
+    } else if (this.props.jobMode === 'upload') {
+
+      let imagePath = null;
+      if (this.props.uploadFileUri && this.props.uploadFileUri.uri) {
+        imagePath = this.props.uploadFileUri.uri;
+        this.upLoadFile(imagePath);
+      } else if (this.props.source && this.props.source.uri) {
+        imagePath = this.getStoragePath(this.props.source.uri).imagePath;
+        if (!this.state.fileExisted) {
+          RNFS.exists(imagePath).then((exists) => {
+            if (!exists) {
+              this.downloadFile(this.props.source.uri, imagePath);
+            } else {
+              this.setState({
+                fileExisted: true,
+                filePath: {uri: 'file://' + imagePath},
+                status: 'success'
+              })
+            }
+          });
+        }
+      } else {
+        this.setState({
+          status: 'success'
+        })
+      }
+
+    } else if (this.props.jobMode === 'select') {
+
+      let imagePath = null;
+      if (this.props.source && this.props.source.uri) {
+        imagePath = this.getStoragePath(this.props.source.uri).imagePath;
+        if (!this.state.fileExisted) {
+          RNFS.exists(imagePath).then((exists) => {
+            if (!exists) {
+              this.downloadFile(this.props.source.uri, imagePath);
+            } else {
+              this.setState({
+                fileExisted: true,
+                filePath: {uri: 'file://' + imagePath},
+                status: 'success'
+              })
+            }
+          });
+        }
+      } else if (this.props.uploadFileUri && this.props.uploadFileUri.uri) {
+        imagePath = this.props.uploadFileUri.uri;
+        this.upLoadFile(imagePath);
+      } else {
+        this.setState({
+          status: 'success'
+        })
+      }
+
     }
   },
 
-  getFileName: function (url) {
+  refreshComponent: function () {
+    let imagePath = null;
+    if (this.props.source) {
+      imagePath = this.getStoragePath(this.props.source.uri).imagePath;
+      this.setState({
+        fileExisted: true,
+        filePath: {uri: 'file://' + imagePath},
+        status: 'success'
+      });
+    } else if (this.props.uploadFileUri) {
+      imagePath = this.props.uploadFileUri.uri;
+      this.upLoadFile(imagePath);
+    }
+  },
+
+  getStoragePath: function (url) {
 
     let urlSuffix = url.split("http://img.izirong.com/").pop();
     let suffixArr = urlSuffix.split('?');
@@ -84,171 +169,209 @@ let LoadExtendImage = React.createClass({
     let imageName = suffixArr[0];
     let qiniuSuffix = suffixArr[1] ? suffixArr[1] : null;
 
+    let imageSuffix = imageName.split('.').pop();
+    let imagePath = null;
+    if (imageSuffix !== 'jpg') {
+      imagePath = CacheDirPath + imageName + '.jpg';
+    } else {
+      imagePath = CacheDirPath + imageName;
+    }
+
     return {
-      imageName: imageName,
+      imagePath: imagePath,
       qiniuSuffix: qiniuSuffix
     }
   },
 
-  loadFunc: function () {
-    if (this.props.source) {
+  upLoadFile: function (uploadFileUri) {
 
-      let imageName = this.getFileName(this.props.source.uri).imageName;
-      let imageSuffix = imageName.split('.').pop();
-      let imagePath = null;
-      if (imageSuffix !== 'jpg') {
-        imagePath = CacheDirPath + imageName + '.jpg';
-      } else {
-        imagePath = CacheDirPath + imageName;
-      }
-
-      RNFS.exists(imagePath).then((exists) => {
-        if (exists) {
-          return RNFS.stat(imagePath).then(info => {
-            if (info.size > 50) {
-              this.setState({
-                imagePath: {uri: 'file://' + imagePath},
-                loadSuccess: true
-              });
-            } else {
-              return this.downloadFile(this.props.source.uri, imagePath);
-            }
-          });
-        } else {
-          return this.downloadFile(this.props.source.uri, imagePath);
-        }
-      });
+    if(this.props.startUpload){
+      this.props.startUpload(uploadFileUri);
     }
-  },
 
-  upLoadFile: function () {
-    this.props.startUpload();
-    let fileName = this.props.localPath.split("/").pop();
+      let fileName = uploadFileUri.split("/").pop();
 
-
-    if (this.props.localPath) {
       this.setState({
-        imagePath: {uri: this.props.localPath},
-        loadSuccess: false
+        fileExisted: true,
+        filePath: {uri: 'file://' + uploadFileUri},
+        status: 'loading'
       });
-      ImAction.uploadImage2(this.props.localPath, fileName)
+
+      ImAction.uploadImage2(uploadFileUri, fileName)
         .then((response) => {
+          if(this.props.uploadSuccess){
+            this.props.uploadSuccess(response.fileUrl);
+          }
 
-          this.props.uploadSuccess(response);
-          this.setState({loadSuccess: true});
-          console.log(response);
-
+          this.setState({
+            status: 'success'
+          })
         }).catch((error) => {
-
         this.setState({
-          loadSuccess: true,
-          failed: true
+          status: 'fail'
         });
-        this.props.uploadFailed(error);
-      });
-    } else {
+        if(this.props.uploadFailed){
+          this.props.uploadFailed(error);
+        }
 
-    }
+        this.errorHandle('uploadError:' + error);
+      });
 
   },
 
   mkdir: function () {
     return RNFS.mkdir(CacheDirPath).then(success => {
       var text = success.toString();
-      this.setState({output: text});
     }).catch(err => this.showError(err));
   },
 
-  downloadFile: function (uri, Path) {
+  downloadFile: function (uri, path) {
     var progress1 = data => {
       var text = JSON.stringify(data);
-      this.setState({output: text});
     };
 
     var begin1 = res => {
       jobId1 = res.jobId;
     };
 
-    RNFS.downloadFile(uri, Path, begin1, progress1)
+    this.setState({
+      loadEnd: false
+    });
+
+    RNFS.downloadFile(uri, path, begin1, progress1)
       .then(res => {
         this.setState({
-          imagePath: {uri: 'file://' + Path},
-          loadSuccess: true
-        });
-      }).catch(err => this.showError(err));
+          fileExisted: true,
+          filePath: {uri: 'file://' + path},
+          status: 'success'
+        })
+      }).catch((error) => {
+      this.setState({
+        status: 'fail'
+      });
+      this.errorHandle('downloadError:' + error);
+    });
   },
 
-  showError: function (err) {
+  _onSelected: function (uri) {
+    if ((!this.props.source || !this.props.source.uri) && (!this.props.uploadFileUri || !this.props.uploadFileUri.uri)) {
+      if (this.props.startUpload) {
+        this.props.startUpload(uri);
+      }
+    } else {
+      this.upLoadFile(uri);
+    }
+  },
 
-    this.setState({
-      failed: true
-    });
+  errorHandle: function (err) {
+    this.props.occurError(err);
     console.log(err);
   },
 
-  showLoading: function () {
-    if (Platform.OS === 'android') {
-      return (
-        <ProgressBarAndroid style={styles.loadStyle}
-                            styleAttr="Inverse"
-                            color="#fff"
-        />
-      );
-    } else {
-      return (
-        <ActivityIndicatorIOS style={styles.loadStyle}
-                              animating={true}
-                              size="large"
-                              color="#fff"
-        />
-      );
-    }
+  showError: function (err) {
+    console.log(err);
   },
 
-  _onPress: function () {
-    if (this.props.jobMode === 'load') {
+  renderLoading: function () {
+    return (
+        Platform.OS === 'android' ?
+          <ProgressBarAndroid style={styles.loadStyle} styleAttr="Inverse" color="#44bcb2"/> :
+          <ActivityIndicatorIOS style={styles.loadStyle} animating={true} size="large" color="#44bcb2"/>
+      );
 
-      if (this.state.failed) {
-        //this.loadFunc();
-      }
-
-    } else {
-
-      if (this.state.failed) {
-        //this.upLoadFile();
-      }
-
-    }
   },
 
   render: function () {
-    console.log(this.state.imagePath)
-    return (
-      <View style={[{backgroundColor:'#eee'},this.props.style]}
-            onLayout={() => {}}
-      >
-          <Image style={[styles.imageStyle]}
-                 source={this.state.imagePath}
-                 onLayout={() => {}}
+
+    if ((!this.props.source || !this.props.source.uri) && (!this.props.uploadFileUri || !this.props.uploadFileUri.uri)) {
+      return (
+        <ImagePicker style={[styles.imageStyle,this.props.style]}
+                     selectType={this.props.selectType}
+                     onSelected={(res) => this._onSelected(res)}
+                     longPress={this.props.longPress}
+                     onError={(err) => this.errorHandle('selectPhoto:' + err)}
+                     title={this.props.title}
+                     fileId={this.props.fileId}
+                     allowsEditing={this.props.allowsEditing}
+                     maxWidth={this.props.maxWidth}
+                     maxHeight={this.props.maxHeight}
+                     aspectX={this.props.aspectX}
+                     aspectY={this.props.aspectY}
+        >
+          {this.props.children}
+        </ImagePicker>
+      );
+    }
+    else if (this.state.status == 'loading') {
+
+      return (
+        <Image style={[styles.imageStyle,this.props.style]}
+               resizeMode="cover"
+               source={this.state.filePath}
+        >
+          { this.state.isEnableLoading? this.renderLoading():null}
+        </Image>
+      );
+
+    } else if (this.state.status == 'fail') {
+
+      return (
+        <Image style={[styles.imageStyle,this.props.style]}
+               resizeMode="cover"
+               source={this.state.filePath}
+        >
+          <Text style={{color:'red'}}> fail </Text>
+        </Image>
+      );
+
+    } else {
+      if (this.props.jobMode === 'select') {
+        return (
+          <ImagePicker
+            selectType={this.props.selectType}
+            onSelected={(res) => this._onSelected(res)}
+            longPress={this.props.longPress}
+            onError={(err) => this.errorHandle('selectPhoto:' + err)}
+            title={this.props.title}
+            fileId={this.props.fileId}
+            allowsEditing={this.props.allowsEditing}
+            maxWidth={this.props.maxWidth}
+            maxHeight={this.props.maxHeight}
+            aspectX={this.props.aspectX}
+            aspectY={this.props.aspectY}
           >
-            { this.props.isEnableLoading ? (this.state.loadSuccess ? null : this.showLoading()) : null }
+            <Image style={[styles.imageStyle,this.props.style]}
+                   source={this.state.filePath}
+                   resizeMode="cover"
+            >
+            </Image>
+          </ImagePicker>
+        );
+
+      } else {
+        return (
+          <Image style={[styles.imageStyle,this.props.style]}
+                 source={this.state.filePath}
+                 resizeMode="cover"
+          >
           </Image>
-      </View>
-    );
+        );
+      }
+    }
+
   }
 });
 
 let styles = StyleSheet.create({
   loadStyle: {
-    height: 50,
-    width: 50
+    height: 40,
+    width: 40,
+    borderRadius: 20
   },
 
   imageStyle: {
-    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5
+    alignItems: 'center'
   }
 });
 

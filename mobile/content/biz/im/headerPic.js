@@ -9,6 +9,8 @@ let NameCircular = require('./nameCircular').NameCircular;
 
 let Cache = require('../../comp/fileCache/fileCache');
 
+let LoadExtendImage = require('../../comp/utils/loadExtendImage');
+
 let HeaderPic = React.createClass({
 
   //imgSrc:{},
@@ -51,13 +53,14 @@ let HeaderPic = React.createClass({
 
   render: function () {
     let {name, photoFileUrl, badge, certified = false, source=false, showBadge=false} = this.props;
-    if(photoFileUrl)
-      photoFileUrl = Cache.getCache(photoFileUrl,name);
+
     if (!_.isEmpty(photoFileUrl)) {
         return (
           <View>
-            <Image style={[styles.head]} resizeMode="cover" source={{uri:photoFileUrl}}/>
-
+            <LoadExtendImage jobMode="load"
+                             source={{uri: photoFileUrl}}
+                             style={styles.head}
+            />
             {this.unReadIcon(badge, showBadge)}
               {(()=>{
               if(certified){
