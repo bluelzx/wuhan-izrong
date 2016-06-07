@@ -92,10 +92,10 @@ let LoadExtendImage = React.createClass({
     } else if (this.props.jobMode === 'upload') {
 
       let imagePath = null;
-      if (this.props.uploadFileUri.uri) {
+      if (this.props.uploadFileUri && this.props.uploadFileUri.uri) {
         imagePath = this.props.uploadFileUri.uri;
         this.upLoadFile(imagePath);
-      } else if (this.props.source.uri) {
+      } else if (this.props.source && this.props.source.uri) {
         imagePath = this.getStoragePath(this.props.source.uri).imagePath;
         if (!this.state.fileExisted) {
           RNFS.exists(imagePath).then((exists) => {
@@ -119,7 +119,7 @@ let LoadExtendImage = React.createClass({
     } else if (this.props.jobMode === 'select') {
 
       let imagePath = null;
-      if (this.props.source.uri) {
+      if (this.props.source && this.props.source.uri) {
         imagePath = this.getStoragePath(this.props.source.uri).imagePath;
         if (!this.state.fileExisted) {
           RNFS.exists(imagePath).then((exists) => {
@@ -134,7 +134,7 @@ let LoadExtendImage = React.createClass({
             }
           });
         }
-      } else if (this.props.uploadFileUri.uri) {
+      } else if (this.props.uploadFileUri && this.props.uploadFileUri.uri) {
         imagePath = this.props.uploadFileUri.uri;
         this.upLoadFile(imagePath);
       } else {
@@ -254,8 +254,10 @@ let LoadExtendImage = React.createClass({
   },
 
   _onSelected: function (uri) {
-    if (!this.props.source && !this.props.uploadFileUri) {
-      this.props.startUpload(uri);
+    if ((!this.props.source || !this.props.source.uri) && (!this.props.uploadFileUri || !this.props.uploadFileUri.uri)) {
+      if (this.props.startUpload) {
+        this.props.startUpload(uri);
+      }
     } else {
       this.upLoadFile(uri);
     }
@@ -281,7 +283,7 @@ let LoadExtendImage = React.createClass({
 
   render: function () {
 
-    if (!this.props.source && !this.props.uploadFileUri) {
+    if ((!this.props.source || !this.props.source.uri) && (!this.props.uploadFileUri || !this.props.uploadFileUri.uri)) {
       return (
         <ImagePicker style={[styles.imageStyle,this.props.style]}
                      selectType={this.props.selectType}
