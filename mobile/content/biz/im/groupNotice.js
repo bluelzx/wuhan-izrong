@@ -138,7 +138,6 @@ let GroupNotice = React.createClass({
         );
       } else {
         Alert("请检查网络连接")
-
       }
 
     }
