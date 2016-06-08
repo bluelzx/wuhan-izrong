@@ -33,6 +33,7 @@ let LoadExtendImage = React.createClass({
     jobMode: PropTypes.oneOf(['load', 'upload', 'select']).isRequired,
     source: PropTypes.object,
     uploadFileUri: PropTypes.object,
+    isSelectUpload: PropTypes.bool,
     isEnableLoading: PropTypes.bool,
     startUpload: PropTypes.func,
     uploadSuccess: PropTypes.func,
@@ -54,6 +55,7 @@ let LoadExtendImage = React.createClass({
   getDefaultProps: function () {
     return {
       isEnableLoading: true,
+      isSelectUpload: true
     };
   },
 
@@ -254,13 +256,17 @@ let LoadExtendImage = React.createClass({
   },
 
   _onSelected: function (uri) {
-    if ((!this.props.source || !this.props.source.uri) && (!this.props.uploadFileUri || !this.props.uploadFileUri.uri)) {
-      if (this.props.startUpload) {
-        this.props.startUpload(uri);
-      }
-    } else {
+    if (this.props.isSelectUpload) {
       this.upLoadFile(uri);
     }
+    else {
+      if ((!this.props.source || !this.props.source.uri) && (!this.props.uploadFileUri || !this.props.uploadFileUri.uri)) {
+        if (this.props.startUpload) {
+          this.props.startUpload(uri);
+        }
+      }
+    }
+
   },
 
   errorHandle: function (err) {
@@ -283,7 +289,29 @@ let LoadExtendImage = React.createClass({
 
   render: function () {
 
-    if ((!this.props.source || !this.props.source.uri) && (!this.props.uploadFileUri || !this.props.uploadFileUri.uri)) {
+    if (this.state.status == 'loading') {
+
+      return (
+        <Image style={[styles.imageStyle,this.props.style]}
+               resizeMode="cover"
+               source={this.state.filePath}
+        >
+          { this.props.isEnableLoading ? this.renderLoading() : null}
+        </Image>
+      );
+
+    } else if (this.state.status == 'fail') {
+
+      return (
+        <Image style={[styles.imageStyle,this.props.style]}
+               resizeMode="cover"
+               source={this.state.filePath}
+        >
+          <Text style={{color:'red'}}> fail </Text>
+        </Image>
+      );
+
+    } else if ((!this.props.source || !this.props.source.uri) && (!this.props.uploadFileUri || !this.props.uploadFileUri.uri)) {
       return (
         <ImagePicker style={[styles.imageStyle,this.props.style]}
                      selectType={this.props.selectType}
@@ -301,29 +329,6 @@ let LoadExtendImage = React.createClass({
           {this.props.children}
         </ImagePicker>
       );
-    }
-    else if (this.state.status == 'loading') {
-
-      return (
-        <Image style={[styles.imageStyle,this.props.style]}
-               resizeMode="cover"
-               source={this.state.filePath}
-        >
-          { this.state.isEnableLoading? this.renderLoading():null}
-        </Image>
-      );
-
-    } else if (this.state.status == 'fail') {
-
-      return (
-        <Image style={[styles.imageStyle,this.props.style]}
-               resizeMode="cover"
-               source={this.state.filePath}
-        >
-          <Text style={{color:'red'}}> fail </Text>
-        </Image>
-      );
-
     } else {
       if (this.props.jobMode === 'select') {
         return (
