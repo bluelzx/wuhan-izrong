@@ -60,7 +60,8 @@ var self = {};
         resolve(new Response(body, options))
       }
 
-      xhr.onerror = function() {
+      xhr.onerror = function(err) {
+        console.log(err);
         reject(new TypeError('Network request failed'))
       }
 

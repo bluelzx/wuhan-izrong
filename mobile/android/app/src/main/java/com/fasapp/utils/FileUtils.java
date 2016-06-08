@@ -360,7 +360,11 @@ public class FileUtils {
     }
 
     //将图片从一个路径复制到另一个路径
-    public static String copyFile1(String oldPath, String newPath) {
+    public static String copyFile1(String oldPath, String newPath, String cacheDir) {
+        File f = new File(cacheDir);
+        if (!f.exists()) {
+            f.mkdirs();
+        }
         File oldFile = new File(oldPath);
         File newFile = new File(newPath);
         oldFile.renameTo(newFile);
