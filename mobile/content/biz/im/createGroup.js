@@ -114,9 +114,17 @@ let CreateGroup = React.createClass({
       Alert('群组成员人数不能超过' + Setting.groupMemberUpperLimit);
       return;
     }
-    if (0 == Object.keys(members).length)
+    let tmp = false;
+    for (let i in members) {
+      if (members[i]) {
+        tmp = true;
+        break;
+      }
+    }
+    if (!tmp) {
+      Alert('您没有选择成员!');
       return;
-    else {
+    }else {
       dismissKeyboard();
       this.props.exec(() => {
           return ContactAction.createGroup(members, this.state.groupName, this.state.userInfo.userId)
@@ -152,7 +160,7 @@ let CreateGroup = React.createClass({
       }
     }
     return (
-      <TouchableOpacity onPress={() => count > 0 && this.createGroup(memberList)}>
+      <TouchableOpacity onPress={() => this.createGroup(memberList)}>
         <Text
           style={{ marginLeft:Platform.OS==='ios'?-40:0,color:'white'}}>{'创建(' + count + '/' + Setting.groupMemberUpperLimit + ')'}</Text>
       </TouchableOpacity>

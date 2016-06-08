@@ -260,9 +260,9 @@ let UserInfo = React.createClass({
              this.state.publicWeChat, 'default', 40, true, true, false)*/}
 
             <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
-              <View style={[styles.listLayout,DictStyle.userInfoBorderBottom]}>
+              <View style={[styles.listLayout,DictStyle.userInfoBorderBottom,{alignItems:'center'}]}>
                 <View
-                  style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
+                  style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5,alignItems:'center'}}>
                   <Image style={styles.circle} source={require('../../image/user/email.png')}/>
                   <Text style={styles.title}>邮箱</Text>
                 </View>
@@ -280,9 +280,9 @@ let UserInfo = React.createClass({
             <View style={[{marginTop: 10},DictStyle.userInfoBorderTop]}>
               <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
                 <View>
-                  <View style={styles.listLayout}>
+                  <View style={[styles.listLayout,{alignItems:'center'}]}>
                     <View
-                      style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
+                      style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5,alignItems:'center'}}>
                       <Image style={styles.circle} source={require('../../image/user/comp.png')}/>
                       <Text style={styles.title}>机构</Text>
                     </View>
