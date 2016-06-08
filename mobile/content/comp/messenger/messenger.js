@@ -209,7 +209,8 @@ let Messenger = React.createClass({
     // Your logic here
     // Eg: Re-send the message to your server
     // this.handleSend(message, rowID, true);
-    this._sendMessage(MSG_CONTENT_TYPE.TEXT, message.content, true, message.msgId);
+    //let msg = ImStore.getMessageByMessageId(message.msgId);
+    this._sendMessage(message.contentType, message.content, true, message.msgId);
     // ImAction.send(message, true);
 
     // setTimeout(() => {

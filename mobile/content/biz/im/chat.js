@@ -46,10 +46,14 @@ let Chat = React.createClass({
       certified:user.certified,
       messageType:param.chatType
     });
-    if (this.props.param.isFromBizDetail) {
-      this.refs['BIZ_Message']._sendMessage(MSG_CONTENT_TYPE.BIZINFO, this.props.param.content);
-    }
     AppStore.addChangeListener(this._onChange, IM_SESSION);
+    if (this.props.param.isFromBizDetail) {
+      let self = this;
+      setTimeout(()=>{
+        self.refs['BIZ_Message']._sendMessage(MSG_CONTENT_TYPE.BIZINFO, self.props.param.content);
+      },1000);
+
+    }
   },
 
   componentWillUnmount: function () {

@@ -43,11 +43,17 @@ let _modifyImgUrl = function(msg,url){
   });
 }
 
+let _getMessageByMessageId = function(msgId) {
+  let ret = _realm.objects(MESSAGE).filtered('msgId == $0',msgId);
+  return ret[0];
+}
+
 let ImPersister = {
   saveMessage: (message, ownerId) => _saveMessage(message, ownerId),
   getMessageBySessionId: (sessionId, page, ownerId) => _getMessageBySessionId(sessionId, page, ownerId),
   resetMessageStatus: (msgId, isMute) => _resetMessageStatus(msgId, isMute),
-  modifyImgUrl:(msgId, url)=>_modifyImgUrl(msgId,url)
+  modifyImgUrl:(msgId, url)=>_modifyImgUrl(msgId,url),
+  getMessageByMessageId:(msgId) => _getMessageByMessageId(msgId)
 };
 
 module.exports = ImPersister;

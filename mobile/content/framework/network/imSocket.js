@@ -19,7 +19,7 @@ let _sendPing = function() {
   });
 }
 
-let unit = 5 * 60 * 1000;//5分钟
+let unit = 1 * 60 * 1000;//5分钟
 let _setPing = function() {
   time = new Date();
   setTimeout(()=> {
@@ -59,8 +59,6 @@ let ImSocket = {
   },
 
   reconnect: function () {
-    //Alert('reconnect');
-    // _socket && _socket.reconnect();
     this.init(_token, _lastSyncTime);
   },
 
