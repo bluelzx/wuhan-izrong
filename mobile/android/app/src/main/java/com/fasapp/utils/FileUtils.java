@@ -360,15 +360,15 @@ public class FileUtils {
     }
 
     //将图片从一个路径复制到另一个路径
-    public static String copyFile1(String oldPath, String newPath, String cacheDir) {
+    public static String copyFile(String oldPath, String newPath, String cacheDir) {
         File f = new File(cacheDir);
         if (!f.exists()) {
             f.mkdirs();
         }
         File oldFile = new File(oldPath);
         File newFile = new File(newPath);
-        copyFile(oldPath, newPath, true);
-      //  oldFile.renameTo(newFile);
+        //copyFile(oldPath, newPath, true);
+        oldFile.renameTo(newFile);
         return newFile.getAbsolutePath();
     }
 
