@@ -367,6 +367,19 @@ public class FileUtils {
         }
         File oldFile = new File(oldPath);
         File newFile = new File(newPath);
+        copyFile(oldPath, newPath, true);
+        //oldFile.renameTo(newFile);
+        return newFile.getAbsolutePath();
+    }
+
+    //将图片从一个路径移动到另一个路径
+    public static String renameToFile(String oldPath, String newPath, String cacheDir) {
+        File f = new File(cacheDir);
+        if (!f.exists()) {
+            f.mkdirs();
+        }
+        File oldFile = new File(oldPath);
+        File newFile = new File(newPath);
         //copyFile(oldPath, newPath, true);
         oldFile.renameTo(newFile);
         return newFile.getAbsolutePath();
