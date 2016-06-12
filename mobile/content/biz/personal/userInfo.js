@@ -98,43 +98,77 @@ let UserInfo = React.createClass({
     },
 
     returnImage: function () {
-        if (this.state.certificated) {
-          return (
-            <View style={{marginLeft: 20,paddingRight:20}}>
-              <LoadExtendImage jobMode="select"
-                               source={{uri: this.state.photoFileUrl}}
-                               selectType="all"
-                               occurError={(error) => Alert(error)}
-                               title="选择图片"
-                               fileId="userPhoto"
-                               allowsEditing={true}
-                               style={styles.head}
-                               uploadSuccess={(url)=>{this.updateUserPoto(url)}}
-              />
-              <NameCircular name={this.state.realName} isV={this.state.certificated}/>
-              <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
-                     resizeMode="cover" source={require('../../image/user/certificated.png')}/>
-            </View>
-          );
-        }
-        let uri = this.state.photoFileUrl + ImageSize50;
-        return (
-          //<Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
-          <View style={{marginLeft: 20,paddingRight:20}}>
-            <LoadExtendImage jobMode="select"
-                             source={{uri: this.state.photoFileUrl}}
-                             selectType="all"
-                             occurError={(error) => Alert(error)}
-                             title="选择图片"
-                             fileId="userPhoto"
-                             allowsEditing={true}
-                             style={styles.head}
-                             uploadSuccess={(url)=>{this.updateUserPoto(url)}}
-            >
-              <NameCircular name={this.state.realName} isV={this.state.certificated}/>
-            </LoadExtendImage>
+      let uri = this.state.photoFileUrl
+      if (!this.state.certificated) {
+         uri = uri + ImageSize50;
+      }
+      return (
+        <View>
+        <LoadExtendImage jobMode="select"
+                         source={{uri: uri}}
+                         selectType="all"
+                         occurError={(error) => Alert(error)}
+                         title="选择图片"
+                         fileId="userPhoto"
+                         allowsEditing={true}
+                         style={styles.head}
+                         uploadSuccess={(url)=>{this.updateUserPoto(url)}}
+        >
+          <NameCircular name={this.state.realName} isV={this.state.certificated}/>
+        </LoadExtendImage>
+          {(()=>{
+            if(this.state.certificated && this.state.photoFileUrl)
+            return (
+                    <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
+                           resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+            );
+          })()}
           </View>
-        );
+      );
+
+
+        //if (this.state.certificated) {
+        //  return (
+        //    <View style={{marginLeft: 20,paddingRight:20}}>
+        //      <LoadExtendImage jobMode="select"
+        //                       source={{uri: this.state.photoFileUrl}}
+        //                       selectType="all"
+        //                       occurError={(error) => Alert(error)}
+        //                       title="选择图片"
+        //                       fileId="userPhoto"
+        //                       allowsEditing={true}
+        //                       style={styles.head}
+        //                       uploadSuccess={(url)=>{this.updateUserPoto(url)}}
+        //      >
+        //      <NameCircular name={this.state.realName} isV={this.state.certificated}/>
+        //      <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
+        //             resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+        //        </LoadExtendImage>
+        //    </View>
+        //  );
+        //}
+        //let uri = this.state.photoFileUrl + ImageSize50;
+        //return (
+        //  //<Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
+        //  <View style={{marginLeft: 20,paddingRight:20}}>
+        //    <LoadExtendImage jobMode="select"
+        //                     source={{uri: this.state.photoFileUrl}}
+        //                     selectType="all"
+        //                     occurError={(error) => Alert(error)}
+        //                     title="选择图片"
+        //                     fileId="userPhoto"
+        //                     allowsEditing={true}
+        //                     style={styles.head}
+        //                     uploadSuccess={(url)=>{this.updateUserPoto(url)}}
+        //    >
+        //      <NameCircular name={this.state.realName} isV={this.state.certificated}/>
+        //    </LoadExtendImage>
+        //  </View>
+        //);
+        //
+
+
+
 
     },
 //<Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>

@@ -138,7 +138,7 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
       publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
       lastSyncTime: null,
       friendList: loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList),
-      certified: loginUserInfo.certificated || false
+      certified: loginUserInfo.isCertificated || false
     };
 
     let t = _realm.objects(LOGINUSERINFO).filtered('userId = $0',loginUserInfo.userId);
@@ -173,7 +173,7 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
     publicAddress: !!(loginUserInfo.publicAddress == true || loginUserInfo.publicAddress === null),
     publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat === null),
     publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
-    certified: loginUserInfo.certificated || false
+    certified: loginUserInfo.isCertificated || false
   };
   _realm.create(IMUSERINFO,loginImUser,true);
 
