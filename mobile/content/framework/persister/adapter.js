@@ -2,10 +2,6 @@
  * Created by baoyinghai on 6/12/16.
  */
 
-
-/**
- *
- * */
 let _saveLoginUserInfo = function (loginUserInfo , token) {
   let param = {
     userId: loginUserInfo.userId,
@@ -35,7 +31,6 @@ let _saveLoginUserInfo = function (loginUserInfo , token) {
     friendList: loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList),
     certified: loginUserInfo.isCertificated || false
   }
-
   return param;
 }
 
