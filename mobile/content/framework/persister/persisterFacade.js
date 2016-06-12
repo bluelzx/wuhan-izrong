@@ -3,6 +3,7 @@ let React = require('react-native');
 let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 let _realm = require('./realmManager');
 let co = require('co');
+let adapter = require('./adapter');
 const {
   DEVICE,
   GROUP,
@@ -112,34 +113,7 @@ let _deleteGroup = function () {
 
 let _saveLoginUserInfo = function (loginUserInfo, token) {
 
-    let param =  {
-      userId: loginUserInfo.userId,
-      address: loginUserInfo.address,
-      realName: loginUserInfo.realName,
-      weChatNo: loginUserInfo.weChatNo,
-      email: loginUserInfo.email,
-      nameCardFileUrl: loginUserInfo.nameCardFileUrl,
-      qqNo: loginUserInfo.qqNo,
-      department: loginUserInfo.department,
-      mobileNumber: loginUserInfo.mobileNumber,
-      jobTitle: loginUserInfo.jobTitle,
-      phoneNumber: loginUserInfo.phoneNumber,
-      photoFileUrl: loginUserInfo.photoFileUrl,
-      orgId: loginUserInfo.orgId,
-      token: token,
-      lastLoginTime: new Date(),
-      publicTitle: !!(loginUserInfo.publicTitle == true || loginUserInfo.publicTitle === null),
-      publicMobile: !!(loginUserInfo.publicMobile == true || loginUserInfo.publicMobile === null),
-      publicDepart: !!(loginUserInfo.publicDepart == true || loginUserInfo.publicDepart === null),
-      publicPhone: !!(loginUserInfo.publicPhone == true || loginUserInfo.publicPhone === null),
-      publicEmail: !!(loginUserInfo.publicEmail == true || loginUserInfo.publicEmail === null),
-      publicAddress: !!(loginUserInfo.publicAddress == true || loginUserInfo.publicAddress === null),
-      publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat === null),
-      publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
-      lastSyncTime: null,
-      friendList: loginUserInfo.friendList && JSON.stringify(loginUserInfo.friendList),
-      certified: loginUserInfo.isCertificated || false
-    };
+    let param = adapter.saveLoginUserInfo(loginUserInfo, token);
 
     let t = _realm.objects(LOGINUSERINFO).filtered('userId = $0',loginUserInfo.userId);
     if(t.length > 0){
@@ -150,31 +124,7 @@ let _saveLoginUserInfo = function (loginUserInfo, token) {
     _realm.create(LOGINUSERINFO,param, true);
 
   //方便查询  将登录者的信息存入imuser表
-  let loginImUser =  {
-    userId: loginUserInfo.userId,
-    address: loginUserInfo.address,
-    realName: loginUserInfo.realName,
-    nameCardFileUrl: loginUserInfo.nameCardFileUrl,
-    department: loginUserInfo.department,
-    jobTitle: loginUserInfo.jobTitle,
-    qqNo: loginUserInfo.qqNo,
-    email: loginUserInfo.email,
-    weChatNo: loginUserInfo.weChatNo,
-    mute:false,
-    mobileNumber: loginUserInfo.mobileNumber,
-    photoFileUrl: loginUserInfo.photoFileUrl,
-    orgId: loginUserInfo.orgId,
-    phoneNumber: loginUserInfo.phoneNumber,
-    publicTitle: !!(loginUserInfo.publicTitle == true || loginUserInfo.publicTitle === null),
-    publicMobile: !!(loginUserInfo.publicMobile == true || loginUserInfo.publicMobile === null),
-    publicDepart: !!(loginUserInfo.publicDepart == true || loginUserInfo.publicDepart === null),
-    publicPhone: !!(loginUserInfo.publicPhone == true || loginUserInfo.publicPhone === null),
-    publicEmail: !!(loginUserInfo.publicEmail == true || loginUserInfo.publicEmail === null),
-    publicAddress: !!(loginUserInfo.publicAddress == true || loginUserInfo.publicAddress === null),
-    publicWeChat: !!(loginUserInfo.publicWeChat == true || loginUserInfo.publicWeChat === null),
-    publicQQ: !!(loginUserInfo.publicQQ == true || loginUserInfo.publicQQ === null),
-    certified: loginUserInfo.isCertificated || false
-  };
+  let loginImUser = adapter.saveImUser(loginUserInfo);
   _realm.create(IMUSERINFO,loginImUser,true);
 
 };
@@ -187,31 +137,7 @@ let _saveImUsersOpen = function (imUserBeanList) {
 
 let _saveImUsers = function (imUserBeanList) {
   for (var i = 0; i < imUserBeanList.length; i++) {
-    let param = {
-      userId: imUserBeanList[i].userId,
-      address: !_.isEmpty(imUserBeanList[i].address) ? imUserBeanList[i].address : '',
-      realName: imUserBeanList[i].realName ? imUserBeanList[i].realName : '',
-      nameCardFileUrl: !_.isEmpty(imUserBeanList[i].nameCardFileUrl) ? imUserBeanList[i].nameCardFileUrl : '',
-      department: !_.isEmpty(imUserBeanList[i].department) ? imUserBeanList[i].department : '',
-      jobTitle: !_.isEmpty(imUserBeanList[i].jobTitle) ? imUserBeanList[i].jobTitle : '',
-      qqNo: imUserBeanList[i].qqNo ? imUserBeanList[i].qqNo : '',
-      email: imUserBeanList[i].email ? imUserBeanList[i].email : '',
-      weChatNo: !_.isEmpty(imUserBeanList[i].weChatNo) ? imUserBeanList[i].weChatNo : '',
-      mute: !_.isEmpty(imUserBeanList[i].mute) ? imUserBeanList[i].mute : false,
-      mobileNumber: imUserBeanList[i].mobileNumber ? imUserBeanList[i].mobileNumber : '',
-      photoFileUrl: !_.isEmpty(imUserBeanList[i].photoFileUrl) ? imUserBeanList[i].photoFileUrl : '',
-      orgId: imUserBeanList[i].orgId ? imUserBeanList[i].orgId : '',
-      phoneNumber: !_.isEmpty(imUserBeanList[i].phoneNumber) ? imUserBeanList[i].phoneNumber : '',
-      publicTitle: !!(imUserBeanList[i].isPublicTitle == true || imUserBeanList[i].isPublicTitle === null),
-      publicMobile: !!(imUserBeanList[i].isPublicMobile == true || imUserBeanList[i].isPublicMobile === null),
-      publicDepart: !!(imUserBeanList[i].isPublicDepart == true || imUserBeanList[i].isPublicDepart === null),
-      publicPhone: !!(imUserBeanList[i].isPublicPhone == true || imUserBeanList[i].isPublicPhone === null),
-      publicEmail: !!(imUserBeanList[i].isPublicEmail == true || imUserBeanList[i].isPublicEmail === null),
-      publicAddress: !!(imUserBeanList[i].isPublicAddress == true || imUserBeanList[i].isPublicAddress === null),
-      publicWeChat: !!(imUserBeanList[i].isPublicWeChat == true || imUserBeanList[i].isPublicWeChat === null),
-      publicQQ: !!(imUserBeanList[i].isPublicQQ == true || imUserBeanList[i].isPublicQQ === null),
-      certified: imUserBeanList[i].isCertificated || false
-    };
+    let param = adapter.saveImUser(imUserBeanList[i]);
     _realm.create(IMUSERINFO, param, true);
   }
 };

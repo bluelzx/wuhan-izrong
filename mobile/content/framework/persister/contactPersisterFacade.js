@@ -8,6 +8,7 @@ const _ = require('lodash');
 let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
 let ErrorMsg = require('../../constants/errorMsg');
 let {SESSION_TYPE} = require('../../constants/dictIm');
+let adapter = require('./adapter');
 const {
   GROUP,
   MESSAGE,
@@ -92,31 +93,7 @@ let _judgeGroup = function(groupId, userId) {
 
 let _saveIMUserInfo = function(item) {
   _realm.write(()=>{
-    let param = {
-      userId: item.userId,
-      address: !_.isEmpty(item.address) ? item.address : '',
-      realName: item.realName ? item.realName : '',
-      nameCardFileUrl: !_.isEmpty(item.nameCardFileUrl) ? item.nameCardFileUrl : '',
-      department: !_.isEmpty(item.department) ? item.department : '',
-      jobTitle: !_.isEmpty(item.jobTitle) ? item.jobTitle : '',
-      qqNo: !_.isEmpty(item.qqNo) ? item.qqNo : '',
-      email: !_.isEmpty(item.email) ? item.email : '',
-      weChatNo: !_.isEmpty(item.weChatNo) ? item.weChatNo : '',
-      mute: !_.isEmpty(item.mute) ? item.mute : false,
-      mobileNumber: !_.isEmpty(item.mobileNumber) ? item.mobileNumber : '',
-      photoFileUrl: !_.isEmpty(item.photoFileUrl) ? item.photoFileUrl : '',
-      orgId: item.orgId,
-      phoneNumber: !_.isEmpty(item.phoneNumber) ? item.phoneNumber : '',
-      publicTitle: !!(item.isPublicTitle == true || item.isPublicTitle === null),
-      publicMobile: !!(item.isPublicMobile == true || item.isPublicMobile === null),
-      publicDepart: !!(item.isPublicDepart == true || item.isPublicDepart === null),
-      publicPhone: !!(item.isPublicPhone == true || item.isPublicPhone === null),
-      publicEmail: !!(item.isPublicEmail == true || item.isPublicEmail === null),
-      publicAddress: !!(item.isPublicAddress == true || item.isPublicAddress === null),
-      publicWeChat: !!(item.isPublicWeChat == true || item.isPublicWeChat === null),
-      publicQQ: !!(item.isPublicQQ == true || item.isPublicQQ === null),
-      certified: item.isCertificated || false
-    }
+    let param = adapter.saveImUser(item);
     _realm.create(IMUSERINFO, param, true);
   })
 }
@@ -384,32 +361,8 @@ let _getUsersExpress = function (groupId) {
 
 
 let _updateContactInfo = function (message) {
-  let param = {
-    userId: message.userId,
-    address: message.address,
-    realName: message.realName,
-    weChatNo: message.weChatNo,
-    email: message.email,
-    nameCardFileUrl: message.nameCardFileUrl,
-    qqNo: message.qqNo,
-    department: message.department,
-    mobileNumber: message.mobileNo,
-    jobTitle: message.jobTitle,
-    publicDepart: message.isPublicDepart,
-    publicTitle: message.isPublicTitle,
-    publicMobile: message.isPublicMobile,
-    phoneNumber: message.phoneNumber||message.mobileNumber,
-    publicPhone: message.isPublicPhone,
-    publicEmail: message.isPublicEmail,
-    publicAddress: message.isPublicAddress,
-    publicWeChat: message.isPublicWeChat,
-    photoFileUrl: message.photoStoredFileUrl,
-    publicQQ: message.isPublicQq || message.isPublicQQ,
-    orgId: message.orgId,
-    certified: message.isCertificated,
-    mute: message.isMute?message.isMute:false
+  let param = adapter.saveImUser(message);
 
-  };
   let ret = {};
   for (let k in param) {
     if (param[k] != undefined) {
@@ -571,32 +524,7 @@ let _setGroupMute = function (groupId, value) {
 }
 
 let _addFriend = function (userInfo, notFriend) {
-  let param = {
-    userId: userInfo.userId,
-    address: userInfo.address,
-    realName: userInfo.realName,
-    weChatNo: userInfo.weChatNo,
-    email: userInfo.email,
-    nameCardFileUrl: userInfo.nameCardFileUrl,
-    qqNo: userInfo.qqNo,
-    department: userInfo.department,
-    mobileNumber: userInfo.mobileNumber,
-    jobTitle: userInfo.jobTitle,
-    publicDepart: userInfo.isPublicDepart,
-    publicTitle: userInfo.isPublicTitle,
-    publicMobile: userInfo.isPublicMobile,
-    phoneNumber: userInfo.isPhoneNumber,
-    publicPhone: userInfo.isPublicPhone,
-    publicEmail: userInfo.isPublicEmail,
-    publicAddress: userInfo.isPublicAddress,
-    publicWeChat: userInfo.isPublicWeChat,
-    photoFileUrl: userInfo.photoFileUrl,
-    publicQQ: userInfo.isPublicQQ,
-    orgId: userInfo.orgId,
-    mute: userInfo.mute,
-    certified: userInfo.isCertificated,
-  };
-
+  let param = adapter.saveImUser(userInfo);
   _realm.write(()=> {
     _realm.create(IMUSERINFO, param, true);
     if(!notFriend) {
