@@ -11,7 +11,7 @@ let _dealMsg = function (message, socket) {
     let userInfo = ContactSotre.getUserInfo();
     let userId = userInfo.userId;
     let lastSyncTime = userInfo.lastSyncTime ? userInfo.lastSyncTime.getTime() : new Date().getTime();
-  //console.log(message);
+  console.log(message);
   switch (message.msgType) {
     case MSG_TYPE.EXCEPTION:
       console.log('[error] %s', message.errMsg);
@@ -157,7 +157,7 @@ let _dealMsg = function (message, socket) {
           break;
         default:
           console.log('None message type matched! [%s]', message.msgType);
-          console.log(message);
+          console.log('NOT_MATCH' + message);
           break;
       }
       break;
@@ -258,7 +258,7 @@ let _dealMsg = function (message, socket) {
         break;
       default:
         console.log('None message type matched! [%s]', message.msgType);
-        console.log(message);
+        console.log('NOT_MATCH' + message);
     }
   }catch(err){
     Alert('推送异常,请联系管理员['+ message.msgType+'],' + err);
@@ -304,7 +304,7 @@ let Resolver = {
         msgToSend = message;
         break;
       default:
-        console.log('None message type matched! [%s]', message.msgType);
+        //console.log('None message type matched! [%s]', message.msgType);
     }
     return msgToSend;
   }
