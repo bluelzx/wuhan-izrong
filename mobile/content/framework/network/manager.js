@@ -201,7 +201,7 @@ Manager.prototype.connect = function (fn) {
  // add lastSyncTime
   let tDate = this.opts.lastSyncTime && this.opts.lastSyncTime();
   let AIBG = this.opts.AIBG;
-  var syncUri  = this.uri + '?' + 'lastSyncTime=' + (tDate ? tDate.getTime() : 0) + '&AIBG=' + AIBG;
+  var syncUri  = this.uri + '?' + 'lastSyncTime=' + (tDate ? tDate.getTime() : (new Date()).getTime()) + '&AIBG=' + AIBG;
   //var syncUri  = this.uri;// + '?' + 'lastSyncTime=' + this.opts.lastSyncTime().getTime();
   console.log('**websocket** opening %s', syncUri);
   this.engine = new WebSocket(syncUri);

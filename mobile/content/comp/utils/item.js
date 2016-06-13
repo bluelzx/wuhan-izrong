@@ -48,8 +48,8 @@ let Item = React.createClass({
     return (
       <TouchableHighlight activeOpacity={0.8} underlayColor= {PlainStyle.colorSet.content} onPress={this.props.func}>
         <View>
-          <View style={[styles.listLayout, top && DictStyle.userInfoBorderTop,this.props.bottom && DictStyle.userInfoBorderBottom,itemStyle]}>
-            <View style={{flexDirection: 'row', backgroundColor: 'transparent', flex: 2}}>
+          <View style={[styles.listLayout, top && DictStyle.userInfoBorderTop,this.props.bottom && DictStyle.userInfoBorderBottom,itemStyle,{alignItems:'center'}]}>
+            <View style={{flexDirection: 'row', backgroundColor: 'transparent', flex: 2,alignItems:'center'}}>
               {this.returnImg()}
               <Text style={styles.title}>{this.props.desc}</Text>
             </View>

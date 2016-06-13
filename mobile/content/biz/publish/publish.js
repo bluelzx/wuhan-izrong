@@ -313,8 +313,9 @@ let Publish = React.createClass({
                          type="all"
                          startUpload={(response) => {this.handleSendImage(response, 10)}}
                          title="选择图片"
-                         fileId="publish1"
+                         fileId="publish"
                          allowsEditing={false}
+                         isSelectUpload={false}
                          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df',backgroundColor: 'white'}}
         >
           <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
@@ -337,7 +338,7 @@ let Publish = React.createClass({
                          longPress={(rowID) => this._longPress(rowID) }
                          selectType="all"
                          title="选择图片"
-                         fileId="userPhoto"
+                         fileId="publish"
                          allowsEditing={true}
                          uploadSuccess={(url)=>{
                              let arr = this.state.imageUploadUrlList;

@@ -48,15 +48,22 @@ let AddMember = React.createClass({
   },
 
   addUser: function( groupId, members) {
-    if (Object.keys(members).length == 0) {
+
+    let tmp = false;
+    for (let i in members) {
+      if (members[i]) {
+        tmp = true;
+        break;
+      }
+    }
+    if (!tmp) {
+      Alert('您没有选择成员!');
       return;
     }
+
     if(Object.keys(members).length + this.state.existMembers > Setting.groupMemberUpperLimit){
       Alert('群组成员人数不能超过' + Setting.groupMemberUpperLimit);
       return;
-    }else if(Object.keys(members).length == 0){
-        //this.props.navigator.pop();
-        return;
     }
     this.props.exec(
       ()=>{

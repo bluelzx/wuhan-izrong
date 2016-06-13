@@ -98,43 +98,77 @@ let UserInfo = React.createClass({
     },
 
     returnImage: function () {
-        if (this.state.certificated) {
-          return (
-            <View style={{marginLeft: 20,paddingRight:20}}>
-              <LoadExtendImage jobMode="select"
-                               source={{uri: this.state.photoFileUrl}}
-                               selectType="all"
-                               occurError={(error) => Alert(error)}
-                               title="选择图片"
-                               fileId="userPhoto"
-                               allowsEditing={true}
-                               style={styles.head}
-                               uploadSuccess={(url)=>{this.updateUserPoto(url)}}
-              />
-              <NameCircular name={this.state.realName} isV={this.state.certificated}/>
-              <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
-                     resizeMode="cover" source={require('../../image/user/certificated.png')}/>
-            </View>
-          );
-        }
-        let uri = this.state.photoFileUrl + ImageSize50;
-        return (
-          //<Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
-          <View style={{marginLeft: 20,paddingRight:20}}>
-            <LoadExtendImage jobMode="select"
-                             source={{uri: this.state.photoFileUrl}}
-                             selectType="all"
-                             occurError={(error) => Alert(error)}
-                             title="选择图片"
-                             fileId="userPhoto"
-                             allowsEditing={true}
-                             style={styles.head}
-                             uploadSuccess={(url)=>{this.updateUserPoto(url)}}
-            >
-              <NameCircular name={this.state.realName} isV={this.state.certificated}/>
-            </LoadExtendImage>
+      let uri = this.state.photoFileUrl
+      if (!this.state.certificated) {
+         uri = uri + ImageSize50;
+      }
+      return (
+        <View>
+        <LoadExtendImage jobMode="select"
+                         source={{uri: uri}}
+                         selectType="all"
+                         occurError={(error) => Alert(error)}
+                         title="选择图片"
+                         fileId="userPhoto"
+                         allowsEditing={true}
+                         style={styles.head}
+                         uploadSuccess={(url)=>{this.updateUserPoto(url)}}
+        >
+          <NameCircular name={this.state.realName} isV={this.state.certificated}/>
+        </LoadExtendImage>
+          {(()=>{
+            if(this.state.certificated && this.state.photoFileUrl)
+            return (
+                    <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
+                           resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+            );
+          })()}
           </View>
-        );
+      );
+
+
+        //if (this.state.certificated) {
+        //  return (
+        //    <View style={{marginLeft: 20,paddingRight:20}}>
+        //      <LoadExtendImage jobMode="select"
+        //                       source={{uri: this.state.photoFileUrl}}
+        //                       selectType="all"
+        //                       occurError={(error) => Alert(error)}
+        //                       title="选择图片"
+        //                       fileId="userPhoto"
+        //                       allowsEditing={true}
+        //                       style={styles.head}
+        //                       uploadSuccess={(url)=>{this.updateUserPoto(url)}}
+        //      >
+        //      <NameCircular name={this.state.realName} isV={this.state.certificated}/>
+        //      <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
+        //             resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+        //        </LoadExtendImage>
+        //    </View>
+        //  );
+        //}
+        //let uri = this.state.photoFileUrl + ImageSize50;
+        //return (
+        //  //<Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
+        //  <View style={{marginLeft: 20,paddingRight:20}}>
+        //    <LoadExtendImage jobMode="select"
+        //                     source={{uri: this.state.photoFileUrl}}
+        //                     selectType="all"
+        //                     occurError={(error) => Alert(error)}
+        //                     title="选择图片"
+        //                     fileId="userPhoto"
+        //                     allowsEditing={true}
+        //                     style={styles.head}
+        //                     uploadSuccess={(url)=>{this.updateUserPoto(url)}}
+        //    >
+        //      <NameCircular name={this.state.realName} isV={this.state.certificated}/>
+        //    </LoadExtendImage>
+        //  </View>
+        //);
+        //
+
+
+
 
     },
 //<Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
@@ -260,9 +294,9 @@ let UserInfo = React.createClass({
              this.state.publicWeChat, 'default', 40, true, true, false)*/}
 
             <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
-              <View style={[styles.listLayout,DictStyle.userInfoBorderBottom]}>
+              <View style={[styles.listLayout,DictStyle.userInfoBorderBottom,{alignItems:'center'}]}>
                 <View
-                  style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
+                  style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5,alignItems:'center'}}>
                   <Image style={styles.circle} source={require('../../image/user/email.png')}/>
                   <Text style={styles.title}>邮箱</Text>
                 </View>
@@ -280,9 +314,9 @@ let UserInfo = React.createClass({
             <View style={[{marginTop: 10},DictStyle.userInfoBorderTop]}>
               <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
                 <View>
-                  <View style={styles.listLayout}>
+                  <View style={[styles.listLayout,{alignItems:'center'}]}>
                     <View
-                      style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5}}>
+                      style={{flexDirection:'row',backgroundColor:PlainStyle.colorSet.personalItemColor,width:Dimensions.get('window').width/5,alignItems:'center'}}>
                       <Image style={styles.circle} source={require('../../image/user/comp.png')}/>
                       <Text style={styles.title}>机构</Text>
                     </View>

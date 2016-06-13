@@ -212,7 +212,7 @@ let BusinessDetail = React.createClass({
     if (this.state.isCertificated) {
       return (
         <View>
-          <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40}]}
+          <Image style={[styles.certified,{position: 'absolute',bottom:0,left:30}]}
                  resizeMode="cover" source={require('../../image/user/certificated.png')}/>
         </View>
       );

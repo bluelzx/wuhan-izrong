@@ -38,6 +38,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
     private Uri uri;
     private boolean cropSquare;
     private String cachePath;
+    private String cacheDir;
     private final int REQUEST_CODE_CAMERA = 1000;
     private final int REQUEST_CODE_GALLERY = 1001;
     private final int REQUEST_CODE_CROP = 1002;
@@ -116,7 +117,8 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
         this.mCrop = needCrop;
         this.mFileName = name;
         this.mCallback = callback;
-        cachePath = getReactApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/fasCache/" + mFileName + ".jpg";
+        cacheDir = getReactApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/fasCache/";
+        cachePath = cacheDir + mFileName + ".jpg";
         mCropConfig = new FunctionConfig.Builder()
                 .setEnableCrop(needCrop)
                 .setEnableRotate(true)
@@ -185,7 +187,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        String uri = FileUtils.copyFile1(path, cachePath);
+                        String uri = FileUtils.copyFile(path, cachePath,cacheDir);
                         mResponse.putString("uri", "file://" + uri);
                         mCallback.invoke(mResponse);
                     }
@@ -194,13 +196,13 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        String uri = FileUtils.copyFile1(path, cachePath);
+                        String uri = FileUtils.copyFile(path, cachePath, cacheDir);
                         mResponse.putString("uri", "file://" + uri);
                         mCallback.invoke(mResponse);
                     }
                     break;
                 case REQUEST_CODE_CROP:
-                    String uri = FileUtils.copyFile1(path, cachePath);
+                    String uri = FileUtils.renameToFile(path, cachePath, cacheDir);
                     mResponse.putString("uri", "file://" + uri);
                     mCallback.invoke(mResponse);
                     break;

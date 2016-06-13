@@ -27,43 +27,44 @@ let _data = {
 };
 
 let ImStore = _.assign({}, EventEmitter.prototype, {
-  addChangeListener: function (callback, event = DictEvent.IM_CHANGE) {
-    this.on(event, callback);
-  },
-  removeChangeListener: function (callback, event = DictEvent.IM_CHANGE) {
-    this.removeListener(event, callback);
-  },
-  emitChange: function (event = DictEvent.IM_CHANGE, data = {}) {
-    this.emit(event, data);
-  },
+    addChangeListener: function (callback, event = DictEvent.IM_CHANGE) {
+      this.on(event, callback);
+    },
+    removeChangeListener: function (callback, event = DictEvent.IM_CHANGE) {
+      this.removeListener(event, callback);
+    },
+    emitChange: function (event = DictEvent.IM_CHANGE, data = {}) {
+      this.emit(event, data);
+    },
 
-  imInit: () => _imInit(),
-  sessionInit: (data) => _sessionInit(data),
-  getMessages: () => _data.messages,
-  saveMsg: (message, userId) => _saveMsg(message, userId),
-  ackMsg: (msgId, toUid, isMute) => _ackMsg(msgId, toUid, isMute),
-  getEarlier: () => _getEarlier(),
-  createHomePageInfo:(msgList)=>{
-    Persister.createHomePageInfo(msgList);
-    AppStore.emitChange(HOMEPAGE_CHANGE);
-  },
-  createPlatFormInfo:(infoId, title, content, createDate, userId)=>{
-    Persister.createPlatFormInfo(infoId, title, content, createDate, userId);
-    AppStore.emitChange(IM_SESSION_LIST);
-  },
-  deleteContactInfo:(userId)=>{
-    Persister.deleteContactInfo(userId);
-    AppStore.emitChange(IM_CONTACT);
-  },
-  updateContactInfo:(message) =>{
-    Persister.updateContactInfo(message);
-    AppStore.emitChange(IM_CONTACT);
-  },
-  isInGroupById: (id, userId) => {
-    return Persister.isInGroupById(id, userId);
-  },
-  modifyImgUrl:(msgId, url) => _modifyImgUrl(msgId, url)
-});
+    imInit: () => _imInit(),
+    sessionInit: (data) => _sessionInit(data),
+    getMessages: () => _data.messages,
+    saveMsg: (message, userId) => _saveMsg(message, userId),
+    ackMsg: (msgId, toUid, isMute) => _ackMsg(msgId, toUid, isMute),
+    getEarlier: () => _getEarlier(),
+    createHomePageInfo: (msgList)=> {
+      Persister.createHomePageInfo(msgList);
+      AppStore.emitChange(HOMEPAGE_CHANGE);
+    },
+    createPlatFormInfo: (infoId, title, content, createDate, userId)=> {
+      Persister.createPlatFormInfo(infoId, title, content, createDate, userId);
+      AppStore.emitChange(IM_SESSION_LIST);
+    },
+    deleteContactInfo: (userId)=> {
+      Persister.deleteContactInfo(userId);
+      AppStore.emitChange(IM_CONTACT);
+    },
+    updateContactInfo: (message) => {
+      Persister.updateContactInfo(message);
+      AppStore.emitChange(IM_CONTACT);
+    },
+    isInGroupById: (id, userId) => {
+      return Persister.isInGroupById(id, userId);
+    },
+    modifyImgUrl: (msgId, url) => _modifyImgUrl(msgId, url)
+  }
+);
 
 let _modifyImgUrl = function(msgId, url) {
   Persister.modifyImgUrl(msgId, url);

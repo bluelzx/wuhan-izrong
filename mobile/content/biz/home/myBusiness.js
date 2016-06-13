@@ -140,13 +140,13 @@ let Market = React.createClass({
           callback(response.contentList, {
             allLoaded: true // the end of the list is reached
           });
-        }, 0); // simulating network fetching
+        }, 800); // simulating network fetching
       } else {
         setTimeout(() => {
           callback(response.contentList, {
             allLoaded: false // the end of the list is reached
           });
-        }, 0); // simulating network fetching
+        }, 800); // simulating network fetching
       }
     }).catch(
       (errorData) => {
@@ -154,7 +154,7 @@ let Market = React.createClass({
           callback([], {
             allLoaded: true, // the end of the list is reached
           });
-        }, 0); // simulating network fetching
+        }, 1000); // simulating network fetching
         if (errorData.msgCode == 'APP_SYS_TOKEN_INVALID') {
           AppStore.forceLogout();
         } else if (errorData.message.includes('Network request failed')) {
