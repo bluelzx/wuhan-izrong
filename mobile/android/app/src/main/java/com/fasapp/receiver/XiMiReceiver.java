@@ -113,27 +113,6 @@ public class XiMiReceiver extends PushMessageReceiver {
         if (MiPushClient.COMMAND_REGISTER.equals(command)) {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
                 mRegId = cmdArg1;
-                ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-                List<ActivityManager.RunningTaskInfo> forGroundActivity = activityManager.getRunningTasks(1);
-                ActivityManager.RunningTaskInfo currentActivity;
-                currentActivity = forGroundActivity.get(0);
-                String activityName = currentActivity.topActivity.getClassName(); //activityName 就是当前屏幕的activityName 名称
-//                final WritableMap a = Arguments.createMap();
-//                a.putString("regId", mRegId + "");
-//                a.putString("aaa", "aaa");
-
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            Thread.sleep(3000);
-//                            MainActivity.saveRegId(mRegId);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }).start();
-//                sendEvent(MainActivity.getContext(), "saveRegId", params);
                 BaseApplication.regId = mRegId;
                 Log.d("onReceiveRegisterResult", mRegId + "   " + cmdArg2);
             }

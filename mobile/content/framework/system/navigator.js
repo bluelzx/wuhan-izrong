@@ -149,8 +149,9 @@ var Main = React.createClass({
         return true;
       }
 
-      Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {
-      });
+      //Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {
+      //});
+      BackAndroid.exitApp()
       return true;
     }
     return false;
