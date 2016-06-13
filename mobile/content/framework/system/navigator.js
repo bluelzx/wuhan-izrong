@@ -60,6 +60,13 @@ var Main = React.createClass({
       isLoadingVisible: false
     });
   },
+
+  componentWillMount: function () {
+    DeviceEventEmitter.addListener('saveRegId', function (e: Event) {
+      //AppStore.saveAndroidPushRegId()
+    })
+  },
+
   componentDidMount: function () {
     AppStore.addChangeListener(this._onChange);
     if (Platform.OS === 'android') {

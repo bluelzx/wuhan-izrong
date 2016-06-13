@@ -1,14 +1,15 @@
 package com.fasapp;
 
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.os.*;
 import android.util.Log;
 
-import com.facebook.react.ReactActivity;
+import com.facebook.react.bridge.ReactContext;
+import com.fasapp.base.ReactActivity;
 import com.rnfs.RNFSPackage;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -16,6 +17,9 @@ import com.facebook.react.shell.MainReactPackage;
 import com.fasapp.pakage.ZXReactPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.xiaomi.channel.commonutils.logger.LoggerInterface;
+import com.xiaomi.mipush.sdk.Logger;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.io.File;
 import java.util.Arrays;
@@ -31,6 +35,9 @@ public class MainActivity extends ReactActivity {
     public static final String RNAU_SHARED_PREFERENCES = "React_Native_Auto_Updater_Shared_Preferences";
     public static final String RNAU_STORED_VERSION = "React_Native_Auto_Updater_Stored_Version";
     public static ReactApplicationContext context;
+    public static final String APP_ID = "2882303761517477213";
+    public static final String APP_KEY = "5271747743213";
+    public static final String TAG = "com.fasapp123";
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -55,6 +62,18 @@ public class MainActivity extends ReactActivity {
         super.onStart();
     }
 
+    public static ReactContext getContext() {
+        if (mReactInstanceManager == null) {
+            // This doesn't seem to happen ...
+            throw new IllegalStateException("Instance manager not available");
+        }
+        final ReactContext context = mReactInstanceManager.getCurrentReactContext();
+        if (context == null) {
+            // This really shouldn't happen ...
+            throw new IllegalStateException("React context not available");
+        }
+        return context;
+    }
 
     /**
      * A list of packages used by the app. If the app uses additional views
@@ -121,7 +140,43 @@ public class MainActivity extends ReactActivity {
         // 反注册（不再接收消息）：unregisterPush(context)
         // 设置标签：setTag(context, tagName)
         // 删除标签：deleteTag(context, tagName)
+
+        //初始化push推送服务
+        if(shouldInit()) {
+            MiPushClient.registerPush(this, APP_ID, APP_KEY);
+        }
+        //打开Log
+        LoggerInterface newLogger = new LoggerInterface() {
+
+            @Override
+            public void setTag(String tag) {
+                // ignore
+            }
+
+            @Override
+            public void log(String content, Throwable t) {
+                Log.d(TAG, content, t);
+            }
+
+            @Override
+            public void log(String content) {
+                Log.d(TAG, content);
+            }
+        };
+        Logger.setLogger(this, newLogger);
     }
 
+    private boolean shouldInit() {
+        ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
+        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+        String mainProcessName = getPackageName();
+        int myPid = android.os.Process.myPid();
+        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
