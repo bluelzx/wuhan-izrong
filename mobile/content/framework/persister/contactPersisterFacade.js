@@ -44,7 +44,8 @@ let ContactPersisterFacade = {
   judgeGroup: (groupId, userId) => _judgeGroup(groupId, userId),
   updateFriendList: (param, userId) => _updateFriendList(param, userId),
   deleteMemberFromGroup: (groupId, userId) => _deleteMemberFromGroup(groupId, userId),
-  testDelete: ()=>_testDelete()
+  testDelete: ()=>_testDelete(),
+  kickOut:(groupId, userId)=>_kickOut(groupId, userId)
 }
 
 let _testDelete = function () {
@@ -88,6 +89,7 @@ let _judgeGroup = function(groupId, userId) {
       })
     }
   });
+ // return false;
   return judge;
 };
 
@@ -493,6 +495,31 @@ let _selfDeleteNotice = function (groupId, userId) {
     _realm.delete(ret);
   }
 }
+
+let _kickOut = function(groupId, userId){
+  //TODO: sessionId要加用户ID
+  _realm.write(() => {
+    let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
+    if(group.length > 0) {
+      let members = group[0].members;
+      console.log('members:' + members);
+      let mem = [];
+      if (members) {
+        JSON.parse(members).forEach((item)=> {
+          if (item != userId) {
+            mem.push(item);
+          }
+        });
+      }
+      group[0].members = JSON.stringify(mem);
+      console.log('members:' + group[0].members);
+    }
+    //_realm.delete(group);
+    //_selfDeleteSession('group:' + groupId + ':' + userId);
+    //_selfDeleteNotice(groupId, userId);
+  });
+}
+
 
 let _leaveGroup = function (groupId, userId) {
   //TODO: sessionId要加用户ID

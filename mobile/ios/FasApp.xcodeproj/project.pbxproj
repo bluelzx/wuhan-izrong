@@ -998,6 +998,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.izirong.fas;
 				PRODUCT_NAME = "爱资融";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1031,6 +1032,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.izirong.fas;
 				PRODUCT_NAME = "爱资融";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
