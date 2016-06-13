@@ -6,18 +6,12 @@ let ContactSotre = require('../store/contactStore');
 let AppStore = require('../store/appStore');
 let {Alert} = require('mx-artifacts');
 
-//let NotificationModule = require('NativeModules').NotificationModule;
-//let { Platform }=require('react-native');
-
-//let {Alert} = require('mx-artifacts');
-
 let _dealMsg = function (message, socket) {
   try {
     let userInfo = ContactSotre.getUserInfo();
     let userId = userInfo.userId;
     let lastSyncTime = userInfo.lastSyncTime ? userInfo.lastSyncTime.getTime() : new Date().getTime();
-
-  //console.log(message);
+  console.log(message);
   switch (message.msgType) {
     case MSG_TYPE.EXCEPTION:
       console.log('[error] %s', message.errMsg);
@@ -96,7 +90,6 @@ let _dealMsg = function (message, socket) {
       }
       //也要更新联系人  群主消息在联系人中有备份.
       ImStore.updateContactInfo(message);
-
     }
       break;
     //已测
@@ -131,6 +124,7 @@ let _dealMsg = function (message, socket) {
         case UPDATE_GROUP_TYPE.ADD_GROUP_MEMBER:
           //TODO: 把userInfo加入到IMUserInfo表中
           if (userId != message.userInfo.fulfillmentValue.userId) {
+            ContactSotre.saveIMUserInfo(message.userInfo.fulfillmentValue);
             ImStore.saveMsg({
               sessionId: KeyGenerator.getSessionKey(NOTICE_TYPE.INVITED, message.groupId, userId, message.userInfo.fulfillmentValue.userId),
               groupId: message.groupId,
@@ -140,9 +134,9 @@ let _dealMsg = function (message, socket) {
               revTime: new Date(),
               noticeType: NOTICE_TYPE.INVITED,
               realName: message.userInfo.fulfillmentValue.realName,
-              orgValue: message.userInfo.fulfillmentValue.orgName
+              orgValue: ContactSotre.getOrgValueByOrgId(message.userInfo.fulfillmentValue.orgId)
             }, userId);
-            ContactSotre.saveIMUserInfo(message.userInfo.fulfillmentValue);
+
           }
           break;
         case UPDATE_GROUP_TYPE.KICK_OUT_GROUP_MEMBER:
@@ -163,12 +157,12 @@ let _dealMsg = function (message, socket) {
           break;
         default:
           console.log('None message type matched! [%s]', message.msgType);
-          console.log(message);
+          console.log('NOT_MATCH' + message);
           break;
       }
       break;
     case MSG_TYPE.GROUP_INFO_DELETE:
-      //TODO 区分被踢和解散
+      // 区分被踢和解散
       let noticeType = DELETE_TYPE.KICK_OUT;
       if (message.action == DELETE_TYPE.DELETE_GROUP) {
         noticeType = DELETE_TYPE.DELETE_GROUP;
@@ -189,13 +183,10 @@ let _dealMsg = function (message, socket) {
       } else {
         //ContactSotre.deleteMemberFromGroup(message.groupId, userId)
       }
-      ContactSotre.leaveGroup(message.groupId);
+      // 是否删除
+      ContactSotre.kickOut(message.groupId);
       break;
     case MSG_TYPE.SYNC_REQ:
-      //message.msgArray.forEach((item)=>{
-      //  // console.log(JSON.parse(item));
-      //  _dealMsg(JSON.parse(item), socket);
-      //});
       socket.send({command: COMMAND_TYPE.SYNC_REQ, lastSyncTime: lastSyncTime});
       break;
     case MSG_TYPE.FORCE_LOGOUT:
@@ -203,7 +194,6 @@ let _dealMsg = function (message, socket) {
       AppStore.forceLogout();
       break;
     case MSG_TYPE.SYNC_RES:
-
         message.msgArray && message.msgArray.forEach((item)=> {
           _dealMsg(JSON.parse(item), socket);
         });
@@ -268,7 +258,7 @@ let _dealMsg = function (message, socket) {
         break;
       default:
         console.log('None message type matched! [%s]', message.msgType);
-        console.log(message);
+        console.log('NOT_MATCH' + message);
     }
   }catch(err){
     Alert('推送异常,请联系管理员['+ message.msgType+'],' + err);
@@ -314,7 +304,7 @@ let Resolver = {
         msgToSend = message;
         break;
       default:
-        console.log('None message type matched! [%s]', message.msgType);
+        //console.log('None message type matched! [%s]', message.msgType);
     }
     return msgToSend;
   }

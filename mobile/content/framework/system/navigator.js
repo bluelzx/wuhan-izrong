@@ -5,6 +5,9 @@
  * @type {(function(this:(Console|*)))|*|Server}
  * @private
  */
+
+let { Alert, Device, Loading } = require('mx-artifacts');
+
 const __log = window.console.log.bind(console);
 const {Dev} = require('../../../config');
 window.console.log = function () {
@@ -32,7 +35,6 @@ AppAction.appInit();
 var TabView = require('./tabView');
 var Login = require('../../biz/login/login');
 var AppStore = require('../store/appStore');
-let { Alert, Device, Loading } = require('mx-artifacts');
 let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
