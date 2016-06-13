@@ -64,6 +64,7 @@ var Main = React.createClass({
   componentWillMount: function () {
     DeviceEventEmitter.addListener('saveRegId', function (e: Event) {
       //AppStore.saveAndroidPushRegId()
+      Alert('saveRegId');
     })
   },
 
