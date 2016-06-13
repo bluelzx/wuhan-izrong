@@ -22,7 +22,6 @@ let PhoneNumber = require('../../comp/utils/numberHelper').phoneNumber;
 let MarketAction = require('../../framework/action/marketAction');
 let DictStyle = require('../../constants/dictStyle');
 let CallPhone = require('../../comp/utils/callPhone');
-
 let ValiSMS = React.createClass({
   getStateFromStores() {
     let deviceModel = 'IOS';
@@ -54,6 +53,8 @@ let ValiSMS = React.createClass({
   },
 
   login: function () {
+    let token = AppStore.getAPNSToken();
+    console.log("token::::" + token);
     dismissKeyboard();
     if (this.state.verify.length != 6) {
       Alert('请输入完整的短信验证码');

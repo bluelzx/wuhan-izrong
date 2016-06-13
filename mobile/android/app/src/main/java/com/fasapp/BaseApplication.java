@@ -30,6 +30,7 @@ public class BaseApplication extends Application {
     public static final String APP_ID = "2882303761517477213";
     public static final String APP_KEY = "5271747743213";
     public static final String TAG = "com.fasapp123";
+    public static String regId = "";
     @Override
     public void onCreate() {
         super.onCreate();

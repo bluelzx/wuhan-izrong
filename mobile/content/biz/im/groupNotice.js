@@ -107,7 +107,7 @@ let GroupNotice = React.createClass({
   },
 
   acceptInvite: function (item) {
-    //TODO:判断本地是否有该群,再判断用户是否在群中 judge
+    //判断本地是否有该群,再判断用户是否在群中 judge
     let user = ContactStore.getUserInfo();
     let judge = ContactStore.judgeGroup(item.groupId, user.userId);
     if (judge) {

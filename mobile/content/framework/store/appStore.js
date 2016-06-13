@@ -86,9 +86,16 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   getMarketInfo: () => _getMarketInfo(),
   //stopJavaServer:() => ServiceModule.stopMyAppService()
   saveHomeMarketList: (homeMarketList)=> _saveHomeMarketList(homeMarketList),
-  shouldUpdate: ()=> Persister.shouldUpdate()
+  shouldUpdate: ()=> Persister.shouldUpdate(),
+  saveAndroidPushRegId: (id) => _saveAndroidPushRegId(id)
 
 });
+
+let _saveAndroidPushRegId = function (id) {
+  _.assign(_data, {
+    pushRegId: id
+  })
+}
 
 let _queryAllPlatFormInfo = function () {
   return Persister.queryAllPlatFormInfo();

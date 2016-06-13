@@ -73,7 +73,7 @@
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
         <service android:name=".service.AppService" />
-        <!--<service
+        <service
             android:name="com.xiaomi.push.service.XMPushService"
             android:enabled="true"
             android:process=":pushservice" />
@@ -84,7 +84,7 @@
         <service
             android:name="com.xiaomi.mipush.sdk.MessageHandleService"
             android:enabled="true" />
-        &lt;!&ndash; 注：此service必须在2.2.5版本以后（包括2.2.5版本）加入 &ndash;&gt;
+        <!-- 注：此service必须在2.2.5版本以后（包括2.2.5版本）加入 -->
         <receiver
             android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver"
             android:exported="true">
@@ -106,7 +106,7 @@
         <receiver
             android:exported="true"
             android:name=".receiver.XiMiReceiver">
-            &lt;!&ndash;这里com.xiaomi.mipushdemo.DemoMessageRreceiver改成app中定义的完整类名&ndash;&gt;
+            <!--这里com.xiaomi.mipushdemo.DemoMessageRreceiver改成app中定义的完整类名-->
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
             </intent-filter>
@@ -116,7 +116,7 @@
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.ERROR" />
             </intent-filter>
-        </receiver>-->
+        </receiver>
 
         <!--&lt;!&ndash; 第三方相关 :接收Push消息（注册、Push消息、Push连接状态、标签，LBS上报结果）广播 &ndash;&gt;
         <receiver android:name=".receiver.HWReceiver" >

@@ -189,7 +189,7 @@ let BusinessDetail = React.createClass({
     if (this.state.photoStoredFileUrl == null) {
       return (
         <View style={{margin:10}}>
-          <NameCircular name={this.state.realName} />
+          <NameCircular name={this.state.realName}/>
           {this.renderIsCertificated()}
         </View>
       );
@@ -213,7 +213,7 @@ let BusinessDetail = React.createClass({
     if (this.state.isCertificated) {
       return (
         <View>
-          <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40}]}
+          <Image style={[styles.certified,{position: 'absolute',bottom:0,left:30}]}
                  resizeMode="cover" source={require('../../image/user/certificated.png')}/>
         </View>
       );

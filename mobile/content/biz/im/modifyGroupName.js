@@ -8,6 +8,7 @@ let { Device, Alert } = require('mx-artifacts');
 let ContactAction = require('../../framework/action/contactAction');
 let Setting = require('../../constants/setting');
 let DictStyle = require('../../constants/dictStyle');
+let Validation = require('../../comp/utils/validation');
 
 let ModifyGroupName = React.createClass({
 
@@ -18,6 +19,10 @@ let ModifyGroupName = React.createClass({
   },
 
   modifyGroupName: function(){
+    if (!Validation.isEnableEmoji(this.state.groupName)) {
+      Alert('输入的群名称不合法，请重新输入');
+      return;
+    }
     if(this.state.groupName.length > Setting.groupNameLengt){
       Alert('群名称不能超过20个字符');
       return ;
@@ -34,7 +39,6 @@ let ModifyGroupName = React.createClass({
 
       });
     });
-
   },
 
   renderRight: function(){
@@ -58,7 +62,7 @@ let ModifyGroupName = React.createClass({
         <View style={{backgroundColor:DictStyle.colorSet.content, paddingTop:10}}>
           <TextInput
             maxLength={20}
-            placeholder="创建群名称"
+            placeholder="修改群名称"
             placeholderTextColor="44B5E6"
             value={this.state.groupName}
             onChangeText={(text) => this.changeTextValue(text)}
