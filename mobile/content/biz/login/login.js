@@ -21,7 +21,7 @@ let Login_ValiSMS = require('./loginValiSMS');
 let Validation = require('../../comp/utils/validation');
 let DictStyle = require('../../constants/dictStyle');
 let CallPhone = require('../../comp/utils/callPhone');
-
+let AppInfoModule = require('NativeModules').AppInfoModule;
 let Login = React.createClass({
   getStateFromStores() {
     return {
@@ -49,6 +49,7 @@ let Login = React.createClass({
       Alert('请输入11位数字的手机号码');
     } else {
       dismissKeyboard();
+
       this.props.exec(() => {
         return LoginAction.sendSmsCodeToLoginMobile({
           mobileNo: this.state.mobileNo
@@ -65,6 +66,10 @@ let Login = React.createClass({
                 });
             }
           }
+        }).then(()=>{
+          AppInfoModule.getPushRegId((id) => {
+            AppStore.saveApnsToken(id);
+          });
         }).catch((errorData) => {
           throw errorData;
         });
@@ -104,8 +109,8 @@ let Login = React.createClass({
         <View style={[{flexDirection: 'column'}, styles.paddingLR]}>
           {this.renderLogo()}
           <View style={{marginTop:10}}>
-            <Input  type="default" placeholder='手机号' maxLength={11}
-                    field='mobileNo' onChangeText={this._onChangeText} icon='phone' inputType="number-pad"
+            <Input type="default" placeholder='手机号' maxLength={11}
+                   field='mobileNo' onChangeText={this._onChangeText} icon='phone' inputType="number-pad"
             />
           </View>
 
@@ -113,8 +118,8 @@ let Login = React.createClass({
           <Button
             containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
-            disabledBackgroundColor = '#b3c7f5'
-            enabledBackgroundColor = '#4b76df'
+            disabledBackgroundColor='#b3c7f5'
+            enabledBackgroundColor='#4b76df'
             disabled={this.state.disabled}
             onPress={()=>this.sendSmsCodeToLoginMobile()}
           >
@@ -124,7 +129,7 @@ let Login = React.createClass({
           <Button
             containerStyle={{marginTop: 20}}
             style={{fontSize: 20, color: '#ffffff'}}
-            enabledBackgroundColor = '#27b8f3'
+            enabledBackgroundColor='#27b8f3'
             onPress={()=>this.toOther(Register_valiMobile)}
           >
             新用户注册

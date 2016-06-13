@@ -26,7 +26,7 @@ console.log(Realm.defaultPath);
 let _realm = new Realm({
   schema: [DeviceSchema, GroupSchema, MessageSchema, ImUserInfoSchema, LoginUserInfoSchema, OrgBeanSchema,NoticeSchema,MarketInfoSchema,
      FilterItemSchema, FilterItemsSchema, OrderItemSchema, SessionSchema,PlatFormInfoSchema,HomePageSchema,NewFriendNoticSchema,HeaderPathSchema],
-  schemaVersion: 44
+  schemaVersion: 45
 });
 
 module.exports = _realm;

@@ -120,7 +120,7 @@ let WhitePage = React.createClass({
     let option = null;
     let param = {};
     if (SESSION_TYPE.GROUP == item.type) { // 区分聊天窗口类型
-      let g = SessionStore.getGroupInfoBySessionId(item.sessionId, userInfo.userId)
+      let g = SessionStore.getGroupInfoBySessionId(item.sessionId, userInfo.userId);
       param.chatType = SESSION_TYPE.GROUP;
       param.title = item.title;
       param.groupId = g.groupId; //query
