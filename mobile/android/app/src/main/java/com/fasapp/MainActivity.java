@@ -8,7 +8,11 @@ import android.content.SharedPreferences;
 import android.os.*;
 import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.fasapp.base.ReactActivity;
 import com.rnfs.RNFSPackage;
 import com.facebook.react.ReactPackage;
@@ -23,6 +27,7 @@ import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -141,6 +146,32 @@ public class MainActivity extends ReactActivity {
         // 设置标签：setTag(context, tagName)
         // 删除标签：deleteTag(context, tagName)
 
+
+    }
+
+    private boolean shouldInit() {
+        ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
+        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+        String mainProcessName = getPackageName();
+        int myPid = android.os.Process.myPid();
+        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private static void sendEvent(ReactContext reactContext,
+                           String eventName,
+                           @Nullable WritableMap params) {
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, params);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         //初始化push推送服务
         if(shouldInit()) {
             MiPushClient.registerPush(this, APP_ID, APP_KEY);
@@ -166,17 +197,11 @@ public class MainActivity extends ReactActivity {
         Logger.setLogger(this, newLogger);
     }
 
-    private boolean shouldInit() {
-        ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
-        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
-        String mainProcessName = getPackageName();
-        int myPid = android.os.Process.myPid();
-        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
-            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
-                return true;
-            }
-        }
-        return false;
+    public static void saveRegId(String mRegId) {
+        WritableMap params = new WritableNativeMap();
+        params.putString("regId", mRegId);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("aaa", "aaa");
+        getContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("saveRegId", params);
     }
-
 }

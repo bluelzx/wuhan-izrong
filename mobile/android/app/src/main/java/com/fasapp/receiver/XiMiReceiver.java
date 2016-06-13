@@ -9,6 +9,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.fasapp.BaseApplication;
 import com.fasapp.MainActivity;
 import com.xiaomi.mipush.sdk.ErrorCode;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -117,22 +118,23 @@ public class XiMiReceiver extends PushMessageReceiver {
                 ActivityManager.RunningTaskInfo currentActivity;
                 currentActivity = forGroundActivity.get(0);
                 String activityName = currentActivity.topActivity.getClassName(); //activityName 就是当前屏幕的activityName 名称
-                final WritableMap a = Arguments.createMap();
-                a.putString("regId", mRegId + "");
-                a.putString("aaa", "aaa");
+//                final WritableMap a = Arguments.createMap();
+//                a.putString("regId", mRegId + "");
+//                a.putString("aaa", "aaa");
 
-                /*new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(2000);*/
-                sendEvent(MainActivity.getContext(), "saveRegId", a);
-                        /*} catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();*/
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            Thread.sleep(3000);
+//                            MainActivity.saveRegId(mRegId);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }).start();
 //                sendEvent(MainActivity.getContext(), "saveRegId", params);
+                BaseApplication.regId = mRegId;
                 Log.d("onReceiveRegisterResult", mRegId + "   " + cmdArg2);
             }
         }
