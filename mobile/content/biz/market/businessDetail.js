@@ -201,6 +201,7 @@ let BusinessDetail = React.createClass({
                            source={{uri: uri}}
                            occurError={(error) => Alert(error)}
                            style={{height:46,width:46,borderRadius:23}}
+                           navigator = {this.props}
                            ref="loadImage"
           />
           {this.renderIsCertificated()}
@@ -288,6 +289,7 @@ let BusinessDetail = React.createClass({
                 style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#cccccc'}}
                 source={{uri:uri}}
                 jobMode="load"
+                navigator = {this.props}
                 key={index}
               >
               </LoadExtendImage>
