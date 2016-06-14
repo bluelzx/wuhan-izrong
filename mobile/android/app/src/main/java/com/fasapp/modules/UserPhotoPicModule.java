@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.widget.Toast;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -14,12 +15,15 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.fasapp.utils.FileUtils;
+import com.fasapp.utils.ImageUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+
 import cn.finalteam.galleryfinal.FunctionConfig;
 import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
@@ -27,9 +31,8 @@ import cn.finalteam.galleryfinal.model.PhotoInfo;
 /**
  * Created by vison on 16/4/11.
  */
+
 public class UserPhotoPicModule extends ReactContextBaseJavaModule {
-    private static final int USER_IMAGE_REQUEST_CODE = 0x01;
-    private static final int USER_CAMERA_REQUEST_CODE = 0x02;
     private Callback mCallback;
     private boolean mCrop;
     private String mFileName;
@@ -38,7 +41,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
     private Uri uri;
     private boolean cropSquare;
     private String cachePath;
-    private String cacheDir;
+    private String cacheDir = getReactApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/fasCache/";
     private final int REQUEST_CODE_CAMERA = 1000;
     private final int REQUEST_CODE_GALLERY = 1001;
     private final int REQUEST_CODE_CROP = 1002;
@@ -96,7 +99,6 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                                 break;
                         }
                     }
-
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -107,9 +109,18 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void compressImage(String uri, String fileName, final Callback callback) {
+        cachePath = cacheDir + fileName + "compress" + ".jpg";
+        File file = new File(cachePath);
+        Uri tempUri = ImageUtils.compressImage(file, uri);
+        mResponse = Arguments.createMap();
+        mResponse.putString("uri", tempUri.toString());
+        callback.invoke(mResponse);
+    }
+
+    @ReactMethod
     public void showImagePic(String type, boolean needCrop, String fileName, boolean cropSquare, Callback callback) {
         showImagePicBySize(type, needCrop, fileName, cropSquare, callback);
-
     }
 
     @ReactMethod
@@ -117,7 +128,6 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
         this.mCrop = needCrop;
         this.mFileName = name;
         this.mCallback = callback;
-        cacheDir = getReactApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/fasCache/";
         cachePath = cacheDir + mFileName + ".jpg";
         mCropConfig = new FunctionConfig.Builder()
                 .setEnableCrop(needCrop)
@@ -187,8 +197,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        String uri = FileUtils.copyFile(path, cachePath,cacheDir);
-                        mResponse.putString("uri", "file://" + uri);
+                        mResponse.putString("uri", FileUtils.copyFile(path, cachePath, cacheDir).toString());
                         mCallback.invoke(mResponse);
                     }
                     break;
@@ -196,14 +205,12 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        String uri = FileUtils.copyFile(path, cachePath, cacheDir);
-                        mResponse.putString("uri", "file://" + uri);
+                        mResponse.putString("uri", FileUtils.copyFile(path, cachePath, cacheDir).toString());
                         mCallback.invoke(mResponse);
                     }
                     break;
                 case REQUEST_CODE_CROP:
-                    String uri = FileUtils.renameToFile(path, cachePath, cacheDir);
-                    mResponse.putString("uri", "file://" + uri);
+                    mResponse.putString("uri", FileUtils.renameToFile(path, cachePath, cacheDir).toString());
                     mCallback.invoke(mResponse);
                     break;
                 default:
@@ -227,7 +234,6 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
             options.inSampleSize = 1;
             Bitmap tempBitMap = BitmapFactory.decodeStream(is, null, options);
             is.close();
-
             File tmpDir = new File(this.getReactApplicationContext().getExternalFilesDir(null).getAbsolutePath() + "/fasCache");
             //File tmpDir = new File(ExternalStorage.getSdCardPath()+ "/fasCache");
             if (!tmpDir.exists()) {
