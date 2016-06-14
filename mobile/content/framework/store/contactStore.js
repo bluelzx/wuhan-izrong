@@ -140,6 +140,15 @@ let _leaveGroup = function(groupId){
   AppStore.emitChange(IM_SESSION_LIST);
 }
 
+let _kickOut = function(groupId){
+  let userId = PersisterFacade.getLoginUserInfo().userId;
+  PersisterFacade.kickOut(groupId, userId);
+  AppStore.emitChange(IM_CONTACT);
+  AppStore.emitChange(IM_SESSION);
+  AppStore.emitChange(IM_GROUP);
+  AppStore.emitChange(IM_SESSION_LIST);
+}
+
 let _addFriend = function(userInfo) {
   PersisterFacade.addFriend(userInfo,true);
   AppStore.emitChange(IM_CONTACT);
@@ -155,10 +164,10 @@ let _newFriendNotic = function(param, userId) {
   let orgValue = PersisterFacade.getOrgValueByOrgId(param.orgId);
   let notic = PersisterFacade.getNewNoticById(param.noticId, userId);
   if(notic && !notic.isAccept){
-    //  有邀请  不更新session
-    PersisterFacade.createNewNotic(param.noticId, param.userId, param.realName, orgValue, param.photoFileUrl,param.certificated,FRIENDNOTIC_TYPE.INVITE, userId);
+    //  有邀请  不更新session   isCertificated  or certificated
+    PersisterFacade.createNewNotic(param.noticId, param.userId, param.realName, orgValue, param.photoFileUrl,param.isCertificated,FRIENDNOTIC_TYPE.INVITE, userId);
   }else{
-    PersisterFacade.createNewNotic(param.noticId, param.userId, param.realName, orgValue, param.photoFileUrl,param.certificated,FRIENDNOTIC_TYPE.INVITE, userId);
+    PersisterFacade.createNewNotic(param.noticId, param.userId, param.realName, orgValue, param.photoFileUrl,param.isCertificated,FRIENDNOTIC_TYPE.INVITE, userId);
 
     //updateSession
     let p = {
@@ -271,7 +280,8 @@ let ContactStore = {
   acceptNewFriendInvite:_acceptNewFriendInvite,
   acceptFriendInvite:_acceptFriendInvite,
   deleteMemberFromGroup: _deleteMemberFromGroup,
-  testDelete: _testDelete
+  testDelete: _testDelete,
+  kickOut:_kickOut
 };
 
 

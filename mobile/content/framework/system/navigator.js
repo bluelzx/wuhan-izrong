@@ -5,6 +5,9 @@
  * @type {(function(this:(Console|*)))|*|Server}
  * @private
  */
+
+let { Alert, Device, Loading } = require('mx-artifacts');
+
 const __log = window.console.log.bind(console);
 const {Dev} = require('../../../config');
 window.console.log = function () {
@@ -32,7 +35,6 @@ AppAction.appInit();
 var TabView = require('./tabView');
 var Login = require('../../biz/login/login');
 var AppStore = require('../store/appStore');
-let { Alert, Device, Loading } = require('mx-artifacts');
 let _ = require('lodash');
 let co = require('co');
 let NotificationManager = require('./notificationManager');
@@ -42,6 +44,7 @@ ImSocket = require('../../framework/network/imSocket');
 let QiniuTest = require('../../test/qiniuTest');
 let Upload = require('../../biz/login/uploadNameCard');
 let Account = require('../../biz/login/accountInfo');
+let UserGuide = require('../../biz/personal/userGuide');
 
 const { NETINFO_CONNECTED, NETINFO_DISCONNECTED } = require('../../constants/dictEvent');
 const { KPI_TYPE } = require('../../constants/dictIm');
@@ -60,6 +63,14 @@ var Main = React.createClass({
       isLoadingVisible: false
     });
   },
+
+  componentWillMount: function () {
+    DeviceEventEmitter.addListener('saveRegId', function (e: Event) {
+      //AppStore.saveAndroidPushRegId()
+      Alert('saveRegId');
+    })
+  },
+
   componentDidMount: function () {
     AppStore.addChangeListener(this._onChange);
     if (Platform.OS === 'android') {
@@ -141,8 +152,9 @@ var Main = React.createClass({
         return true;
       }
 
-      Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {
-      });
+      //Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {
+      //});
+      BackAndroid.exitApp()
       return true;
     }
     return false;

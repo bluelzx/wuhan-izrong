@@ -65,10 +65,17 @@ let Messenger = React.createClass({
   },
 
   _sendMessage(contentType, content, isReSend = false, msgId = '', isNotSend, localUri) {
+
+
     if (this.props.param.chatType === SESSION_TYPE.GROUP && !ImAction.isInGroupById(this.props.param.groupId, this.props.param.myId)) {
       //TODO: 用户已不在群组....
-      Alert('您已不在该群组');
-    } else {
+      //msgToSend.contentType = MSG_CONTENT_TYPE.KICKOUT;
+      //ImAction.send(msgToSend, false, this.props.param.myId, true);
+      //Alert('您已不在该群组');
+      let messages = this.state.messages;
+      messages.push({position:'',isTips:'您已移出该群，请重新加群'});
+      this.setState({messages: messages});
+    }else {
       let msgToSend = {
         sessionId: this.props.param.sessionId,
         msgId: isReSend ? msgId : KeyGenerator.getMessageKey(this.props.param.sessionId, this.props.param.myId),
@@ -105,13 +112,12 @@ let Messenger = React.createClass({
         msgToSend.cb = (sucUrl)=> {
           ImStore.modifyImgUrl(msgId,sucUrl);
           self._sendMessage(MSG_CONTENT_TYPE.IMAGE, sucUrl, true, msgId, false, uri);
-          console.log('hahahaha 我上传成功了  --登攀');
         }
       }
-
       ImAction.send(msgToSend, isReSend, this.props.param.myId, isNotSend);
       return msgToSend.msgId;
     }
+
   },
 
   handleSend(message = {}, rowID = null) {

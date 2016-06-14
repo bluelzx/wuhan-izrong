@@ -157,7 +157,7 @@ let _sessionInit = (data) => {
 
 let _saveMsg = (message, userId) => {
 
-  console.log(message);
+  console.log('saveMsg' , message);
   //TODO 还有INVITED和有人退出群组消息的情况需要处理
   if(message.msgType == SESSION_TYPE.GROUP_NOTICE){
     //TODO 这种情况考虑换个地方处理,群通知在会话中只有一个所以是覆盖前一个群通知会话

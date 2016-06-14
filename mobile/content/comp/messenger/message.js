@@ -203,6 +203,14 @@ export default class Message extends React.Component {
       onMessageLongPress,
       } = this.props;
 
+    if(rowData.isTips){
+      return (
+        <View style={{justifyContent:'center',marginTop:0}}>
+          <Text style={{textAlign:'center', color:'#aaaaaa'}}>{rowData.isTips}</Text>
+        </View>
+      );
+    }
+
     var flexStyle = {};
     var RowView = Bubble;
     if ( rowData.content.length > 40 ) {

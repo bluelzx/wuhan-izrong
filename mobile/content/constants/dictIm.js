@@ -3,6 +3,7 @@ const MSG_CONTENT_TYPE = {
   IMAGE: 'image',
   NAMECARD:'namecard',
   BIZINFO:'bizinfo',
+  KICKOUT:'kickout',
   NULL:'null'
 };
 

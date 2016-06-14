@@ -187,7 +187,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        String uri = FileUtils.copyFile1(path, cachePath,cacheDir);
+                        String uri = FileUtils.copyFile(path, cachePath,cacheDir);
                         mResponse.putString("uri", "file://" + uri);
                         mCallback.invoke(mResponse);
                     }
@@ -196,13 +196,13 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        String uri = FileUtils.copyFile1(path, cachePath, cacheDir);
+                        String uri = FileUtils.copyFile(path, cachePath, cacheDir);
                         mResponse.putString("uri", "file://" + uri);
                         mCallback.invoke(mResponse);
                     }
                     break;
                 case REQUEST_CODE_CROP:
-                    String uri = FileUtils.copyFile1(path, cachePath, cacheDir);
+                    String uri = FileUtils.renameToFile(path, cachePath, cacheDir);
                     mResponse.putString("uri", "file://" + uri);
                     mCallback.invoke(mResponse);
                     break;

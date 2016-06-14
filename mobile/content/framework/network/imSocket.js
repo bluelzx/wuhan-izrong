@@ -14,12 +14,15 @@ let time = null;
 
 let _sendPing = function() {
   console.log('######################send ping' + time);
-  _socket && _socket.sendStr('IM_SERVER_PING',(error)=>{
-    console.log('######################send ping error!' + error);
-  });
+  setTimeout(()=>{
+    _socket && _socket.sendStr('IM_SERVER_PING',(error)=>{
+      console.log('######################send ping error!' + error);
+    });
+  },1000);
+
 }
 
-let unit = 1 * 60 * 1000;//5分钟
+let unit = 1 * 60 * 1000;//1分钟
 let _setPing = function() {
   time = new Date();
   setTimeout(()=> {
@@ -59,7 +62,9 @@ let ImSocket = {
   },
 
   reconnect: function () {
+    console.log('##############reconnect');
     this.init(_token, _lastSyncTime);
+    _sendPing();
   },
 
 
@@ -73,7 +78,7 @@ let ImSocket = {
     // this.uri = ImWebSocket + AppStore.getToken();
     this.uri = newUrl;
     //this.uri = 'ws://localhost:3000/t001';
-    console.log('###### Connect to %s', this.uri);
+    //console.log('###### Connect to %s', this.uri);
     let AIBG = -1;
     if (Platform.OS === 'android') {
       AIBG = 1;
@@ -94,7 +99,7 @@ let ImSocket = {
 
     _socket.on('close', function (reason) {
       //_socket = null;
-      console.log('###### close %s', JSON.stringify(reason));
+      console.log('###### close ');
     });
 
     _socket.on('reconnect', function (attempt) {
@@ -102,7 +107,7 @@ let ImSocket = {
     });
 
     _socket.on('error', function (attempt) {
-      console.log('###### reconnect after %d attempt', attempt);
+      console.log('###### websocket error', attempt);
       //setTimeout(()=>{
       //  _socket&&_socket.open();
       //},10000);
@@ -112,10 +117,10 @@ let ImSocket = {
   },
 
   sendSyncReq: () => {
-    let userInfo = ContactSotre.getUserInfo();
-    let lastSyncTime = userInfo.lastSyncTime;
-    let message = {msgType: COMMAND_TYPE.SYNC_REQ,lastSyncTime:lastSyncTime};
-    _send(message);
+    //let userInfo = ContactSotre.getUserInfo();
+    //let lastSyncTime = userInfo.lastSyncTime;
+    //let message = {command: COMMAND_TYPE.SYNC_REQ,lastSyncTime:lastSyncTime};
+    //_send(message);
   },
 
   send: (message)=>_send(message),

@@ -9,6 +9,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
+import com.fasapp.BaseApplication;
 import com.fasapp.R;
 
 
@@ -27,6 +28,11 @@ public class AppInfoModule extends ReactContextBaseJavaModule {
     public AppInfoModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+    }
+
+    @ReactMethod
+    public void getPushRegId (Callback call) {
+        call.invoke(BaseApplication.regId);
     }
 
     @ReactMethod

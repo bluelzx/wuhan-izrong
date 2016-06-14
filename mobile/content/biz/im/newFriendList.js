@@ -134,7 +134,7 @@ let NewFriendList = React.createClass({
             <View style={{flex:2}}>
               <Text numberOfLines={1} style={{color:DictStyle.colorSet.imTitleTextColor}}>{item.realName + '-' + item.orgName}</Text>
               <Text numberOfLines={1}
-                    style={{marginTop:5,color:'#687886'}}>{item.msgType == FRIENDNOTIC_TYPE.ACCEPT?'好友请求答复':'请求加你为好友'}</Text>
+                    style={{marginTop:5,color:'#687886'}}>{item.msgType == FRIENDNOTIC_TYPE.ACCEPT?'同意了你的好友申请':'请求加你为好友'}</Text>
             </View>
 
             {(()=>{
@@ -161,13 +161,8 @@ let NewFriendList = React.createClass({
                 }
               }
               else if(item.msgType == FRIENDNOTIC_TYPE.ACCEPT){
-                return (
-                  <Text
-                    style={{textAlign:'right',flex:1,justifyContent:'flex-end',borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'对方同意'}</Text>
-                );
+                return null;
               }
-
-
             })()}
 
             </View>

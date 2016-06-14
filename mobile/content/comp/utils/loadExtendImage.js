@@ -13,18 +13,21 @@ let {
   Image,
   ActivityIndicatorIOS,
   ProgressBarAndroid,
-  Platform
+  Platform,
+  TouchableHighlight
   } = React;
 
 let RNFS = require('react-native-fs');
 let TimerMixin = require('react-timer-mixin');
-
 let CacheDirPath = Platform.OS === 'android' ? RNFS.ExternalDirectoryPath + '/fasCache/' : RNFS.DocumentDirectoryPath + '/fasCache/';
 let jobId1 = -1, jobId2 = 1;
-
 let ImAction = require('../../framework/action/imAction');
 let Lightbox = require('../lightBox/Lightbox');
 let ImagePicker = require('./imagePicker');
+let {Device,Alert} = require('mx-artifacts');
+let {ImageSizeOrigin} = require('../../../config');
+let ShowLargeImg=require('./showLargeImg');
+let TabView = require('../../framework/system/tabView');
 
 let LoadExtendImage = React.createClass({
   mixins: [TimerMixin],
@@ -64,7 +67,8 @@ let LoadExtendImage = React.createClass({
       fileExisted: false,
       filePath: {uri: ''},
       loadEnd: true,
-      status: 'loading'
+      status: 'loading',
+      modalVisible: false
     };
   },
 
@@ -77,6 +81,7 @@ let LoadExtendImage = React.createClass({
     if (this.props.jobMode === 'load') {
 
       if (!this.state.fileExisted) {
+        //console.log("adfgsdfgdfgsdfgdfgsdfgdfsdfgsdfgdfg"+this.props.source.uri.toString());
         let imagePath = this.getStoragePath(this.props.source.uri).imagePath;
         RNFS.exists(imagePath).then((exists) => {
           if (!exists) {
@@ -187,37 +192,37 @@ let LoadExtendImage = React.createClass({
 
   upLoadFile: function (uploadFileUri) {
 
-    if(this.props.startUpload){
+    if (this.props.startUpload) {
       this.props.startUpload(uploadFileUri);
     }
 
-      let fileName = uploadFileUri.split("/").pop();
+    let fileName = uploadFileUri.split("/").pop();
 
-      this.setState({
-        fileExisted: true,
-        filePath: {uri: 'file://' + uploadFileUri},
-        status: 'loading'
-      });
+    this.setState({
+      fileExisted: true,
+      filePath: {uri: 'file://' + uploadFileUri},
+      status: 'loading'
+    });
 
-      ImAction.uploadImage2(uploadFileUri, fileName)
-        .then((response) => {
-          if(this.props.uploadSuccess){
-            this.props.uploadSuccess(response.fileUrl);
-          }
-
-          this.setState({
-            status: 'success'
-          })
-        }).catch((error) => {
-        this.setState({
-          status: 'fail'
-        });
-        if(this.props.uploadFailed){
-          this.props.uploadFailed(error);
+    ImAction.uploadImage2(uploadFileUri, fileName)
+      .then((response) => {
+        if (this.props.uploadSuccess) {
+          this.props.uploadSuccess(response.fileUrl);
         }
 
-        this.errorHandle('uploadError:' + error);
+        this.setState({
+          status: 'success'
+        })
+      }).catch((error) => {
+      this.setState({
+        status: 'fail'
       });
+      if (this.props.uploadFailed) {
+        this.props.uploadFailed(error);
+      }
+
+      this.errorHandle('uploadError:' + error);
+    });
 
   },
 
@@ -280,12 +285,27 @@ let LoadExtendImage = React.createClass({
 
   renderLoading: function () {
     return (
-        Platform.OS === 'android' ?
-          <ProgressBarAndroid style={styles.loadStyle} styleAttr="Inverse" color="#44bcb2"/> :
-          <ActivityIndicatorIOS style={styles.loadStyle} animating={true} size="large" color="#44bcb2"/>
-      );
+      Platform.OS === 'android' ?
+        <ProgressBarAndroid style={styles.loadStyle} styleAttr="Inverse" color="#44bcb2"/> :
+        <ActivityIndicatorIOS style={styles.loadStyle} animating={true} size="large" color="#44bcb2"/>
+    );
 
   },
+
+  toPage: function (name, uri) {
+    const { navigator } = this.props.navigator;
+    if (navigator) {
+      navigator.push({
+        comp: name,
+        param: {
+          uri: uri,
+          filePath:this.state.filePath
+        }
+      })
+    }
+  },
+
+
 
   render: function () {
 
@@ -352,20 +372,40 @@ let LoadExtendImage = React.createClass({
             </Image>
           </ImagePicker>
         );
-
       } else {
         return (
-          <Image style={[styles.imageStyle,this.props.style]}
-                 source={this.state.filePath}
-                 resizeMode="cover"
-          >
-          </Image>
+          <View>
+            <TouchableHighlight onPress={()=>this.toPage(ShowLargeImg,this.props.source.uri)}
+                                underlayColor={'#ffffff'}>
+              <Image style={[styles.imageStyle,this.props.style]}
+                     source={this.state.filePath}
+                     resizeMode="cover"
+              >
+              </Image>
+            </TouchableHighlight>
+          </View>
         );
       }
     }
 
   }
 });
+
+//<Modal
+//  visible={this.state.modalVisible}
+//  animationType='fade'
+//>
+//  <View style={styles.viewStyle}>
+//    <TouchableHighlight onPress={this.disMissModal}
+//                        onLongPress={this.showSaveDialog}>
+//      <Image style={styles.largeImageStyle}
+//             source={this.state.filePath}
+//             resizeMode="contain"
+//      >
+//      </Image>
+//    </TouchableHighlight>
+//  </View>
+//</Modal>
 
 let styles = StyleSheet.create({
   loadStyle: {
@@ -377,6 +417,19 @@ let styles = StyleSheet.create({
   imageStyle: {
     justifyContent: 'center',
     alignItems: 'center'
+  },
+
+  viewStyle: {
+    height: 100,
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: "#000000"
+  },
+
+  largeImageStyle: {
+    height: Device.height,
+    width: Device.width
   }
 });
 

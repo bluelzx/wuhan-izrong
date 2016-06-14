@@ -201,7 +201,7 @@ Manager.prototype.connect = function (fn) {
  // add lastSyncTime
   let tDate = this.opts.lastSyncTime && this.opts.lastSyncTime();
   let AIBG = this.opts.AIBG;
-  var syncUri  = this.uri + '?' + 'lastSyncTime=' + (tDate ? tDate.getTime() : 0) + '&AIBG=' + AIBG;
+  var syncUri  = this.uri + '?' + 'lastSyncTime=' + (tDate ? tDate.getTime() : (new Date()).getTime()) + '&AIBG=' + AIBG;
   //var syncUri  = this.uri;// + '?' + 'lastSyncTime=' + this.opts.lastSyncTime().getTime();
   console.log('**websocket** opening %s', syncUri);
   this.engine = new WebSocket(syncUri);
@@ -218,7 +218,7 @@ Manager.prototype.connect = function (fn) {
 
   // emit `connect_error`
   socket.onerror = (e) => {
-    console.log('**websocket** connect_error [%s]', JSON.stringify(e));
+    //console.log('**websocket** connect_error [%s]', JSON.stringify(e));
     self.cleanup();
     self.readyState = 'closed';
     self.emitAll('connect_error', e);
@@ -236,11 +236,11 @@ Manager.prototype.connect = function (fn) {
   // emit `connect_timeout`
   if (false !== this._timeout) {
     var timeout = this._timeout;
-    console.log('**websocket** connect attempt will timeout after %d', timeout);
+    //console.log('**websocket** connect attempt will timeout after %d', timeout);
 
     // set timer
     var timer = setTimeout(function () {
-      console.log('**websocket** connect attempt timed out after %d', timeout);
+      //console.log('**websocket** connect attempt timed out after %d', timeout);
       socket.close();
       //socket.emit('error', 'timeout');
       self.emitAll('connect_timeout', timeout);
@@ -263,7 +263,7 @@ Manager.prototype.connect = function (fn) {
  */
 
 Manager.prototype.onopen = function () {
-  console.log('**websocket** open');
+  //console.log('**websocket** open');
 
   // clear old subs
   this.cleanup();
@@ -321,7 +321,7 @@ Manager.prototype.onmessage = function (data) {
  */
 
 Manager.prototype.onerror = function (err) {
-  console.log('**websocket** onerror %s', err);
+  //console.log('**websocket** onerror %s', err);
   this.emitAll('error', err);
 };
 
@@ -364,7 +364,7 @@ Manager.prototype.cleanup = function () {
 
 Manager.prototype.close =
 Manager.prototype.disconnect = function () {
-  console.log('**websocket** disconnect');
+  //console.log('**websocket** disconnect');
   this.skipReconnect = true;
   this.reconnecting = false;
   if ('opening' === this.readyState) {
@@ -384,7 +384,7 @@ Manager.prototype.disconnect = function () {
  */
 
 Manager.prototype.onclose = function (reason) {
-  console.log('**websocket** onclose');
+  //console.log('**websocket** onclose');
 
   this.cleanup();
   this.backoff.reset();
@@ -408,13 +408,13 @@ Manager.prototype.reconnect = function () {
   var self = this;
 
   if (this.backoff.attempts >= this._reconnectionAttempts) {
-    console.log('**websocket** reconnect failed');
+    //console.log('**websocket** reconnect failed');
     this.backoff.reset();
     this.emitAll('reconnect_failed');
     this.reconnecting = false;
   } else {
     var delay = this.backoff.duration();
-    console.log('**websocket** will wait %dms before reconnect attempt', delay);
+    //console.log('**websocket** will wait %dms before reconnect attempt', delay);
 
     this.reconnecting = true;
     var timer = setTimeout(function () {
@@ -434,7 +434,7 @@ Manager.prototype.reconnect = function () {
           self.reconnect();
           self.emitAll('reconnect_error', err.data);
         } else {
-          console.log('**websocket** reconnect success');
+          //console.log('**websocket** reconnect success');
           self.onreconnect();
         }
       });
@@ -474,7 +474,7 @@ Manager.prototype.send = function (data, fn) {
     return;
   }
   let _socket = this.engine;
-  console.log('**websocket** send %s', JSON.stringify(data));
+  //console.log('**websocket** send %s', JSON.stringify(data));
   _socket.send(JSON.stringify(data));
 };
 
@@ -491,6 +491,6 @@ Manager.prototype.sendStr = function (data, fn) {
     return;
   }
   let _socket = this.engine;
-  console.log('**websocket** send string %s', data);
+  //console.log('**websocket** send string %s', data);
   _socket.send(data);
 };

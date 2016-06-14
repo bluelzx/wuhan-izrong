@@ -48,8 +48,15 @@ let DeleteMember = React.createClass({
 
   delUser: function( groupId, members) {
     dismissKeyboard();
-    if(Object.keys(members).length == 0){
-      //this.props.navigator.pop();
+    let tmp = false;
+    for (let i in members) {
+      if (members[i]) {
+        tmp = true;
+        break;
+      }
+    }
+    if (!tmp) {
+      Alert('您没有选择成员!');
       return;
     }
     this.props.exec(() => {

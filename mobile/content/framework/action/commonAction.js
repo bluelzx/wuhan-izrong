@@ -32,7 +32,7 @@ var _notificationRegister = function (token) {
 }
 
 var _onNotification = function (notification) {
-  console.log(notification);
+  console.log(' push  notification消息 :' , notification);
   //TODO:同步请求
   ImSocket.sendSyncReq();
 }
