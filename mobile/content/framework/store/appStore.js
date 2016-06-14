@@ -52,7 +52,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   isForceLogout: () => _info.isForceLogout,
   isDelete: ()=> _info.isDelete,
   isForceUpdate: ()=> _info.forceUpdate,
-  saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
+  saveApnsToken: (apnsToken, judgeEmit) => _save_apns_token(apnsToken,judgeEmit),
   getAPNSToken: () => _get_apns_token(),
   updateLastSyncTime: (t)=>_updateLastSyncTime(t),
   getToken: () => _data.token || '',
@@ -225,11 +225,14 @@ let _forceUpdate = () => {
   AppStore.emitChange();
 };
 
-let _save_apns_token = (apnsToken) => {
+let _save_apns_token = (apnsToken, judgeEmit) => {
   _info.apnTokens = apnsToken;
   Persister.saveAPNSToken(apnsToken);
   console.log('APNSToken' + apnsToken);
-  AppStore.emitChange();
+  if (!judgeEmit) {
+    AppStore.emitChange();
+  }
+
 };
 
 let _get_apns_token = () => {

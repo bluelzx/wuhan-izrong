@@ -42,6 +42,7 @@ ImSocket = require('../../framework/network/imSocket');
 let QiniuTest = require('../../test/qiniuTest');
 let Upload = require('../../biz/login/uploadNameCard');
 let Account = require('../../biz/login/accountInfo');
+let UserGuide = require('../../biz/personal/userGuide');
 
 const { NETINFO_CONNECTED, NETINFO_DISCONNECTED } = require('../../constants/dictEvent');
 const { KPI_TYPE } = require('../../constants/dictIm');
@@ -149,8 +150,9 @@ var Main = React.createClass({
         return true;
       }
 
-      Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {
-      });
+      //Alert('确认退出该应用?', () => BackAndroid.exitApp(), () => {
+      //});
+      BackAndroid.exitApp()
       return true;
     }
     return false;

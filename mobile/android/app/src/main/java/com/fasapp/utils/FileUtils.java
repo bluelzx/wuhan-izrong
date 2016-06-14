@@ -1,5 +1,6 @@
 package com.fasapp.utils;
 
+import android.net.Uri;
 import android.os.Environment;
 
 import java.io.File;
@@ -360,7 +361,7 @@ public class FileUtils {
     }
 
     //将图片从一个路径复制到另一个路径
-    public static String copyFile(String oldPath, String newPath, String cacheDir) {
+    public static Uri copyFile(String oldPath, String newPath, String cacheDir) {
         File f = new File(cacheDir);
         if (!f.exists()) {
             f.mkdirs();
@@ -369,11 +370,12 @@ public class FileUtils {
         File newFile = new File(newPath);
         copyFile(oldPath, newPath, true);
         //oldFile.renameTo(newFile);
-        return newFile.getAbsolutePath();
+        //return newFile.getAbsolutePath();
+        return Uri.fromFile(newFile);
     }
 
     //将图片从一个路径移动到另一个路径
-    public static String renameToFile(String oldPath, String newPath, String cacheDir) {
+    public static Uri renameToFile(String oldPath, String newPath, String cacheDir) {
         File f = new File(cacheDir);
         if (!f.exists()) {
             f.mkdirs();
@@ -382,7 +384,7 @@ public class FileUtils {
         File newFile = new File(newPath);
         //copyFile(oldPath, newPath, true);
         oldFile.renameTo(newFile);
-        return newFile.getAbsolutePath();
+        return Uri.fromFile(newFile);
     }
 
     public static void copyFile(String oldPath, String newPath) {

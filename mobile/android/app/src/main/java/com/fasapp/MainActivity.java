@@ -3,12 +3,9 @@ package com.fasapp;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.*;
 import android.util.Log;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -24,8 +21,6 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
-
-import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
