@@ -98,12 +98,12 @@ let UserInfo = React.createClass({
     },
 
     returnImage: function () {
-      let uri = this.state.photoFileUrl
+      let uri = this.state.photoFileUrl;
       if (!this.state.certificated) {
          uri = uri + ImageSize50;
       }
       return (
-        <View>
+        <View style={{marginLeft:20}}>
         <LoadExtendImage jobMode="select"
                          source={{uri: uri}}
                          selectType="all"
@@ -116,13 +116,13 @@ let UserInfo = React.createClass({
         >
           <NameCircular name={this.state.realName} isV={this.state.certificated}/>
         </LoadExtendImage>
-          {(()=>{
+          {()=>{
             if(this.state.certificated && this.state.photoFileUrl)
             return (
                     <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
                            resizeMode="cover" source={require('../../image/user/certificated.png')}/>
             );
-          })()}
+          }}
           </View>
       );
 
