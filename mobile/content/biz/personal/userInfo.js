@@ -149,9 +149,6 @@ let UserInfo = React.createClass({
         );
       }
 
-
-
-
       //if (this.state.certificated) {
       //  return (
       //    <View style={{marginLeft: 20,paddingRight:20}}>
