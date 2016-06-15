@@ -179,12 +179,12 @@ let _dealMsg = function (message, socket) {
           noticeType: noticeType,
           userId: group.groupMasterUid
         }, userId);
-        //ContactSotre.leaveGroup(message.groupId);
+        ContactSotre.leaveGroup(message.groupId);
       } else {
         //ContactSotre.deleteMemberFromGroup(message.groupId, userId)
+        // 是否删除
+        ContactSotre.kickOut(message.groupId);
       }
-      // 是否删除
-      ContactSotre.kickOut(message.groupId);
       break;
     case MSG_TYPE.SYNC_REQ:
       socket.send({command: COMMAND_TYPE.SYNC_REQ, lastSyncTime: lastSyncTime});
