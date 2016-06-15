@@ -26,13 +26,12 @@ let Lightbox = require('../lightBox/Lightbox');
 let ImagePicker = require('./imagePicker');
 let {Device,Alert} = require('mx-artifacts');
 let {ImageSizeOrigin} = require('../../../config');
-let ShowLargeImg=require('./showLargeImg');
+let ShowLargeImg = require('./showLargeImg');
 let TabView = require('../../framework/system/tabView');
 let Icon = require('react-native-vector-icons/Ionicons');
 
 let LoadExtendImage = React.createClass({
   mixins: [TimerMixin],
-
   propTypes: {
     jobMode: PropTypes.oneOf(['load', 'upload', 'select']).isRequired,
     source: PropTypes.object,
@@ -102,7 +101,6 @@ let LoadExtendImage = React.createClass({
       }
 
     } else if (this.props.jobMode === 'upload') {
-
       let imagePath = null;
       if (this.props.uploadFileUri && this.props.uploadFileUri.uri) {
         imagePath = this.props.uploadFileUri.uri;
@@ -196,7 +194,7 @@ let LoadExtendImage = React.createClass({
   },
 
   upLoadFile: function (uploadFileUri) {
-
+    console.log('weisen compress' + uploadFileUri);
     if (this.props.startUpload) {
       this.props.startUpload(uploadFileUri);
     }
@@ -225,8 +223,8 @@ let LoadExtendImage = React.createClass({
       if (this.props.uploadFailed) {
         this.props.uploadFailed(error);
       }
-
       this.errorHandle('uploadError:' + error);
+      throw(error);
     });
 
   },
@@ -304,12 +302,11 @@ let LoadExtendImage = React.createClass({
         comp: name,
         param: {
           uri: uri,
-          filePath:this.state.filePath
+          filePath: this.state.filePath
         }
       })
     }
   },
-
 
 
   render: function () {

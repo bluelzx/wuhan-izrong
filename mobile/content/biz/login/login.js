@@ -68,8 +68,9 @@ let Login = React.createClass({
           }
         }).then(()=>{
           if (Platform.OS === 'android') {
-            AppInfoModule.getPushRegId((id) => {
+            AppInfoModule.getPushRegId((id, deviceModel) => {
               AppStore.saveApnsToken(id, true);
+              AppStore.saveDeviceModel(deviceModel)
             });
           }
         }).catch((errorData) => {

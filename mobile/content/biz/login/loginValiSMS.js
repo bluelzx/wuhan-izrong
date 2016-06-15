@@ -26,7 +26,7 @@ let ValiSMS = React.createClass({
   getStateFromStores() {
     let deviceModel = 'IOS';
     if (Platform.OS != 'ios') {
-      deviceModel = 'ANDROID';
+      deviceModel = AppStore.getDeviceModel();
     }
     return {
       disabled: true,
