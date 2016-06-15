@@ -135,6 +135,7 @@ public class XiMiReceiver extends PushMessageReceiver {
 //                }).start();
 //                sendEvent(MainActivity.getContext(), "saveRegId", params);
                 BaseApplication.regId = mRegId;
+                BaseApplication.deviceModel = "XIAOMI";
                 Log.d("onReceiveRegisterResult", mRegId + "   " + cmdArg2);
             }
         }

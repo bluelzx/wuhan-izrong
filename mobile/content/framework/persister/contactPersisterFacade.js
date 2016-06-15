@@ -7,7 +7,7 @@ const DEFAULT_GROUP_IMAGE = "";
 const _ = require('lodash');
 let SessionIdSplit = require('../../comp/utils/sessionIdSplitUtils');
 let ErrorMsg = require('../../constants/errorMsg');
-let {SESSION_TYPE} = require('../../constants/dictIm');
+let {SESSION_TYPE, DELETE_TYPE} = require('../../constants/dictIm');
 let adapter = require('./adapter');
 const {
   GROUP,
@@ -482,7 +482,7 @@ let _selfDeleteNotice = function (groupId, userId) {
     if (item && !_.isEmpty(item)) {
       if (SessionIdSplit.getUserIdFromSessionId(item.noticeId) == userId) {
         noticeNum = noticeNum + 1;
-        if (SessionIdSplit.getIdFromSessionId(item.noticeId) == groupId) {
+        if (SessionIdSplit.getIdFromSessionId(item.noticeId) == groupId && item.msgType != DELETE_TYPE.DELETE_GROUP) {
           deleteNum = deleteNum + 1;
           let ret = _realm.objects(NOTICE).filtered('\'' + item.noticeId + '\' =  noticeId');
           _realm.delete(ret);
@@ -522,7 +522,7 @@ let _kickOut = function(groupId, userId){
 
 
 let _leaveGroup = function (groupId, userId) {
-  //TODO: sessionId要加用户ID
+  //sessionId要加用户ID
   _realm.write(() => {
     let group = _realm.objects(GROUP).filtered('groupId = ' + groupId);
     _realm.delete(group);
