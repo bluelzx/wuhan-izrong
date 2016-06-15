@@ -26,12 +26,12 @@ let Lightbox = require('../lightBox/Lightbox');
 let ImagePicker = require('./imagePicker');
 let {Device,Alert} = require('mx-artifacts');
 let {ImageSizeOrigin} = require('../../../config');
-let ShowLargeImg=require('./showLargeImg');
+let ShowLargeImg = require('./showLargeImg');
 let TabView = require('../../framework/system/tabView');
+let Icon = require('react-native-vector-icons/Ionicons');
 
 let LoadExtendImage = React.createClass({
   mixins: [TimerMixin],
-
   propTypes: {
     jobMode: PropTypes.oneOf(['load', 'upload', 'select']).isRequired,
     source: PropTypes.object,
@@ -42,6 +42,9 @@ let LoadExtendImage = React.createClass({
     uploadSuccess: PropTypes.func,
     uploadFailed: PropTypes.func,
     occurError: PropTypes.func,
+
+    //是否允许在点击的时候加载大图
+    showLargeImg:PropTypes.bool,
 
     selectType: PropTypes.oneOf(['all', 'camera', 'library']),
     longPress: PropTypes.func,
@@ -58,7 +61,8 @@ let LoadExtendImage = React.createClass({
   getDefaultProps: function () {
     return {
       isEnableLoading: true,
-      isSelectUpload: true
+      isSelectUpload: true,
+      showLargeImg:true
     };
   },
 
@@ -97,7 +101,6 @@ let LoadExtendImage = React.createClass({
       }
 
     } else if (this.props.jobMode === 'upload') {
-
       let imagePath = null;
       if (this.props.uploadFileUri && this.props.uploadFileUri.uri) {
         imagePath = this.props.uploadFileUri.uri;
@@ -191,7 +194,7 @@ let LoadExtendImage = React.createClass({
   },
 
   upLoadFile: function (uploadFileUri) {
-
+    console.log('weisen compress' + uploadFileUri);
     if (this.props.startUpload) {
       this.props.startUpload(uploadFileUri);
     }
@@ -220,8 +223,8 @@ let LoadExtendImage = React.createClass({
       if (this.props.uploadFailed) {
         this.props.uploadFailed(error);
       }
-
       this.errorHandle('uploadError:' + error);
+      throw(error);
     });
 
   },
@@ -299,12 +302,11 @@ let LoadExtendImage = React.createClass({
         comp: name,
         param: {
           uri: uri,
-          filePath:this.state.filePath
+          filePath: this.state.filePath
         }
       })
     }
   },
-
 
 
   render: function () {
@@ -323,13 +325,20 @@ let LoadExtendImage = React.createClass({
     } else if (this.state.status == 'fail') {
 
       return (
+        <TouchableHighlight onPress={()=>this.upLoadFile(this.props.uploadFileUri.uri)}>
         <Image style={[styles.imageStyle,this.props.style]}
                resizeMode="cover"
                source={this.state.filePath}
         >
-          <Text style={{color:'red'}}> fail </Text>
+            <Image
+              style={{width:30,height:30}}
+              source = {require('../../image/utils/refresh.png')}>
+
+            </Image>
         </Image>
+          </TouchableHighlight>
       );
+      //<Icon name="refresh" size={25} color='#ff0000'/>
 
     } else if ((!this.props.source || !this.props.source.uri) && (!this.props.uploadFileUri || !this.props.uploadFileUri.uri)) {
       return (
@@ -372,7 +381,17 @@ let LoadExtendImage = React.createClass({
             </Image>
           </ImagePicker>
         );
-      } else {
+      } else if(this.props.showLargeImg == false){
+        return (
+          <View>
+              <Image style={[styles.imageStyle,this.props.style]}
+                     source={this.state.filePath}
+                     resizeMode="cover"
+              >
+              </Image>
+          </View>
+        );
+      }else{
         return (
           <View>
             <TouchableHighlight onPress={()=>this.toPage(ShowLargeImg,this.props.source.uri)}

@@ -31,7 +31,6 @@ import cn.finalteam.galleryfinal.model.PhotoInfo;
 /**
  * Created by vison on 16/4/11.
  */
-
 public class UserPhotoPicModule extends ReactContextBaseJavaModule {
     private Callback mCallback;
     private boolean mCrop;
@@ -99,6 +98,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                                 break;
                         }
                     }
+
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -128,7 +128,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
         this.mCrop = needCrop;
         this.mFileName = name;
         this.mCallback = callback;
-        cachePath = cacheDir + mFileName + ".jpg";
+        cachePath = cacheDir + mFileName + "compress.jpg";
         mCropConfig = new FunctionConfig.Builder()
                 .setEnableCrop(needCrop)
                 .setEnableRotate(true)
@@ -197,7 +197,8 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        mResponse.putString("uri", FileUtils.copyFile(path, cachePath, cacheDir).toString());
+                        String cacheUri = ImageUtils.compressImage1(path.toString(), cachePath, cacheDir);
+                        mResponse.putString("uri", cacheUri);
                         mCallback.invoke(mResponse);
                     }
                     break;
@@ -205,12 +206,13 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        mResponse.putString("uri", FileUtils.copyFile(path, cachePath, cacheDir).toString());
+                        mResponse.putString("uri", ImageUtils.compressImage1(path.toString(), cachePath, cacheDir));
                         mCallback.invoke(mResponse);
                     }
                     break;
                 case REQUEST_CODE_CROP:
-                    mResponse.putString("uri", FileUtils.renameToFile(path, cachePath, cacheDir).toString());
+                    String cacheUri = ImageUtils.compressImage1(path.toString(), cachePath, cacheDir);
+                    mResponse.putString("uri",cacheUri);
                     mCallback.invoke(mResponse);
                     break;
                 default:

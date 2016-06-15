@@ -32,7 +32,7 @@ public class AppInfoModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getPushRegId (Callback call) {
-        call.invoke(BaseApplication.regId);
+        call.invoke(BaseApplication.regId, BaseApplication.deviceModel);
     }
 
     @ReactMethod

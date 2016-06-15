@@ -9,7 +9,8 @@ let {
   View,
   Text,
   TouchableHighlight,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
   } = React;
 let AppStore = require('../../framework/store/appStore');
 let LoginAction = require('../../framework/action/loginAction');
@@ -24,6 +25,7 @@ let RegisterPotocol = require('./registerPotocol');
 let DictStyle = require('../../constants/dictStyle');
 let PlainStyle = require('../../constants/dictStyle');
 let CallPhone = require('../../comp/utils/callPhone');
+let AppInfoModule = require('NativeModules').AppInfoModule;
 
 let Register_valiMobile = React.createClass({
   getStateFromStores() {
@@ -75,6 +77,13 @@ let Register_valiMobile = React.createClass({
                   }
                 });
             }
+          }
+        }).then(()=>{
+          if (Platform.OS === 'android') {
+            AppInfoModule.getPushRegId((id, deviceModel) => {
+              AppStore.saveApnsToken(id, true);
+              AppStore.saveDeviceModel(deviceModel)
+            });
           }
         }).catch((errorData) => {
           throw errorData;
