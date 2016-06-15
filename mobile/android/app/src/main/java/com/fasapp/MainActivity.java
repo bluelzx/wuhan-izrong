@@ -14,6 +14,7 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.huawei.android.pushagent.api.PushManager;
 import com.rnfs.RNFSPackage;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -124,8 +125,9 @@ public class MainActivity extends ReactActivity {
 //        String model=android.os.Build.MODEL;
 //        String release=android.os.Build.VERSION.RELEASE;
         String brand = Build.BRAND;
+        Log.d(TAG, "brand:" + brand);
         if ("HUAWEI".equals(brand) || "honor".equals(brand)) {
-//            PushManager.requestToken(MainActivity.this);
+            PushManager.requestToken(MainActivity.this);
         } else {
             //初始化push推送服务
             if (shouldInit()) {

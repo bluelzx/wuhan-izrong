@@ -27,7 +27,8 @@ let _info = {
   isForceLogout: false,
   apnTokens: null,
   isFreezing: false,
-  isDelete: false
+  isDelete: false,
+  deviceModel: 'XIAOMI'
 };
 
 let _data = {};
@@ -52,7 +53,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   isForceLogout: () => _info.isForceLogout,
   isDelete: ()=> _info.isDelete,
   isForceUpdate: ()=> _info.forceUpdate,
-  saveApnsToken: (apnsToken) => _save_apns_token(apnsToken),
+  saveApnsToken: (apnsToken, judgeEmit) => _save_apns_token(apnsToken, judgeEmit),
   getAPNSToken: () => _get_apns_token(),
   updateLastSyncTime: (t)=>_updateLastSyncTime(t),
   getToken: () => _data.token || '',
@@ -87,9 +88,19 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   //stopJavaServer:() => ServiceModule.stopMyAppService()
   saveHomeMarketList: (homeMarketList)=> _saveHomeMarketList(homeMarketList),
   shouldUpdate: ()=> Persister.shouldUpdate(),
-  saveAndroidPushRegId: (id) => _saveAndroidPushRegId(id)
+  saveAndroidPushRegId: (id) => _saveAndroidPushRegId(id),
+  saveDeviceModel: (deviceModel) => _saveDeviceModel(deviceModel),
+  getDeviceModel: () => _getDeviceModel()
 
 });
+
+let _getDeviceModel = function () {
+  return _info.deviceModel
+}
+
+let _saveDeviceModel = function (deviceModel) {
+  _info.deviceModel = deviceModel;
+}
 
 let _saveAndroidPushRegId = function (id) {
   _.assign(_data, {
@@ -225,11 +236,13 @@ let _forceUpdate = () => {
   AppStore.emitChange();
 };
 
-let _save_apns_token = (apnsToken) => {
+let _save_apns_token = (apnsToken, judgeEmit) => {
   _info.apnTokens = apnsToken;
   Persister.saveAPNSToken(apnsToken);
   console.log('APNSToken' + apnsToken);
-  AppStore.emitChange();
+  if (!judgeEmit) {
+    AppStore.emitChange();
+  }
 };
 
 let _get_apns_token = () => {

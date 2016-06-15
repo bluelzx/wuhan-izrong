@@ -114,6 +114,7 @@ public class XiMiReceiver extends PushMessageReceiver {
             if (message.getResultCode() == ErrorCode.SUCCESS) {
                 mRegId = cmdArg1;
                 BaseApplication.regId = mRegId;
+                BaseApplication.deviceModel = "XIAOMI";
                 Log.d("onReceiveRegisterResult", mRegId + "   " + cmdArg2);
             }
         }

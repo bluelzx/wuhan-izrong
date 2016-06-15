@@ -31,6 +31,7 @@ public class BaseApplication extends Application {
     public static final String APP_KEY = "5271747743213";
     public static final String TAG = "com.fasapp123";
     public static String regId = "";
+    public static String deviceModel = "";
     @Override
     public void onCreate() {
         super.onCreate();
