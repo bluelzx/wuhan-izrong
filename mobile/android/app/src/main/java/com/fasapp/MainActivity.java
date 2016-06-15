@@ -89,14 +89,14 @@ public class MainActivity extends ReactActivity {
     @Override
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
-                new MainReactPackage(),
-                new RNFSPackage(),
-                new RealmReactPackage(),
-                new VectorIconsPackage(),
-                new RNSharePackage(),
-                new RNDeviceInfo(),
-                new ZXReactPackage(this),
-                new ExtraDimensionsPackage(this)
+            new MainReactPackage(),
+            new RNFSPackage(),
+            new RealmReactPackage(),
+            new VectorIconsPackage(),
+            new RNSharePackage(),
+            new RNDeviceInfo(),
+            new ZXReactPackage(this),
+            new ExtraDimensionsPackage(this)
         );
     }
 

@@ -178,7 +178,7 @@ let LargeImg = React.createClass({
                             onLongPress={this.moreHandle}
                             style={styles.viewStyle}>
           <Image style={styles.largeImageStyle}
-                 resizeMode="cover"
+                 resizeMode="contain"
                  source={this.state.littleFilePath}
           >
             {this.renderLoading()}
