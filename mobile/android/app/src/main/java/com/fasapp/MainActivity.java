@@ -3,21 +3,13 @@ package com.fasapp;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.*;
 import android.util.Log;
 
 import com.facebook.react.ReactActivity;
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.huawei.android.pushagent.api.PushManager;
 import com.rnfs.RNFSPackage;
 import com.facebook.react.ReactPackage;
-import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.shell.MainReactPackage;
 import com.fasapp.pakage.ZXReactPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
@@ -25,10 +17,7 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
-
-import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -67,20 +56,7 @@ public class MainActivity extends ReactActivity {
     protected void onStart() {
         super.onStart();
     }
-
-    /*public static ReactContext getContext() {
-        if (mReactInstanceManager == null) {
-            // This doesn't seem to happen ...
-            throw new IllegalStateException("Instance manager not available");
-        }
-        final ReactContext context = mReactInstanceManager.getCurrentReactContext();
-        if (context == null) {
-            // This really shouldn't happen ...
-            throw new IllegalStateException("React context not available");
-        }
-        return context;
-    }*/
-
+    
     /**
      * A list of packages used by the app. If the app uses additional views
      * or modules besides the default ones, add more packages here.
@@ -191,13 +167,4 @@ public class MainActivity extends ReactActivity {
         }
         return false;
     }
-
-
-//    public static void saveRegId(String mRegId) {
-//        WritableMap params = new WritableNativeMap();
-//        params.putString("regId", mRegId);
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("aaa", "aaa");
-//        getContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("saveRegId", params);
-//    }
 }
