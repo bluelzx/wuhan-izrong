@@ -80,6 +80,7 @@ let Personal = React.createClass({
                              source={{uri: uri}}
                              style={styles.head}
                              ref="loadImage"
+                             navigator = {{navigator:AppStore.getNavigator()}}
             />
             <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
                    resizeMode="cover" source={require('../../image/user/certificated.png')}/>
@@ -92,11 +93,11 @@ let Personal = React.createClass({
                            source={{uri: uri}}
                            style={styles.head}
                            ref="loadImage"
+                           navigator ={{navigator:AppStore.getNavigator()}}
           />
         </View>
       );
     } else {
-
       return (
         <View style={{marginLeft:20}}>
           <NameCircular name={this.state.realName} isV={this.state.certificated}/>

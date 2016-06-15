@@ -209,7 +209,6 @@ let TextEdit = React.createClass({
                          this.setState({newValue:text});
                          this.textChange(text);
                          }}
-          //autoFocus={true}
                    autoCapitalize="none"
                    autoCorrect={false}
         />
@@ -235,8 +234,10 @@ let TextEdit = React.createClass({
     if (this.state.publicName != '') {
       return (
         <View style={{backgroundColor:PlainStyle.colorSet.textEditBackground, height: 50}}>
-          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-            <Text style={{color: PlainStyle.colorSet.textEditTextColor, fontSize: 18, marginLeft: 20}}>公开此信息</Text>
+          <View
+            style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <Text
+              style={{color: PlainStyle.colorSet.textEditTextColor, fontSize: 18, marginLeft: 20}}>公开此信息</Text>
             <Switch style={{margin: 20}}
                     value={this.state.newPublicValue}
                     onValueChange={this.switchControl}
@@ -250,12 +251,14 @@ let TextEdit = React.createClass({
   render: function () {
     if (this.props.param.name == 'phoneNumber') {
       return (
-        <NavBarView navigator={this.props.navigator} title={this.props.param.title} actionButton={this.renderUpdate}>
+        <NavBarView navigator={this.props.navigator} title={this.props.param.title}
+                    actionButton={this.renderUpdate}>
           <View
             style={[DictStyle.textEditItem,{marginTop: 20}]}
           >
             <View style={[styles.view, {flexDirection: 'row'}]}>
-              <TextInput style={[styles.text, {width: 80}]} defaultValue={this.state.oldValue.split('-')[0]}
+              <TextInput style={[styles.text, {width: 80}]}
+                         defaultValue={this.state.oldValue.split('-')[0]}
                          keyboardType='number-pad'
                          underlineColorAndroid="transparent"
                          maxLength={4}
@@ -287,7 +290,8 @@ let TextEdit = React.createClass({
       );
     } else if (this.props.param.needPublic && this.props.param.needEdit) {
       return (
-        <NavBarView navigator={this.props.navigator} title={this.props.param.title} actionButton={this.renderUpdate}>
+        <NavBarView navigator={this.props.navigator} title={this.props.param.title}
+                    actionButton={this.renderUpdate}>
           <View
             style={[DictStyle.textEditItem,{marginTop: 20}]}
           >
@@ -300,19 +304,17 @@ let TextEdit = React.createClass({
       );
     } else if (!this.props.param.needPublic && this.props.param.needEdit) {
       return (
-        <NavBarView navigator={this.props.navigator} title={this.props.param.title} actionButton={this.renderUpdate}>
-          <View
-            style={[DictStyle.textEditItem,{marginTop: 20}]}
-          >
-            <View style={styles.view}>
-              {this.renderTextInput()}
-            </View>
+        <NavBarView navigator={this.props.navigator} title={this.props.param.title}
+                    actionButton={this.renderUpdate}>
+          <View style={[DictStyle.textEditItem,{marginTop: 20,padding:5}]}>
+            {this.renderTextInput()}
           </View>
         </NavBarView>
       );
     } else if (this.props.param.needPublic && !this.props.param.needEdit) {
       return (
-        <NavBarView navigator={this.props.navigator} title={this.props.param.title} actionButton={this.renderUpdate}>
+        <NavBarView navigator={this.props.navigator} title={this.props.param.title}
+                    actionButton={this.renderUpdate}>
           <View
             style={[DictStyle.textEditItem,{marginTop: 20}]}
           >
@@ -330,13 +332,13 @@ let TextEdit = React.createClass({
 let styles = StyleSheet.create({
   view: {
     marginTop: 10,
-    marginLeft: 20,
     borderBottomWidth: 0.5,
     borderBottomColor: PlainStyle.colorSet.textEditBorderColor
   },
   text: {
     fontSize: 18,
     height: 40,
+    marginLeft:20,
     color: PlainStyle.colorSet.textEditTextColor,
     paddingBottom: 10
   }

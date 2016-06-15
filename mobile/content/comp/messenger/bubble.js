@@ -114,7 +114,8 @@ export default class Bubble extends React.Component {
                            isEnableLoading={false}
                            uploadSuccess={this.props.cb}
                            uploadfailed={(error) => Alert(error)}
-                           jobMode="upload"
+                           jobMode={this.props.localUri?'upload':'load'}
+                           navigator={{navigator:AppStore.getNavigator()}}
           >
           </LoadExtendImage>
         </View>

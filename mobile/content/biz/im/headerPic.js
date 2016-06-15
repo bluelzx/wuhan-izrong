@@ -6,7 +6,7 @@ let React = require('react-native');
 const {Image, View, Platform, Text, StyleSheet} = React;
 let _ = require('lodash');
 let NameCircular = require('./nameCircular').NameCircular;
-
+let AppStore = require('../../framework/store/appStore');
 let Cache = require('../../comp/fileCache/fileCache');
 
 let LoadExtendImage = require('../../comp/utils/loadExtendImage');
@@ -60,6 +60,7 @@ let HeaderPic = React.createClass({
             <LoadExtendImage jobMode="load"
                              source={{uri: photoFileUrl}}
                              style={styles.head}
+                             navigator = {{navigator:AppStore.getNavigator()}}
             />
             {this.unReadIcon(badge, showBadge)}
               {(()=>{
