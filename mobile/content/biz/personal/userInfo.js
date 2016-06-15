@@ -136,15 +136,14 @@ let UserInfo = React.createClass({
                              allowsEditing={true}
                              uploadSuccess={(url)=>{this.updateUserPoto(url)}}
             >
-              <NameCircular name={this.state.realName} isV={this.state.certificated}/>
             </LoadExtendImage>
-            {(()=> {
+            {()=> {
               if (this.state.certificated && this.state.photoFileUrl)
                 return (
                   <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
                          resizeMode="cover" source={require('../../image/user/certificated.png')}/>
                 );
-            })()}
+            }}
           </View>
         );
       }
