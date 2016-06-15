@@ -474,7 +474,7 @@ Manager.prototype.send = function (data, fn) {
     return;
   }
   let _socket = this.engine;
-  //console.log('**websocket** send %s', JSON.stringify(data));
+  console.log('**websocket** send %s', JSON.stringify(data));
   _socket.send(JSON.stringify(data));
 };
 
@@ -491,6 +491,6 @@ Manager.prototype.sendStr = function (data, fn) {
     return;
   }
   let _socket = this.engine;
-  //console.log('**websocket** send string %s', data);
+  console.log('**websocket** send string %s', data);
   _socket.send(data);
 };
