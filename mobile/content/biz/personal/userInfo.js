@@ -119,7 +119,7 @@ let UserInfo = React.createClass({
                     <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
                            resizeMode="cover" source={require('../../image/user/certificated.png')}/>
                   );
-              })}
+              })()}
             </LoadExtendImage>
           </View>
         );
