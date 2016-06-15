@@ -174,16 +174,14 @@ let LargeImg = React.createClass({
     if (this.state.status == 'loading') {
       console.log(this.state.littleUri);
       return (
-        <TouchableHighlight onPress={this.closeLargeImg}
-                            onLongPress={this.moreHandle}
-                            style={styles.viewStyle}>
+
           <Image style={styles.largeImageStyle}
                  resizeMode="contain"
                  source={this.state.littleFilePath}
           >
             {this.renderLoading()}
           </Image>
-        </TouchableHighlight>
+
       )
     } else {
       return (
