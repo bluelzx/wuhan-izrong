@@ -44,6 +44,9 @@ let LoadExtendImage = React.createClass({
     uploadFailed: PropTypes.func,
     occurError: PropTypes.func,
 
+    //是否允许在点击的时候加载大图
+    showLargeImg:PropTypes.bool,
+
     selectType: PropTypes.oneOf(['all', 'camera', 'library']),
     longPress: PropTypes.func,
     allowsEditing: PropTypes.bool,
@@ -59,7 +62,8 @@ let LoadExtendImage = React.createClass({
   getDefaultProps: function () {
     return {
       isEnableLoading: true,
-      isSelectUpload: true
+      isSelectUpload: true,
+      showLargeImg:true
     };
   },
 
@@ -380,7 +384,17 @@ let LoadExtendImage = React.createClass({
             </Image>
           </ImagePicker>
         );
-      } else {
+      } else if(this.props.showLargeImg == false){
+        return (
+          <View>
+              <Image style={[styles.imageStyle,this.props.style]}
+                     source={this.state.filePath}
+                     resizeMode="cover"
+              >
+              </Image>
+          </View>
+        );
+      }else{
         return (
           <View>
             <TouchableHighlight onPress={()=>this.toPage(ShowLargeImg,this.props.source.uri)}
