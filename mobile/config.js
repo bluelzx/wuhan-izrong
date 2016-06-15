@@ -66,6 +66,7 @@ var ppConfig = {
   Dev: true, // Switch for log. true means print.
   Host: 'http://121.40.51.79:8081',
   ImHost: '121.40.51.79:3000',
+  //ImHost: '192.168.64.232:3000',
   ImageHost: 'http://img.izirong.com/',
   ImageBkt: 'wuhan-fas-img',
   ImageAk: 'iCduUao0AIuRdTqd3_4oqwzU8doDU3vh0sMF1CzD',

@@ -41,10 +41,10 @@ let NotificationManager = require('./notificationManager');
 let Publish = require('../../biz/publish/publish');
 let Chat = require('../../biz/im/chat');
 ImSocket = require('../../framework/network/imSocket');
-let QiniuTest = require('../../test/qiniuTest');
-let Upload = require('../../biz/login/uploadNameCard');
-let Account = require('../../biz/login/accountInfo');
-let ModalTest = require('../../biz/login/modalTest');
+//let QiniuTest = require('../../test/qiniuTest');
+//let Upload = require('../../biz/login/uploadNameCard');
+//let Account = require('../../biz/login/accountInfo');
+//let ModalTest = require('../../biz/login/modalTest');
 
 const { NETINFO_CONNECTED, NETINFO_DISCONNECTED } = require('../../constants/dictEvent');
 const { KPI_TYPE } = require('../../constants/dictIm');
