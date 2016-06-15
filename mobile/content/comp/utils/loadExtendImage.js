@@ -28,6 +28,7 @@ let {Device,Alert} = require('mx-artifacts');
 let {ImageSizeOrigin} = require('../../../config');
 let ShowLargeImg = require('./showLargeImg');
 let TabView = require('../../framework/system/tabView');
+let Icon = require('react-native-vector-icons/Ionicons');
 
 let LoadExtendImage = React.createClass({
   mixins: [TimerMixin],
@@ -320,13 +321,20 @@ let LoadExtendImage = React.createClass({
     } else if (this.state.status == 'fail') {
 
       return (
+        <TouchableHighlight onPress={()=>this.upLoadFile(this.props.uploadFileUri.uri)}>
         <Image style={[styles.imageStyle,this.props.style]}
                resizeMode="cover"
                source={this.state.filePath}
         >
-          <Text style={{color:'red'}}> fail </Text>
+            <Image
+              style={{width:30,height:30}}
+              source = {require('../../image/utils/refresh.png')}>
+
+            </Image>
         </Image>
+          </TouchableHighlight>
       );
+      //<Icon name="refresh" size={25} color='#ff0000'/>
 
     } else if ((!this.props.source || !this.props.source.uri) && (!this.props.uploadFileUri || !this.props.uploadFileUri.uri)) {
       return (
