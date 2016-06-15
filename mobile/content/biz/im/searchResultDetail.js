@@ -153,7 +153,7 @@ let SearchResultDetail = React.createClass({
                   onPress={()=>this.addFriend()}
                 >
                   <Text style={{fontSize: 20, color: '#ffffff',textAlign:'center'}}>
-                  加为好友
+                    {this.props.param.friendInvite?'同意申请':'加为好友'}
                     </Text>
                 </TouchableOpacity>
               );

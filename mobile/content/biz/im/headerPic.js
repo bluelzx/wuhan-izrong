@@ -52,7 +52,7 @@ let HeaderPic = React.createClass({
   },
 
   render: function () {
-    let {name, photoFileUrl, badge, certified = false, source=false, showBadge=false} = this.props;
+    let {name, photoFileUrl, badge, certified = false, source=false, showBadge=false } = this.props;
 
     if (!_.isEmpty(photoFileUrl)) {
         return (

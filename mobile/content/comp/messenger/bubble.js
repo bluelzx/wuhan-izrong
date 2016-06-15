@@ -107,8 +107,8 @@ export default class Bubble extends React.Component {
       return (
         <View style={[styles.bubble, customStyle,
                  this.props.position=='left'&&{borderTopRightRadius: 5,borderRightWidth:0.5},
-                    this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5}]}>
-          <LoadExtendImage style={{flex: 1,width: 100,height: 100}}
+                    this.props.position!='left'&&{borderTopLeftRadius: 5,borderLeftWidth:0.5},{overflow:'hidden', paddingHorizontal: 0,paddingVertical: 0}]}>
+          <LoadExtendImage style={{flex: 1,width: 150,height: 150}}
                            uploadFileUri={{uri:this.props.localUri}}
                            source={{uri:this.props.content}}
                            isEnableLoading={false}

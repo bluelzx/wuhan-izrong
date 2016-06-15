@@ -250,7 +250,7 @@ export default class Message extends React.Component {
 
             <View style={{marginTop:5,alignSelf:'stretch',flexDirection:'row',backgroundColor:'transparent',justifyContent:position === 'right'?'flex-end':'flex-start'}}>
               {position === 'right' ? this.renderErrorButton(rowData, rowID, onErrorButtonPress) : null}
-              {position === 'left' ? this._renderAngle(rowData) : null}
+              {position === 'left'&& rowData.contentType!==MSG_CONTENT_TYPE.IMAGE ? this._renderAngle(rowData) : null}
               <RowView
                 {...rowData}
                 renderCustomText={this.props.renderCustomText}
@@ -259,7 +259,7 @@ export default class Message extends React.Component {
                 rightBackgroundColor={this.props.rightBackgroundColor}
                 errorBackgroundColor={/*this.props.errorBackgroundColor*/this.props.rightBackgroundColor}
               />
-              {position === 'right' ? this._renderAngle(rowData) : null}
+              {position === 'right' && rowData.contentType!==MSG_CONTENT_TYPE.IMAGE? this._renderAngle(rowData) : null}
             </View>
           </View>
           {rowData.position === 'right' ? this.renderImage(rowData, rowID, diffMessage, forceRenderImage, onImagePress) : null}
