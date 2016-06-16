@@ -141,7 +141,7 @@ let GroupMembers = React.createClass({
             );
           }else{
             return (
-              <View style={{backgroundColor:'transparent', marginTop:20, alignItems:'center', color:DictStyle.searchFriend.nullUnitColor}}>
+              <View style={{backgroundColor:'transparent', marginTop:40, alignItems:'center', color:DictStyle.searchFriend.nullUnitColor}}>
                 <Text>{'无符合条件的用户'}</Text>
               </View>
             );
