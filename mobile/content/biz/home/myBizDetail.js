@@ -41,6 +41,7 @@ let dismissKeyboard = require('react-native-dismiss-keyboard');
 let DictStyle = require('../../constants/dictStyle');
 let Lightbox = require('../../comp/lightBox/Lightbox');
 let Icon = require('react-native-vector-icons/Ionicons');
+let LoadExtendImage = require('../../comp/utils/loadExtendImage');
 
 let AppStore = require('../../framework/store/appStore');
 let MarketAction = require('../../framework/action/marketAction');
@@ -80,6 +81,7 @@ let MyBizDetail = React.createClass({
       amount: marketInfo.amount,
       remark: null,
       fileUrlList: [],
+      imageUploadUrlList: [],
 
       keyboardSpace: 0,
       scrollHeight: screenHeight - 108
@@ -420,7 +422,8 @@ let MyBizDetail = React.createClass({
           <View style={{alignItems:'center',marginTop:10,flexDirection:'row'}}>
             <View style={{width:((screenWidth-60)/5 + 10) * this.state.fileUrlList.length}}>
               <ListView style={{}} scrollEnabled={false} horizontal={true}
-                        dataSource={ds.cloneWithRows(this.state.fileUrlList)} renderRow={this.renderImgItem}/>
+                        dataSource={ds.cloneWithRows(this.state.fileUrlList)}
+                        renderRow={this.renderImgItem}/>
             </View>
             {this.renderAdd()}
           </View>
@@ -432,23 +435,22 @@ let MyBizDetail = React.createClass({
   renderAdd (){
     if (this.state.fileUrlList.length < 5) {
       return (
-        <ImagePicker
-          type="all"
-          onSelected={(response) => {this.handleSendImage(response, 10)}}
-          onError={(error) => this.handleImageError(error)}
-          title="选择图片"
-          fileId="publish1"
-          allowsEditing={false}
-          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
+        <LoadExtendImage jobMode="select"
+                         type="all"
+                         startUpload={(response) => {this.handleSendImage(response, 10)}}
+                         title="选择图片"
+                         fileId="publish"
+                         allowsEditing={false}
+                         isSelectUpload={false}
+                         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df',backgroundColor: 'white'}}
         >
           <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
             <Image
               style={{width:(screenWidth-60)/5-20,height:(screenWidth-60)/5-20,borderRadius:5}}
               source={require('../../image/market/addImage.png')}
-              resize-mode='cover'
             />
           </View>
-        </ImagePicker>
+        </LoadExtendImage>
       );
     }
   },
@@ -465,38 +467,71 @@ let MyBizDetail = React.createClass({
     }
   },
   renderImgItem: function (rowData, sectionID, rowID) {
+    if(rowData.includes('http')){
+      let url = rowData + ImageSize50;
+      return (
+        <View style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}>
+          <LoadExtendImage style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+                           source={{uri:url}}
+                           //longPress={(rowID) => this._longPress(rowID) }
+                           selectType="all"
+                           title="选择图片"
+                           fileId="publish"
+                           allowsEditing={false}
+                           occurError={(error) => Alert(error)}
+                           uploadSuccess={(url)=>{
+                             let arr = this.state.imageUploadUrlList;
+                                if (rowID > 5) {
+                                  arr.push(url);
+                                } else {
+                                  arr[rowID] = url;
+                                }
+                                this.setState({
+                                  imageUploadUrlList: arr
+                                });
+                                console.log('成功');
+                             }}
+                           uploadfailed={(error) => this.handleImageError(error)}
+                           jobMode="select"
+          >
+          </LoadExtendImage>
+        </View>
+      )
+    }else{
+      let uri = rowData;
+      return (
+        <View style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}>
+          <LoadExtendImage style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
+                           uploadFileUri={{uri:uri}}
+                           //longPress={(rowID) => this._longPress(rowID) }
+                           selectType="all"
+                           title="选择图片"
+                           fileId="publish"
+                           allowsEditing={false}
+                           occurError={(error) => Alert(error)}
+                           uploadSuccess={(url)=>{
+                             let arr = this.state.imageUploadUrlList;
+                                if (rowID > 5) {
+                                  arr.push(url);
+                                } else {
+                                  arr[rowID] = url;
+                                }
+                                this.setState({
+                                  imageUploadUrlList: arr
+                                });
+                                console.log('成功');
+                             }}
+                           uploadfailed={(error) => this.handleImageError(error)}
+                           jobMode="select"
+          >
+          </LoadExtendImage>
+        </View>
+      )
+    }
 
-    let uri = rowData + ImageSize50;
-
-    return (
-      <ImagePicker
-        longPress={() => this._longPress(rowID)}
-        type="all"
-        onSelected={(response) => {this.handleSendImage(response, rowID)}}
-        onError={(error) => this.handleImageError(error)}
-        title="选择图片"
-        allowsEditing={false}
-        style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}
-      >
-        <Lightbox imageSource={{uri:rowData}}
-                  navigator={this.props.navigator}
-                  underlayColor="#f7f7f7"
-                  deleteHeader={()=>{
-                    let arr = this.state.fileUrlList;
-                    _.pullAt(arr,rowID);
-                    this.setState({fileUrlList: arr});
-                    }}
-        >
-          <Image
-            style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5,borderWidth:1,borderColor:'#cccccc'}}
-            source={{uri:uri}}
-          />
-        </Lightbox>
-      </ImagePicker>
-    )
   },
 
-  renderImageItem: function () {
+  renderDownImageItem: function () {
     return (
       <View style={{flexDirection:'row',marginTop:10}}>
         {
@@ -504,16 +539,14 @@ let MyBizDetail = React.createClass({
             let uri = item + ImageSize100;
 
             return (
-              <Lightbox imageSource={{uri:item}}
-                        navigator={this.props.navigator}
-                        underlayColor="#f7f7f7"
-                        key={index}
+              <LoadExtendImage
+                style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'white'}}
+                source={{uri:uri}}
+                jobMode="load"
+                navigator = {this.props}
+                key={index}
               >
-                <Image
-                  style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5}}
-                  source={{uri:uri, isStatic: true}}
-                />
-              </Lightbox>
+              </LoadExtendImage>
             )
           })
         }
@@ -563,7 +596,7 @@ let MyBizDetail = React.createClass({
       return (
         <View>
           {this.renderImageTitle()}
-          {this.renderImageItem()}
+          {this.renderDownImageItem()}
         </View>
       );
     }
@@ -581,7 +614,10 @@ let MyBizDetail = React.createClass({
         </TouchableHighlight>
       );
     } else {
-      return <View></View>;
+      return(
+        <View>
+        </View>
+      );
     }
   },
 
@@ -608,7 +644,7 @@ let MyBizDetail = React.createClass({
       ActionSheetIOS.showActionSheetWithOptions({
           options: options,
           cancelButtonIndex: 2,
-          destructiveButtonIndex: 1,
+          destructiveButtonIndex: 1
         },
         (buttonIndex) => {
           if (buttonIndex == 0) {
@@ -622,8 +658,13 @@ let MyBizDetail = React.createClass({
             );
           } else if (buttonIndex == 1) {
             let arr = this.state.fileUrlList;
-            arr[rowId] = 0;
-            this.setState({fileUrlList: _.compact(arr)})
+            let uploadArr = this.state.imageUploadUrlList;
+            _.pullAt(arr, rowId);
+            _.pullAt(uploadArr, rowId);
+            this.setState({
+              fileUrlList: arr,
+              imageUploadUrlList: uploadArr
+            });
           }
         });
     } else {
@@ -642,8 +683,13 @@ let MyBizDetail = React.createClass({
               break;
             case 1:
               let arr = this.state.fileUrlList;
-              arr[rowId] = 0;
-              this.setState({fileUrlList: _.compact(arr)});
+              let uploadArr = this.state.imageUploadUrlList;
+              _.pullAt(arr, rowId);
+              _.pullAt(uploadArr, rowId);
+              this.setState({
+                fileUrlList: arr,
+                imageUploadUrlList: uploadArr
+              });
               break;
             default:
               break;
@@ -704,7 +750,8 @@ let MyBizDetail = React.createClass({
             marketInfo: response,
             remark: response.remark,
             remarkText: response.remark,
-            fileUrlList: response.fileUrlList
+            fileUrlList: response.fileUrlList,
+            imageUploadUrlList: response.fileUrlList
           });
         }).catch(
           (errorData) => {
@@ -733,7 +780,7 @@ let MyBizDetail = React.createClass({
       term: this.state.term,
       amount: this.state.amount,
       rate: this.state.rate / 100,
-      fileUrlList: this.state.fileUrlList,
+      fileUrlList: this.state.imageUploadUrlList,
       remark: this.state.remarkText
     };
     let item = {
@@ -808,25 +855,34 @@ let MyBizDetail = React.createClass({
     );
   },
   handleSendImage(uri, index) {
-    this.props.exec(() => {
-      return ImAction.uploadImage(uri)
-        .then((response) => {
-          let arr = this.state.fileUrlList;
-          if (index > 5) {
-            arr.push(response.fileUrl);
-          } else {
-            arr[index] = response.fileUrl;
-          }
-          this.setState({
-            fileUrlList: arr
-          });
-        }).catch((errorData) => {
-          console.log('Image upload error ' + JSON.stringify(errorData));
-          throw errorData;
-        }).catch((errorData) => {
-          throw errorData;
-        });
+    let arr = this.state.fileUrlList;
+    if (index > 5) {
+      arr.push(uri);
+    } else {
+      arr[index] = uri;
+    }
+    this.setState({
+      fileUrlList: arr
     });
+    //this.props.exec(() => {
+    //  return ImAction.uploadImage(uri)
+    //    .then((response) => {
+    //      let arr = this.state.fileUrlList;
+    //      if (index > 5) {
+    //        arr.push(response.fileUrl);
+    //      } else {
+    //        arr[index] = response.fileUrl;
+    //      }
+    //      this.setState({
+    //        fileUrlList: arr
+    //      });
+    //    }).catch((errorData) => {
+    //      console.log('Image upload error ' + JSON.stringify(errorData));
+    //      throw errorData;
+    //    }).catch((errorData) => {
+    //      throw errorData;
+    //    });
+    //});
   },
 
   handleImageError(error) {
