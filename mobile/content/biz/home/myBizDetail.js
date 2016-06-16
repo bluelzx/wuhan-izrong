@@ -565,7 +565,7 @@ let MyBizDetail = React.createClass({
                 {'备注'}
               </Text>
               <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
-                <Text style={{marginRight:10,color:'#d3d5df',flex:1,width:screenWidth-120}}
+                <Text style={{marginRight:10,color:(this.state.remarkText == '' || this.state.remarkText == null) ? '#d3d5df' : DictStyle.marketSet.fontColor,flex:1,width:screenWidth-120}}
                       numberOfLines={3}
                 >{(this.state.remarkText == '' || this.state.remarkText == null) ? '50字以内' : this.state.remarkText}
                 </Text>
@@ -721,8 +721,9 @@ let MyBizDetail = React.createClass({
     }, '确定', '取消');
   },
   callBackRemarks: function (remarkText) {
+    let newText = this.replaceEnterToSpace(remarkText);
     this.setState({
-      remarkText: remarkText
+      remarkText: newText
     })
   },
 
@@ -888,6 +889,11 @@ let MyBizDetail = React.createClass({
   handleImageError(error) {
     console.log('Image select error ' + JSON.stringify(error));
     Alert('图片选择失败');
+  },
+
+  replaceEnterToSpace (text) {
+    let newText = text.replace(/[\n]/ig,'  ');
+    return newText;
   }
 
 

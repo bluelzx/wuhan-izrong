@@ -451,9 +451,10 @@ let Publish = React.createClass({
   },
 
   callBackRemarks: function (remarkText) {
+    let newText = this.replaceEnterToSpace(remarkText);
     this.setState({
-      remark: remarkText,
-      remarkText: remarkText
+      remark: newText,
+      remarkText: newText
     })
   },
 
@@ -662,6 +663,11 @@ let Publish = React.createClass({
   handleImageError(error) {
     console.log('Image select error ' + JSON.stringify(error));
     Alert('图片上传失败');
+  },
+
+  replaceEnterToSpace (text) {
+    let newText = text.replace(/[\n]/ig,'  ');
+    return newText;
   }
 
 });
