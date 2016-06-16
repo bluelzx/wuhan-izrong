@@ -212,10 +212,10 @@ let Publish = React.createClass({
             <Text style={{marginLeft:10, color:DictStyle.marketSet.fontColor}}>{'方向'}</Text>
             <Text style={{color:'#dd656c'}}>{'*'}</Text>
           </View>
-            <View style={{marginLeft:10,flexDirection:'row'}}>
-                <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
-                           change={this._bizOrientationDataChange}/>
-            </View>
+          <View style={{marginLeft:10,flexDirection:'row'}}>
+            <SelectBtn dataList={bizOrientationUnit} defaultData={this.state.bizOrientationDefault}
+                       change={this._bizOrientationDataChange}/>
+          </View>
 
         </View>
       </View>
@@ -223,8 +223,8 @@ let Publish = React.createClass({
   },
   renderTimeLimit: function () {
     return (
-        <View style={{flexDirection:'column',marginTop:5}}>
-            <View style={{marginTop:5,flexDirection:'row'}}
+      <View style={{flexDirection:'column',marginTop:5}}>
+        <View style={{marginTop:5,flexDirection:'row'}}
               ref="timeLimitInputView"
               onLayout={() => {}}
         >
@@ -245,8 +245,8 @@ let Publish = React.createClass({
   },
   renderAmount: function () {
     return (
-        <View style={{flexDirection:'column',marginTop:5}}>
-            <View style={{marginTop:5,flexDirection:'row'}}
+      <View style={{flexDirection:'column',marginTop:5}}>
+        <View style={{marginTop:5,flexDirection:'row'}}
               ref="amountInputView"
               onLayout={() => {}}
         >
@@ -269,8 +269,8 @@ let Publish = React.createClass({
   },
   renderRate: function () {
     return (
-        <View style={{flexDirection:'column',marginTop:5}}>
-            <View style={{alignItems:'center',marginTop:5,flexDirection:'row'}}
+      <View style={{flexDirection:'column',marginTop:5}}>
+        <View style={{alignItems:'center',marginTop:5,flexDirection:'row'}}
               ref="rateInputView"
               onLayout={() => {}}
         >
@@ -329,17 +329,16 @@ let Publish = React.createClass({
     }
   },
   renderImgItem: function (rowData, sectionID, rowID) {
-    let uri = rowData + ImageSize50;
     return (
       <View
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df',backgroundColor: 'white'}}>
         <LoadExtendImage style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
                          uploadFileUri={{uri:rowData}}
-                         longPress={(rowID) => this._longPress(rowID) }
+                         //longPress={(rowID) => this._longPress(rowID) }
                          selectType="all"
                          title="选择图片"
                          fileId="publish"
-                         allowsEditing={true}
+                         allowsEditing={false}
                          uploadSuccess={(url)=>{
                              let arr = this.state.imageUploadUrlList;
                                 if (rowID > 5) {
@@ -466,7 +465,7 @@ let Publish = React.createClass({
           comp: name,
           param: {
             filterItems: this.state.filterItems,
-            pickTypeRow:  this.state.pickTypeRow,
+            pickTypeRow: this.state.pickTypeRow,
             callBackCategory: this.callBackCategory
           }
         })
@@ -568,8 +567,13 @@ let Publish = React.createClass({
             );
           } else if (buttonIndex == 1) {
             let arr = this.state.fileUrlList;
+            let uploadArr = this.state.imageUploadUrlList;
             _.pullAt(arr, rowId);
-            this.setState({fileUrlList: arr});
+            _.pullAt(uploadArr, rowId);
+            this.setState({
+              fileUrlList: arr,
+              imageUploadUrlList: uploadArr
+            });
           }
         });
     } else {
@@ -588,8 +592,13 @@ let Publish = React.createClass({
               break;
             case 1:
               let arr = this.state.fileUrlList;
+              let uploadArr = this.state.imageUploadUrlList;
               _.pullAt(arr, rowId);
-              this.setState({fileUrlList: arr});
+              _.pullAt(uploadArr, rowId);
+              this.setState({
+                fileUrlList: arr,
+                imageUploadUrlList: uploadArr
+              });
               break;
             default:
               break;
@@ -612,8 +621,8 @@ let Publish = React.createClass({
     }
     let rate = data.rate == 0 ? '--' : (numeral(data.rate * 100).format('0,0.00') + '%');
     let remark = data.remark == '' ? '--' : data.remark;
-    let shareContent = data.bizCategory + '  ' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出')  + '\n'
-      + '金额:' + amount  + '\n' + '期限:' + dayNum + '\n'  + '利率:' + rate + '\n' + '备注:' + remark
+    let shareContent = data.bizCategory + '  ' + '业务方向:  ' + (data.bizOrientation == 'IN' ? '收' : '出') + '\n'
+      + '金额:' + amount + '\n' + '期限:' + dayNum + '\n' + '利率:' + rate + '\n' + '备注:' + remark
       + '\n' + '——来自爱资融APP';
 
     Share.open({

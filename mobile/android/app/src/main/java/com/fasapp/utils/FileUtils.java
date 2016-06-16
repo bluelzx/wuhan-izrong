@@ -1,5 +1,7 @@
 package com.fasapp.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 
@@ -384,8 +386,10 @@ public class FileUtils {
         File newFile = new File(newPath);
         //copyFile(oldPath, newPath, true);
         oldFile.renameTo(newFile);
+        ImageUtils.loopCompressImage(newFile,newPath,50);
         return Uri.fromFile(newFile);
     }
+
 
     public static void copyFile(String oldPath, String newPath) {
         try {
@@ -469,6 +473,7 @@ public class FileUtils {
                 while ((byteread = in.read(buffer)) != -1) {
                     out.write(buffer, 0, byteread);
                 }
+                ImageUtils.loopCompressImage(destFile,destFileName,50);
                 return true;
             } catch (FileNotFoundException e) {
                 return false;

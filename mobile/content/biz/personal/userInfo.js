@@ -113,14 +113,14 @@ let UserInfo = React.createClass({
                              style={styles.head}
                              uploadSuccess={(url)=>{this.updateUserPoto(url)}}
             >
-              {(()=> {
-                if (this.state.certificated && this.state.photoFileUrl)
-                  return (
-                    <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
-                           resizeMode="cover" source={require('../../image/user/certificated.png')}/>
-                  );
-              })()}
             </LoadExtendImage>
+            {(()=> {
+              if (this.state.certificated && this.state.photoFileUrl)
+                return (
+                  <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
+                         resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+                );
+            })()}
           </View>
         );
       } else {
@@ -221,11 +221,7 @@ let UserInfo = React.createClass({
                       backgroundColor={PlainStyle.colorSet.content}>
 
             <View style={[styles.layout,DictStyle.userInfoBorderTop,DictStyle.userInfoBorderBottom]}>
-
-
               {this.returnImage()}
-
-
               <TouchableOpacity
                 style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}
                 onPress={()=>this.toEdit('真实姓名', 'realName', this.state.realName, 'isPublicRealName', true, 'default', 10, true, false)}
