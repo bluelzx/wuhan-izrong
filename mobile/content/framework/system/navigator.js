@@ -76,7 +76,7 @@ var Main = React.createClass({
 
       DeviceEventEmitter.addListener('onPause', function (e:Event) {
         ImSocket.disconnect();
-        AppStore.startJavaServer();
+       // AppStore.startJavaServer();
       });
 
       DeviceEventEmitter.addListener('onResume', function (e:Event) {
@@ -273,10 +273,7 @@ var Main = React.createClass({
 
   initSocket: function (token) {
     if (token) {
-      ImSocket.init(token, ()=> {
-        let sTime = AppStore.getLoginUserInfo();
-        return sTime && sTime.lastSyncTime;
-      });
+      ImSocket.init(token)
     }
   },
 

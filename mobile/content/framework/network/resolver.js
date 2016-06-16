@@ -10,7 +10,7 @@ let _dealMsg = function (message, socket) {
   try {
     let userInfo = ContactSotre.getUserInfo();
     let userId = userInfo.userId;
-    let lastSyncTime = userInfo.lastSyncTime ? userInfo.lastSyncTime.getTime() : new Date().getTime();
+    //let lastSyncTime = userInfo.lastSyncTime ? userInfo.lastSyncTime.getTime() : new Date().getTime();
   console.log(message);
   switch (message.msgType) {
     case MSG_TYPE.EXCEPTION:
@@ -70,13 +70,13 @@ let _dealMsg = function (message, socket) {
       break;
     //已测,小红点及数字不消失
     case MSG_TYPE.PLATFORM_INFO:
-      if (lastSyncTime < message.createDate) {
+      //if (lastSyncTime < message.createDate) {
         ImStore.createPlatFormInfo(message.infoId,
           message.title, message.content,
           new Date(message.createDate), userId);
         ContactSotre.syncReq(new Date(message.createDate));
-        lastSyncTime = message.createDate;
-      }
+        //lastSyncTime = message.createDate;
+      //}
       break;
     //已测 weisen
     case MSG_TYPE.HOME_PAGE:
@@ -187,17 +187,18 @@ let _dealMsg = function (message, socket) {
       }
       break;
     case MSG_TYPE.SYNC_REQ:
-      socket.send({command: COMMAND_TYPE.SYNC_REQ, lastSyncTime: lastSyncTime});
+      socket.send({command: COMMAND_TYPE.SYNC_REQ});
       break;
     case MSG_TYPE.FORCE_LOGOUT:
       //强制登出
       AppStore.forceLogout();
       break;
     case MSG_TYPE.SYNC_RES:
+      console.log('sync' , message);
         message.msgArray && message.msgArray.forEach((item)=> {
           _dealMsg(JSON.parse(item), socket);
         });
-        ContactSotre.syncReq(new Date());
+        //ContactSotre.syncReq(new Date());
         break;
       //已测
       case MSG_TYPE.CONTANCT_INFO_CERTIFY:

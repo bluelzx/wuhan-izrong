@@ -1,14 +1,9 @@
 let Manager = require('./manager');
-//let { Alert, Device, Loading } = require('mx-artifacts');
 let Resolver = require('./resolver');
 let { ImHost } = require('../../../config');
-let { COMMAND_TYPE } = require('../../constants/dictIm');
-let { Platform } = require('react-native');
-let ContactSotre = require('../store/contactStore');
 
 let _socket = null;
 let _token = null;
-let _lastSyncTime = null;
 
 let time = null;
 
@@ -63,27 +58,19 @@ let ImSocket = {
 
   reconnect: function () {
     console.log('##############reconnect');
-    this.init(_token, _lastSyncTime);
+    this.init(_token);
     _sendPing();
   },
 
 
-  init: function (token,lastSyncTime) {
+  init: function (token) {
     _token = token;
-    _lastSyncTime = lastSyncTime;
 
-   // Alert('socket:' + _socket);
     let newUrl = _getUrl(token);
-    // if ( newUrl==this.uri && _socket) return;
-    // this.uri = ImWebSocket + AppStore.getToken();
+
     this.uri = newUrl;
-    //this.uri = 'ws://localhost:3000/t001';
-    //console.log('###### Connect to %s', this.uri);
-    let AIBG = -1;
-    if (Platform.OS === 'android') {
-      AIBG = 1;
-    }
-    _socket = Manager(this.uri,{lastSyncTime:lastSyncTime,AIBG:AIBG});
+
+    _socket = Manager(this.uri);
 
     _socket.on('open', function () {
       console.log('###### open');
