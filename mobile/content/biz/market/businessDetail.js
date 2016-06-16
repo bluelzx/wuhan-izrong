@@ -409,7 +409,16 @@ let BusinessDetail = React.createClass({
           });
         }).catch(
           (errorData) => {
-            throw errorData;
+            if (errorData.msgCode == 'APP_BIZ_ORDER_HAS_DOWNSELF'){
+              Alert(errorData.msgContent,()=>{
+                const { navigator } = this.props;
+                if (navigator) {
+                  navigator.pop();
+                }
+              });
+            }else{
+              throw errorData;
+            }
           }
         );
       }
