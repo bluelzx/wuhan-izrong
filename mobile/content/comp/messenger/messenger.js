@@ -111,8 +111,17 @@ let Messenger = React.createClass({
         let uri = msgToSend.content;
         msgToSend.cb = (sucUrl)=> {
           ImStore.modifyImgUrl(msgId,sucUrl);
-          self._sendMessage(MSG_CONTENT_TYPE.IMAGE, sucUrl, true, msgId, false, uri);
+          self._sendMessage(MSG_CONTENT_TYPE.IMAGE, sucUrl, true, msgId, false, null);
+        };
+        msgToSend.erCb = ()=>{
+          ImStore.modifyMsgState(msgId,'UploadError');
+          this._onChange();
         }
+        //msgToSend.isReSend = isReSend;
+        //if(isReSend){
+        //  ImStore.modifyMsgState(msgId,'Sending');
+        //  this._onChange();
+        //}
       }
       ImAction.send(msgToSend, isReSend, this.props.param.myId, isNotSend);
       return msgToSend.msgId;
@@ -138,7 +147,7 @@ let Messenger = React.createClass({
   },
 
   handleSendImage(uri) {
-    this._sendMessage(MSG_CONTENT_TYPE.IMAGE, '' , false, '', true, uri)
+    this._sendMessage(MSG_CONTENT_TYPE.IMAGE, uri , false, '', true, uri)
     //let p = new Promise((resolve,reject)=>{
     //  resolve( this._sendMessage(MSG_CONTENT_TYPE.IMAGE, '' , false, '', true, uri))
     //}).catch((err)=>{

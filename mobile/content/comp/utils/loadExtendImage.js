@@ -220,11 +220,13 @@ let LoadExtendImage = React.createClass({
       this.setState({
         status: 'fail'
       });
+
       if (this.props.uploadFailed) {
+        console.log('#################uploadFailed:'+this.props.uploadFailed);
         this.props.uploadFailed(error);
       }
       this.errorHandle('uploadError:' + error);
-      throw(error);
+     // throw(error);
     });
 
   },
@@ -278,7 +280,7 @@ let LoadExtendImage = React.createClass({
   },
 
   errorHandle: function (err) {
-    this.props.occurError(err);
+   this.props.occurError&&this.props.occurError(err);
     console.log(err);
   },
 

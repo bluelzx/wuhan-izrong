@@ -35,7 +35,7 @@ let MembersBar = React.createClass({
         param:Object.assign(member,{isStranger:ContactStore.isStranger(member.userId)})
         })} key={member.userId} style={{alignItems:'center',padding:5,alignSelf:'flex-start'}}>
         <View style={{marginTop:5,height: 51,width: 51}}>
-          <HeaderPic photoFileUrl={member.photoFileUrl} certified={member.certified} name={member.realName}/>
+          <HeaderPic photoFileUrl={member.photoFileUrl} certified={member.certified} name={member.realName} showLargeImg={false}/>
         </View>
         <Text numberOfLines={1}
               style={{color:DictStyle.groupManage.memberNameColor,marginTop:4, width:40}}>{member.realName}</Text>

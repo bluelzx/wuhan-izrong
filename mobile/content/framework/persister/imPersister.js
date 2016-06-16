@@ -43,6 +43,12 @@ let _modifyImgUrl = function(msg,url){
   });
 }
 
+let _modifyMsgState = function(msgId, status){
+  _realm.write(()=>{
+    _realm.create(MESSAGE,{msgId:msgId, status:status},true);
+  });
+}
+
 let _getMessageByMessageId = function(msgId) {
   let ret = _realm.objects(MESSAGE).filtered('msgId == $0',msgId);
   return ret[0];
@@ -53,6 +59,7 @@ let ImPersister = {
   getMessageBySessionId: (sessionId, page, ownerId) => _getMessageBySessionId(sessionId, page, ownerId),
   resetMessageStatus: (msgId, isMute) => _resetMessageStatus(msgId, isMute),
   modifyImgUrl:(msgId, url)=>_modifyImgUrl(msgId,url),
+  modifyMsgState:(msgId, status)=>_modifyMsgState(msgId, status),
   getMessageByMessageId:(msgId) => _getMessageByMessageId(msgId)
 };
 

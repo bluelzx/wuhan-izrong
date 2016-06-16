@@ -28,9 +28,9 @@ export default class ErrorButton extends React.Component {
 
   componentWillMount() {
     Object.assign(styles, this.props.styles);
-    if(this.state.isLoading == true){
-      this.setTimOutFunc();
-    }
+    //if(this.state.isLoading == true){
+    //  this.setTimOutFunc();
+    //}
   }
 
   componentWillUnmount(){
@@ -52,7 +52,7 @@ export default class ErrorButton extends React.Component {
     });
 
     this.props.onErrorButtonPress(this.props.rowData, this.props.rowID);
-    this.setTimOutFunc();
+   // this.setTimOutFunc();
   }
 
   render() {

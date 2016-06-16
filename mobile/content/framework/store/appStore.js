@@ -8,6 +8,8 @@ let { ImHost } = require('../../../config');
 //let { MsgTypes } = require('../../constants/notification');
 
 let Persister = require('../persister/persisterFacade');
+let Event = require('../../comp/utils/events')();
+
 
 //let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 let {
@@ -32,7 +34,9 @@ let _info = {
 };
 
 let _data = {};
+
 let AppStore = _.assign({}, EventEmitter.prototype, {
+  getEvent:Event,
   saveNavigator: (nv)=> {
     _data.navigator = nv
   },

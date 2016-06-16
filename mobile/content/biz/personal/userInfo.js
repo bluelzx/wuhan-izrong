@@ -101,6 +101,28 @@ let UserInfo = React.createClass({
       let uri = null;
       if(this.state.photoFileUrl){
         uri = this.state.photoFileUrl + ImageSize50;
+      }else{
+        return (
+          <View style={{marginLeft:20}}>
+            <LoadExtendImage jobMode="select"
+                             source={{uri: uri}}
+                             selectType="all"
+                             occurError={(error) => Alert(error)}
+                             title="选择图片"
+                             fileId="userPhoto"
+                             allowsEditing={true}
+                             uploadSuccess={(url)=>{this.updateUserPoto(url)}}
+            >
+            </LoadExtendImage>
+            {()=> {
+              if (this.state.certificated && this.state.photoFileUrl)
+                return (
+                  <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
+                         resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+                );
+            }}
+          </View>
+        );
         return (
           <View style={{marginLeft:20}}>
             <LoadExtendImage jobMode="select"
@@ -122,28 +144,6 @@ let UserInfo = React.createClass({
                          resizeMode="cover" source={require('../../image/user/certificated.png')}/>
                 );
             })()}
-          </View>
-        );
-      }else{
-        return (
-          <View style={{marginLeft:20}}>
-            <LoadExtendImage jobMode="select"
-                             source={{uri: uri}}
-                             selectType="all"
-                             occurError={(error) => Alert(error)}
-                             title="选择图片"
-                             fileId="userPhoto"
-                             allowsEditing={true}
-                             uploadSuccess={(url)=>{this.updateUserPoto(url)}}
-            >
-            </LoadExtendImage>
-            {()=> {
-              if (this.state.certificated && this.state.photoFileUrl)
-                return (
-                  <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
-                         resizeMode="cover" source={require('../../image/user/certificated.png')}/>
-                );
-            }}
           </View>
         );
       }
