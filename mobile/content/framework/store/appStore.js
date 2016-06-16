@@ -91,13 +91,13 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   saveHomeMarketList: (homeMarketList)=> _saveHomeMarketList(homeMarketList),
   shouldUpdate: ()=> Persister.shouldUpdate(),
   saveAndroidPushRegId: (id) => _saveAndroidPushRegId(id),
-  saveDeviceModel: (deviceModel) => _saveDeviceModel(deviceModel),
-  getDeviceModel: () => _getDeviceModel()
+  saveDeviceModel: (deviceModel) => {_info.deviceModel = deviceModel; console.log("appstore" + deviceModel)},
+  getDeviceModel: () => _info.deviceModel || ''
 
 });
 
 let _getDeviceModel = function () {
-  return _info.deviceModel
+  return _info.deviceModel || ''
 }
 
 let _saveDeviceModel = function (deviceModel) {

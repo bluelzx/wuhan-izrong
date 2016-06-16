@@ -53,7 +53,21 @@ let Login = React.createClass({
       this.props.exec(() => {
         return LoginAction.sendSmsCodeToLoginMobile({
           mobileNo: this.state.mobileNo
-        }).then((response) => {
+        }).then((response)=>{
+          if (Platform.OS === 'android') {
+            return new Promise((resolve, reject)=>{
+              AppInfoModule.getPushRegId((id, deviceModel) => {
+                try {
+                  AppStore.saveApnsToken(id, true);
+                  AppStore.saveDeviceModel(deviceModel);
+                  resolve();
+                }catch(err){
+                  reject({errMsg:err});
+                }
+              });
+            });
+          }
+        }).then(() => {
           const { navigator } = this.props;
           if (navigator) {
             if (!this.state.disabled) {
@@ -65,13 +79,6 @@ let Login = React.createClass({
                   }
                 });
             }
-          }
-        }).then(()=>{
-          if (Platform.OS === 'android') {
-            AppInfoModule.getPushRegId((id, deviceModel) => {
-              AppStore.saveApnsToken(id, true);
-              AppStore.saveDeviceModel(deviceModel)
-            });
           }
         }).catch((errorData) => {
           throw errorData;
