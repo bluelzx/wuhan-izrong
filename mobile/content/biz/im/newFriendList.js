@@ -98,7 +98,8 @@ let NewFriendList = React.createClass({
 
   renderItem: function(item) {
     let {width} = Device;
-
+    let userInfo = ContactSotre.getUserInfoByUserId(item.userId);
+    item.certified = userInfo&&userInfo.certified;
     return (
       <TouchableOpacity
         key={item.userId}
@@ -144,8 +145,8 @@ let NewFriendList = React.createClass({
 
                 if (item.isAccept) {
                   return (
-                    <Text
-                      style={{textAlign:'right',flex:1,justifyContent:'flex-end',borderRadius:5,color:'#687886', paddingHorizontal:20,paddingVertical:5}}>{'已同意'}</Text>
+                    <View
+                      style={{flex:1,justifyContent:'flex-end',borderRadius:5, paddingHorizontal:20,paddingVertical:5}}><Text style={{color:'#687886',textAlign:'right'}}>{'已同意'}</Text></View>
 
                   );
                 } else {

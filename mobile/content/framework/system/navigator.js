@@ -76,7 +76,7 @@ var Main = React.createClass({
 
       DeviceEventEmitter.addListener('onPause', function (e:Event) {
         ImSocket.disconnect();
-        AppStore.startJavaServer();
+       // AppStore.startJavaServer();
       });
 
       DeviceEventEmitter.addListener('onResume', function (e:Event) {
@@ -161,6 +161,7 @@ var Main = React.createClass({
   _onChange: function () {
     this.setState(this._getStateFromStores());
     if (AppStore.isLogout()) {
+      ImSocket.disconnect();
       if (AppStore.isFreezing()) {
         Promise.resolve().then((resolve) => {
           this.refs.navigator.resetTo({comp: Login});
@@ -169,7 +170,7 @@ var Main = React.createClass({
           Alert('系统异常');
         });
       } else if (AppStore.isForceLogout()) {
-        ImSocket.disconnect();
+       // ImSocket.disconnect();
         Alert(
           '    您的账号已经在其他设备上登录了，您将被强制登出，请确认您的账号密码没有泄露',
           {text: '确定', onPress: () => this.refs.navigator.resetTo({comp: Login})}
@@ -272,10 +273,7 @@ var Main = React.createClass({
 
   initSocket: function (token) {
     if (token) {
-      ImSocket.init(token, ()=> {
-        let sTime = AppStore.getLoginUserInfo();
-        return sTime && sTime.lastSyncTime;
-      });
+      ImSocket.init(token)
     }
   },
 

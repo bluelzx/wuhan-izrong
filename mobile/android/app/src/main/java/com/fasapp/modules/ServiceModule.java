@@ -56,21 +56,21 @@ public class ServiceModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void startAppService(String token,int lastSyncTime, String host) {
 
-        if(token==null){
-            return;
-        }
-        setTokenAndLastSyncTimeAndHost(token, lastSyncTime, host);
-        if(token.equals(getToken())) {
-            if (!AppUtils.isServiceWork(getReactApplicationContext(), "com.fasapp.service.AppService")) {
-                getReactApplicationContext().startService(new Intent(getReactApplicationContext(), AppService.class));
-            }
-        }
+//        if(token==null){
+//            return;
+//        }
+//        setTokenAndLastSyncTimeAndHost(token, lastSyncTime, host);
+//        if(token.equals(getToken())) {
+//            if (!AppUtils.isServiceWork(getReactApplicationContext(), "com.fasapp.service.AppService")) {
+//                getReactApplicationContext().startService(new Intent(getReactApplicationContext(), AppService.class));
+//            }
+//        }
     }
 
 
     @ReactMethod
     public void stopMyAppService() {
-        LogUtils.d("stopMyAppService","option");
-        getReactApplicationContext().stopService(new Intent(getReactApplicationContext(), AppService.class));
+//        LogUtils.d("stopMyAppService","option");
+//        getReactApplicationContext().stopService(new Intent(getReactApplicationContext(), AppService.class));
     }
 }

@@ -212,7 +212,7 @@ let SearchFriend = React.createClass({
              //return null;
              if(!this.state.showSearchBtn && this.state.keyWord && this.state.keyWord.length > 0) {
                return (
-                 <View style={{flex:1,marginTop:10}}>
+                 <View style={{flex:1,marginTop:40}}>
                    <Text
                      style={{textAlign:'center',color:DictStyle.searchFriend.nullUnitColor}}>{'无符合条件的用户'}</Text>
                  </View>

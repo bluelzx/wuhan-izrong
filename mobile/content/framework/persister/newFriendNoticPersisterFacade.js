@@ -18,7 +18,22 @@ let NewFriendNoticPersisterFacade = {
 };
 
 let _queryAllNewNotic = function(ownerId){
-  let ret = _realm.objects(NEWFRIENDNOTIC).filtered('ownerId =' + ownerId ).sorted('recTime',true);
+  let result = _realm.objects(NEWFRIENDNOTIC).filtered('ownerId =' + ownerId ).sorted('recTime',true);
+  let ret = [];
+  result.forEach((item)=>{
+    ret.push({
+      noticId: item.noticId,
+      userId: item.userId,
+      realName: item.realName,
+      orgName: item.orgName,
+      photoFileUrl: item.photoFileUrl,
+      ownerId: item.ownerId,
+      certified:item.certified,
+      isAccept:item.isAccept||false,
+      msgType:item.msgType,
+      recTime:item.recTime
+    });
+  });
   return ret;
 }
 

@@ -62,7 +62,8 @@ let ImStore = _.assign({}, EventEmitter.prototype, {
     isInGroupById: (id, userId) => {
       return Persister.isInGroupById(id, userId);
     },
-    modifyImgUrl: (msgId, url) => _modifyImgUrl(msgId, url)
+    modifyImgUrl: (msgId, url) => _modifyImgUrl(msgId, url),
+    modifyMsgState:(msgId, status)=>_modifyMsgState(msgId, status)
   }
 );
 
@@ -71,6 +72,16 @@ let _modifyImgUrl = function(msgId, url) {
   _data.messages.forEach((obj)=>{
     if(obj.msgId == msgId){
       obj.content = url;
+    }
+  });
+  ImStore.emitChange(DictEvent.IM_SESSION);
+}
+
+let _modifyMsgState = function(msgId, status){
+  Persister.modifyMsgState(msgId, status);
+  _data.messages.forEach((obj)=>{
+    if(obj.msgId == msgId){
+      obj.status = status;
     }
   });
   ImStore.emitChange(DictEvent.IM_SESSION);
@@ -313,7 +324,8 @@ let _saveMsg = (message, userId) => {
         messageType:_data.messageType ,
         orgValue:ContactStore.getOrgValueByOrgId(userInfo.orgId),
         localUri:message.localUri,
-        cb:message.cb
+        cb:message.cb,
+        erCb:message.erCb
       });
     }
 

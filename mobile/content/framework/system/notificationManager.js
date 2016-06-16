@@ -6,18 +6,24 @@ var React = require('react-native');
 var {
   PushNotificationIOS,
   Platform,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  AppStateIOS
   } = React;
 var CommonAction = require('../action/commonAction');
 var AppStore = require('../store/appStore');
 
 let _handleAppStateChange = function (currentAppState) {
   //if (AppStore.getRevBillMessage()) {
-  //  switch (currentAppState) {
-  //    case "active":
-  //      CommonAction.freshNotification();
-  //      break;
-  //  }
+  console.log('############## app state : ' + currentAppState);
+    //switch (currentAppState) {
+    //  case "active":
+    //  {
+    //    let navigator = AppStore.getNavigator();
+    //    console.log('############## app state : ' + navigator);
+    //    navigator&&navigator.push({comp:'tabView',tabName:'IM'});
+    //    break;
+    //  }
+    //}
   //}
 }
 
@@ -31,13 +37,13 @@ module.exports = {
         }
         PushNotificationIOS.removeEventListener('register', CommonAction.notificationRegister);
         PushNotificationIOS.removeEventListener('notification', CommonAction.onNotification);
-        //AppStateIOS.removeEventListener('change', _handleAppStateChange);
+        AppStateIOS.removeEventListener('change', _handleAppStateChange);
 
 
         PushNotificationIOS.addEventListener('register', CommonAction.notificationRegister);
         PushNotificationIOS.addEventListener('notification', CommonAction.onNotification);
 
-       // AppState.addEventListener('change', _handleAppStateChange);
+        AppStateIOS.addEventListener('change', _handleAppStateChange);
 
       } else {
         DeviceEventEmitter.addListener('Msg', (e:Event)=>CommonAction.onNotification());

@@ -24,6 +24,7 @@ let HeaderPic = require('./headerPic');
 let DictStyle = require('../../constants/dictStyle');
 let { Button} = require('mx-artifacts');
 let Chat = require('./chat');
+let Adapter = require('../../framework/persister/adapter');
 
 let { SESSION_TYPE } = require('../../constants/dictIm');
 
@@ -37,7 +38,8 @@ let SearchResultDetail = React.createClass({
     if(!this.props.param.isStranger){
       userInfo = ContactStore.getUserInfoByUserId(this.props.param.userId);
     }else{
-      userInfo = this.props.param;
+      userInfo = Adapter.saveImUser(this.props.param);
+      userInfo.orgValue = ContactStore.getOrgValueByOrgId(this.props.param.orgId);
     }
 
     console.log(userInfo.mute);
@@ -153,7 +155,7 @@ let SearchResultDetail = React.createClass({
                   onPress={()=>this.addFriend()}
                 >
                   <Text style={{fontSize: 20, color: '#ffffff',textAlign:'center'}}>
-                  加为好友
+                    {this.props.param.friendInvite?'同意申请':'加为好友'}
                     </Text>
                 </TouchableOpacity>
               );

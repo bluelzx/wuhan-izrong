@@ -198,10 +198,7 @@ Manager.prototype.open =
 Manager.prototype.connect = function (fn) {
   // console.log('**websocket** readyState %s', this.readyState);
   if (~this.readyState.indexOf('open')) return this;
- // add lastSyncTime
-  let tDate = this.opts.lastSyncTime && this.opts.lastSyncTime();
-  let AIBG = this.opts.AIBG;
-  var syncUri  = this.uri + '?' + 'lastSyncTime=' + (tDate ? tDate.getTime() : (new Date()).getTime()) + '&AIBG=' + AIBG;
+  var syncUri  = this.uri;
   //var syncUri  = this.uri;// + '?' + 'lastSyncTime=' + this.opts.lastSyncTime().getTime();
   console.log('**websocket** opening %s', syncUri);
   this.engine = new WebSocket(syncUri);

@@ -1,13 +1,14 @@
 let { NetInfo, Platform } = require('react-native');
 let _ = require('lodash');
 let EventEmitter = require('events').EventEmitter;
-let ServiceModule = require('NativeModules').ServiceModule;
+//let ServiceModule = require('NativeModules').ServiceModule;
 let { ImHost } = require('../../../config');
 //let ImSocket = require('../network/imSocket');
 
 //let { MsgTypes } = require('../../constants/notification');
 
 let Persister = require('../persister/persisterFacade');
+
 
 //let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 let {
@@ -32,6 +33,7 @@ let _info = {
 };
 
 let _data = {};
+
 let AppStore = _.assign({}, EventEmitter.prototype, {
   saveNavigator: (nv)=> {
     _data.navigator = nv
@@ -82,7 +84,7 @@ let AppStore = _.assign({}, EventEmitter.prototype, {
   queryAllHomePageInfo: ()=>_queryAllHomePageInfo(),
   queryAllPlatFormInfo: ()=>_queryAllPlatFormInfo(),
   getBadge: ()=>_getBadge(),
-  startJavaServer: () => ServiceModule.startAppService(_data.token, 0, ImHost),
+  //startJavaServer: () => ServiceModule.startAppService(_data.token, 0, ImHost),
   saveMarketInfo: (marketInfoList) => _saveMarketInfo(marketInfoList),
   getMarketInfo: () => _getMarketInfo(),
   //stopJavaServer:() => ServiceModule.stopMyAppService()
