@@ -99,30 +99,8 @@ let UserInfo = React.createClass({
 
     returnImage: function () {
       let uri = null;
-      if(this.state.photoFileUrl){
+      if (this.state.photoFileUrl) {
         uri = this.state.photoFileUrl + ImageSize50;
-      }else{
-        return (
-          <View style={{marginLeft:20}}>
-            <LoadExtendImage jobMode="select"
-                             source={{uri: uri}}
-                             selectType="all"
-                             occurError={(error) => Alert(error)}
-                             title="选择图片"
-                             fileId="userPhoto"
-                             allowsEditing={true}
-                             uploadSuccess={(url)=>{this.updateUserPoto(url)}}
-            >
-            </LoadExtendImage>
-            {()=> {
-              if (this.state.certificated && this.state.photoFileUrl)
-                return (
-                  <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
-                         resizeMode="cover" source={require('../../image/user/certificated.png')}/>
-                );
-            }}
-          </View>
-        );
         return (
           <View style={{marginLeft:20}}>
             <LoadExtendImage jobMode="select"
@@ -135,73 +113,34 @@ let UserInfo = React.createClass({
                              style={styles.head}
                              uploadSuccess={(url)=>{this.updateUserPoto(url)}}
             >
+              {(()=> {
+                if (this.state.certificated && this.state.photoFileUrl)
+                  return (
+                    <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
+                           resizeMode="cover" source={require('../../image/user/certificated.png')}/>
+                  );
+              })()}
+            </LoadExtendImage>
+          </View>
+        );
+      } else {
+        return (
+          <View style={{marginLeft:20}}>
+            <LoadExtendImage jobMode="select"
+                             source={{uri: uri}}
+                             selectType="all"
+                             occurError={(error) => Alert(error)}
+                             title="选择图片"
+                             fileId="userPhoto"
+                             allowsEditing={true}
+                             uploadSuccess={(url)=>{this.updateUserPoto(url)}}
+            >
               <NameCircular name={this.state.realName} isV={this.state.certificated}/>
             </LoadExtendImage>
-            {(()=> {
-              if (this.state.certificated && this.state.photoFileUrl)
-                return (
-                  <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
-                         resizeMode="cover" source={require('../../image/user/certificated.png')}/>
-                );
-            })()}
           </View>
         );
       }
-
-      //if (this.state.certificated) {
-      //  return (
-      //    <View style={{marginLeft: 20,paddingRight:20}}>
-      //      <LoadExtendImage jobMode="select"
-      //                       source={{uri: this.state.photoFileUrl}}
-      //                       selectType="all"
-      //                       occurError={(error) => Alert(error)}
-      //                       title="选择图片"
-      //                       fileId="userPhoto"
-      //                       allowsEditing={true}
-      //                       style={styles.head}
-      //                       uploadSuccess={(url)=>{this.updateUserPoto(url)}}
-      //      >
-      //      <NameCircular name={this.state.realName} isV={this.state.certificated}/>
-      //      <Image style={[styles.certified,{position: 'absolute',bottom:5,left:40,right:40}]}
-      //             resizeMode="cover" source={require('../../image/user/certificated.png')}/>
-      //        </LoadExtendImage>
-      //    </View>
-      //  );
-      //}
-      //let uri = this.state.photoFileUrl + ImageSize50;
-      //return (
-      //  //<Image style={styles.head} resizeMode="cover" source={{uri: uri}}/>
-      //  <View style={{marginLeft: 20,paddingRight:20}}>
-      //    <LoadExtendImage jobMode="select"
-      //                     source={{uri: this.state.photoFileUrl}}
-      //                     selectType="all"
-      //                     occurError={(error) => Alert(error)}
-      //                     title="选择图片"
-      //                     fileId="userPhoto"
-      //                     allowsEditing={true}
-      //                     style={styles.head}
-      //                     uploadSuccess={(url)=>{this.updateUserPoto(url)}}
-      //    >
-      //      <NameCircular name={this.state.realName} isV={this.state.certificated}/>
-      //    </LoadExtendImage>
-      //  </View>
-      //);
-      //
-
-
     },
-//<Image style={styles.head} resizeMode="cover" source={{uri: this.state.photoFileUrl}}/>
-
-//<ImagePicker
-//  type="all"
-//  onSelected={(response) => this.uploadUserPoto(response)}
-//  onError={(error) => Alert(error)}
-//  title="选择图片"
-//  fileId="userPhoto"
-//  allowsEditing={true}
-//  style={{marginLeft: 20,paddingRight:20}}
-//>
-//  </ImagePicker>
 
     toEdit: function (title, name, value, publicName, publicValue, type, maxLength, needEdit, needPublic) {
       if (value == '未设置') {
@@ -305,12 +244,6 @@ let UserInfo = React.createClass({
 
             {this.renderRow('座机号', require('../../image/user/telephoneNo.png'), 'phoneNumber', this.state.phoneNumber, 'isPublicPhone',
               this.state.publicPhone, 'number-pad', 11, true, true, false)}
-
-            {/*this.renderRow('QQ', require('../../image/user/qqNo.png'), 'qqNo', this.state.qqNo, 'isPublicQq',
-             this.state.publicQQ, 'number-pad', 20, true, true, false)*/}
-
-            {/*this.renderRow('微信', require('../../image/user/wechatNo.png'), 'weChatNo', this.state.weChatNo, 'isPublicWeChat',
-             this.state.publicWeChat, 'default', 40, true, true, false)*/}
 
             <TouchableHighlight activeOpacity={0.8} underlayColor={PlainStyle.colorSet.content} onPress={()=>{}}>
               <View style={[styles.listLayout,DictStyle.userInfoBorderBottom,{alignItems:'center'}]}>
