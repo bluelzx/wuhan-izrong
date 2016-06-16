@@ -25,7 +25,6 @@ let LoadExtendImage = require('./loadExtendImage');
 let CacheDirPath = Platform.OS === 'android' ? RNFS.ExternalDirectoryPath + '/fasCache/' : RNFS.DocumentDirectoryPath + '/fasCache/';
 let LargeImg = React.createClass({
   getInitialState(){
-    console.log('filePath'+this.props.param.filePath.uri);
     return {
       littleUri: this.props.param.uri,
       uri: this.props.param.uri.split('?')[0] + ImageSizeOrigin,
@@ -41,6 +40,7 @@ let LargeImg = React.createClass({
       let imagePath = this.getStoragePath(this.state.uri).imagePath;
       RNFS.exists(imagePath).then((exists) => {
         if (!exists) {
+          console.log("down load");
           this.downloadFile(this.state.uri, imagePath);
         } else {
           this.setState({
@@ -73,14 +73,17 @@ let LargeImg = React.createClass({
           status: 'success'
         })
       }).catch((error) => {
+      console.log("下载失败:"+'file://' + path);
+      RNFS.unlink(path);
       this.setState({
-        status: 'fail'
+        status: 'fail',
+        fileExisted:false
       });
-      this.errorHandle('downloadError:' + error);
+      //this.errorHandle('downloadError:' + error);
+      //console.log("下载失败:"+this.state.filePath.uri);
     });
   },
   getStoragePath: function (url) {
-    console.log(url);
     let urlSuffix = url.split("http://img.izirong.com/").pop();
     let suffixArr = urlSuffix.split('?');
     let imageName = suffixArr[0] + 'B';
@@ -169,21 +172,45 @@ let LargeImg = React.createClass({
       return null;
     }
   },
-
+refresh:function(){
+  this.setState({
+    status:'loading'
+  });
+  this.componentDidMount();
+},
   render(){
     if (this.state.status == 'loading') {
-      console.log(this.state.littleUri);
+      console.log("loading");
       return (
-
+        <TouchableHighlight onPress={this.closeLargeImg}
+                            style={styles.viewStyle}>
+          <View style={styles.viewStyle}>
           <Image style={styles.largeImageStyle}
                  resizeMode="contain"
                  source={this.state.littleFilePath}
           >
             {this.renderLoading()}
           </Image>
-
+          </View>
+        </TouchableHighlight>
       )
-    } else {
+    } else if(this.state.status == 'fail'){
+      return(
+        <TouchableHighlight onPress={this.closeLargeImg}
+                            style={styles.viewStyle}>
+          <View style={styles.viewStyle}>
+          <Image style={styles.largeImageStyle}
+                 resizeMode="contain"
+                 source={this.state.littleFilePath}
+          >
+          </Image>
+            <Text style={{color:'#ffffff'}}>原图加载失败</Text>
+          </View>
+        </TouchableHighlight>
+      )
+    }
+    else if(this.state.status == 'success'){
+      console.log("大图路径:"+this.state.filePath.uri)
       return (
         <TouchableHighlight onPress={this.closeLargeImg}
                             onLongPress={this.moreHandle}
