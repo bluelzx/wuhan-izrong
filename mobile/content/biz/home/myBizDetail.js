@@ -477,7 +477,7 @@ let MyBizDetail = React.createClass({
                            selectType="all"
                            title="选择图片"
                            fileId="publish"
-                           allowsEditing={true}
+                           allowsEditing={false}
                            occurError={(error) => Alert(error)}
                            uploadSuccess={(url)=>{
                              let arr = this.state.imageUploadUrlList;
@@ -507,7 +507,7 @@ let MyBizDetail = React.createClass({
                            selectType="all"
                            title="选择图片"
                            fileId="publish"
-                           allowsEditing={true}
+                           allowsEditing={false}
                            occurError={(error) => Alert(error)}
                            uploadSuccess={(url)=>{
                              let arr = this.state.imageUploadUrlList;

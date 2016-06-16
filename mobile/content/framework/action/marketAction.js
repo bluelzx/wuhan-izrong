@@ -13,31 +13,21 @@ let AppLinks = require('../../constants/appLinks');
 let pub = '/pub';
 
 let MarketActions = {
-  bizOrderMarketSearch: (p) => _bfetchWithUrlAndP(AppLinks.bizOrderMarketSearch, p),
-  getBizOrderInMarket: (p) => _pfetchWithUrlAndP(AppLinks.getBizOrderInMarket, p),
+  bizOrderMarketSearch: (p) => _bizOrderMarketSearch(AppLinks.bizOrderMarketSearch, p),
+  getBizOrderInMarket: (p) => _getBizOrderInMarket(AppLinks.getBizOrderInMarket, p),
 
-  bizOrderAdminSearch: (p) => _bfetchWithUrlAndP(AppLinks.bizOrderAdminSearch, p),
-  getBizOrderByCreator: (p) => _pfetchWithUrlAndP(AppLinks.getBizOrderByCreator, p),
-  refreshBizOrder: (p) => _pfetchWithUrlAndP(AppLinks.refreshBizOrder, p),
+  bizOrderAdminSearch: (p) => _bizOrderAdminSearch(AppLinks.bizOrderAdminSearch, p),
+  getBizOrderByCreator: (p) => _getBizOrderByCreator(AppLinks.getBizOrderByCreator, p),
+  refreshBizOrder: (p) => _refreshBizOrder(AppLinks.refreshBizOrder, p),
 
-  addBizOrder: (p) => _bfetchWithUrlAndP(AppLinks.addBizOrder, p),
-  downselfBizOrder: (p) => _pfetchWithUrlAndP(AppLinks.downselfBizOrder, p),
-  updateBizOrder: (p) => _bfetchWithUrlAndP(AppLinks.updateBizOrder, p),
-  getBizOrderCategoryAndItem: () => _pfetch1WithUrl(AppLinks.getBizOrderCategoryAndItem),
+  addBizOrder: (p) => _addBizOrder(AppLinks.addBizOrder, p),
+  downselfBizOrder: (p) => _downselfBizOrder(AppLinks.downselfBizOrder, p),
+  updateBizOrder: (p) => _updateBizOrder(AppLinks.updateBizOrder, p),
+  getBizOrderCategoryAndItem: () => _getBizOrderCategoryAndItem(AppLinks.getBizOrderCategoryAndItem),
   getTop15BizOrderListByCategory: (p) => _getTop15BizOrderListByCategory(AppLinks.getTop15BizOrderListByCategory,p)
 };
 
-let _bfetchWithUrl = function (url) {
-  return new Promise((resolve, reject) => {
-    BFetch(url).then((response) => {
-      resolve(response);
-    }).catch((errorData) => {
-      reject(errorData);
-    });
-  });
-};
-
-let _bfetchWithUrlAndP = function (url, p) {
+let _bizOrderMarketSearch = function (url, p) {
   return new Promise((resolve, reject) => {
     BFetch(url, p).then((response) => {
       resolve(response);
@@ -47,9 +37,9 @@ let _bfetchWithUrlAndP = function (url, p) {
   });
 };
 
-let _pfetchWithUrl = function (url) {
+let _getBizOrderInMarket = function (url, p) {
   return new Promise((resolve, reject) => {
-    PFetch(url).then((response) => {
+    PFetch(url, p).then((response) => {
       resolve(response);
     }).catch((errorData) => {
       reject(errorData);
@@ -57,9 +47,69 @@ let _pfetchWithUrl = function (url) {
   });
 };
 
-let _pfetchWithUrlAndP = function (url, p) {
+let _bizOrderAdminSearch = function (url, p) {
+  return new Promise((resolve, reject) => {
+    BFetch(url, p).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _getBizOrderByCreator = function (url, p) {
   return new Promise((resolve, reject) => {
     PFetch(url, p).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _refreshBizOrder = function (url, p) {
+  return new Promise((resolve, reject) => {
+    PFetch(url, p).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _addBizOrder = function (url, p) {
+  return new Promise((resolve, reject) => {
+    BFetch(url, p).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _downselfBizOrder = function (url, p) {
+  return new Promise((resolve, reject) => {
+    PFetch(url, p).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _updateBizOrder = function (url, p) {
+  return new Promise((resolve, reject) => {
+    BFetch(url, p).then((response) => {
+      resolve(response);
+    }).catch((errorData) => {
+      reject(errorData);
+    });
+  });
+};
+
+let _getBizOrderCategoryAndItem = function (url) {
+  return new Promise((resolve, reject) => {
+    PFetch(url).then((response) => {
       resolve(response);
     }).catch((errorData) => {
       reject(errorData);
