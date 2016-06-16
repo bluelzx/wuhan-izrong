@@ -106,7 +106,7 @@ export default class Bubble extends React.Component {
 
       //判断jobMode  upload   content为本地文件路径
       let jobMode = 'upload';
-      if (this.props.content && !!~this.props.content.indexOf('http')) {
+      if (this.props.content && this.props.content.indexOf('http')>=0) {
         jobMode = 'load';
       }
       console.log('jobMode:' + jobMode + ',uri:' + this.props.content);
@@ -122,6 +122,7 @@ export default class Bubble extends React.Component {
                            uploadFailed={this.props.erCb}
                            jobMode={jobMode}
                            navigator={{navigator:AppStore.getNavigator()}}
+                           showRefshImg={false}
           >
           </LoadExtendImage>
         </View>

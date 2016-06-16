@@ -19,6 +19,7 @@ let ImStore = require('../../framework/store/imStore');
 let { MSG_CONTENT_TYPE, COMMAND_TYPE, SESSION_TYPE } = require('../../constants/dictIm');
 let { IM_SESSION } = require('../../constants/dictEvent');
 let KeyGenerator = require('../../comp/utils/keyGenerator');
+let Event = require('../../comp/utils/events');
 
 let Messenger = React.createClass({
 
@@ -115,13 +116,10 @@ let Messenger = React.createClass({
         };
         msgToSend.erCb = ()=>{
           ImStore.modifyMsgState(msgId,'UploadError');
-          this._onChange();
+          Event.trigger('loadStatus',{msgId:msgId,s:''});
+         // this._onChange();
         }
-        //msgToSend.isReSend = isReSend;
-        //if(isReSend){
-        //  ImStore.modifyMsgState(msgId,'Sending');
-        //  this._onChange();
-        //}
+
       }
       ImAction.send(msgToSend, isReSend, this.props.param.myId, isNotSend);
       return msgToSend.msgId;
@@ -225,7 +223,20 @@ let Messenger = React.createClass({
     // Eg: Re-send the message to your server
     // this.handleSend(message, rowID, true);
     //let msg = ImStore.getMessageByMessageId(message.msgId);
-    this._sendMessage(message.contentType, message.content, true, message.msgId);
+    if(message.contentType == MSG_CONTENT_TYPE.IMAGE){
+      if(message.content && message.content.indexOf('http')>=0){
+        this._sendMessage(message.contentType, message.content, true, message.msgId);
+      }else {
+        ImAction.uploadImage(message.content).then((response)=> {
+          ImStore.modifyImgUrl(message.msgId, response.fileUrl)
+          self._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl, true, msgId, false, uri);
+        }).catch((err)=>{
+          Event.trigger('loadStatus',{msgId:message.msgId,s:''});
+        });
+      }
+    }else {
+      this._sendMessage(message.contentType, message.content, true, message.msgId);
+    }
     // ImAction.send(message, true);
 
     // setTimeout(() => {

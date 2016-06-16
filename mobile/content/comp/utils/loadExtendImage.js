@@ -46,6 +46,8 @@ let LoadExtendImage = React.createClass({
     //是否允许在点击的时候加载大图
     showLargeImg:PropTypes.bool,
 
+    showRefshImg:PropTypes.bool,
+
     selectType: PropTypes.oneOf(['all', 'camera', 'library']),
     longPress: PropTypes.func,
     allowsEditing: PropTypes.bool,
@@ -62,7 +64,8 @@ let LoadExtendImage = React.createClass({
     return {
       isEnableLoading: true,
       isSelectUpload: true,
-      showLargeImg:true
+      showLargeImg:true,
+      showRefshImg:true
     };
   },
 
@@ -222,7 +225,6 @@ let LoadExtendImage = React.createClass({
       });
 
       if (this.props.uploadFailed) {
-        console.log('#################uploadFailed:'+this.props.uploadFailed);
         this.props.uploadFailed(error);
       }
       this.errorHandle('uploadError:' + error);
@@ -332,11 +334,20 @@ let LoadExtendImage = React.createClass({
                resizeMode="cover"
                source={this.state.filePath}
         >
-            <Image
-              style={{width:30,height:30}}
-              source = {require('../../image/utils/refresh.png')}>
+          {(()=>{
+            if(this.props.showRefshImg){
+              return (
+                <Image
+                  style={{width:30,height:30}}
+                  source = {require('../../image/utils/refresh.png')}>
 
-            </Image>
+                </Image>
+              );
+            }else{
+              return null;
+            }
+          })()}
+
         </Image>
           </TouchableHighlight>
       );

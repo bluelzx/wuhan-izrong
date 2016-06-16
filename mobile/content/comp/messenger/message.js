@@ -144,6 +144,7 @@ export default class Message extends React.Component {
           rowData={rowData}
           rowID={rowID}
           styles={styles}
+          msgId = {rowData.msgId}
           isLoading={rowData.status == 'Sending'?true:false}
         />
       );

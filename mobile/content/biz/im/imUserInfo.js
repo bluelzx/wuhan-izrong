@@ -24,6 +24,7 @@ let HeaderPic = require('./headerPic');
 let DictStyle = require('../../constants/dictStyle');
 let { Button} = require('mx-artifacts');
 
+
 let { SESSION_TYPE } = require('../../constants/dictIm');
 
 let ImUserInfo = React.createClass({
