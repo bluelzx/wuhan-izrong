@@ -52,7 +52,6 @@ var UFetch = function (url, param) {
     qiniu.conf.ACCESS_KEY = ImageAk;
     qiniu.conf.SECRET_KEY = ImageSk;
     let fileName = KeyGenerator.getImgKey(AppStore.getUserId());
-    fileName='dengpan2';
     var putPolicy = new qiniu.auth.PutPolicy2(
       {scope: ImageBkt + ':' + fileName}
     );

@@ -2,6 +2,8 @@ import React, {View, Text, TouchableHighlight, StyleSheet, Image, Platform} from
 import { Spinner } from 'mx-artifacts';
 let DictStyle = require('../../constants/dictStyle');
 
+let Event = require('../../comp/utils/events');
+
 let styles = StyleSheet.create({
   errorButtonContainer: {
     alignSelf: 'center',
@@ -22,15 +24,29 @@ export default class ErrorButton extends React.Component {
     super(props);
     this.state = {
       isLoading: this.props.isLoading,
+      msgId: this.props.msgId
     };
+  }
+
+  modifyidLoading(data) {
+    let {msgId, s} = data;
+    if(msgId == this.state.msgId){
+      this.setState({isLoading:false});
+    }
+    Event.remove('loadStatus',this.modifyidLoading.bind(this));
+  }
+
+  componentDidMount(){
+    Event.listen('loadStatus',this.modifyidLoading.bind(this));
   }
 
 
   componentWillMount() {
     Object.assign(styles, this.props.styles);
-    if(this.state.isLoading == true){
-      this.setTimOutFunc();
-    }
+    //if(this.state.isLoading == true){
+    //  this.setTimOutFunc();
+    //}
+    Event.remove('loadStatus',this.modifyidLoading.bind(this));
   }
 
   componentWillUnmount(){
@@ -52,7 +68,7 @@ export default class ErrorButton extends React.Component {
     });
 
     this.props.onErrorButtonPress(this.props.rowData, this.props.rowID);
-    this.setTimOutFunc();
+   // this.setTimOutFunc();
   }
 
   render() {
@@ -84,5 +100,6 @@ ErrorButton.defaultProps = {
   rowData: {},
   rowID: null,
   styles: {},
-  isLoading:false
+  isLoading:false,
+  msgId:''
 };

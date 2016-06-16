@@ -27,10 +27,19 @@ let _updateUserInfo = function (column, value) {
     switch (column) {
       case 'realName':
         _realm.write(() => {
+
           _realm.create(LOGINUSERINFO, {
             userId: userId,
             realName: value
           }, true);
+
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            realName: value
+          }, true);
+
+
         });
         break;
       case 'mobileNumber':
@@ -39,6 +48,12 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             mobileNumber: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            mobileNumber: value
+          }, true);
+
         });
         break;
       case 'isPublicMobile':
@@ -47,6 +62,13 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             publicMobile: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            publicMobile: value
+          }, true);
+
+
         });
         break;
       case 'phoneNumber':
@@ -55,11 +77,23 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             phoneNumber: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            phoneNumber: value
+          }, true);
+
+
         });
         break;
       case 'isPublicPhone':
         _realm.write(() => {
           _realm.create(LOGINUSERINFO, {
+            userId: userId,
+            publicPhone: value
+          }, true);
+
+          _realm.create(IMUSERINFO, {
             userId: userId,
             publicPhone: value
           }, true);
@@ -71,6 +105,12 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             qqNo: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            qqNo: value
+          }, true);
+
         });
         break;
       case 'isPublicQq':
@@ -79,6 +119,12 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             publicQQ: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            publicQQ: value
+          }, true);
+
         });
         break;
       case 'weChatNo':
@@ -87,11 +133,22 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             weChatNo: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            weChatNo: value
+          }, true);
+
         });
         break;
       case 'isPublicWeChat':
         _realm.write(() => {
           _realm.create(LOGINUSERINFO, {
+            userId: userId,
+            publicWeChat: value
+          }, true);
+
+          _realm.create(IMUSERINFO, {
             userId: userId,
             publicWeChat: value
           }, true);
@@ -103,6 +160,12 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             email: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            email: value
+          }, true);
+
         });
         break;
       case 'isPublicEmail':
@@ -111,6 +174,12 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             publicEmail: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            publicEmail: value
+          }, true);
+
         });
         break;
       case 'department':
@@ -119,6 +188,12 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             department: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            department: value
+          }, true);
+
         });
         break;
       case 'isPublicDepart':
@@ -127,6 +202,12 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             publicDepart: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            publicDepart: value
+          }, true);
+
         });
         break;
       case 'jobTitle':
@@ -135,6 +216,12 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             jobTitle: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            jobTitle: value
+          }, true);
+
         });
         break;
       case 'isPublicTitle':
@@ -143,6 +230,12 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             publicTitle: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            publicTitle: value
+          }, true);
+
         });
         break;
       case 'photoFileUrl':
@@ -151,6 +244,13 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             photoFileUrl: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            photoFileUrl: value
+          }, true);
+
+
         });
         break;
       case 'isCertificated':
@@ -159,6 +259,12 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             certified: value
           }, true);
+
+          _realm.create(IMUSERINFO, {
+            userId: userId,
+            certified: value
+          }, true);
+
         });
         break;
       case 'status':
@@ -167,6 +273,7 @@ let _updateUserInfo = function (column, value) {
             userId: userId,
             status: value
           }, true);
+
         });
         break;
     }

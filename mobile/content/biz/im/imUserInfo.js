@@ -24,6 +24,7 @@ let HeaderPic = require('./headerPic');
 let DictStyle = require('../../constants/dictStyle');
 let { Button} = require('mx-artifacts');
 
+
 let { SESSION_TYPE } = require('../../constants/dictIm');
 
 let ImUserInfo = React.createClass({
@@ -107,7 +108,7 @@ let ImUserInfo = React.createClass({
         return ContactAction.addFriend(this.props.param.userId).then((response)=> {
           ContactStore.addFriend(this.state.data);
         }).then((response)=> {
-          this.props.navigator.popToTop();
+          this.props.navigator.pop();
         }).catch((err)=> {
           throw err;
         });

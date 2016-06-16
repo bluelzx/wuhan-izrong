@@ -9,6 +9,7 @@ let { ImHost } = require('../../../config');
 
 let Persister = require('../persister/persisterFacade');
 
+
 //let ConvertChineseKey = require('../../comp/utils/convertChineseKey');
 let {
   Default_EVENT,
@@ -32,6 +33,7 @@ let _info = {
 };
 
 let _data = {};
+
 let AppStore = _.assign({}, EventEmitter.prototype, {
   saveNavigator: (nv)=> {
     _data.navigator = nv

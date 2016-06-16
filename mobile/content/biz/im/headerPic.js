@@ -52,7 +52,7 @@ let HeaderPic = React.createClass({
   },
 
   render: function () {
-    let {name, photoFileUrl, badge, certified = false, source=false, showBadge=false} = this.props;
+    let {name, photoFileUrl, badge, certified = false, source=false, showBadge=false ,showLargeImg = true} = this.props;
 
     if (!_.isEmpty(photoFileUrl)) {
         return (
@@ -61,6 +61,7 @@ let HeaderPic = React.createClass({
                              source={{uri: photoFileUrl}}
                              style={styles.head}
                              navigator = {{navigator:AppStore.getNavigator()}}
+                             showLargeImg = {showLargeImg}
             />
             {this.unReadIcon(badge, showBadge)}
               {(()=>{
