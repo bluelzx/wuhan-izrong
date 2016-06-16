@@ -23,6 +23,7 @@ let UserPhotoPicModule = require('NativeModules').UserPhotoPicModule;
 let SaveFileModule = require('NativeModules').SaveFileModule;
 let LoadExtendImage = require('./loadExtendImage');
 let CacheDirPath = Platform.OS === 'android' ? RNFS.ExternalDirectoryPath + '/fasCache/' : RNFS.DocumentDirectoryPath + '/fasCache/';
+let imagePath;
 let LargeImg = React.createClass({
   getInitialState(){
     return {
@@ -37,7 +38,7 @@ let LargeImg = React.createClass({
   },
   componentDidMount() {
     if (!this.state.fileExisted) {
-      let imagePath = this.getStoragePath(this.state.uri).imagePath;
+      imagePath = this.getStoragePath(this.state.uri).imagePath;
       RNFS.exists(imagePath).then((exists) => {
         if (!exists) {
           console.log("down load");
@@ -101,7 +102,10 @@ let LargeImg = React.createClass({
     }
   },
 
-  closeLargeImg: function () {
+  closeLargeImg: function (data) {
+    if(data==true){
+      RNFS.unlink(imagePath);
+    }
     const { navigator } = this.props;
     if (navigator) {
       navigator.pop();
@@ -182,7 +186,7 @@ refresh:function(){
     if (this.state.status == 'loading') {
       console.log("loading");
       return (
-        <TouchableHighlight onPress={this.closeLargeImg}
+        <TouchableHighlight onPress={()=>this.closeLargeImg(true)}
                             style={styles.viewStyle}>
           <View style={styles.viewStyle}>
           <Image style={styles.largeImageStyle}
@@ -196,7 +200,7 @@ refresh:function(){
       )
     } else if(this.state.status == 'fail'){
       return(
-        <TouchableHighlight onPress={this.closeLargeImg}
+        <TouchableHighlight onPress={()=>this.closeLargeImg(false)}
                             style={styles.viewStyle}>
           <View style={styles.viewStyle}>
           <Image style={styles.largeImageStyle}
@@ -212,7 +216,7 @@ refresh:function(){
     else if(this.state.status == 'success'){
       console.log("大图路径:"+this.state.filePath.uri)
       return (
-        <TouchableHighlight onPress={this.closeLargeImg}
+        <TouchableHighlight onPress={()=>this.closeLargeImg(false)}
                             onLongPress={this.moreHandle}
                             style={styles.viewStyle}>
           <Image style={styles.largeImageStyle}
