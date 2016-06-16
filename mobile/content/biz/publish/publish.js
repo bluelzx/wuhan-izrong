@@ -338,7 +338,7 @@ let Publish = React.createClass({
                          selectType="all"
                          title="选择图片"
                          fileId="publish"
-                         allowsEditing={true}
+                         allowsEditing={false}
                          uploadSuccess={(url)=>{
                              let arr = this.state.imageUploadUrlList;
                                 if (rowID > 5) {

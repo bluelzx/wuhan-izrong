@@ -29,20 +29,27 @@ public class ImageUtils {
                 FileOutputStream fos = null;
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                System.out.println("aaaabbbb" + baos.toByteArray().length / 1024);
-                int per = 100;
-                while (baos.toByteArray().length / 1024 > size) {
-                    System.out.println("bbbb " + baos.toByteArray().length / 1024);
-                    baos.reset();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, per, baos);
-                    per -= 10;
-                    System.out.println("aaaabbbb " + baos.toByteArray().length / 1024 + " 9999 " + per);
-                }
-                System.out.println("aaaabbbb" + per);
                 fos = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, per, fos);
+                if (baos.toByteArray().length / 1024 /1024 <= 1) {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+                } else if (baos.toByteArray().length / 1024 /1024 <= 3) {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+                } else if (baos.toByteArray().length / 1024 /1024 <= 5) {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 30, fos);
+                } else {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 10, fos);
+                }
                 fos.flush();
                 fos.close();
+//                if(baos.toByteArray().length / 1024 / 1024 <= 1 ){
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+//                }else if(baos.toByteArray().length / 1024 /1024 <= 3 ){
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 60, baos);
+//                }else if(baos.toByteArray().length / 1024 /1024 <= 5 ){
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 40, baos);
+//                }else if(baos.toByteArray().length / 1024 /1024 <= 7 ){
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
+//                }
             }
             if (bitmap != null && !bitmap.isRecycled()) {
                 bitmap.recycle();

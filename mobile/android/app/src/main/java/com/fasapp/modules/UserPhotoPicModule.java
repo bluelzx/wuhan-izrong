@@ -128,7 +128,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
         this.mCrop = needCrop;
         this.mFileName = name;
         this.mCallback = callback;
-        cachePath = cacheDir + mFileName + "compress.jpg";
+        cachePath = cacheDir + mFileName + ".jpg";
         mCropConfig = new FunctionConfig.Builder()
                 .setEnableCrop(needCrop)
                 .setEnableRotate(true)
@@ -197,8 +197,7 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        String cacheUri = ImageUtils.compressImage1(path.toString(), cachePath, cacheDir);
-                        mResponse.putString("uri", cacheUri);
+                        mResponse.putString("uri", FileUtils.copyFile(path, cachePath, cacheDir).toString());
                         mCallback.invoke(mResponse);
                     }
                     break;
@@ -206,13 +205,12 @@ public class UserPhotoPicModule extends ReactContextBaseJavaModule {
                     if (mCrop) {
                         GalleryFinal.openCrop(REQUEST_CODE_CROP, mCropConfig, path, mOnHanlderResultCallback);
                     } else {
-                        mResponse.putString("uri", ImageUtils.compressImage1(path.toString(), cachePath, cacheDir));
+                        mResponse.putString("uri", FileUtils.copyFile(path, cachePath, cacheDir).toString());
                         mCallback.invoke(mResponse);
                     }
                     break;
                 case REQUEST_CODE_CROP:
-                    String cacheUri = ImageUtils.compressImage1(path.toString(), cachePath, cacheDir);
-                    mResponse.putString("uri",cacheUri);
+                    mResponse.putString("uri", FileUtils.renameToFile(path, cachePath, cacheDir).toString());
                     mCallback.invoke(mResponse);
                     break;
                 default:
