@@ -329,12 +329,14 @@ let Publish = React.createClass({
     }
   },
   renderImgItem: function (rowData, sectionID, rowID) {
+    console.log('rowId:' + rowID);
     return (
       <View
+        key={rowData}
         style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df',backgroundColor: 'white'}}>
         <LoadExtendImage style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
                          uploadFileUri={{uri:rowData}}
-                         //longPress={(rowID) => this._longPress(rowID) }
+                         longPress={() => this._longPress(rowID) }
                          selectType="all"
                          title="选择图片"
                          fileId="publish"
@@ -545,6 +547,7 @@ let Publish = React.createClass({
     }
   },
   _longPress (rowId){
+
     if (Platform.OS === 'ios') {
       let options = [
         '保存图片',
@@ -567,13 +570,15 @@ let Publish = React.createClass({
               }
             );
           } else if (buttonIndex == 1) {
-            let arr = this.state.fileUrlList;
+            let showArr = this.state.fileUrlList;
             let uploadArr = this.state.imageUploadUrlList;
-            _.pullAt(arr, rowId);
-            _.pullAt(uploadArr, rowId);
+            showArr[rowId] = 0;
+            let endEditedShowArr = _.compact(showArr);
+            uploadArr[rowId] = 0;
+            let endEditedUploadArr = _.compact(uploadArr);
             this.setState({
-              fileUrlList: arr,
-              imageUploadUrlList: uploadArr
+              fileUrlList: endEditedShowArr,
+              imageUploadUrlList: endEditedUploadArr
             });
           }
         });
@@ -592,13 +597,15 @@ let Publish = React.createClass({
               );
               break;
             case 1:
-              let arr = this.state.fileUrlList;
+              let showArr = this.state.fileUrlList;
               let uploadArr = this.state.imageUploadUrlList;
-              _.pullAt(arr, rowId);
-              _.pullAt(uploadArr, rowId);
+              showArr[rowId] = 0;
+              let endEditedShowArr = _.compact(showArr);
+              uploadArr[rowId] = 0;
+              let endEditedUploadArr = _.compact(uploadArr);
               this.setState({
-                fileUrlList: arr,
-                imageUploadUrlList: uploadArr
+                fileUrlList: endEditedShowArr,
+                imageUploadUrlList: endEditedUploadArr
               });
               break;
             default:
@@ -666,7 +673,7 @@ let Publish = React.createClass({
   },
 
   replaceEnterToSpace (text) {
-    let newText = text.replace(/[\n]/ig,'  ');
+    let newText = text.replace(/[\n]/ig, '  ');
     return newText;
   }
 

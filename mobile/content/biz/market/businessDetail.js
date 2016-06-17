@@ -160,8 +160,8 @@ let BusinessDetail = React.createClass({
       <View style={{backgroundColor:'#f0f0f0',borderRadius:2,margin:10}}>
         {this.renderPromulgator()}
         <View style={{marginBottom:14}}>
-          {this.returnInfoItem(true, require('../../image/market/mobile.png'), this.state.mobileNumber == null || this.state.mobileNumber == '' ? '--' : this.state.mobileNumber, this.state.isPublicMobile != false ? true : false)}
-          {this.returnInfoItem(true, require('../../image/market/tel.png'), this.state.phoneNumber == null || this.state.phoneNumber == '' ? '--' : this.state.phoneNumber, this.state.isPublicPhone != false ? true : false)}
+          {this.returnInfoItem(true, require('../../image/market/mobile.png'), this.state.mobileNumber == null || this.state.mobileNumber == '' ? '--' : this.state.mobileNumber, this.state.isPublicMobile)}
+          {this.returnInfoItem(true, require('../../image/market/tel.png'), this.state.phoneNumber == null || this.state.phoneNumber == '' ? '--' : this.state.phoneNumber, this.state.isPublicPhone)}
           {this.returnInfoItem(false, require('../../image/market/email.png'), this.state.userName, true)}
         </View>
       </View>
@@ -221,7 +221,7 @@ let BusinessDetail = React.createClass({
   },
   returnInfoItem: function (isCallPhone, url, value, isPublic) {
     if (isCallPhone) {
-      if (value == '--') {
+      if (isPublic == false) {
         return (
           <View style={{flexDirection:'row',alignItems:'center',paddingVertical:5,marginLeft:10}}>
             <Image style={{width:16,height:16}}
@@ -230,10 +230,23 @@ let BusinessDetail = React.createClass({
             <Text
               style={{marginLeft:10,fontSize:DictStyle.marketSet.fontSize,color:DictStyle.marketSet.fontColor}}
               numberOfLines={2}
-            >{isPublic ? value : '--'}</Text>
+            >{'--'}</Text>
           </View>
         );
       } else {
+        if (value == '--'){
+          return (
+            <View style={{flexDirection:'row',alignItems:'center',paddingVertical:5,marginLeft:10}}>
+              <Image style={{width:16,height:16}}
+                     source={url}
+              />
+              <Text
+                style={{marginLeft:10,fontSize:DictStyle.marketSet.fontSize,color:DictStyle.marketSet.fontColor}}
+                numberOfLines={2}
+              >{isPublic ? value : '--'}</Text>
+            </View>
+          );
+        }
         return (
           <View style={{flexDirection:'row',alignItems:'center',paddingVertical:5,marginLeft:10}}>
             <Image style={{width:16,height:16}}
@@ -407,6 +420,9 @@ let BusinessDetail = React.createClass({
             photoStoredFileUrl: response.photoStoredFileUrl,
             isCertificated: response.isCertificated
           });
+          console.log('wxg--' + 'isPublicMobile: ' +  response.isPublicMobile + '\n' +
+                      'wxg--' + 'mobileNumber: ' +  response.mobileNumber + '\n' +
+                      'response' + JSON.stringify(response))
         }).catch(
           (errorData) => {
             if (errorData.msgCode == 'APP_BIZ_ORDER_HAS_DOWNSELF'){
