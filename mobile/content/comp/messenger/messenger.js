@@ -39,22 +39,21 @@ let Messenger = React.createClass({
 
   _getStateFromStores() {
     return {
-      messages: ImStore.getMessages(),
+      messages: ImStore.getMessages()
       // token: AppStore.getToken()
     };
   },
 
   getInitialState() {
-    return _.assign(this._getStateFromStores(), {
+    let orgState = this._getStateFromStores();
+    return _.assign(orgState, {
       // messages: this.getMessages()
+      mode:orgState.messages && orgState.messages.length < 10
     });
   },
 
   componentDidMount() {
     ImStore.addChangeListener(this._onChange, IM_SESSION);
-    //if (this.props.param.isFromBizDetail) {
-    //  this._sendMessage(MSG_CONTENT_TYPE.BIZINFO, this.props.param.content);
-    //}
   },
 
   componentWillUnmount() {
@@ -67,61 +66,71 @@ let Messenger = React.createClass({
 
   _sendMessage(contentType, content, isReSend = false, msgId = '', isNotSend, localUri) {
 
-
-    if (this.props.param.chatType === SESSION_TYPE.GROUP && !ImAction.isInGroupById(this.props.param.groupId, this.props.param.myId)) {
-      //TODO: 用户已不在群组....
-      //msgToSend.contentType = MSG_CONTENT_TYPE.KICKOUT;
-      //ImAction.send(msgToSend, false, this.props.param.myId, true);
-      //Alert('您已不在该群组');
-      let messages = this.state.messages;
-      messages.push({position:'',isTips:'您已移出该群，请重新加群'});
-      this.setState({messages: messages});
-    }else {
-      let msgToSend = {
-        sessionId: this.props.param.sessionId,
-        msgId: isReSend ? msgId : KeyGenerator.getMessageKey(this.props.param.sessionId, this.props.param.myId),
-        fromUId: null,
-        contentType: contentType,
-        content: content,
-        revTime: new Date(),
-        isRead: true,
-        status: 'Sending',//'ErrorButton',
-        //status: 'isMute',
-        localUri:localUri
-      };
-      if (this.props.param.chatType === SESSION_TYPE.USER) {
-        _.assign(msgToSend, {
-          // toId: this.props.param.userId,
-          toId: this.props.param.userId,
-          groupId: null,
-          type: SESSION_TYPE.USER,
-          msgType: COMMAND_TYPE.SEND_P2P_MSG
-        });
-      } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
-        _.assign(msgToSend, {
-          toId: null,
-          groupId: this.props.param.groupId,
-          type: SESSION_TYPE.GROUP,
-          msgType: COMMAND_TYPE.SEND_GROUP_MSG
-        });
+    if(this.state.messages.length >= 9) {
+      if(!this.state.mode) {
+        this.setState({mode: false});
       }
+    }
 
-      if(msgToSend.contentType == MSG_CONTENT_TYPE.IMAGE){
-        let self = this;
-        let msgId = msgToSend.msgId;
-        let uri = msgToSend.content;
-        msgToSend.cb = (sucUrl)=> {
-          ImStore.modifyImgUrl(msgId,sucUrl);
-          self._sendMessage(MSG_CONTENT_TYPE.IMAGE, sucUrl, true, msgId, false, null);
+    setTimeout(()=>{
+      if (this.props.param.chatType === SESSION_TYPE.GROUP && !ImAction.isInGroupById(this.props.param.groupId, this.props.param.myId)) {
+        //TODO: 用户已不在群组....
+        //msgToSend.contentType = MSG_CONTENT_TYPE.KICKOUT;
+        //ImAction.send(msgToSend, false, this.props.param.myId, true);
+        //Alert('您已不在该群组');
+        let messages = this.state.messages;
+        messages.push({position:'',isTips:'您已移出该群，请重新加群'});
+        this.setState({messages: messages});
+      }else {
+        let msgToSend = {
+          sessionId: this.props.param.sessionId,
+          msgId: isReSend ? msgId : KeyGenerator.getMessageKey(this.props.param.sessionId, this.props.param.myId),
+          fromUId: null,
+          contentType: contentType,
+          content: content,
+          revTime: new Date(),
+          isRead: true,
+          status: 'Sending',//'ErrorButton',
+          //status: 'isMute',
+          localUri:localUri
         };
-        msgToSend.erCb = ()=>{
-          ImStore.modifyMsgState(msgId,'UploadError');
+        if (this.props.param.chatType === SESSION_TYPE.USER) {
+          _.assign(msgToSend, {
+            // toId: this.props.param.userId,
+            toId: this.props.param.userId,
+            groupId: null,
+            type: SESSION_TYPE.USER,
+            msgType: COMMAND_TYPE.SEND_P2P_MSG
+          });
+        } else if (this.props.param.chatType === SESSION_TYPE.GROUP) {
+          _.assign(msgToSend, {
+            toId: null,
+            groupId: this.props.param.groupId,
+            type: SESSION_TYPE.GROUP,
+            msgType: COMMAND_TYPE.SEND_GROUP_MSG
+          });
         }
 
+        if(msgToSend.contentType == MSG_CONTENT_TYPE.IMAGE){
+          let self = this;
+          let msgId = msgToSend.msgId;
+          let uri = msgToSend.content;
+          msgToSend.cb = (sucUrl)=> {
+            ImStore.modifyImgUrl(msgId,sucUrl);
+            self._sendMessage(MSG_CONTENT_TYPE.IMAGE, sucUrl, true, msgId, false, null);
+          };
+          msgToSend.erCb = ()=>{
+            ImStore.modifyMsgState(msgId,'UploadError');
+          }
+
+        }
+        ImAction.send(msgToSend, isReSend, this.props.param.myId, isNotSend);
       }
-      ImAction.send(msgToSend, isReSend, this.props.param.myId, isNotSend);
-      return msgToSend.msgId;
-    }
+
+    },500);
+
+
+
 
   },
 
@@ -274,7 +283,8 @@ let Messenger = React.createClass({
 
   render() {
 
-    if(this.state.messages.length < 10) {
+    if(this.state.mode) {
+    //if(this.state.messages.length < 10) {
       return (
         <GiftedMessenger
           ref={(c) => this._GiftedMessenger = c}

@@ -38,7 +38,7 @@ let MembersBar = React.createClass({
           <HeaderPic photoFileUrl={member.photoFileUrl} certified={member.certified} name={member.realName} showLargeImg={false}/>
         </View>
         <Text numberOfLines={1}
-              style={{color:DictStyle.groupManage.memberNameColor,marginTop:4, width:40}}>{member.realName}</Text>
+              style={{fontSize:12,color:DictStyle.groupManage.memberNameColor,marginTop:4, width:40}}>{member.realName}</Text>
       </TouchableOpacity>
     );
   },
