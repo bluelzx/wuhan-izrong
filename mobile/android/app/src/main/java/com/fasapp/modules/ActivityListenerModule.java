@@ -8,7 +8,7 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.fasapp.service.AppService;
+
 
 import javax.annotation.Nullable;
 
@@ -41,7 +41,7 @@ public class ActivityListenerModule extends ReactContextBaseJavaModule implement
     public void onHostResume() {
         // Actvity `onResume`
         sendEvent(getReactApplicationContext(),"onResume",null);
-        getReactApplicationContext().stopService(new Intent(getReactApplicationContext(), AppService.class));
+//        getReactApplicationContext().stopService(new Intent(getReactApplicationContext(), AppService.class));
     }
 
     @Override

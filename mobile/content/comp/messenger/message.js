@@ -137,7 +137,7 @@ export default class Message extends React.Component {
   }
 
   renderErrorButton(rowData, rowID, onErrorButtonPress){
-    if (rowData.status === 'ErrorButton' || rowData.status === 'Sending' ) {
+    if (rowData.status === 'ErrorButton' || rowData.status === 'Sending' || rowData.status === 'isNetErr' || rowData.status === 'UploadError') {
       return (
         <ErrorButton
           onErrorButtonPress={onErrorButtonPress}
@@ -145,20 +145,12 @@ export default class Message extends React.Component {
           rowID={rowID}
           styles={styles}
           msgId = {rowData.msgId}
+          status={rowData.status}
           isLoading={rowData.status == 'Sending'?true:false}
         />
       );
-    }else if(rowData.status === 'UploadError'){
-      return (
-        <ErrorButton
-          onErrorButtonPress={onErrorButtonPress}
-          rowData={rowData}
-          rowID={rowID}
-          styles={styles}
-          isLoading={false}
-        />
-      );
-    } else{
+    }
+    else{
       return <View></View>;
     }
   }

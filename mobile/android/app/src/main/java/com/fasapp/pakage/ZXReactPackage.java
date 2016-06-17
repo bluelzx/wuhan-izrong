@@ -11,7 +11,7 @@ import com.fasapp.modules.ActivityListenerModule;
 import com.fasapp.modules.AppInfoModule;
 import com.fasapp.modules.NotificationModule;
 import com.fasapp.modules.SaveFileModule;
-import com.fasapp.modules.ServiceModule;
+//import com.fasapp.modules.ServiceModule;
 import com.fasapp.modules.UserPhotoPicModule;
 import com.fasapp.view.viewpager.ZXViewPagerManager;
 
@@ -29,7 +29,7 @@ public class ZXReactPackage implements ReactPackage {
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
         modules.add(new UserPhotoPicModule(reactContext));
-        modules.add(new ServiceModule(reactContext));
+//        modules.add(new ServiceModule(reactContext));
         modules.add(new ActivityListenerModule(reactContext));
         modules.add(new SaveFileModule(reactContext));
         modules.add(new NotificationModule(reactContext));

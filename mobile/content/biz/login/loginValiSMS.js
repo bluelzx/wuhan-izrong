@@ -28,6 +28,7 @@ let ValiSMS = React.createClass({
     if (Platform.OS != 'ios') {
       deviceModel = AppStore.getDeviceModel();
     }
+    //console.log("123" + deviceModel);
     return {
       disabled: true,
       verify: '',

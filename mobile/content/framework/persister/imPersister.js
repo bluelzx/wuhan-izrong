@@ -28,11 +28,11 @@ let _getMessageBySessionId = (sessionId, page, ownerId) => {
   return msgs.slice(start, end);
 };
 
-let _resetMessageStatus = (msgId, isMute) => {
+let _resetMessageStatus = (msgId, isMute, isNetErr) => {
   _realm.write(() => {
     _realm.create(MESSAGE, {
       msgId: msgId,
-      status: isMute?'isMute':'Seen'
+      status: isMute ? 'isMute' : (isNetErr ? 'isNetErr' : 'Seen')
     }, true);
   });
 };
@@ -57,7 +57,7 @@ let _getMessageByMessageId = function(msgId) {
 let ImPersister = {
   saveMessage: (message, ownerId) => _saveMessage(message, ownerId),
   getMessageBySessionId: (sessionId, page, ownerId) => _getMessageBySessionId(sessionId, page, ownerId),
-  resetMessageStatus: (msgId, isMute) => _resetMessageStatus(msgId, isMute),
+  resetMessageStatus: (msgId, isMute, isNetErr) => _resetMessageStatus(msgId, isMute, isNetErr),
   modifyImgUrl:(msgId, url)=>_modifyImgUrl(msgId,url),
   modifyMsgState:(msgId, status)=>_modifyMsgState(msgId, status),
   getMessageByMessageId:(msgId) => _getMessageByMessageId(msgId)
