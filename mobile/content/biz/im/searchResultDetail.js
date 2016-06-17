@@ -30,19 +30,18 @@ let { SESSION_TYPE } = require('../../constants/dictIm');
 
 let SearchResultDetail = React.createClass({
 
-
   getStateFromStores: function() {
     ////// 是否已经是好友
     let userInfo;
     //this.props.param.isStranger = ContactStore.isStranger(this.props.param.userId);
     if(!this.props.param.isStranger){
       userInfo = ContactStore.getUserInfoByUserId(this.props.param.userId);
+    }else if(this.props.param.friendInvite){
+      userInfo = this.props.param;
     }else{
       userInfo = Adapter.saveImUser(this.props.param);
       userInfo.orgValue = ContactStore.getOrgValueByOrgId(this.props.param.orgId);
     }
-
-    console.log(userInfo.mute);
     return{
       data:userInfo,
       mute:userInfo.mute||false,
