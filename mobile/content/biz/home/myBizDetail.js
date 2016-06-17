@@ -470,10 +470,12 @@ let MyBizDetail = React.createClass({
     if(rowData.includes('http')){
       let url = rowData + ImageSize50;
       return (
-        <View style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}>
+        <View
+          key={rowData}
+          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}>
           <LoadExtendImage style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
                            source={{uri:url}}
-                           //longPress={(rowID) => this._longPress(rowID) }
+                           longPress={() => this._longPress(rowID) }
                            selectType="all"
                            title="选择图片"
                            fileId="publish"
@@ -500,10 +502,12 @@ let MyBizDetail = React.createClass({
     }else{
       let uri = rowData;
       return (
-        <View style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}>
+        <View
+          key={rowData}
+          style={{width:(screenWidth-60)/5,height:(screenWidth-60)/5,marginLeft:10,borderRadius:5,borderWidth:1,borderColor:'#d3d5df'}}>
           <LoadExtendImage style={{flex:1,width:(screenWidth-60)/5-2,height:(screenWidth-60)/5-2,borderRadius:5}}
                            uploadFileUri={{uri:uri}}
-                           //longPress={(rowID) => this._longPress(rowID) }
+                           longPress={() => this._longPress(rowID) }
                            selectType="all"
                            title="选择图片"
                            fileId="publish"
@@ -657,13 +661,15 @@ let MyBizDetail = React.createClass({
               }
             );
           } else if (buttonIndex == 1) {
-            let arr = this.state.fileUrlList;
+            let showArr = this.state.fileUrlList;
             let uploadArr = this.state.imageUploadUrlList;
-            _.pullAt(arr, rowId);
-            _.pullAt(uploadArr, rowId);
+            showArr[rowId] = 0;
+            let endEditedShowArr = _.compact(showArr);
+            uploadArr[rowId] = 0;
+            let endEditedUploadArr = _.compact(uploadArr);
             this.setState({
-              fileUrlList: arr,
-              imageUploadUrlList: uploadArr
+              fileUrlList: endEditedShowArr,
+              imageUploadUrlList: endEditedUploadArr
             });
           }
         });
@@ -682,13 +688,15 @@ let MyBizDetail = React.createClass({
               );
               break;
             case 1:
-              let arr = this.state.fileUrlList;
+              let showArr = this.state.fileUrlList;
               let uploadArr = this.state.imageUploadUrlList;
-              _.pullAt(arr, rowId);
-              _.pullAt(uploadArr, rowId);
+              showArr[rowId] = 0;
+              let endEditedShowArr = _.compact(showArr);
+              uploadArr[rowId] = 0;
+              let endEditedUploadArr = _.compact(uploadArr);
               this.setState({
-                fileUrlList: arr,
-                imageUploadUrlList: uploadArr
+                fileUrlList: endEditedShowArr,
+                imageUploadUrlList: endEditedUploadArr
               });
               break;
             default:
