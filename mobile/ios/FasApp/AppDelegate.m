@@ -55,7 +55,7 @@ typedef enum{
 
     latestJSCodeLocation = [updater latestJSCodeLocation];
   }else if(startType==Debug){
-    latestJSCodeLocation=[NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios"];
+    latestJSCodeLocation=[NSURL URLWithString:@"http://192.168.64.240:8081/index.ios.bundle?platform=ios"];
   }else{
     latestJSCodeLocation=[[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   }

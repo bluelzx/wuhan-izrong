@@ -17,8 +17,10 @@ let _send = (data, bFlag = false, userId, notSend = false) => {
   ImSocket.send(data)
     .then(() => {
       // ImStore.send();
-    }).catch(() => {
+    }).catch((err) => {
+       ImStore.ackMsg(data.msgId,data.toId,false,true);
       Alert('请检查网络连接');
+
     });
 };
 

@@ -116,8 +116,6 @@ let Messenger = React.createClass({
         };
         msgToSend.erCb = ()=>{
           ImStore.modifyMsgState(msgId,'UploadError');
-          Event.trigger('loadStatus',{msgId:msgId,s:''});
-         // this._onChange();
         }
 
       }
@@ -227,11 +225,20 @@ let Messenger = React.createClass({
       if(message.content && message.content.indexOf('http')>=0){
         this._sendMessage(message.contentType, message.content, true, message.msgId);
       }else {
-        ImAction.uploadImage(message.content).then((response)=> {
+        let p = new Promise((resolve, reject) => {
+          ImStore.modifyMsgState(message.msgId,'Sending');
+          resolve();
+        }).catch((err)=>{
+          throw err;
+        });
+
+        p.then(()=>{
+          return ImAction.uploadImage(message.content);
+        }).then((response)=> {
           ImStore.modifyImgUrl(message.msgId, response.fileUrl)
           self._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl, true, msgId, false, uri);
         }).catch((err)=>{
-          Event.trigger('loadStatus',{msgId:message.msgId,s:''});
+          ImStore.modifyMsgState(message.msgId,'UploadError')
         });
       }
     }else {
