@@ -238,16 +238,17 @@ let Messenger = React.createClass({
           ImStore.modifyMsgState(message.msgId,'Sending');
           resolve();
         }).catch((err)=>{
+          console.log('modifyMsgStateErr');
           throw err;
         });
-
         p.then(()=>{
-          return ImAction.uploadImage(message.content);
-        }).then((response)=> {
-          ImStore.modifyImgUrl(message.msgId, response.fileUrl)
-          self._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl, true, msgId, false, uri);
-        }).catch((err)=>{
-          ImStore.modifyMsgState(message.msgId,'UploadError')
+          return ImAction.uploadImage(message.content).then((response)=> {
+            ImStore.modifyImgUrl(message.msgId, response.fileUrl);
+            this._sendMessage(MSG_CONTENT_TYPE.IMAGE, response.fileUrl, true, message.msgId);
+          }).catch((err)=>{
+            console.log('modifyMsgStateErr2' + err);
+            ImStore.modifyMsgState(message.msgId,'UploadError')
+          });
         });
       }
     }else {
