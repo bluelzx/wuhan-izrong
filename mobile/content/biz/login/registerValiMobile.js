@@ -65,6 +65,21 @@ let Register_valiMobile = React.createClass({
         return LoginAction.validateSmsCode({
           mobileNo: this.state.mobileNo,
           inputSmsCode: this.state.verify
+        }).then(()=>{
+          if (Platform.OS === 'android') {
+            return new Promise((resolve, reject)=>{
+              AppInfoModule.getPushRegId((id, deviceModel) => {
+                try {
+                  AppStore.saveApnsToken(id, true);
+                  AppStore.saveDeviceModel(deviceModel);
+                  console.log("zhuce" + deviceModel)
+                  resolve();
+                }catch(err){
+                  reject({errMsg:err});
+                }
+              });
+            });
+          }
         }).then((response) => {
           const { navigator } = this.props;
           if (navigator) {
@@ -77,13 +92,6 @@ let Register_valiMobile = React.createClass({
                   }
                 });
             }
-          }
-        }).then(()=>{
-          if (Platform.OS === 'android') {
-            AppInfoModule.getPushRegId((id, deviceModel) => {
-              AppStore.saveApnsToken(id, true);
-              AppStore.saveDeviceModel(deviceModel)
-            });
           }
         }).catch((errorData) => {
           throw errorData;
